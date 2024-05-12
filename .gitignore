@@ -1,0 +1,8 @@
+*.wsp
+*.obj
+*.map
+*.lst
+*.lod
+*.hex
+*.lis
+*.src
