@@ -48,7 +48,7 @@
 
 #define UART                 0			// change to 1 when using UART 1
 //#define UART_BPS             57600
-#define UART_BPS             19200
+#define UART_BPS             115200
 #define UART_DATA_BITS       8
 #define UART_PARITY          0
 #define UART_STOP_BITS       1
@@ -87,7 +87,7 @@
 extern long SysClkFreq;
 char device_name[] = DEVICE_NAME;
 
-void uart_init(void)
+void x_uart_init(void)
 {
 #ifndef _SIMULATE
  #ifdef _ZSL_UART_USED
@@ -196,18 +196,7 @@ int getch(void)
 }
 #endif
 
-void test(void)
-{
-    int a = 1;
-    int b = 2;
-    int c = 3;
-    c = b + a + 2;
-    c++;
-    c++;
-}
-
-
-#define WS2812_CMD		(*(XSFR)0xFF30)
+/*#define WS2812_CMD		(*(XSFR)0xFF30)
 #define WS2812_DATA		(*(XSFR)0xFF31)
 
 void ws2812b(void) {
@@ -221,52 +210,105 @@ void ws2812b(void) {
   WS2812_DATA = 255; //red
   WS2812_DATA = 0; //green
   WS2812_DATA = 0; //blue
+}*/
+
+#define DIGITAL_IO_LEDS		(*(XSFR)0xFF00)
+
+void toggle_off_leds() {
+  DIGITAL_IO_LEDS = 0;
 }
+
+void toggle_on_leds() {
+  DIGITAL_IO_LEDS = 255;
+}
+
+void set_leds() {
+  DIGITAL_IO_LEDS = DIGITAL_IO_LEDS;
+}
+
+#define MPGSEL_0	(*(XSFR)0xFF78)		/* Z2 MEM MGR BANK 0 PAGE SELECT REG (WRITE ONLY)*/
+#define MPGSEL_1	(*(XSFR)0xFF79)		/* Z2 MEM MGR BANK 1 PAGE SELECT REG (WRITE ONLY)*/
+#define MPGSEL_2	(*(XSFR)0xFF7A)		/* Z2 MEM MGR BANK 2 PAGE SELECT REG (WRITE ONLY)*/
+#define MPGSEL_3	(*(XSFR)0xFF7B)		/* Z2 MEM MGR BANK 3 PAGE SELECT REG (WRITE ONLY)*/
+#define MPGENA		(*(XSFR)0xFF7C)		/* Z2 MEM MGR PAGING ENABLE REGISTER (BIT 0, WRITE ONLY)*/
+
+
+void ROMRAM512Init() {
+  MPGENA = 1;
+  MPGSEL_0 = 0;
+  MPGSEL_1 = 1;
+  MPGSEL_2 = 64 - 2;
+  MPGSEL_3 = 64 - 1;
+}
+
+int addr_0000 _At 0xB90000;
+int addr_4000 _At 0xB94000;
+int addr_8000 _At 0xB98000;
+int addr_C000 _At 0xB9C000;
+int addr_FE43 _At 0xB9FE43;
+
+void jumpToRomWBWStart(void);
+
+void uart_preinit() {
+  // printf("uart pre init\r\n");
+}
+
+void uart_init() {
+  printf("eZ80 UART0 (115200)\r\n");
+}
+
+void spike(void);
 
 int main()
 {
-  unsigned int x = 0;
-  int f = 0;
-    int ch;
-    int i = 0;
-    static char zds[] = "ZiLOG Developers Studio";
+    int x = 0;
 
-    uart_init();
-    test();
+    x_uart_init();
 
-    ws2812b();
+    printf("Starting...\r\n");
 
-    //printf("\nUsing Uart %i\n", UART);
-    //printf("-----------------------\n");
-    //printf("%s\n", zds);
-    //printf("-----------------------\n");
-    //printf("i = %i\n", 5);
-    //printf("d = %d\n", 25);
-    //printf("f = %f\n", 1.26);
-    //printf("%s %i %d %f\n", device_name, 5, 25, 1.26);
-    //printf("-----------------------\n");
+    ROMRAM512Init();
 
-  // set a pin as an output??
+    spike();
 
-//PB_DR
- PB_DDR = 0; // should be init to output (0)
-// PB_ALT1
-// PB_ALT2
+    jumpToRomWBWStart(); //switch to z80 mode, BASE of B9, PC => 0xB90000
 
-    while (1)
-    {
-      if (x++ > 256)
-      {
-        x = 0;
-        f = !f;
-        PB_DR = f ? 1 : 0;
-        putchar( 255 ) ;
+    addr_0000 = 0;
+    addr_4000 = 4;
+    addr_8000 = 8;
+    addr_C000 = 12;
+    addr_FE43 = 101;
 
-      }
+    while(1) {
+        if (x++ > 128000) {
+            x = 0;
+            printf("Addresses %d, %d, %d, %d, %d\r\n", addr_FE43, addr_0000, addr_4000, addr_8000, addr_C000);
 
-      //putchar( 'B' ) ;
-      //putchar( 'C' ) ;
+            MPGSEL_1 = 4; //was 64 - 1
+            //MPGSEL_3 = 64 - 1;
+            printf("Addresses(1->4) %d, %d, %d, %d, %d\r\n", addr_FE43, addr_0000, addr_4000, addr_8000, addr_C000);
 
+            MPGSEL_1 = 1;
+            //MPGSEL_3 = 64 - 1;
+            printf("Addresses(1->1) %d, %d, %d, %d, %d\r\n", addr_FE43, addr_0000, addr_4000, addr_8000, addr_C000);
+
+            addr_FE43++;
+            //addr_0000++;
+            //addr_4000++;
+            //addr_8000++;
+            //addr_C000++;
+        }
     }
+
+    //CS2_LBR = 0xFF;
+    //CS2_UBR = 0xFF;
+    //CS2_CTL = 0xF8; // 111 1 1000 7 wait states, io, enabled
+    //CS2_BMC = 0x47; // 01 0 0 1111 [7:6] Z80, [5] AD_MUX off, [4] reserved, [3:0] max cycles delays
+
+    //CS3_LBR = 0xB8;
+    //CS3_UBR = 0xB8;
+    //CS3_CTL = 0xF8; // 111 1 1000 7 wait states, ram, enabled
+    //CS3_BMC = 0x4F;    ; // 0100 1111;
+
     return 0;
 }

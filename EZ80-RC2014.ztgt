@@ -14,8 +14,8 @@
       <device>MT28F008B3-BB</device>
       <externalAddress>100000</externalAddress>
       <externalAutoSelect>true</externalAutoSelect>
-      <externalRamLower>B80000</externalRamLower>
-      <externalRamUpper>C7FFFF</externalRamUpper>
+      <externalRamLower>B90000</externalRamLower>
+      <externalRamUpper>B9FFFF</externalRamUpper>
       <manufacturer>Micron</manufacturer>
       <units>1</units>
       <usingExternal>true</usingExternal>
@@ -36,16 +36,16 @@
             <upper>00</upper>
          </CS1>
          <CS2>
-            <busMode>4F</busMode>
+            <busMode>47</busMode>
             <controlRegister>F8</controlRegister>
             <lower>FF</lower>
             <upper>FF</upper>
          </CS2>
          <CS3>
-            <busMode>4f</busMode>
+            <busMode>4F</busMode>
             <controlRegister>E8</controlRegister>
-            <lower>80</lower>
-            <upper>80</upper>
+            <lower>B9</lower>
+            <upper>B9</upper>
          </CS3>
       </ChipSelects>
       <Internal>
