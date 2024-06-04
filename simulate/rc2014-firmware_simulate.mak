@@ -84,32 +84,12 @@ clean:
             $(RM) "$(WORKDIR)\rc2014-firmware.hex"
 	@if exist "$(WORKDIR)\rc2014-firmware.map"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.map"
-	@if exist "$(WORKDIR)\main.obj"  \
-            $(RM) "$(WORKDIR)\main.obj"
-	@if exist "$(WORKDIR)\main.lis"  \
-            $(RM) "$(WORKDIR)\main.lis"
-	@if exist "$(WORKDIR)\main.lst"  \
-            $(RM) "$(WORKDIR)\main.lst"
-	@if exist "$(WORKDIR)\main.src"  \
-            $(RM) "$(WORKDIR)\main.src"
 	@if exist "$(WORKDIR)\zsldevinit.obj"  \
             $(RM) "$(WORKDIR)\zsldevinit.obj"
 	@if exist "$(WORKDIR)\zsldevinit.lis"  \
             $(RM) "$(WORKDIR)\zsldevinit.lis"
 	@if exist "$(WORKDIR)\zsldevinit.lst"  \
             $(RM) "$(WORKDIR)\zsldevinit.lst"
-	@if exist "$(WORKDIR)\test.obj"  \
-            $(RM) "$(WORKDIR)\test.obj"
-	@if exist "$(WORKDIR)\test.lis"  \
-            $(RM) "$(WORKDIR)\test.lis"
-	@if exist "$(WORKDIR)\test.lst"  \
-            $(RM) "$(WORKDIR)\test.lst"
-	@if exist "$(WORKDIR)\jump_table.obj"  \
-            $(RM) "$(WORKDIR)\jump_table.obj"
-	@if exist "$(WORKDIR)\jump_table.lis"  \
-            $(RM) "$(WORKDIR)\jump_table.lis"
-	@if exist "$(WORKDIR)\jump_table.lst"  \
-            $(RM) "$(WORKDIR)\jump_table.lst"
 	@if exist "$(WORKDIR)\cstartup.obj"  \
             $(RM) "$(WORKDIR)\cstartup.obj"
 	@if exist "$(WORKDIR)\cstartup.lis"  \
@@ -128,6 +108,62 @@ clean:
             $(RM) "$(WORKDIR)\vectors16.lis"
 	@if exist "$(WORKDIR)\vectors16.lst"  \
             $(RM) "$(WORKDIR)\vectors16.lst"
+	@if exist "$(WORKDIR)\uart.obj"  \
+            $(RM) "$(WORKDIR)\uart.obj"
+	@if exist "$(WORKDIR)\uart.lis"  \
+            $(RM) "$(WORKDIR)\uart.lis"
+	@if exist "$(WORKDIR)\uart.lst"  \
+            $(RM) "$(WORKDIR)\uart.lst"
+	@if exist "$(WORKDIR)\uart.src"  \
+            $(RM) "$(WORKDIR)\uart.src"
+	@if exist "$(WORKDIR)\console.obj"  \
+            $(RM) "$(WORKDIR)\console.obj"
+	@if exist "$(WORKDIR)\console.lis"  \
+            $(RM) "$(WORKDIR)\console.lis"
+	@if exist "$(WORKDIR)\console.lst"  \
+            $(RM) "$(WORKDIR)\console.lst"
+	@if exist "$(WORKDIR)\console.src"  \
+            $(RM) "$(WORKDIR)\console.src"
+	@if exist "$(WORKDIR)\main.obj"  \
+            $(RM) "$(WORKDIR)\main.obj"
+	@if exist "$(WORKDIR)\main.lis"  \
+            $(RM) "$(WORKDIR)\main.lis"
+	@if exist "$(WORKDIR)\main.lst"  \
+            $(RM) "$(WORKDIR)\main.lst"
+	@if exist "$(WORKDIR)\rc2014-digital-io.obj"  \
+            $(RM) "$(WORKDIR)\rc2014-digital-io.obj"
+	@if exist "$(WORKDIR)\rc2014-digital-io.lis"  \
+            $(RM) "$(WORKDIR)\rc2014-digital-io.lis"
+	@if exist "$(WORKDIR)\rc2014-digital-io.lst"  \
+            $(RM) "$(WORKDIR)\rc2014-digital-io.lst"
+	@if exist "$(WORKDIR)\rc2014-digital-io.src"  \
+            $(RM) "$(WORKDIR)\rc2014-digital-io.src"
+	@if exist "$(WORKDIR)\rc2014-512k-rom-ram.obj"  \
+            $(RM) "$(WORKDIR)\rc2014-512k-rom-ram.obj"
+	@if exist "$(WORKDIR)\rc2014-512k-rom-ram.lis"  \
+            $(RM) "$(WORKDIR)\rc2014-512k-rom-ram.lis"
+	@if exist "$(WORKDIR)\rc2014-512k-rom-ram.lst"  \
+            $(RM) "$(WORKDIR)\rc2014-512k-rom-ram.lst"
+	@if exist "$(WORKDIR)\rc2014-512k-rom-ram.src"  \
+            $(RM) "$(WORKDIR)\rc2014-512k-rom-ram.src"
+	@if exist "$(WORKDIR)\rc2014-hook.obj"  \
+            $(RM) "$(WORKDIR)\rc2014-hook.obj"
+	@if exist "$(WORKDIR)\rc2014-hook.lis"  \
+            $(RM) "$(WORKDIR)\rc2014-hook.lis"
+	@if exist "$(WORKDIR)\rc2014-hook.lst"  \
+            $(RM) "$(WORKDIR)\rc2014-hook.lst"
+	@if exist "$(WORKDIR)\test.obj"  \
+            $(RM) "$(WORKDIR)\test.obj"
+	@if exist "$(WORKDIR)\test.lis"  \
+            $(RM) "$(WORKDIR)\test.lis"
+	@if exist "$(WORKDIR)\test.lst"  \
+            $(RM) "$(WORKDIR)\test.lst"
+	@if exist "$(WORKDIR)\io-hook.obj"  \
+            $(RM) "$(WORKDIR)\io-hook.obj"
+	@if exist "$(WORKDIR)\io-hook.lis"  \
+            $(RM) "$(WORKDIR)\io-hook.lis"
+	@if exist "$(WORKDIR)\io-hook.lst"  \
+            $(RM) "$(WORKDIR)\io-hook.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -135,47 +171,26 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
-            $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\zsldevinit.obj  \
-            $(WORKDIR_ESCSPACE)\test.obj  \
-            $(WORKDIR_ESCSPACE)\jump_table.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
-            $(WORKDIR_ESCSPACE)\vectors16.obj
+            $(WORKDIR_ESCSPACE)\vectors16.obj  \
+            $(WORKDIR_ESCSPACE)\uart.obj  \
+            $(WORKDIR_ESCSPACE)\console.obj  \
+            $(WORKDIR_ESCSPACE)\main.obj  \
+            $(WORKDIR_ESCSPACE)\rc2014-digital-io.obj  \
+            $(WORKDIR_ESCSPACE)\rc2014-512k-rom-ram.obj  \
+            $(WORKDIR_ESCSPACE)\rc2014-hook.obj  \
+            $(WORKDIR_ESCSPACE)\test.obj  \
+            $(WORKDIR_ESCSPACE)\io-hook.obj
 
 rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
-
-$(WORKDIR_ESCSPACE)\main.obj :  \
-            $(PRJDIR_ESCSPACE)\src\main.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
-            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\main.c"
 
 $(WORKDIR_ESCSPACE)\zsldevinit.obj :  \
             $(PRJDIR_ESCSPACE)\zsldevinit.asm  \
             $(INCLUDE_ESCSPACE)\zilog\intvect.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\zsldevinit.asm"
-
-$(WORKDIR_ESCSPACE)\test.obj :  \
-            $(PRJDIR_ESCSPACE)\src\test.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
-
-$(WORKDIR_ESCSPACE)\jump_table.obj :  \
-            $(PRJDIR_ESCSPACE)\src\jump_table.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\jump_table.s"
 
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
@@ -189,4 +204,36 @@ $(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
+
+$(WORKDIR_ESCSPACE)\uart.obj :  \
+            $(PRJDIR_ESCSPACE)\src\uart.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\uart.c"
+
+$(WORKDIR_ESCSPACE)\console.obj :  \
+            $(PRJDIR_ESCSPACE)\src\console.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\console.c"
+
+$(WORKDIR_ESCSPACE)\main.obj :  \
+            $(PRJDIR_ESCSPACE)\src\main.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
+
+$(WORKDIR_ESCSPACE)\rc2014-digital-io.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rc2014-digital-io.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rc2014-digital-io.c"
+
+$(WORKDIR_ESCSPACE)\rc2014-512k-rom-ram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rc2014-512k-rom-ram.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rc2014-512k-rom-ram.c"
+
+$(WORKDIR_ESCSPACE)\rc2014-hook.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rc2014-hook.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rc2014-hook.s"
+
+$(WORKDIR_ESCSPACE)\test.obj :  \
+            $(PRJDIR_ESCSPACE)\src\test.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
+
+$(WORKDIR_ESCSPACE)\io-hook.obj :  \
+            $(PRJDIR_ESCSPACE)\src\io-hook.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\io-hook.s"
 

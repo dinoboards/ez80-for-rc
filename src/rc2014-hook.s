@@ -1,0 +1,84 @@
+
+	SECTION CODE
+
+	.assume adl=1
+
+HOOK_CNT	EQU	4
+
+	PUBLIC	_rc2014_hook
+_rc2014_hook:
+	PUSH	IX
+	LD	IX, 3
+	ADD	IX, SP
+
+	PUSH	IY
+	PUSH	HL
+	PUSH	DE
+	PUSH	BC
+	PUSH	AF
+
+	;LD	A, (IX+0) 			; SHOULD BE 2H FOR Z80 MODE
+	LD	A, (IX+1)
+	LD	IYL, A
+	LD	A, (IX+2)
+	LD	IYH, A				; IY SHOULD BE RETURN ADDRESS, THE ADDRESS OF THE NEXT INSTR.
+	LD.S 	A, (IY)  			; IS THIS THE FIST BYTE AFTER THE RST.L 16 INSTRUCTION.
+
+	CP	HOOK_CNT
+	JR	NC, hook_resume
+
+	SLA	A				; MULT BY 4
+	SLA	A
+	LD	C, A
+	LD	B, 0
+
+	LD	HL, jump_tbl			; ADD IT TO THE JUMP TABLE
+	ADD	HL, BC
+
+						; AT THIS POINT
+						; HL IS JUMP HANDLER ADDR
+						; {MBASE,IY} IS POINTS TO THE FUNCTION INDEX BYTE
+						; {MBASE,IX} IS SPS STACK FRAME
+	JP	(HL)				; INVOKE THE HANDLER
+
+hook_resume:
+	POP	AF
+	POP	BC
+	POP	DE
+	POP	HL
+	POP	IY
+	POP	IX
+
+	NOP
+	RET.L
+
+
+jump_tbl:
+	JP	_fn_0
+	JP	_fn_1
+	JP	_fn_2
+	JP	_fn_3
+
+	XREF	_uart_preinit
+_fn_0:
+	INC	IY				; UPDATE RETURN ADDRESS TO SKIP FUNCTION BYTE
+
+	LD	A, IYL
+	LD	(IX+1), A
+	LD	A, IYH
+	LD	(IX+2), A
+
+	call	_uart_preinit
+	jr	hook_resume
+
+_fn_1:
+_fn_2:
+_fn_3:
+	INC	IY				; UPDATE RETURN ADDRESS TO SKIP FUNCTION BYTE
+
+	LD	A, IYL
+	LD	(IX+1), A
+	LD	A, IYH
+	LD	(IX+2), A
+
+	jr	hook_resume

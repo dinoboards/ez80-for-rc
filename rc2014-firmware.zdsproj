@@ -1,15 +1,20 @@
-<project type="Executable" project-type="Standard" configuration="simulate" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
+<project type="Executable" project-type="Standard" configuration="debug" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
 <cpu>eZ80F92</cpu>
 
 <!-- file information -->
 <files>
-<file filter-key="">src\main.c</file>
 <file filter-key="">.\zsldevinit.asm</file>
-<file filter-key="">src\test.s</file>
-<file filter-key="">src\jump_table.s</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
 <file filter-key="">src\startup\vectors16.asm</file>
+<file filter-key="">src\uart.c</file>
+<file filter-key="">src\console.c</file>
+<file filter-key="">src\main.s</file>
+<file filter-key="">src\rc2014-digital-io.c</file>
+<file filter-key="">src\rc2014-512k-rom-ram.c</file>
+<file filter-key="">src\rc2014-hook.s</file>
+<file filter-key="">src\test.s</file>
+<file filter-key="">src\io-hook.s</file>
 </files>
 
 <!-- configuration information -->
@@ -383,16 +388,9 @@
 <!-- breakpoint information -->
 <breakpoints>
 <breakpoint temporary="false" enabled="true" >
-<line-number>54</line-number>
-<pathname>Z:\ZDS\src\boot\common\vectors16.asm</pathname>
-<address>0</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>55</line-number>
+<line-number>18</line-number>
 <pathname>Z:\rc2014-ez80-firmware\src\test.s</pathname>
-<address>1957</address>
+<address>1348</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>
