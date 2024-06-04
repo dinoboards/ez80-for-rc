@@ -1,3 +1,3 @@
 
 cd simulate
-make -B -f .\simplest_simulate.mak
+make -B -f .\rc2014-firmware_simulate.mak

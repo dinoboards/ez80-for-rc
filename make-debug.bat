@@ -1,3 +1,3 @@
 
 cd debug
-make -B -f .\simplest_debug.mak
+make -B -f .\rc2014-firmware_debug.mak
