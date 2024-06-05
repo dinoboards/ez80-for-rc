@@ -70,7 +70,7 @@ buildall: clean rc2014-firmware
 
 relink: deltarget rc2014-firmware
 
-deltarget:
+deltarget: 
 	@if exist "$(WORKDIR)\rc2014-firmware.lod"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.lod"
 	@if exist "$(WORKDIR)\rc2014-firmware.hex"  \
@@ -78,21 +78,77 @@ deltarget:
 	@if exist "$(WORKDIR)\rc2014-firmware.map"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.map"
 
-clean:
+clean: 
 	@if exist "$(WORKDIR)\rc2014-firmware.lod"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.lod"
 	@if exist "$(WORKDIR)\rc2014-firmware.hex"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.hex"
 	@if exist "$(WORKDIR)\rc2014-firmware.map"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.map"
+	@if exist "$(WORKDIR)\console.obj"  \
+            $(RM) "$(WORKDIR)\console.obj"
+	@if exist "$(WORKDIR)\console.lis"  \
+            $(RM) "$(WORKDIR)\console.lis"
+	@if exist "$(WORKDIR)\console.lst"  \
+            $(RM) "$(WORKDIR)\console.lst"
+	@if exist "$(WORKDIR)\console.src"  \
+            $(RM) "$(WORKDIR)\console.src"
+	@if exist "$(WORKDIR)\cstartup.obj"  \
+            $(RM) "$(WORKDIR)\cstartup.obj"
+	@if exist "$(WORKDIR)\cstartup.lis"  \
+            $(RM) "$(WORKDIR)\cstartup.lis"
+	@if exist "$(WORKDIR)\cstartup.lst"  \
+            $(RM) "$(WORKDIR)\cstartup.lst"
+	@if exist "$(WORKDIR)\init_params_f92.obj"  \
+            $(RM) "$(WORKDIR)\init_params_f92.obj"
+	@if exist "$(WORKDIR)\init_params_f92.lis"  \
+            $(RM) "$(WORKDIR)\init_params_f92.lis"
+	@if exist "$(WORKDIR)\init_params_f92.lst"  \
+            $(RM) "$(WORKDIR)\init_params_f92.lst"
 	@if exist "$(WORKDIR)\main.obj"  \
             $(RM) "$(WORKDIR)\main.obj"
 	@if exist "$(WORKDIR)\main.lis"  \
             $(RM) "$(WORKDIR)\main.lis"
 	@if exist "$(WORKDIR)\main.lst"  \
             $(RM) "$(WORKDIR)\main.lst"
-	@if exist "$(WORKDIR)\main.src"  \
-            $(RM) "$(WORKDIR)\main.src"
+	@if exist "$(WORKDIR)\rst-io.obj"  \
+            $(RM) "$(WORKDIR)\rst-io.obj"
+	@if exist "$(WORKDIR)\rst-io.lis"  \
+            $(RM) "$(WORKDIR)\rst-io.lis"
+	@if exist "$(WORKDIR)\rst-io.lst"  \
+            $(RM) "$(WORKDIR)\rst-io.lst"
+	@if exist "$(WORKDIR)\rst-rc2014-bank-switch.obj"  \
+            $(RM) "$(WORKDIR)\rst-rc2014-bank-switch.obj"
+	@if exist "$(WORKDIR)\rst-rc2014-bank-switch.lis"  \
+            $(RM) "$(WORKDIR)\rst-rc2014-bank-switch.lis"
+	@if exist "$(WORKDIR)\rst-rc2014-bank-switch.lst"  \
+            $(RM) "$(WORKDIR)\rst-rc2014-bank-switch.lst"
+	@if exist "$(WORKDIR)\rst-rc2014-fnc.obj"  \
+            $(RM) "$(WORKDIR)\rst-rc2014-fnc.obj"
+	@if exist "$(WORKDIR)\rst-rc2014-fnc.lis"  \
+            $(RM) "$(WORKDIR)\rst-rc2014-fnc.lis"
+	@if exist "$(WORKDIR)\rst-rc2014-fnc.lst"  \
+            $(RM) "$(WORKDIR)\rst-rc2014-fnc.lst"
+	@if exist "$(WORKDIR)\test.obj"  \
+            $(RM) "$(WORKDIR)\test.obj"
+	@if exist "$(WORKDIR)\test.lis"  \
+            $(RM) "$(WORKDIR)\test.lis"
+	@if exist "$(WORKDIR)\test.lst"  \
+            $(RM) "$(WORKDIR)\test.lst"
+	@if exist "$(WORKDIR)\uart.obj"  \
+            $(RM) "$(WORKDIR)\uart.obj"
+	@if exist "$(WORKDIR)\uart.lis"  \
+            $(RM) "$(WORKDIR)\uart.lis"
+	@if exist "$(WORKDIR)\uart.lst"  \
+            $(RM) "$(WORKDIR)\uart.lst"
+	@if exist "$(WORKDIR)\uart.src"  \
+            $(RM) "$(WORKDIR)\uart.src"
+	@if exist "$(WORKDIR)\vectors16.obj"  \
+            $(RM) "$(WORKDIR)\vectors16.obj"
+	@if exist "$(WORKDIR)\vectors16.lis"  \
+            $(RM) "$(WORKDIR)\vectors16.lis"
+	@if exist "$(WORKDIR)\vectors16.lst"  \
+            $(RM) "$(WORKDIR)\vectors16.lst"
 	@if exist "$(WORKDIR)\zsldevinit.obj"  \
             $(RM) "$(WORKDIR)\zsldevinit.obj"
 	@if exist "$(WORKDIR)\zsldevinit.lis"  \
@@ -101,19 +157,28 @@ clean:
             $(RM) "$(WORKDIR)\zsldevinit.lst"
 
 # pre-4.11.0 compatibility
-rebuildall: buildall
+rebuildall: buildall 
 
-LIBS =
+LIBS = 
 
 OBJS =  \
+            $(WORKDIR_ESCSPACE)\console.obj  \
+            $(WORKDIR_ESCSPACE)\cstartup.obj  \
+            $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
+            $(WORKDIR_ESCSPACE)\rst-io.obj  \
+            $(WORKDIR_ESCSPACE)\rst-rc2014-bank-switch.obj  \
+            $(WORKDIR_ESCSPACE)\rst-rc2014-fnc.obj  \
+            $(WORKDIR_ESCSPACE)\test.obj  \
+            $(WORKDIR_ESCSPACE)\uart.obj  \
+            $(WORKDIR_ESCSPACE)\vectors16.obj  \
             $(WORKDIR_ESCSPACE)\zsldevinit.obj
 
 rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
 
-$(WORKDIR_ESCSPACE)\main.obj :  \
-            $(PRJDIR_ESCSPACE)\src\main.c  \
+$(WORKDIR_ESCSPACE)\console.obj :  \
+            $(PRJDIR_ESCSPACE)\src\console.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
             $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
@@ -127,8 +192,61 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
             $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
             $(INCLUDE_ESCSPACE)\zilog\uart.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\main.c"
+            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
+            $(PRJDIR_ESCSPACE)\src\uart.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\console.c"
+
+$(WORKDIR_ESCSPACE)\cstartup.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
+
+$(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\init_params_f92.asm  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_params_f92.asm"
+
+$(WORKDIR_ESCSPACE)\main.obj :  \
+            $(PRJDIR_ESCSPACE)\src\main.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
+
+$(WORKDIR_ESCSPACE)\rst-io.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-io.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-io.s"
+
+$(WORKDIR_ESCSPACE)\rst-rc2014-bank-switch.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-rc2014-bank-switch.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-rc2014-bank-switch.s"
+
+$(WORKDIR_ESCSPACE)\rst-rc2014-fnc.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-rc2014-fnc.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-rc2014-fnc.s"
+
+$(WORKDIR_ESCSPACE)\test.obj :  \
+            $(PRJDIR_ESCSPACE)\src\test.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
+
+$(WORKDIR_ESCSPACE)\uart.obj :  \
+            $(PRJDIR_ESCSPACE)\src\uart.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
+            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
+            $(PRJDIR_ESCSPACE)\src\uart.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\uart.c"
+
+$(WORKDIR_ESCSPACE)\vectors16.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
 
 $(WORKDIR_ESCSPACE)\zsldevinit.obj :  \
             $(PRJDIR_ESCSPACE)\zsldevinit.asm  \

@@ -5,8 +5,8 @@
 
 INSTR_OUT_NN_A	EQU	%D3
 
-	PUBLIC	_io_hook
-_io_hook:
+	PUBLIC	_rst_io
+_rst_io:
 	PUSH	IX
 	LD	IX, 3
 	ADD	IX, SP
@@ -26,7 +26,7 @@ _io_hook:
 	CP	INSTR_OUT_NN_A
 	JR	Z, out_nn_a_hook
 
-hook_resume:
+rst_io_resume:
 	POP	AF
 	POP	BC
 	POP	HL
@@ -43,7 +43,7 @@ out_nn_a_hook:
 	POP	AF				; RETIEVE VALUE OF A BEFORE HOOK WAS INVOKED
 	PUSH	AF
 	; LD	A, (IX+5)			; OR GET IT VIA THE STACK VALUE
-	
+
 	OUT	(C), A
 
 	INC	IY
@@ -54,4 +54,4 @@ out_nn_a_hook:
 	LD	A, IYH				; INSTRUCTION
 	LD	(IX+2), A
 
-	jr	hook_resume
+	jr	rst_io_resume

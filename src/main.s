@@ -4,14 +4,14 @@
 
 	PUBLIC	_main
 	XREF	_x_uart_init
-	XREF	_ROMRAM512Init
+	XREF	bank_init_z2
 	XREF	_spike
 
 _main:
 	CALL	_x_uart_init
-	CALL	_ROMRAM512Init
+	CALL	bank_init_z2
 
-	; call	_spike
+	;call	_spike
 
 	LD	A, %B9				; set MBASE to $B9
 	LD	MB, A

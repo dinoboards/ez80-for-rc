@@ -21,12 +21,19 @@ _spike:
 	.assume adl = 0
 step1:
 	NOP
-	;LD	A, 15
-	;RST.L	%08
-	;OUT 	(0), A
-	NOP
-	RST.L	%10
-	DB	%00
+	LD	A, 15
+	RST.L	%08		; I/O HELPER
+	OUT 	(0), A
+
+
+	;LD	A, 2
+	;LD	BC, %1234
+	;RST.L	%10		; ACCESS FUNCTION 2
+
+	;LD	A, %03		; bank to switch to
+	;RST.L	%18		; fast bank switchiing
+
+
 	RET.L
 step1_end:
 

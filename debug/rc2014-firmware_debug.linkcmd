@@ -75,18 +75,17 @@ define _SYS_CLK_FREQ = 18432000
 define _zsl_g_clock_xdefine = 18432000
 
 "Z:\rc2014-ez80-firmware\debug\rc2014-firmware"= \
- ".\zsldevinit.obj", \
+ ".\console.obj", \
  ".\cstartup.obj", \
  ".\init_params_f92.obj", \
- ".\vectors16.obj", \
- ".\uart.obj", \
- ".\console.obj", \
  ".\main.obj", \
- ".\rc2014-digital-io.obj", \
- ".\rc2014-512k-rom-ram.obj", \
- ".\rc2014-hook.obj", \
+ ".\rst-io.obj", \
+ ".\rst-rc2014-bank-switch.obj", \
+ ".\rst-rc2014-fnc.obj", \
  ".\test.obj", \
- ".\io-hook.obj", \
+ ".\uart.obj", \
+ ".\vectors16.obj", \
+ ".\zsldevinit.obj", \
  "Z:\ZDS\lib\std\chelpD.lib", \
  "Z:\ZDS\lib\std\crtD.lib", \
  "Z:\ZDS\lib\std\crtSD.lib", \

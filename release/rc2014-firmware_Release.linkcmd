@@ -61,9 +61,9 @@ DEFINE __CS1_BMC_INIT_PARAM = $00
 DEFINE __CS2_LBR_INIT_PARAM = $ff
 DEFINE __CS2_UBR_INIT_PARAM = $ff
 DEFINE __CS2_CTL_INIT_PARAM = $f8
-DEFINE __CS2_BMC_INIT_PARAM = $4f
-DEFINE __CS3_LBR_INIT_PARAM = $80
-DEFINE __CS3_UBR_INIT_PARAM = $80
+DEFINE __CS2_BMC_INIT_PARAM = $47
+DEFINE __CS3_LBR_INIT_PARAM = $b9
+DEFINE __CS3_UBR_INIT_PARAM = $b9
 DEFINE __CS3_CTL_INIT_PARAM = $e8
 DEFINE __CS3_BMC_INIT_PARAM = $4f
 DEFINE __RAM_CTL_INIT_PARAM = $80
@@ -76,10 +76,16 @@ define _SYS_CLK_FREQ = 18432000
 define _zsl_g_clock_xdefine = 18432000
 
 "Z:\rc2014-ez80-firmware\release\rc2014-firmware"= \
- "Z:\ZDS\lib\zilog\vectors16.obj", \
- "Z:\ZDS\lib\zilog\init_params_f92.obj", \
- "Z:\ZDS\lib\zilog\cstartup.obj", \
+ ".\console.obj", \
+ ".\cstartup.obj", \
+ ".\init_params_f92.obj", \
  ".\main.obj", \
+ ".\rst-io.obj", \
+ ".\rst-rc2014-bank-switch.obj", \
+ ".\rst-rc2014-fnc.obj", \
+ ".\test.obj", \
+ ".\uart.obj", \
+ ".\vectors16.obj", \
  ".\zsldevinit.obj", \
  "Z:\ZDS\lib\std\chelp.lib", \
  "Z:\ZDS\lib\std\crt.lib", \

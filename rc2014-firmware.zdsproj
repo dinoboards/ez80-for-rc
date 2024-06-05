@@ -3,18 +3,17 @@
 
 <!-- file information -->
 <files>
-<file filter-key="">.\zsldevinit.asm</file>
+<file filter-key="">src\console.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
-<file filter-key="">src\startup\vectors16.asm</file>
-<file filter-key="">src\uart.c</file>
-<file filter-key="">src\console.c</file>
 <file filter-key="">src\main.s</file>
-<file filter-key="">src\rc2014-digital-io.c</file>
-<file filter-key="">src\rc2014-512k-rom-ram.c</file>
-<file filter-key="">src\rc2014-hook.s</file>
+<file filter-key="">src\rst-io.s</file>
+<file filter-key="">src\rst-rc2014-bank-switch.s</file>
+<file filter-key="">src\rst-rc2014-fnc.s</file>
 <file filter-key="">src\test.s</file>
-<file filter-key="">src\io-hook.s</file>
+<file filter-key="">src\uart.c</file>
+<file filter-key="">src\startup\vectors16.asm</file>
+<file filter-key="">.\zsldevinit.asm</file>
 </files>
 
 <!-- configuration information -->
@@ -387,10 +386,45 @@
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
+<breakpoint temporary="false" enabled="false" >
 <line-number>18</line-number>
 <pathname>Z:\rc2014-ez80-firmware\src\test.s</pathname>
-<address>1348</address>
+<address>1061</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="false" >
+<line-number>58</line-number>
+<pathname>Z:\rc2014-ez80-firmware\src\rst-rc2014-bank-switch.s</pathname>
+<address>1366</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="false" >
+<line-number>0</line-number>
+<pathname></pathname>
+<address>12050439</address>
+<command></command>
+<preserve-type>1</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>18</line-number>
+<pathname>Z:\rc2014-ez80-firmware\src\main.s</pathname>
+<address>1029</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>0</line-number>
+<pathname></pathname>
+<address>12125610</address>
+<command></command>
+<preserve-type>1</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>70</line-number>
+<pathname>Z:\rc2014-ez80-firmware\src\startup\vectors16.asm</pathname>
+<address>24</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>

@@ -48,8 +48,9 @@ MACEND
 	SEGMENT	.RESET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	XREF	_rc2014_hook
-	XREF	_io_hook
+	XREF	_rst_io
+	XREF	_rst_rc2014_fnc
+	XREF	_rst_rc2014_bank_switch
 _reset:
 _rst0:
 	di
@@ -58,16 +59,17 @@ _rst0:
 
 	ORG	%08
 _rst8:
-	jp.lil	_io_hook
+	jp.lil	_rst_io
 
 	org	%10
 _rst10:
-	jp.lil	_rc2014_hook
+	jp.lil	_rst_rc2014_fnc
 
+	org	%18
 _rst18:
-	di
-	rsmix
-	jp.lil	__init
+	jp.lil	_rst_rc2014_bank_switch
+
+	org	%20
 _rst20:
 	di
 	rsmix
