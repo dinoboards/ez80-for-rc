@@ -14,22 +14,7 @@
 	XREF	__c_startup
 	XREF	__cstartup
 	XREF	_main
-	XREF	__CS0_LBR_INIT_PARAM
-	XREF	__CS0_UBR_INIT_PARAM
-	XREF	__CS0_CTL_INIT_PARAM
-	XREF	__CS1_LBR_INIT_PARAM
-	XREF	__CS1_UBR_INIT_PARAM
-	XREF	__CS1_CTL_INIT_PARAM
-	XREF	__CS2_LBR_INIT_PARAM
-	XREF	__CS2_UBR_INIT_PARAM
-	XREF	__CS2_CTL_INIT_PARAM
-	XREF	__CS3_LBR_INIT_PARAM
-	XREF	__CS3_UBR_INIT_PARAM
-	XREF	__CS3_CTL_INIT_PARAM
-	XREF	__CS0_BMC_INIT_PARAM
-	XREF	__CS1_BMC_INIT_PARAM
-	XREF	__CS2_BMC_INIT_PARAM
-	XREF	__CS3_BMC_INIT_PARAM
+
 	XREF	__FLASH_CTL_INIT_PARAM
 	XREF	__FLASH_ADDR_U_INIT_PARAM
 	XREF	__RAM_CTL_INIT_PARAM
@@ -56,7 +41,7 @@ __init:
 	out0	(PB_DDR), a			; GPIO
 	out0	(PC_DDR), a			;
 	out0	(PD_DDR), a			;
-	ld	a, %00
+	xor	a
 	out0	(PB_ALT1), a			;
 	out0	(PC_ALT1), a			;
 	out0	(PD_ALT1), a			;
@@ -80,41 +65,40 @@ __init:
 	out0	(RTC_CTRL), a			; the RTC to be synchronized to another
                              			; time source.
 
-	; configure external memory/io
-	ld	a, __CS0_LBR_INIT_PARAM
+	; CS0 and CS1 are disabled
+	xor	a
 	out0	(CS0_LBR), a
-	ld	a, __CS0_UBR_INIT_PARAM
 	out0	(CS0_UBR), a
-	ld	a, __CS0_BMC_INIT_PARAM
 	out0	(CS0_BMC), a
-	ld	a, __CS0_CTL_INIT_PARAM
 	out0	(CS0_CTL), a
 
-	ld	a, __CS1_LBR_INIT_PARAM
 	out0	(CS1_LBR), a
-	ld	a, __CS1_UBR_INIT_PARAM
 	out0	(CS1_UBR), a
-	ld	a, __CS1_BMC_INIT_PARAM
 	out0	(CS1_BMC), a
-	ld	a, __CS1_CTL_INIT_PARAM
 	out0	(CS1_CTL), a
 
-	ld	a, __CS2_LBR_INIT_PARAM
+	; CPU @ 18.432
+	; WITH BUS-MODE SET TO Z80, BUS-CYCLE OF 3 -> EQUIVALENT TO Z80 @ 6.144MHZ
+	; NO ADDITIONAL WAIT STATES REQUIRED
+	
+	; RC2014 512K ROM/RAM MODULE TESTED WITH BUS-CYCLE OF 1 AND NO W/S
+
+	; CS2 is enabled for I/O @ $FFxx
+	ld	a, %FF
 	out0	(CS2_LBR), a
-	ld	a, __CS2_UBR_INIT_PARAM
 	out0	(CS2_UBR), a
-	ld	a, __CS2_BMC_INIT_PARAM
+	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | BMX_BC_3
 	out0	(CS2_BMC), a
-	ld	a, __CS2_CTL_INIT_PARAM
+	ld	a, CSX_WAIT_0 | CSX_TYPE_IO | CSX_ENABLED
 	out0	(CS2_CTL), a
 
-	ld	a, __CS3_LBR_INIT_PARAM
+	; CS3 is enabled for memory @ $B9xxxx
+	ld	a, %B9
 	out0	(CS3_LBR), a
-	ld	a, __CS3_UBR_INIT_PARAM
 	out0	(CS3_UBR), a
-	ld	a, __CS3_BMC_INIT_PARAM
+	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | BMX_BC_3
 	out0	(CS3_BMC), a
-	ld	a, __CS3_CTL_INIT_PARAM
+	ld	a, CSX_WAIT_0 | CSX_TYPE_MEM | CSX_ENABLED
 	out0	(CS3_CTL), a
 
 	; enable internal memory
@@ -148,17 +132,7 @@ __no_cstartup:
 
 	call	__open_periphdevice
 
-	;---------------------------------------------
-	; prepare to go to the main system rountine
-	ld	hl, 0				; hl = NULL
-	push	hl				; argv[0] = NULL
-	ld	ix, 0
-	add	ix, sp				; ix = &argv[0]
-	push	ix				; &argv[0]
-	pop	hl
-	ld	de, 0				; argc = 0
 	call	_main				; int main(int argc, char *argv[]))
-	pop	de				; clean the stack
 
 __exit:
 _exit:

@@ -1,6 +1,6 @@
 ;  zsldevinit.asm
 ;  Implementation file for opening peripheral devices.
-; 
+;
 ;  This file contains implementation for opening (by calling intialize routines)
 ;  peripheral devices required by ZiLOG Standard Library implementations for eZ80
 ;  and eZ80 Acclaim! series of microprocessors and microcontrollers.
@@ -13,7 +13,7 @@
 
 	segment	CODE
 	.assume adl=1
-	
+
 	XDEF _open_periphdevice
 	XDEF __open_periphdevice
 
@@ -72,14 +72,14 @@ endif
 	XREF _zsl_g_clock_xdefine
 	XREF __lcmpu
 
-	ld	hl,#(_zsl_g_clock_xdefine & %ffffff)		; load the symbol value in HL
-	ld	e,#(_zsl_g_clock_xdefine >> 24)				; load the highest byte in E
+	ld	hl,#(_zsl_g_clock_xdefine & %ffffff)	; load the symbol value in HL
+	ld	e,#(_zsl_g_clock_xdefine >> 24)		; load the highest byte in E
 	ld	bc,0
 	xor	a,a
-	call __lcmpu									; check if it is zero
-	jr	z,_skip										; skip if it zero
+	call __lcmpu					; check if it is zero
+	jr	z,_skip					; skip if it zero
 
-	ld hl, #(_zsl_g_clock_xdefine & %ffffff)		; load symbol value in g_clock0\1 variables.
+	ld hl, #(_zsl_g_clock_xdefine & %ffffff)	; load symbol value in g_clock0\1 variables.
 	ld a, #(_zsl_g_clock_xdefine >> 24)
 .endif
 
@@ -207,7 +207,7 @@ BUFF_SIZE .equ 64									; default software FIFO buff size value.
 	XDEF _g_fifosize
 
 _g_fifosize:
-	.trio BUFF_SIZE									; Maximum size of the FIFO	
+	.trio BUFF_SIZE									; Maximum size of the FIFO
 .endif
 
 	segment bss
@@ -222,7 +222,7 @@ _g_TxBuffer_UART0:
 	ds BUFF_SIZE									; Allocate space for transmit FIFO.
 
 .endif
-	
+
 .ifdef ZSL_DEVICE_UART1
 	XDEF _g_RxBuffer_UART1
 	XDEF _g_TxBuffer_UART1

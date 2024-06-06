@@ -176,4 +176,40 @@ FLASH_ROW:	.equ	%FD
 FLASH_COL:	.equ	%FE
 FLASH_PGCTL:	.equ	%FF
 
+CSX_WAIT_7	equ	(7 << 5)
+CSX_WAIT_6	equ	(6 << 5)
+CSX_WAIT_5	equ	(5 << 5)
+CSX_WAIT_4	equ	(4 << 5)
+CSX_WAIT_3	equ	(3 << 5)
+CSX_WAIT_2	equ	(2 << 5)
+CSX_WAIT_1	equ	(1 << 5)
+CSX_WAIT_0	equ	(0 << 5)
+CSX_TYPE_IO	equ	%10
+CSX_TYPE_MEM	equ	0
+CSX_ENABLED	equ	%08
+CSX_DISABLED	equ	0
+
+BMX_BM_EZ80		equ	(%00 << 6)
+BMX_BM_Z80		equ	(%01 << 6)
+BMX_BM_INTEL		equ	(%02 << 6)
+BMX_BM_MOTOROLA		equ	(%03 << 6)
+BMX_AD_SEPERATE		equ	(%0 << 5)
+BMX_AD_MULTIPLEX	equ	(%1 << 5)
+BMX_BC_0		equ	%00
+BMX_BC_1		equ	%01
+BMX_BC_2		equ	%02
+BMX_BC_3		equ	%03
+BMX_BC_4		equ	%04
+BMX_BC_5		equ	%05
+BMX_BC_6		equ	%06
+BMX_BC_7		equ	%07
+BMX_BC_8		equ	%08
+BMX_BC_9		equ	%09
+BMX_BC_10		equ	%0A
+BMX_BC_11		equ	%0B
+BMX_BC_12		equ	%0C
+BMX_BC_13		equ	%0D
+BMX_BC_14		equ	%0E
+BMX_BC_15		equ	%0F
+
 ;* End eZ80F92 inc file
