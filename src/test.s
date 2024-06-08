@@ -21,10 +21,17 @@ _spike:
 	.assume adl = 0
 step1:
 	NOP
-	LD	A, 15
+	LD	A, %67
+	LD	B, %54
+	LD	C, %10
 	RST.L	%08		; I/O HELPER
-	OUT 	(0), A
+	OUT 	(C), A
 
+
+	NOP
+	NOP
+	NOP
+	NOP
 
 	;LD	A, 2
 	;LD	BC, %1234
