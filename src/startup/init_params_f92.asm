@@ -53,7 +53,6 @@ __init:
 	out0	(TMR2_CTL), a			;
 	out0	(TMR3_CTL), a			;
 	out0	(TMR4_CTL), a			;
-	out0	(TMR5_CTL), a			;
 	out0	(UART0_IER), a			; UARTs
 	out0	(UART1_IER), a			;
 	out0	(I2C_CTL), a			; I2C
@@ -64,6 +63,27 @@ __init:
 	and	a, %BE				; resets the RTC count prescaler allowing
 	out0	(RTC_CTRL), a			; the RTC to be synchronized to another
                              			; time source.
+
+	; set PB5 for RC2014 clock out
+	; out frequency = 18.432Mhz / (DIV * (RR*2))
+	;               = 18.432Mhz / (4 * 1 * 2)
+	;               =  2.304Mhz
+
+	; divide cpu clock by 4
+	ld	a, 1
+	out0	(TMR5_RR_L), a
+	xor	a
+	out0	(TMR5_RR_H), a
+	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4
+	out0	(TMR5_CTL), a
+
+	; SEND TIMER 5 TO PB5
+	ld	a, 1 << 5 ; Px5 ALT
+	out0	(PB_ALT2), a
+	out0	(PB_DDR), a
+	xor	a
+	out0	(PB_ALT1), a
+	out0	(PB_DR), a
 
 	; CS0 and CS1 are disabled
 	xor	a
@@ -80,7 +100,7 @@ __init:
 	; CPU @ 18.432
 	; WITH BUS-MODE SET TO Z80, BUS-CYCLE OF 3 -> EQUIVALENT TO Z80 @ 6.144MHZ
 	; NO ADDITIONAL WAIT STATES REQUIRED
-	
+
 	; RC2014 512K ROM/RAM MODULE TESTED WITH BUS-CYCLE OF 1 AND NO W/S
 
 	; CS2 is enabled for I/O @ $FFxx

@@ -212,4 +212,14 @@ BMX_BC_13		equ	%0D
 BMX_BC_14		equ	%0E
 BMX_BC_15		equ	%0F
 
+TMR_ENABLED		equ	(1 << 0)
+TMR_RST_EN		equ	(1 << 1)
+TMR_CLK_DIV_4		equ	(0 << 2)
+TMR_CLK_DIV_16		equ	(1 << 2)
+TMR_CLK_DIV_64		equ	(2 << 2)
+TMR_CLK_DIV_128		equ	(3 << 2)
+TMR_SINGLE		equ	(0 << 4)
+TMR_CONTINUOUS		equ	(1 << 4)
+TMR_IRQ_EN		equ	(1 << 6)
+
 ;* End eZ80F92 inc file

@@ -17,13 +17,6 @@ void x_uart_init(void)
 #ifndef _SIMULATE
  #ifdef _ZSL_UART_USED
 	ei();
-   #ifdef ZSL_DEVICE_UART0
-	//enable Max3222 driver
-    PB_DR = 0x40;
-    PB_ALT2 = 0x00;
-    PB_ALT1 = 0x00;
-    PB_DDR = 0xBF;
-   #endif
  #else
     unsigned short int i;
     unsigned short brg;
@@ -39,12 +32,6 @@ void x_uart_init(void)
     PD_ALT1 = 0x00;
     PD_DDR = 0xEB;
     PD_DR = 0x00;
-
-	//enable Max3222 driver
-    PB_DR = 0x40;
-    PB_ALT2 = 0x00;
-    PB_ALT1 = 0x00;
-    PB_DDR = 0xBF;
   #endif
 
     UART_LCTL |= LCTL_DLAB;
