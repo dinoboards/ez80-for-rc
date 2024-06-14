@@ -20,7 +20,7 @@ void x_uart_init(void)
  #else
     unsigned short int i;
     unsigned short brg;
-    brg = SysClkFreq/(16 * UART_BPS);
+    brg = (SysClkFreq*1000)/(16 * UART_BPS);
 
   #if (UART==1)
     PC_ALT2 = 0x03;

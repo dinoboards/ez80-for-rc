@@ -7,6 +7,7 @@
 ;*****************************************************************************
 
         INCLUDE "ez80f92.inc"
+        INCLUDE "..\config.inc"
 
 
 	XREF	__stack
@@ -68,6 +69,9 @@ __init:
 	; out frequency = 18.432Mhz / (DIV * (RR*2))
 	;               = 18.432Mhz / (4 * 1 * 2)
 	;               =  2.304Mhz
+	;
+	;               = 20Mhz / 8 = 2.5Mhz
+	;               = 24MHz / 8 = 3Mhz
 
 	; divide cpu clock by 4
 	ld	a, 1
@@ -97,17 +101,11 @@ __init:
 	out0	(CS1_BMC), a
 	out0	(CS1_CTL), a
 
-	; CPU @ 18.432
-	; WITH BUS-MODE SET TO Z80, BUS-CYCLE OF 3 -> EQUIVALENT TO Z80 @ 6.144MHZ
-	; NO ADDITIONAL WAIT STATES REQUIRED
-
-	; RC2014 512K ROM/RAM MODULE TESTED WITH BUS-CYCLE OF 1 AND NO W/S
-
 	; CS2 is enabled for I/O @ $FFxx
 	ld	a, %FF
 	out0	(CS2_LBR), a
 	out0	(CS2_UBR), a
-	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | BMX_BC_3
+	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | IO_BUS_CYCLES
 	out0	(CS2_BMC), a
 	ld	a, CSX_WAIT_0 | CSX_TYPE_IO | CSX_ENABLED
 	out0	(CS2_CTL), a
@@ -116,7 +114,7 @@ __init:
 	ld	a, %B9
 	out0	(CS3_LBR), a
 	out0	(CS3_UBR), a
-	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | BMX_BC_3
+	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | MEM_BUS_CYCLES
 	out0	(CS3_BMC), a
 	ld	a, CSX_WAIT_0 | CSX_TYPE_MEM | CSX_ENABLED
 	out0	(CS3_CTL), a
@@ -169,10 +167,8 @@ _abort:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _SysClkFreq:
-	DL	_SYS_CLK_FREQ
+	DL	CPU_CLK_FREQ/1000
 
-
-	XREF	_SYS_CLK_FREQ
 	XDEF	_SysClkFreq
 
 	END

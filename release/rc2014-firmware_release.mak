@@ -63,7 +63,7 @@ ASFLAGS =  \
 -NOlistmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn  \
 -NOdebug -NOigcase -cpu:eZ80F92
 
-LDFLAGS = @.\rc2014-firmware_Release.linkcmd
+LDFLAGS = @.\rc2014-firmware_release.linkcmd
 build: rc2014-firmware
 
 buildall: clean rc2014-firmware

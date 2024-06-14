@@ -75,7 +75,7 @@ define _OSC_FREQ = 20000000
 define _SYS_CLK_SRC = 0
 define _OSC_FREQ_MULT = 1
 define __PLL_CTL0_INIT_PARAM = $00
-define _zsl_g_clock_xdefine = 18432000
+define _zsl_g_clock_xdefine = 24000000
 
 "Z:\rc2014-ez80-firmware\simulate\rc2014-firmware"= \
  ".\console.obj", \
