@@ -386,27 +386,6 @@
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>123</line-number>
-<pathname>Z:\rc2014-ez80-firmware\src\rst-io.s</pathname>
-<address>0</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>127</line-number>
-<pathname>Z:\rc2014-ez80-firmware\src\rst-io.s</pathname>
-<address>0</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>112</line-number>
-<pathname>Z:\rc2014-ez80-firmware\src\rst-io.s</pathname>
-<address>0</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>

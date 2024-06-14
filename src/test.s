@@ -24,9 +24,58 @@ step1:
 	LD	A, %67
 	LD	B, %54
 	LD	C, %10
-	RST.L	%08		; I/O HELPER
-	OUT 	(C), A
+	LD	D, %23
+	LD	E, %34
+	LD	H, %45
+	LD	L, %56
 
+	RST.L	%08		; I/O HELPER
+	OUT	(%45), A
+
+	RST.L	%08		; I/O HELPER
+	OUT 	(C), A		; OUT (%FF10), %67
+
+	RST.L	%08		; I/O HELPER
+	OUT 	(C), B		; OUT (%FF10), %54
+
+	RST.L	%08		; I/O HELPER
+	OUT 	(C), C		; OUT (%FF10), %10
+
+	RST.L	%08		; I/O HELPER
+	OUT	(C), D		; OUT (%FF10), %23
+
+	RST.L	%08		; I/O HELPER
+	OUT	(C), E		; OUT (%FF10), %34
+
+	RST.L	%08		; I/O HELPER
+	OUT	(C), H		; OUT (%FF10), %45
+
+	RST.L	%08		; I/O HELPER
+	OUT	(C), L		; OUT (%FF10), %56
+
+
+	RST.L	%08		; I/O HELPER
+	IN	A, (C)		; IN (%FF10), A
+
+	RST.L	%08		; I/O HELPER
+	IN	B, (C)		; IN (%FF10), B
+	LD	B, %54
+
+	RST.L	%08		; I/O HELPER
+	IN	C, (C)		; IN (%FF10), C
+	LD	C, %10
+
+	RST.L	%08		; I/O HELPER
+	IN	D, (C)		; IN (%FF10), D
+
+	RST.L	%08		; I/O HELPER
+	IN	E, (C)		; IN (%FF10), E
+
+	RST.L	%08		; I/O HELPER
+	IN	H, (C)		; IN (%FF10), H
+
+	RST.L	%08		; I/O HELPER
+	IN	L, (C)		; IN (%FF10), L
 
 	NOP
 	NOP
