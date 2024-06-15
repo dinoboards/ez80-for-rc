@@ -81,12 +81,22 @@ __init:
 	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4
 	out0	(TMR5_CTL), a
 
+	; CONFIGURE PB4 & PB5
 	; SEND TIMER 5 TO PB5
-	ld	a, 1 << 5 ; Px5 ALT
-	out0	(PB_ALT2), a
-	out0	(PB_DDR), a
-	xor	a
+	; GPIO MODE 7, ALT1 0, ALT2 1, DDR 1, DR 0
+	;
+	; SET PB4 (INT) TO INPUT & ENABLE INTERRUPT VECTOR
+	; GPIO MODE 8, ALT1 1, ALT2 1, DDR 0, DR 0
+	ld	a, P4_ALT1
 	out0	(PB_ALT1), a
+
+	ld	a, P5_ALT2 | P4_ALT2
+	out0	(PB_ALT2), a
+
+	ld	a, P5_DDR
+	out0	(PB_DDR), a
+
+	XOR	A
 	out0	(PB_DR), a
 
 	; CS0 and CS1 are disabled

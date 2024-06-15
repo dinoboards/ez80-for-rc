@@ -201,6 +201,8 @@ $(WORKDIR_ESCSPACE)\cstartup.obj :  \
 
 $(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_params_f92.asm  \
+            $(INCLUDE_ESCSPACE)\zilog\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_params_f92.asm"
 

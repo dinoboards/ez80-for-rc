@@ -54,7 +54,7 @@ MACEND
 _reset:
 _rst0:
 	di
-	rsmix
+	stmix
 	jp.lil	__init
 
 	ORG	%08
@@ -72,19 +72,19 @@ _rst18:
 	org	%20
 _rst20:
 	di
-	rsmix
+	stmix
 	jp.lil	__init
 _rst28:
 	di
-	rsmix
+	stmix
 	jp.lil	__init
 _rst30:
 	di
-	rsmix
+	stmix
 	jp.lil	__init
 _rst38:
 	di
-	rsmix
+	stmix
 	jp.lil	__init
 	ds %26
 _nmi:
@@ -273,7 +273,7 @@ __1st_jump_table:
 	jp	__2nd_jump_table + %64
 	jp	__2nd_jump_table + %68
 	jp	__2nd_jump_table + %6c
-	jp	__2nd_jump_table + %70
+	jp	delegate_isr; external_isr; __2nd_jump_table + %70
 	jp	__2nd_jump_table + %74
 	jp	__2nd_jump_table + %78
 	jp	__2nd_jump_table + %7c
@@ -293,5 +293,50 @@ __1st_jump_table:
 	jp	__2nd_jump_table + %b4
 	jp	__2nd_jump_table + %b8
 	jp	__2nd_jump_table + %bc
+
+delegate_isr:	; defer to the external ISR routine
+
+	PUSH	IX
+	LD	IX,+3
+	ADD	IX,SP
+	PUSH	AF
+
+	LD	A, (IX)			; ADL MODE OF INTERRUPTED CODE (2 - Z80, 3 - ADL)
+	CP	3
+	JR	NZ, skip_24_reg_save
+
+	PUSH	BC			; IF WE INTERRUPTED AN ADL ROUTINE,
+	PUSH	DE			; THEN WE NEED TO SAVE ALL REGISTERS BEFORE
+	PUSH	HL			; JUMPING INTO Z80 CODE
+	PUSH	IY			; BECAUSE DESPITE IT ONLY HAVE ACCESS TO THE
+	EXX				; LOWER 16 BIT OF REGISTERS, THE VARIOUS INSTRUCTIONS
+	PUSH	AF			; CAN HAVE SIDE EFFECTS ON THE UPPER 8 BITS
+	PUSH	BC
+	PUSH	DE
+	PUSH	HL
+	EXX
+
+skip_24_reg_save:
+	RST.S	%38		; delegate to ISR routine of external ROM
+
+	LD	A, (IX)
+	CP	3
+	JR	NZ, skip_24_reg_restore
+	EXX
+	POP	HL
+	POP	DE
+	POP	BC
+	POP	AF
+	EXX
+	POP	IY
+	POP	HL
+	POP	DE
+	POP	BC
+
+skip_24_reg_restore:
+	POP	AF
+	POP	IX
+	EI
+	RETI.L			; return rom interrupt - back to ADL 0 or 1
 
 	END

@@ -222,4 +222,9 @@ TMR_SINGLE		equ	(0 << 4)
 TMR_CONTINUOUS		equ	(1 << 4)
 TMR_IRQ_EN		equ	(1 << 6)
 
+P5_ALT2			EQU	(1<<5)
+P4_ALT2			EQU	(1<<4)
+P4_ALT1			EQU	(1<<4)
+P5_DDR			EQU	(1<<5)
+
 ;* End eZ80F92 inc file
