@@ -143,9 +143,6 @@ __init:
 	; setup Stack Pointer
 	ld	sp, __stack
 
-	; in itialize the interrupt vector table
-	call	__init_default_vectors
-
 	; start application
 	ld	a, __cstartup
 	or	a, a
