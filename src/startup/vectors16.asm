@@ -169,6 +169,49 @@ _set_vector:
 	ret
 
 
+delegate_isr:	; defer to the external ISR routine
+
+	PUSH	HL
+	LD	HL, 3
+	ADD	HL, SP
+	PUSH	AF
+
+	LD	A, (HL)			; ADL MODE OF INTERRUPTED CODE (2 - Z80, 3 - ADL)
+	CP	3
+	JR	NZ, skip_24_reg_save
+
+	PUSH	BC			; IF WE INTERRUPTED AN ADL ROUTINE,
+	PUSH	DE			; WE NEED TO SAVE ALL 24-BIT REGISTERS
+	PUSH	HL			; BEFORE JUMPING INTO Z80 CODE,
+	PUSH	IX			; BECAUSE DESPITE IT ONLY HAVE ACCESS TO THE
+	PUSH	IY			; LOWER 16 BIT OF REGISTERS, THE VARIOUS INSTRUCTIONS
+	EXX				; CAN HAVE SIDE EFFECTS ON THE UPPER 8 BITS
+	PUSH	BC			; AF REGISTER PAIR DOES NOT HAVE AN UPPER 8 BITS TO BE
+	PUSH	DE			; IMPACTED, SO WE CAN SKIP IT
+	PUSH	HL
+	EXX
+
+skip_24_reg_save:
+	RST.S	%38		; delegate to ISR routine of external ROM
+
+	JR	NZ, skip_24_reg_restore
+	EXX
+	POP	HL
+	POP	DE
+	POP	BC
+	EXX
+	POP	IY
+	POP	IX
+	POP	HL
+	POP	DE
+	POP	BC
+
+skip_24_reg_restore:
+	POP	AF
+	POP	HL
+	EI
+	RETI.L			; return rom interrupt - back to ADL 0 or 1
+
 ;*****************************************************************************
 	DEFINE IVJMPTBL, SPACE = RAM
 	SEGMENT IVJMPTBL
@@ -219,7 +262,7 @@ __vector_table:
 	dw	__1st_jump_table + %64
 	dw	__1st_jump_table + %68
 	dw	__1st_jump_table + %6c
-	dw	__1st_jump_table + %70
+	dw	delegate_isr
 	dw	__1st_jump_table + %74
 	dw	__1st_jump_table + %78
 	dw	__1st_jump_table + %7c
@@ -244,6 +287,8 @@ __vector_table:
 ; 1st Interrupt Vector Jump Table
 ;  - this table must reside in the first 64K bytes of memory
 ;  - each 4-byte entry is a jump to the 2nd jump table plus offset
+;  TODO: WE CAN REMOVED THE 'DYNAMIC' JUMP TABLE AND JUST HARD
+; CODE THE ABOVE JUMP TABLE AS REQUIRED
 __1st_jump_table:
 	jp	__2nd_jump_table + %00
 	jp	__2nd_jump_table + %04
@@ -273,7 +318,7 @@ __1st_jump_table:
 	jp	__2nd_jump_table + %64
 	jp	__2nd_jump_table + %68
 	jp	__2nd_jump_table + %6c
-	jp	delegate_isr; external_isr; __2nd_jump_table + %70
+	jp	__2nd_jump_table + %70
 	jp	__2nd_jump_table + %74
 	jp	__2nd_jump_table + %78
 	jp	__2nd_jump_table + %7c
@@ -293,50 +338,5 @@ __1st_jump_table:
 	jp	__2nd_jump_table + %b4
 	jp	__2nd_jump_table + %b8
 	jp	__2nd_jump_table + %bc
-
-delegate_isr:	; defer to the external ISR routine
-
-	PUSH	IX
-	LD	IX,+3
-	ADD	IX,SP
-	PUSH	AF
-
-	LD	A, (IX)			; ADL MODE OF INTERRUPTED CODE (2 - Z80, 3 - ADL)
-	CP	3
-	JR	NZ, skip_24_reg_save
-
-	PUSH	BC			; IF WE INTERRUPTED AN ADL ROUTINE,
-	PUSH	DE			; THEN WE NEED TO SAVE ALL REGISTERS BEFORE
-	PUSH	HL			; JUMPING INTO Z80 CODE
-	PUSH	IY			; BECAUSE DESPITE IT ONLY HAVE ACCESS TO THE
-	EXX				; LOWER 16 BIT OF REGISTERS, THE VARIOUS INSTRUCTIONS
-	PUSH	AF			; CAN HAVE SIDE EFFECTS ON THE UPPER 8 BITS
-	PUSH	BC
-	PUSH	DE
-	PUSH	HL
-	EXX
-
-skip_24_reg_save:
-	RST.S	%38		; delegate to ISR routine of external ROM
-
-	LD	A, (IX)
-	CP	3
-	JR	NZ, skip_24_reg_restore
-	EXX
-	POP	HL
-	POP	DE
-	POP	BC
-	POP	AF
-	EXX
-	POP	IY
-	POP	HL
-	POP	DE
-	POP	BC
-
-skip_24_reg_restore:
-	POP	AF
-	POP	IX
-	EI
-	RETI.L			; return rom interrupt - back to ADL 0 or 1
 
 	END
