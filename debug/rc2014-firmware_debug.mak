@@ -201,13 +201,14 @@ $(WORKDIR_ESCSPACE)\cstartup.obj :  \
 
 $(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_params_f92.asm  \
-            $(INCLUDE_ESCSPACE)\zilog\ez80F92.inc  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_params_f92.asm"
 
 $(WORKDIR_ESCSPACE)\main.obj :  \
-            $(PRJDIR_ESCSPACE)\src\main.s
+            $(PRJDIR_ESCSPACE)\src\main.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
 
 $(WORKDIR_ESCSPACE)\rst-io.obj :  \
@@ -219,11 +220,14 @@ $(WORKDIR_ESCSPACE)\rst-rc2014-bank-switch.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-rc2014-bank-switch.s"
 
 $(WORKDIR_ESCSPACE)\rst-rc2014-fnc.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-rc2014-fnc.s
+            $(PRJDIR_ESCSPACE)\src\rst-rc2014-fnc.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-rc2014-fnc.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \
-            $(PRJDIR_ESCSPACE)\src\test.s
+            $(PRJDIR_ESCSPACE)\src\test.s  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
 
 $(WORKDIR_ESCSPACE)\uart.obj :  \

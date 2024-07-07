@@ -1,10 +1,53 @@
 
+        INCLUDE "startup\ez80f92.inc"
+
 	SECTION CODE
 
 	.assume adl=1
 
 	public	_spike
 _spike:
+	;set up RTC and confirm operation
+
+	IN0	A, (RTC_CTRL)
+
+	LD	A, RTC_ALARM_DISABLE | RTC_INT_DISABLE | RTC_BCD_ENABLE | RTC_CLK_32KHZ | RTC_SLP_WAKE_DISABLE | RTC_UNLOCK
+	OUT0	(RTC_CTRL), A
+
+	LD	A, 3
+	OUT0	(RTC_SEC), A
+	LD	A, %05
+	OUT0	(RTC_MIN), A
+	LD	A, %10
+	OUT0	(RTC_HRS), A
+	LD	A, 6
+	OUT0	(RTC_DOW), A
+	LD	A, %29
+	OUT0	(RTC_DOM), A
+	LD	A, %06
+	OUT0	(RTC_MON), A
+	LD	A, %24
+	OUT0	(RTC_YR), A
+	LD	A, %20
+	OUT0	(RTC_CEN), A
+
+	IN0	A, (RTC_CTRL)
+
+	LD	A, RTC_ALARM_DISABLE | RTC_INT_DISABLE | RTC_BCD_ENABLE | RTC_CLK_32KHZ | RTC_SLP_WAKE_DISABLE | RTC_LOCK
+	OUT0	(RTC_CTRL), A
+
+LOOP:
+	in0	A, (RTC_SEC)
+	NOP
+	LD	BC, %FF00
+	OUT	(BC), A
+	IN0	A, (RTC_MIN)
+	NOP
+	IN0	A, (RTC_HRS)
+	NOP
+	JR	LOOP
+
+
 	LD	HL, step1
 	ld	de, 0b7E000h
 	ld	bc, step1_size

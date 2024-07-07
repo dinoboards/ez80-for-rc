@@ -22,7 +22,7 @@
 
 ; **************
 
-        INCLUDE "ez80f92.inc"
+        INCLUDE "startup/ez80f92.inc"
 
 
 
@@ -32,7 +32,9 @@ CLK_20:			.EQU	20000000
 
 CPU_CLK_FREQ:		.EQU	CLK_24
 
-if CPU_CLK_FREQ != CLK_24
+Z80_ADDR_MBASE		.EQU	%B9
+
+if CPU_CLK_FREQ == CLK_24
 
 IO_BUS_CYCLES 		.EQU	BMX_BC_4	; EQUIVALENT TO Z80 @ 6MHZ
 MEM_BUS_CYCLES 		.EQU	BMX_BC_4	; EQUIVALENT TO Z80 @ 6MHZ
