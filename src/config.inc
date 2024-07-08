@@ -24,7 +24,7 @@
 
         INCLUDE "startup/ez80f92.inc"
 
-
+TICKFREQ		.EQU	60
 
 CLK_24:			.EQU	24000000
 CLK_18_432		.EQU	18432000

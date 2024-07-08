@@ -27,6 +27,8 @@
 	XDEF	_exit
 	XREF	__vector_table
 
+	XREF	HB_SECTCK
+
 ;*****************************************************************************
 ; Startup code
         DEFINE	.STARTUP, SPACE = ROM
@@ -70,7 +72,7 @@ __init:
 
        ; set TMR1 for 60Hz interrupt signal?
 
-COUNT_FOR_60HZ EQU (CPU_CLK_FREQ/(16*2))/60
+COUNT_FOR_60HZ EQU (CPU_CLK_FREQ/16)/60
 
        LD      A, COUNT_FOR_60HZ & %FF
        OUT0    (TMR1_RR_L), A
@@ -171,6 +173,9 @@ __no_cstartup:
 	XREF __open_periphdevice
 
 	CALL	__open_periphdevice
+
+	LD	A, TICKFREQ
+	LD	(HB_SECTCK), A
 
 	CALL	_main				; int main(int argc, char *argv[]))
 

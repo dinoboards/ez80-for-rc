@@ -6,7 +6,7 @@
 	.assume adl=1
 
 	public	_spike
-_spike:
+_spike:	
 	LD	HL, step1
 	ld	de, 0b7E000h
 	ld	bc, step1_size
@@ -23,7 +23,20 @@ _spike:
 	.assume adl = 0
 step1:
 	ei
+
+	LD	DE, 0
+	LD	HL, 0
+	LD	A, 2
+	LD	B, 0	; GET TIMER TICK
+	RST.L	%10
+
 loop:
+	LD	DE, 0
+	LD	HL, 0
+	LD	A, 2
+	LD	B, 1	; GET SECS TICK
+	RST.L	%10
+
 	nop
 	nop
 	jr loop

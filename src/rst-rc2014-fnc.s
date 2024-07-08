@@ -1,5 +1,7 @@
 	include "config.inc"
 
+	XREF	timer_tick_control
+
 	SECTION CODE
 
 	.assume adl=1
@@ -9,6 +11,7 @@ HOOK_CNT	EQU	4
 ; A = function index
 ; A = 0 -> SYSTEM INITIALISE, HL-> PLATFORM DESCRIPTION TABLE
 ; A = 1 -> RTC-FUNC, B-> RTC SUB-FUNCTION
+; A = 2 -> 60HZ-TIMER-FUNC, B-> SUB-FUNCTION
 
 	PUBLIC	_rst_rc2014_fnc
 _rst_rc2014_fnc:
@@ -37,7 +40,7 @@ rst_rc2014_fnc_resume:
 rc_functions:
 	JP	rcfn_platform_init
 	JP	rtc_control
-	JP	_fn_2
+	JP	timer_tick_control
 	JP	_fn_3
 
 _fn_1:
@@ -186,7 +189,6 @@ rtc_set_time:
 
 	LD	A, RTC_ALARM_DISABLE | RTC_INT_DISABLE | RTC_BCD_ENABLE | RTC_CLK_32KHZ | RTC_SLP_WAKE_DISABLE | RTC_LOCK
 	OUT0	(RTC_CTRL), A
-
 
 	XOR	A		; SUCCESS
 	RET.L
