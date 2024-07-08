@@ -21,11 +21,11 @@
 	XREF	__RAM_CTL_INIT_PARAM
 	XREF	__RAM_ADDR_U_INIT_PARAM
 
-        XDEF	__init
-        XDEF	_abort
-        XDEF	__exit
-        XDEF	_exit
-
+	XDEF	__init
+	XDEF	_abort
+	XDEF	__exit
+	XDEF	_exit
+	XREF	__vector_table
 
 ;*****************************************************************************
 ; Startup code
@@ -36,34 +36,49 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Minimum default initialization
 __init:
-	; disable internal peripheral interrupt sources
-	;-- this will help during a RAM debug session --
-	ld	a, %FF
-	out0	(PB_DDR), a			; GPIO
-	out0	(PC_DDR), a			;
-	out0	(PD_DDR), a			;
-	xor	a
-	out0	(PB_ALT1), a			;
-	out0	(PC_ALT1), a			;
-	out0	(PD_ALT1), a			;
-	out0	(PB_ALT2), a			;
-	out0	(PC_ALT2), a			;
-	out0	(PD_ALT2), a			;
-	out0	(TMR0_CTL), a			; timers
-	out0	(TMR1_CTL), a			;
-	out0	(TMR2_CTL), a			;
-	out0	(TMR3_CTL), a			;
-	out0	(TMR4_CTL), a			;
-	out0	(UART0_IER), a			; UARTs
-	out0	(UART1_IER), a			;
-	out0	(I2C_CTL), a			; I2C
-	out0	(FLASH_IRQ), a			; Flash
-	ld	a, %04
-	out0	(SPI_CTL), a			; SPI
-	in0	a, (RTC_CTRL)			; RTC, Writing to the RTC_CTRL register also
-	and	a, %BE				; resets the RTC count prescaler allowing
-	out0	(RTC_CTRL), a			; the RTC to be synchronized to another
+	IM	2				; Interrtup mode 2
+	LD	HL, __vector_table
+	LD	A, __vector_table >> 8 & 0ffh
+	LD	I, A				; Load interrtup vector base
+
+	LD	A, %FF
+	OUT0	(PB_DDR), A			; GPIO
+	OUT0	(PC_DDR), A			;
+	OUT0	(PD_DDR), A			;
+	XOR	A
+	OUT0	(PB_ALT1), A			;
+	OUT0	(PC_ALT1), A			;
+	OUT0	(PD_ALT1), A			;
+	OUT0	(PB_ALT2), A			;
+	OUT0	(PC_ALT2), A			;
+	OUT0	(PD_ALT2), A			;
+	OUT0	(TMR0_CTL), A			; timers
+	OUT0	(TMR1_CTL), A			;
+	OUT0	(TMR2_CTL), A			;
+	OUT0	(TMR3_CTL), A			;
+	OUT0	(TMR4_CTL), A			;
+	OUT0	(UART0_IER), A			; UARTs
+	OUT0	(UART1_IER), A			;
+	OUT0	(I2C_CTL), A			; I2C
+	OUT0	(FLASH_IRQ), A			; Flash
+	LD	A, %04
+	OUT0	(SPI_CTL), A			; SPI
+	IN0	A, (RTC_CTRL)			; RTC, Writing to the RTC_CTRL register also
+	AND	A, %BE				; resets the RTC count prescaler allowing
+	OUT0	(RTC_CTRL), A			; the RTC to be synchronized to another
                              			; time source.
+
+       ; set TMR1 for 60Hz interrupt signal?
+
+COUNT_FOR_60HZ EQU (CPU_CLK_FREQ/(16*2))/60
+
+       LD      A, COUNT_FOR_60HZ & %FF
+       OUT0    (TMR1_RR_L), A
+       LD      A, COUNT_FOR_60HZ >> 8
+       OUT0    (TMR1_RR_H), A
+       LD      A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_16 | TMR_IRQ_EN
+       OUT0    (TMR1_CTL), A
+
 
 	; set PB5 for RC2014 clock out
 	; out frequency = 18.432Mhz / (DIV * (RR*2))
@@ -74,12 +89,12 @@ __init:
 	;               = 24MHz / 8 = 3Mhz
 
 	; divide cpu clock by 4
-	ld	a, 1
-	out0	(TMR5_RR_L), a
-	xor	a
-	out0	(TMR5_RR_H), a
+	LD	A, 1
+	OUT0	(TMR5_RR_L), A
+	XOR	A
+	OUT0	(TMR5_RR_H), A
 	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4
-	out0	(TMR5_CTL), a
+	OUT0	(TMR5_CTL), A
 
 	; CONFIGURE PB4 & PB5
 	; SEND TIMER 5 TO PB5
@@ -87,67 +102,67 @@ __init:
 	;
 	; SET PB4 (INT) TO INPUT & ENABLE INTERRUPT VECTOR
 	; GPIO MODE 8, ALT1 1, ALT2 1, DDR 0, DR 0
-	ld	a, P4_ALT1
-	out0	(PB_ALT1), a
+	LD	A, P4_ALT1
+	OUT0	(PB_ALT1), A
 
-	ld	a, P5_ALT2 | P4_ALT2
-	out0	(PB_ALT2), a
+	LD	A, P5_ALT2 | P4_ALT2
+	OUT0	(PB_ALT2), A
 
-	ld	a, P5_DDR
-	out0	(PB_DDR), a
+	LD	A, P5_DDR
+	OUT0	(PB_DDR), A
 
 	XOR	A
-	out0	(PB_DR), a
+	OUT0	(PB_DR), A
 
 	; CS0 and CS1 are disabled
-	xor	a
-	out0	(CS0_LBR), a
-	out0	(CS0_UBR), a
-	out0	(CS0_BMC), a
-	out0	(CS0_CTL), a
+	XOR	A
+	OUT0	(CS0_LBR), A
+	OUT0	(CS0_UBR), A
+	OUT0	(CS0_BMC), A
+	OUT0	(CS0_CTL), A
 
-	out0	(CS1_LBR), a
-	out0	(CS1_UBR), a
-	out0	(CS1_BMC), a
-	out0	(CS1_CTL), a
+	OUT0	(CS1_LBR), A
+	OUT0	(CS1_UBR), A
+	OUT0	(CS1_BMC), A
+	OUT0	(CS1_CTL), A
 
 	; CS2 is enabled for I/O @ $FFxx
-	ld	a, %FF
-	out0	(CS2_LBR), a
-	out0	(CS2_UBR), a
-	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | IO_BUS_CYCLES
-	out0	(CS2_BMC), a
-	ld	a, CSX_WAIT_0 | CSX_TYPE_IO | CSX_ENABLED
-	out0	(CS2_CTL), a
+	LD	A, %FF
+	OUT0	(CS2_LBR), A
+	OUT0	(CS2_UBR), A
+	LD	A, BMX_BM_Z80 | BMX_AD_SEPERATE | IO_BUS_CYCLES
+	OUT0	(CS2_BMC), A
+	LD	A, CSX_WAIT_0 | CSX_TYPE_IO | CSX_ENABLED
+	OUT0	(CS2_CTL), A
 
 	; CS3 is enabled for memory @ $B9xxxx
-	ld	a, %B9
-	out0	(CS3_LBR), a
-	out0	(CS3_UBR), a
-	ld	a, BMX_BM_Z80 | BMX_AD_SEPERATE | MEM_BUS_CYCLES
-	out0	(CS3_BMC), a
-	ld	a, CSX_WAIT_0 | CSX_TYPE_MEM | CSX_ENABLED
-	out0	(CS3_CTL), a
+	LD	A, %B9
+	OUT0	(CS3_LBR), A
+	OUT0	(CS3_UBR), A
+	LD	A, BMX_BM_Z80 | BMX_AD_SEPERATE | MEM_BUS_CYCLES
+	OUT0	(CS3_BMC), A
+	LD	A, CSX_WAIT_0 | CSX_TYPE_MEM | CSX_ENABLED
+	OUT0	(CS3_CTL), A
 
 	; enable internal memory
-	ld	a, __FLASH_ADDR_U_INIT_PARAM
-	out0	(FLASH_ADDR_U), a
-	ld	a, __FLASH_CTL_INIT_PARAM
-	out0	(FLASH_CTRL), a
+	LD	A, __FLASH_ADDR_U_INIT_PARAM
+	OUT0	(FLASH_ADDR_U), A
+	LD	A, __FLASH_CTL_INIT_PARAM
+	OUT0	(FLASH_CTRL), A
 
-	ld	a, __RAM_ADDR_U_INIT_PARAM
-	out0	(RAM_ADDR_U), a
-	ld	a, __RAM_CTL_INIT_PARAM
-	out0	(RAM_CTL), a
+	LD	A, __RAM_ADDR_U_INIT_PARAM
+	OUT0	(RAM_ADDR_U), A
+	LD	A, __RAM_CTL_INIT_PARAM
+	OUT0	(RAM_CTL), A
 
 	; setup Stack Pointer
 	ld	sp, __stack
 
 	; start application
-	ld	a, __cstartup
-	or	a, a
-	jr	z, __no_cstartup
-	call	__c_startup
+	LD	A, __cstartup
+	OR	A
+	JR	Z, __no_cstartup
+	CALL	__c_startup
 
 __no_cstartup:
 	;--------------------------------------------------
@@ -155,9 +170,9 @@ __no_cstartup:
 
 	XREF __open_periphdevice
 
-	call	__open_periphdevice
+	CALL	__open_periphdevice
 
-	call	_main				; int main(int argc, char *argv[]))
+	CALL	_main				; int main(int argc, char *argv[]))
 
 __exit:
 _exit:
@@ -167,9 +182,9 @@ _abort:
 
 	XREF	__close_periphdevice
 
-	call	__close_periphdevice
+	CALL	__close_periphdevice
 
-	jr	$				; if we return from main loop forever here
+	JR	$				; if we return from main loop forever here
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

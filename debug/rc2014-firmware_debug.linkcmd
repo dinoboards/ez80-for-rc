@@ -75,6 +75,7 @@ define _SYS_CLK_FREQ = 24000000
 define _zsl_g_clock_xdefine = 24000000
 
 "Z:\rc2014-ez80-firmware\debug\rc2014-firmware"= \
+ ".\60-hz-counter.obj", \
  ".\console.obj", \
  ".\cstartup.obj", \
  ".\init_params_f92.obj", \

@@ -63,7 +63,6 @@ _nmi:
 	jp.lil	__default_nmi_handler
 
 
-
 ;*****************************************************************************
 ; Startup code
 	DEFINE .STARTUP, SPACE = ROM
@@ -73,16 +72,16 @@ _nmi:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Default Non-Maskable Interrupt handler
 __default_nmi_handler:
-	retn
+	RETN.L
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Default Maskable Interrupt handler
 __default_mi_handler:
-	ei
-	reti
+	EI
+	RETI.L
+
 
 delegate_isr:	; defer to the external ISR routine
-
 	PUSH	HL
 	LD	HL, 3
 	ADD	HL, SP
@@ -132,55 +131,58 @@ skip_24_reg_restore:
 	DEFINE .IVECTS, SPACE = ROM, ALIGN = 100h
 	SEGMENT .IVECTS
 
+	PUBLIC	__vector_table
+	EXTERN	ms_60Hz_timer_counter_isr
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 __vector_table:
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	delegate_isr
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
-	dw	__default_mi_handler
+	dw	__default_mi_handler		; 00H - unused
+	dw	__default_mi_handler		; 02H - unused
+	dw	__default_mi_handler		; 04H - unused
+	dw	__default_mi_handler		; 06H - unused
+	dw	__default_mi_handler		; 08H - Flash
+	dw	__default_mi_handler		; 0AH - PRT 0
+	dw	ms_60Hz_timer_counter_isr	; 0CH - PRT 1
+	dw	__default_mi_handler		; 0EH - PRT 2
+	dw	__default_mi_handler		; 10H - PRT 3
+	dw	__default_mi_handler		; 12H - PRT 4
+	dw	__default_mi_handler		; 14H - PRT 5
+	dw	__default_mi_handler		; 16H - RTC
+	dw	__default_mi_handler		; 18H - UART 0
+	dw	__default_mi_handler		; 1AH - UART 1
+	dw	__default_mi_handler		; 1CH - I2C
+	dw	__default_mi_handler		; 1EH - SPI
+	dw	__default_mi_handler		; 20H - unused
+	dw	__default_mi_handler		; 22H - unused
+	dw	__default_mi_handler		; 24H - unused
+	dw	__default_mi_handler		; 26H - unused
+	dw	__default_mi_handler		; 28H - unused
+	dw	__default_mi_handler		; 2AH - unused
+	dw	__default_mi_handler		; 2CH - unused
+	dw	__default_mi_handler		; 2EH - unused
+	dw	__default_mi_handler		; 30H - Port B0
+	dw	__default_mi_handler		; 32H - Port B1
+	dw	__default_mi_handler		; 34H - Port B2
+	dw	__default_mi_handler		; 36H - Port B3
+	dw	delegate_isr			; 38H - Port B4
+	dw	__default_mi_handler		; 3AH - Port B5
+	dw	__default_mi_handler		; 3CH - Port B6
+	dw	__default_mi_handler		; 3EH - Port B7
+	dw	__default_mi_handler		; 40H - Port C0
+	dw	__default_mi_handler		; 42H - Port C1
+	dw	__default_mi_handler		; 44H - Port C2
+	dw	__default_mi_handler		; 46H - Port C3
+	dw	__default_mi_handler		; 48H - Port C4
+	dw	__default_mi_handler		; 4AH - Port C5
+	dw	__default_mi_handler		; 4CH - Port C6
+	dw	__default_mi_handler		; 4EH - Port C7
+	dw	__default_mi_handler		; 50H - Port D0
+	dw	__default_mi_handler		; 52H - Port D1
+	dw	__default_mi_handler		; 54H - Port D2
+	dw	__default_mi_handler		; 56H - Port D3
+	dw	__default_mi_handler		; 58H - Port D4
+	dw	__default_mi_handler		; 5AH - Port D5
+	dw	__default_mi_handler		; 5CH - Port D6
+	dw	__default_mi_handler		; 5EH - Port D7
 
 	END

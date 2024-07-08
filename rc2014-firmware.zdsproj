@@ -3,6 +3,7 @@
 
 <!-- file information -->
 <files>
+<file filter-key="">src\60-hz-counter.s</file>
 <file filter-key="">src\console.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>

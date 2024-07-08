@@ -84,6 +84,12 @@ clean:
             $(RM) "$(WORKDIR)\rc2014-firmware.hex"
 	@if exist "$(WORKDIR)\rc2014-firmware.map"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.map"
+	@if exist "$(WORKDIR)\60-hz-counter.obj"  \
+            $(RM) "$(WORKDIR)\60-hz-counter.obj"
+	@if exist "$(WORKDIR)\60-hz-counter.lis"  \
+            $(RM) "$(WORKDIR)\60-hz-counter.lis"
+	@if exist "$(WORKDIR)\60-hz-counter.lst"  \
+            $(RM) "$(WORKDIR)\60-hz-counter.lst"
 	@if exist "$(WORKDIR)\console.obj"  \
             $(RM) "$(WORKDIR)\console.obj"
 	@if exist "$(WORKDIR)\console.lis"  \
@@ -161,6 +167,7 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
+            $(WORKDIR_ESCSPACE)\60-hz-counter.obj  \
             $(WORKDIR_ESCSPACE)\console.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
@@ -175,6 +182,12 @@ OBJS =  \
 
 rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
+
+$(WORKDIR_ESCSPACE)\60-hz-counter.obj :  \
+            $(PRJDIR_ESCSPACE)\src\60-hz-counter.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\60-hz-counter.s"
 
 $(WORKDIR_ESCSPACE)\console.obj :  \
             $(PRJDIR_ESCSPACE)\src\console.c  \
