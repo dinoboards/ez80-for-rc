@@ -3,14 +3,15 @@
 
 <!-- file information -->
 <files>
-<file filter-key="">src\60-hz-counter.s</file>
+<file filter-key="">src\rst-10-drivers\60-hz-counter.s</file>
 <file filter-key="">src\console.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
 <file filter-key="">src\main.s</file>
-<file filter-key="">src\rst-io.s</file>
-<file filter-key="">src\rst-rc2014-bank-switch.s</file>
-<file filter-key="">src\rst-rc2014-fnc.s</file>
+<file filter-key="">src\rst-10-drivers\real-time-clock.s</file>
+<file filter-key="">src\rst-08-io.s</file>
+<file filter-key="">src\rst-10-rc2014-fnc.s</file>
+<file filter-key="">src\rst-18-rc2014-bank-switch.s</file>
 <file filter-key="">src\test.s</file>
 <file filter-key="">src\uart.c</file>
 <file filter-key="">src\startup\vectors16.asm</file>

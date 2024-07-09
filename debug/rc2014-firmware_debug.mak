@@ -116,24 +116,30 @@ clean:
             $(RM) "$(WORKDIR)\main.lis"
 	@if exist "$(WORKDIR)\main.lst"  \
             $(RM) "$(WORKDIR)\main.lst"
-	@if exist "$(WORKDIR)\rst-io.obj"  \
-            $(RM) "$(WORKDIR)\rst-io.obj"
-	@if exist "$(WORKDIR)\rst-io.lis"  \
-            $(RM) "$(WORKDIR)\rst-io.lis"
-	@if exist "$(WORKDIR)\rst-io.lst"  \
-            $(RM) "$(WORKDIR)\rst-io.lst"
-	@if exist "$(WORKDIR)\rst-rc2014-bank-switch.obj"  \
-            $(RM) "$(WORKDIR)\rst-rc2014-bank-switch.obj"
-	@if exist "$(WORKDIR)\rst-rc2014-bank-switch.lis"  \
-            $(RM) "$(WORKDIR)\rst-rc2014-bank-switch.lis"
-	@if exist "$(WORKDIR)\rst-rc2014-bank-switch.lst"  \
-            $(RM) "$(WORKDIR)\rst-rc2014-bank-switch.lst"
-	@if exist "$(WORKDIR)\rst-rc2014-fnc.obj"  \
-            $(RM) "$(WORKDIR)\rst-rc2014-fnc.obj"
-	@if exist "$(WORKDIR)\rst-rc2014-fnc.lis"  \
-            $(RM) "$(WORKDIR)\rst-rc2014-fnc.lis"
-	@if exist "$(WORKDIR)\rst-rc2014-fnc.lst"  \
-            $(RM) "$(WORKDIR)\rst-rc2014-fnc.lst"
+	@if exist "$(WORKDIR)\real-time-clock.obj"  \
+            $(RM) "$(WORKDIR)\real-time-clock.obj"
+	@if exist "$(WORKDIR)\real-time-clock.lis"  \
+            $(RM) "$(WORKDIR)\real-time-clock.lis"
+	@if exist "$(WORKDIR)\real-time-clock.lst"  \
+            $(RM) "$(WORKDIR)\real-time-clock.lst"
+	@if exist "$(WORKDIR)\rst-08-io.obj"  \
+            $(RM) "$(WORKDIR)\rst-08-io.obj"
+	@if exist "$(WORKDIR)\rst-08-io.lis"  \
+            $(RM) "$(WORKDIR)\rst-08-io.lis"
+	@if exist "$(WORKDIR)\rst-08-io.lst"  \
+            $(RM) "$(WORKDIR)\rst-08-io.lst"
+	@if exist "$(WORKDIR)\rst-10-rc2014-fnc.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-rc2014-fnc.obj"
+	@if exist "$(WORKDIR)\rst-10-rc2014-fnc.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-rc2014-fnc.lis"
+	@if exist "$(WORKDIR)\rst-10-rc2014-fnc.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-rc2014-fnc.lst"
+	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.obj"  \
+            $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.obj"
+	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.lis"  \
+            $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lis"
+	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"  \
+            $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"
 	@if exist "$(WORKDIR)\test.obj"  \
             $(RM) "$(WORKDIR)\test.obj"
 	@if exist "$(WORKDIR)\test.lis"  \
@@ -172,9 +178,10 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
-            $(WORKDIR_ESCSPACE)\rst-io.obj  \
-            $(WORKDIR_ESCSPACE)\rst-rc2014-bank-switch.obj  \
-            $(WORKDIR_ESCSPACE)\rst-rc2014-fnc.obj  \
+            $(WORKDIR_ESCSPACE)\real-time-clock.obj  \
+            $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj  \
+            $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
@@ -184,10 +191,8 @@ rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
 
 $(WORKDIR_ESCSPACE)\60-hz-counter.obj :  \
-            $(PRJDIR_ESCSPACE)\src\60-hz-counter.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\60-hz-counter.s"
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\60-hz-counter.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\60-hz-counter.s"
 
 $(WORKDIR_ESCSPACE)\console.obj :  \
             $(PRJDIR_ESCSPACE)\src\console.c  \
@@ -224,19 +229,21 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
 
-$(WORKDIR_ESCSPACE)\rst-io.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-io.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-io.s"
+$(WORKDIR_ESCSPACE)\real-time-clock.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\real-time-clock.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\real-time-clock.s"
 
-$(WORKDIR_ESCSPACE)\rst-rc2014-bank-switch.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-rc2014-bank-switch.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-rc2014-bank-switch.s"
+$(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-08-io.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
 
-$(WORKDIR_ESCSPACE)\rst-rc2014-fnc.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-rc2014-fnc.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-rc2014-fnc.s"
+$(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-rc2014-fnc.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-rc2014-fnc.s"
+
+$(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-18-rc2014-bank-switch.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-rc2014-bank-switch.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \
             $(PRJDIR_ESCSPACE)\src\test.s  \

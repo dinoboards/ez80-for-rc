@@ -4,14 +4,6 @@
 
 extern long SysClkFreq;
 
-void uart_preinit() {
-  printf("uart pre init\r\n");
-}
-
-void uart_init() {
-  // printf("eZ80 UART0 (115200)\r\n");
-}
-
 void x_uart_init(void)
 {
 #ifndef _SIMULATE

@@ -1,3 +1,7 @@
+;
+; RST_IO - RST 8 INSTRUCTION HANDLER
+; interpret the expected IN/OUT insturction proceeding the RST 8
+; ensuring that the I/O address is set to range of 0xFFxx
 
 	SECTION CODE
 
