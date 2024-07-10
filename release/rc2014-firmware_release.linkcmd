@@ -77,7 +77,6 @@ define _zsl_g_clock_xdefine = 24000000
 
 "Z:\rc2014-ez80-firmware\release\rc2014-firmware"= \
  ".\60-hz-counter.obj", \
- ".\console.obj", \
  ".\cstartup.obj", \
  ".\init_params_f92.obj", \
  ".\main.obj", \
@@ -86,12 +85,12 @@ define _zsl_g_clock_xdefine = 24000000
  ".\rst-10-rc2014-fnc.obj", \
  ".\rst-18-rc2014-bank-switch.obj", \
  ".\test.obj", \
- ".\uart.obj", \
  ".\uart_control.obj", \
  ".\uart_rx_buffer_add_to.obj", \
  ".\uart_rx_buffer_empty.obj", \
  ".\uart_rx_buffer_full.obj", \
  ".\uart_rx_buffer_get.obj", \
+ ".\uart_rx_buffer_get_length.obj", \
  ".\uart_rx_buffer_init.obj", \
  ".\uart_tx_buffer.obj", \
  ".\vectors16.obj", \

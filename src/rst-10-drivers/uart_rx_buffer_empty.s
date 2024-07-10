@@ -18,3 +18,4 @@ _rx_buffer_empty:
 
 	XOR	A		; RETURN ZERO IF EMPTY
 	RET
+

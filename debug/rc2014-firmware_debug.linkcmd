@@ -89,6 +89,7 @@ define _zsl_g_clock_xdefine = 24000000
  ".\uart_rx_buffer_empty.obj", \
  ".\uart_rx_buffer_full.obj", \
  ".\uart_rx_buffer_get.obj", \
+ ".\uart_rx_buffer_get_length.obj", \
  ".\uart_rx_buffer_init.obj", \
  ".\uart_tx_buffer.obj", \
  ".\vectors16.obj", \

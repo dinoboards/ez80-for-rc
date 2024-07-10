@@ -5,7 +5,10 @@
 
 	.assume adl=1
 
-	XREF	uart_control
+	PUBLIC	uart_control
+	XREF	_rx_buffer_empty
+	XREF	_rx_buffer_get
+	XREF	_rx_buffer_get_length
 
 UART_ERR_FIFOBUFFERFULL	EQU	%0C		;!< The error code returned when the transmit FIFO buffer is full.
 
@@ -15,7 +18,7 @@ uart_control:
 
 	LD	A, B		; SUB FUNCTION CODE
 	OR	A		; TEST SUB FUNCTION CODE
-	JR	Z, uart_in	; B = 0, get ticks
+	JR	Z, uart_in	; B = 0
 	DEC	A
 	JR	Z, uart_out	; B = 1
 	DEC	A
@@ -32,13 +35,40 @@ uart_control:
 	LD	A, %FF		; UNKNOWN UART FUNCTION
 	RET.L
 
-uart_in:
+
 	; block and wait for char
 	; return in E
+uart_in:
+	CALL	_rx_buffer_empty
+	OR	A
+	JR	NZ, uart_in
 
+	CALL	_rx_buffer_get
+	XOR	A
+	RET.L
+
+	; send char in E
 uart_out:
+	IN0	A, (UART0_LSR)		; WAIT FOR TX READY
+	AND	LSR_THRE
+	JR	Z, uart_out
+
+	OUT0	(UART0_THR), E		; SEND THE CHAR
+	XOR	A
+	RET.L
+
 uart_ist:
+	CALL	_rx_buffer_get_length	; RETURN THE NUMBER OF CHARS IN THE RX BUFFER IN A
+
+	BIT	7, A			; IF A > 127, THEN RETURN 127 (NEGATIVE NUMBERS ARE ERROR CODES)
+	RET.L	Z
+
+	LD	A, 127
+	RET.L
+
 uart_ost:
+
+
 uart_initdev:
 uart_query:
 uart_device:

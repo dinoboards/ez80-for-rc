@@ -168,6 +168,12 @@ clean:
             $(RM) "$(WORKDIR)\uart_rx_buffer_get.lis"
 	@if exist "$(WORKDIR)\uart_rx_buffer_get.lst"  \
             $(RM) "$(WORKDIR)\uart_rx_buffer_get.lst"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get_length.obj"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get_length.obj"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get_length.lis"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get_length.lis"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get_length.lst"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get_length.lst"
 	@if exist "$(WORKDIR)\uart_rx_buffer_init.obj"  \
             $(RM) "$(WORKDIR)\uart_rx_buffer_init.obj"
 	@if exist "$(WORKDIR)\uart_rx_buffer_init.lis"  \
@@ -213,6 +219,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_empty.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_full.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_get.obj  \
+            $(WORKDIR_ESCSPACE)\uart_rx_buffer_get_length.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_init.obj  \
             $(WORKDIR_ESCSPACE)\uart_tx_buffer.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
@@ -281,6 +288,10 @@ $(WORKDIR_ESCSPACE)\uart_rx_buffer_full.obj :  \
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_get.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_get.s"
+
+$(WORKDIR_ESCSPACE)\uart_rx_buffer_get_length.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get_length.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_get_length.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_init.s

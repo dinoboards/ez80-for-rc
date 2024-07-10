@@ -91,14 +91,6 @@ clean:
             $(RM) "$(WORKDIR)\60-hz-counter.lis"
 	@if exist "$(WORKDIR)\60-hz-counter.lst"  \
             $(RM) "$(WORKDIR)\60-hz-counter.lst"
-	@if exist "$(WORKDIR)\console.obj"  \
-            $(RM) "$(WORKDIR)\console.obj"
-	@if exist "$(WORKDIR)\console.lis"  \
-            $(RM) "$(WORKDIR)\console.lis"
-	@if exist "$(WORKDIR)\console.lst"  \
-            $(RM) "$(WORKDIR)\console.lst"
-	@if exist "$(WORKDIR)\console.src"  \
-            $(RM) "$(WORKDIR)\console.src"
 	@if exist "$(WORKDIR)\cstartup.obj"  \
             $(RM) "$(WORKDIR)\cstartup.obj"
 	@if exist "$(WORKDIR)\cstartup.lis"  \
@@ -147,14 +139,6 @@ clean:
             $(RM) "$(WORKDIR)\test.lis"
 	@if exist "$(WORKDIR)\test.lst"  \
             $(RM) "$(WORKDIR)\test.lst"
-	@if exist "$(WORKDIR)\uart.obj"  \
-            $(RM) "$(WORKDIR)\uart.obj"
-	@if exist "$(WORKDIR)\uart.lis"  \
-            $(RM) "$(WORKDIR)\uart.lis"
-	@if exist "$(WORKDIR)\uart.lst"  \
-            $(RM) "$(WORKDIR)\uart.lst"
-	@if exist "$(WORKDIR)\uart.src"  \
-            $(RM) "$(WORKDIR)\uart.src"
 	@if exist "$(WORKDIR)\uart_control.obj"  \
             $(RM) "$(WORKDIR)\uart_control.obj"
 	@if exist "$(WORKDIR)\uart_control.lis"  \
@@ -185,6 +169,12 @@ clean:
             $(RM) "$(WORKDIR)\uart_rx_buffer_get.lis"
 	@if exist "$(WORKDIR)\uart_rx_buffer_get.lst"  \
             $(RM) "$(WORKDIR)\uart_rx_buffer_get.lst"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get_length.obj"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get_length.obj"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get_length.lis"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get_length.lis"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get_length.lst"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get_length.lst"
 	@if exist "$(WORKDIR)\uart_rx_buffer_init.obj"  \
             $(RM) "$(WORKDIR)\uart_rx_buffer_init.obj"
 	@if exist "$(WORKDIR)\uart_rx_buffer_init.lis"  \
@@ -217,7 +207,6 @@ LIBS =
 
 OBJS =  \
             $(WORKDIR_ESCSPACE)\60-hz-counter.obj  \
-            $(WORKDIR_ESCSPACE)\console.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
@@ -226,12 +215,12 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
-            $(WORKDIR_ESCSPACE)\uart.obj  \
             $(WORKDIR_ESCSPACE)\uart_control.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_add_to.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_empty.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_full.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_get.obj  \
+            $(WORKDIR_ESCSPACE)\uart_rx_buffer_get_length.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_init.obj  \
             $(WORKDIR_ESCSPACE)\uart_tx_buffer.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
@@ -243,25 +232,6 @@ rc2014-firmware: $(OBJS)
 $(WORKDIR_ESCSPACE)\60-hz-counter.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\60-hz-counter.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\60-hz-counter.s"
-
-$(WORKDIR_ESCSPACE)\console.obj :  \
-            $(PRJDIR_ESCSPACE)\src\console.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
-            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
-            $(PRJDIR_ESCSPACE)\src\uart.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\console.c"
 
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
@@ -300,25 +270,6 @@ $(WORKDIR_ESCSPACE)\test.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
 
-$(WORKDIR_ESCSPACE)\uart.obj :  \
-            $(PRJDIR_ESCSPACE)\src\uart.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
-            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
-            $(PRJDIR_ESCSPACE)\src\uart.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\uart.c"
-
 $(WORKDIR_ESCSPACE)\uart_control.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_control.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_control.s"
@@ -338,6 +289,10 @@ $(WORKDIR_ESCSPACE)\uart_rx_buffer_full.obj :  \
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_get.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_get.s"
+
+$(WORKDIR_ESCSPACE)\uart_rx_buffer_get_length.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get_length.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_get_length.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_init.s

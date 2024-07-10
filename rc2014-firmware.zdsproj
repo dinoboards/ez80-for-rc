@@ -17,6 +17,7 @@
 <file filter-key="">src\rst-10-drivers\uart_rx_buffer_empty.s</file>
 <file filter-key="">src\rst-10-drivers\uart_rx_buffer_full.s</file>
 <file filter-key="">src\rst-10-drivers\uart_rx_buffer_get.s</file>
+<file filter-key="">src\rst-10-drivers\uart_rx_buffer_get_length.s</file>
 <file filter-key="">src\rst-10-drivers\uart_rx_buffer_init.s</file>
 <file filter-key="">src\rst-10-drivers\uart_tx_buffer.s</file>
 <file filter-key="">src\startup\vectors16.asm</file>

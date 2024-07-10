@@ -9,8 +9,7 @@
 ; UART0_THR	.EQU	$C0
 ; UART0_RBR	.EQU	$C0
 
-LSR_THRE	.EQU	%20
-LSR_DR		.EQU	%01
+
 
 	public	_spike
 	XREF	_rx_buffer_empty
@@ -19,33 +18,33 @@ LSR_DR		.EQU	%01
 
 _spike:
 	ld	e, '>'
-	call	out_byte
+	LD	A, 3			; UART
+	LD	B, 1			; UART-OUT
+	RST.L	%10
+
 	ld	e, ' '
-	call	out_byte
+	LD	A, 3			; UART
+	LD	B, 1			; UART-OUT
+	RST.L	%10
 
 EZUART_IN:
-	CALL	_rx_buffer_empty
-	OR	A
-	JR	NZ, EZUART_IN
+	LD	A, 3			; UART
+	LD	B, 0			; UART-IN
+	RST.L	%10			; CHAR RETURNED IN E
 
-	CALL	_rx_buffer_get
-	LD	A, E			; char should be in E
+	push	de
+	LD	A, 3			; UART
+	LD	B, 2			; UART-IST
+	RST.L	%10			; BUF LENGTH IN A
+	pop	de
 
 EZUART_OUT:
-	CALL	out_byte
+	LD	A, 3			; UART
+	LD	B, 1			; UART-OUT
+	RST.L	%10
 
 	JR	EZUART_IN
 
-out_byte:
-	; LD	A, 2			; UART
-	; LD	B,
-
-	IN0	A, (UART0_LSR)		; WAIT FOR TX READY
-	AND	LSR_THRE
-	JR	Z, EZUART_OUT
-
-	OUT0	(UART0_THR), E		; SEND THE CHAR
-	ret
 
 	LD	HL, step1
 	ld	de, 0b7E000h
