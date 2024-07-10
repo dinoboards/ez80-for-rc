@@ -133,6 +133,7 @@ skip_24_reg_restore:
 
 	PUBLIC	__vector_table
 	EXTERN	ms_60Hz_timer_counter_isr
+	EXTERN _uart0_receive_isr
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 __vector_table:
@@ -148,7 +149,7 @@ __vector_table:
 	dw	__default_mi_handler		; 12H - PRT 4
 	dw	__default_mi_handler		; 14H - PRT 5
 	dw	__default_mi_handler		; 16H - RTC
-	dw	__default_mi_handler		; 18H - UART 0
+	dw	_uart0_receive_isr			; 18H - UART 0
 	dw	__default_mi_handler		; 1AH - UART 1
 	dw	__default_mi_handler		; 1CH - I2C
 	dw	__default_mi_handler		; 1EH - SPI

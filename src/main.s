@@ -8,12 +8,14 @@
 	XREF	_x_uart_init
 	XREF	bank_init_z2
 	XREF	_spike
+	XREF	_rx_buffer_init
 
 _main:
 	CALL	_x_uart_init
+	CALL	_rx_buffer_init
 	CALL	bank_init_z2
 
-	; call	_spike
+	call	_spike
 
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $B9
 	LD	MB, A

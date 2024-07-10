@@ -24,6 +24,8 @@
 
         INCLUDE "startup/ez80f92.inc"
 
+RX_BUFFER_SIZE		.EQU	140
+
 TICKFREQ		.EQU	60
 
 CLK_24:			.EQU	24000000

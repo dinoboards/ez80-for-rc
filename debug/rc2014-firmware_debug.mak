@@ -154,6 +154,48 @@ clean:
             $(RM) "$(WORKDIR)\uart.lst"
 	@if exist "$(WORKDIR)\uart.src"  \
             $(RM) "$(WORKDIR)\uart.src"
+	@if exist "$(WORKDIR)\uart_control.obj"  \
+            $(RM) "$(WORKDIR)\uart_control.obj"
+	@if exist "$(WORKDIR)\uart_control.lis"  \
+            $(RM) "$(WORKDIR)\uart_control.lis"
+	@if exist "$(WORKDIR)\uart_control.lst"  \
+            $(RM) "$(WORKDIR)\uart_control.lst"
+	@if exist "$(WORKDIR)\uart_rx_buffer_add_to.obj"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_add_to.obj"
+	@if exist "$(WORKDIR)\uart_rx_buffer_add_to.lis"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_add_to.lis"
+	@if exist "$(WORKDIR)\uart_rx_buffer_add_to.lst"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_add_to.lst"
+	@if exist "$(WORKDIR)\uart_rx_buffer_empty.obj"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_empty.obj"
+	@if exist "$(WORKDIR)\uart_rx_buffer_empty.lis"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_empty.lis"
+	@if exist "$(WORKDIR)\uart_rx_buffer_empty.lst"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_empty.lst"
+	@if exist "$(WORKDIR)\uart_rx_buffer_full.obj"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_full.obj"
+	@if exist "$(WORKDIR)\uart_rx_buffer_full.lis"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_full.lis"
+	@if exist "$(WORKDIR)\uart_rx_buffer_full.lst"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_full.lst"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get.obj"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get.obj"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get.lis"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get.lis"
+	@if exist "$(WORKDIR)\uart_rx_buffer_get.lst"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_get.lst"
+	@if exist "$(WORKDIR)\uart_rx_buffer_init.obj"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_init.obj"
+	@if exist "$(WORKDIR)\uart_rx_buffer_init.lis"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_init.lis"
+	@if exist "$(WORKDIR)\uart_rx_buffer_init.lst"  \
+            $(RM) "$(WORKDIR)\uart_rx_buffer_init.lst"
+	@if exist "$(WORKDIR)\uart_tx_buffer.obj"  \
+            $(RM) "$(WORKDIR)\uart_tx_buffer.obj"
+	@if exist "$(WORKDIR)\uart_tx_buffer.lis"  \
+            $(RM) "$(WORKDIR)\uart_tx_buffer.lis"
+	@if exist "$(WORKDIR)\uart_tx_buffer.lst"  \
+            $(RM) "$(WORKDIR)\uart_tx_buffer.lst"
 	@if exist "$(WORKDIR)\vectors16.obj"  \
             $(RM) "$(WORKDIR)\vectors16.obj"
 	@if exist "$(WORKDIR)\vectors16.lis"  \
@@ -184,6 +226,13 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart.obj  \
+            $(WORKDIR_ESCSPACE)\uart_control.obj  \
+            $(WORKDIR_ESCSPACE)\uart_rx_buffer_add_to.obj  \
+            $(WORKDIR_ESCSPACE)\uart_rx_buffer_empty.obj  \
+            $(WORKDIR_ESCSPACE)\uart_rx_buffer_full.obj  \
+            $(WORKDIR_ESCSPACE)\uart_rx_buffer_get.obj  \
+            $(WORKDIR_ESCSPACE)\uart_rx_buffer_init.obj  \
+            $(WORKDIR_ESCSPACE)\uart_tx_buffer.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
             $(WORKDIR_ESCSPACE)\zsldevinit.obj
 
@@ -268,6 +317,34 @@ $(WORKDIR_ESCSPACE)\uart.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\src\uart.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\uart.c"
+
+$(WORKDIR_ESCSPACE)\uart_control.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_control.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_control.s"
+
+$(WORKDIR_ESCSPACE)\uart_rx_buffer_add_to.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_add_to.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_add_to.s"
+
+$(WORKDIR_ESCSPACE)\uart_rx_buffer_empty.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_empty.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_empty.s"
+
+$(WORKDIR_ESCSPACE)\uart_rx_buffer_full.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_full.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_full.s"
+
+$(WORKDIR_ESCSPACE)\uart_rx_buffer_get.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_get.s"
+
+$(WORKDIR_ESCSPACE)\uart_rx_buffer_init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_init.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_init.s"
+
+$(WORKDIR_ESCSPACE)\uart_tx_buffer.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_tx_buffer.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_tx_buffer.s"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm

@@ -1,4 +1,4 @@
-<project type="Executable" project-type="Standard" configuration="debug" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
+<project type="Executable" project-type="Standard" configuration="release" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
 <cpu>eZ80F92</cpu>
 
 <!-- file information -->
@@ -14,6 +14,13 @@
 <file filter-key="">src\rst-18-rc2014-bank-switch.s</file>
 <file filter-key="">src\test.s</file>
 <file filter-key="">src\uart.c</file>
+<file filter-key="">src\rst-10-drivers\uart_control.s</file>
+<file filter-key="">src\rst-10-drivers\uart_rx_buffer_add_to.s</file>
+<file filter-key="">src\rst-10-drivers\uart_rx_buffer_empty.s</file>
+<file filter-key="">src\rst-10-drivers\uart_rx_buffer_full.s</file>
+<file filter-key="">src\rst-10-drivers\uart_rx_buffer_get.s</file>
+<file filter-key="">src\rst-10-drivers\uart_rx_buffer_init.s</file>
+<file filter-key="">src\rst-10-drivers\uart_tx_buffer.s</file>
 <file filter-key="">src\startup\vectors16.asm</file>
 <file filter-key="">.\zsldevinit.asm</file>
 </files>

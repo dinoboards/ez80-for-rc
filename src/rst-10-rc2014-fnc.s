@@ -2,6 +2,7 @@
 
 	XREF	timer_tick_control
 	XREF	rtc_control
+	XREF	uart_control
 
 	SECTION CODE
 
@@ -42,7 +43,7 @@ rc_functions:
 	JP	rcfn_platform_init
 	JP	rtc_control
 	JP	timer_tick_control
-	JP	_fn_3
+	JP	uart_control
 
 _fn_1:
 _fn_2:
