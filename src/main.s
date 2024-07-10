@@ -5,13 +5,13 @@
 	.assume adl=1
 
 	PUBLIC	_main
-	XREF	_x_uart_init
+	XREF	_uart0_init
 	XREF	bank_init_z2
 	XREF	_spike
 	XREF	_rx_buffer_init
 
 _main:
-	CALL	_x_uart_init
+	CALL	_uart0_init
 	CALL	_rx_buffer_init
 	CALL	bank_init_z2
 

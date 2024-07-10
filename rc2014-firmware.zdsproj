@@ -1,10 +1,9 @@
-<project type="Executable" project-type="Standard" configuration="release" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
+<project type="Executable" project-type="Standard" configuration="debug" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
 <cpu>eZ80F92</cpu>
 
 <!-- file information -->
 <files>
 <file filter-key="">src\rst-10-drivers\60-hz-counter.s</file>
-<file filter-key="">src\console.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
 <file filter-key="">src\main.s</file>
@@ -13,7 +12,6 @@
 <file filter-key="">src\rst-10-rc2014-fnc.s</file>
 <file filter-key="">src\rst-18-rc2014-bank-switch.s</file>
 <file filter-key="">src\test.s</file>
-<file filter-key="">src\uart.c</file>
 <file filter-key="">src\rst-10-drivers\uart_control.s</file>
 <file filter-key="">src\rst-10-drivers\uart_rx_buffer_add_to.s</file>
 <file filter-key="">src\rst-10-drivers\uart_rx_buffer_empty.s</file>

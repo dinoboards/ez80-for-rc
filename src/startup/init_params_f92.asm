@@ -191,11 +191,4 @@ _abort:
 
 	JR	$				; if we return from main loop forever here
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-_SysClkFreq:
-	DL	CPU_CLK_FREQ/1000
-
-	XDEF	_SysClkFreq
-
 	END
