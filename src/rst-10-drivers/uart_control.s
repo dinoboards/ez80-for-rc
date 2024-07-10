@@ -34,10 +34,14 @@ uart_control:
 
 	LD	A, %FF		; UNKNOWN UART FUNCTION
 	RET.L
-
-
-	; block and wait for char
-	; return in E
+;
+; Function B = 00 -- Character Input (CIOIN)
+;  Output E = Character
+;  Output A = Status
+;
+; Read and return a Character (E).  If no character(s) are available in the unit's input buffer, this function will
+; wait indefinitely.  The returned Status (A) is a standard  HBIOS result code.
+;
 uart_in:
 	CALL	_rx_buffer_empty
 	OR	A
@@ -46,8 +50,14 @@ uart_in:
 	CALL	_rx_buffer_get
 	XOR	A
 	RET.L
-
-	; send char in E
+;
+; Function B = 01 -- Character Output (CIOOUT)
+;  Input E = Character to send
+;  Output A = Status
+;
+; Send a Character (E). If there is no space available in the unit's output buffer, the function will wait
+; indefinitely.  The returned Status (A) is a standard HBIOS result code.
+;
 uart_out:
 	IN0	A, (UART0_LSR)		; WAIT FOR TX READY
 	AND	LSR_THRE
@@ -56,7 +66,14 @@ uart_out:
 	OUT0	(UART0_THR), E		; SEND THE CHAR
 	XOR	A
 	RET.L
-
+;
+; Return the count of Characters Pending (A) in the input buffer.
+;  Output A = Status/Characters Pending
+;
+; The value returned in register A is used as both a Status (A) code and the return value. Negative values
+; (bit 7 set) indicate a standard HBIOS result (error) code.  Otherwise, the return value represents the number
+; of characters in the input buffer.
+;
 uart_ist:
 	CALL	_rx_buffer_get_length	; RETURN THE NUMBER OF CHARS IN THE RX BUFFER IN A
 
@@ -66,8 +83,20 @@ uart_ist:
 	LD	A, 127
 	RET.L
 
+;
+; Function B = 03 -- Character Output Status (CIOOST)
+;   Output A = Transmitter Status
+;
+; Return the status of the output FIFO.  0 means the output FIFO is full and no more characters can be sent. 1 means
+; the output FIFO is not full and at least one character can be sent.
+; Negative values (bit 7 set) indicate a standard HBIOS result (error) code.
+;
 uart_ost:
-
+	IN0	A, (UART0_LSR)
+	AND	LSR_THRE
+	RET.L	Z
+	LD	A, 1
+	RET.L
 
 uart_initdev:
 uart_query:

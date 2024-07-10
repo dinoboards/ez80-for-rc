@@ -27,16 +27,25 @@ _spike:
 	LD	B, 1			; UART-OUT
 	RST.L	%10
 
+
+	LD	B, 32
+out_next:
+	PUSH	BC
+	ld	e, '>'
+	LD	A, 3			; UART
+	LD	B, 1			; UART-OUT
+	RST.L	%10
+	POP	BC
+	DJNZ	out_next
+
+	LD	A, 3			; UART
+	LD	B, 3			; UART-OST
+	RST.L	%10			; CHAR RETURNED IN E
+
 EZUART_IN:
 	LD	A, 3			; UART
 	LD	B, 0			; UART-IN
 	RST.L	%10			; CHAR RETURNED IN E
-
-	push	de
-	LD	A, 3			; UART
-	LD	B, 2			; UART-IST
-	RST.L	%10			; BUF LENGTH IN A
-	pop	de
 
 EZUART_OUT:
 	LD	A, 3			; UART
