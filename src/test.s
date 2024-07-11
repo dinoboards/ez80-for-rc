@@ -17,6 +17,11 @@
 	ei
 
 _spike:
+	LD	A, 3			; UART
+	LD	B, 4			; UART-CONFIG
+	LD	HL, 38400		; desired baud rate
+	RST.L	%10			;
+
 	ld	e, '>'
 	LD	A, 3			; UART
 	LD	B, 1			; UART-OUT
@@ -26,21 +31,6 @@ _spike:
 	LD	A, 3			; UART
 	LD	B, 1			; UART-OUT
 	RST.L	%10
-
-
-	LD	B, 32
-out_next:
-	PUSH	BC
-	ld	e, '>'
-	LD	A, 3			; UART
-	LD	B, 1			; UART-OUT
-	RST.L	%10
-	POP	BC
-	DJNZ	out_next
-
-	LD	A, 3			; UART
-	LD	B, 3			; UART-OST
-	RST.L	%10			; CHAR RETURNED IN E
 
 EZUART_IN:
 	LD	A, 3			; UART

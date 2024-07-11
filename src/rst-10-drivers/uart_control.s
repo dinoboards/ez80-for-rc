@@ -26,16 +26,14 @@ uart_control:
 	DEC	A
 	JR	Z, uart_ost	; B = 3
 	DEC	A
-	JR	Z, uart_initdev	; B = 4
+	JR	Z, uart_config	; B = 4
 	DEC	A
 	JR	Z, uart_query	; B = 5
-	DEC	A
-	JR	Z, uart_device	; B = 6
 
 	LD	A, %FF		; UNKNOWN UART FUNCTION
 	RET.L
 ;
-; Function B = 00 -- Character Input (CIOIN)
+; Function B = 00 -- Character Input (UART_IN)
 ;  Output E = Character
 ;  Output A = Status
 ;
@@ -51,7 +49,7 @@ uart_in:
 	XOR	A
 	RET.L
 ;
-; Function B = 01 -- Character Output (CIOOUT)
+; Function B = 01 -- Character Output (UART_OUT)
 ;  Input E = Character to send
 ;  Output A = Status
 ;
@@ -84,7 +82,7 @@ uart_ist:
 	RET.L
 
 ;
-; Function B = 03 -- Character Output Status (CIOOST)
+; Function B = 03 -- Character Output Status (UART_OST)
 ;   Output A = Transmitter Status
 ;
 ; Return the status of the output FIFO.  0 means the output FIFO is full and no more characters can be sent. 1 means
@@ -98,9 +96,48 @@ uart_ost:
 	LD	A, 1
 	RET.L
 
-uart_initdev:
+;
+; Function B = 04 -- Configure UART Device (UART_CONFIG)
+;   Input HL{23:0} = New desired baud rate
+;   Output A = Status
+;
+; Configure the UART device with the new desired baud rate.
+;
+; TODO: data bits (5, 6, 7, 8), stop bits (1,2), parity, flow control (none, hw, sw)
+	XREF	__ldivu
+	XREF	__itol
+uart_config:
+	XOR	A			; A:HL = HL * 16
+	ADD	HL,HL
+	RLA
+	ADD	HL,HL
+	RLA
+	ADD	HL,HL
+	RLA
+	ADD	HL,HL
+	RLA
+
+	LD	BC, HL
+
+	LD	HL, CPU_CLK_FREQ & %FFFFFF
+	LD	E, CPU_CLK_FREQ >> 24
+	CALL	__ldivu			; HL = E:HL / A:BC
+					; HL = BRG
+
+	IN0	A, (UART0_LCTL)		; ENABLE REGISTER ACCESS
+	SET	7, A			; SET DLAB BIT
+	OUT0	(UART0_LCTL), A
+
+	OUT0	(UART0_BRG_L), L
+	OUT0	(UART0_BRG_H), H
+
+	RES	7, A			; DISABLE REGISTER ACCESS
+	OUT0	(UART0_LCTL), A
+
+	XOR	A
+	RET.L
+
 uart_query:
-uart_device:
 	LD	A, %FF		; UNKNOWN UART FUNCTION
 	RET.L
 
