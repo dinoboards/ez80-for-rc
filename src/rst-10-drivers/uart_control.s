@@ -99,7 +99,9 @@ uart_ost:
 ;
 ; Function B = 04 -- Configure UART Device (UART_CONFIG)
 ;   Input HL{23:0} = New desired baud rate
-;   DE{0:1} = Parity (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+;   DE{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+;   DE{2}   = Stop Bits (0 -> 1, 1 -> 2)
+;   DE{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
 ;   Output A = Status
 ;
 ; Configure the UART device with the new desired baud rate.
@@ -108,7 +110,8 @@ uart_ost:
 	XREF	__ldivu
 	XREF	__itol
 uart_config:
-	XOR	A			; A:HL = HL * 16
+	PUSH	DE
+	XOR	A				; A:HL = HL * 16
 	ADD	HL,HL
 	RLA
 	ADD	HL,HL
@@ -122,39 +125,51 @@ uart_config:
 
 	LD	HL, CPU_CLK_FREQ & %FFFFFF
 	LD	E, CPU_CLK_FREQ >> 24
-	CALL	__ldivu			; HL = E:HL / A:BC
-					; HL = BRG
+	CALL	__ldivu				; HL = E:HL / A:BC
+						; HL = BRG
 
-	IN0	A, (UART0_LCTL)		; ENABLE REGISTER ACCESS
-	SET	7, A			; SET DLAB BIT
+	IN0	A, (UART0_LCTL)			; ENABLE REGISTER ACCESS
+	SET	7, A				; SET DLAB BIT
 	OUT0	(UART0_LCTL), A
 
 	OUT0	(UART0_BRG_L), L
 	OUT0	(UART0_BRG_H), H
 
-	RES	7, A			; DISABLE REGISTER ACCESS
+	RES	7, A				; DISABLE REGISTER ACCESS
 	OUT0	(UART0_LCTL), A
 
+	POP	DE
 	LD	A, E
 	AND	3
 	INC	A
-	LD	E, A
+	LD	B, A
 
-	LD	A, LCTL_8_BITS_1_STOP_BIT
+	LD	A, E				; MOVE DESIRED BIT LENGTH TO A
+	RRCA
+	RRCA
+	RRCA
+	AND	3
 
-	DEC	E				; E{0:1} == 0
-	JR	Z, uart_config_assign_line
+	DEC	B				; E{0:1} == 0
+	JR	Z, uart_config_assign_stop_bits
 
-	DEC	E				; E{0:1} == 1
-	JR	Z, uart_config_assign_line
+	DEC	B				; E{0:1} == 1
+	JR	Z, uart_config_assign_stop_bits
 
-	DEC	E				; E{0:1} == 2
+	DEC	B				; E{0:1} == 2
 	JR	NZ, uart_config_even_parity
-	OR	LCTL_PARITY_ENABLED		; CONFIGURE ODD PARITY
-	JR	uart_config_assign_line
+	OR	LCTL_ODD_PARITY		; CONFIGURE ODD PARITY
+	JR	uart_config_assign_stop_bits
 
 uart_config_even_parity:
-	OR	LCTL_PARITY_ENABLED | LCTL_EVEN_PARITY
+	OR	LCTL_EVEN_PARITY
+
+uart_config_assign_stop_bits:
+
+	BIT	2, E
+	JR	Z, uart_config_assign_line	; 1 STOP BIT IS THE DEFAULT
+
+	OR	LCTL_2_STOP_BITS		; ENABLE 2 STOP BITS
 
 uart_config_assign_line:
 	OUT0	(UART0_LCTL), A
@@ -204,7 +219,7 @@ _uart0_init:
 	LD	A, UART_FCTL_FIFOEN | UART_FCTL_CLRRxF | UART_FCTL_CLRTxF | UART_FCTL_TRIG_4
 	OUT0	(UART0_FCTL), A
 
-	LD	A, LCTL_8_BITS_1_STOP_BIT
+	LD	A, LCTL_8_BITS | LCTL_1_STOP_BIT
 	OUT0	(UART0_LCTL), A
 
 	LD	A, 1
