@@ -19,7 +19,8 @@
 _spike:
 	LD	A, 3			; UART
 	LD	B, 4			; UART-CONFIG
-	LD	HL, 38400		; desired baud rate
+	LD	HL, 115200		; desired baud rate
+	LD	DE, 3			; TODO: set parity to even
 	RST.L	%10			;
 
 	ld	e, '>'

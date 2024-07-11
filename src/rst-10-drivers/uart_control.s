@@ -99,6 +99,7 @@ uart_ost:
 ;
 ; Function B = 04 -- Configure UART Device (UART_CONFIG)
 ;   Input HL{23:0} = New desired baud rate
+;   DE{0:1} = Parity (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
 ;   Output A = Status
 ;
 ; Configure the UART device with the new desired baud rate.
@@ -132,6 +133,30 @@ uart_config:
 	OUT0	(UART0_BRG_H), H
 
 	RES	7, A			; DISABLE REGISTER ACCESS
+	OUT0	(UART0_LCTL), A
+
+	LD	A, E
+	AND	3
+	INC	A
+	LD	E, A
+
+	LD	A, LCTL_8_BITS_1_STOP_BIT
+
+	DEC	E				; E{0:1} == 0
+	JR	Z, uart_config_assign_line
+
+	DEC	E				; E{0:1} == 1
+	JR	Z, uart_config_assign_line
+
+	DEC	E				; E{0:1} == 2
+	JR	NZ, uart_config_even_parity
+	OR	LCTL_PARITY_ENABLED		; CONFIGURE ODD PARITY
+	JR	uart_config_assign_line
+
+uart_config_even_parity:
+	OR	LCTL_PARITY_ENABLED | LCTL_EVEN_PARITY
+
+uart_config_assign_line:
 	OUT0	(UART0_LCTL), A
 
 	XOR	A
@@ -176,7 +201,7 @@ _uart0_init:
 	XOR	A
 	OUT0	(UART0_MCTL), A
 
-	LD	A, UART_FCTL_FIFOEN |UART_FCTL_CLRRxF | UART_FCTL_CLRTxF | UART_FCTL_TRIG_4
+	LD	A, UART_FCTL_FIFOEN | UART_FCTL_CLRRxF | UART_FCTL_CLRTxF | UART_FCTL_TRIG_4
 	OUT0	(UART0_FCTL), A
 
 	LD	A, LCTL_8_BITS_1_STOP_BIT
