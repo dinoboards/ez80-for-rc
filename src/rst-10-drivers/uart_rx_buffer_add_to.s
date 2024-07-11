@@ -5,14 +5,18 @@
 
 	.assume adl=1
 
+	PUBLIC	_rx_buffer_add_to
 	XREF	_rx_buffer_full
 	XREF	_rx_buf_next_in
 	XREF	_rx_buf
 
 UART_ERR_FIFOBUFFERFULL	EQU	%0C		;!< The error code returned when the transmit FIFO buffer is full.
 
-	PUBLIC	_rx_buffer_add_to
-
+;
+; Function add a character to the receive buffer.
+;   Input E = Character to be inserted
+;   Output A = Status (0 -> OK or UART_ERR_FIFOBUFFERFULL)
+;
 _rx_buffer_add_to:
 	CALL	_rx_buffer_full
 	OR	A

@@ -8,11 +8,14 @@
 	PUBLIC	_rx_buffer_get_length
 	XREF	_rx_buf_next_in
 	XREF	_rx_buf_next_out
-
+;
+; Function get number of remaining bytes free in the RX buffer
+;   Output A = number of bytes free in the RX buffer
+;
 _rx_buffer_get_length:
 	LD	A, (_rx_buf_next_out)
 	LD	HL, _rx_buf_next_in
-	CP	A, (HL)				; rx_buf_next_in > rx_buf_next_out ?
+	CP	(HL)				; rx_buf_next_in > rx_buf_next_out ?
 	JR	Z, L_2
 	JR	NC, L_1
 
@@ -25,8 +28,6 @@ L_1:
 	LD	C, A				; return rx_buf_next_in - rx_buf_next_out + RX_BUFFER_SIZE
 	LD	A, (HL)
 	SUB	A, C
+L_2:
 	ADD	A, RX_BUFFER_SIZE
-	RET
-
-L_2:	XOR	A				; is empty
 	RET

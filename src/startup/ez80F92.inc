@@ -265,7 +265,13 @@ UART_FCTL_CLRTxF	EQU	%04
 UART_FCTL_CLRRxF	EQU	%02
 UART_FCTL_FIFOEN	EQU	%01
 
-LSR_THRE		EQU	%20
-LSR_DR			EQU	%01
+LCTL_DLAB            EQU	(1 << 7)
+LSR_THRE             EQU	(1 << 5)
+LSR_DR               EQU	(1 << 0)
+MCTL_RTS             EQU	(1 << 1)
+MCTL_DTR             EQU	(1 << 0)
+
+; LSR_THRE		EQU	%20
+; LSR_DR			EQU	%01
 
 ;* End eZ80F92 inc file

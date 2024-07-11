@@ -43,9 +43,21 @@ uart_control:
 uart_in:
 	CALL	_rx_buffer_empty
 	OR	A
-	JR	NZ, uart_in
+	JR	nZ, uart_in
 
+	CALL	_rx_buffer_get_length
+	CP	RX_BUFFER_LOW			; buffer_size == RX_BUFFER_LOW ?
+	JR	NZ, uart_in_end			; no, do nothing
+
+	DI
+	IN0	A, (UART0_MCTL)			; yes, resume receiving bytes
+	OR	MCTL_RTS
+	OUT0	(UART0_MCTL), A
+	EI
+
+uart_in_end:
 	CALL	_rx_buffer_get
+
 	XOR	A
 	RET.L
 ;
@@ -104,14 +116,14 @@ uart_ost:
 ;   DE{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
 ;   Output A = Status
 ;
-; Configure the UART device with the new desired baud rate.
-;
-; TODO: data bits (5, 6, 7, 8), stop bits (1,2), parity, flow control (none, hw, sw)
+; Configure the UART device with the new desired baud rate, parity, stop bits, and data bits.  The returned Status (A)
+; is a standard HBIOS result code.
+
 	XREF	__ldivu
 	XREF	__itol
 uart_config:
 	PUSH	DE
-	XOR	A				; A:HL = HL * 16
+	XOR	A					; A:HL = HL * 16
 	ADD	HL,HL
 	RLA
 	ADD	HL,HL
@@ -125,17 +137,17 @@ uart_config:
 
 	LD	HL, CPU_CLK_FREQ & %FFFFFF
 	LD	E, CPU_CLK_FREQ >> 24
-	CALL	__ldivu				; HL = E:HL / A:BC
-						; HL = BRG
+	CALL	__ldivu					; HL = E:HL / A:BC
+							; HL = BRG
 
-	IN0	A, (UART0_LCTL)			; ENABLE REGISTER ACCESS
-	SET	7, A				; SET DLAB BIT
+	IN0	A, (UART0_LCTL)				; ENABLE REGISTER ACCESS
+	SET	7, A					; SET DLAB BIT
 	OUT0	(UART0_LCTL), A
 
 	OUT0	(UART0_BRG_L), L
 	OUT0	(UART0_BRG_H), H
 
-	RES	7, A				; DISABLE REGISTER ACCESS
+	RES	7, A					; DISABLE REGISTER ACCESS
 	OUT0	(UART0_LCTL), A
 
 	POP	DE
@@ -144,32 +156,31 @@ uart_config:
 	INC	A
 	LD	B, A
 
-	LD	A, E				; MOVE DESIRED BIT LENGTH TO A
+	LD	A, E					; MOVE DESIRED BIT LENGTH TO A
 	RRCA
 	RRCA
 	RRCA
 	AND	3
 
-	DEC	B				; E{0:1} == 0
+	DEC	B					; E{0:1} == 0
 	JR	Z, uart_config_assign_stop_bits
 
-	DEC	B				; E{0:1} == 1
+	DEC	B					; E{0:1} == 1
 	JR	Z, uart_config_assign_stop_bits
 
-	DEC	B				; E{0:1} == 2
+	DEC	B					; E{0:1} == 2
 	JR	NZ, uart_config_even_parity
-	OR	LCTL_ODD_PARITY		; CONFIGURE ODD PARITY
+	OR	LCTL_ODD_PARITY				; CONFIGURE ODD PARITY
 	JR	uart_config_assign_stop_bits
 
 uart_config_even_parity:
 	OR	LCTL_EVEN_PARITY
 
 uart_config_assign_stop_bits:
-
 	BIT	2, E
-	JR	Z, uart_config_assign_line	; 1 STOP BIT IS THE DEFAULT
+	JR	Z, uart_config_assign_line		; 1 STOP BIT IS THE DEFAULT
 
-	OR	LCTL_2_STOP_BITS		; ENABLE 2 STOP BITS
+	OR	LCTL_2_STOP_BITS			; ENABLE 2 STOP BITS
 
 uart_config_assign_line:
 	OUT0	(UART0_LCTL), A
@@ -178,7 +189,7 @@ uart_config_assign_line:
 	RET.L
 
 uart_query:
-	LD	A, %FF		; UNKNOWN UART FUNCTION
+	LD	A, %FF					; UNKNOWN UART FUNCTION
 	RET.L
 
 	PUBLIC	_uart0_init
@@ -189,18 +200,20 @@ BRG_H	EQU	((BRG & %FF00) >> 8)
 
 _uart0_init:
 	di
-	LD	A, %3
+	LD	A, %0F					; 0000 0011
 	OUT0	(PD_ALT2),A
 
-	XOR	A
+	LD	A, %F0
 	OUT0	(PD_ALT1),A
+
+	XOR	A					; 0000 0000
 	OUT0	(PD_DR),A
 
-	LD	A, %EB
+	LD	A, %0F					; 1110 1011
 	OUT0	(PD_DDR),A
 
-	IN0	A, (UART0_LCTL)		; ENABLE REGISTER ACCESS
-	SET	7, A			; SET DLAB BIT
+	IN0	A, (UART0_LCTL)				; ENABLE REGISTER ACCESS
+	SET	7, A					; SET DLAB BIT
 	OUT0	(UART0_LCTL), A
 
 	LD	A, BRG_L
@@ -209,11 +222,11 @@ _uart0_init:
 	LD	A, BRG_H
 	OUT0	(UART0_BRG_H), A
 
-	IN0	A, (UART0_LCTL)		; DISABLE REGISTER ACCESS
-	RES	7, A			; CLEAR DLAB BIT
+	IN0	A, (UART0_LCTL)				; DISABLE REGISTER ACCESS
+	RES	7, A					; CLEAR DLAB BIT
 	OUT0	(UART0_LCTL), A
 
-	XOR	A
+	LD	A, MCTL_RTS				; H/W FLOW CONTROL - ALLOW RECEIVING BYTES
 	OUT0	(UART0_MCTL), A
 
 	LD	A, UART_FCTL_FIFOEN | UART_FCTL_CLRRxF | UART_FCTL_CLRTxF | UART_FCTL_TRIG_4
@@ -223,13 +236,10 @@ _uart0_init:
 	OUT0	(UART0_LCTL), A
 
 	LD	A, 1
-	OUT0	(UART0_IER), A		; ENABLE INTERRUPTS FOR RECEIVE EVENTS
+	OUT0	(UART0_IER), A				; ENABLE INTERRUPTS FOR RECEIVE EVENTS
 
-	ei
+	EI
 	RET
-
-
-
 
 	PUBLIC	_uart0_receive_isr
 	XREF	_rx_buffer_add_to
@@ -240,12 +250,29 @@ _uart0_receive_isr:
 	PUSH	BC
 	PUSH	DE
 	PUSH	HL
-	IN0	A, (UART0_IIR);
+
+	LD	B, 4
+
+_uart0_receive_isr_loop
+	IN0	A, (UART0_IIR)
 	BIT	0, A
 	JR	NZ, _uart0_receive_isr_end
 	IN0	E, (UART0_RBR)
 
+	PUSH	BC
 	CALL	_rx_buffer_add_to
+	CALL	_rx_buffer_get_length
+	POP	BC
+
+	CP	RX_BUFFER_HIGH				; RX_BUFFER_FULL = buffer_size ?
+	JR	NZ, _uart0_receive_isr_try_next		; no, do nothing
+
+	IN0	A, (UART0_MCTL)				; yes, stop receiving bytes
+	AND	~MCTL_RTS
+	OUT0	(UART0_MCTL), A
+
+_uart0_receive_isr_try_next:
+	DJNZ	_uart0_receive_isr_loop
 
 _uart0_receive_isr_end:
 	POP	HL
