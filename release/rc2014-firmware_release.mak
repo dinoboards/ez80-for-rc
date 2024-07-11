@@ -230,7 +230,9 @@ rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
 
 $(WORKDIR_ESCSPACE)\60-hz-counter.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\60-hz-counter.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\60-hz-counter.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\60-hz-counter.s"
 
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
@@ -250,7 +252,9 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
 
 $(WORKDIR_ESCSPACE)\real-time-clock.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\real-time-clock.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\real-time-clock.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\real-time-clock.s"
 
 $(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
@@ -258,7 +262,9 @@ $(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-rc2014-fnc.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-rc2014-fnc.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-rc2014-fnc.s"
 
 $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
@@ -271,35 +277,51 @@ $(WORKDIR_ESCSPACE)\test.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
 
 $(WORKDIR_ESCSPACE)\uart_control.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_control.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_control.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_control.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_add_to.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_add_to.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_add_to.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_add_to.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_empty.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_empty.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_empty.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_empty.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_full.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_full.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_full.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_full.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_get.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_get.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_get_length.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get_length.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_get_length.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_get_length.s"
 
 $(WORKDIR_ESCSPACE)\uart_rx_buffer_init.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_init.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_rx_buffer_init.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_rx_buffer_init.s"
 
 $(WORKDIR_ESCSPACE)\uart_tx_buffer.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_tx_buffer.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart_tx_buffer.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart_tx_buffer.s"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \

@@ -24,6 +24,7 @@ _spike:
 	;LD	DE, 3 | 4		; TODO: set parity to even, 2 STOP BITS
 	;LD	DE, 2 << 3		; 7 STOP BITS
 	LD	DE, 3 << 3		; 8 STOP BITS
+	LD	DE, 3 << 3 | %20	; 8 STOP BITS | CTS FLOW CONTROL
 	RST.L	%10			;
 
 	ld	e, '>'
@@ -41,11 +42,11 @@ EZUART_IN:
 	LD	B, 0			; UART-IN
 	RST.L	%10			; CHAR RETURNED IN E
 
-	LD	B, 0
-WAIT:
-	PUSH	BC
-	POP	BC
-	DJNZ	WAIT
+; 	LD	B, 0
+; WAIT:
+; 	PUSH	BC
+; 	POP	BC
+; 	DJNZ	WAIT
 
 EZUART_OUT:
 	LD	A, 3			; UART

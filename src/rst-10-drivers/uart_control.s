@@ -9,6 +9,7 @@
 	XREF	_rx_buffer_empty
 	XREF	_rx_buffer_get
 	XREF	_rx_buffer_get_length
+	XREF	_cts_flow_control
 
 UART_ERR_FIFOBUFFERFULL	EQU	%0C		;!< The error code returned when the transmit FIFO buffer is full.
 
@@ -67,12 +68,23 @@ uart_in_end:
 ;
 ; Send a Character (E). If there is no space available in the unit's output buffer, the function will wait
 ; indefinitely.  The returned Status (A) is a standard HBIOS result code.
+; Will block if CTS flow control enabled, and receiver does not assert (low) our CTS input.
 ;
 uart_out:
 	IN0	A, (UART0_LSR)		; WAIT FOR TX READY
 	AND	LSR_THRE
 	JR	Z, uart_out
 
+	LD	A, (_cts_flow_control)	; IS CTS FLOW CONTROL ENABLED
+	OR	A
+	JR	Z, uart_out_char	; NO, SEND THE CHAR NOW
+
+uart_wait_for_cts_low:
+	IN0	A, (UART0_MSR)		; YES, WAIT FOR CTS TO GO LOW
+	AND	MSR_CTS
+	JR	Z, uart_wait_for_cts_low
+
+uart_out_char:
 	OUT0	(UART0_THR), E		; SEND THE CHAR
 	XOR	A
 	RET.L
@@ -114,11 +126,13 @@ uart_ost:
 ;   DE{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
 ;   DE{2}   = Stop Bits (0 -> 1, 1 -> 2)
 ;   DE{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
+;   DE{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
 ;   Output A = Status
 ;
 ; Configure the UART device with the new desired baud rate, parity, stop bits, and data bits.  The returned Status (A)
 ; is a standard HBIOS result code.
-
+; If CTS flow control is enabled, transmission will pause while the CTS signal is held high.
+;
 	XREF	__ldivu
 	XREF	__itol
 uart_config:
@@ -185,6 +199,16 @@ uart_config_assign_stop_bits:
 uart_config_assign_line:
 	OUT0	(UART0_LCTL), A
 
+	BIT 	5, E
+	JR	NZ, uart_config_enable_flow_control
+
+	XOR	A
+	LD	(_cts_flow_control), A			; DISABLE CTS FLOW CONTROL
+	RET.L
+
+uart_config_enable_flow_control:
+	LD	A, 1
+	LD	(_cts_flow_control), A			; ENABLE CTS FLOW CONTROL
 	XOR	A
 	RET.L
 
@@ -238,6 +262,8 @@ _uart0_init:
 	LD	A, 1
 	OUT0	(UART0_IER), A				; ENABLE INTERRUPTS FOR RECEIVE EVENTS
 
+	XOR	A					; BY DEFAULT, CTS FLOW CONTROL (TRANSMISSION) IS DISABLED
+	LD	(_cts_flow_control), A
 	EI
 	RET
 
