@@ -9,7 +9,8 @@
 	XREF	_rx_buffer_empty
 	XREF	_rx_buffer_get
 	XREF	_rx_buffer_get_length
-	XREF	_cts_flow_control
+	XREF	_baud_rate
+	XREF	_line_control
 
 UART_ERR_FIFOBUFFERFULL	EQU	%0C		;!< The error code returned when the transmit FIFO buffer is full.
 
@@ -75,8 +76,8 @@ uart_out:
 	AND	LSR_THRE
 	JR	Z, uart_out
 
-	LD	A, (_cts_flow_control)	; IS CTS FLOW CONTROL ENABLED
-	OR	A
+	LD	A, (_line_control)	; IS CTS FLOW CONTROL ENABLED
+	BIT	5, A
 	JR	Z, uart_out_char	; NO, SEND THE CHAR NOW
 
 uart_wait_for_cts_low:
@@ -124,20 +125,26 @@ uart_ost:
 	RET.L
 ;
 ; Function B = 04 -- Configure UART Device (UART_CONFIG)
-;   Input HL{23:0} = New desired baud rate
-;   DE{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
-;   DE{2}   = Stop Bits (0 -> 1, 1 -> 2)
-;   DE{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
-;   DE{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
-;   Output A = Status
+;   Input:
+;     HL{23:0} = New desired baud rate
+;     E{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+;     E{2}   = Stop Bits (0 -> 1, 1 -> 2)
+;     E{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
+;     E{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
+;   Output
+;     A = Status
 ;
 ; Configure the UART device with the new desired baud rate, parity, stop bits, and data bits.  The returned Status (A)
 ; is a standard HBIOS result code.
 ; If CTS flow control is enabled, transmission will pause while the CTS signal is held high.
 ;
+; TODO: add ability to enable/disable RTS flow control. (if disabled - ensure RTS is set to high impedance)
+;
 	XREF	__ldivu
 	XREF	__itol
 uart_config:
+	LD	(_baud_rate), HL
+
 	PUSH	DE
 	XOR	A					; A:HL = HL * 16
 	ADD	HL,HL
@@ -173,6 +180,7 @@ uart_config:
 	LD	B, A
 
 	LD	A, E					; MOVE DESIRED BIT LENGTH TO A
+	LD	(_line_control), A			; SAVE NEW LINE CONTROL CONFIG
 	RRCA
 	RRCA
 	RRCA
@@ -201,21 +209,27 @@ uart_config_assign_stop_bits:
 uart_config_assign_line:
 	OUT0	(UART0_LCTL), A
 
-	BIT 	5, E
-	JR	NZ, uart_config_enable_flow_control
-
-	XOR	A
-	LD	(_cts_flow_control), A			; DISABLE CTS FLOW CONTROL
-	RET.L
-
-uart_config_enable_flow_control:
-	LD	A, 1
-	LD	(_cts_flow_control), A			; ENABLE CTS FLOW CONTROL
 	XOR	A
 	RET.L
-
+;
+; Function B = 05 -- GET UART Device Configure (UART_QUERY)
+;   Output:
+;     HL{23:0} = New desired baud rate
+;     E{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+;     E{2}   = Stop Bits (0 -> 1, 1 -> 2)
+;     E{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
+;     E{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
+;     A = Status
+;
+; Retreive the UART device's current configuration.  The returned Status (A) is a standard HBIOS result code.
+;
 uart_query:
-	LD	A, %FF					; UNKNOWN UART FUNCTION
+	LD	HL, (_baud_rate)
+	LD	A, (_line_control)
+	LD	E, A
+
+uart_query_end:
+	XOR	A
 	RET.L
 
 	PUBLIC	_uart0_init
@@ -264,8 +278,12 @@ _uart0_init:
 	LD	A, 1
 	OUT0	(UART0_IER), A				; ENABLE INTERRUPTS FOR RECEIVE EVENTS
 
-	XOR	A					; BY DEFAULT, CTS FLOW CONTROL (TRANSMISSION) IS DISABLED
-	LD	(_cts_flow_control), A
+	LD	HL, UART_BPS
+	LD	(_baud_rate), HL
+
+	LD	A, 3 << 3				; 8 BITS, 1 STOP BIT, NO PARITY, CTS FLOW CONTROL DISABLED
+	LD	(_line_control), A
+
 	EI
 	RET
 

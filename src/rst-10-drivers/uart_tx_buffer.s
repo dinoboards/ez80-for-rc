@@ -8,7 +8,8 @@
 	PUBLIC	_rx_buf
 	PUBLIC	_rx_buf_next_in
 	PUBLIC	_rx_buf_next_out
-	PUBLIC	_cts_flow_control
+	PUBLIC	_baud_rate
+	PUBLIC	_line_control
 
 _rx_buf:
 	DS	RX_BUFFER_SIZE
@@ -19,5 +20,16 @@ _rx_buf_next_in:
 _rx_buf_next_out:
 	DS	1
 
-_cts_flow_control:
-	DS	1	; IF 1, THEN  ONLY TRANSMITT IF CTS IS READ AS LOW
+_baud_rate:
+	DS	3
+
+;
+; line control bits:
+;
+; {0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+; {2}   = Stop Bits (0 -> 1, 1 -> 2)
+; {3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
+; {5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
+;
+_line_control:
+	DS	1
