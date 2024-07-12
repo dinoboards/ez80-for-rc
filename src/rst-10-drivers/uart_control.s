@@ -44,7 +44,7 @@ uart_control:
 uart_in:
 	CALL	_rx_buffer_empty
 	OR	A
-	JR	nZ, uart_in
+	JR	NZ, uart_in
 
 	CALL	_rx_buffer_get_length
 	CP	RX_BUFFER_LOW			; buffer_size == RX_BUFFER_LOW ?
@@ -100,11 +100,12 @@ uart_ist:
 	CALL	_rx_buffer_get_length	; RETURN THE NUMBER OF CHARS IN THE RX BUFFER IN A
 
 	BIT	7, A			; IF A > 127, THEN RETURN 127 (NEGATIVE NUMBERS ARE ERROR CODES)
-	RET.L	Z
+	JR	Z, uart_ist_postive
 
 	LD	A, 127
+uart_ist_postive:
+	OR	A
 	RET.L
-
 ;
 ; Function B = 03 -- Character Output Status (UART_OST)
 ;   Output A = Transmitter Status
@@ -113,13 +114,14 @@ uart_ist:
 ; the output FIFO is not full and at least one character can be sent.
 ; Negative values (bit 7 set) indicate a standard HBIOS result (error) code.
 ;
+; TODO: if CTS flow control enabled, return 0 if CTS is high.
+;
 uart_ost:
 	IN0	A, (UART0_LSR)
 	AND	LSR_THRE
 	RET.L	Z
 	LD	A, 1
 	RET.L
-
 ;
 ; Function B = 04 -- Configure UART Device (UART_CONFIG)
 ;   Input HL{23:0} = New desired baud rate

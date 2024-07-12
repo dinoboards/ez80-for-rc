@@ -28,6 +28,9 @@ L_1:
 	LD	C, A				; return rx_buf_next_in - rx_buf_next_out + RX_BUFFER_SIZE
 	LD	A, (HL)
 	SUB	A, C
-L_2:
 	ADD	A, RX_BUFFER_SIZE
+	RET
+
+L_2:
+	XOR	A
 	RET

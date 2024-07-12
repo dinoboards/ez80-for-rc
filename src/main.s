@@ -15,7 +15,7 @@ _main:
 	CALL	_rx_buffer_init
 	CALL	bank_init_z2
 
-	call	_spike
+	; call	_spike
 
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $B9
 	LD	MB, A
