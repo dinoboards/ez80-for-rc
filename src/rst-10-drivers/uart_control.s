@@ -9,6 +9,8 @@
 	XREF	_rx_buffer_empty
 	XREF	_rx_buffer_get
 	XREF	_rx_buffer_get_length
+	XREF	_rx_buf_next_in
+	XREF	_rx_buf_next_out
 	XREF	_baud_rate
 	XREF	_line_control
 
@@ -31,6 +33,8 @@ uart_control:
 	JR	Z, uart_config	; B = 4
 	DEC	A
 	JR	Z, uart_query	; B = 5
+	DEC	A
+	JR	Z, uart_reset	; B = 6
 
 	LD	A, %FF		; UNKNOWN UART FUNCTION
 	RET.L
@@ -127,10 +131,10 @@ uart_ost:
 ; Function B = 04 -- Configure UART Device (UART_CONFIG)
 ;   Input:
 ;     HL{23:0} = New desired baud rate
-;     E{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
-;     E{2}   = Stop Bits (0 -> 1, 1 -> 2)
-;     E{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
-;     E{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
+;     D{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+;     D{2}   = Stop Bits (0 -> 1, 1 -> 2)
+;     D{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
+;     D{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
 ;   Output
 ;     A = Status
 ;
@@ -174,12 +178,12 @@ uart_config:
 	OUT0	(UART0_LCTL), A
 
 	POP	DE
-	LD	A, E
+	LD	A, D
 	AND	3
 	INC	A
 	LD	B, A
 
-	LD	A, E					; MOVE DESIRED BIT LENGTH TO A
+	LD	A, D					; MOVE DESIRED BIT LENGTH TO A
 	LD	(_line_control), A			; SAVE NEW LINE CONTROL CONFIG
 	RRCA
 	RRCA
@@ -201,7 +205,7 @@ uart_config_even_parity:
 	OR	LCTL_EVEN_PARITY
 
 uart_config_assign_stop_bits:
-	BIT	2, E
+	BIT	2, D
 	JR	Z, uart_config_assign_line		; 1 STOP BIT IS THE DEFAULT
 
 	OR	LCTL_2_STOP_BITS			; ENABLE 2 STOP BITS
@@ -215,20 +219,42 @@ uart_config_assign_line:
 ; Function B = 05 -- GET UART Device Configure (UART_QUERY)
 ;   Output:
 ;     HL{23:0} = New desired baud rate
-;     E{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
-;     E{2}   = Stop Bits (0 -> 1, 1 -> 2)
-;     E{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
-;     E{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
+;     E = H{23:16}
+;     D{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+;     D{2}   = Stop Bits (0 -> 1, 1 -> 2)
+;     D{3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
+;     D{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
 ;     A = Status
 ;
 ; Retreive the UART device's current configuration.  The returned Status (A) is a standard HBIOS result code.
 ;
 uart_query:
 	LD	HL, (_baud_rate)
-	LD	A, (_line_control)
+	LD	A, (_baud_rate+2)
 	LD	E, A
+	LD	A, (_line_control)
+	LD	D, A
 
 uart_query_end:
+	XOR	A
+	RET.L
+;
+; Function B = 06 -- UART flush all buffers (UART_RESET)
+;
+; Output
+;   A = Status
+;
+uart_reset:
+	DI
+
+	LD	A, UART_FCTL_FIFOEN | UART_FCTL_CLRRxF | UART_FCTL_CLRTxF | UART_FCTL_TRIG_4
+	OUT0	(UART0_FCTL), A
+
+	XOR	A
+	LD	(_rx_buf_next_in), A
+	LD	(_rx_buf_next_out), A
+
+	EI
 	XOR	A
 	RET.L
 

@@ -1,5 +1,6 @@
 	include "config.inc"
 
+	XREF	ez80_utils_control
 	XREF	timer_tick_control
 	XREF	rtc_control
 	XREF	uart_control
@@ -11,7 +12,7 @@
 HOOK_CNT	EQU	4
 
 ; A = function index
-; A = 0 -> SYSTEM INITIALISE, HL-> PLATFORM DESCRIPTION TABLE
+; A = 0 -> SYSTEM INITIALISE, B-> SUB FUNCTION
 ; A = 1 -> RTC-FUNC, B-> RTC SUB-FUNCTION
 ; A = 2 -> 60HZ-TIMER-FUNC, B-> SUB-FUNCTION
 
@@ -40,7 +41,7 @@ rst_rc2014_fnc_resume:
 
 
 rc_functions:
-	JP	rcfn_platform_init
+	JP	ez80_utils_control
 	JP	rtc_control
 	JP	timer_tick_control
 	JP	uart_control

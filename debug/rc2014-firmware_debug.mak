@@ -96,6 +96,12 @@ clean:
             $(RM) "$(WORKDIR)\cstartup.lis"
 	@if exist "$(WORKDIR)\cstartup.lst"  \
             $(RM) "$(WORKDIR)\cstartup.lst"
+	@if exist "$(WORKDIR)\ez80_utils.obj"  \
+            $(RM) "$(WORKDIR)\ez80_utils.obj"
+	@if exist "$(WORKDIR)\ez80_utils.lis"  \
+            $(RM) "$(WORKDIR)\ez80_utils.lis"
+	@if exist "$(WORKDIR)\ez80_utils.lst"  \
+            $(RM) "$(WORKDIR)\ez80_utils.lst"
 	@if exist "$(WORKDIR)\init_params_f92.obj"  \
             $(RM) "$(WORKDIR)\init_params_f92.obj"
 	@if exist "$(WORKDIR)\init_params_f92.lis"  \
@@ -207,6 +213,7 @@ LIBS =
 OBJS =  \
             $(WORKDIR_ESCSPACE)\60-hz-counter.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
+            $(WORKDIR_ESCSPACE)\ez80_utils.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\real-time-clock.obj  \
@@ -237,6 +244,12 @@ $(WORKDIR_ESCSPACE)\60-hz-counter.obj :  \
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
+
+$(WORKDIR_ESCSPACE)\ez80_utils.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\ez80_utils.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\ez80_utils.s"
 
 $(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_params_f92.asm  \
