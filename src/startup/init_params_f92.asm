@@ -70,17 +70,20 @@ __init:
 	OUT0	(RTC_CTRL), A			; the RTC to be synchronized to another
                              			; time source.
 
-       ; set TMR1 for 60Hz interrupt signal?
+	; set TMR1 for 60Hz interrupt signal?
+RTC_CLOCK_RATE EQU 32768
 
-COUNT_FOR_60HZ EQU (CPU_CLK_FREQ/16)/60
+COUNT_FOR_60HZ EQU RTC_CLOCK_RATE / 60
 
-       LD      A, COUNT_FOR_60HZ & %FF
-       OUT0    (TMR1_RR_L), A
-       LD      A, COUNT_FOR_60HZ >> 8
-       OUT0    (TMR1_RR_H), A
-       LD      A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_16 | TMR_IRQ_EN
-       OUT0    (TMR1_CTL), A
+	LD	A, TMR0_IN_SYSCLK | TMR1_IN_RTC | TMR2_IN_SYSCLK | TMR3_IN_SYSCLK
+	OUT0	(TMR_ISS), A
 
+	LD	A, COUNT_FOR_60HZ & %FF
+	OUT0	(TMR1_RR_L), A
+	LD	A, COUNT_FOR_60HZ >> 8
+	OUT0	(TMR1_RR_H), A
+	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4 | TMR_IRQ_EN
+	OUT0	(TMR1_CTL), A
 
 	; set PB5 for RC2014 clock out
 	; out frequency = 18.432Mhz / (DIV * (RR*2))

@@ -11,7 +11,7 @@ ms_60Hz_timer_counter_isr:
 	PUSH	AF
 	PUSH	HL
 
-	IN0    A, (TMR1_CTL)			; clear interrupt signal
+	IN0    A, (TMR1_CTL)		; CLEAR INTERRUPT SIGNAL
 
 	LD	HL, HB_TICKS		; POINT TO TICK COUNTER
 	CALL	INC32HL
