@@ -90,6 +90,22 @@ clean:
             $(RM) "$(WORKDIR)\60-hz-counter.lis"
 	@if exist "$(WORKDIR)\60-hz-counter.lst"  \
             $(RM) "$(WORKDIR)\60-hz-counter.lst"
+	@if exist "$(WORKDIR)\clib.obj"  \
+            $(RM) "$(WORKDIR)\clib.obj"
+	@if exist "$(WORKDIR)\clib.lis"  \
+            $(RM) "$(WORKDIR)\clib.lis"
+	@if exist "$(WORKDIR)\clib.lst"  \
+            $(RM) "$(WORKDIR)\clib.lst"
+	@if exist "$(WORKDIR)\clib.src"  \
+            $(RM) "$(WORKDIR)\clib.src"
+	@if exist "$(WORKDIR)\cpu_freq_calculator.obj"  \
+            $(RM) "$(WORKDIR)\cpu_freq_calculator.obj"
+	@if exist "$(WORKDIR)\cpu_freq_calculator.lis"  \
+            $(RM) "$(WORKDIR)\cpu_freq_calculator.lis"
+	@if exist "$(WORKDIR)\cpu_freq_calculator.lst"  \
+            $(RM) "$(WORKDIR)\cpu_freq_calculator.lst"
+	@if exist "$(WORKDIR)\cpu_freq_calculator.src"  \
+            $(RM) "$(WORKDIR)\cpu_freq_calculator.src"
 	@if exist "$(WORKDIR)\cstartup.obj"  \
             $(RM) "$(WORKDIR)\cstartup.obj"
 	@if exist "$(WORKDIR)\cstartup.lis"  \
@@ -212,6 +228,8 @@ LIBS =
 
 OBJS =  \
             $(WORKDIR_ESCSPACE)\60-hz-counter.obj  \
+            $(WORKDIR_ESCSPACE)\clib.obj  \
+            $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\ez80_utils.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
@@ -240,6 +258,25 @@ $(WORKDIR_ESCSPACE)\60-hz-counter.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\60-hz-counter.s"
+
+$(WORKDIR_ESCSPACE)\clib.obj :  \
+            $(PRJDIR_ESCSPACE)\src\clib.c  \
+            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
+            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\clib.c"
+
+$(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\cpu_freq_calculator.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\cpu_freq_calculator.c"
 
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
@@ -341,7 +378,6 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
 
 $(WORKDIR_ESCSPACE)\zsldevinit.obj :  \
-            $(PRJDIR_ESCSPACE)\zsldevinit.asm  \
-            $(INCLUDE_ESCSPACE)\zilog\intvect.inc
+            $(PRJDIR_ESCSPACE)\zsldevinit.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\zsldevinit.asm"
 

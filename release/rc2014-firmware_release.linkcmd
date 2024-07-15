@@ -71,12 +71,14 @@ DEFINE __RAM_ADDR_U_INIT_PARAM = $B7
 DEFINE __FLASH_CTL_INIT_PARAM = $28
 DEFINE __FLASH_ADDR_U_INIT_PARAM = $00
 
-define _SYS_CLK_FREQ = 7372800
+define _SYS_CLK_FREQ = 18432000
 
-define _zsl_g_clock_xdefine = 7372800
+define _zsl_g_clock_xdefine = 18432000
 
 "Z:\rc2014-ez80-firmware\release\rc2014-firmware"= \
  ".\60-hz-counter.obj", \
+ ".\clib.obj", \
+ ".\cpu_freq_calculator.obj", \
  ".\cstartup.obj", \
  ".\ez80_utils.obj", \
  ".\init_params_f92.obj", \

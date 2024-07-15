@@ -4,6 +4,8 @@
 <!-- file information -->
 <files>
 <file filter-key="">src\rst-10-drivers\60-hz-counter.s</file>
+<file filter-key="">src\clib.c</file>
+<file filter-key="">src\rst-10-drivers\cpu_freq_calculator.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\rst-10-drivers\ez80_utils.s</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
