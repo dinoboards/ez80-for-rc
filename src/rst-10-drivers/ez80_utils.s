@@ -17,6 +17,8 @@ ez80_utils_control:
 	JR	Z, ez80_firmware_query			; B = 0
 	DEC	A
 	JR	Z, ez80_reg_ehl_to_hl			; B = 1
+	DEC	A
+	JR	Z, ez80_reg_hl_to_ehl			; B = 2
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -42,7 +44,8 @@ ez80_firmware_query:
 	LD	HL, %000001 ; 0.0.0
 	RET.L
 ;
-; Function B = 01 -- register copy
+; Function B = 01 -- register copy (8:16 -> 24)
+; LD HL, E:HL{15:0}
 ; Input
 ;   E:HL{15:0} = value to be copied
 ; Output
@@ -52,11 +55,25 @@ ez80_firmware_query:
 ;
 ez80_reg_ehl_to_hl:
 	LD	(tmp), HL				; ONLY THE LOWER 16 BITS OF HL ARE VALID
-	ld	a, e
-	ld	(tmp+2), A				; SAVE THE UPPER 8 BITS OF THE 24 BIT BAUD RATE
-	ld	hl, (tmp)
+	LD	A, E
+	LD	(tmp+2), A				; SAVE THE UPPER 8 BITS OF THE 24 BIT VALUE
+	LD	HL, (tmp)
 	RET.L
 
+; Function B = 02 -- register copy (24 -> 8:16)
+; LD E:HL{15:0}, HL
+; Input
+;   HL{23:0} = value to be copied
+; Output
+;   E:HL{15:0} -> HL{23:0}
+;
+; not re-entrant safe
+;
+ez80_reg_hl_to_ehl:
+	LD	(tmp), HL				; STORE THE FULL 24 BITS OF HL
+	LD	A, (tmp+2)				; RETRIEVE THE UPPER 8 BITS
+	LD	E, A
+	RET.L
 
 	SECTION BSS
 tmp:

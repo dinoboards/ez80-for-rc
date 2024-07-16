@@ -1,6 +1,10 @@
 
         INCLUDE "..\config.inc"
 
+	XREF	__idivu
+	XREF	__iremu
+	XREF	__imul_b
+
 	SEGMENT	CODE
 
 	.ASSUME ADL=1
@@ -17,24 +21,12 @@ _ms_60Hz_timer_counter_isr:
 	INC	HL
 	LD	(_system_ticks), HL
 
-	LD	HL, _system_sub_second_count		; POINT TO SECONDS TICK COUNTER
-	DEC	(HL)					; COUNTDOWN ONE SECOND OF TICKS
-	JR	NZ, HB_TICK1				; NOT DONE, SKIP AHEAD
-	LD	A, TICKFREQ				; TICKS PER SECOND
-	LD	(HL), A					; RESET COUNTDOWN REGISTER
-	LD	HL, (_system_second_ticks)		; POINT TO SECONDS COUNTER
-	INC	HL					; INCREMENT AND RETURN
-	LD	(_system_second_ticks), HL
-
-HB_TICK1:
 	POP	HL
 	POP	AF
 	EI
 	RETI.L
 
-
 	PUBLIC	timer_tick_control
-
 timer_tick_control:
 	POP	BC					; RESTORE BC AND HL
 	POP	HL
@@ -52,7 +44,7 @@ timer_tick_control:
 	XOR	A					; SUCCESS
 	RET.L
 
-
+;
 ; GET TIMER TICKS
 ;   RETURNS:
 ;     HL{23:0}:		TIMER VALUE (24 BIT)
@@ -74,21 +66,21 @@ tm_tick_get:
 ; GET TIMER SECONDS
 ;   RETURNS:
 ;     HL{23:0}:		TIMER VALUE (24 BIT)
-;     E:HL{15:0}:	TIMER VALUE (24 BIT)
-;     D:		0
 ;     C: 		NUM TICKS WITHIN CURRENT SECOND
 ;
 tmr_secs_get:
-	LD	D, 0
-	DI
-	LD	HL, (_system_second_ticks)
-	LD	A, (_system_second_ticks+2)
-	LD	E, A
-	LD	A, (_system_sub_second_count)
-	EI
-	NEG						; CONVERT DOWNCOUNTER TO UPCOUNTER
-	ADD	A, TICKFREQ
-	LD	C, A
+	LD	HL, (_system_ticks)
+	LD	BC, TICKFREQ
+	CALL	__idivu
+	PUSH	HL
+
+	LD	BC, TICKFREQ
+	LD	HL,(_system_ticks)
+	CALL	__iremu
+	LD	C, L					; SECOND FRACTION INTO C
+
+	POP	HL					; RESTORE SECONDS
+
 	XOR	A					; SUCCESS
 	RET.L
 ;
@@ -108,7 +100,10 @@ tmr_tick_set:
 ;     HL{23:0}: SECONDS VALUE (24 BIT)
 ;
 tmr_secs_set:
-	LD	(_system_second_ticks), HL
+	LD	A, TICKFREQ
+	CALL	__imul_b
+
+	LD	(_system_ticks), HL
 
 	XOR	A					; SUCCESS
 	RET.L
@@ -116,17 +111,17 @@ tmr_secs_set:
 
 	SEGMENT	BSS
 
-	PUBLIC	_system_sub_second_count
+	; PUBLIC	_system_sub_second_count
 	PUBLIC	_system_ticks
-	PUBLIC	_system_second_ticks
+	; PUBLIC	_system_second_ticks
 
 _system_ticks:
 	DS	3
 
-_system_sub_second_count:
-	DS	1					; TICK COUNTER FOR FRACTIONAL SECONDS
+; _system_sub_second_count:
+; 	DS	1					; TICK COUNTER FOR FRACTIONAL SECONDS
 
-_system_second_ticks:
-	DS	3
+; _system_second_ticks:
+; 	DS	3
 
 	END

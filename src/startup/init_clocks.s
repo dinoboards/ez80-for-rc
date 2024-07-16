@@ -6,8 +6,6 @@
 
 	PUBLIC	_init_clocks
 	XREF	_system_ticks
-	XREF	_system_sub_second_count
-	XREF	_system_second_ticks
 	XREF	_assign_cpu_frequency
 	XREF	_rtc_enabled
 
@@ -18,9 +16,6 @@ COUNT_FOR_60HZ_RTC EQU RTC_CLOCK_RATE / 60
 COUNT_FOR_60HZ_SYSCLK EQU (CPU_CLK_FREQ/16)/60
 
 _init_clocks:
-	LD	A, TICKFREQ
-	LD	(_system_sub_second_count), A
-
 	LD	HL, 1
 	CALL	configure_tmr1_to_rtc			; CONFIGURE TM1 FOR RTC CLOCK AS FULL SPEED
 
@@ -41,11 +36,8 @@ wait:
 
 	CALL	measure_cpu_freq
 
-	LD	A, TICKFREQ				; RESET TICK COUNTERS
-	LD	(_system_sub_second_count), A
 	LD	HL, 0
 	LD	(_system_ticks), HL
-	LD	(_system_second_ticks), HL
 
 	CPL						; RETURN NZ FOR RTC PRESENT
 	LD	(_rtc_enabled), A
