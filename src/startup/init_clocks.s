@@ -7,6 +7,7 @@
 	PUBLIC	_init_clocks
 	XREF	_system_ticks
 	XREF	_system_sub_second_count
+	XREF	_system_second_ticks
 	XREF	_assign_cpu_frequency
 	XREF	_rtc_enabled
 
@@ -40,12 +41,11 @@ wait:
 
 	CALL	measure_cpu_freq
 
-	LD	A, TICKFREQ				; RESET _system_ticks
+	LD	A, TICKFREQ				; RESET TICK COUNTERS
 	LD	(_system_sub_second_count), A
 	LD	HL, 0
 	LD	(_system_ticks), HL
-	XOR	A
-	LD	(_system_ticks+3), A
+	LD	(_system_second_ticks), HL
 
 	CPL						; RETURN NZ FOR RTC PRESENT
 	LD	(_rtc_enabled), A
@@ -87,7 +87,7 @@ repeat:
 	LD	HL, _system_ticks
 
 	LD	DE, 0
-	ld	bc, 0
+	LD	BC, 0
 
 	LD	A, (HL)
 sync_tick:

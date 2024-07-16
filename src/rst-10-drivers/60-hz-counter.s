@@ -13,15 +13,18 @@ _ms_60Hz_timer_counter_isr:
 
 	IN0    A, (TMR1_CTL)				; CLEAR INTERRUPT SIGNAL
 
-	LD	HL, _system_ticks			; POINT TO TICK COUNTER
-	CALL	INC32HL
+	LD	HL, (_system_ticks)			; POINT TO TICK COUNTER
+	INC	HL
+	LD	(_system_ticks), HL
+
 	LD	HL, _system_sub_second_count		; POINT TO SECONDS TICK COUNTER
 	DEC	(HL)					; COUNTDOWN ONE SECOND OF TICKS
 	JR	NZ, HB_TICK1				; NOT DONE, SKIP AHEAD
 	LD	A, TICKFREQ				; TICKS PER SECOND
 	LD	(HL), A					; RESET COUNTDOWN REGISTER
-	LD	HL, _system_second_ticks		; POINT TO SECONDS COUNTER
-	CALL	INC32HL					; INCREMENT AND RETURN
+	LD	HL, (_system_second_ticks)		; POINT TO SECONDS COUNTER
+	INC	HL					; INCREMENT AND RETURN
+	LD	(_system_second_ticks), HL
 
 HB_TICK1:
 	POP	HL
@@ -52,13 +55,17 @@ timer_tick_control:
 
 ; GET TIMER TICKS
 ;   RETURNS:
-;     DE{15:0}:HL{15:0}: TIMER VALUE (32 BIT)
-;     C TICKFREQ (60)
+;     HL{23:0}:		TIMER VALUE (24 BIT)
+;     E:HL{15:0}:	TIMER VALUE (24 BIT)
+;     D:		0
+;     C:		60 (TICKFREQ)
 ;
 tm_tick_get:
-	LD	HL, _system_ticks
 	DI
-	CALL	LD32
+	LD	HL, (_system_ticks)
+	LD	A, (_system_ticks+2)
+	LD	D, 0
+	LD	E, A
 	EI
 	LD	C, TICKFREQ
 	XOR	A					; SUCCESS
@@ -66,13 +73,17 @@ tm_tick_get:
 ;
 ; GET TIMER SECONDS
 ;   RETURNS:
-;     DE:HL: SECONDS VALUE (32 BIT)
-;     C: NUM TICKS WITHIN CURRENT SECOND
+;     HL{23:0}:		TIMER VALUE (24 BIT)
+;     E:HL{15:0}:	TIMER VALUE (24 BIT)
+;     D:		0
+;     C: 		NUM TICKS WITHIN CURRENT SECOND
 ;
 tmr_secs_get:
-	LD	HL, _system_second_ticks
+	LD	D, 0
 	DI
-	CALL	LD32
+	LD	HL, (_system_second_ticks)
+	LD	A, (_system_second_ticks+2)
+	LD	E, A
 	LD	A, (_system_sub_second_count)
 	EI
 	NEG						; CONVERT DOWNCOUNTER TO UPCOUNTER
@@ -83,91 +94,39 @@ tmr_secs_get:
 ;
 ; SET TIMER
 ;   ON ENTRY:
-;     DE{15:0}:HL{15:0}: TIMER VALUE (32 BIT)
+;     HL{23:0}: TIMER VALUE (24 BIT)
 ;
 tmr_tick_set:
-	LD	BC, _system_ticks
-	DI
-	CALL	ST32
-	EI
+	LD	(_system_ticks), HL
+
 	XOR	A					; SUCCESS
 	RET.L
 
 ;
 ; SET SECS
 ;   ON ENTRY:
-;     DE:HL: SECONDS VALUE (32 BIT)
+;     HL{23:0}: SECONDS VALUE (24 BIT)
 ;
 tmr_secs_set:
-	LD	BC, _system_second_ticks
-	DI
-	CALL	ST32
-	EI
-	XOR	A
+	LD	(_system_second_ticks), HL
+
+	XOR	A					; SUCCESS
 	RET.L
-;
-; INC32 (HL)
-; INCREMENT 32 BIT BINARY AT ADDRESS
-;
-INC32HL:
-	INC	(HL)
-	RET	NZ
-	INC	HL
-	INC	(HL)
-	RET	NZ
-	INC	HL
-	INC	(HL)
-	RET	NZ
-	INC	HL
-	INC	(HL)
-	RET
 
-; LOAD OR STORE DE:HL
-;
-LD32:
-	; LD DE:HL, (HL)
-	PUSH	AF
-	LD	E, (HL)
-	INC	HL
-	LD	D, (HL)
-	INC	HL
-	LD	A, (HL)
-	INC	HL
-	LD	H, (HL)
-	LD	L, A
-	POP	AF
-	EX	DE, HL
-	RET
-
-ST32:
-	; LD (BC),DE{15:0}:HL{15:0}
-	PUSH	AF
-	LD	A,L
-	LD	(BC),A
-	INC	BC
-	LD	A,H
-	LD	(BC),A
-	INC	BC
-	LD	A,E
-	LD	(BC),A
-	INC	BC
-	LD	A,D
-	LD	(BC),A
-	POP	AF
-	RET
 
 	SEGMENT	BSS
 
 	PUBLIC	_system_sub_second_count
 	PUBLIC	_system_ticks
+	PUBLIC	_system_second_ticks
 
 _system_ticks:
-	DS	4
+	DS	3
 
 _system_sub_second_count:
-	DS	1				; TICK COUNTER FOR FRACTIONAL SECONDS
+	DS	1					; TICK COUNTER FOR FRACTIONAL SECONDS
 
 _system_second_ticks:
-	DS	4
+	DS	3
 
 	END
