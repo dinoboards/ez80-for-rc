@@ -1,6 +1,7 @@
 	include "..\config.inc"
 
 	XREF	timer_tick_control
+	XREF	_rtc_enabled
 
 	SECTION CODE
 
@@ -50,7 +51,18 @@ rtc_control:
 	OR	A
 	RET.L
 
+ERR_NOHW	.EQU	-8				; HARDWARE NOT PRESENT
+
 rtc_init:
+	LD	A, (_rtc_enabled)			; NZ IF RTC IS ENABLED
+	OR	A
+	JR	NZ, rtc_init_ok
+
+	LD	A, ERR_NOHW
+	OR	A
+	RET.L
+
+rtc_init_ok:
 	XOR	A					; SUCCESS
 	RET.L
 
