@@ -14,29 +14,29 @@
 	XREF	_baud_rate
 	XREF	_line_control
 
-UART_ERR_FIFOBUFFERFULL	EQU	%0C		;!< The error code returned when the transmit FIFO buffer is full.
+UART_ERR_FIFOBUFFERFULL	EQU	%0C			; THE ERROR CODE RETURNED WHEN THE TRANSMIT FIFO BUFFER IS FULL.
 
 uart_control:
-	POP	BC		; restore bc and hl
+	POP	BC					; RESTORE BC AND HL
 	POP	HL
 
-	LD	A, B		; SUB FUNCTION CODE
-	OR	A		; TEST SUB FUNCTION CODE
-	JR	Z, uart_in	; B = 0
+	LD	A, B					; SUB FUNCTION CODE
+	OR	A					; TEST SUB FUNCTION CODE
+	JR	Z, uart_in				; B = 0
 	DEC	A
-	JR	Z, uart_out	; B = 1
+	JR	Z, uart_out				; B = 1
 	DEC	A
-	JR	Z, uart_ist	; B = 2
+	JR	Z, uart_ist				; B = 2
 	DEC	A
-	JR	Z, uart_ost	; B = 3
+	JR	Z, uart_ost				; B = 3
 	DEC	A
-	JR	Z, uart_config	; B = 4
+	JR	Z, uart_config				; B = 4
 	DEC	A
-	JR	Z, uart_query	; B = 5
+	JR	Z, uart_query				; B = 5
 	DEC	A
-	JR	Z, uart_reset	; B = 6
+	JR	Z, uart_reset				; B = 6
 
-	LD	A, %FF		; UNKNOWN UART FUNCTION
+	LD	A, %FF					; UNKNOWN UART FUNCTION
 	RET.L
 ;
 ; Function B = 00 -- Character Input (UART_IN)
@@ -52,11 +52,11 @@ uart_in:
 	JR	NZ, uart_in
 
 	CALL	_rx_buffer_get_length
-	CP	RX_BUFFER_LOW			; buffer_size == RX_BUFFER_LOW ?
-	JR	NZ, uart_in_end			; no, do nothing
+	CP	RX_BUFFER_LOW				; BUFFER_SIZE == RX_BUFFER_LOW ?
+	JR	NZ, uart_in_end				; NO, DO NOTHING
 
 	DI
-	IN0	A, (UART0_MCTL)			; yes, resume receiving bytes
+	IN0	A, (UART0_MCTL)				; YES, RESUME RECEIVING BYTES
 	OR	MCTL_RTS
 	OUT0	(UART0_MCTL), A
 	EI
@@ -76,21 +76,21 @@ uart_in_end:
 ; Will block if CTS flow control enabled, and receiver does not assert (low) our CTS input.
 ;
 uart_out:
-	IN0	A, (UART0_LSR)		; WAIT FOR TX READY
+	IN0	A, (UART0_LSR)				; WAIT FOR TX READY
 	AND	LSR_THRE
 	JR	Z, uart_out
 
-	LD	A, (_line_control)	; IS CTS FLOW CONTROL ENABLED
+	LD	A, (_line_control)			; IS CTS FLOW CONTROL ENABLED
 	BIT	5, A
-	JR	Z, uart_out_char	; NO, SEND THE CHAR NOW
+	JR	Z, uart_out_char			; NO, SEND THE CHAR NOW
 
 uart_wait_for_cts_low:
-	IN0	A, (UART0_MSR)		; YES, WAIT FOR CTS TO GO LOW
+	IN0	A, (UART0_MSR)				; YES, WAIT FOR CTS TO GO LOW
 	AND	MSR_CTS
 	JR	Z, uart_wait_for_cts_low
 
 uart_out_char:
-	OUT0	(UART0_THR), E		; SEND THE CHAR
+	OUT0	(UART0_THR), E				; SEND THE CHAR
 	XOR	A
 	RET.L
 ;
@@ -102,9 +102,9 @@ uart_out_char:
 ; of characters in the input buffer.
 ;
 uart_ist:
-	CALL	_rx_buffer_get_length	; RETURN THE NUMBER OF CHARS IN THE RX BUFFER IN A
+	CALL	_rx_buffer_get_length			; RETURN THE NUMBER OF CHARS IN THE RX BUFFER IN A
 
-	BIT	7, A			; IF A > 127, THEN RETURN 127 (NEGATIVE NUMBERS ARE ERROR CODES)
+	BIT	7, A					; IF A > 127, THEN RETURN 127 (NEGATIVE NUMBERS ARE ERROR CODES)
 	JR	Z, uart_ist_postive
 
 	LD	A, 127
@@ -336,10 +336,10 @@ _uart0_receive_isr_loop
 	CALL	_rx_buffer_get_length
 	POP	BC
 
-	CP	RX_BUFFER_HIGH				; RX_BUFFER_FULL = buffer_size ?
-	JR	NZ, _uart0_receive_isr_try_next		; no, do nothing
+	CP	RX_BUFFER_HIGH				; RX_BUFFER_FULL = BUFFER_SIZE ?
+	JR	NZ, _uart0_receive_isr_try_next		; NO, DO NOTHING
 
-	IN0	A, (UART0_MCTL)				; yes, stop receiving bytes
+	IN0	A, (UART0_MCTL)				; YES, STOP RECEIVING BYTES
 	AND	~MCTL_RTS
 	OUT0	(UART0_MCTL), A
 

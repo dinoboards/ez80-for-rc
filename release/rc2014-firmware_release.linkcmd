@@ -81,12 +81,14 @@ define _zsl_g_clock_xdefine = 18432000
  ".\cpu_freq_calculator.obj", \
  ".\cstartup.obj", \
  ".\ez80_utils.obj", \
+ ".\init_clocks.obj", \
  ".\init_params_f92.obj", \
  ".\main.obj", \
  ".\real-time-clock.obj", \
  ".\rst-08-io.obj", \
  ".\rst-10-rc2014-fnc.obj", \
  ".\rst-18-rc2014-bank-switch.obj", \
+ ".\system_vars.obj", \
  ".\test.obj", \
  ".\uart_control.obj", \
  ".\uart_rx_buffer_add_to.obj", \

@@ -5,23 +5,23 @@
 
 	.ASSUME ADL=1
 
-	PUBLIC	ms_60Hz_timer_counter_isr
+	PUBLIC	_ms_60Hz_timer_counter_isr
 
-ms_60Hz_timer_counter_isr:
+_ms_60Hz_timer_counter_isr:
 	PUSH	AF
 	PUSH	HL
 
-	IN0    A, (TMR1_CTL)		; CLEAR INTERRUPT SIGNAL
+	IN0    A, (TMR1_CTL)				; CLEAR INTERRUPT SIGNAL
 
-	LD	HL, HB_TICKS		; POINT TO TICK COUNTER
+	LD	HL, _system_ticks			; POINT TO TICK COUNTER
 	CALL	INC32HL
-	LD	HL, HB_SECTCK		; POINT TO SECONDS TICK COUNTER
-	DEC	(HL)			; COUNTDOWN ONE SECOND OF TICKS
-	JR	NZ, HB_TICK1		; NOT DONE, SKIP AHEAD
-	LD	A, TICKFREQ		; TICKS PER SECOND
-	LD	(HL), A			; RESET COUNTDOWN REGISTER
-	LD	HL, HB_SECS		; POINT TO SECONDS COUNTER
-	CALL	INC32HL			; INCREMENT AND RETURN
+	LD	HL, _system_sub_second_count		; POINT TO SECONDS TICK COUNTER
+	DEC	(HL)					; COUNTDOWN ONE SECOND OF TICKS
+	JR	NZ, HB_TICK1				; NOT DONE, SKIP AHEAD
+	LD	A, TICKFREQ				; TICKS PER SECOND
+	LD	(HL), A					; RESET COUNTDOWN REGISTER
+	LD	HL, _system_second_ticks		; POINT TO SECONDS COUNTER
+	CALL	INC32HL					; INCREMENT AND RETURN
 
 HB_TICK1:
 	POP	HL
@@ -33,20 +33,20 @@ HB_TICK1:
 	PUBLIC	timer_tick_control
 
 timer_tick_control:
-	POP	BC		; restore bc and hl
+	POP	BC					; RESTORE BC AND HL
 	POP	HL
 
-	LD	A, B		; SUB FUNCTION CODE
-	OR	A		; TEST SUB FUNCTION CODE
-	JR	Z, tm_tick_get	; B = 0, get ticks
+	LD	A, B					; SUB FUNCTION CODE
+	OR	A					; TEST SUB FUNCTION CODE
+	JR	Z, tm_tick_get				; B = 0, GET TICKS
 	DEC	A
-	JR	Z, tmr_secs_get	; B = 1, get secs
+	JR	Z, tmr_secs_get				; B = 1, GET SECS
 	DEC	A
-	JR	Z, tmr_tick_set	; B = 2, set ticks
+	JR	Z, tmr_tick_set				; B = 2, SET TICKS
 	DEC	A
-	JR	Z, tmr_secs_set	; B = 3, set secs
+	JR	Z, tmr_secs_set				; B = 3, SET SECS
 
-	XOR	A		; SUCCESS
+	XOR	A					; SUCCESS
 	RET.L
 
 
@@ -56,12 +56,12 @@ timer_tick_control:
 ;     C TICKFREQ (60)
 ;
 tm_tick_get:
-	LD	HL, HB_TICKS
+	LD	HL, _system_ticks
 	DI
 	CALL	LD32
 	EI
 	LD	C, TICKFREQ
-	XOR	A		; SUCCESS
+	XOR	A					; SUCCESS
 	RET.L
 ;
 ; GET TIMER SECONDS
@@ -70,15 +70,15 @@ tm_tick_get:
 ;     C: NUM TICKS WITHIN CURRENT SECOND
 ;
 tmr_secs_get:
-	LD	HL, HB_SECS
+	LD	HL, _system_second_ticks
 	DI
 	CALL	LD32
-	LD	A, (HB_SECTCK)
+	LD	A, (_system_sub_second_count)
 	EI
-	NEG			; CONVERT DOWNCOUNTER TO UPCOUNTER
+	NEG						; CONVERT DOWNCOUNTER TO UPCOUNTER
 	ADD	A, TICKFREQ
 	LD	C, A
-	XOR	A		; SUCCESS
+	XOR	A					; SUCCESS
 	RET.L
 ;
 ; SET TIMER
@@ -86,11 +86,11 @@ tmr_secs_get:
 ;     DE{15:0}:HL{15:0}: TIMER VALUE (32 BIT)
 ;
 tmr_tick_set:
-	LD	BC, HB_TICKS
+	LD	BC, _system_ticks
 	DI
 	CALL	ST32
 	EI
-	XOR	A		; SUCCESS
+	XOR	A					; SUCCESS
 	RET.L
 
 ;
@@ -99,7 +99,7 @@ tmr_tick_set:
 ;     DE:HL: SECONDS VALUE (32 BIT)
 ;
 tmr_secs_set:
-	LD	BC, HB_SECS
+	LD	BC, _system_second_ticks
 	DI
 	CALL	ST32
 	EI
@@ -158,16 +158,16 @@ ST32:
 
 	SEGMENT	BSS
 
-	PUBLIC	HB_SECTCK
-	PUBLIC	HB_TICKS
+	PUBLIC	_system_sub_second_count
+	PUBLIC	_system_ticks
 
-HB_TICKS:
+_system_ticks:
 	DS	4
 
-HB_SECTCK:
-	DS	1	; TICK COUNTER FOR FRACTIONAL SECONDS
+_system_sub_second_count:
+	DS	1				; TICK COUNTER FOR FRACTIONAL SECONDS
 
-HB_SECS:
+_system_second_ticks:
 	DS	4
 
 	END

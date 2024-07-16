@@ -6,17 +6,17 @@
 
 	PUBLIC	_main
 	XREF	_uart0_init
-	XREF	bank_init_z2
-	XREF	_spike
+	XREF	_bank_init_z2
 	XREF	_rx_buffer_init
-	xref	_measure_cpu_freq
+	xref	_init_clocks
 
 _main:
 	CALL	_uart0_init
 	CALL	_rx_buffer_init
-	CALL	bank_init_z2
-	CALL	_measure_cpu_freq
+	CALL	_bank_init_z2
+	CALL	_init_clocks
 
+	; XREF	_spike
 	; call	_spike
 
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $B9

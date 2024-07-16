@@ -5,7 +5,7 @@
 
 	.assume adl=1
 
-UART_ERR_RECEIVEFIFOEMPTY	.EQU	%0F		;!< The error code returned when the software receive FIFO buffer is empty.
+UART_ERR_RECEIVEFIFOEMPTY	.EQU	%0F		; The error code returned when the software receive FIFO buffer is empty.
 
 	XREF	_rx_buffer_empty
 	XREF	_rx_buf
@@ -26,17 +26,17 @@ _rx_buffer_get:
 	UEXT	HL
 	LD	L, A
 	LD	BC, _rx_buf
-	ADD	HL, BC			; HL = rx_buf + rx_buf_next_out
+	ADD	HL, BC					; HL = rx_buf + rx_buf_next_out
 
-	LD	E, (HL)			; char to be returned!!
+	LD	E, (HL)					; CHAR TO BE RETURNED!!
 
 	INC	A
-	LD	(_rx_buf_next_out), A	; rx_buf_next_out++;
+	LD	(_rx_buf_next_out), A			; rx_buf_next_out++;
 
-	CP	RX_BUFFER_SIZE		; rx_buf_next_out >= RX_BUFFER_SIZE
+	CP	RX_BUFFER_SIZE				; rx_buf_next_out >= RX_BUFFER_SIZE
 	JR	C, L_4
 
-	XOR	A			; yes, rx_buf_next_out = 0
+	XOR	A					; yes, rx_buf_next_out = 0
 	LD	(_rx_buf_next_out), A
 
 L_4:

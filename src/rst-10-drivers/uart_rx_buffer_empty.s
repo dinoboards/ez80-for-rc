@@ -14,8 +14,8 @@ _rx_buffer_empty:
 	LD	HL, _rx_buf_next_out
 	CP	A, (HL)
 	LD	A, 1
-	RET	Z		; RETURN NON-ZERO IF EMPTY
+	RET	Z					; RETURN NON-ZERO IF EMPTY
 
-	XOR	A		; RETURN ZERO IF EMPTY
+	XOR	A					; RETURN ZERO IF EMPTY
 	RET
 

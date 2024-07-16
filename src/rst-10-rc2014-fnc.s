@@ -25,14 +25,14 @@ _rst_rc2014_fnc:
 	JR	NC, rst_rc2014_fnc_resume
 
 	LD	BC, %000000
-	SLA	A				; MULT BY 4
+	SLA	A					; MULT BY 4
 	SLA	A
 	LD	C, A
 
-	LD	HL, rc_functions		; ADD IT TO THE JUMP TABLE
+	LD	HL, rc_functions			; ADD IT TO THE JUMP TABLE
 	ADD	HL, BC
 
-	JP	(HL)				; INVOKE THE HANDLER
+	JP	(HL)					; INVOKE THE HANDLER
 
 rst_rc2014_fnc_resume:
 	POP	BC

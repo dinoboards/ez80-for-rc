@@ -26,7 +26,7 @@ _rx_buffer_add_to:
 	RET
 
  L_1:
-	LD	A, (_rx_buf_next_in)		; _rx_buf[rx_buf_next_in] = c
+	LD	A, (_rx_buf_next_in)			; _rx_buf[rx_buf_next_in] = c
 	UEXT	HL
 	LD	L, A
 	LD	BC, _rx_buf
@@ -34,12 +34,12 @@ _rx_buffer_add_to:
 	LD	(HL), E
 
 	INC	A
-	LD	(_rx_buf_next_in), A		; _rx_buf_next_in++
+	LD	(_rx_buf_next_in), A			; _rx_buf_next_in++
 
-	CP	A, RX_BUFFER_SIZE		; _rx_buf_next_in >= RX_BUFFER_SIZE ?
+	CP	A, RX_BUFFER_SIZE			; _rx_buf_next_in >= RX_BUFFER_SIZE ?
 	JR	C, L_4
 
-	XOR	A				; YES, _rx_buf_next_in = 0
+	XOR	A					; YES, _rx_buf_next_in = 0
 	LD	(_rx_buf_next_in), A
 
  L_4:

@@ -11,7 +11,7 @@
 ;  A -> ZERO SUCCESS
 ;  A -> NON-ZERO ERROR CODE
 
-; RTCINIT	EQU	0	; GET TIME
+; RTCINIT	EQU	0	; INIT - NO OP
 ; RTCGETTIM	EQU	1	; GET TIME
 ; RTCSETTIM	EQU	2	; SET TIME
 ; RTCGETBYT	EQU	3	; GET NVRAM BYTE BY INDEX
@@ -20,15 +20,14 @@
 ; RTCSETBLK	EQU	6	; SET NVRAM DATA BLOCK
 ; RTCGETALM	EQU	7	; GET ALARM
 ; RTCSETALM	EQU	8	; SET ALARM
-; RTCDEVICE	EQU	9	; RTC DEVICE INFO REPORT
 
 	PUBLIC	rtc_control
 rtc_control:
-	POP	BC		; restore bc and hl
+	POP	BC					; RESTORE BC AND HL
 	POP	HL
 
-	LD	A, B		; SUB FUNCTION CODE
-	OR	A		; TEST SUB FUNCTION CODE
+	LD	A, B					; SUB FUNCTION CODE
+	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, rtc_init
 	DEC	A
 	JR	Z, rtc_get_time
@@ -47,14 +46,12 @@ rtc_control:
 	DEC	A
 	JR	Z, rtc_set_alarm
 
-
-	LD	A, 1		; UNKNOWN SUB FUCTION
+	LD	A, 1					; UNKNOWN SUB FUCTION
 	OR	A
 	RET.L
 
-
 rtc_init:
-	XOR	A		; SUCCESS
+	XOR	A					; SUCCESS
 	RET.L
 
 rtc_get_byte:
@@ -63,7 +60,7 @@ rtc_get_block:
 rtc_set_block:
 rtc_get_alarm:
 rtc_set_alarm:
-	LD	A, 1		; NOT IMPLEMTNED YET
+	LD	A, 1					; NOT IMPLEMTNED YET
 	OR	A
 	RET.L
 
@@ -105,7 +102,7 @@ rtc_get_time:
 	IN0	A, (RTC_SEC)
 	LD.S	(HL), A
 
-	XOR	A		; SUCCESS
+	XOR	A					; SUCCESS
 	RET.L
 
 rtc_set_time:
@@ -142,5 +139,5 @@ rtc_set_time:
 	LD	A, RTC_ALARM_DISABLE | RTC_INT_DISABLE | RTC_BCD_ENABLE | RTC_CLK_32KHZ | RTC_SLP_WAKE_DISABLE | RTC_LOCK
 	OUT0	(RTC_CTRL), A
 
-	XOR	A		; SUCCESS
+	XOR	A					; SUCCESS
 	RET.L

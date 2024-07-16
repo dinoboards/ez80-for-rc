@@ -15,17 +15,17 @@
 _rx_buffer_get_length:
 	LD	A, (_rx_buf_next_out)
 	LD	HL, _rx_buf_next_in
-	CP	(HL)				; rx_buf_next_in > rx_buf_next_out ?
+	CP	(HL)					; rx_buf_next_in > rx_buf_next_out ?
 	JR	Z, L_2
 	JR	NC, L_1
 
-	LD	C, A				; yes, return rx_buf_next_in - rx_buf_next_out
+	LD	C, A					; yes, return rx_buf_next_in - rx_buf_next_out
 	LD	A, (HL)
 	SUB	A, C
 	RET
 
 L_1:
-	LD	C, A				; return rx_buf_next_in - rx_buf_next_out + RX_BUFFER_SIZE
+	LD	C, A					; return rx_buf_next_in - rx_buf_next_out + RX_BUFFER_SIZE
 	LD	A, (HL)
 	SUB	A, C
 	ADD	A, RX_BUFFER_SIZE

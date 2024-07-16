@@ -118,6 +118,12 @@ clean:
             $(RM) "$(WORKDIR)\ez80_utils.lis"
 	@if exist "$(WORKDIR)\ez80_utils.lst"  \
             $(RM) "$(WORKDIR)\ez80_utils.lst"
+	@if exist "$(WORKDIR)\init_clocks.obj"  \
+            $(RM) "$(WORKDIR)\init_clocks.obj"
+	@if exist "$(WORKDIR)\init_clocks.lis"  \
+            $(RM) "$(WORKDIR)\init_clocks.lis"
+	@if exist "$(WORKDIR)\init_clocks.lst"  \
+            $(RM) "$(WORKDIR)\init_clocks.lst"
 	@if exist "$(WORKDIR)\init_params_f92.obj"  \
             $(RM) "$(WORKDIR)\init_params_f92.obj"
 	@if exist "$(WORKDIR)\init_params_f92.lis"  \
@@ -154,6 +160,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lis"
 	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"  \
             $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"
+	@if exist "$(WORKDIR)\system_vars.obj"  \
+            $(RM) "$(WORKDIR)\system_vars.obj"
+	@if exist "$(WORKDIR)\system_vars.lis"  \
+            $(RM) "$(WORKDIR)\system_vars.lis"
+	@if exist "$(WORKDIR)\system_vars.lst"  \
+            $(RM) "$(WORKDIR)\system_vars.lst"
 	@if exist "$(WORKDIR)\test.obj"  \
             $(RM) "$(WORKDIR)\test.obj"
 	@if exist "$(WORKDIR)\test.lis"  \
@@ -232,12 +244,14 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\ez80_utils.obj  \
+            $(WORKDIR_ESCSPACE)\init_clocks.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\real-time-clock.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
+            $(WORKDIR_ESCSPACE)\system_vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart_control.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_add_to.obj  \
@@ -275,8 +289,8 @@ $(WORKDIR_ESCSPACE)\clib.obj :  \
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\clib.c"
 
 $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\cpu_freq_calculator.c
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\cpu_freq_calculator.c"
+            $(PRJDIR_ESCSPACE)\src\startup\cpu_freq_calculator.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\cpu_freq_calculator.c"
 
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
@@ -287,6 +301,10 @@ $(WORKDIR_ESCSPACE)\ez80_utils.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\ez80_utils.s"
+
+$(WORKDIR_ESCSPACE)\init_clocks.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\init_clocks.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_clocks.s"
 
 $(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_params_f92.asm  \
@@ -319,6 +337,10 @@ $(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj :  \
 $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-18-rc2014-bank-switch.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-rc2014-bank-switch.s"
+
+$(WORKDIR_ESCSPACE)\system_vars.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\system_vars.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system_vars.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \
             $(PRJDIR_ESCSPACE)\src\test.s  \
@@ -378,6 +400,7 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
 
 $(WORKDIR_ESCSPACE)\zsldevinit.obj :  \
-            $(PRJDIR_ESCSPACE)\zsldevinit.asm
+            $(PRJDIR_ESCSPACE)\zsldevinit.asm  \
+            $(INCLUDE_ESCSPACE)\zilog\intvect.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\zsldevinit.asm"
 

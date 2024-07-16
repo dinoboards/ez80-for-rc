@@ -27,7 +27,7 @@
 	XDEF	_exit
 	XREF	__vector_table
 
-	XREF	HB_SECTCK
+	XREF	_system_sub_second_count
 
 ;*****************************************************************************
 ; Startup code
@@ -70,20 +70,20 @@ __init:
 	OUT0	(RTC_CTRL), A			; the RTC to be synchronized to another
                              			; time source.
 
-	; set TMR1 for 60Hz interrupt signal?
-RTC_CLOCK_RATE EQU 32768
+; 	; set TMR1 for 60Hz interrupt signal?
+; RTC_CLOCK_RATE EQU 32768
 
-COUNT_FOR_60HZ EQU RTC_CLOCK_RATE / 60
+; COUNT_FOR_60HZ EQU RTC_CLOCK_RATE / 60
 
-	LD	A, TMR0_IN_SYSCLK | TMR1_IN_RTC | TMR2_IN_SYSCLK | TMR3_IN_SYSCLK
-	OUT0	(TMR_ISS), A
+; 	LD	A, TMR0_IN_SYSCLK | TMR1_IN_RTC | TMR2_IN_SYSCLK | TMR3_IN_SYSCLK
+; 	OUT0	(TMR_ISS), A
 
-	LD	A, COUNT_FOR_60HZ & %FF
-	OUT0	(TMR1_RR_L), A
-	LD	A, COUNT_FOR_60HZ >> 8
-	OUT0	(TMR1_RR_H), A
-	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4 | TMR_IRQ_EN
-	OUT0	(TMR1_CTL), A
+; 	LD	A, COUNT_FOR_60HZ & %FF
+; 	OUT0	(TMR1_RR_L), A
+; 	LD	A, COUNT_FOR_60HZ >> 8
+; 	OUT0	(TMR1_RR_H), A
+; 	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4 | TMR_IRQ_EN
+; 	OUT0	(TMR1_CTL), A
 
 	; set PB5 for RC2014 clock out
 	; out frequency = 18.432Mhz / (DIV * (RR*2))
@@ -176,9 +176,6 @@ __no_cstartup:
 	XREF __open_periphdevice
 
 	CALL	__open_periphdevice
-
-	LD	A, TICKFREQ
-	LD	(HB_SECTCK), A
 
 	CALL	_main				; int main(int argc, char *argv[]))
 
