@@ -2,7 +2,7 @@
 <Target name="eZ80F92_99C0873_Flash" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/target.tsd" xsi:type="TargetEZ80">
    <Clock>
       <clockType>Oscillator</clockType>
-      <frequency>18432000</frequency>
+      <frequency>14745600</frequency>
    </Clock>
    <ControlReg>
       <pc>0</pc>

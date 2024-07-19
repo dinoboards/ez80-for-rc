@@ -21,24 +21,14 @@ _rst_io:
 	PUSH	BC					; B = IX-8, C = IX-9
 	PUSH	AF					; A = IX-11
 
-
-ifdef _SIMULATE
-	LD	IY, %B70000				; SIMULATOR HAS FAULT AND DOES
-							; NOT SIMULATE LD.S A, (IY) CORRECTLY
-endif
 							; (IX+0) => SHOULD BE 02H FOR Z80 MODE
 	LD	A, (IX+1)				; (IX+1) =>
 	LD	IYL, A
 	LD	A, (IX+2)
 	LD	IYH, A					; IY SHOULD BE RETURN ADDRESS, THE ADDRESS OF THE NEXT INSTR.
 
-ifdef _SIMULATE
-	LD 	A, (IY)
-else
 	LD.S	A, (IY)					; MBASE WITH LD.S A, (IY)
 							; OP-CODE OF I/O OPERATION, AFTER THE RST.L 8
-endif
-
 	CP	INSTR_OUT_NN_A
 	JR	Z, out_nn_a_hook
 
@@ -103,11 +93,7 @@ inout_r_c_hook:
 	LD	A, IYH					; INSTRUCTION
 	LD	(IX+2), A
 
-ifdef _SIMULATE
-	LD	A, (IY+(1-2))				; THE REGISTER TO BE UPDATED
-else
 	LD.S	A, (IY+(1-2))				; THE REGISTER TO BE UPDATED
-endif
 	LD	B, %FF
 
 	CP	%78					; IN A, (BC)
