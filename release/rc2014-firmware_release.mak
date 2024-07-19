@@ -304,7 +304,9 @@ $(WORKDIR_ESCSPACE)\ez80_utils.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\ez80_utils.s"
 
 $(WORKDIR_ESCSPACE)\init_clocks.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\init_clocks.s
+            $(PRJDIR_ESCSPACE)\src\startup\init_clocks.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_clocks.s"
 
 $(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
@@ -340,7 +342,9 @@ $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-rc2014-bank-switch.s"
 
 $(WORKDIR_ESCSPACE)\system_vars.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\system_vars.s
+            $(PRJDIR_ESCSPACE)\src\startup\system_vars.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system_vars.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \

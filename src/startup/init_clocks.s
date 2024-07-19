@@ -104,19 +104,19 @@ repeat:
 	LD	HL, _system_ticks
 
 	LD	DE, 0
-	LD	BC, 0
+	LD	C, 7
 
 	LD	A, (HL)
 sync_tick:
 	CP	(HL)					; SYNC TO NEXT TICK EDGE
 	JR	Z, sync_tick
 
-	LD	A, (HL)
+	ADD	C
 
 cycle_counter:
 	INC	DE
-	CP	(HL)					; SYNC TO NEXT TICK EDGE
-	JR	Z, cycle_counter
+	CP	(HL)					; COUNT FOR 6 TICKS
+	JR	NZ, cycle_counter
 
 skip:
 	PUSH	DE
