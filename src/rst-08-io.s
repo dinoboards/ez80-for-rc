@@ -9,7 +9,7 @@
 
 INSTR_OUT_NN_A	EQU	%D3		; OUT (nn), A
 INSTR_IN_A_NN	EQU	%DB		; IN A, (nn)
-INSTR_INOUT_R_C	EQU	%ED		; IN r, (BC) & OUT (BC), r
+INSTR_INOUT	EQU	%ED		; IN r, (BC) & OUT (BC), r
 
 	PUBLIC	_rst_io
 _rst_io:
@@ -35,13 +35,14 @@ _rst_io:
 	CP	INSTR_IN_A_NN
 	JR	Z, in_a_nn_hook
 
-	CP	INSTR_INOUT_R_C
-	JR	Z, inout_r_c_hook
+	CP	INSTR_INOUT
+	JR	Z, inout_hook
 
 rst_io_resume:
 	POP	AF
 rst_io_resume2:
 	POP	BC
+rst_io_resume3:
 	POP	IY
 	POP	IX
 	RET.L
@@ -85,7 +86,7 @@ in_a_nn_hook:
 
 	JR	rst_io_resume2
 
-inout_r_c_hook:
+inout_hook:
 	INC	IY					; SET RETURN ADDRESS TO SKIP 2 BYTES
 	INC	IY
 	LD	A, IYL
@@ -94,6 +95,14 @@ inout_r_c_hook:
 	LD	(IX+2), A
 
 	LD.S	A, (IY+(1-2))				; THE REGISTER TO BE UPDATED
+
+	CP	%B2					; INIR
+	JR	Z, inir_hook
+
+	CP	%B3					; OTIR
+	JR	Z, otir_hook
+
+
 	LD	B, %FF
 
 	CP	%78					; IN A, (BC)
@@ -204,4 +213,40 @@ in_l_c_hook:
 
 out_l_c_hook:
 	OUT	(BC), L
+	JR	rst_io_resume
+
+inir_hook:
+	; INIR:
+	;   repeat {  (HL) ← ({UU, BC[15:0]})  B ← B - 1,    HL ← HL + 1  } while B ≠ 0
+	; WE HAVE TO 'SLOW' DOWN THE OPERATION, OTHERWISE WE RISK DRIVING THE BUS TOO FAST
+	; NOTE: FLAGS ARE NOT UPDATED AS PER THE INIR
+
+	PUSH	BC
+	LD	B, %FF
+	IN	A, (BC)
+	POP	BC
+	LD.S	(HL), A
+	INC.S	HL
+	DJNZ	inir_hook
+
+	LD	(IX-8), B				; RESTORED B SHOULD BE 0
+
+	JR	rst_io_resume
+
+otir_hook:
+	; OTIR:
+	;  repeat {  ({UU, BC[15:0]}) ← (HL)  B ← B - 1,    HL ← HL + 1  } while B ≠ 0
+	; WE HAVE TO 'SLOW' DOWN THE OPERATION, OTHERWISE WE RISK DRIVING THE BUS TOO FAST
+	; NOTE: FLAGS ARE NOT UPDATED AS PER THE OTIR
+
+	LD.S	A, (HL)
+	INC.S	HL
+	PUSH	BC
+	LD	B, %FF
+	OUT	(BC), A
+	POP	BC
+	DJNZ	otir_hook
+
+	LD	(IX-8), B				; RESTORED B SHOULD BE 0
+
 	JR	rst_io_resume
