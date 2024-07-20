@@ -13,6 +13,8 @@
 	XREF	_rx_buf_next_out
 	XREF	_baud_rate
 	XREF	_line_control
+	XREF	_cpu_freq_calculated
+	XREF	__lmulu
 
 UART_ERR_FIFOBUFFERFULL	EQU	%0C			; THE ERROR CODE RETURNED WHEN THE TRANSMIT FIFO BUFFER IS FULL.
 
@@ -150,27 +152,12 @@ uart_config:
 	LD	(_baud_rate), HL
 
 	PUSH	DE
-	XOR	A					; A:HL = HL * 16
-	ADD	HL,HL
-	RLA
-	ADD	HL,HL
-	RLA
-	ADD	HL,HL
-	RLA
-	ADD	HL,HL
-	RLA
-
-	LD	BC, HL
-
-	LD	HL, CPU_CLK_FREQ & %FFFFFF
-	LD	E, CPU_CLK_FREQ >> 24
-	CALL	__ldivu					; HL = E:HL / A:BC
-							; HL = BRG
 
 	IN0	A, (UART0_LCTL)				; ENABLE REGISTER ACCESS
 	SET	7, A					; SET DLAB BIT
 	OUT0	(UART0_LCTL), A
 
+	CALL	get_brg
 	OUT0	(UART0_BRG_L), L
 	OUT0	(UART0_BRG_H), H
 
@@ -260,10 +247,6 @@ uart_reset:
 
 	PUBLIC	_uart0_init
 
-BRG	EQU	(CPU_CLK_FREQ/(16 * UART_BPS))
-BRG_L	EQU	(BRG & %FF)
-BRG_H	EQU	((BRG & %FF00) >> 8)
-
 _uart0_init:
 	di
 	LD	A, %0F					; 0000 0011
@@ -282,11 +265,12 @@ _uart0_init:
 	SET	7, A					; SET DLAB BIT
 	OUT0	(UART0_LCTL), A
 
-	LD	A, BRG_L
-	OUT0	(UART0_BRG_L), A
+	LD	HL, UART_BPS
+	LD	(_baud_rate), HL
 
-	LD	A, BRG_H
-	OUT0	(UART0_BRG_H), A
+	CALL	get_brg
+	OUT0	(UART0_BRG_L), L
+	OUT0	(UART0_BRG_H), H
 
 	IN0	A, (UART0_LCTL)				; DISABLE REGISTER ACCESS
 	RES	7, A					; CLEAR DLAB BIT
@@ -301,14 +285,11 @@ _uart0_init:
 	LD	A, LCTL_8_BITS | LCTL_1_STOP_BIT
 	OUT0	(UART0_LCTL), A
 
+	LD	A, 3 << 3                               ; 8 BITS, 1 STOP BIT, NO PARITY, CTS FLOW CONTROL DISABLED
+	LD	(_line_control), A
+
 	LD	A, 1
 	OUT0	(UART0_IER), A				; ENABLE INTERRUPTS FOR RECEIVE EVENTS
-
-	LD	HL, UART_BPS
-	LD	(_baud_rate), HL
-
-	LD	A, 3 << 3				; 8 BITS, 1 STOP BIT, NO PARITY, CTS FLOW CONTROL DISABLED
-	LD	(_line_control), A
 
 	EI
 	RET
@@ -353,3 +334,25 @@ _uart0_receive_isr_end:
 	POP	AF
 	EI
 	RETI.L
+
+;
+; Calculate BRG L and BRG H based on CPU CLOCK and current baud rate
+; Output
+;   L = BRG_L
+;   H = BRG_H
+;
+get_brg:
+	LD	HL, (_baud_rate)
+
+	ADD	HL, HL
+	ADD	HL, HL
+	ADD	HL, HL
+	ADD	HL, HL
+	LD	BC, HL					; BC = HL * 16
+
+	LD	HL, (_cpu_freq_calculated)
+	LD	A, (_cpu_freq_calculated+3)
+	LD	E, A					; EuHL = CPU_FREQ
+	XOR	A					; AuBC = baud rate
+	JP	__ldivu					; HL = E:HL / A:BC
+							; HL = BRG

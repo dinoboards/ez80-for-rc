@@ -138,8 +138,10 @@ __init:
 	LD	A, %FF
 	OUT0	(CS2_LBR), A
 	OUT0	(CS2_UBR), A
-	LD	A, (_cs2_bus_cycles)
+
+	LD	A, IO_BUS_CYCLES
 	AND	%0F
+	LD	(_cs2_bus_cycles), A
 	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
 	OUT0	(CS2_BMC), A
 	LD	A, CSX_TYPE_IO | CSX_ENABLED
@@ -149,8 +151,9 @@ __init:
 	LD	A, %B9
 	OUT0	(CS3_LBR), A
 	OUT0	(CS3_UBR), A
-	LD	A, (_cs3_bus_cycles)
+	LD	A, MEM_BUS_CYCLES
 	AND	%0F
+	LD	(_cs3_bus_cycles), A
 	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
 	OUT0	(CS3_BMC), A
 	LD	A, CSX_TYPE_MEM | CSX_ENABLED

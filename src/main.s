@@ -11,10 +11,10 @@
 	xref	_init_clocks
 
 _main:
-	CALL	_uart0_init
-	CALL	_rx_buffer_init
 	CALL	_bank_init_z2
 	CALL	_init_clocks
+	CALL	_rx_buffer_init
+	CALL	_uart0_init
 
 	; XREF	_spike
 	; call	_spike

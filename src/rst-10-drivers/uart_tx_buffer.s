@@ -20,9 +20,7 @@ _rx_buf_next_in:
 _rx_buf_next_out:
 	DS	1
 
-_baud_rate:
-	DS	3
-
+	SECTION	DATA
 ;
 ; line control bits:
 ;
@@ -32,4 +30,7 @@ _baud_rate:
 ; {5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
 ;
 _line_control:
-	DS	1
+	DB	3 << 3 ; 8 BITS, 1 STOP BIT, NO PARITY, CTS FLOW CONTROL DISABLED
+
+_baud_rate:
+	DW24	UART_BPS

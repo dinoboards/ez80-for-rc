@@ -26,7 +26,7 @@ _rtc_enabled:
 	DB	0
 
 _cpu_freq_calculated:
-	DS	4
+	DL	CPU_CLK_FREQ
 
 _platform_description:
 _romwbw_version:
