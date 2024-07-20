@@ -102,6 +102,11 @@ inout_hook:
 	CP	%B3					; OTIR
 	JR	Z, otir_hook
 
+	CP	%A2
+	JR	Z, ini_hook
+
+	CP	%A3					; OUTI
+	JR	Z, outi_hook
 
 	LD	B, %FF
 
@@ -250,3 +255,38 @@ otir_hook:
 	LD	(IX-8), B				; RESTORED B SHOULD BE 0
 
 	JR	rst_io_resume
+
+ini_hook:
+	; INIR
+	;   (HL) ← ({UU, BC[15:0]}), B ← B–1, HL ← HL+1
+	;
+
+	PUSH	BC
+	LD	B, %FF
+	IN	A, (BC)
+	POP	BC
+	LD.S	(HL), A
+	INC.S	HL
+	DEC	B
+
+	LD	(IX-8), B				; RESTORED B SHOULD BE B-1
+
+	JR	rst_io_resume
+
+outi_hook:
+	; OUTI
+	;  ({UU, BC[15:0]}) ← (HL), B ← B–1, HL ← HL+1
+	;
+
+	LD.S	A, (HL)
+	INC.S	HL
+	PUSH	BC
+	LD	B, %FF
+	OUT	(BC), A
+	POP	BC
+	DEC	B
+
+	LD	(IX-8), B				; RESTORED B SHOULD BE B-1
+
+	JR	rst_io_resume
+
