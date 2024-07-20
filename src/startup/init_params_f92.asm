@@ -29,6 +29,9 @@
 
 	XREF	_system_sub_second_count
 
+	XREF	_cs2_bus_cycles
+	XREF	_cs3_bus_cycles
+
 ;*****************************************************************************
 ; Startup code
         DEFINE	.STARTUP, SPACE = ROM
@@ -135,18 +138,22 @@ __init:
 	LD	A, %FF
 	OUT0	(CS2_LBR), A
 	OUT0	(CS2_UBR), A
-	LD	A, BMX_BM_Z80 | BMX_AD_SEPERATE | IO_BUS_CYCLES
+	LD	A, (_cs2_bus_cycles)
+	AND	%0F
+	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
 	OUT0	(CS2_BMC), A
-	LD	A, CSX_WAIT_0 | CSX_TYPE_IO | CSX_ENABLED
+	LD	A, CSX_TYPE_IO | CSX_ENABLED
 	OUT0	(CS2_CTL), A
 
 	; CS3 is enabled for memory @ $B9xxxx
 	LD	A, %B9
 	OUT0	(CS3_LBR), A
 	OUT0	(CS3_UBR), A
-	LD	A, BMX_BM_Z80 | BMX_AD_SEPERATE | MEM_BUS_CYCLES
+	LD	A, (_cs3_bus_cycles)
+	AND	%0F
+	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
 	OUT0	(CS3_BMC), A
-	LD	A, CSX_WAIT_0 | CSX_TYPE_MEM | CSX_ENABLED
+	LD	A, CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS3_CTL), A
 
 	; enable internal memory

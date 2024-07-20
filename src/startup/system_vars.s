@@ -18,6 +18,10 @@
 	PUBLIC	_romwbw_ramsize
 	PUBLIC	_romwbw_romsize
 
+	PUBLIC	_cs3_bus_cycles
+	PUBLIC	_cs2_bus_cycles
+	PUBLIC	_cs_bus_timings
+
 _rtc_enabled:
 	DB	0
 
@@ -46,4 +50,11 @@ _romwbw_romsize:
 	DS	2
 _romwbw_reserved:
 	DS	2
+
+	SECTION	DATA
+_cs_bus_timings:
+_cs2_bus_cycles:
+	DB	IO_BUS_CYCLES
+_cs3_bus_cycles:
+	DB	MEM_BUS_CYCLES
 

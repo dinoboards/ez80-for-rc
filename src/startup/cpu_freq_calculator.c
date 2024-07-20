@@ -19,7 +19,6 @@ extern unsigned long cpu_freq_calculated;
 #define UPPER_FOR_7MHZ ((7372800 / TIMER_FACTOR) + 64)
 #define LOWER_FOR_7MHZ (UPPER_FOR_7MHZ-1024)
 
-
 void assign_cpu_frequency(const unsigned de) {
   cpu_freq_calculated = ((long)de * (long)TIMER_FACTOR) / 100L * 100L;
 
