@@ -22,6 +22,11 @@
 	PUBLIC	_cs2_bus_cycles
 	PUBLIC	_cs_bus_timings
 
+	PUBLIC	_system_ticks
+
+	PUBLIC	_line_control
+	PUBLIC	_baud_rate
+
 _rtc_enabled:
 	DB	0
 
@@ -51,10 +56,24 @@ _romwbw_romsize:
 _romwbw_reserved:
 	DS	2
 
-	SECTION	DATA
+_system_ticks:
+	DS	3
+
+_baud_rate:
+	DS	3
+;
+; line control bits:
+;
+; {0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
+; {2}   = Stop Bits (0 -> 1, 1 -> 2)
+; {3:4} = Data Bits (00 -> 5, 01 -> 6, 10 -> 7, 11 -> 8)
+; {5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
+;
+_line_control:
+	DS	1
+
 _cs_bus_timings:
 _cs2_bus_cycles:
-	DB	IO_BUS_CYCLES
+	DS	1
 _cs3_bus_cycles:
-	DB	MEM_BUS_CYCLES
-
+	DS	1

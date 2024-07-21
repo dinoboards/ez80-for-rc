@@ -4,6 +4,7 @@
 	XREF	__idivu
 	XREF	__iremu
 	XREF	__imul_b
+	XREF	_system_ticks
 
 	SEGMENT	CODE
 
@@ -107,21 +108,5 @@ tmr_secs_set:
 
 	XOR	A					; SUCCESS
 	RET.L
-
-
-	SEGMENT	BSS
-
-	; PUBLIC	_system_sub_second_count
-	PUBLIC	_system_ticks
-	; PUBLIC	_system_second_ticks
-
-_system_ticks:
-	DS	3
-
-; _system_sub_second_count:
-; 	DS	1					; TICK COUNTER FOR FRACTIONAL SECONDS
-
-; _system_second_ticks:
-; 	DS	3
 
 	END
