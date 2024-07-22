@@ -5,8 +5,6 @@
 
 	.assume adl=1
 
-UART_ERR_RECEIVEFIFOEMPTY	.EQU	%0F		; The error code returned when the software receive FIFO buffer is empty.
-
 	XREF	_rx_buffer_empty
 	XREF	_rx_buf
 	XREF	_rx_buf_next_out

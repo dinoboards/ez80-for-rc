@@ -19,7 +19,9 @@
 ;
 ; **************
 
-        INCLUDE "startup/ez80f92.inc"
+        INCLUDE "startup\ez80f92.inc"
+        INCLUDE ".\romwbw.inc"
+        INCLUDE ".\rst-10-constants.inc"
 
 RX_BUFFER_SIZE		.EQU	140
 RX_BUFFER_HIGH		.EQU	120

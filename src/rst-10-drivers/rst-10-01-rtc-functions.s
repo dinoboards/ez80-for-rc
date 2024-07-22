@@ -60,9 +60,6 @@ _rtc_dispatch:
 ; MIN		DS	1
 ; SECCOND	DS	1
 ;
-
-
-ERR_NOHW	.EQU	-8				; HARDWARE NOT PRESENT
 ;
 ; Function B = 0 -- RTC_INIT
 ; Initialize the RTC hardware

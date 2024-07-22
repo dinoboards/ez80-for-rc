@@ -279,6 +279,13 @@
 
 <!-- breakpoint information -->
 <breakpoints>
+<breakpoint temporary="false" enabled="true" >
+<line-number>363</line-number>
+<pathname>Z:\rc2014-ez80-firmware\src\rst-10-drivers\rst-10-00-system-utils-functions.s</pathname>
+<address>2196</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
 </breakpoints>
 
 </project>

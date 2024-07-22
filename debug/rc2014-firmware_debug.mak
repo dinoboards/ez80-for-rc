@@ -293,18 +293,24 @@ $(WORKDIR_ESCSPACE)\cstartup.obj :  \
 $(WORKDIR_ESCSPACE)\init_clocks.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_clocks.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_clocks.s"
 
 $(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_params_f92.asm  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_params_f92.asm"
 
 $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\main.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
 
@@ -313,23 +319,43 @@ $(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-00-system-utils-functions.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-00-system-utils-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-00-system-utils-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-01-rtc-functions.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-01-rtc-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-01-rtc-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-02-system-timer-functions.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-02-system-timer-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-02-system-timer-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-03-uart-functions.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-03-uart-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-03-uart-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-functions.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
@@ -339,6 +365,8 @@ $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
 $(WORKDIR_ESCSPACE)\system_vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\system_vars.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system_vars.s"
 
@@ -348,31 +376,59 @@ $(WORKDIR_ESCSPACE)\test.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-full.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-get-length.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-get.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-init.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s"
 
 $(WORKDIR_ESCSPACE)\uart-rx-variables.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
