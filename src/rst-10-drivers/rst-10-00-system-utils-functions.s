@@ -1,4 +1,12 @@
-
+;
+; General System Utilities Functions
+;
+; Access with RST.L %10 (A=0, B=sub function code)
+;
+; The System Utilities provides functions to access the system configuration
+; and control functions, including the ability to query the firmware version,
+; and configure the eZ80 bus cycles for external memory and I/O.
+;
         INCLUDE "..\config.inc"
 
 	XREF	__ladd_b
