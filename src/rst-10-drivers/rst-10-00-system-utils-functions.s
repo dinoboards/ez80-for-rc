@@ -5,7 +5,7 @@
 
 	.assume adl=1
 
-	PUBLIC	ez80_utils_control
+	PUBLIC	_system_utils_dispatch
 	XREF	_system_ticks
 	XREF	_platform_description
 	XREF	_SYS_CLK_FREQ
@@ -15,7 +15,7 @@
 	XREF	__ladd_b
 	XREF	_cs_bus_timings
 
-ez80_utils_control:
+_system_utils_dispatch:
 	POP	BC					; RESTORE BC AND HL
 	POP	HL
 

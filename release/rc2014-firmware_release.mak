@@ -107,12 +107,6 @@ clean:
             $(RM) "$(WORKDIR)\cstartup.lis"
 	@if exist "$(WORKDIR)\cstartup.lst"  \
             $(RM) "$(WORKDIR)\cstartup.lst"
-	@if exist "$(WORKDIR)\ez80_utils.obj"  \
-            $(RM) "$(WORKDIR)\ez80_utils.obj"
-	@if exist "$(WORKDIR)\ez80_utils.lis"  \
-            $(RM) "$(WORKDIR)\ez80_utils.lis"
-	@if exist "$(WORKDIR)\ez80_utils.lst"  \
-            $(RM) "$(WORKDIR)\ez80_utils.lst"
 	@if exist "$(WORKDIR)\init_clocks.obj"  \
             $(RM) "$(WORKDIR)\init_clocks.obj"
 	@if exist "$(WORKDIR)\init_clocks.lis"  \
@@ -143,6 +137,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-08-io.lis"
 	@if exist "$(WORKDIR)\rst-08-io.lst"  \
             $(RM) "$(WORKDIR)\rst-08-io.lst"
+	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.lst"
 	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.obj"
 	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.lis"  \
@@ -243,12 +243,12 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\clib.obj  \
             $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
-            $(WORKDIR_ESCSPACE)\ez80_utils.obj  \
             $(WORKDIR_ESCSPACE)\init_clocks.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\real-time-clock.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
@@ -291,12 +291,6 @@ $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
 
-$(WORKDIR_ESCSPACE)\ez80_utils.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\ez80_utils.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\ez80_utils.s"
-
 $(WORKDIR_ESCSPACE)\init_clocks.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_clocks.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -324,6 +318,10 @@ $(WORKDIR_ESCSPACE)\real-time-clock.obj :  \
 $(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-08-io.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-00-system-utils-functions.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-00-system-utils-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-02-system-timer-functions.s

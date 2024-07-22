@@ -78,12 +78,12 @@ define _zsl_g_clock_xdefine = 24000000
  ".\clib.obj", \
  ".\cpu_freq_calculator.obj", \
  ".\cstartup.obj", \
- ".\ez80_utils.obj", \
  ".\init_clocks.obj", \
  ".\init_params_f92.obj", \
  ".\main.obj", \
  ".\real-time-clock.obj", \
  ".\rst-08-io.obj", \
+ ".\rst-10-00-system-utils-functions.obj", \
  ".\rst-10-02-system-timer-functions.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-rc2014-bank-switch.obj", \

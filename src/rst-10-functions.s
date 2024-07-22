@@ -1,6 +1,6 @@
 	include "config.inc"
 
-	XREF	ez80_utils_control
+	XREF	_system_utils_dispatch
 	XREF	rtc_control
 	XREF	_system_timer_dispatch
 	XREF	uart_control
@@ -42,7 +42,7 @@ rst_rc2014_fnc_resume:
 
 
 rc_functions:
-	JP	ez80_utils_control
+	JP	_system_utils_dispatch
 	JP	rtc_control
 	JP	_system_timer_dispatch
 	JP	uart_control
