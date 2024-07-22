@@ -21,7 +21,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	XREF	_rst_io
-	XREF	_rst_rc2014_fnc
+	XREF	_rst_10_functions
 	XREF	_rst_rc2014_bank_switch
 _reset:
 _rst0:
@@ -35,7 +35,7 @@ _rst8:
 
 	org	%10
 _rst10:
-	jp.lil	_rst_rc2014_fnc
+	jp.lil	_rst_10_functions
 
 	org	%18
 _rst18:

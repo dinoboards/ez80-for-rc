@@ -1,4 +1,19 @@
-
+;
+; SYSTEM TIMER INTERFACE
+;
+; Access with RST.L %10 (A=2, B=sub function code)
+;
+; The System Timer track a counter that is incremented at a fixed rate.
+; The rate can be selected, and is typically 50 Hz or 60 Hz.
+;
+; The timer is driven by the RTC if it is enabled, otherwise it is driven
+; by the CPU clock.
+;
+; The interface provides function to access and reset the tick counter,
+; as well as access a calibrated seconds value.
+;
+; The tick count is a 24 bit number, and will wrap to 0 after 2^24 ticks.
+;
         INCLUDE "..\config.inc"
 
 	XREF	__idivu
@@ -17,7 +32,12 @@
 	.ASSUME ADL=1
 
 	PUBLIC	_system_timer_isr
-
+	PUBLIC	_system_timer_dispatch
+;
+; SYSTEM TIMER ISR
+;
+; This ISR is called at the tick frequency, and increments the 24 bit tick counter.
+;
 _system_timer_isr:
 	PUSH	AF
 	PUSH	HL
@@ -32,53 +52,64 @@ _system_timer_isr:
 	POP	AF
 	EI
 	RETI.L
-
-	PUBLIC	timer_tick_control
-timer_tick_control:
+;
+; SYSTEM TIMER DISPATCH
+;
+; Dispatcher for the RST.L %10 trap functions
+; Inputs:
+;   B = TIMER SUB FUNCTION INDEX
+; Outputs:
+;   A = 0 -> SUCCESS, NON-ZERO -> ERROR
+;   Other registers as per sub-functions
+;
+_system_timer_dispatch:
 	POP	BC					; RESTORE BC AND HL
 	POP	HL
 
 	LD	A, B					; SUB FUNCTION CODE
 	OR	A					; TEST SUB FUNCTION CODE
-	JR	Z, tm_tick_get				; B = 0, GET TICKS
+	JR	Z, tm_tick_get				; B = 0, SYSTMR_GET_TICKS
 	DEC	A
-	JR	Z, tmr_secs_get				; B = 1, GET SECS
+	JR	Z, tmr_secs_get				; B = 1, SYSTMR_GET_SECONDS
 	DEC	A
-	JR	Z, tmr_tick_set				; B = 2, SET TICKS
+	JR	Z, tmr_tick_set				; B = 2, SYSTMR_SET_TICKS
 	DEC	A
-	JR	Z, tmr_secs_set				; B = 3, SET SECS
+	JR	Z, tmr_secs_set				; B = 3, SYSTMR_SET_SECONDS
 	DEC	A
-	JR	Z, tmr_freq_get				; B = 4, GET FREQ
+	JR	Z, tmr_freq_get				; B = 4, SYSTMR_GET_FREQTICK
 	DEC	A
-	JR	Z, tmr_freq_set				; B = 5, SET FREQ
+	JR	Z, tmr_freq_set				; B = 5, SYSTMR_SET_FREQTICK
 
-	XOR	A					; SUCCESS
+	LD	A, %FF					; FAILURE - UNKONWN SUB FUNCTION
 	RET.L
-
 ;
-; GET TIMER TICKS
-;   RETURNS:
-;     HL{23:0}:		TIMER VALUE (24 BIT)
-;     E:HL{15:0}:	TIMER VALUE (24 BIT)
-;     D:		0
-;     C:		50 or 60 (_ticks_frequency)
+; Function B = 0 -- SYSTMR_GET_TICKS
+; Retrieve the current 24 bit tick count.
+;
+; Output:
+;   HL{23:0}	= TIMER VALUE (24 BIT)
+;   E:HL{15:0}	= TIMER VALUE (24 BIT)
+;   D		= 0
+;   C		= tick frequency (typically 50 or 60)
 ;
 tm_tick_get:
 	DI
 	LD	HL, (_system_ticks)
 	LD	A, (_system_ticks+2)
+	EI
 	LD	D, 0
 	LD	E, A
-	EI
 	LD	A, (_ticks_frequency)
 	LD	C, A
 	XOR	A					; SUCCESS
 	RET.L
 ;
-; GET TIMER SECONDS
+; Function B = 1 -- SYSTMR_GET_SECONDS
+; Retrieve the current 24 bit number of seconds counted.
+;
 ;   RETURNS:
-;     HL{23:0}:		TIMER VALUE (24 BIT)
-;     C: 		NUM TICKS WITHIN CURRENT SECOND
+;     HL{23:0}	= Number of seconds counted
+;     C 	= Number of ticks within the current second
 ;
 tmr_secs_get:
 	LD	HL, (_system_ticks)
@@ -132,6 +163,8 @@ tmr_freq_get:
 	RET.L
 ;
 ; SET TIMER FREQUENCY
+;  Set the on board system clock to track the desired frequency, typically
+;  this will be 50Hz or 60Hz.
 ;  ON ENTRY:
 ;   	C: TIMER FREQUENCY
 ;

@@ -143,12 +143,18 @@ clean:
             $(RM) "$(WORKDIR)\rst-08-io.lis"
 	@if exist "$(WORKDIR)\rst-08-io.lst"  \
             $(RM) "$(WORKDIR)\rst-08-io.lst"
-	@if exist "$(WORKDIR)\rst-10-rc2014-fnc.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-rc2014-fnc.obj"
-	@if exist "$(WORKDIR)\rst-10-rc2014-fnc.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-rc2014-fnc.lis"
-	@if exist "$(WORKDIR)\rst-10-rc2014-fnc.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-rc2014-fnc.lst"
+	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-functions.lst"
 	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.obj"  \
             $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.obj"
 	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.lis"  \
@@ -161,12 +167,6 @@ clean:
             $(RM) "$(WORKDIR)\system_vars.lis"
 	@if exist "$(WORKDIR)\system_vars.lst"  \
             $(RM) "$(WORKDIR)\system_vars.lst"
-	@if exist "$(WORKDIR)\systimer.obj"  \
-            $(RM) "$(WORKDIR)\systimer.obj"
-	@if exist "$(WORKDIR)\systimer.lis"  \
-            $(RM) "$(WORKDIR)\systimer.lis"
-	@if exist "$(WORKDIR)\systimer.lst"  \
-            $(RM) "$(WORKDIR)\systimer.lst"
 	@if exist "$(WORKDIR)\test.obj"  \
             $(RM) "$(WORKDIR)\test.obj"
 	@if exist "$(WORKDIR)\test.lis"  \
@@ -249,10 +249,10 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\real-time-clock.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\system_vars.obj  \
-            $(WORKDIR_ESCSPACE)\systimer.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart_control.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_add_to.obj  \
@@ -325,11 +325,13 @@ $(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-08-io.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
 
-$(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-rc2014-fnc.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-rc2014-fnc.s"
+$(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-02-system-timer-functions.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-02-system-timer-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-functions.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-18-rc2014-bank-switch.s
@@ -340,10 +342,6 @@ $(WORKDIR_ESCSPACE)\system_vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system_vars.s"
-
-$(WORKDIR_ESCSPACE)\systimer.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\systimer.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\systimer.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \
             $(PRJDIR_ESCSPACE)\src\test.s  \

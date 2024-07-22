@@ -1,8 +1,8 @@
 	include "config.inc"
 
 	XREF	ez80_utils_control
-	XREF	timer_tick_control
 	XREF	rtc_control
+	XREF	_system_timer_dispatch
 	XREF	uart_control
 
 	SECTION CODE
@@ -14,11 +14,11 @@ HOOK_CNT	EQU	4
 ; A = function index
 ; A = 0 -> UTIL-FUNC, B-> SUB FUNCTION
 ; A = 1 -> RTC-FUNC, B-> RTC SUB-FUNCTION
-; A = 2 -> SYS-TIMER-FUNC, B-> SUB-FUNCTION
+; A = 2 -> SYSTMR, B-> SUB-FUNCTION
 ; A = 3 -> UART-FUNC, B-> SUB-FUNCTION
 
-	PUBLIC	_rst_rc2014_fnc
-_rst_rc2014_fnc:
+	PUBLIC	_rst_10_functions
+_rst_10_functions:
 	PUSH	HL
 	PUSH	BC
 
@@ -44,7 +44,7 @@ rst_rc2014_fnc_resume:
 rc_functions:
 	JP	ez80_utils_control
 	JP	rtc_control
-	JP	timer_tick_control
+	JP	_system_timer_dispatch
 	JP	uart_control
 
 _fn_1:
