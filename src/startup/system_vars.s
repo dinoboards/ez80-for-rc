@@ -23,15 +23,13 @@
 	PUBLIC	_cs_bus_timings
 
 	PUBLIC	_system_ticks
+	PUBLIC	_ticks_frequency
 
 	PUBLIC	_line_control
 	PUBLIC	_baud_rate
 
 _rtc_enabled:
 	DB	0
-
-_cpu_freq_calculated:
-	DL	CPU_CLK_FREQ
 
 _platform_description:
 _romwbw_version:
@@ -77,3 +75,14 @@ _cs2_bus_cycles:
 	DS	1
 _cs3_bus_cycles:
 	DS	1
+
+
+	SECTION	DATA
+
+_cpu_freq_calculated:
+	DL	CPU_CLK_FREQ
+
+_ticks_frequency:
+	DB	DEFAULT_TICKFREQ
+
+	END

@@ -85,12 +85,6 @@ clean:
             $(RM) "$(WORKDIR)\rc2014-firmware.hex"
 	@if exist "$(WORKDIR)\rc2014-firmware.map"  \
             $(RM) "$(WORKDIR)\rc2014-firmware.map"
-	@if exist "$(WORKDIR)\60-hz-counter.obj"  \
-            $(RM) "$(WORKDIR)\60-hz-counter.obj"
-	@if exist "$(WORKDIR)\60-hz-counter.lis"  \
-            $(RM) "$(WORKDIR)\60-hz-counter.lis"
-	@if exist "$(WORKDIR)\60-hz-counter.lst"  \
-            $(RM) "$(WORKDIR)\60-hz-counter.lst"
 	@if exist "$(WORKDIR)\clib.obj"  \
             $(RM) "$(WORKDIR)\clib.obj"
 	@if exist "$(WORKDIR)\clib.lis"  \
@@ -167,6 +161,12 @@ clean:
             $(RM) "$(WORKDIR)\system_vars.lis"
 	@if exist "$(WORKDIR)\system_vars.lst"  \
             $(RM) "$(WORKDIR)\system_vars.lst"
+	@if exist "$(WORKDIR)\systimer.obj"  \
+            $(RM) "$(WORKDIR)\systimer.obj"
+	@if exist "$(WORKDIR)\systimer.lis"  \
+            $(RM) "$(WORKDIR)\systimer.lis"
+	@if exist "$(WORKDIR)\systimer.lst"  \
+            $(RM) "$(WORKDIR)\systimer.lst"
 	@if exist "$(WORKDIR)\test.obj"  \
             $(RM) "$(WORKDIR)\test.obj"
 	@if exist "$(WORKDIR)\test.lis"  \
@@ -240,7 +240,6 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
-            $(WORKDIR_ESCSPACE)\60-hz-counter.obj  \
             $(WORKDIR_ESCSPACE)\clib.obj  \
             $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
@@ -253,6 +252,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-rc2014-fnc.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\system_vars.obj  \
+            $(WORKDIR_ESCSPACE)\systimer.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart_control.obj  \
             $(WORKDIR_ESCSPACE)\uart_rx_buffer_add_to.obj  \
@@ -267,12 +267,6 @@ OBJS =  \
 
 rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
-
-$(WORKDIR_ESCSPACE)\60-hz-counter.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\60-hz-counter.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\60-hz-counter.s"
 
 $(WORKDIR_ESCSPACE)\clib.obj :  \
             $(PRJDIR_ESCSPACE)\src\clib.c  \
@@ -346,6 +340,10 @@ $(WORKDIR_ESCSPACE)\system_vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system_vars.s"
+
+$(WORKDIR_ESCSPACE)\systimer.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\systimer.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\systimer.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \
             $(PRJDIR_ESCSPACE)\src\test.s  \

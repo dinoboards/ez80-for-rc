@@ -75,7 +75,6 @@ define _SYS_CLK_FREQ = 24000000
 define _zsl_g_clock_xdefine = 24000000
 
 "Z:\rc2014-ez80-firmware\debug\rc2014-firmware"= \
- ".\60-hz-counter.obj", \
  ".\clib.obj", \
  ".\cpu_freq_calculator.obj", \
  ".\cstartup.obj", \
@@ -88,6 +87,7 @@ define _zsl_g_clock_xdefine = 24000000
  ".\rst-10-rc2014-fnc.obj", \
  ".\rst-18-rc2014-bank-switch.obj", \
  ".\system_vars.obj", \
+ ".\systimer.obj", \
  ".\test.obj", \
  ".\uart_control.obj", \
  ".\uart_rx_buffer_add_to.obj", \

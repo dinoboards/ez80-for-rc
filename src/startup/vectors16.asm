@@ -132,7 +132,7 @@ skip_24_reg_restore:
 	SEGMENT .IVECTS
 
 	PUBLIC	__vector_table
-	EXTERN	_ms_60Hz_timer_counter_isr
+	EXTERN	_system_timer_isr
 	EXTERN _uart0_receive_isr
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -143,7 +143,7 @@ __vector_table:
 	dw	__default_mi_handler		; 06H - unused
 	dw	__default_mi_handler		; 08H - Flash
 	dw	__default_mi_handler		; 0AH - PRT 0
-	dw	_ms_60Hz_timer_counter_isr	; 0CH - PRT 1
+	dw	_system_timer_isr		; 0CH - PRT 1
 	dw	__default_mi_handler		; 0EH - PRT 2
 	dw	__default_mi_handler		; 10H - PRT 3
 	dw	__default_mi_handler		; 12H - PRT 4
