@@ -19,6 +19,10 @@
 	XREF	__idivu
 	XREF	__iremu
 	XREF	__imul_b
+	XREF	__stoiu
+	XREF	__imuls
+	XREF	__idivs
+
 	XREF	_system_ticks
 	XREF	_ticks_frequency
 	XREF	_rtc_enabled
@@ -57,9 +61,9 @@ _system_timer_isr:
 ;
 ; Dispatcher for the RST.L %10 trap functions
 ; Inputs:
-;   B = TIMER SUB FUNCTION INDEX
+;   B      = TIMER SUB FUNCTION INDEX
 ; Outputs:
-;   A = 0 -> SUCCESS, NON-ZERO -> ERROR
+;   A      = 0 -> SUCCESS, NON-ZERO -> ERROR
 ;   Other registers as per sub-functions
 ;
 _system_timer_dispatch:
@@ -68,31 +72,31 @@ _system_timer_dispatch:
 
 	LD	A, B					; SUB FUNCTION CODE
 	OR	A					; TEST SUB FUNCTION CODE
-	JR	Z, tm_tick_get				; B = 0, SYSTMR_GET_TICKS
+	JR	Z, tmr_tick_get				; B = 0, SYSTMR_TICKS_GET
 	DEC	A
-	JR	Z, tmr_secs_get				; B = 1, SYSTMR_GET_SECONDS
+	JR	Z, tmr_secs_get				; B = 1, SYSTMR_SECONDS_GET
 	DEC	A
-	JR	Z, tmr_tick_set				; B = 2, SYSTMR_SET_TICKS
+	JR	Z, tmr_tick_set				; B = 2, SYSTMR_TICKS_SET
 	DEC	A
-	JR	Z, tmr_secs_set				; B = 3, SYSTMR_SET_SECONDS
+	JR	Z, tmr_secs_set				; B = 3, SYSTMR_SECONDS_SET
 	DEC	A
-	JR	Z, tmr_freq_get				; B = 4, SYSTMR_GET_FREQTICK
+	JR	Z, tmr_freq_get				; B = 4, SYSTMR_FREQTICK_GET
 	DEC	A
-	JR	Z, tmr_freq_set				; B = 5, SYSTMR_SET_FREQTICK
+	JR	Z, tmr_freq_set				; B = 5, SYSTMR_FREQTICK_SET
 
 	LD	A, %FF					; FAILURE - UNKONWN SUB FUNCTION
 	RET.L
 ;
-; Function B = 0 -- SYSTMR_GET_TICKS
+; Function B = 0 -- SYSTMR_TICKS_GET
 ; Retrieve the current 24 bit tick count.
 ;
 ; Output:
-;   HL{23:0}	= TIMER VALUE (24 BIT)
-;   E:HL{15:0}	= TIMER VALUE (24 BIT)
-;   D		= 0
-;   C		= tick frequency (typically 50 or 60)
+;   uHL	 = TIMER VALUE (24 BIT)
+;   EHL  = TIMER VALUE (24 BIT)
+;   D	 = 0
+;   C	 = tick frequency (typically 50 or 60)
 ;
-tm_tick_get:
+tmr_tick_get:
 	DI
 	LD	HL, (_system_ticks)
 	LD	A, (_system_ticks+2)
@@ -104,12 +108,13 @@ tm_tick_get:
 	XOR	A					; SUCCESS
 	RET.L
 ;
-; Function B = 1 -- SYSTMR_GET_SECONDS
+; Function B = 1 -- SYSTMR_SECONDS_GET
 ; Retrieve the current 24 bit number of seconds counted.
 ;
-;   RETURNS:
-;     HL{23:0}	= Number of seconds counted
-;     C 	= Number of ticks within the current second
+; Outputs:
+;   uHL	 = Number of seconds counted
+;   C	 = Number of ticks within the current second
+;   DE	 = Number of milliseconds within the current second
 ;
 tmr_secs_get:
 	LD	HL, (_system_ticks)
@@ -126,10 +131,41 @@ tmr_secs_get:
 	CALL	__iremu
 	LD	C, L					; SECOND FRACTION INTO C
 
+	PUSH	BC
+	CALL	get_milliseconds
+	POP	BC
+	LD	E, L					; DE = MILLISECONDS
+	LD	D, H
+
 	POP	HL					; RESTORE SECONDS
 
 	XOR	A					; SUCCESS
 	RET.L
+;
+; Calculate the number of milliseconds within the current second
+; Inputs:
+;  C = Number of ticks within the current second
+; Output:
+;  HL = Number of milliseconds within the current second
+;
+get_milliseconds:
+	LD	B, 0					; BC = ticks within second
+	CALL	__stoiu					; uHL = BC
+	LD	BC, 16000
+	CALL	__imuls					; uHL = uBC * uHL
+	LD	DE, HL					; uDE = uHL = ticks_within_second * 16000
+
+	LD	A,(_ticks_frequency)
+	UEXT	HL
+	LD	L,A
+	LD	BC,HL					; uBC = _ticks_frequency
+	LD	HL,DE					; uHL = ticks_within_second * 16000
+	CALL	__idivs
+
+	LD	IY, HL
+	LEA	HL, IY+8				; uHL = uHL + 8
+	LD	BC, 16
+	JP	__idivs					; uHL = uHL / 16
 ;
 ; SET TIMER
 ;   ON ENTRY:
