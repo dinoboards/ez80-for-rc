@@ -58,8 +58,8 @@ _system_timer_isr:
 	RETI.L
 ;
 ; SYSTEM TIMER DISPATCH
-;
 ; Dispatcher for the RST.L %10 trap functions
+;
 ; Inputs:
 ;   B      = Timer sub function index
 ; Outputs:
@@ -145,8 +145,10 @@ tmr_secs_get:
 	RET.L
 ;
 ; Calculate the number of milliseconds within the current second
+;
 ; Inputs:
 ;  C = Number of ticks within the current second
+;
 ; Output:
 ;  HL = Number of milliseconds within the current second
 ;
@@ -171,8 +173,10 @@ get_milliseconds:
 ;
 ; Function B = 2 -- SYSTMR_TICKS_SET
 ; Set the current 24 bit tick count.
+;
 ; Inputs:
 ;   uHL	 = New timer tick count (24 bits)
+;
 ; Outputs:
 ;   A	 = 0 -> Success, otherwise errored
 ;
@@ -184,8 +188,10 @@ tmr_tick_set:
 ;
 ; Function B = 3 -- SYSTMR_SECONDS_SET
 ; Set the current 24 bit number of seconds counted.
+;
 ; Inputs:
 ;   uHL: Number of seconds to be assigned to counter
+;
 ; Outputs:
 ;   A	 = 0 -> Success, otherwise errored
 ;
@@ -200,6 +206,7 @@ tmr_secs_set:
 ;
 ; Function B = 4 -- SYSTMR_FREQTICK_GET
 ; Retrieve the current timer frequency.
+;
 ; Outputs:
 ;  C	 = tick frequency (typically 50 or 60)
 ;  A	 = 0 -> Success, otherwise errored
@@ -213,8 +220,10 @@ tmr_freq_get:
 ; Function B = 5 -- SYSTMR_FREQTICK_SET
 ; Set the on board system clock to track the desired frequency, typically
 ; this will be 50Hz or 60Hz.
+;
 ; Inputs:
 ;   C 	 = new tick frequency (typically 50 or 60)
+;
 ; Outputs:
 ;   A	 = 0 -> Success, otherwise errored
 ;

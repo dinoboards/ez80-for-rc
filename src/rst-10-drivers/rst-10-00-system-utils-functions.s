@@ -18,8 +18,10 @@
 ;
 ; SYSTEM UTILS DISPATCH
 ; Dispatcher for the RST.L %10 trap functions
+;
 ; Inputs:
 ;  B      = Utils sub function index
+;
 ; Outputs:
 ;  A	 = 0 -> Success, otherwise errored
 ;  Other registers as per sub-functions
@@ -44,8 +46,10 @@ _system_utils_dispatch:
 	RET.L
 ;
 ; Function B = 00 -- ez80 Firmware Query
+;
 ; Input
 ;   MBASE:HL	= Pointer to the configuration table
+;
 ; Output
 ;   MBASE:HL	= Pointer to the ez80 firmware configuration table
 ;
@@ -125,8 +129,10 @@ _system_build_freq:
 ;
 ; Function B = 01 -- register copy (8:16 -> 24)
 ; LD HL, E:HL
+;
 ; Input
 ;   E:HL	= 24 bit value to be copied
+;
 ; Output
 ;   uHL		= E:HL
 ;
@@ -141,8 +147,10 @@ ez80_reg_ehl_to_hl:
 
 ; Function B = 02 -- register copy (24 -> 8:16)
 ; LD E:HL, HL
+;
 ; Input
 ;   uHL 	= 24 bit value to be copied
+;
 ; Output
 ;   E:HL	= uHL
 ;
@@ -161,6 +169,7 @@ tmp:
 	SECTION	CODE
 ;
 ; Function B = 03 -- Set Bus cycles
+;
 ; Input
 ;   H 	= CS3 External Memory Bus Cycles (1-15)
 ;   L 	= CS2 External I/O Bus Cycles (1-15)
@@ -191,6 +200,7 @@ ez80_set_bus_cycles:
 	RET.L
 ;
 ; Function B = 03 -- Set Bus cycles to achive an equivalent frequency
+;
 ; Input
 ;   HL = CS3 External Memory Bus Frequency (Khz)
 ;   DE = CS2 External I/O Bus Frequency (Khz)

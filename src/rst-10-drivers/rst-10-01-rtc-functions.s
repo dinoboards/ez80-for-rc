@@ -1,27 +1,34 @@
+;
+; RTC INTERFACE
+;
+; Access with RST.L %10 (A=1, B=sub function code)
+;
+; The RTC provides functions to access the Real Time Clock hardware.
+;
+; Function provide ability to set/get the current time, set/get alarms,
+;
+; The RTC is driven by a 32KHz crystal.
+;
+; Use the RTC_QUERY to determine if the RTC is powered and enabled.
+;
 	include "..\config.inc"
 
-	XREF	timer_tick_control
 	XREF	_rtc_enabled
 
 	SECTION CODE
 
 	.assume adl=1
-
-; B = RTC SUB FUNCTION INDEX (STARTING FROM 0)
-; RETURNS:
-;  A -> ZERO SUCCESS
-;  A -> NON-ZERO ERROR CODE
-
-; RTCINIT	EQU	0	; INIT - NO OP
-; RTCGETTIM	EQU	1	; GET TIME
-; RTCSETTIM	EQU	2	; SET TIME
-; RTCGETBYT	EQU	3	; GET NVRAM BYTE BY INDEX
-; RTCSETBYT	EQU	4	; SET NVRAM BYTE BY INDEX
-; RTCGETBLK	EQU	5	; GET NVRAM DATA BLOCK
-; RTCSETBLK	EQU	6	; SET NVRAM DATA BLOCK
-; RTCGETALM	EQU	7	; GET ALARM
-; RTCSETALM	EQU	8	; SET ALARM
-
+;
+; RTC DISPATCH
+; Dispatcher for the RST.L %10 trap functions
+;
+; Inputs:
+;   B      = RTC sub function index
+;
+; Outputs:
+;  A	 = 0 -> Success, otherwise errored
+;  Other registers as per sub-functions
+;
 	PUBLIC	_rtc_dispatch
 _rtc_dispatch:
 	POP	BC					; RESTORE BC AND HL
@@ -29,64 +36,76 @@ _rtc_dispatch:
 
 	LD	A, B					; SUB FUNCTION CODE
 	OR	A					; TEST SUB FUNCTION CODE
-	JR	Z, rtc_init
+	JR	Z, rtc_query				; B = 0, RTC_QUERY
 	DEC	A
-	JR	Z, rtc_get_time
+	JR	Z, rtc_time_get				; B = 1, RTC_TIME_GET
 	DEC	A
-	JR	Z, rtc_set_time
+	JR	Z, rtc_time_set				; B = 2, RTC_TIME_SET
 	DEC	A
-	JR	Z, rtc_get_byte
+	JR	Z, rtc_alarm_get			; B = 3, RTC_ALARM_GET
 	DEC	A
-	JR	Z, rtc_set_byte
-	DEC	A
-	JR	Z, rtc_get_block
-	DEC	A
-	JR	Z, rtc_set_block
-	DEC	A
-	JR	Z, rtc_get_alarm
-	DEC	A
-	JR	Z, rtc_set_alarm
+	JR	Z, rtc_alarm_set			; B = 4, RTC_ALARM_SET
 
 	LD	A, 1					; UNKNOWN SUB FUCTION
 	OR	A
 	RET.L
+;
+; Date Time Structure
+; -------------------
+; CENTURY	DS	1
+; YEAR		DS	1
+; MONTH		DS	1
+; DAY		DS	1
+; HOUR		DS	1
+; MIN		DS	1
+; SECCOND	DS	1
+;
+
 
 ERR_NOHW	.EQU	-8				; HARDWARE NOT PRESENT
-
-rtc_init:
+;
+; Function B = 0 -- RTC_INIT
+; Initialize the RTC hardware
+;
+; Outputs:
+; A	 = 0 -> Success, ERR_NOHW -> RTC hardware not present
+;
+rtc_query:
 	LD	A, (_rtc_enabled)			; NZ IF RTC IS ENABLED
 	OR	A
-	JR	NZ, rtc_init_ok
+	JR	NZ, rtc_query_ok
 
 	LD	A, ERR_NOHW
 	OR	A
 	RET.L
 
-rtc_init_ok:
+rtc_query_ok:
 	XOR	A					; SUCCESS
 	RET.L
-
-rtc_get_byte:
-rtc_set_byte:
-rtc_get_block:
-rtc_set_block:
-rtc_get_alarm:
-rtc_set_alarm:
+;
+; Function B = 3 -- RTC_ALARM_GET
+; Not implemented yet
+;
+rtc_alarm_get:
+;
+; Function B = 4 -- RTC_ALARM_SET
+; Not implemented yet
+;
+rtc_alarm_set:
 	LD	A, 1					; NOT IMPLEMTNED YET
 	OR	A
 	RET.L
-
-	; hl[15:0] -> address[15:0] to write bcd date/time values
-	; mbase -> address[23:16]
-	; structure:
-	; CENTURY	DS	1
-	; YEAR		D	1
-	; MONTH		D	1
-	; DAY		D	1
-	; HOUR		D	1
-	; MIN		D	1
-	; SECCOND	D	1
-rtc_get_time:
+;
+; Function B = 1 -- RTC_TIME_GET
+; Retrieve the current RTC time
+;
+; Inputs:
+;  MBASE:HL	= Address of Date Time Struct to receive the current date/time values
+;
+; Outputs:
+;  A	 = 0 -> Success, otherwise errored
+;
+rtc_time_get:
 	IN0	A, (RTC_CEN)
 	LD.S	(HL), A
 	INC	HL
@@ -116,8 +135,16 @@ rtc_get_time:
 
 	XOR	A					; SUCCESS
 	RET.L
-
-rtc_set_time:
+;
+; Function B = 2 -- RTC_TIME_SET
+;
+; Inputs:
+;  MBASE:HL	= Address of Date Time Struct containing the new date/time values
+;
+; Outputs:
+;  A	 = 0 -> Success, otherwise errored
+;
+rtc_time_set:
 	LD	A, RTC_INT_DISABLE | RTC_BCD_ENABLE | RTC_CLK_32KHZ | RTC_UNLOCK
 	OUT0	(RTC_CTRL), A
 
