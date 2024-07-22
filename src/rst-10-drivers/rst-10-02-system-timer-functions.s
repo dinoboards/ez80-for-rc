@@ -61,7 +61,7 @@ _system_timer_isr:
 ;
 ; Dispatcher for the RST.L %10 trap functions
 ; Inputs:
-;   B      = TIMER SUB FUNCTION INDEX
+;   B      = Timer sub function index
 ; Outputs:
 ;   A	 = 0 -> Success, otherwise errored
 ;   Other registers as per sub-functions

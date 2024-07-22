@@ -1,44 +1,53 @@
 
         INCLUDE "..\config.inc"
 
+	XREF	__ladd_b
+	XREF	__ldivu
+	XREF	__stoiu
+	XREF	_cpu_freq_calculated
+	XREF	_cs_bus_timings
+	XREF	_platform_description
+	XREF	_SYS_CLK_FREQ
+	XREF	_system_ticks
+
 	SECTION CODE
 
 	.assume adl=1
 
 	PUBLIC	_system_utils_dispatch
-	XREF	_system_ticks
-	XREF	_platform_description
-	XREF	_SYS_CLK_FREQ
-	XREF	_cpu_freq_calculated
-	XREF	__ldivu
-	XREF	__stoiu
-	XREF	__ladd_b
-	XREF	_cs_bus_timings
-
+;
+; SYSTEM UTILS DISPATCH
+; Dispatcher for the RST.L %10 trap functions
+; Inputs:
+;  B      = Utils sub function index
+; Outputs:
+;  A	 = 0 -> Success, otherwise errored
+;  Other registers as per sub-functions
+;
 _system_utils_dispatch:
 	POP	BC					; RESTORE BC AND HL
 	POP	HL
 
 	LD	A, B					; SUB FUNCTION CODE
 	OR	A					; TEST SUB FUNCTION CODE
-	JR	Z, ez80_firmware_query			; B = 0
+	JR	Z, ez80_firmware_query			; B = 0, SYSUTL_INIT
 	DEC	A
-	JR	Z, ez80_reg_ehl_to_hl			; B = 1
+	JR	Z, ez80_reg_ehl_to_hl			; B = 1, SYSUTL_EHL_TO_HL
 	DEC	A
-	JR	Z, ez80_reg_hl_to_ehl			; B = 2
+	JR	Z, ez80_reg_hl_to_ehl			; B = 2, SYSUTL_HL_TO_EHL
 	DEC	A
-	JR	Z, ez80_set_bus_cycles			; B = 3
+	JR	Z, ez80_set_bus_cycles			; B = 3, SYSUTL_SET_BUSTM
 	DEC	A
-	JR	Z, ez80_set_bus_freq			; B = 4
+	JR	Z, ez80_set_bus_freq			; B = 4, SYSUTL_SET_BUSFQ
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
 ;
 ; Function B = 00 -- ez80 Firmware Query
 ; Input
-;   MBASE:HL{15:0} = Pointer to the configuration table
+;   MBASE:HL	= Pointer to the configuration table
 ; Output
-;   MBASE:HL{15:0} = Pointer to the ez80 firmware configuration table
+;   MBASE:HL	= Pointer to the ez80 firmware configuration table
 ;
 ; Input Table:
 ;  00-03: CB_VERSION: 		HBIOS Version (RMJ, RMN, RUP, RTP)
@@ -115,11 +124,11 @@ _system_build_freq:
 	DL	_SYS_CLK_FREQ
 ;
 ; Function B = 01 -- register copy (8:16 -> 24)
-; LD HL, E:HL{15:0}
+; LD HL, E:HL
 ; Input
-;   E:HL{15:0} = value to be copied
+;   E:HL	= 24 bit value to be copied
 ; Output
-;   HL{23:0} -> E:HL{15:0}
+;   uHL		= E:HL
 ;
 ; not re-entrant safe
 ;
@@ -131,11 +140,11 @@ ez80_reg_ehl_to_hl:
 	RET.L
 
 ; Function B = 02 -- register copy (24 -> 8:16)
-; LD E:HL{15:0}, HL
+; LD E:HL, HL
 ; Input
-;   HL{23:0} = value to be copied
+;   uHL 	= 24 bit value to be copied
 ; Output
-;   E:HL{15:0} -> HL{23:0}
+;   E:HL	= uHL
 ;
 ; not re-entrant safe
 ;
@@ -150,14 +159,14 @@ tmp:
 	DS	3
 
 	SECTION	CODE
-
+;
 ; Function B = 03 -- Set Bus cycles
 ; Input
-;   H = CS3 External Memory Bus Cycles (1-15)
-;   L = CS2 External I/O Bus Cycles (1-15)
+;   H 	= CS3 External Memory Bus Cycles (1-15)
+;   L 	= CS2 External I/O Bus Cycles (1-15)
 ;
 ; Output
-;   A = 0 -> SUCCESS, NZ -> ONE ORE MORE VALUES OUT OF RANGE
+;   A 	= 0 -> SUCCESS, NZ -> ONE ORE MORE VALUES OUT OF RANGE
 ;
 ez80_set_bus_cycles:
 	PUSH	IX
@@ -180,8 +189,7 @@ ez80_set_bus_cycles:
 	POP	IX
 	XOR	A
 	RET.L
-
-
+;
 ; Function B = 03 -- Set Bus cycles to achive an equivalent frequency
 ; Input
 ;   HL = CS3 External Memory Bus Frequency (Khz)
