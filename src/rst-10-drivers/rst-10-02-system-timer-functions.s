@@ -16,20 +16,20 @@
 ;
         INCLUDE "..\config.inc"
 
-	XREF	__idivu
-	XREF	__iremu
-	XREF	__imul_b
-	XREF	__stoiu
-	XREF	__imuls
 	XREF	__idivs
+	XREF	__idivu
+	XREF	__imul_b
+	XREF	__imuls
+	XREF	__iremu
+	XREF	__stoiu
 
-	XREF	_system_ticks
-	XREF	_ticks_frequency
-	XREF	_rtc_enabled
-	XREF	_get_ticks_for_rtcclk
-	XREF	_get_ticks_for_sysclk
 	XREF	_configure_tmr1_to_rtc
 	XREF	_configure_tmr1_to_sysclk
+	XREF	_get_ticks_for_rtcclk
+	XREF	_get_ticks_for_sysclk
+	XREF	_rtc_enabled
+	XREF	_system_ticks
+	XREF	_ticks_frequency
 
 	SEGMENT	CODE
 
@@ -40,7 +40,7 @@
 ;
 ; SYSTEM TIMER ISR
 ;
-; This ISR is called at the tick frequency, and increments the 24 bit tick counter.
+; This ISR is called at the tick frequency rate, and increments the 24 bit tick counter.
 ;
 _system_timer_isr:
 	PUSH	AF
@@ -63,7 +63,7 @@ _system_timer_isr:
 ; Inputs:
 ;   B      = TIMER SUB FUNCTION INDEX
 ; Outputs:
-;   A      = 0 -> SUCCESS, NON-ZERO -> ERROR
+;   A	 = 0 -> Success, otherwise errored
 ;   Other registers as per sub-functions
 ;
 _system_timer_dispatch:
@@ -91,10 +91,11 @@ _system_timer_dispatch:
 ; Retrieve the current 24 bit tick count.
 ;
 ; Output:
-;   uHL	 = TIMER VALUE (24 BIT)
-;   EHL  = TIMER VALUE (24 BIT)
+;   uHL	 = Current timer tick count (24 bits)
+;   EHL  = Current timer tick count (24 bits)
 ;   D	 = 0
 ;   C	 = tick frequency (typically 50 or 60)
+;   A	 = 0 -> Success, otherwise errored
 ;
 tmr_tick_get:
 	DI
@@ -115,6 +116,7 @@ tmr_tick_get:
 ;   uHL	 = Number of seconds counted
 ;   C	 = Number of ticks within the current second
 ;   DE	 = Number of milliseconds within the current second
+;   A	 = 0 -> Success, otherwise errored
 ;
 tmr_secs_get:
 	LD	HL, (_system_ticks)
@@ -167,9 +169,12 @@ get_milliseconds:
 	LD	BC, 16
 	JP	__idivs					; uHL = uHL / 16
 ;
-; SET TIMER
-;   ON ENTRY:
-;     HL{23:0}: TIMER VALUE (24 BIT)
+; Function B = 2 -- SYSTMR_TICKS_SET
+; Set the current 24 bit tick count.
+; Inputs:
+;   uHL	 = New timer tick count (24 bits)
+; Outputs:
+;   A	 = 0 -> Success, otherwise errored
 ;
 tmr_tick_set:
 	LD	(_system_ticks), HL
@@ -177,9 +182,12 @@ tmr_tick_set:
 	XOR	A					; SUCCESS
 	RET.L
 ;
-; SET SECS
-;   ON ENTRY:
-;     HL{23:0}: SECONDS VALUE (24 BIT)
+; Function B = 3 -- SYSTMR_SECONDS_SET
+; Set the current 24 bit number of seconds counted.
+; Inputs:
+;   uHL: Number of seconds to be assigned to counter
+; Outputs:
+;   A	 = 0 -> Success, otherwise errored
 ;
 tmr_secs_set:
 	LD	A, (_ticks_frequency)
@@ -190,19 +198,25 @@ tmr_secs_set:
 	XOR	A					; SUCCESS
 	RET.L
 ;
-; GET TIMER FREQUENCY
-;   RETURNS:
+; Function B = 4 -- SYSTMR_FREQTICK_GET
+; Retrieve the current timer frequency.
+; Outputs:
+;  C	 = tick frequency (typically 50 or 60)
+;  A	 = 0 -> Success, otherwise errored
 ;
 tmr_freq_get:
 	LD	A, (_ticks_frequency)
 	LD	C, A
+	XOR	A					; SUCCESS
 	RET.L
 ;
-; SET TIMER FREQUENCY
-;  Set the on board system clock to track the desired frequency, typically
-;  this will be 50Hz or 60Hz.
-;  ON ENTRY:
-;   	C: TIMER FREQUENCY
+; Function B = 5 -- SYSTMR_FREQTICK_SET
+; Set the on board system clock to track the desired frequency, typically
+; this will be 50Hz or 60Hz.
+; Inputs:
+;   C 	 = new tick frequency (typically 50 or 60)
+; Outputs:
+;   A	 = 0 -> Success, otherwise errored
 ;
 tmr_freq_set:
 	LD	A, C
