@@ -1,7 +1,7 @@
 	include "config.inc"
 
 	XREF	_system_utils_dispatch
-	XREF	rtc_control
+	XREF	_rtc_dispatch
 	XREF	_system_timer_dispatch
 	XREF	uart_control
 
@@ -43,7 +43,7 @@ rst_rc2014_fnc_resume:
 
 rc_functions:
 	JP	_system_utils_dispatch
-	JP	rtc_control
+	JP	_rtc_dispatch
 	JP	_system_timer_dispatch
 	JP	uart_control
 

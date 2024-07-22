@@ -22,8 +22,8 @@
 ; RTCGETALM	EQU	7	; GET ALARM
 ; RTCSETALM	EQU	8	; SET ALARM
 
-	PUBLIC	rtc_control
-rtc_control:
+	PUBLIC	_rtc_dispatch
+_rtc_dispatch:
 	POP	BC					; RESTORE BC AND HL
 	POP	HL
 
