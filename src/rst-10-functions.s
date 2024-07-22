@@ -3,7 +3,7 @@
 	XREF	_system_utils_dispatch
 	XREF	_rtc_dispatch
 	XREF	_system_timer_dispatch
-	XREF	uart_control
+	XREF	_uart_dispatch
 
 	SECTION CODE
 
@@ -45,7 +45,7 @@ rc_functions:
 	JP	_system_utils_dispatch
 	JP	_rtc_dispatch
 	JP	_system_timer_dispatch
-	JP	uart_control
+	JP	_uart_dispatch
 
 _fn_1:
 _fn_2:

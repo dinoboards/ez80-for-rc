@@ -1,5 +1,5 @@
 
-        INCLUDE "..\config.inc"
+        INCLUDE "..\..\config.inc"
 
 	SECTION CODE
 

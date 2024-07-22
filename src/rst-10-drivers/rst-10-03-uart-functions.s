@@ -1,24 +1,25 @@
 
         INCLUDE "..\config.inc"
 
+	XREF	__lmulu
+	XREF	_baud_rate
+	XREF	_cpu_freq_calculated
+	XREF	_line_control
+	XREF	_rx_buf_next_in
+	XREF	_rx_buf_next_out
+	XREF	_rx_buffer_empty
+	XREF	_rx_buffer_get
+	XREF	_rx_buffer_get_length
+
 	SECTION CODE
 
 	.assume adl=1
 
-	PUBLIC	uart_control
-	XREF	_rx_buffer_empty
-	XREF	_rx_buffer_get
-	XREF	_rx_buffer_get_length
-	XREF	_rx_buf_next_in
-	XREF	_rx_buf_next_out
-	XREF	_baud_rate
-	XREF	_line_control
-	XREF	_cpu_freq_calculated
-	XREF	__lmulu
+	PUBLIC	_uart_dispatch
 
 UART_ERR_FIFOBUFFERFULL	EQU	%0C			; THE ERROR CODE RETURNED WHEN THE TRANSMIT FIFO BUFFER IS FULL.
 
-uart_control:
+_uart_dispatch:
 	POP	BC					; RESTORE BC AND HL
 	POP	HL
 
