@@ -30,6 +30,7 @@
 	XREF	_rtc_enabled
 	XREF	_system_ticks
 	XREF	_ticks_frequency
+	XREF	_ticks_per_10_us
 
 	SEGMENT	CODE
 
@@ -83,6 +84,10 @@ _system_timer_dispatch:
 	JR	Z, tmr_freq_get				; B = 4, SYSTMR_FREQTICK_GET
 	DEC	A
 	JR	Z, tmr_freq_set				; B = 5, SYSTMR_FREQTICK_SET
+	DEC	A
+	JR	Z, tmr_delay_start			; B = 6, SYSTMR_DELAY_START
+	DEC	A
+	JR	Z, tmr_delay_wait			; B = 7, SYSTMR_DELAY_WAIT
 
 	LD	A, %FF					; FAILURE - UNKONWN SUB FUNCTION
 	RET.L
@@ -249,5 +254,52 @@ tmr_freq_set_exit
 	LD	(_system_ticks), HL
 	XOR	A					; SUCCESS
 	RET.L
+;
+; Function B = 6 -- SYSTMR_DELAY
+; Delay for a number of microseconds
+;
+; Inputs:
+;  C: Duration in 10's of microseconds
+;
+; Outputs
+;  HL: Target time point
+;
+tmr_delay_start:
+	LD	A, (_ticks_per_10_us)
+	LD	B, A
+	MLT	BC		;  duration(DE) = duration_10us(D) * ticks_per_10_us(E);
+
+	IN0	L, (TMR5_DR_L)
+	IN0	H, (TMR5_DR_H)
+	OR	A
+	SBC.SIS	HL, BC
+	RET.L
+;
+; Function B = 7 -- SYSTMR_DELAY_WAIT
+; Wait for the delay to expire
+;
+; Inputs:
+;  HL: Target time point
+;  C: Duration in 10's of microseconds
+;
+; Outputs:
+;  None
+;
+tmr_delay_wait:
+	;while (delay_point - jiffy >= 0)
+	; wait
+	PUSH	BC
+wait:
+	PUSH	HL
+	IN0	C, (TMR5_DR_L)
+	IN0	B, (TMR5_DR_H)
+
+	OR	A
+	SBC.S	HL, BC
+	POP	HL
+	JP	M, wait
+
+	POP	BC
+	JR	tmr_delay_start
 
 	END

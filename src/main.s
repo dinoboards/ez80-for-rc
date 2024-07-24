@@ -11,8 +11,8 @@
 	xref	_init_clocks
 
 _main:
-	CALL	_bank_init_z2
 	CALL	_init_clocks
+	CALL	_bank_init_z2
 	CALL	_rx_buffer_init
 	CALL	_uart0_init
 

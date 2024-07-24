@@ -70,9 +70,9 @@ DEFINE __RAM_ADDR_U_INIT_PARAM = $B7
 DEFINE __FLASH_CTL_INIT_PARAM = $28
 DEFINE __FLASH_ADDR_U_INIT_PARAM = $00
 
-define _SYS_CLK_FREQ = 24000000
+define _SYS_CLK_FREQ = 18432000
 
-define _zsl_g_clock_xdefine = 24000000
+define _zsl_g_clock_xdefine = 18432000
 
 "Z:\rc2014-ez80-firmware\debug\rc2014-firmware"= \
  ".\clib.obj", \

@@ -1,4 +1,5 @@
 extern unsigned long cpu_freq_calculated;
+extern unsigned char ticks_per_10_us;
 
 #define TIMER_FACTOR (120)
 
@@ -45,4 +46,6 @@ void assign_cpu_frequency(const unsigned de) {
 
   else if (de >= LOWER_FOR_32MHZ && de <= UPPER_FOR_32MHZ)
     cpu_freq_calculated = 32000000;
+
+  ticks_per_10_us = (cpu_freq_calculated / 16) / 100000;
 }

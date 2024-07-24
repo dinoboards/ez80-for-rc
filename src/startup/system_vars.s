@@ -24,6 +24,7 @@
 
 	PUBLIC	_system_ticks
 	PUBLIC	_ticks_frequency
+	PUBLIC	_ticks_per_10_us
 
 	PUBLIC	_line_control
 	PUBLIC	_baud_rate
@@ -84,5 +85,8 @@ _cpu_freq_calculated:
 
 _ticks_frequency:
 	DB	DEFAULT_TICKFREQ
+
+_ticks_per_10_us:
+	DB	CPU_CLK_FREQ/16/100000
 
 	END

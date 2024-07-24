@@ -53,6 +53,8 @@ _system_utils_dispatch:
 	JR	Z, ez80_cpu_freq_get			; B = 5, SYSUTL_CPU_FREQ_GET
 	DEC	A
 	JR	Z, ez80_bank_helper_set			; B = 6, SYSUTL_BANK_HELPER_SET
+	DEC	A
+	JR	Z, ez80_debug				; B = 7, SYSUTL_DEBUG
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -134,11 +136,25 @@ tmp:
 ;   L 	= CS2 External I/O Bus Cycles (1-15)
 ;
 ; Output
+;   H 	= CS3 External Memory Bus Cycles (1-15)
+;   L 	= CS2 External I/O Bus Cycles (1-15)
 ;   A 	= 0 -> SUCCESS, NZ -> ONE ORE MORE VALUES OUT OF RANGE
 ;
 ez80_bus_cycles_set:
 	PUSH	IX
 	LD	IX, _cs_bus_timings
+
+	LD	A, 2					; IO must always be >= 2 & <= 15
+	CP	L
+	JR	C, valid_io_bus_cycle
+	LD	L, 2
+valid_io_bus_cycle:
+
+	CP	H
+	JR	C, valid_mem_bus_cycle
+	LD	H, 1
+valid_mem_bus_cycle:
+
 	LD	(IX+0), L
 	LD	(IX+1), H
 
@@ -222,9 +238,21 @@ ez80_bus_freq_set:
 
 	LD	BC, 10					; HL = HL / BC
 	XOR	A
-	CALL	__ldivu					; L = CALCULATED CS3 BUS CYCLES
+	CALL	__ldivu					; L = CALCULATED CS2 BUS CYCLES
 
 	LD	H, (IX-10)				; CALCULATED CS3 BUS CYCLES
+
+	LD	A, 2					; IO must always be >= 2 & <= 15
+	CP	L
+	JR	C, valid_io_fq
+	LD	L, 2
+valid_io_fq:
+	DEC	A
+	CP	H					; Mem must always be >= 1 & <= 15
+	JR	C, valid_mem_fq
+	LD	H, 1
+valid_mem_fq:
+
 
 	LD	SP, IX
 	POP	IX
@@ -289,4 +317,12 @@ ez80_bank_helper_set:
 ez80_bank_helper_set_not_supported:
 	LD	A, 1
 	OR	A
+	RET.L
+;
+; Function B = 07 -- SYSUTL_DEBUG
+; Convenience function to allow breakpoint to be set within ZDS
+; to debug through external memory code
+;
+ez80_debug:
+	XOR	A
 	RET.L

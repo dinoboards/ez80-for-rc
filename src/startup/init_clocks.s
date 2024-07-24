@@ -24,6 +24,9 @@ RTC_CLOCK_RATE EQU 32768
 COUNT_FOR_60HZ_RTC EQU RTC_CLOCK_RATE / 60
 
 _init_clocks:
+	; initialise TMR5 for maxmimum count and DIV4
+	CALL	configure_tmr5
+
 	IN0	A, (RTC_CTRL)
 	AND	%70 ; 01110000
 	CP	RTC_INT_DISABLE | RTC_BCD_ENABLE | RTC_CLK_32KHZ
@@ -135,6 +138,19 @@ skip:
 	POP	DE
 
 	DI
+	RET
+;
+; Configure TMR5 as a continuous timer based on CPU clock /16
+; Can be used to calibrate delay for various i/o operations
+; See SYSTMR_DELAY_START and SYSTMR_DELAY_WAIT RST %10 functions
+;
+configure_tmr5:
+	XOR	A
+	OUT0	(TMR5_RR_L), A
+	OUT0	(TMR5_RR_H), A
+	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_16
+	OUT0	(TMR5_CTL), A
+
 	RET
 ;
 ; Determine the timer counter to generate a 50Hz or 60Hz timer based on the cpu clock
