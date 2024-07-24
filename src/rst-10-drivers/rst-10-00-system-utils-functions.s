@@ -35,9 +35,6 @@
 ;  Other registers as per sub-functions
 ;
 _system_utils_dispatch:
-	POP	BC					; RESTORE BC AND HL
-	POP	HL
-
 	LD	A, B					; SUB FUNCTION CODE
 	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, ez80_version_exchange		; B = 0, SYSUTL_VER_EXCHANGE

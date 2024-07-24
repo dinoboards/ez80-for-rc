@@ -68,9 +68,6 @@ _system_timer_isr:
 ;   Other registers as per sub-functions
 ;
 _system_timer_dispatch:
-	POP	BC					; RESTORE BC AND HL
-	POP	HL
-
 	LD	A, B					; SUB FUNCTION CODE
 	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, tmr_tick_get				; B = 0, SYSTMR_TICKS_GET

@@ -31,9 +31,6 @@
 ;
 	PUBLIC	_rtc_dispatch
 _rtc_dispatch:
-	POP	BC					; RESTORE BC AND HL
-	POP	HL
-
 	LD	A, B					; SUB FUNCTION CODE
 	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, rtc_query				; B = 0, RTC_QUERY
