@@ -266,8 +266,8 @@ tmr_delay_start:
 	LD	B, A
 	MLT	BC		;  duration(DE) = duration_10us(D) * ticks_per_10_us(E);
 
-	IN0	L, (TMR5_DR_L)
-	IN0	H, (TMR5_DR_H)
+	IN0	L, (TMR4_DR_L)
+	IN0	H, (TMR4_DR_H)
 	OR	A
 	SBC.SIS	HL, BC
 	RET.L
@@ -288,8 +288,8 @@ tmr_delay_wait:
 	PUSH	BC
 wait:
 	PUSH	HL
-	IN0	C, (TMR5_DR_L)
-	IN0	B, (TMR5_DR_H)
+	IN0	C, (TMR4_DR_L)
+	IN0	B, (TMR4_DR_H)
 
 	OR	A
 	SBC.S	HL, BC

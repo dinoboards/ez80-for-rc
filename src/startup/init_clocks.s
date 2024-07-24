@@ -1,3 +1,11 @@
+;
+; Configure timers and clocks
+;
+; TMR5 -> generates a bus clock - CPU clock / 4, sent to PB5
+;         TMR5 is configured in init_params_f92.asm
+; TMR1 -> system ticks - generates a 50Hz or 60Hz counter, based on RTC or CPU clock
+; TMR4 -> continuous down counter, based on CPU clock / 16.  Uses to calculate microsecond delays
+
         INCLUDE "..\config.inc"
 
 	SECTION CODE
@@ -25,7 +33,7 @@ COUNT_FOR_60HZ_RTC EQU RTC_CLOCK_RATE / 60
 
 _init_clocks:
 	; initialise TMR5 for maxmimum count and DIV4
-	CALL	configure_tmr5
+	CALL	configure_tmr4
 
 	IN0	A, (RTC_CTRL)
 	AND	%70 ; 01110000
@@ -140,16 +148,16 @@ skip:
 	DI
 	RET
 ;
-; Configure TMR5 as a continuous timer based on CPU clock /16
+; Configure TMR4 as a continuous timer based on CPU clock /16
 ; Can be used to calibrate delay for various i/o operations
 ; See SYSTMR_DELAY_START and SYSTMR_DELAY_WAIT RST %10 functions
 ;
-configure_tmr5:
+configure_tmr4:
 	XOR	A
-	OUT0	(TMR5_RR_L), A
-	OUT0	(TMR5_RR_H), A
+	OUT0	(TMR4_RR_L), A
+	OUT0	(TMR4_RR_H), A
 	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_16
-	OUT0	(TMR5_CTL), A
+	OUT0	(TMR4_CTL), A
 
 	RET
 ;
