@@ -1,17 +1,10 @@
-;*****************************************************************************
-; vectors16.asm
-;
-; eZ80's Reset, RST and first generation interrupt vector arrangement
-;*****************************************************************************
-; Copyright (C) 2005 by ZiLOG, Inc.  All Rights Reserved.
-;*****************************************************************************
+
 
 	XREF	__init
 	XREF	__low_rom
 
 	XDEF	_reset
 
-;*****************************************************************************
 ; Reset and all RST nn's
 ;  1. diaable interrupts
 ;  2. clear mixed memory mode (MADL) flag
@@ -19,7 +12,6 @@
 	DEFINE	.RESET, SPACE = ROM
 	SEGMENT	.RESET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	XREF	_rst_io
 	XREF	_rst_10_functions
 	XREF	_rst_rc2014_bank_switch
@@ -80,46 +72,42 @@ __default_mi_handler:
 	EI
 	RETI.L
 
+	PUBLIC	_marshall_isr
 
-delegate_isr:	; defer to the external ISR routine
-	PUSH	HL
-	LD	HL, 3
-	ADD	HL, SP
+_marshall_isr:	; defer to the external ISR routine
+	PUSH	IX			; BECAUSE DESPITE IT ONLY HAVE ACCESS TO THE
+	PUSH	IY			; LOWER 16 BIT OF REGISTERS, THE VARIOUS INSTRUCTIONS
+
 	PUSH	AF
-
-	LD	A, (HL)			; ADL MODE OF INTERRUPTED CODE (2 - Z80, 3 - ADL)
-	CP	3
-	JR	NZ, skip_24_reg_save
+	EX	AF, AF'
+	PUSH	AF
 
 	PUSH	BC			; IF WE INTERRUPTED AN ADL ROUTINE,
 	PUSH	DE			; WE NEED TO SAVE ALL 24-BIT REGISTERS
 	PUSH	HL			; BEFORE JUMPING INTO Z80 CODE,
-	PUSH	IX			; BECAUSE DESPITE IT ONLY HAVE ACCESS TO THE
-	PUSH	IY			; LOWER 16 BIT OF REGISTERS, THE VARIOUS INSTRUCTIONS
 	EXX				; CAN HAVE SIDE EFFECTS ON THE UPPER 8 BITS
 	PUSH	BC			; AF REGISTER PAIR DOES NOT HAVE AN UPPER 8 BITS TO BE
 	PUSH	DE			; IMPACTED, SO WE CAN SKIP IT
 	PUSH	HL
-	EXX
 
 skip_24_reg_save:
-	RST.S	%38		; delegate to ISR routine of external ROM
+	RST.S	%38			; marshall to ISR routine of external ROM
 
-	JR	NZ, skip_24_reg_restore
-	EXX
 	POP	HL
 	POP	DE
 	POP	BC
 	EXX
+	POP	HL
+	POP	DE
+	POP	BC
+
+	POP	AF
+	EX	AF, AF'
+	POP	AF
+
 	POP	IY
 	POP	IX
-	POP	HL
-	POP	DE
-	POP	BC
 
-skip_24_reg_restore:
-	POP	AF
-	POP	HL
 	EI
 	RETI.L			; return rom interrupt - back to ADL 0 or 1
 
@@ -165,7 +153,7 @@ __vector_table:
 	dw	__default_mi_handler		; 32H - Port B1
 	dw	__default_mi_handler		; 34H - Port B2
 	dw	__default_mi_handler		; 36H - Port B3
-	dw	delegate_isr			; 38H - Port B4
+	dw	_marshall_isr			; 38H - Port B4
 	dw	__default_mi_handler		; 3AH - Port B5
 	dw	__default_mi_handler		; 3CH - Port B6
 	dw	__default_mi_handler		; 3EH - Port B7

@@ -31,6 +31,7 @@
 	XREF	_system_ticks
 	XREF	_ticks_frequency
 	XREF	_ticks_per_10_us
+	XREF	_marshall_isr
 
 	SEGMENT	CODE
 
@@ -53,6 +54,18 @@ _system_timer_isr:
 	INC	HL
 	LD	(_system_ticks), HL
 
+	AND	080H					; ISOLATE PRT_IRQ
+	LD	(tmr_irq), A				; SAVE PRT_IRQ
+
+	LD	A, (send_int_to_z80)
+	OR	A
+	JR	Z, _system_timer_isr_exit
+
+	POP	HL
+	POP	AF
+	JP	_marshall_isr
+
+_system_timer_isr_exit:
 	POP	HL
 	POP	AF
 	EI
@@ -85,6 +98,12 @@ _system_timer_dispatch:
 	JR	Z, tmr_delay_start			; B = 6, SYSTMR_DELAY_START
 	DEC	A
 	JR	Z, tmr_delay_wait			; B = 7, SYSTMR_DELAY_WAIT
+	DEC	A
+	JR	Z, tmr_int_disable			; B = 8, SYSTMR_INT_DISABLE
+	DEC	A
+	JR	Z, tmr_int_enable			; B = 9, SYSTMR_INT_ENABLE
+	DEC	A
+	JR	Z, tmr_is_tmr_tick			; B = 10, SYSTMR_IS_TICK_ISR
 
 	LD	A, %FF					; FAILURE - UNKONWN SUB FUNCTION
 	RET.L
@@ -264,7 +283,7 @@ tmr_freq_set_exit
 tmr_delay_start:
 	LD	A, (_ticks_per_10_us)
 	LD	B, A
-	MLT	BC		;  duration(DE) = duration_10us(D) * ticks_per_10_us(E);
+	MLT	BC					;  duration(DE) = duration_10us(D) * ticks_per_10_us(E);
 
 	IN0	L, (TMR4_DR_L)
 	IN0	H, (TMR4_DR_H)
@@ -298,5 +317,75 @@ wait:
 
 	POP	BC
 	JR	tmr_delay_start
+;
+; Function B = 8 -- SYSTMR_INT_DISABLE
+;  Disable forwarding of interrupt to Z80 external memory
+;  Recommend always calling this before EI, as previous
+;  platform invocations may have enabled the interrupts
+;
+; Inputs:
+;  None
+;
+; Outputs:
+;  A: 0 -> Success, otherwise errored
+;
+tmr_int_disable:
+	XOR	A
+	LD	(send_int_to_z80), A
+	LD	(tmr_irq), A
+
+	RET.L
+;
+; Function B = 9 -- SYSTMR_INT_ENABLE
+;  Enable forwarding of interrupt to Z80 external memory
+;
+; Inputs:
+;  None
+;
+; Outputs:
+;  A: 0 -> Success, otherwise errored
+;
+tmr_int_enable:
+	LD	A, 1
+	LD	(send_int_to_z80), A
+
+	XOR	A
+	RET.L
+;
+;
+; Function B = 10 -- SYSTMR_IS_TICK_ISR
+;  Returns flag to indicate if timer tick interrupt request
+;  was requested.
+;
+; Inputs:
+;  None
+; Outputs:
+;  A: 0 -> No interrupt, 1 -> Interrupt triggered
+;
+tmr_is_tmr_tick:
+	PUSH	HL
+	LD	HL, tmr_irq
+	LD	A, (HL)
+
+	OR	A
+	PUSH	AF
+
+	XOR	A					; clear to indicate isr handled
+	LD	(HL), A
+	POP	AF
+
+	JR	NZ, timer_tick_int
+
+timer_tick_int:
+	POP	HL
+	RET.L
+
+	SECTION DATA
+
+send_int_to_z80:
+	DB	00					; If non-zero, pass timer tick interrupt to Z80 external memory (038H)
+
+tmr_irq:
+	DB	00					; If non-zero, timer tick interrupt was requested
 
 	END
