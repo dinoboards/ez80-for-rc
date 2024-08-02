@@ -12,8 +12,9 @@ This is a ZDSII ez80Acclaim (5.3.5) project.
 It requires windows to be built and be placed in a specific absolute path under windows:
 
 Recommend to:
-* Clone repo to `Z:\rc2014-ez80-firmware`
+* Clone repo to `Z:\rc2014-ez80`
 * Install the ZDS IDE to `Z:\ZDS`
+* Using ZDSII IDE, open the project file in Z:\rc2014-ez80\firmware\rc2014-firmware.zdsproj
 
 > Many of the configuration files created and managed by the ZDSII IDE include full absolute paths to files.  So if you try open the project file
 under a different local path, many of the project files will be updated.
