@@ -321,5 +321,4 @@ ez80_bank_helper_set_not_supported:
 ; to debug through external memory code
 ;
 ez80_debug:
-	XOR	A
 	RET.L
