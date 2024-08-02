@@ -6,3 +6,8 @@
 *.hex
 *.lis
 *.src
+
+hardware/bin
+*.mx
+*.jed
+hardware/bin/**/*.doc

@@ -1,0 +1,71 @@
+Name     ez80-cpu ;
+PartNo   00 ;
+Date     15/12/2020 ;
+Revision 01 ;
+Designer Dean Netherton ;
+Company  Dino ;
+Assembly None ;
+Location Ignored ;
+Device   g16v8a ;
+
+
+/************* INPUT PINS *********************/
+PIN  1 = CPU_CLK;
+// PIN  2 = NC;
+// PIN  3 = NC;
+// PIN  4 = NC;
+PIN  5 = EZ_WR;
+PIN  6 = IORQ;
+//PIN  7 = NC;
+//PIN  8 = NC;
+PIN  9 = EZ_ONBUS;
+PIN 10 = GND;
+//PIN 11 = OE;
+
+/**************** OUTPUT PINS *********************/
+//PIN 12 = NC;
+//PIN 13 = NC;
+PIN 14 = C0;
+PIN 15 = C1;
+PIN 16 = WR;
+PIN 17 = C2;
+PIN 18 = C3;
+//PIN 19 = NC;
+PIN 20 = VCC;
+
+//WR = EZ_WR;
+
+field WAITCOUNT = [C0, C1, C2, C3];
+
+T00=WAITCOUNT:['b'0000];
+T01=WAITCOUNT:['b'0001];
+T02=WAITCOUNT:['b'0010];
+T03=WAITCOUNT:['b'0011];
+T04=WAITCOUNT:['b'0100];
+T05=WAITCOUNT:['b'0101];
+T06=WAITCOUNT:['b'0110];
+T07=WAITCOUNT:['b'0111];
+T08=WAITCOUNT:['b'1000];
+T09=WAITCOUNT:['b'1001];
+T10=WAITCOUNT:['b'1010];
+T11=WAITCOUNT:['b'1011];
+T12=WAITCOUNT:['b'1100];
+T13=WAITCOUNT:['b'1101];
+T14=WAITCOUNT:['b'1110];
+T15=WAITCOUNT:['b'1111];
+
+FINISHED=T03;
+
+C0.D = !EZ_WR & (T00 # T02 # T04 # T06 # T08 # T10 # T12 # T14 # T15);
+
+C1.D = !EZ_WR & (T01 # T02 # T05 # T06 # T09 # T10 # T13 # T14 # T15);
+
+C2.D = !EZ_WR & (T03 # T04 # T05 # T06 # T11 # T12 # T13 # T14 # T15);
+
+C3.D = !EZ_WR & (T07 # T08 # T09 # T10 # T11 # T12 # T13 # T14 # T15);
+
+WR = !((IORQ & !EZ_WR) // IF A NON IORQ WR, THEN PASS THROUGH WR
+     # (!IORQ & !EZ_WR & T00) // IF IORQ WR AND COUNTER @ 0 - PASS THROUGH
+     # (!IORQ & !EZ_WR & (T00 # T01 # T02 # T03 # T04 ))); // PASSTHROUGH ONLY FOR NEXT 11 CLOCK TICKS
+
+WR.OE = !EZ_ONBUS;

@@ -1,0 +1,76 @@
+Name     ez80-cpu-v1.5a ;
+PartNo   00 ;
+Date     15/12/2020 ;
+Revision 01 ;
+Designer Dean Netherton ;
+Company  Dino ;
+Assembly None ;
+Location Ignored ;
+Device   g16v8a ;
+
+/************* INPUT PINS *********************/
+PIN  1 = CPU_CLK;
+PIN  2 = EZ_WAIT;
+// PIN  3 = NC; EZ_XRD;
+PIN  4 = EZ_RD; // TODO: as RD and IORQ are only passed through, they
+PIN  5 = EZ_WR;
+PIN  6 = EZ_IORQ; // can be rewired outside of the PLD
+// PIN  7 = NC;
+// PIN  8 = NC;
+PIN  9 = EZ_ONBUS;
+PIN 10 = GND;
+//PIN 11 = NC;
+
+/**************** OUTPUT PINS *********************/
+PIN 12 = IORQ;
+PIN 13 = RD;
+PIN 14 = WR;
+PIN 15 = C1;
+PIN 16 = C0;
+PIN 17 = C2;
+//PIN 18 = NC; //X0;
+//PIN 19 = NC; //X1;
+PIN 20 = VCC;
+
+field WAITCOUNT = [C0, C1, C2];
+
+T00=WAITCOUNT:['b'000];
+T01=WAITCOUNT:['b'001];
+T02=WAITCOUNT:['b'010];
+T03=WAITCOUNT:['b'011];
+T04=WAITCOUNT:['b'100];
+T05=WAITCOUNT:['b'101];
+T06=WAITCOUNT:['b'110];
+T07=WAITCOUNT:['b'111];
+
+C0.D = !EZ_WR & (T00 # T02 # T04 # T06 # T07);
+C1.D = !EZ_WR & (T01 # T02 # T05 # T06 # T07);
+C2.D = !EZ_WR & (T03 # T04 # T05 # T06 # T07);
+
+// SETUP FOR 6 CLOCKS
+// HOLD FOR REMAINING CLOCKS
+SETUP = (T00 # T01 # T02 # T03 # T04 # T05 # T06);
+
+WR = EZ_WR # (!EZ_IORQ & !EZ_WR & !SETUP & EZ_WAIT);
+WR.OE = !EZ_ONBUS;
+
+IORQ = EZ_IORQ;         // TO BE REMOVED
+IORQ.OE = !EZ_ONBUS;    // TO BE REMOVED
+
+RD = EZ_RD;             // TO BE REMOVED
+RD.OE = !EZ_ONBUS;      // TO BE REMOVED
+
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Truth Tables
+//
+//
+// EZ_IORQ | EZ_WR | SETUP  |  WAIT  | WR
+//   x     |   1   |   x    |   x    | 1
+//   1     |   0   |   x    |   x    | 0       // memory write
+//   0     |   0   |   1    |   x    | 0       // setup for io write
+//   0     |   0   |   0    |   1    | 1       // hold for io write
+//
+//
+///////////////////////////////////////////////////////////////////////////
