@@ -150,7 +150,7 @@ skip:
 ;
 ; Configure TMR4 as a continuous timer based on CPU clock /16
 ; Can be used to calibrate delay for various i/o operations
-; See SYSTMR_DELAY_START and SYSTMR_DELAY_WAIT RST %10 functions
+; See SYSTMR_THROTTLE_START and SYSTMR_THROTTLE_WAIT RST %10 functions
 ;
 configure_tmr4:
 	XOR	A

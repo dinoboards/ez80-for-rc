@@ -130,7 +130,7 @@ tmp:
 ;
 ; Input
 ;   H 	= CS3 External Memory Bus Cycles (1-15)
-;   L 	= CS2 External I/O Bus Cycles (1-15)
+;   L 	= CS2 External I/O Bus Cycles (2-15)
 ;
 ; Output
 ;   H 	= CS3 External Memory Bus Cycles (1-15)
@@ -147,8 +147,9 @@ ez80_bus_cycles_set:
 	LD	L, 2
 valid_io_bus_cycle:
 
-	CP	H
-	JR	C, valid_mem_bus_cycle
+	XOR	A
+	OR	H
+	JR	NZ, valid_mem_bus_cycle
 	LD	H, 1
 valid_mem_bus_cycle:
 

@@ -257,7 +257,7 @@ otir_hook:
 	JR	rst_io_resume
 
 ini_hook:
-	; INIR
+	; INI
 	;   (HL) ← ({UU, BC[15:0]}), B ← B–1, HL ← HL+1
 	;
 

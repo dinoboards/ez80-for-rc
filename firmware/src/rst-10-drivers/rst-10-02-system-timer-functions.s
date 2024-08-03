@@ -95,9 +95,9 @@ _system_timer_dispatch:
 	DEC	A
 	JR	Z, tmr_freq_set				; B = 5, SYSTMR_FREQTICK_SET
 	DEC	A
-	JR	Z, tmr_delay_start			; B = 6, SYSTMR_DELAY_START
+	JR	Z, tmr_throttle_start			; B = 6, SYSTMR_THROTTLE_START
 	DEC	A
-	JR	Z, tmr_delay_wait			; B = 7, SYSTMR_DELAY_WAIT
+	JR	Z, tmr_throttle_wait			; B = 7, SYSTMR_THROTTLE_WAIT
 	DEC	A
 	JR	Z, tmr_int_disable			; B = 8, SYSTMR_INT_DISABLE
 	DEC	A
@@ -271,7 +271,7 @@ tmr_freq_set_exit
 	XOR	A					; SUCCESS
 	RET.L
 ;
-; Function B = 6 -- SYSTMR_DELAY
+; Function B = 6 -- SYSTMR_THROTTLE_START
 ; Delay for a number of microseconds
 ;
 ; Inputs:
@@ -280,10 +280,10 @@ tmr_freq_set_exit
 ; Outputs
 ;  HL: Target time point
 ;
-tmr_delay_start:
+tmr_throttle_start:
 	LD	A, (_ticks_per_10_us)
 	LD	B, A
-	MLT	BC					;  duration(DE) = duration_10us(D) * ticks_per_10_us(E);
+	MLT	BC					;  duration(BC) = duration_10us(B) * ticks_per_10_us(C);
 
 	IN0	L, (TMR4_DR_L)
 	IN0	H, (TMR4_DR_H)
@@ -291,7 +291,7 @@ tmr_delay_start:
 	SBC.SIS	HL, BC
 	RET.L
 ;
-; Function B = 7 -- SYSTMR_DELAY_WAIT
+; Function B = 7 -- SYSTMR_THROTTLE_WAIT
 ; Wait for the delay to expire
 ;
 ; Inputs:
@@ -301,7 +301,7 @@ tmr_delay_start:
 ; Outputs:
 ;  None
 ;
-tmr_delay_wait:
+tmr_throttle_wait:
 	;while (delay_point - jiffy >= 0)
 	; wait
 	PUSH	BC
@@ -316,7 +316,7 @@ wait:
 	JP	M, wait
 
 	POP	BC
-	JR	tmr_delay_start
+	JR	tmr_throttle_start
 ;
 ; Function B = 8 -- SYSTMR_INT_DISABLE
 ;  Disable forwarding of interrupt to Z80 external memory
