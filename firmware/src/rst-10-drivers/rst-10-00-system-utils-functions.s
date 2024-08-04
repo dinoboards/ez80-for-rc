@@ -130,7 +130,7 @@ tmp:
 ;
 ; Input
 ;   H 	= CS3 External Memory Bus Cycles (1-15)
-;   L 	= CS2 External I/O Bus Cycles (2-15)
+;   L 	= CS2 External I/O Bus Cycles (1-15)
 ;
 ; Output
 ;   H 	= CS3 External Memory Bus Cycles (1-15)
@@ -141,18 +141,17 @@ ez80_bus_cycles_set:
 	PUSH	IX
 	LD	IX, _cs_bus_timings
 
-	LD	A, 2					; IO must always be >= 2 & <= 15
-	CP	L
-	JR	C, valid_io_bus_cycle
-	LD	L, 2
+	XOR	A					; IO must always be >= 1 & <= 15
+	OR	L
+	JR	NZ, valid_io_bus_cycle
+	LD	L,1
 valid_io_bus_cycle:
 
-	XOR	A
+	XOR	A					; MEM must always be >= 1 & <= 15
 	OR	H
 	JR	NZ, valid_mem_bus_cycle
 	LD	H, 1
 valid_mem_bus_cycle:
-
 	LD	(IX+0), L
 	LD	(IX+1), H
 
@@ -173,16 +172,20 @@ valid_mem_bus_cycle:
 	RET.L
 ;
 ; Function B = 04 --SYSUTL_BUSFQ_SET
-; Set Bus cycles to based on an equivalent frequency calculation
+; Set Bus cycles to based on an equivalent frequency calculation.
+; If the calculated values are below the supplied minimum values (H', L')
+; the minimum values are used.
 ;
 ; Input
 ;   HL = CS3 External Memory Bus Frequency (Khz)
 ;   DE = CS2 External I/O Bus Frequency (Khz)
+;   H' = Minimum CS3 External Memory Bus Cycles (1-15)
+;   L' = Minimum CS2 External I/O Bus Cycles (1-15)
 ;
 ; Output
 ;   H = CS3 External Memory Bus Cycles (1-15)
 ;   L = CS2 External I/O Bus Cycles (1-15)
-;   A = 0 -> SUCCESS, NZ -> ONE ORE MORE VALUES OUT OF RANGE
+;   A = 0 -> SUCCESS, NZ -> ONE OR MORE VALUES OUT OF RANGE
 ;
 ez80_bus_freq_set:
 	; TO CALCULATE BUS CYCLES FOR A DESIRED BUS FREQUENCY WE USE:
@@ -240,17 +243,20 @@ ez80_bus_freq_set:
 
 	LD	H, (IX-10)				; CALCULATED CS3 BUS CYCLES
 
-	LD	A, 2					; IO must always be >= 2 & <= 15
+	EXX
+	LD	A, L					; IO must always be >= L'
+	EXX
 	CP	L
 	JR	C, valid_io_fq
-	LD	L, 2
+	LD	L, A
 valid_io_fq:
-	DEC	A
-	CP	H					; Mem must always be >= 1 & <= 15
+	EXX
+	LD	A, H
+	EXX
+	CP	H					; Mem must always be >= H'
 	JR	C, valid_mem_fq
-	LD	H, 1
+	LD	H, A
 valid_mem_fq:
-
 
 	LD	SP, IX
 	POP	IX
