@@ -8,8 +8,6 @@ set PLD_SRC=%1
 
 if "%PLD_SRC%" == "" set PLD_SRC=ez80-cpu
 
-cd hardware
-
 if not exist "bin" mkdir bin
 
 echo Compiling %PLD_SRC%.jed from %PLD_SRC%.pld
