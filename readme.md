@@ -5,6 +5,8 @@ This repo contains the code required for operating the eZ80 CPU on the RC2014 pl
 
 The firmware will manage startup, configuration of on-chip devices, interrupt marshalling and handover to external ROM/RAM modules in Z80 compatibility mode.
 
+Full description and progress at my hackaday project page: https://hackaday.io/project/196330-ez80-cpu-for-rc2014-and-other-backplanes
+
 ## Building the code
 
 This is a ZDSII ez80Acclaim (5.3.5) project.
