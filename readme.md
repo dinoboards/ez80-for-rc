@@ -7,6 +7,8 @@ The firmware will manage startup, configuration of on-chip devices, interrupt ma
 
 Full description and progress at my hackaday project page: https://hackaday.io/project/196330-ez80-cpu-for-rc2014-and-other-backplanes
 
+also mirrored at https://dinoboards.github.io/ez80-for-rc2014-backplanes/
+
 ## Building the code
 
 This is a ZDSII ez80Acclaim (5.3.5) project.
