@@ -15,7 +15,7 @@ _spike:
 
 	; copy code from rom to ram and run it in Z80 mode
 	LD	HL, step1
-	ld	de, 0b7E000h
+	ld	de, 02E000h
 	ld	bc, step1_size
 	ldir
 

@@ -132,8 +132,8 @@ __init:
 	LD	A, CSX_TYPE_IO | CSX_ENABLED
 	OUT0	(CS2_CTL), A
 
-	; CS3 is enabled for memory @ $B9xxxx
-	LD	A, %B9
+	; CS3 is enabled for memory @ $03xxxx
+	LD	A, Z80_ADDR_MBASE
 	OUT0	(CS3_LBR), A
 	OUT0	(CS3_UBR), A
 	LD	A, MEM_BUS_CYCLES

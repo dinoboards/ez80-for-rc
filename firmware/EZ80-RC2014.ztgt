@@ -6,7 +6,7 @@
    </Clock>
    <ControlReg>
       <pc>0</pc>
-      <splStackPtr>C80000</splStackPtr>
+      <splStackPtr>30000</splStackPtr>
       <spsStackPtr>ffff</spsStackPtr>
       <useAdlMode>true</useAdlMode>
    </ControlReg>
@@ -14,8 +14,8 @@
       <device>MT28F008B3-BB</device>
       <externalAddress>100000</externalAddress>
       <externalAutoSelect>true</externalAutoSelect>
-      <externalRamLower>B90000</externalRamLower>
-      <externalRamUpper>B9FFFF</externalRamUpper>
+      <externalRamLower>30000</externalRamLower>
+      <externalRamUpper>3FFFF</externalRamUpper>
       <manufacturer>Micron</manufacturer>
       <units>1</units>
       <usingExternal>true</usingExternal>
@@ -50,7 +50,7 @@
       </ChipSelects>
       <Internal>
          <mapFlashToPage>0</mapFlashToPage>
-         <mapRamToPage>b7</mapRamToPage>
+         <mapRamToPage>2</mapRamToPage>
          <useFlashRam>true</useFlashRam>
          <useInternalDataRam>true</useInternalDataRam>
       </Internal>

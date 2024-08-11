@@ -19,7 +19,7 @@ _main:
 	; XREF	_spike
 	; call	_spike
 
-	LD	A, Z80_ADDR_MBASE		; set MBASE to $B9
+	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
 	LD	MB, A
 	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
 
