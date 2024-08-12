@@ -1,4 +1,4 @@
-Name     ez80-cpu-v1.5a ;
+Name     ez80-cpu-v1.5b;
 PartNo   00 ;
 Date     15/12/2020 ;
 Revision 01 ;
@@ -11,25 +11,25 @@ Device   g16v8a ;
 /************* INPUT PINS *********************/
 PIN  1 = CPU_CLK;
 PIN  2 = EZ_WAIT;
-// PIN  3 = NC; EZ_XRD;
-PIN  4 = EZ_RD; // TODO: as RD is only passed through - it can be removed
+PIN  3 = EZ_MREQ;
+PIN  4 = EZ_CS3;
 PIN  5 = EZ_WR;
 PIN  6 = EZ_IORQ;
-// PIN  7 = NC;
+PIN  7 = EZ_RD;
 // PIN  8 = NC;
-PIN  9 = EZ_ONBUS;
+// PIN  9 = NC;
 PIN 10 = GND;
 //PIN 11 = NC;
 
 /**************** OUTPUT PINS *********************/
-PIN 12 = IORQ;
-PIN 13 = RD;
-PIN 14 = WR;
+PIN 12 = T_IORQ;
+PIN 13 = T_WR;
+PIN 14 = T_MREQ;
 PIN 15 = C1;
 PIN 16 = C0;
 PIN 17 = C2;
-//PIN 18 = NC; //X0;
-//PIN 19 = NC; //X1;
+//PIN 18 = NC;
+PIN 19 = T_RD;
 PIN 20 = VCC;
 
 field WAITCOUNT = [C0, C1, C2];
@@ -52,22 +52,20 @@ C2.D = !EZ_WR & (T03 # T04 # T05 # T06 # T07);
 // HOLD FOR REMAINING CLOCKS
 SETUP = (T00 # T01 # T02 # T03 # T04 # T05);
 
-WR = EZ_WR # (!EZ_IORQ & !EZ_WR & !SETUP & EZ_WAIT);
-WR.OE = !EZ_ONBUS;
+T_WR = EZ_WR # (!EZ_IORQ & !EZ_WR & !SETUP & EZ_WAIT);
 
-IORQ = EZ_IORQ # (!EZ_IORQ & !EZ_WR & !SETUP & EZ_WAIT);
-IORQ.OE = !EZ_ONBUS;
+T_IORQ = EZ_IORQ # (!EZ_IORQ & !EZ_WR & !SETUP & EZ_WAIT);
 
-RD = EZ_RD;             // TO BE REMOVED
-RD.OE = !EZ_ONBUS;      // TO BE REMOVED
+T_MREQ = EZ_CS3 # EZ_MREQ;
 
+T_RD = EZ_RD;
 
 ///////////////////////////////////////////////////////////////////////////
 //
 // Truth Tables
 //
 //
-// EZ_IORQ | EZ_WR | SETUP  |  WAIT  | WR
+// EZ_IORQ | EZ_WR | SETUP  |  WAIT  | T_WR
 //   x     |   1   |   x    |   x    | 1
 //   1     |   0   |   x    |   x    | 0       // memory write
 //   0     |   0   |   1    |   x    | 0       // setup for io write

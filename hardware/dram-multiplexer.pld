@@ -1,0 +1,132 @@
+Name     dram-multiplexer;
+PartNo   00 ;
+Date     12/08/2024 ;
+Revision 01 ;
+Designer Dean Netherton ;
+Company  Dino ;
+Assembly None ;
+Location Ignored ;
+Device   V2500C ;
+
+// COL_ADDR:
+//   HIGH -> PRESENT MX <= COLUMN ADDRESS
+//   LOW  -> PRESENT MX <= ROW ADDRESS
+
+/************* INPUT PINS *********************/
+PIN  1 = X0;
+PIN  2 = X1;
+PIN  3 = A15;
+PIN  4 = A14;
+PIN  5 = A13;
+PIN  6 = A12;
+PIN  7 = A11;
+PIN  8 = A10;
+PIN  9 = A9;
+PIN  11 = A8;
+PIN  12 = A7;
+PIN  13 = A6;
+PIN  14 = A5;
+PIN  15 = A4;
+PIN  16 = A3;
+PIN  17 = A2;
+PIN  18 = A1;
+PIN  19 = A0;
+PIN 20 = COL_ADDR;
+
+/**************** OUTPUT PINS *********************/
+PIN 21 = A16;
+PIN 22 = A17;
+PIN 23 = A18;
+PIN 24 = BANK0;
+PIN 25 = M10;
+PIN 26 = M9;
+PIN 27 = M8;
+PIN 28 = M7;
+PIN 29 = M6;
+PIN 31 = M5;
+PIN 32 = M4;
+PIN 33 = M3;
+PIN 34 = M2;
+PIN 35 = M1;
+PIN 36 = M0;
+PIN 37 = A19;
+PIN 38 = A20;
+PIN 39 = A21;
+PIN 40 = A22;
+
+
+/**************** POWER PINS *********************/
+PIN 10 = VCC;
+PIN 30 = GND;
+
+
+field CFG = [X0, X1];
+
+/*
+  R 00 -> 2 256KB MODULES   (9 BITS FOR ROW/COL)
+  S 01 -> 2 1MB             (10 BITS FOR ROW/COL)
+  T 10 -> 2 4MB             (11 BITS FOR ROW/COL)
+  V 11 -> invalid configuration
+*/
+
+CFG_2X256KB = CFG:['b'00];
+CFG_2X1M = CFG:['b'01];
+CFG_2X4M = CFG:['b'10];
+CFG_1X8M = CFG:['b'11];
+
+/*
+
+| CONFIGURATION | TOTAL ADDR RANGE   | BANK 0             | BANK 1             |
+| CFG_2X256KB   | 00 0000 -- 07 FFFF | 00 0000 -- 03 FFFF | 04 0000 -- 07 FFFF | 19 BITS
+| CFG_2X1M      | 00 0000 -- 1F FFFF | 00 0000 -- 0F FFFF | 10 0000 -- 1F FFFF | 21 BITS
+| CFG_2X4M      | 00 0000 -- 7F FFFF | 00 0000 -- 3F FFFF | 40 0000 -- 7F FFFF | 23 BITS
+
+*/
+
+BANK0 = (CFG_2X256KB & !A18) # (CFG_2X1M & !A20) # (CFG_2X4M & !A22);
+
+R0 = (COL_ADDR & A0) # (!COL_ADDR & A9);
+R1 = (COL_ADDR & A1) # (!COL_ADDR & A10);
+R2 = (COL_ADDR & A2) # (!COL_ADDR & A11);
+R3 = (COL_ADDR & A3) # (!COL_ADDR & A12);
+R4 = (COL_ADDR & A4) # (!COL_ADDR & A13);
+R5 = (COL_ADDR & A5) # (!COL_ADDR & A14);
+R6 = (COL_ADDR & A6) # (!COL_ADDR & A15);
+R7 = (COL_ADDR & A7) # (!COL_ADDR & A16);
+R8 = (COL_ADDR & A8) # (!COL_ADDR & A17);
+
+S0 = (COL_ADDR & A0) # (!COL_ADDR & A10);
+S1 = (COL_ADDR & A1) # (!COL_ADDR & A11);
+S2 = (COL_ADDR & A2) # (!COL_ADDR & A12);
+S3 = (COL_ADDR & A3) # (!COL_ADDR & A13);
+S4 = (COL_ADDR & A4) # (!COL_ADDR & A14);
+S5 = (COL_ADDR & A5) # (!COL_ADDR & A15);
+S6 = (COL_ADDR & A6) # (!COL_ADDR & A16);
+S7 = (COL_ADDR & A7) # (!COL_ADDR & A17);
+S8 = (COL_ADDR & A8) # (!COL_ADDR & A18);
+S9 = (COL_ADDR & A9) # (!COL_ADDR & A19);
+
+T0 = (COL_ADDR & A0) # (!COL_ADDR & A11);
+T1 = (COL_ADDR & A1) # (!COL_ADDR & A12);
+T2 = (COL_ADDR & A2) # (!COL_ADDR & A13);
+T3 = (COL_ADDR & A3) # (!COL_ADDR & A14);
+T4 = (COL_ADDR & A4) # (!COL_ADDR & A15);
+T5 = (COL_ADDR & A5) # (!COL_ADDR & A16);
+T6 = (COL_ADDR & A6) # (!COL_ADDR & A17);
+T7 = (COL_ADDR & A7) # (!COL_ADDR & A18);
+T8 = (COL_ADDR & A8) # (!COL_ADDR & A19);
+T9 = (COL_ADDR & A9) # (!COL_ADDR & A20);
+T10 = (COL_ADDR & A10) # (!COL_ADDR & A21);
+
+M0 = (CFG_2X256KB & R0) # (CFG_2X1M & S0) # (CFG_2X4M & T0);
+M1 = (CFG_2X256KB & R1) # (CFG_2X1M & S1) # (CFG_2X4M & T1);
+M2 = (CFG_2X256KB & R2) # (CFG_2X1M & S2) # (CFG_2X4M & T2);
+M3 = (CFG_2X256KB & R3) # (CFG_2X1M & S3) # (CFG_2X4M & T3);
+M4 = (CFG_2X256KB & R4) # (CFG_2X1M & S4) # (CFG_2X4M & T4);
+M5 = (CFG_2X256KB & R5) # (CFG_2X1M & S5) # (CFG_2X4M & T5);
+M6 = (CFG_2X256KB & R6) # (CFG_2X1M & S6) # (CFG_2X4M & T6);
+M7 = (CFG_2X256KB & R7) # (CFG_2X1M & S7) # (CFG_2X4M & T7);
+M8 = (CFG_2X256KB & R8) # (CFG_2X1M & S8) # (CFG_2X4M & T8);
+M9 =                      (CFG_2X1M & S9) # (CFG_2X4M & T9);
+M10 =                                       (CFG_2X4M & T10);
+

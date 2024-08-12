@@ -1,0 +1,96 @@
+Name     dram-refresh;
+PartNo   00 ;
+Date     12/08/2024 ;
+Revision 01 ;
+Designer Dean Netherton ;
+Company  Dino ;
+Assembly None ;
+Location Ignored ;
+Device   v750c ;
+
+/*
+SOME DRAM REFRESH TIMINGS:
+
+tRAC: RAS Access Time
+tAA:  Column Address Access Time
+tCAC: CAS Access Time
+tRC:  Cycle Time
+tPC:  Fast Page Mode Cycle Time
+
+
+| MANUFACTUER | DRAM TYPE              | CAPACITY      | REFRSH RATE | tRAC    | tAA    | tCAC   | tRC    | tPC    |
+| TOSHIBA     | TC5117400BSJ/BST-60/70 | 4,194,304 X 4 | 2048/32ms   | 60/70ns |30/35ns | 15/20ns| 110/130| 40/45  |
+| SAMSUNG     | KM41C4000D, KM41V4000D | 4,194,304 x 1 | 1024/16ms   |
+
+*/
+
+// Generate a REFRSH_REQ signal every 15us
+// Assume an incoming clock of 16MHz
+
+/************* INPUT PINS *********************/
+PIN  1 = CLK;
+// PIN  2 = NC;
+// PIN  3 = NC;
+// PIN  4 = NC;
+// PIN  5 = NC;
+// PIN  6 = NC;
+// PIN  7 = NC;
+// PIN  8 = NC;
+// PIN  9 = NC;
+// PIN 10 = NC;
+// PIN 11 = NC;
+// PIN 13 = NC;
+
+/**************** OUTPUT PINS *********************/
+PIN 14 = REFRSH_REQ;
+// PIN 15 = NC;
+// PIN 16 = NC;
+// PIN 17 = NC;
+// PIN 18 = NC;
+// PIN 19 = NC;
+// PIN 20 = NC;
+// PIN 21 = NC;
+// PIN 22 = NC;
+// PIN 23 = NC;
+
+/**************** POWER PINS *********************/
+PIN 24 = VCC;
+PIN 12 = GND;
+
+NODE C0;
+NODE C1;
+NODE C2;
+NODE C3;
+NODE C4;
+NODE C5;
+NODE C6;
+NODE C7;
+
+field COUNTER = [C0, C1, C2, C3, C4, C5, C6, C7];
+
+C0.D = !C0;
+
+C1.D = !C1;
+C1.ckmux = C0;
+
+C2.D = !C2;
+C2.ckmux = C1;
+
+C3.D = !C3;
+C3.ckmux = C2;
+
+C4.D = !C4;
+C4.ckmux = C3;
+
+C5.D = !C5;
+C5.ckmux = C4;
+
+C6.D = !C6;
+C6.ckmux = C5;
+
+C7.D = !C7;
+C7.ckmux = C6;
+
+[C0..7].ar = COUNTER:[240];
+
+REFRSH_REQ.D = (COUNTER:[240]);
