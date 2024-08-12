@@ -6,7 +6,7 @@ Designer Dean Netherton ;
 Company  Dino ;
 Assembly None ;
 Location Ignored ;
-Device   v750c ;
+Device   g22v10 ;
 
 /*
 SOME DRAM REFRESH TIMINGS:
@@ -43,28 +43,28 @@ PIN  1 = CLK;
 
 /**************** OUTPUT PINS *********************/
 PIN 14 = REFRSH_REQ;
-// PIN 15 = NC;
-// PIN 16 = NC;
-// PIN 17 = NC;
-// PIN 18 = NC;
-// PIN 19 = NC;
-// PIN 20 = NC;
-// PIN 21 = NC;
-// PIN 22 = NC;
-// PIN 23 = NC;
+PIN 15 = C0;
+PIN 16 = C1;
+PIN 17 = C2;
+PIN 18 = C3;
+PIN 19 = C4;
+PIN 20 = C5;
+PIN 21 = C6;
+PIN 22 = C7;
+PIN 23 = C8;
 
 /**************** POWER PINS *********************/
 PIN 24 = VCC;
 PIN 12 = GND;
 
-NODE C0;
-NODE C1;
-NODE C2;
-NODE C3;
-NODE C4;
-NODE C5;
-NODE C6;
-NODE C7;
+// NODE C0;
+// NODE C1;
+// NODE C2;
+// NODE C3;
+// NODE C4;
+// NODE C5;
+// NODE C6;
+// NODE C7;
 
 field COUNTER = [C0, C1, C2, C3, C4, C5, C6, C7];
 
