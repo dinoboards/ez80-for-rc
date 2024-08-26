@@ -15,16 +15,16 @@ _spike:
 
 	; copy code from rom to ram and run it in Z80 mode
 	LD	HL, step1
-	ld	de, 02E000h
+	ld	de, 02E300h
 	ld	bc, step1_size
 	ldir
 
-	LD	A, 0B7H
+	LD	A, 02H
 	LD	MB, A
 	LD.SIS	SP, 0E700H
 	NOP
 	NOP
-	CALL.IS	0E000H		; run the z80 code in RAM
+	CALL.IS	0E300H		; run the z80 code in RAM
 	RET
 
 
