@@ -8,7 +8,7 @@
 /* -define:NDEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
 /* -genprintf -NOkeepasm -keeplst -NOlist -NOlistinc -NOmodsect */
 /* -optsize -promote -NOreduceopt */
-/* -stdinc:"\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog;$(INCLUDE)\zilog\"" */
+/* -stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog;$(INCLUDE)\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -NOdebug */
 /* -cpu:eZ80F92 */
 /*-asmsw:"  */
@@ -79,6 +79,7 @@ define _zsl_g_clock_xdefine = 18432000
  ".\clib.obj", \
  ".\cpu_freq_calculator.obj", \
  ".\cstartup.obj", \
+ ".\i2c-calculate.obj", \
  ".\init_clocks.obj", \
  ".\init_params_f92.obj", \
  ".\main.obj", \
@@ -87,6 +88,7 @@ define _zsl_g_clock_xdefine = 18432000
  ".\rst-10-01-rtc-functions.obj", \
  ".\rst-10-02-system-timer-functions.obj", \
  ".\rst-10-03-uart-functions.obj", \
+ ".\rst-10-04-i2c-functions.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-rc2014-bank-switch.obj", \
  ".\system_vars.obj", \

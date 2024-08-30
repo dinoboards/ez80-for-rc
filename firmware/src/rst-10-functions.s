@@ -4,6 +4,7 @@
 	XREF	_rtc_dispatch
 	XREF	_system_timer_dispatch
 	XREF	_uart_dispatch
+	XREF	_i2c_dispatch
 
 	SECTION CODE
 
@@ -16,6 +17,7 @@ HOOK_CNT	EQU	4
 ; A = 1 -> RTC-FUNC, B-> RTC SUB-FUNCTION
 ; A = 2 -> SYSTMR, B-> SUB-FUNCTION
 ; A = 3 -> UART-FUNC, B-> SUB-FUNCTION
+; A = 4 -> I2C-FUNC, B-> SUB-FUNCTION
 
 	PUBLIC	_rst_10_functions
 _rst_10_functions:
@@ -27,6 +29,8 @@ _rst_10_functions:
 	JR	Z, _system_timer_dispatch		; A = 2, SYSTMR_xxx functions
 	DEC	A
 	JR	Z, _uart_dispatch			; A = 3, UART_xxx functions
+	DEC	A
+	JR	Z, _i2c_dispatch			; A = 4, I2C_xxx functions
 
 	LD	A, %FF					; UNKNOWN UART FUNCTION
 	RET.L

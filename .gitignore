@@ -11,3 +11,5 @@ hardware/bin
 *.mx
 *.jed
 hardware/bin/**/*.doc
+
+apps/bin/

@@ -298,5 +298,59 @@ TMR0_IN_SYSCLK		EQU	%00
 TMR0_IN_RTC		EQU	%01
 TMR0_IN_B0		EQU	%02
 
+; I2C_SR status values
+
+I2CSTAT_BUSERROR			EQU	%00	; Bus error
+I2CSTAT_STARTTXD			EQU	%08	; START condition transmitted
+I2CSTAT_RPTDSTARTTXD			EQU	%10	; Repeated START condition transmitted
+I2CSTAT_SLAWTXD_ACKRXD			EQU	%18	; Address and Write bit transmitted, ACK received
+I2CSTAT_SLAWTXD_ACKNRXD			EQU	%20	; Address and Write bit transmitted, ACK NOT received
+I2CSTAT_DATABYTETXDMMODE_ACKRXD		EQU	%28	; Data byte transmitted in CONTROLLER mode, ACK received
+I2CSTAT_DATABYTETXDMMODE_ACKNRXD	EQU	%30	; Data byte transmitted in CONTROLLER mode, ACK NOT received
+I2CSTAT_ARBLOST				EQU	%38	; Arbitration lost in address or data byte
+I2CSTAT_SLARTXD_ACKRXD			EQU	%40	; Address and Read bit transmitted, ACK received
+I2CSTAT_SLARTXD_ACKNRXD			EQU	%48	; Address and Read bit transmitted, ACK NOT received
+I2CSTAT_DATABYTERXDMMODE_ACKTXD		EQU	%50	; Data byte received in CONTROLLER mode, ACK transmitted
+I2CSTAT_DATABYTERXDMMODE_NACKTXD	EQU	%58	; Data byte received in CONTROLLER mode, NACK transmitted
+I2CSTAT_SLAWRXD_ACKTXD			EQU	%60	; Target address and Write bit received, ACK transmitted
+I2CSTAT_ARBLOST_SLAWRXD_ACKTXD		EQU	%68	; Arbitration lost in address as CONTROLLER, target address and Write bit received, ACK transmitted
+I2CSTAT_ARBLOST_GLCLADRXD_ACKTXD	EQU	%78	; Arbitration lost in address as CONTROLLER, General Call address received, ACK transmitted
+I2CSTAT_SLDATARXD_ACKTXD		EQU	%80	; Data byte received after target address received, ACK transmitted
+I2CSTAT_SLDATARXD_NACKTXD		EQU	%88	; Data byte received after target address received, NACK transmitted
+I2CSTAT_SLSTOPREPSTART_RXD		EQU	%A0	; STOP or repeated START condition received in TARGET mode
+I2CSTAT_SLARRXD_ACKTXD			EQU	%A8	; Target address and Read bit received, ACK transmitted
+I2CSTAT_ARBLOST_SLARRXD_ACKTXD		EQU	%B0	; Arbitration lost in address as CONTROLLER, target address and Read bit received, ACK transmitted
+I2CSTAT_SLDATATXD_ACKRXD		EQU	%B8	; Data byte transmitted in TARGET mode, ACK received
+I2CSTAT_SLDATATXD_ACKNRXD		EQU	%C0	; Data byte transmitted in TARGET mode, ACK not received
+I2CSTAT_SLDATALASTTXD_ACKRXD		EQU	%C8	; Last byte transmitted in TARGET mode, ACK received
+I2CSTAT_NORELEVANT_STATUS		EQU	%F8	; No relevant status information, IFLG = 0
+
+
+
+; I2C_CTRL bits
+I2C_INT_ENABLED		EQU	1 << 7		; I2C interrupt is enabled
+I2C_ENABLED 		EQU	1 << 6		; The I2C bus (SCL/SDA) is enable
+I2C_STA			EQU	1 << 5		; CONTROLLER mode start-transmit START condition on the bus
+I2C_STP			EQU	1 << 4		; CONTROLLER mode stop-transmit STOP condition on the bus
+I2C_IFLG		EQU	1 << 3		; I2C interrupt flag is set
+I2C_AAK			EQU	1 << 2		; Acknowledge
+
+;  I2C_CTL masks
+I2CMASK_SRESET_CONFIRM	EQU	%38
+I2CMASK_SET_STA		EQU	%20
+I2CMASK_SET_STP		EQU	%10
+I2CMASK_SET_AAK		EQU	%04
+I2CMASK_CLR_AAK		EQU	%FB
+I2CMASK_GET_IFLG	EQU	%08
+I2CMASK_CLR_IFLG	EQU	%F7
+I2CMASK_CLR_IFLGAAK	EQU	%F3
+I2CMASK_SET_INT		EQU	%80
+I2CMASK_CLR_INT		EQU	%7F
+I2CMASK_GCE_ENABLE	EQU	%01
+
+; I2C Transmit Masks
+
+I2CMODE_TRANSMIT	EQU	%FE
+I2CMODE_RECEIVE		EQU	%01
 
 ;* End eZ80F92 inc file

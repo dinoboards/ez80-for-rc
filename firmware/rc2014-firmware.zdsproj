@@ -6,6 +6,7 @@
 <file filter-key="">src\clib.c</file>
 <file filter-key="">src\startup\cpu_freq_calculator.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
+<file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
 <file filter-key="">src\startup\init_clocks.s</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
 <file filter-key="">src\main.s</file>
@@ -14,6 +15,7 @@
 <file filter-key="">src\rst-10-drivers\rst-10-01-rtc-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-02-system-timer-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-03-uart-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
 <file filter-key="">src\rst-18-rc2014-bank-switch.s</file>
 <file filter-key="">src\startup\system_vars.s</file>
@@ -59,7 +61,7 @@
 <option name="optspeed" type="boolean" change-action="compile">false</option>
 <option name="promote" type="boolean" change-action="compile">true</option>
 <option name="reduceopt" type="boolean" change-action="compile">false</option>
-<option name="stdinc" type="string" change-action="compile"></option>
+<option name="stdinc" type="string" change-action="compile">src\includes</option>
 <option name="usrinc" type="string" change-action="compile"></option>
 <option name="watch" type="boolean" change-action="none">false</option>
 <option name="multithread" type="boolean" change-action="compile">false</option>
@@ -179,7 +181,7 @@
 <option name="optspeed" type="boolean" change-action="compile">false</option>
 <option name="promote" type="boolean" change-action="compile">true</option>
 <option name="reduceopt" type="boolean" change-action="compile">false</option>
-<option name="stdinc" type="string" change-action="compile"></option>
+<option name="stdinc" type="string" change-action="compile">src\includes</option>
 <option name="usrinc" type="string" change-action="compile"></option>
 <option name="watch" type="boolean" change-action="none">false</option>
 <option name="multithread" type="boolean" change-action="compile">false</option>

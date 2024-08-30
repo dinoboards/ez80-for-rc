@@ -48,7 +48,7 @@ CFLAGS =  \
 -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! -genprintf  \
 -keepasm -keeplst -list -listinc -NOmodsect -optsize -promote  \
 -NOreduceopt  \
--stdinc:"\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog;$(INCLUDE)\zilog\""  \
+-stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog;$(INCLUDE)\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
 	-define:_EZ80ACCLAIM!=1  \
@@ -106,6 +106,14 @@ clean:
             $(RM) "$(WORKDIR)\cstartup.lis"
 	@if exist "$(WORKDIR)\cstartup.lst"  \
             $(RM) "$(WORKDIR)\cstartup.lst"
+	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.obj"
+	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.lis"
+	@if exist "$(WORKDIR)\i2c-calculate.lst"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.lst"
+	@if exist "$(WORKDIR)\i2c-calculate.src"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.src"
 	@if exist "$(WORKDIR)\init_clocks.obj"  \
             $(RM) "$(WORKDIR)\init_clocks.obj"
 	@if exist "$(WORKDIR)\init_clocks.lis"  \
@@ -154,6 +162,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-03-uart-functions.lis"
 	@if exist "$(WORKDIR)\rst-10-03-uart-functions.lst"  \
             $(RM) "$(WORKDIR)\rst-10-03-uart-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lst"
 	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-10-functions.obj"
 	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
@@ -242,6 +256,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\clib.obj  \
             $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
+            $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
             $(WORKDIR_ESCSPACE)\init_clocks.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
@@ -250,6 +265,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\system_vars.obj  \
@@ -289,6 +305,12 @@ $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj :  \
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
+
+$(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\i2c\i2c-calculate.c"
 
 $(WORKDIR_ESCSPACE)\init_clocks.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\init_clocks.s  \
@@ -349,6 +371,15 @@ $(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-03-uart-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-04-i2c-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-04-i2c-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
