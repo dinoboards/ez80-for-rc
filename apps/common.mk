@@ -4,7 +4,7 @@ MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
 # --assemble-only
-ZCC := zcc +cpm -compiler=sdcc --vc -Cs --Werror -lmath32 -I../common -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -create-app
+ZCC := zcc +cpm -compiler=sdcc --vc -Cs --Werror -lm -I../common -create-app
 BIN = ../bin/
 
 TARGETS := $(addsuffix .com,$(addprefix $(BIN),$(APPS)))
@@ -16,11 +16,14 @@ all: $(addsuffix .com,$(APPS))
 
 $(TARGETS):
 	@mkdir -p $(BIN)
-	$(ZCC) --assemble-only $(filter-out %.h,$^) -o $(notdir $@)
+	$(ZCC) --assemble-only $(filter-out %.h,$^) -o $(BIN)$(APPS)
 	mkdir -p $(BIN)$(APPS)
 	mv $(patsubst %.c,%.c.asm,$(filter-out %.h,$(filter-out %.asm,$^))) $(BIN)$(APPS)
 	$(ZCC)  $(filter-out %.h,$^) -o $(notdir $@)
 	mv $(call uppercase,$(notdir $@)) "$@"
+	if ls *.bin 1> /dev/null 2>&1; then mv *.bin $(BIN)$(APPS)/; fi
+	if ls *.ihx 1> /dev/null 2>&1; then mv *.ihx $(BIN)$(APPS)/; fi
+	if [ -f $(notdir $(basename $@)).map ]; then mv $(notdir $(basename $@)).map $(BIN)$(APPS); fi
 	rm -f *.com
 	echo "Compiled $(notdir $@) from $(filter-out %.h,$^)"
 

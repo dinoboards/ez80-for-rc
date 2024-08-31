@@ -2,12 +2,13 @@
 ; RST.L $10
 #DEFINE RST_L_10	DB	$49, $D7
 
+	SECTION code_compiler
+
 ;
 ; extern void i2c_init(const uint8_t t, i2c_clk_divider*) __sdcccall(1);
 ; 	A = t
 ;	DE = i2c_clk_divider*
 ;
-	xor	a, a
 	PUBLIC	_i2c_init
 _i2c_init:
 	PUSH	IX
