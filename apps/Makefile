@@ -1,10 +1,10 @@
 BIN=./bin/
 
 all:
-	@docker run --platform linux/amd64 -v .:/src/ -it z88dk/z88dk make apps -B -j
+	@docker run -v .:/src/ -it z88dk/z88dk make apps -B -j
 
 
-apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com
+apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com
 
 format:
 	@$(MAKE) -C i2cscan format --no-print-directory
@@ -24,3 +24,7 @@ $(BIN)matrix8.com:
 .PHONY: $(BIN)dhry.com
 $(BIN)dhry.com:
 	@$(MAKE) -C dhry --no-print-directory
+
+.PHONY: $(BIN)whet.com
+$(BIN)whet.com:
+	@$(MAKE) -C whet --no-print-directory
