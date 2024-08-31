@@ -308,7 +308,9 @@ $(WORKDIR_ESCSPACE)\cstartup.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
 
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\i2c\i2c-calculate.c"
 
 $(WORKDIR_ESCSPACE)\init_clocks.obj :  \

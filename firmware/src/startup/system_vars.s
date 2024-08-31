@@ -29,6 +29,9 @@
 	PUBLIC	_line_control
 	PUBLIC	_baud_rate
 
+	PUBLIC	_i2_clk_divider
+	PUBLIC	_i2c_bus_freq
+
 _rtc_enabled:
 	DB	0
 
@@ -60,6 +63,15 @@ _system_ticks:
 
 _baud_rate:
 	DS	3
+
+; I2C clock divider struct (scalar and exponent)
+_i2_clk_divider:
+	DS	2
+
+; I2C bus frequency
+_i2c_bus_freq:
+	DS	3
+
 ;
 ; line control bits:
 ;

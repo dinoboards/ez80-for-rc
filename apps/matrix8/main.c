@@ -9,7 +9,10 @@
 uint8_t stat = 0;
 uint8_t buffer[20];
 
-unsigned char rotr(unsigned char c) __z88dk_fastcall {
+i2c_clk_divider i2c_clk_divider;
+
+unsigned char rotr(unsigned char c) __z88dk_fastcall
+{
   return (c >> 1) | (c << 7);
 }
 
@@ -18,20 +21,25 @@ uint8_t i;
 
 void sleep_a_bit(void);
 
-void main(void) {
-  i2c_init(0);
+void main(void)
+{
+  stat = i2c_init(I2C_BUS_FREQ_100KHZ, &i2c_clk_divider);
+  printf("I2C Init: STAT: %02X; Actual Frequency: %ld, scalar: %d, exponent: %d\r\n", stat, i2c_clk_divider.bus_frequency, i2c_clk_divider.scalar, i2c_clk_divider.exponent);
 
   adafruit_8x8matrix_init();
   if (stat != 0)
     goto error1;
 
-  while (1) {
-    if (kbhit()) {
+  while (1)
+  {
+    if (kbhit())
+    {
       printf("\r\n");
       exit(0);
     }
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++)
+    {
       buffer[1 + (i * 2)] = rotr(d + i);
       buffer[1 + ((i + 1) * 2)] = 0xFF;
     }
@@ -56,15 +64,18 @@ error2:
   printf("\r\nError2: %02X\r\n", stat);
 }
 
-void sleep_a_bit(void) {
+void sleep_a_bit(void)
+{
   for (uint32_t i = 0; i < 0x60000; i++)
     ;
 }
 
-void adafruit_8x8matrix_init(void) {
+void adafruit_8x8matrix_init(void)
+{
   buffer[0] = 0x21;
   stat = i2c_write(target_address, 1, buffer);
-  if (stat != 0) {
+  if (stat != 0)
+  {
     printf("Retrying reset... due to error %02X\r\n", stat);
     stat = i2c_write(target_address, 1, buffer);
   }
@@ -80,7 +91,8 @@ void adafruit_8x8matrix_init(void) {
   adafruit_8x8matrix_set_brightness(15);
 }
 
-void adafruit_8x8matrix_blink_rate(uint8_t b) {
+void adafruit_8x8matrix_blink_rate(uint8_t b)
+{
   if (b > 3)
     b = 0;
 
@@ -91,7 +103,8 @@ void adafruit_8x8matrix_blink_rate(uint8_t b) {
   printf(" %02X\r\n", stat);
 }
 
-void adafruit_8x8matrix_set_brightness(uint8_t b) {
+void adafruit_8x8matrix_set_brightness(uint8_t b)
+{
   if (b > 15)
     b = 15;
 
@@ -102,13 +115,15 @@ void adafruit_8x8matrix_set_brightness(uint8_t b) {
   printf(" %02X\r\n", stat);
 }
 
-void adafruit_8x8matrix_display(void) {
+void adafruit_8x8matrix_display(void)
+{
 
   buffer[0] = 0;
 
   stat = i2c_write(target_address, 17, buffer);
 
-  if (stat != 0) {
+  if (stat != 0)
+  {
     printf("Retrying... due to error %02X\r\n", stat);
 
     stat = i2c_write(target_address, 17, buffer);

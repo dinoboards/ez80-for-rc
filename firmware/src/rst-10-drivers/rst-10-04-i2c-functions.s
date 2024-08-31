@@ -9,6 +9,9 @@
 	XREF	__icmpzero
 	XREF	_i2c_calc_ccr
 
+	XREF	_i2_clk_divider				; I2C clock divider scalar value
+	XREF	_i2c_bus_freq				; I2C bus frequency
+
 	PUBLIC	_i2c_dispatch
 
 I2C_SRESET	.EQU	%12 				; any non-zero value will reset
@@ -40,13 +43,23 @@ _i2c_dispatch:
 ; 4.  The I2C bus is configured for master mode.
 ;
 ; Inputs:
-;  C	= 0 -> 100kbps, 1 -> 400kbps
+;  C	 = 0 -> 100kbps, 1 -> 400kbps
 ;
 ; Outputs:
-;  A	= 0 -> Success
+;  A	 = 0 -> Success
+;  uHL	 = Actual Frequency (24bit)
+;  DE:HL = Actual Frequency (32 bit, E=0)
+;  B     = I2C clock divider exponent
+;  C     = I2C clock divider scalar value
 ;
 i2c_init:
 	CALL	i2c_reinit
+	LD	BC, (_i2_clk_divider)
+	LD	HL, (_i2c_bus_freq)
+	LD	A, (_i2c_bus_freq+2)
+	LD	E, A
+	XOR	A
+	LD	D, A
 	RET.L
 ;
 ; Function B = 01 -- I2C Write (I2C_WRITE)
