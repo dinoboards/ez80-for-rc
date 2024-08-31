@@ -192,6 +192,14 @@ clean:
             $(RM) "$(WORKDIR)\test.lis"
 	@if exist "$(WORKDIR)\test.lst"  \
             $(RM) "$(WORKDIR)\test.lst"
+	@if exist "$(WORKDIR)\uart-calculate.obj"  \
+            $(RM) "$(WORKDIR)\uart-calculate.obj"
+	@if exist "$(WORKDIR)\uart-calculate.lis"  \
+            $(RM) "$(WORKDIR)\uart-calculate.lis"
+	@if exist "$(WORKDIR)\uart-calculate.lst"  \
+            $(RM) "$(WORKDIR)\uart-calculate.lst"
+	@if exist "$(WORKDIR)\uart-calculate.src"  \
+            $(RM) "$(WORKDIR)\uart-calculate.src"
 	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.obj"  \
             $(RM) "$(WORKDIR)\uart-rx-buffer-add-to.obj"
 	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.lis"  \
@@ -270,6 +278,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\system_vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
+            $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-full.obj  \
@@ -405,6 +414,10 @@ $(WORKDIR_ESCSPACE)\test.obj :  \
             $(PRJDIR_ESCSPACE)\src\test.s  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
+
+$(WORKDIR_ESCSPACE)\uart-calculate.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s  \

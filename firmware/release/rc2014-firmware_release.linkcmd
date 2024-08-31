@@ -93,6 +93,7 @@ define _zsl_g_clock_xdefine = 18432000
  ".\rst-18-rc2014-bank-switch.obj", \
  ".\system_vars.obj", \
  ".\test.obj", \
+ ".\uart-calculate.obj", \
  ".\uart-rx-buffer-add-to.obj", \
  ".\uart-rx-buffer-empty.obj", \
  ".\uart-rx-buffer-full.obj", \

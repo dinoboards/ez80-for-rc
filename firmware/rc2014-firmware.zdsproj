@@ -20,6 +20,7 @@
 <file filter-key="">src\rst-18-rc2014-bank-switch.s</file>
 <file filter-key="">src\startup\system_vars.s</file>
 <file filter-key="">src\test.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-calculate.c</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s</file>

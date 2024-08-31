@@ -10,6 +10,7 @@
 	XREF	_rx_buffer_empty
 	XREF	_rx_buffer_get
 	XREF	_rx_buffer_get_length
+	XREF	_get_brg
 
 	SECTION CODE
 
@@ -155,7 +156,7 @@ uart_config:
 	SET	7, A					; SET DLAB BIT
 	OUT0	(UART0_LCTL), A
 
-	CALL	get_brg
+	CALL	_get_brg
 	OUT0	(UART0_BRG_L), L
 	OUT0	(UART0_BRG_H), H
 
@@ -266,7 +267,7 @@ _uart0_init:
 	LD	HL, UART_BPS
 	LD	(_baud_rate), HL
 
-	CALL	get_brg
+	CALL	_get_brg
 	OUT0	(UART0_BRG_L), L
 	OUT0	(UART0_BRG_H), H
 
@@ -332,25 +333,3 @@ _uart0_receive_isr_end:
 	POP	AF
 	EI
 	RETI.L
-
-;
-; Calculate BRG L and BRG H based on CPU CLOCK and current baud rate
-; Output
-;   L = BRG_L
-;   H = BRG_H
-;
-get_brg:
-	LD	HL, (_baud_rate)
-
-	ADD	HL, HL
-	ADD	HL, HL
-	ADD	HL, HL
-	ADD	HL, HL
-	LD	BC, HL					; BC = HL * 16
-
-	LD	HL, (_cpu_freq_calculated)
-	LD	A, (_cpu_freq_calculated+3)
-	LD	E, A					; EuHL = CPU_FREQ
-	XOR	A					; AuBC = baud rate
-	JP	__ldivu					; HL = E:HL / A:BC
-							; HL = BRG
