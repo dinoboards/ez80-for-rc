@@ -22,9 +22,6 @@
 	XREF	__RAM_ADDR_U_INIT_PARAM
 
 	XDEF	__init
-	XDEF	_abort
-	XDEF	__exit
-	XDEF	_exit
 	XREF	__vector_table
 
 	XREF	_system_sub_second_count
@@ -158,32 +155,11 @@ __init:
 	; setup Stack Pointer
 	ld	sp, __stack
 
-	; start application
-	LD	A, __cstartup
-	OR	A
-	JR	Z, __no_cstartup
 	CALL	__c_startup
 
 __no_cstartup:
-	;--------------------------------------------------
-	; Initialize the peripheral devices
 
-	XREF __open_periphdevice
+	JP	_main
 
-	CALL	__open_periphdevice
-
-	CALL	_main				; int main(int argc, char *argv[]))
-
-__exit:
-_exit:
-_abort:
-	;--------------------------------------------------
-	; Close the peripheral devices
-
-	XREF	__close_periphdevice
-
-	CALL	__close_periphdevice
-
-	JR	$				; if we return from main loop forever here
 
 	END

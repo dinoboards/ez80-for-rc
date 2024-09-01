@@ -29,7 +29,6 @@
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s</file>
 <file filter-key="">src\startup\vectors16.asm</file>
-<file filter-key="">.\zsldevinit.asm</file>
 </files>
 
 <!-- configuration information -->
@@ -131,7 +130,7 @@
 <option name="warnisfatal" type="boolean" change-action="none">false</option>
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
-<option name="fplib" type="string" change-action="build">Real</option>
+<option name="fplib" type="string" change-action="build">None</option>
 <option name="useadddirectives" type="boolean" change-action="build">false</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
@@ -143,7 +142,7 @@
 </tool>
 <tool name="Middleware">
 <options>
-<option name="usezsl" type="boolean" change-action="rebuild">true</option>
+<option name="usezsl" type="boolean" change-action="rebuild">false</option>
 <option name="zslports" type="string" change-action="rebuild"></option>
 <option name="zsluarts" type="string" change-action="rebuild"></option>
 <option name="userzk" type="boolean" change-action="rebuild">false</option>
@@ -251,7 +250,7 @@
 <option name="warnisfatal" type="boolean" change-action="none">false</option>
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
-<option name="fplib" type="string" change-action="build">Real</option>
+<option name="fplib" type="string" change-action="build">None</option>
 <option name="useadddirectives" type="boolean" change-action="build">false</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
@@ -263,7 +262,7 @@
 </tool>
 <tool name="Middleware">
 <options>
-<option name="usezsl" type="boolean" change-action="rebuild">true</option>
+<option name="usezsl" type="boolean" change-action="rebuild">false</option>
 <option name="zslports" type="string" change-action="rebuild"></option>
 <option name="zsluarts" type="string" change-action="rebuild"></option>
 <option name="userzk" type="boolean" change-action="rebuild">false</option>

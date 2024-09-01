@@ -48,7 +48,7 @@ CFLAGS =  \
 -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! -genprintf  \
 -keepasm -keeplst -list -listinc -NOmodsect -optsize -promote  \
 -NOreduceopt  \
--stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog;$(INCLUDE)\zilog\""  \
+-stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
 	-define:_EZ80ACCLAIM!=1  \
@@ -248,12 +248,6 @@ clean:
             $(RM) "$(WORKDIR)\vectors16.lis"
 	@if exist "$(WORKDIR)\vectors16.lst"  \
             $(RM) "$(WORKDIR)\vectors16.lst"
-	@if exist "$(WORKDIR)\zsldevinit.obj"  \
-            $(RM) "$(WORKDIR)\zsldevinit.obj"
-	@if exist "$(WORKDIR)\zsldevinit.lis"  \
-            $(RM) "$(WORKDIR)\zsldevinit.lis"
-	@if exist "$(WORKDIR)\zsldevinit.lst"  \
-            $(RM) "$(WORKDIR)\zsldevinit.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -286,8 +280,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-get.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-init.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-variables.obj  \
-            $(WORKDIR_ESCSPACE)\vectors16.obj  \
-            $(WORKDIR_ESCSPACE)\zsldevinit.obj
+            $(WORKDIR_ESCSPACE)\vectors16.obj
 
 rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -416,7 +409,8 @@ $(WORKDIR_ESCSPACE)\test.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
 
 $(WORKDIR_ESCSPACE)\uart-calculate.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c"
 
 $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj :  \
@@ -478,9 +472,4 @@ $(WORKDIR_ESCSPACE)\uart-rx-variables.obj :  \
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
-
-$(WORKDIR_ESCSPACE)\zsldevinit.obj :  \
-            $(PRJDIR_ESCSPACE)\zsldevinit.asm  \
-            $(INCLUDE_ESCSPACE)\zilog\intvect.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\zsldevinit.asm"
 

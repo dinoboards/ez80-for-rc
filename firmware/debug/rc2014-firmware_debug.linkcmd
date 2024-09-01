@@ -8,7 +8,7 @@
 /* -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
 /* -genprintf -keepasm -keeplst -list -listinc -NOmodsect -optsize */
 /* -promote -NOreduceopt */
-/* -stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog;$(INCLUDE)\zilog\"" */
+/* -stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92 */
 /*-asmsw:"  */
 	/* -define:_EZ80ACCLAIM!=1 */
@@ -72,7 +72,6 @@ DEFINE __FLASH_ADDR_U_INIT_PARAM = $00
 
 define _SYS_CLK_FREQ = 18432000
 
-define _zsl_g_clock_xdefine = 18432000
 
 "Z:\rc2014-ez80\firmware\debug\rc2014-firmware"= \
  ".\clib.obj", \
@@ -101,13 +100,9 @@ define _zsl_g_clock_xdefine = 18432000
  ".\uart-rx-buffer-init.obj", \
  ".\uart-rx-variables.obj", \
  ".\vectors16.obj", \
- ".\zsldevinit.obj", \
  "Z:\ZDS\lib\std\chelpD.lib", \
  "Z:\ZDS\lib\std\crtD.lib", \
  "Z:\ZDS\lib\std\crtSD.lib", \
  "Z:\ZDS\lib\std\nokernelD.lib", \
- "Z:\ZDS\lib\std\fplibD.lib", \
- "Z:\ZDS\lib\std\fplibSD.lib", \
- "Z:\ZDS\lib\zilog\gpioD.lib", \
- "Z:\ZDS\lib\zilog\uartF92D.lib"
+ "Z:\ZDS\lib\zilog\zsldevinitdummy.obj"
 

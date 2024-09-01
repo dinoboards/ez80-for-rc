@@ -1,14 +1,6 @@
-;*****************************************************************************
-; cstartup.asm
-;
-; ZDS II C Runtime Startup for the eZ80 and eZ80Acclaim! C Compiler
-;*****************************************************************************
-; Copyright (C) 2005 by ZiLOG, Inc.  All Rights Reserved.
-;*****************************************************************************
 
-	XDEF	_errno
+	; XDEF	_errno
 	XDEF	__c_startup
-	XDEF	__cstartup
         XREF	_main
 
         XREF	__low_bss			; Low address of bss segment
@@ -23,8 +15,6 @@
         XREF	__low_code
         XREF	__low_romcode
 
-
-        __cstartup EQU %1
 
 ;*****************************************************************************
 ; Startup code
@@ -86,8 +76,8 @@ _copy_code_to_ram_done:
 
 ;*****************************************************************************
 ; Define global system var _errno. Used by floating point libraries
-	SEGMENT	DATA
-_errno:
-	DS	3				; extern int _errno
+; 	SEGMENT	DATA
+; _errno:
+; 	DS	3				; extern int _errno
 
         END
