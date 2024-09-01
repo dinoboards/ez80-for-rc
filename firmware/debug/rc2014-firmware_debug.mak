@@ -45,19 +45,19 @@ AR = @"$(BIN)\eZ80lib"
 WEBTOC = @"$(BIN)\mkwebpage"
 
 CFLAGS =  \
--define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! -genprintf  \
--keepasm -keeplst -list -listinc -NOmodsect -optsize -promote  \
--NOreduceopt  \
+-define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
+-define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
+-listinc -NOmodsect -optsize -promote -NOreduceopt  \
 -stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
-	-define:_EZ80ACCLAIM!=1  \
+	-define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1  \
 	-include:\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\" -list  \
 	-NOlistmac -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn -debug  \
 	-NOigcase -cpu:eZ80F92"
 
 ASFLAGS =  \
--define:_EZ80ACCLAIM!=1  \
+-define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1  \
 -include:"\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\"" -list  \
 -NOlistmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn  \
 -debug -NOigcase -cpu:eZ80F92
@@ -70,20 +70,20 @@ buildall: clean rc2014-firmware
 relink: deltarget rc2014-firmware
 
 deltarget: 
-	@if exist "$(WORKDIR)\rc2014-firmware.lod"  \
-            $(RM) "$(WORKDIR)\rc2014-firmware.lod"
-	@if exist "$(WORKDIR)\rc2014-firmware.hex"  \
-            $(RM) "$(WORKDIR)\rc2014-firmware.hex"
-	@if exist "$(WORKDIR)\rc2014-firmware.map"  \
-            $(RM) "$(WORKDIR)\rc2014-firmware.map"
+	@if exist "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.lod"  \
+            $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.lod"
+	@if exist "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.hex"  \
+            $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.hex"
+	@if exist "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.map"  \
+            $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.map"
 
 clean: 
-	@if exist "$(WORKDIR)\rc2014-firmware.lod"  \
-            $(RM) "$(WORKDIR)\rc2014-firmware.lod"
-	@if exist "$(WORKDIR)\rc2014-firmware.hex"  \
-            $(RM) "$(WORKDIR)\rc2014-firmware.hex"
-	@if exist "$(WORKDIR)\rc2014-firmware.map"  \
-            $(RM) "$(WORKDIR)\rc2014-firmware.map"
+	@if exist "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.lod"  \
+            $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.lod"
+	@if exist "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.hex"  \
+            $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.hex"
+	@if exist "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.map"  \
+            $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-debug-firmware.map"
 	@if exist "$(WORKDIR)\clib.obj"  \
             $(RM) "$(WORKDIR)\clib.obj"
 	@if exist "$(WORKDIR)\clib.lis"  \

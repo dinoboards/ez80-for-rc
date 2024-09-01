@@ -12,6 +12,12 @@
 	DEFINE	.RESET, SPACE = ROM
 	SEGMENT	.RESET
 
+IFDEF RC2014_ALT_FIRMWARE
+ROM_BASE	.EQU	%010000
+ELSE
+ROM_BASE	.EQU	%000000
+ENDIF
+
 	XREF	_rst_io
 	XREF	_rst_10_functions
 	XREF	_rst_rc2014_bank_switch
@@ -21,19 +27,19 @@ _rst0:
 	stmix
 	jp.lil	__init
 
-	ORG	%08
+	ORG	ROM_BASE+%08
 _rst8:
 	jp.lil	_rst_io
 
-	org	%10
+	org	ROM_BASE+%10
 _rst10:
 	jp.lil	_rst_10_functions
 
-	org	%18
+	org	ROM_BASE+%18
 _rst18:
 	jp.lil	_rst_rc2014_bank_switch
 
-	org	%20
+	org	ROM_BASE+%20
 _rst20:
 	di
 	stmix
