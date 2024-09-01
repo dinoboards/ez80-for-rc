@@ -11,14 +11,14 @@
       <useAdlMode>true</useAdlMode>
    </ControlReg>
    <ExtFlash>
-      <device>MT28F008B3-BB</device>
+      <device />
       <externalAddress>100000</externalAddress>
-      <externalAutoSelect>true</externalAutoSelect>
+      <externalAutoSelect>false</externalAutoSelect>
       <externalRamLower>30000</externalRamLower>
       <externalRamUpper>3FFFF</externalRamUpper>
-      <manufacturer>Micron</manufacturer>
+      <manufacturer />
       <units>1</units>
-      <usingExternal>true</usingExternal>
+      <usingExternal>false</usingExternal>
       <usingInternal>true</usingInternal>
    </ExtFlash>
    <Memory>
