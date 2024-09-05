@@ -146,6 +146,14 @@ clean:
             $(RM) "$(WORKDIR)\program-info-page.lst"
 	@if exist "$(WORKDIR)\program-info-page.src"  \
             $(RM) "$(WORKDIR)\program-info-page.src"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.obj"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.obj"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.lis"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.lis"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.lst"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.lst"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.src"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.src"
 	@if exist "$(WORKDIR)\rom-flashing.obj"  \
             $(RM) "$(WORKDIR)\rom-flashing.obj"
 	@if exist "$(WORKDIR)\rom-flashing.lis"  \
@@ -292,6 +300,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\program-info-page-shim.obj  \
             $(WORKDIR_ESCSPACE)\program-info-page.obj  \
+            $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj  \
@@ -386,6 +395,10 @@ $(WORKDIR_ESCSPACE)\program-info-page.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\program-info-page.c"
+
+$(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c"
 
 $(WORKDIR_ESCSPACE)\rom-flashing.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing.c  \

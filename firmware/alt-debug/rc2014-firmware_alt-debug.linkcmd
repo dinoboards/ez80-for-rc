@@ -96,6 +96,7 @@ DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
  ".\main.obj", \
  ".\program-info-page-shim.obj", \
  ".\program-info-page.obj", \
+ ".\rom-flashing-calculator.obj", \
  ".\rom-flashing.obj", \
  ".\rst-08-io.obj", \
  ".\rst-10-00-system-utils-functions.obj", \

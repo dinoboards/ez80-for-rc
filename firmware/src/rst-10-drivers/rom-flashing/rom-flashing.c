@@ -1,19 +1,15 @@
 #include "rom-flashing.h"
+#include "rom-flashing-calculator.h"
 #include <critical-blocks.h>
 #include <eZ80F92-extra.h>
 #include <stdint.h>
 
-/*
-TODO:
-
-1. calculate fdiv from cpu clock
-
-*/
 int8_t IFL_Init(void) {
+  uint8_t fdiv = calculate_fdiv();
   critical_begin();
   FLASH_KEY  = FLASH_KEY_UNLOCK_1;
   FLASH_KEY  = FLASH_KEY_UNLOCK_2;
-  FLASH_FDIV = 0x66; // TODO: CACLULATE THIS FROM CPU CLOCK
+  FLASH_FDIV = fdiv;
 
   FLASH_KEY  = FLASH_KEY_UNLOCK_1;
   FLASH_KEY  = FLASH_KEY_UNLOCK_2;

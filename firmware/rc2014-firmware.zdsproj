@@ -12,6 +12,7 @@
 <file filter-key="">src\main.s</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\program-info-page-shim.s</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\program-info-page.c</file>
+<file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing.c</file>
 <file filter-key="">src\rst-08-io.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-00-system-utils-functions.s</file>
@@ -550,9 +551,9 @@ DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
 <!-- breakpoint information -->
 <breakpoints>
 <breakpoint temporary="false" enabled="true" >
-<line-number>51</line-number>
-<pathname>Z:\rc2014-ez80\firmware\src\test.s</pathname>
-<address>4662</address>
+<line-number>30</line-number>
+<pathname>Z:\rc2014-ez80\firmware\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</pathname>
+<address>2108</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>
