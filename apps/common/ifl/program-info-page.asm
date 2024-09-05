@@ -12,7 +12,7 @@ _IFL_ProgramInfoPage:
 	LD	L, (IX+4)			; flash_addr
 	LD	E, (IX+5)			; source_addr low byte
 	LD	D, (IX+6)			; source_addr high byte
-	EZ80_UTIL_MBDE_TO_UDE
+	EZ80_CPY_MBDE_TO_UDE
 
 	LD	C, (IX+7)			; len
 

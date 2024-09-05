@@ -1,7 +1,5 @@
 
 
-#DEFINE RST_L_10	DB	$49, $D7
-
 
 	SECTION code_compiler
 

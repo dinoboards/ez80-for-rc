@@ -11,7 +11,7 @@ _IFL_GetPage:
 
 	LD	L, (IX+4)			; flash_addr low byte
 	LD	H, (IX+5)			; flash_addr high byte
-	EZ80_UTIL_MBHL_TO_UHL
+	EZ80_CPY_MBHL_TO_UHL
 
 	EZ80_IFL_GETPAGE
 

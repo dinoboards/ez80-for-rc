@@ -11,7 +11,7 @@ _IFL_ReadInfoPage:
 
 	LD	L, (IX+4)			; destination_addr low byte
 	LD	H, (IX+5)			; destination_addr high byte
-	EZ80_UTIL_MBHL_TO_UHL
+	EZ80_CPY_MBHL_TO_UHL
 
 	LD	E, (IX+6)			; flash_addr
 	LD	C, (IX+7)			; len

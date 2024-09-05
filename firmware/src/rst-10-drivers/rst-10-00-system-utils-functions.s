@@ -334,7 +334,7 @@ ez80_bank_helper_set_not_supported:
 ez80_debug:
 	RET.L
 
-;
+; TODO - REMOVE THIS FUNCTION - SHOULD NOT BE USED NOW
 ; Function B = 08 -- SYSUTL_MBHL_TO_HL
 ; Load MB 8 bit value into the upper byte of HL
 ;
@@ -351,6 +351,7 @@ ez80_reg_mbhl_to_hl:
 	LD	HL, (tmp)
 	RET.L
 ;
+; TODO - REMOVE THIS FUNCTION - SHOULD NOT BE USED NOW
 ; Function B = 09 -- SYSUTL_MBDE_TO_DE
 ; Load MB 8 bit value into the upper byte of DE
 ;

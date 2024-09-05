@@ -398,7 +398,10 @@ $(WORKDIR_ESCSPACE)\program-info-page.obj :  \
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\program-info-page.c"
 
 $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c"
 
 $(WORKDIR_ESCSPACE)\rom-flashing.obj :  \
@@ -407,6 +410,7 @@ $(WORKDIR_ESCSPACE)\rom-flashing.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\critical-blocks.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\rom-flashing.c"
 

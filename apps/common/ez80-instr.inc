@@ -9,14 +9,6 @@
 					LD B, 0 \ \
 					EZ80_FN
 
-#define EZ80_UTIL_EHL_TO_UHL		XOR A \ \
-					LD B, 1 \ \
-					EZ80_FN
-
-#define EZ80_UTIL_UHL_TO_EHL		XOR A \ \
-					LD B, 2 \ \
-					EZ80_FN
-
 #define EZ80_UTIL_SET_BUSTM 		XOR A \ \
 					LD B, 3 \ \
 					EZ80_FN
@@ -35,14 +27,6 @@
 
 #define EZ80_UTIL_DEBUG 		XOR A \ \
 					LD B, 7 \ \
-					EZ80_FN
-
-#define EZ80_UTIL_MBHL_TO_UHL		XOR A \ \
-					LD B, 8 \ \
-					EZ80_FN
-
-#define EZ80_UTIL_MBDE_TO_UDE		XOR A \ \
-					LD B, 9 \ \
 					EZ80_FN
 
 #define EZ80_RTC_INIT 			LD A, 1 \ \
@@ -233,3 +217,16 @@ IO_SEGMENT	EQU		$FF		; THE UPPER 8-BIT ADDRESS FOR I/O
 #define IN_A_NN(addr) \
 					LD A, IO_SEGMENT \ \
 					IN A, (addr)
+
+
+	EXTERN _EZ80_CPY_EHL_TO_UHL
+#define EZ80_CPY_EHL_TO_UHL 	CALL _EZ80_CPY_EHL_TO_UHL
+
+	EXTERN _EZ80_CPY_UHL_TO_EHL
+#define EZ80_CPY_UHL_TO_EHL	CALL _EZ80_CPY_UHL_TO_EHL
+
+	EXTERN	_EZ80_CPY_MBHL_TO_UHL
+#define EZ80_CPY_MBHL_TO_UHL	CALL _EZ80_CPY_MBHL_TO_UHL
+
+	EXTERN	_EZ80_CPY_MBDE_TO_UDE
+#define EZ80_CPY_MBDE_TO_UDE	CALL _EZ80_CPY_MBDE_TO_UDE

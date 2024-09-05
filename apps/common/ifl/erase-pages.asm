@@ -12,7 +12,7 @@ _IFL_ErasePages:
 	LD	L, (IX+4)			; flash_addr low byte
 	LD	H, (IX+5)			; flash_addr high byte
 	LD	E, (IX+6)			; flash_addr high byte
-	EZ80_UTIL_EHL_TO_UHL
+	EZ80_CPY_EHL_TO_UHL
 
 	LD	E, (IX+8)			; number_of_pages
 

@@ -550,13 +550,6 @@ DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>30</line-number>
-<pathname>Z:\rc2014-ez80\firmware\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</pathname>
-<address>2108</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>

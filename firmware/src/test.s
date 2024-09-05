@@ -24,6 +24,8 @@ _spike:
 	LD.SIS	SP, 0E700H
 	NOP
 	NOP
+	LD	HL, %451234
+	LD	E, %66
 	CALL.IS	0E300H		; run the z80 code in RAM
 	RET
 
@@ -35,20 +37,6 @@ step1:
 
 	; write code here to be run in z80 mode on on-chip rom
 
-	IN0	A, (FLASH_PAGE)
-	ld	B, A
-
-	LD	A, %80
-	out0	(FLASH_PAGE), A
-
-	NOP
-
-	LD	A, B
-	out0	(FLASH_PAGE), A
-
-	NOP
-
-	RET.L
 step1_end:
 
 step1_size	equ	step1_end-step1
