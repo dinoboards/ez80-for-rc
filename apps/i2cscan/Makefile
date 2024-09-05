@@ -2,4 +2,4 @@ APPS := i2cscan
 
 include ../common.mk
 
-$(BIN)i2cscan.com: main.c ../common/i2c.asm ../common/i2c.h
+$(BIN)$(APPS).com: $(BIN)$(APPS)/main.c.o $(BIN)common/i2c.lib ../common/i2c.h

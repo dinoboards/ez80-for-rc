@@ -2,8 +2,8 @@
 #include <uart.h>
 
 #define LCTL_DLAB (unsigned char)0x80
-#define LSR_THRE (unsigned char)0x20
-#define LSR_DR (unsigned char)0x01
+#define LSR_THRE  (unsigned char)0x20
+#define LSR_DR    (unsigned char)0x01
 
 /*!
  * Receive a data byte from UART0.
@@ -12,10 +12,7 @@
  * the API blocks till it becomes available. When the FIFO is enabled this API returns the data byte
  * at the top of the FIFO.
  */
-int getch(VOID)
-{
-  return 0;
-}
+int getch(VOID) { return 0; }
 
 /*!
  * Transmit a data byte on UART0.
@@ -23,8 +20,7 @@ int getch(VOID)
  * This function writes a data byte into the UARTx transmit buffer. In case of FIFO, the data byte
  * is put into the end of the FIFO.
  */
-int putch(int ch)
-{
+int putch(int ch) {
   while ((UART0_LSR & LSR_THRE) == (unsigned char)0)
     ;
   UART0_THR = ch;
@@ -41,7 +37,4 @@ int putch(int ch)
  * function returns UART_ERR_FAILURE if invoked in poll mode, or if
  * FIFO has an error in it. The function returns UART_ERR_RECEIVEFIFOEMPTY if receive FIFO buffer is empty. When it returns
  */
-int peekc(VOID)
-{
-  return 0;
-}
+int peekc(VOID) { return 0; }

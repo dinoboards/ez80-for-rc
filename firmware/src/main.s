@@ -16,8 +16,8 @@ _main:
 	CALL	_rx_buffer_init
 	CALL	_uart0_init
 
-	; XREF	_spike
-	; call	_spike
+	;XREF	_spike
+	;call	_spike
 
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
 	LD	MB, A

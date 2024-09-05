@@ -10,12 +10,16 @@
 <file filter-key="">src\startup\init_clocks.s</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
 <file filter-key="">src\main.s</file>
+<file filter-key="">src\rst-10-drivers\rom-flashing\program-info-page-shim.s</file>
+<file filter-key="">src\rst-10-drivers\rom-flashing\program-info-page.c</file>
+<file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing.c</file>
 <file filter-key="">src\rst-08-io.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-00-system-utils-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-01-rtc-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-02-system-timer-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-03-uart-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-07-rom-flashing-functions.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
 <file filter-key="">src\rst-18-rc2014-bank-switch.s</file>
 <file filter-key="">src\startup\system_vars.s</file>
@@ -111,7 +115,13 @@
 </tool>
 <tool name="Linker">
 <options>
-<option name="directives" type="string" change-action="build"></option>
+<option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+COPY FLASH_RAM_CODE ROM
+DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
+DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
+DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
+</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -131,7 +141,7 @@
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
 <option name="fplib" type="string" change-action="build">None</option>
-<option name="useadddirectives" type="boolean" change-action="build">false</option>
+<option name="useadddirectives" type="boolean" change-action="build">true</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
 <option name="ram" type="string" change-action="build">02E000-02FFFF</option>
@@ -231,7 +241,13 @@
 </tool>
 <tool name="Linker">
 <options>
-<option name="directives" type="string" change-action="build"></option>
+<option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+COPY FLASH_RAM_CODE ROM
+DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
+DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
+DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
+</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -251,7 +267,7 @@
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
 <option name="fplib" type="string" change-action="build">None</option>
-<option name="useadddirectives" type="boolean" change-action="build">false</option>
+<option name="useadddirectives" type="boolean" change-action="build">true</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
 <option name="ram" type="string" change-action="build">02E000-02FFFF</option>
@@ -351,7 +367,13 @@
 </tool>
 <tool name="Linker">
 <options>
-<option name="directives" type="string" change-action="build"></option>
+<option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+COPY FLASH_RAM_CODE ROM
+DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
+DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
+DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
+</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -371,7 +393,7 @@
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
 <option name="fplib" type="string" change-action="build">None</option>
-<option name="useadddirectives" type="boolean" change-action="build">false</option>
+<option name="useadddirectives" type="boolean" change-action="build">true</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
 <option name="ram" type="string" change-action="build">02E000-02FFFF</option>
@@ -471,7 +493,13 @@
 </tool>
 <tool name="Linker">
 <options>
-<option name="directives" type="string" change-action="build"></option>
+<option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+COPY FLASH_RAM_CODE ROM
+DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
+DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
+DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
+</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -491,7 +519,7 @@
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
 <option name="fplib" type="string" change-action="build">None</option>
-<option name="useadddirectives" type="boolean" change-action="build">false</option>
+<option name="useadddirectives" type="boolean" change-action="build">true</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
 <option name="ram" type="string" change-action="build">02E000-02FFFF</option>
@@ -521,6 +549,13 @@
 
 <!-- breakpoint information -->
 <breakpoints>
+<breakpoint temporary="false" enabled="true" >
+<line-number>51</line-number>
+<pathname>Z:\rc2014-ez80\firmware\src\test.s</pathname>
+<address>4662</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
 </breakpoints>
 
 </project>

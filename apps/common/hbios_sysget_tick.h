@@ -4,6 +4,6 @@
 #include <stdint.h>
 
 extern uint32_t sysget_tick(void);
-extern uint8_t sysget_tick_rate(void);
+extern uint8_t  sysget_tick_rate(void);
 
 #endif

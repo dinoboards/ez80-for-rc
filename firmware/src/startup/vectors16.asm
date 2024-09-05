@@ -5,6 +5,9 @@
 
 	XDEF	_reset
 
+
+        DEFINE	ZFL_nINT_Flash, SPACE = RAM
+
 ; Reset and all RST nn's
 ;  1. diaable interrupts
 ;  2. clear mixed memory mode (MADL) flag

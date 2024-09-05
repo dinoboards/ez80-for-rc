@@ -76,6 +76,16 @@ DEFINE __FLASH_ADDR_U_INIT_PARAM = $00
 define _SYS_CLK_FREQ = 18432000
 
 
+/* additional user-defined directives */
+CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
+COPY FLASH_RAM_CODE ROM
+DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
+DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
+DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
+
+/* end additional user-defined directives */
+
 "Z:\rc2014-ez80\firmware\bin\rc2014-alt-debug-firmware"= \
  ".\clib.obj", \
  ".\cpu_freq_calculator.obj", \
@@ -84,12 +94,16 @@ define _SYS_CLK_FREQ = 18432000
  ".\init_clocks.obj", \
  ".\init_params_f92.obj", \
  ".\main.obj", \
+ ".\program-info-page-shim.obj", \
+ ".\program-info-page.obj", \
+ ".\rom-flashing.obj", \
  ".\rst-08-io.obj", \
  ".\rst-10-00-system-utils-functions.obj", \
  ".\rst-10-01-rtc-functions.obj", \
  ".\rst-10-02-system-timer-functions.obj", \
  ".\rst-10-03-uart-functions.obj", \
  ".\rst-10-04-i2c-functions.obj", \
+ ".\rst-10-07-rom-flashing-functions.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-rc2014-bank-switch.obj", \
  ".\system_vars.obj", \

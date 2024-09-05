@@ -1,9 +1,10 @@
 APPS := dhry
 
+
 include ../common.mk
 
-ZCC := zcc +cpm -clib=sdcc_iy -SO3 --max-allocs-per-node200000 -lm -DPRINTF -m -pragma-include:zpragma.inc -I../common  -create-app
+ZCC_EXTRA := -clib=sdcc_iy -SO3 --max-allocs-per-node200000 -DPRINTF -pragma-include:zpragma.inc
 
-$(BIN)dhry.com: dhry_1.c dhry_2.c dhry.h ../common/hbios_sysget_tick.asm
+$(BIN)$(APPS).com: $(BIN)$(APPS)/dhry_1.c.o $(BIN)$(APPS)/dhry_2.c.o dhry.h $(BIN)common/hbios_sysget_tick.lib
 
 

@@ -25,7 +25,7 @@ Boolean Regb = true;
 #define REGSTRING "static"
 #else
 #ifdef REGISTER
-#define REG register
+#define REG       register
 Boolean Regb = true;
 #define REGSTRING "register"
 #else
@@ -37,25 +37,21 @@ Boolean Regb = false;
 
 /* Global Variables: */
 
-Rec_Pointer Ptr_Glob,
-    Next_Ptr_Glob;
-int Int_Glob;
-Boolean Bool_Glob;
-char Ch_1_Glob,
-    Ch_2_Glob;
-int Arr_1_Glob[50];
-int Arr_2_Glob[50][50];
+Rec_Pointer Ptr_Glob, Next_Ptr_Glob;
+int         Int_Glob;
+Boolean     Bool_Glob;
+char        Ch_1_Glob, Ch_2_Glob;
+int         Arr_1_Glob[50];
+int         Arr_2_Glob[50][50];
 
 /* variables for time measurement: */
 
 #define Too_Small_Time 2
 /* Measurements should last at least about 2 seconds */
 
-uint32_t Begin_Time,
-    End_Time;
+uint32_t Begin_Time, End_Time;
 
-double_t User_Time, Microseconds,
-    Dhrystones_Per_Second;
+double_t User_Time, Microseconds, Dhrystones_Per_Second;
 
 /* end of variables for time measurement */
 
@@ -68,27 +64,26 @@ void main(void)
 /* main program, corresponds to procedures        */
 /* Main and Proc_0 in the Ada version             */
 {
-  One_Fifty Int_1_Loc = 0;
-  REG One_Fifty Int_2_Loc = 0;
-  One_Fifty Int_3_Loc = 0;
-  REG char Ch_Index;
-  Enumeration Enum_Loc = Indent_Unknown;
-  Str_30 Str_1_Loc;
-  Str_30 Str_2_Loc;
+  One_Fifty        Int_1_Loc = 0;
+  REG One_Fifty    Int_2_Loc = 0;
+  One_Fifty        Int_3_Loc = 0;
+  REG char         Ch_Index;
+  Enumeration      Enum_Loc = Indent_Unknown;
+  Str_30           Str_1_Loc;
+  Str_30           Str_2_Loc;
   REG unsigned int Run_Index;
-  unsigned int Number_Of_Runs;
+  unsigned int     Number_Of_Runs;
 
   /* Initializations */
 
   Next_Ptr_Glob = &malloc_1;
-  Ptr_Glob = &malloc_2;
+  Ptr_Glob      = &malloc_2;
 
-  Ptr_Glob->Ptr_Comp = Next_Ptr_Glob;
-  Ptr_Glob->Discr = Ident_1;
+  Ptr_Glob->Ptr_Comp                = Next_Ptr_Glob;
+  Ptr_Glob->Discr                   = Ident_1;
   Ptr_Glob->variant.var_1.Enum_Comp = Ident_3;
-  Ptr_Glob->variant.var_1.Int_Comp = 40;
-  strcpy(Ptr_Glob->variant.var_1.Str_Comp,
-         "DHRYSTONE PROGRAM, SOME STRING");
+  Ptr_Glob->variant.var_1.Int_Comp  = 40;
+  strcpy(Ptr_Glob->variant.var_1.Str_Comp, "DHRYSTONE PROGRAM, SOME STRING");
   strcpy(Str_1_Loc, "DHRYSTONE PROGRAM, 1'ST STRING");
 
   Arr_2_Glob[8][7] = 10;
@@ -112,15 +107,14 @@ void main(void)
 
   TIMER_START();
 
-  for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index)
-  {
+  for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index) {
     Proc_5();
     Proc_4();
     /* Ch_1_Glob == 'A', Ch_2_Glob == 'B', Bool_Glob == true */
     Int_1_Loc = 2;
     Int_2_Loc = 3;
     strcpy(Str_2_Loc, "DHRYSTONE PROGRAM, 2'ND STRING");
-    Enum_Loc = Ident_2;
+    Enum_Loc  = Ident_2;
     Bool_Glob = !Func_2(Str_1_Loc, Str_2_Loc);
     /* Bool_Glob == 1 */
     while (Int_1_Loc < Int_2_Loc) /* loop body executed once */
@@ -144,7 +138,7 @@ void main(void)
         Proc_6(Ident_1, &Enum_Loc);
         strcpy(Str_2_Loc, "DHRYSTONE PROGRAM, 3'RD STRING");
         Int_2_Loc = Run_Index;
-        Int_Glob = Run_Index;
+        Int_Glob  = Run_Index;
       }
     }
     /* Int_1_Loc == 3, Int_2_Loc == 3, Int_3_Loc == 7 */
@@ -170,15 +164,12 @@ void main(void)
 #ifdef TIMEFUNC
   User_Time = (float)(End_Time - Begin_Time) / (float)sysget_tick_rate();
 
-  if (User_Time < Too_Small_Time)
-  {
+  if (User_Time < Too_Small_Time) {
     printf("Measured time too small (less than %d) to obtain meaningful results\n", Too_Small_Time);
     printf("Please increase number of runs\n");
     printf("\n");
-  }
-  else
-  {
-    Microseconds = (double_t)User_Time * 1e6 / (double_t)Number_Of_Runs;
+  } else {
+    Microseconds          = (double_t)User_Time * 1e6 / (double_t)Number_Of_Runs;
     Dhrystones_Per_Second = (double_t)Number_Of_Runs / (double_t)User_Time;
 
     printf("Total Duration in seconds:                  ");
@@ -195,7 +186,7 @@ void main(void)
 #ifndef STATIC
 void Proc_1(REG Rec_Pointer Ptr_Val_Par)
 #else
-void Proc_1(Rec_Pointer Ptr_Val_Par)
+void    Proc_1(Rec_Pointer Ptr_Val_Par)
 #endif
 /******************/
 
@@ -214,7 +205,7 @@ void Proc_1(Rec_Pointer Ptr_Val_Par)
   structassign(*Ptr_Val_Par->Ptr_Comp, *Ptr_Glob);
   Ptr_Val_Par->variant.var_1.Int_Comp = 5;
   Next_Record->variant.var_1.Int_Comp = Ptr_Val_Par->variant.var_1.Int_Comp;
-  Next_Record->Ptr_Comp = Ptr_Val_Par->Ptr_Comp;
+  Next_Record->Ptr_Comp               = Ptr_Val_Par->Ptr_Comp;
   Proc_3(&Next_Record->Ptr_Comp);
   /* Ptr_Val_Par->Ptr_Comp->Ptr_Comp
                       == Ptr_Glob->Ptr_Comp */
@@ -222,29 +213,25 @@ void Proc_1(Rec_Pointer Ptr_Val_Par)
   /* then, executed */
   {
     Next_Record->variant.var_1.Int_Comp = 6;
-    Proc_6(Ptr_Val_Par->variant.var_1.Enum_Comp,
-           &Next_Record->variant.var_1.Enum_Comp);
+    Proc_6(Ptr_Val_Par->variant.var_1.Enum_Comp, &Next_Record->variant.var_1.Enum_Comp);
     Next_Record->Ptr_Comp = Ptr_Glob->Ptr_Comp;
-    Proc_7(Next_Record->variant.var_1.Int_Comp, 10,
-           &Next_Record->variant.var_1.Int_Comp);
-  }
-  else /* not executed */
+    Proc_7(Next_Record->variant.var_1.Int_Comp, 10, &Next_Record->variant.var_1.Int_Comp);
+  } else /* not executed */
     structassign(*Ptr_Val_Par, *Ptr_Val_Par->Ptr_Comp);
 } /* Proc_1 */
 
 void Proc_2(One_Fifty *Int_Par_Ref)
 /* *Int_Par_Ref == 1, becomes 4 */
 {
-  One_Fifty Int_Loc;
+  One_Fifty   Int_Loc;
   Enumeration Enum_Loc = Indent_Unknown;
 
   Int_Loc = *Int_Par_Ref + 10;
   do
-    if (Ch_1_Glob == 'A')
-    {
+    if (Ch_1_Glob == 'A') {
       Int_Loc -= 1;
       *Int_Par_Ref = Int_Loc - Int_Glob;
-      Enum_Loc = Ident_1;
+      Enum_Loc     = Ident_1;
     }
   while (Enum_Loc != Ident_1); /* true */
 }
@@ -263,7 +250,7 @@ void Proc_4(void) /* without parameters */
 /* executed once */
 {
   Boolean Bool_Loc;
-  Bool_Loc = Ch_1_Glob == 'A';
+  Bool_Loc  = Ch_1_Glob == 'A';
   Bool_Glob = Bool_Loc | Bool_Glob;
   Ch_2_Glob = 'B';
 } /* Proc_4 */

@@ -10,7 +10,4 @@ extern uint32_t cpu_freq_calculated;
    H = BRG_H
 */
 
-uint16_t get_brg()
-{
-  return ((cpu_freq_calculated * 10 / (baud_rate * 16)) + 5) / 10;
-}
+uint16_t get_brg() { return ((cpu_freq_calculated * 10 / (baud_rate * 16)) + 5) / 10; }

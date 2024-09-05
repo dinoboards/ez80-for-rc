@@ -35,6 +35,17 @@ step1:
 
 	; write code here to be run in z80 mode on on-chip rom
 
+	IN0	A, (FLASH_PAGE)
+	ld	B, A
+
+	LD	A, %80
+	out0	(FLASH_PAGE), A
+
+	NOP
+
+	LD	A, B
+	out0	(FLASH_PAGE), A
+
 	NOP
 
 	RET.L

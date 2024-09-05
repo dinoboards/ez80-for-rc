@@ -133,6 +133,28 @@ clean:
             $(RM) "$(WORKDIR)\main.lis"
 	@if exist "$(WORKDIR)\main.lst"  \
             $(RM) "$(WORKDIR)\main.lst"
+	@if exist "$(WORKDIR)\program-info-page-shim.obj"  \
+            $(RM) "$(WORKDIR)\program-info-page-shim.obj"
+	@if exist "$(WORKDIR)\program-info-page-shim.lis"  \
+            $(RM) "$(WORKDIR)\program-info-page-shim.lis"
+	@if exist "$(WORKDIR)\program-info-page-shim.lst"  \
+            $(RM) "$(WORKDIR)\program-info-page-shim.lst"
+	@if exist "$(WORKDIR)\program-info-page.obj"  \
+            $(RM) "$(WORKDIR)\program-info-page.obj"
+	@if exist "$(WORKDIR)\program-info-page.lis"  \
+            $(RM) "$(WORKDIR)\program-info-page.lis"
+	@if exist "$(WORKDIR)\program-info-page.lst"  \
+            $(RM) "$(WORKDIR)\program-info-page.lst"
+	@if exist "$(WORKDIR)\program-info-page.src"  \
+            $(RM) "$(WORKDIR)\program-info-page.src"
+	@if exist "$(WORKDIR)\rom-flashing.obj"  \
+            $(RM) "$(WORKDIR)\rom-flashing.obj"
+	@if exist "$(WORKDIR)\rom-flashing.lis"  \
+            $(RM) "$(WORKDIR)\rom-flashing.lis"
+	@if exist "$(WORKDIR)\rom-flashing.lst"  \
+            $(RM) "$(WORKDIR)\rom-flashing.lst"
+	@if exist "$(WORKDIR)\rom-flashing.src"  \
+            $(RM) "$(WORKDIR)\rom-flashing.src"
 	@if exist "$(WORKDIR)\rst-08-io.obj"  \
             $(RM) "$(WORKDIR)\rst-08-io.obj"
 	@if exist "$(WORKDIR)\rst-08-io.lis"  \
@@ -169,6 +191,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lis"
 	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.lst"  \
             $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-07-rom-flashing-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-07-rom-flashing-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-07-rom-flashing-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-07-rom-flashing-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-07-rom-flashing-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-07-rom-flashing-functions.lst"
 	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-10-functions.obj"
 	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
@@ -263,12 +291,16 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\init_clocks.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
+            $(WORKDIR_ESCSPACE)\program-info-page-shim.obj  \
+            $(WORKDIR_ESCSPACE)\program-info-page.obj  \
+            $(WORKDIR_ESCSPACE)\rom-flashing.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-07-rom-flashing-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
             $(WORKDIR_ESCSPACE)\system_vars.obj  \
@@ -339,6 +371,32 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
 
+$(WORKDIR_ESCSPACE)\program-info-page-shim.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\program-info-page-shim.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\program-info-page-shim.s"
+
+$(WORKDIR_ESCSPACE)\program-info-page.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\program-info-page.c  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\critical-blocks.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\program-info-page.c"
+
+$(WORKDIR_ESCSPACE)\rom-flashing.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing.c  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\critical-blocks.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\rom-flashing.c"
+
 $(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-08-io.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
@@ -383,6 +441,14 @@ $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-04-i2c-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-07-rom-flashing-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-07-rom-flashing-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-07-rom-flashing-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \

@@ -3,9 +3,15 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-# --assemble-only
-ZCC := zcc +cpm -compiler=sdcc --vc -Cs --Werror -lm -I../common -create-app
-BIN = ../bin/
+ZCC_EXTRA := --vc -Cs --Werror
+
+ifdef RELEASE
+	BIN = ../bin/release/
+  ZCC_EXTRA += -SO3 --max-allocs-per-node200000
+else
+	BIN = ../bin/debug/
+endif
+ZCC := zcc +cpm -compiler=sdcc  -lm -I../common
 
 TARGETS := $(addsuffix .com,$(addprefix $(BIN),$(APPS)))
 
@@ -15,17 +21,10 @@ all: $(addsuffix .com,$(APPS))
 	@
 
 $(TARGETS):
-	@mkdir -p $(BIN)
-	$(ZCC) --assemble-only $(filter-out %.h,$^) -o $(BIN)$(APPS)
-	mkdir -p $(BIN)$(APPS)
-	mv $(patsubst %.c,%.c.asm,$(filter-out %.h,$(filter-out %.asm,$^))) $(BIN)$(APPS)
-	$(ZCC)  $(filter-out %.h,$^) -o $(notdir $@)
-	mv $(call uppercase,$(notdir $@)) "$@"
-	if ls *.bin 1> /dev/null 2>&1; then mv *.bin $(BIN)$(APPS)/; fi
-	if ls *.ihx 1> /dev/null 2>&1; then mv *.ihx $(BIN)$(APPS)/; fi
-	if [ -f $(notdir $(basename $@)).map ]; then mv $(notdir $(basename $@)).map $(BIN)$(APPS); fi
-	rm -f *.com
-	echo "Compiled $(notdir $@) from $(filter-out %.h,$^)"
+	@mkdir -p $(BIN)$(APPS)
+	$(ZCC) $(ZCC_EXTRA) $(foreach lib,$(filter %.lib,$^),-l$(lib)) $(filter-out %.h,$(filter-out %.lib,$^)) -o $@ -create-app
+	filesize=$$(stat -c%s "$@")
+	echo "Compiled $(notdir $@) ($$filesize bytes) from $(notdir $(filter-out %.h,$(filter-out %.lib,$^)))"
 
 
 .PHONY: format
@@ -37,13 +36,32 @@ clean:
 	@rm -rf $(BIN)
 
 
-# A macro for converting a string to uppercase
-uppercase_TABLE:=a,A b,B c,C d,D e,E f,F g,G h,H i,I j,J k,K l,L m,M n,N o,O p,P q,Q r,R s,S t,T u,U v,V w,W x,X y,Y z,Z
-
-define uppercase_internal
-$(if $1,$$(subst $(firstword $1),$(call uppercase_internal,$(wordlist 2,$(words $1),$1),$2)),$2)
+define compile
+	@mkdir -p $(dir $@)
+	$(ZCC) $(ZCC_EXTRA) --c-code-in-asm --assemble-only $< -o $@
+	echo "Compiled $(notdir $@) from $(notdir $<)"
 endef
 
-define uppercase
-$(eval uppercase_RESULT:=$(call uppercase_internal,$(uppercase_TABLE),$1))$(uppercase_RESULT)
+define assemble
+	@mkdir -p $(dir $@)
+	$(ZCC) $(ZCC_EXTRA)  --compile-only $< -o $@
+	echo "Assembled $(notdir $@) from $(notdir $<)"
 endef
+
+define buildlib
+	@mkdir -p $(dir $@)
+	z88dk-z80asm -x$@ $<
+	echo "Packaged $(notdir $@) from $(notdir $<)"
+endef
+
+%.lib: %.o; $(buildlib)
+$(BIN)common/%.o: ../common/%.asm;	$(assemble)
+
+$(BIN)%.c.o: $(BIN)%.c.asm; $(assemble)
+
+.PRECIOUS: $(BIN)$(APPS)/%.c.asm
+$(BIN)$(APPS)/%.c.asm: %.c; $(compile)
+
+IFL_ASM_FILES := $(wildcard ../common/ifl/*.asm)
+IFL_LIB_FILES := $(patsubst ../common/ifl/%.asm,$(BIN)common/ifl/%.lib,$(IFL_ASM_FILES))
+IFL_LIB=$(IFL_LIB_FILES) ../common/ifl.h

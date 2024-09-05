@@ -2,5 +2,5 @@ APPS := matrix8
 
 include ../common.mk
 
-$(BIN)matrix8.com: main.c ../common/i2c.asm adafruit-8x8matrix.h ../common/i2c.h
+$(BIN)$(APPS).com: $(BIN)$(APPS)/main.c.o $(BIN)common/i2c.lib adafruit-8x8matrix.h ../common/i2c.h
 

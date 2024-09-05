@@ -5,6 +5,7 @@
 	XREF	_system_timer_dispatch
 	XREF	_uart_dispatch
 	XREF	_i2c_dispatch
+	XREF	_rom_flash_dispatch
 
 	SECTION CODE
 
@@ -18,6 +19,9 @@ HOOK_CNT	EQU	4
 ; A = 2 -> SYSTMR, B-> SUB-FUNCTION
 ; A = 3 -> UART-FUNC, B-> SUB-FUNCTION
 ; A = 4 -> I2C-FUNC, B-> SUB-FUNCTION
+; A = 5 -> SPI-FUNC, B-> SUB-FUNCTION
+; A = 6 -> RESERVED, B-> SUB-FUNCTION
+; A = 7 -> ROM-FLASHING, B-> SUB-FUNCTION
 
 	PUBLIC	_rst_10_functions
 _rst_10_functions:
@@ -31,6 +35,14 @@ _rst_10_functions:
 	JR	Z, _uart_dispatch			; A = 3, UART_xxx functions
 	DEC	A
 	JR	Z, _i2c_dispatch			; A = 4, I2C_xxx functions
+	DEC	A
+	JR	Z, _spi_dispatch			; A = 5, SPI_xxx functions
+	DEC	A
+	JR	Z, _reserved_dispatch			; A = 6, RESERVED functions
+	DEC	A
+	JR	Z, _rom_flash_dispatch			; A = 7, ROM-FLASHING functions
 
+_spi_dispatch:
+_reserved_dispatch:
 	LD	A, %FF					; UNKNOWN UART FUNCTION
 	RET.L
