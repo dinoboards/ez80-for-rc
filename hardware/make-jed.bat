@@ -6,7 +6,7 @@ if "%CUPLPATH%" == "" set CUPLPATH=z:\Wincupl\Shared
 
 set PLD_SRC=%1
 
-if "%PLD_SRC%" == "" set PLD_SRC=ez80-cpu
+if "%PLD_SRC%" == "" set PLD_SRC=ez80-cpu-v1.7
 
 if not exist "bin" mkdir bin
 
