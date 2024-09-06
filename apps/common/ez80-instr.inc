@@ -173,6 +173,10 @@
 					LD B, 7 \ \
 					EZ80_FN
 
+#define EZ80_IFL_WRITEINFOBYTE		LD A, 7 \ \
+					LD B, 8 \ \
+					EZ80_FN
+
 #define RET_L				DB	$49 \ \
 					RET
 

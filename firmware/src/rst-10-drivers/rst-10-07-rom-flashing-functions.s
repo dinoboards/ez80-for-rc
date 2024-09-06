@@ -23,6 +23,7 @@
 	XREF	_IFL_Program
 	XREF	_IFL_ProgramInfoPage
 	XREF	_IFL_ReadInfoPage
+	XREF	_IFL_WriteInfoByte
 
 	.assume adl=1
 
@@ -56,6 +57,8 @@ _rom_flash_dispatch:
 	JR	Z, IFL_ProgramInfoPage			; B = 6, IFL_PROGRAMINFOPAGE
 	DEC	A
 	JR	Z, IFL_ReadInfoPage			; B = 7, IFL_READINFOPAGE
+	DEC	A
+	JR	Z, IFL_WriteInfoByte			; B = 8, IFL_WRITEINFOBYTE
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -116,16 +119,19 @@ IFL_ErasePages:
 	RET.L
 ;
 ; Function B = 04 -- IFL_ERASEINFOPAGE
-; Erases the Information Page
+; Erases the one of the Information Page
 ;
 ; Inputs:
+;  L     = Destination address within the Information Page to be erased
 ;  None
 ;
 ; Outputs:
 ;  A	 = ZFL_ERR_SUCCESS(0), otherwise Flash Library status code
 ;
 IFL_EraseInfoPage:
+	PUSH	HL
 	CALL	_IFL_EraseInfoPage
+	POP	HL
 	RET.L
 ;
 ; Function B = 05 -- IFL_PROGRAM
@@ -191,4 +197,20 @@ IFL_ReadInfoPage:
 	POP	HL
 	POP	DE
 	POP	BC
+	RET.L
+;
+; Function B = 08 -- IFL_WRITEINFOBYTE
+; Writes a single byte of data to the information page
+;
+; Inputs:
+;  L     = Destination address within the Information Page
+;  H     = Data byte to write
+;
+; Outputs:
+;  A	 = ZFL_ERR_SUCCESS(0), otherwise Flash Library status code
+;
+IFL_WriteInfoByte:
+	PUSH	HL
+	CALL	_IFL_WriteInfoByte
+	POP	HL
 	RET.L

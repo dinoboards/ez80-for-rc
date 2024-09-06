@@ -47,20 +47,40 @@ startup code:
 //
 
 void spike_flash_info(void) {
-  uint8_t data1[6] = {0x11, 0x22, 0x33, 0x44, 0xAA, 0xBB};
+  uint8_t data1[6] = {0, 0, 0, 0, 0, 0};
   uint8_t stat     = IFL_ReadInfoPage(data1, 0, 6);
   printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
          data1[5]);
 
-  stat = IFL_EraseInfoPage();
-  printf("IFL_EraseInfoPage: %02X\n", stat);
+  stat = IFL_WriteInfoByte(0, 0x55);
+  printf("IFL_WriteInfoByte: %02X\n", stat);
 
-  stat = IFL_ReadInfoPage(data1, 0, 2);
-  printf("IFL_ReadInfoPage: %02X, %02X, %02X\n", stat, data1[0], data1[1]);
+  stat = IFL_ReadInfoPage(data1, 0, 6);
+  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
+         data1[5]);
 
-  uint8_t data[4] = {0x55, 0x66, 0x77, 0x88};
-  stat            = IFL_ProgramInfoPage(0, data, 4);
-  printf("IFL_ProgramInfoPage: %02X\n", stat);
+  stat = IFL_WriteInfoByte(1, 0x66);
+  printf("IFL_WriteInfoByte: %02X\n", stat);
+
+  stat = IFL_ReadInfoPage(data1, 0, 6);
+  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
+         data1[5]);
+
+  stat = IFL_WriteInfoByte(2, data1[2] + 1);
+  printf("IFL_WriteInfoByte: %02X\n", stat);
+
+  stat = IFL_ReadInfoPage(data1, 0, 6);
+  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
+         data1[5]);
+  // stat = IFL_EraseInfoPage();
+  // printf("IFL_EraseInfoPage: %02X\n", stat);
+
+  // stat = IFL_ReadInfoPage(data1, 0, 2);
+  // printf("IFL_ReadInfoPage: %02X, %02X, %02X\n", stat, data1[0], data1[1]);
+
+  // uint8_t data[4] = {0x55, 0x66, 0x77, 0x88};
+  // stat            = IFL_ProgramInfoPage(0, data, 4);
+  // printf("IFL_ProgramInfoPage: %02X\n", stat);
 
   stat = IFL_ReadInfoPage(data1, 0, 6);
   printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
@@ -87,8 +107,6 @@ uint8_t main(const int argc, char *argv[]) {
   printf("IFL_Init: %02X\n", stat);
 
   spike_flash_info();
-
-  spike_flash_read_write();
 
   // // spike call into library
   // addr_24_t addr = 0x56789A;

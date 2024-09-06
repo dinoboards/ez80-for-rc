@@ -32,6 +32,8 @@
 	PUBLIC	_i2_clk_divider
 	PUBLIC	_i2c_bus_freq
 
+	PUBLIC	_flash_ram_content
+
 _rtc_enabled:
 	DB	0
 
@@ -100,5 +102,8 @@ _ticks_frequency:
 
 _ticks_per_10_us:
 	DB	CPU_CLK_FREQ/16/100000
+
+_flash_ram_content:
+	DB	0
 
 	END

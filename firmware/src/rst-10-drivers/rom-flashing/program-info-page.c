@@ -5,7 +5,7 @@
 #include <eZ80F92-extra.h>
 #include <stdint.h>
 
-int8_t _IFL_EraseInfoPage(void) {
+int8_t _IFL_EraseInfoPage(const uint8_t addr) {
   uint8_t Page;
   int8_t  status = ZFL_ERR_SUCCESS;
 
@@ -17,7 +17,7 @@ int8_t _IFL_EraseInfoPage(void) {
   FLASH_PROT = 0xFE;
 
   FLASH_PAGE = FLASH_PAGE_INFO_EN;
-  FLASH_ROW  = 0;
+  FLASH_ROW  = addr & IFL_ROW_SIZE ? 1 : 0;
 
   FLASH_PGCTL = FLASH_PGCTL_PG_ERASE;
   while (FLASH_PGCTL & FLASH_PGCTL_PG_ERASE)
@@ -88,13 +88,6 @@ int8_t _IFL_ReadInfoPage(uint8_t *pDst, uint8_t _pSrc, uint8_t Len) {
   critical_begin();
   Page = FLASH_PAGE;
 
-  /*
-   * The Info Page can only be read using memory reads after
-   * initializing the Flash Page, Row, and column registers.
-   *
-   * Since the Info Page contains only 2 rows the Page is always 0 and the Row
-   * is either 0 or 1.
-   */
   FLASH_PAGE = FLASH_PAGE_INFO_EN;
 
   for (i = 0; i < Len; i++)
@@ -104,4 +97,27 @@ int8_t _IFL_ReadInfoPage(uint8_t *pDst, uint8_t _pSrc, uint8_t Len) {
   critical_end();
 
   return ZFL_ERR_SUCCESS;
+}
+
+int8_t _IFL_WriteInfoByte(uint16_t addr_and_data) {
+  int8_t status;
+
+  const uint8_t data = (uint8_t)(addr_and_data >> 8);
+  const uint8_t addr = (uint8_t)(addr_and_data & 0xFF);
+
+  uint8_t buffer[IFL_ROW_SIZE];
+
+  status = _IFL_ReadInfoPage(buffer, addr & IFL_ROW_SIZE, IFL_ROW_SIZE);
+
+  if (status != ZFL_ERR_SUCCESS)
+    return status;
+
+  buffer[addr & ~IFL_ROW_SIZE] = data;
+
+  status = _IFL_EraseInfoPage(addr);
+
+  if (status != ZFL_ERR_SUCCESS)
+    return status;
+
+  return _IFL_ProgramInfoPage(addr & IFL_ROW_SIZE, buffer, IFL_ROW_SIZE);
 }

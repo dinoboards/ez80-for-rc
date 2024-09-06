@@ -41,13 +41,14 @@
 #define IFL_ROW_SIZE         (IFL_PAGE_SIZE >> 3)
 
 int8_t  IFL_Init(void);
-int8_t  IFL_IsAddrValid(const uint32_t hAddr, const uint16_t Len);
-uint8_t IFL_GetPage(const uint32_t hAddr);
-int8_t  IFL_ErasePages(const uint32_t hAddr, uint8_t NumPages);
-int8_t  IFL_EraseInfoPage(void);
-int8_t  IFL_Program(uint32_t hDst, uint8_t *hSrc, const uint16_t Len);
+int8_t  IFL_IsAddrValid(const uint32_t addr, const uint16_t length);
+uint8_t IFL_GetPage(const uint32_t addr);
+int8_t  IFL_ErasePages(const uint32_t addr, uint8_t num_pages);
+int8_t  IFL_Program(const uint32_t addr, uint8_t *hSrc, const uint16_t length);
 
-int8_t IFL_ProgramInfoPage(uint8_t hDst, uint8_t *hSrc, uint8_t Len);
-int8_t IFL_ReadInfoPage(uint8_t *pDst, uint8_t pSrc, uint8_t Len);
+int8_t IFL_EraseInfoPage(const uint8_t addr);
+int8_t IFL_ProgramInfoPage(uint8_t addr, uint8_t *hSrc, uint8_t length);
+int8_t IFL_ReadInfoPage(uint8_t *pDst, uint8_t addr, uint8_t length);
+int8_t IFL_WriteInfoByte(const uint8_t addr, const uint8_t data);
 
 #endif
