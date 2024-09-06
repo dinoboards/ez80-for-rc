@@ -1,4 +1,3 @@
-#pragma printf = "%s %c %u %f %d %u %ld %lld %llu %lu"
 /*
  * C Converted Whetstone double Precision Benchmark
  *    Version 1.2 22 March 1998
@@ -51,6 +50,10 @@ C  WRITE statements and FORMAT sttements removed.
 C
 C**********************************************************************
 */
+
+#define STATIC
+#define TIMEFUNC
+#define COMMAND
 
 /*
  * COMMAND LINE DEFINES

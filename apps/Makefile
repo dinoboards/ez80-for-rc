@@ -3,6 +3,8 @@ BIN=./bin/
 all:
 	@docker run -v .:/src/ -it z88dk/z88dk make apps -B -j
 
+z88dk:
+	@docker run -v .:/src/ -it z88dk/z88dk
 
 apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com $(BIN)fwupdate.com
 

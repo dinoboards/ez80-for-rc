@@ -11,7 +11,7 @@ ifdef RELEASE
 else
 	BIN = ../bin/debug/
 endif
-ZCC := zcc +cpm -compiler=sdcc  -lm -I../common
+ZCC := zcc +cpm -compiler=sdcc -lm -I../common
 
 TARGETS := $(addsuffix .com,$(addprefix $(BIN),$(APPS)))
 

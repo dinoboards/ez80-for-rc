@@ -373,6 +373,8 @@
  */
 
 #define TIMEFUNC
+#define STATIC
+#define PRINTF
 
 /* Compiler and system dependent definitions: */
 
