@@ -52,10 +52,6 @@ _system_utils_dispatch:
 	JR	Z, ez80_bank_helper_set			; B = 6, SYSUTL_BANK_HELPER_SET
 	DEC	A
 	JR	Z, ez80_debug				; B = 7, SYSUTL_DEBUG
-	DEC	A
-	JR	Z, ez80_reg_mbhl_to_hl			; B = 8, SYSUTL_MBHL_TO_HL
-	DEC	A
-	JR	Z, ez80_reg_mbde_to_de			; B = 9, SYSUTL_MBDE_TO_DE
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -332,38 +328,4 @@ ez80_bank_helper_set_not_supported:
 ; to debug through external memory code
 ;
 ez80_debug:
-	RET.L
-
-; TODO - REMOVE THIS FUNCTION - SHOULD NOT BE USED NOW
-; Function B = 08 -- SYSUTL_MBHL_TO_HL
-; Load MB 8 bit value into the upper byte of HL
-;
-; Input
-;   HL		= 16 bit value to be copied
-;
-; Output
-;   HL		= MB:HL
-;
-ez80_reg_mbhl_to_hl:
-	LD	(tmp), HL				; STORE THE FULL 16 BITS OF HL
-	LD	A, MB
-	LD	(tmp+2), A				; SAVE THE UPPER 8 BITS OF THE 24 BIT VALUE
-	LD	HL, (tmp)
-	RET.L
-;
-; TODO - REMOVE THIS FUNCTION - SHOULD NOT BE USED NOW
-; Function B = 09 -- SYSUTL_MBDE_TO_DE
-; Load MB 8 bit value into the upper byte of DE
-;
-; Input
-;   DE		= 16 bit value to be copied
-;
-; Output
-;   DE		= MB:DE
-;
-ez80_reg_mbde_to_de:
-	LD	(tmp), DE				; STORE THE FULL 16 BITS OF DE
-	LD	A, MB
-	LD	(tmp+2), A				; SAVE THE UPPER 8 BITS OF THE 24 BIT VALUE
-	LD	DE, (tmp)
 	RET.L
