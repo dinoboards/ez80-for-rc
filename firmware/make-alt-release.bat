@@ -1,3 +1,3 @@
 
 cd alt-release
-make -B -f .\rc2014-alt-firmware_release.mak
+make -B -f .\rc2014-firmware_alt-release.mak
