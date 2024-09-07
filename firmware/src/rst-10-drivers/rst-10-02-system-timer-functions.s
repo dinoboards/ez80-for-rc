@@ -380,7 +380,7 @@ timer_tick_int:
 	POP	HL
 	RET.L
 
-	SECTION DATA
+	SECTION BSS
 
 send_int_to_z80:
 	DB	00					; If non-zero, pass timer tick interrupt to Z80 external memory (038H)

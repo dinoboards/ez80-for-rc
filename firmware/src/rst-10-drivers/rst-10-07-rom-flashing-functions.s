@@ -155,7 +155,7 @@ IFL_Program:
 	POP	DE
 	POP	BC
 	EXX
-	RET.L
+  	RET.L
 ;
 ; Function B = 06 -- IFL_PROGRAMINFOPAGE
 ; Programs one or more bytes in the Information Page

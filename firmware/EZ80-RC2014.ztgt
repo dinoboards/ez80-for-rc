@@ -7,7 +7,7 @@
    <ControlReg>
       <pc>0</pc>
       <splStackPtr>30000</splStackPtr>
-      <spsStackPtr>ffff</spsStackPtr>
+      <spsStackPtr>FFFE</spsStackPtr>
       <useAdlMode>true</useAdlMode>
    </ControlReg>
    <ExtFlash>

@@ -98,42 +98,67 @@ void spike_flash_read_write(void) {
   printf("IFL_Program: %02X\n", stat);
 }
 
+int8_t emit_to_null(const uint32_t offset, const uint8_t *data, const uint16_t len) {
+  offset;
+  data;
+  len;
+
+  return ZFL_ERR_SUCCESS;
+}
+
+// int8_t emit_to_flash(const uint32_t offset, const uint8_t *data, const uint8_t len) {
+//   return IFL_Program(offset, data, len);
+// }
+
 uint8_t main(const int argc, char *argv[]) {
   argc;
   argv;
   printf("Warning.  Potentially dangerous operation.\n");
 
-  int8_t stat = IFL_Init();
-  printf("IFL_Init: %02X\n", stat);
+  static FILE *file;
+  static int8_t stat;
 
-  spike_flash_info();
+  stat = IFL_Init();
+  if (stat) {
+    printf("Failure initializing flash %d\n", stat);
+    return 1;
+  }
 
-  // // spike call into library
-  // addr_24_t addr = 0x56789A;
-  // uint16_t  len  = 0x1234;
-  // uint8_t   stat = IFL_IsAddrValid(addr, len);
-  // printf("Stat: %02X\n", stat);
-
-  // // Open the file 'fw.hex' for reading
   // FILE *file = fopen("fw.hex", "r");
-  // if (file == NULL)
-  // {
-  //   perror("Error opening file");
+  // if (file == NULL) {
+  //   printf("Error opening file");
   //   return 1;
   // }
 
-  // stat = process_hex_record(file);
-
-  // // // Loop over each character in the file
-  // // int ch;
-  // // while ((ch = fgetc(file)) != EOF)
-  // // {
-  // //   // Process the character (for now, just print it)
-  // //   putchar(ch);
-  // // }
-
-  // // Close the file
+  // stat = process_hex_records(file, emit_to_null);
   // fclose(file);
+
+  // if (stat) {
+  //   fclose(file);
+  //   printf("Failure processing hex records\n");
+  //   return 1;
+  // }
+
+  stat = IFL_ErasePages(0x010000, 64);
+  if (stat) {
+    printf("Flash erase failure: %02X\n", stat);
+    return 1;
+  }
+
+  file = fopen("fw.hex", "r");
+  if (file == NULL) {
+    printf("Error opening file");
+    return 1;
+  }
+
+  stat = process_hex_records(file, IFL_Program);
+  fclose(file);
+
+  if (stat) {
+    fclose(file);
+    printf("Flash write failure\n");
+    return 1;
+  }
 
   // parse command line and identify filename
   // open file for reading

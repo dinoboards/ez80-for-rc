@@ -91,6 +91,8 @@ _cs2_bus_cycles:
 _cs3_bus_cycles:
 	DS	1
 
+_flash_ram_content:
+	DS	1
 
 	SECTION	DATA
 
@@ -102,8 +104,5 @@ _ticks_frequency:
 
 _ticks_per_10_us:
 	DB	CPU_CLK_FREQ/16/100000
-
-_flash_ram_content:
-	DB	0
 
 	END

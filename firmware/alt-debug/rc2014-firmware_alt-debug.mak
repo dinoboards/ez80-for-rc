@@ -109,6 +109,12 @@ clean:
             $(RM) "$(WORKDIR)\cstartup.lis"
 	@if exist "$(WORKDIR)\cstartup.lst"  \
             $(RM) "$(WORKDIR)\cstartup.lst"
+	@if exist "$(WORKDIR)\dual_bios_support.obj"  \
+            $(RM) "$(WORKDIR)\dual_bios_support.obj"
+	@if exist "$(WORKDIR)\dual_bios_support.lis"  \
+            $(RM) "$(WORKDIR)\dual_bios_support.lis"
+	@if exist "$(WORKDIR)\dual_bios_support.lst"  \
+            $(RM) "$(WORKDIR)\dual_bios_support.lst"
 	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
             $(RM) "$(WORKDIR)\i2c-calculate.obj"
 	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
@@ -297,6 +303,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\clib.obj  \
             $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
+            $(WORKDIR_ESCSPACE)\dual_bios_support.obj  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
             $(WORKDIR_ESCSPACE)\init_clocks.obj  \
             $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
@@ -351,6 +358,10 @@ $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj :  \
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
+
+$(WORKDIR_ESCSPACE)\dual_bios_support.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\dual_bios_support.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\dual_bios_support.s"
 
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \

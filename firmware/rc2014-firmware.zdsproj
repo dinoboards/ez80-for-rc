@@ -6,6 +6,7 @@
 <file filter-key="">src\clib.c</file>
 <file filter-key="">src\startup\cpu_freq_calculator.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
+<file filter-key="">src\startup\dual_bios_support.s</file>
 <file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
 <file filter-key="">src\startup\init_clocks.s</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
@@ -117,12 +118,15 @@
 <tool name="Linker">
 <options>
 <option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
-CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
 COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-</option>
+CHANGE ALT_BIOS_CTRL_ROM=ALT_BIOS_CTRL_RAM
+COPY ALT_BIOS_CTRL_RAM ROM
+DEFINE __ALT_BIOS_CTRL_ROM = COPY BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __ALT_BIOS_CTRL_RAM = BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_BIOS_CTRL_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -243,12 +247,15 @@ DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
 <tool name="Linker">
 <options>
 <option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
-CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
 COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-</option>
+CHANGE ALT_BIOS_CTRL_ROM=ALT_BIOS_CTRL_RAM
+COPY ALT_BIOS_CTRL_RAM ROM
+DEFINE __ALT_BIOS_CTRL_ROM = COPY BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __ALT_BIOS_CTRL_RAM = BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_BIOS_CTRL_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -369,12 +376,15 @@ DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
 <tool name="Linker">
 <options>
 <option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
-CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
 COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-</option>
+CHANGE ALT_BIOS_CTRL_ROM=ALT_BIOS_CTRL_RAM
+COPY ALT_BIOS_CTRL_RAM ROM
+DEFINE __ALT_BIOS_CTRL_ROM = COPY BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __ALT_BIOS_CTRL_RAM = BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_BIOS_CTRL_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -495,12 +505,15 @@ DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
 <tool name="Linker">
 <options>
 <option name="directives" type="string" change-action="build">CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
-CHANGE FLASH_INFO_PAGE=FLASH_RAM_CODE
 COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-</option>
+CHANGE ALT_BIOS_CTRL_ROM=ALT_BIOS_CTRL_RAM
+COPY ALT_BIOS_CTRL_RAM ROM
+DEFINE __ALT_BIOS_CTRL_ROM = COPY BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __ALT_BIOS_CTRL_RAM = BASE OF ALT_BIOS_CTRL_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_BIOS_CTRL_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>

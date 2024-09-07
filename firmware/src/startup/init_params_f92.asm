@@ -29,6 +29,8 @@
 	XREF	_cs2_bus_cycles
 	XREF	_cs3_bus_cycles
 
+	XREF	_probe_for_alt_bios
+
 ;*****************************************************************************
 ; Startup code
         DEFINE	.STARTUP, SPACE = ROM
@@ -152,8 +154,9 @@ __init:
 	LD	A, __RAM_CTL_INIT_PARAM
 	OUT0	(RAM_CTL), A
 
-	; setup Stack Pointer
-	ld	sp, __stack
+	ld	sp, %02FF00
+
+	; Call	_attempt_alt_bios
 
 	CALL	__c_startup
 

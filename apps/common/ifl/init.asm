@@ -6,4 +6,5 @@
 ; extern void IFL_Init(void);
 _IFL_Init:
 	EZ80_IFL_INIT
+	LD	L, A
 	RET

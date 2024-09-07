@@ -11,8 +11,9 @@ INSTR_OUT_NN_A	EQU	%D3		; OUT (nn), A
 INSTR_IN_A_NN	EQU	%DB		; IN A, (nn)
 INSTR_INOUT	EQU	%ED		; IN r, (BC) & OUT (BC), r
 
-	PUBLIC	_rst_io
-_rst_io:
+	PUBLIC	_rst_08_functions
+
+_rst_08_functions:
 	PUSH	IX
 	LD	IX, 3
 	ADD	IX, SP

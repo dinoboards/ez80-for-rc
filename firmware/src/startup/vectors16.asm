@@ -21,8 +21,8 @@ ELSE
 ROM_BASE	.EQU	%000000
 ENDIF
 
-	XREF	_rst_io
-	XREF	_rst_10_functions
+	XREF	check_alt_bios_rst_08
+	XREF	check_alt_bios_rst_10
 	XREF	_rst_rc2014_bank_switch
 _reset:
 _rst0:
@@ -32,11 +32,11 @@ _rst0:
 
 	ORG	ROM_BASE+%08
 _rst8:
-	jp.lil	_rst_io
+	jp.lil	check_alt_bios_rst_08
 
 	org	ROM_BASE+%10
 _rst10:
-	jp.lil	_rst_10_functions
+	jp.lil	check_alt_bios_rst_10
 
 	org	ROM_BASE+%18
 _rst18:
