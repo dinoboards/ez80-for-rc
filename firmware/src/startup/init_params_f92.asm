@@ -6,7 +6,6 @@
 ; Copyright (C) 2005 by ZiLOG, Inc.  All Rights Reserved.
 ;*****************************************************************************
 
-        INCLUDE "ez80f92.inc"
         INCLUDE "..\config.inc"
 
 
@@ -29,7 +28,7 @@
 	XREF	_cs2_bus_cycles
 	XREF	_cs3_bus_cycles
 
-	XREF	_probe_for_alt_bios
+	XREF	FIRMWARE_RAM_RESERVED
 
 ;*****************************************************************************
 ; Startup code
@@ -154,15 +153,8 @@ __init:
 	LD	A, __RAM_CTL_INIT_PARAM
 	OUT0	(RAM_CTL), A
 
-	ld	sp, %02FF00
-
-	; Call	_attempt_alt_bios
-
-	CALL	__c_startup
-
-__no_cstartup:
+	ld	sp, FIRMWARE_RAM_RESERVED
 
 	JP	_main
-
 
 	END

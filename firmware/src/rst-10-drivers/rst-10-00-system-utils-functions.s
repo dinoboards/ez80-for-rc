@@ -18,6 +18,10 @@
 	XREF	_SYS_CLK_FREQ
 	XREF	_system_ticks
 
+	XREF	_util_get_day_of_month
+	XREF	_util_get_month
+	XREF	_util_get_year
+
 	SECTION CODE
 
 	.assume adl=1
@@ -68,18 +72,38 @@ _system_utils_dispatch:
 ;
 ; Outputs:
 ;  A	= 0 -> Success, otherwise errored
-;  C	= eZ80 Chip Id (0->EZ80F92AZ020EG)
+;  C	= eZ80 Chip Id (0->EZ80F92AZ020EG), Bit 7 is set if running on alt-firmware
 ;  D	= eZ80 Firmware Major Version Number
 ;  E	= eZ80 Firmware Minor Version Number
 ;  H	= eZ80 Firmware Patch Version Number
 ;  L	= eZ80 Firmware Revision Version Number
-;
+;  C'	= firmware's build day of month
+;  D'	= firmware's build month
+;  E'	= firmware's build year (20xx)
+
+
 ez80_version_exchange:
+	CALL	_util_get_day_of_month
+	LD	C, A
+	PUSH	BC
+	CALL	_util_get_month
+	LD	D, A
+	PUSH	DE
+	CALL	_util_get_year
+	POP	DE
+	POP	BC
+	LD	E, A
+	EXX
 	LD	D, 0
 	LD	E, 1
 	LD	H, 0
 	LD	L, 0
+
+IFDEF RC2014_ALT_FIRMWARE
+	LD	C, %80
+ELSE
 	LD	C, 0
+ENDIF
 
 	XOR	A
 	RET.L

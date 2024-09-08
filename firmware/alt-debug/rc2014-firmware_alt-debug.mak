@@ -87,6 +87,14 @@ clean:
             $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-alt-debug-firmware.hex"
 	@if exist "Z:\rc2014-ez80\firmware\bin\rc2014-alt-debug-firmware.map"  \
             $(RM) "Z:\rc2014-ez80\firmware\bin\rc2014-alt-debug-firmware.map"
+	@if exist "$(WORKDIR)\build-date.obj"  \
+            $(RM) "$(WORKDIR)\build-date.obj"
+	@if exist "$(WORKDIR)\build-date.lis"  \
+            $(RM) "$(WORKDIR)\build-date.lis"
+	@if exist "$(WORKDIR)\build-date.lst"  \
+            $(RM) "$(WORKDIR)\build-date.lst"
+	@if exist "$(WORKDIR)\build-date.src"  \
+            $(RM) "$(WORKDIR)\build-date.src"
 	@if exist "$(WORKDIR)\clib.obj"  \
             $(RM) "$(WORKDIR)\clib.obj"
 	@if exist "$(WORKDIR)\clib.lis"  \
@@ -300,6 +308,7 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
+            $(WORKDIR_ESCSPACE)\build-date.obj  \
             $(WORKDIR_ESCSPACE)\clib.obj  \
             $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
@@ -335,6 +344,10 @@ OBJS =  \
 
 rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
+
+$(WORKDIR_ESCSPACE)\build-date.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\build-date.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
 
 $(WORKDIR_ESCSPACE)\clib.obj :  \
             $(PRJDIR_ESCSPACE)\src\clib.c  \

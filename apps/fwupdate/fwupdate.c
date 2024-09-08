@@ -115,7 +115,7 @@ uint8_t main(const int argc, char *argv[]) {
   argv;
   printf("Warning.  Potentially dangerous operation.\n");
 
-  static FILE *file;
+  static FILE  *file;
   static int8_t stat;
 
   stat = IFL_Init();

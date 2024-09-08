@@ -8,13 +8,22 @@
 	XREF	_uart0_init
 	XREF	_bank_init_z2
 	XREF	_rx_buffer_init
-	xref	_init_clocks
+	XREF	_init_clocks
+	XREF	__c_startup
+	XREF	_attempt_alt_firmware
+	XREF	_IFL_Init
 
 _main:
+	CALL	__c_startup
 	CALL	_init_clocks
 	CALL	_bank_init_z2
 	CALL	_rx_buffer_init
 	CALL	_uart0_init
+
+IFNDEF RC2014_ALT_FIRMWARE
+	CALL	_IFL_Init
+	CALL	_attempt_alt_firmware			; may not return if alt-bios present and ok to boot with
+ENDIF
 
 	;XREF	_spike
 	;call	_spike

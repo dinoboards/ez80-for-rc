@@ -15,8 +15,8 @@
         XREF	__low_code
         XREF	__low_romcode
 
-	XREF	__ALT_BIOS_CTRL_ROM
-	XREF	__ALT_BIOS_CTRL_RAM
+	XREF	__ALT_FIRMWARE_CTRL_ROM
+	XREF	__ALT_FIRMWARE_CTRL_RAM
 	XREF	__LENGTH_ALT_BIOS_CTRL
 
 ;*****************************************************************************
@@ -76,15 +76,12 @@ _c_data_done:
 _copy_code_to_ram_done:
 	; C environment created, continue with the initialization process
 
-IFNDEF RC2014_ALT_FIRMWARE
-
 ; copy ALT_BIOS_CTRL code to top of RAM
-	LD	HL, __ALT_BIOS_CTRL_ROM
-	LD	DE, __ALT_BIOS_CTRL_RAM
+	LD	HL, __ALT_FIRMWARE_CTRL_ROM
+	LD	DE, __ALT_FIRMWARE_CTRL_RAM
 	LD	BC, __LENGTH_ALT_BIOS_CTRL
 	LDIR
 	ret
-ENDIF
 
 ;*****************************************************************************
 ; Define global system var _errno. Used by floating point libraries
