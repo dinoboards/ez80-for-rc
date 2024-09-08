@@ -45,19 +45,48 @@
         DEFINE	ALT_FIRMWARE_CTRL_RAM, SPACE = RAM, ORG=%02FF00
         SEGMENT	ALT_FIRMWARE_CTRL_RAM
 
+
 	.assume adl=1
 
 	SEGMENT	CODE
 
 IFDEF RC2014_ALT_FIRMWARE
-	ORG	ALT_FIRMWARE_INFO
+	PUBLIC	_ez80_exchange_version_verified
+_ez80_exchange_version_verified:
+	LD	A, (ALT_FIRMWARE_STAT)
+	BIT	1, A
 
+	RET	Z					; return as already marked as verified
+
+	CRITICAL_BEGIN
+
+	ENABLE_FLASH_WRITES ~%80
+
+	LD	A, (ALT_FIRMWARE_STAT)
+	RES	1, A
+	LD	(ALT_FIRMWARE_STAT), A
+
+	DISABLE_FLASH_WRITES
+	CRITICAL_END
+
+	RET
+
+	ORG	ALT_FIRMWARE_INFO
 MARKER:
 	DB	"RC2014-ALT-FIRMWARE", %00
 
 	ORG	ALT_FIRMWARE_STAT
 	DB	%FF
 ELSE
+	ORG	ALT_FIRMWARE_INFO
+MARKER:
+	DB	"                   ", %00
+
+	ORG	ALT_FIRMWARE_STAT
+	DB	%FF
+
+	SEGMENT	CODE
+
 
 	PUBLIC	_attempt_alt_firmware
 
@@ -76,7 +105,7 @@ compare_loop:
 
 ; if *ALT_FIRMWARE_STAT == ~0x00 (0xFF), then new alt-firmware installed, but yet to be attempted
 ; if *ALT_FIRMWARE_STAT == ~0x01 (0xFE), then alt-firmware attempted and failed
-; if *ALT_FIRMWARE_STAT == ~0x02 (0xFC), then alt-firmware attempted and succeeded
+; if *ALT_FIRMWARE_STAT == ~0x03 (0xFC), then alt-firmware attempted and succeeded
 
 	LD	A, (ALT_FIRMWARE_STAT)
 	CP	~%00
@@ -85,7 +114,7 @@ compare_loop:
 	CP	~%01					; alt-firmware has been attempted and failed
 	RET	Z					; so return and continue with main bios
 
-	CP	~%02					; alt-firmware has been attempted and succeeded
+	CP	~%03					; alt-firmware has been attempted and succeeded
 	JP	Z, ALT_FIRMWARE_BASE			; so jump to alt-firmware
 
 	; unknown state, so continue with main bios
@@ -105,6 +134,7 @@ attempt_alt_firmare:
 
 STRING_TO_CHECK:
 	DB	"RC2014"
+
 
 ENDIF
 

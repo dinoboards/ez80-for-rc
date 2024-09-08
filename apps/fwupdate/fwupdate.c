@@ -3,7 +3,7 @@
 #include <ifl.h>
 #include <stdint.h>
 #include <stdio.h>
-
+#include <string.h>
 #include "hex-record.h"
 /*
 
@@ -106,11 +106,10 @@ int8_t emit_to_null(const uint32_t offset, const uint8_t *data, const uint16_t l
   return ZFL_ERR_SUCCESS;
 }
 
-// int8_t emit_to_flash(const uint32_t offset, const uint8_t *data, const uint8_t len) {
-//   return IFL_Program(offset, data, len);
-// }
+// TODO: Check we are on the main bios
+// if you attempt this on the alt bios, it will fail
 
-uint8_t main(const int argc, char *argv[]) {
+uint8_t main(const int argc, const char *argv[]) {
   argc;
   argv;
   printf("Warning.  Potentially dangerous operation.\n");
@@ -138,6 +137,16 @@ uint8_t main(const int argc, char *argv[]) {
   //   printf("Failure processing hex records\n");
   //   return 1;
   // }
+
+  // erase the last page - to ensure alt bios is now marked as invalid
+  // if we run this code, under alt-bios, the other commands will fail - as we will attempt
+  // to erase running code
+  // but at least on next boot, the system should switch back to main bios
+  stat = IFL_ErasePages(0x01FC00, 1);
+  if (stat) {
+    printf("Flash erase failure: %02X\n", stat);
+    return 1;
+  }
 
   stat = IFL_ErasePages(0x010000, 64);
   if (stat) {

@@ -7,7 +7,7 @@
 <file filter-key="">src\clib.c</file>
 <file filter-key="">src\startup\cpu_freq_calculator.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
-<file filter-key="">src\startup\dual_bios_support.s</file>
+<file filter-key="">src\startup\dual-firmware.s</file>
 <file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
 <file filter-key="">src\startup\init_clocks.s</file>
 <file filter-key="">src\startup\init_params_f92.asm</file>
@@ -564,6 +564,13 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM</option>
 
 <!-- breakpoint information -->
 <breakpoints>
+<breakpoint temporary="false" enabled="true" >
+<line-number>101</line-number>
+<pathname>Z:\rc2014-ez80\firmware\src\startup\dual-firmware.s</pathname>
+<address>2247</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
 </breakpoints>
 
 </project>

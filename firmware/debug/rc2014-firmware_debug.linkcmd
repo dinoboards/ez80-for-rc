@@ -91,7 +91,7 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM
  ".\clib.obj", \
  ".\cpu_freq_calculator.obj", \
  ".\cstartup.obj", \
- ".\dual_bios_support.obj", \
+ ".\dual-firmware.obj", \
  ".\i2c-calculate.obj", \
  ".\init_clocks.obj", \
  ".\init_params_f92.obj", \

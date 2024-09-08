@@ -22,6 +22,8 @@
 	XREF	_util_get_month
 	XREF	_util_get_year
 
+	XREF	_ez80_exchange_version_verified
+
 	SECTION CODE
 
 	.assume adl=1
@@ -83,6 +85,9 @@ _system_utils_dispatch:
 
 
 ez80_version_exchange:
+IFDEF RC2014_ALT_FIRMWARE
+	CALL	_ez80_exchange_version_verified
+ENDIF
 	CALL	_util_get_day_of_month
 	LD	C, A
 	PUSH	BC
