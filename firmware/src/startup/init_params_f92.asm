@@ -39,10 +39,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Minimum default initialization
 __init:
+IFNDEF RC2014_ALT_FIRMWARE
 	IM	2				; Interrtup mode 2
 	LD	HL, __vector_table
 	LD	A, __vector_table >> 8 & 0ffh
 	LD	I, A				; Load interrtup vector base
+ENDIF
 
 	LD	A, %FF
 	OUT0	(PB_DDR), A			; GPIO

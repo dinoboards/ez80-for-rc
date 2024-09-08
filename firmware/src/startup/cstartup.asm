@@ -19,6 +19,10 @@
 	XREF	__ALT_FIRMWARE_CTRL_RAM
 	XREF	__LENGTH_ALT_BIOS_CTRL
 
+	XREF	__FLASH_ROM_CODE
+	XREF	__FLASH_RAM_CODE
+	XREF	__LENGTH_FLASH_CODE
+
 ;*****************************************************************************
 ; Startup code
         DEFINE	.STARTUP, SPACE = ROM
@@ -81,6 +85,13 @@ _copy_code_to_ram_done:
 	LD	DE, __ALT_FIRMWARE_CTRL_RAM
 	LD	BC, __LENGTH_ALT_BIOS_CTRL
 	LDIR
+
+; copy FLASH INFO helper code
+	LD	HL, __FLASH_ROM_CODE
+	LD	DE, __FLASH_RAM_CODE
+	LD	BC, __LENGTH_FLASH_CODE
+	LDIR
+
 	ret
 
 ;*****************************************************************************

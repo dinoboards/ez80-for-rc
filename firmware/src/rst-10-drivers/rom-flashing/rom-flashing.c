@@ -101,3 +101,34 @@ int8_t IFL_Program(uint8_t *pDst, uint8_t *pSrc, const uint16_t Len) {
 
   return status;
 }
+
+int8_t IFL_WriteInfoByte(const uint16_t addr_and_data) {
+  int8_t status;
+
+  const uint8_t data = (uint8_t)(addr_and_data >> 8);
+  const uint8_t addr = (uint8_t)(addr_and_data & 0xFF);
+
+  uint8_t buffer[IFL_ROW_SIZE];
+
+  status = IFL_ReadInfoPage(buffer, addr & IFL_ROW_SIZE, IFL_ROW_SIZE);
+
+  if (status != ZFL_ERR_SUCCESS)
+    return status;
+
+  buffer[addr & ~IFL_ROW_SIZE] = data;
+
+  status = IFL_EraseInfoPage(addr);
+
+  if (status != ZFL_ERR_SUCCESS)
+    return status;
+
+  return IFL_ProgramInfoPage(addr & IFL_ROW_SIZE, buffer, IFL_ROW_SIZE);
+}
+
+uint24_t IFL_ReadInfoWord24(const uint8_t addr) {
+  uint24_t result;
+
+  IFL_ReadInfoPage((uint8_t *)&result, addr, 3);
+
+  return result;
+}

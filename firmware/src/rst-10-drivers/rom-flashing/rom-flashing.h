@@ -55,13 +55,15 @@ IFL_ROW_SIZE	128
 #define ZFL_ERR_TOO_MANY_ERASE_BLOCKS -11
 #define ZFL_ERR_TOO_MANY_REGIONS      -12
 
-int8_t  IFL_Init(void);
-int8_t  IFL_IsAddrValid(const uint8_t *flash_addr, const uint16_t length);
-uint8_t IFL_GetPage(const void *flash_addr);
-int8_t  IFL_ErasePages(const uint8_t *flash_addr, uint8_t number_of_pages);
-int8_t  _IFL_EraseInfoPage(const uint8_t addr);
-int8_t  IFL_Program(uint8_t *flash_addr, uint8_t *source_addr, const uint16_t length);
-int8_t  IFL_ProgramInfoPage(uint8_t flash_addr, uint8_t *source_addr, uint8_t length);
-int8_t  IFL_ReadInfoPage(uint8_t *destination_addr, uint8_t flash_addr, uint8_t length);
+int8_t   IFL_Init(void);
+int8_t   IFL_IsAddrValid(const uint8_t *flash_addr, const uint16_t length);
+uint8_t  IFL_GetPage(const void *flash_addr);
+int8_t   IFL_ErasePages(const uint8_t *flash_addr, uint8_t number_of_pages);
+int8_t   IFL_EraseInfoPage(const uint8_t addr);
+int8_t   IFL_Program(uint8_t *flash_addr, uint8_t *source_addr, const uint16_t length);
+int8_t   IFL_ProgramInfoPage(uint8_t flash_addr, uint8_t *source_addr, uint8_t length);
+int8_t   IFL_ReadInfoPage(uint8_t *destination_addr, uint8_t flash_addr, uint8_t length);
+int8_t   IFL_WriteInfoByte(const uint16_t addr_and_data);
+uint24_t IFL_ReadInfoWord24(const uint8_t addr);
 
 #endif

@@ -1,10 +1,10 @@
 #pragma printf = "%0X %X %x %s %c %u %f %d %u %ld %lld %llu %lu %p"
 
+#include "hex-record.h"
 #include <ifl.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include "hex-record.h"
 /*
 
 New firmware model
@@ -169,8 +169,17 @@ uint8_t main(const int argc, const char *argv[]) {
     return 1;
   }
 
-  // parse command line and identify filename
-  // open file for reading
+  stat = IFL_WriteInfoByte(0xFF, 0x5A);
+  if (stat) {
+    printf("Flash write failure\n");
+    return 1;
+  }
+
+  stat = IFL_WriteInfoByte(0xFE, 0x00);
+  if (stat) {
+    printf("Flash write failure\n");
+    return 1;
+  }
 
   return 0;
 }

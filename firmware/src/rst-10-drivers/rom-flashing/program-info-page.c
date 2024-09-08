@@ -5,7 +5,7 @@
 #include <eZ80F92-extra.h>
 #include <stdint.h>
 
-int8_t _IFL_EraseInfoPage(const uint8_t addr) {
+int8_t IFL_EraseInfoPage(const uint8_t addr) {
   uint8_t Page;
   int8_t  status = ZFL_ERR_SUCCESS;
 
@@ -36,7 +36,7 @@ int8_t _IFL_EraseInfoPage(const uint8_t addr) {
   return status;
 }
 
-int8_t _IFL_ProgramInfoPage(uint8_t hDst, uint8_t *hSrc, uint8_t Len) {
+int8_t IFL_ProgramInfoPage(uint8_t hDst, uint8_t *hSrc, uint8_t Len) {
   uint16_t i;
   uint8_t  status = ZFL_ERR_SUCCESS;
   uint8_t  Page;
@@ -79,7 +79,7 @@ int8_t _IFL_ProgramInfoPage(uint8_t hDst, uint8_t *hSrc, uint8_t Len) {
   return status;
 }
 
-int8_t _IFL_ReadInfoPage(uint8_t *pDst, uint8_t _pSrc, uint8_t Len) {
+int8_t IFL_ReadInfoPage(uint8_t *pDst, uint8_t _pSrc, uint8_t Len) {
   uint8_t  x;
   uint16_t i;
   uint8_t  Page;
@@ -97,27 +97,4 @@ int8_t _IFL_ReadInfoPage(uint8_t *pDst, uint8_t _pSrc, uint8_t Len) {
   critical_end();
 
   return ZFL_ERR_SUCCESS;
-}
-
-int8_t _IFL_WriteInfoByte(uint16_t addr_and_data) {
-  int8_t status;
-
-  const uint8_t data = (uint8_t)(addr_and_data >> 8);
-  const uint8_t addr = (uint8_t)(addr_and_data & 0xFF);
-
-  uint8_t buffer[IFL_ROW_SIZE];
-
-  status = _IFL_ReadInfoPage(buffer, addr & IFL_ROW_SIZE, IFL_ROW_SIZE);
-
-  if (status != ZFL_ERR_SUCCESS)
-    return status;
-
-  buffer[addr & ~IFL_ROW_SIZE] = data;
-
-  status = _IFL_EraseInfoPage(addr);
-
-  if (status != ZFL_ERR_SUCCESS)
-    return status;
-
-  return _IFL_ProgramInfoPage(addr & IFL_ROW_SIZE, buffer, IFL_ROW_SIZE);
 }

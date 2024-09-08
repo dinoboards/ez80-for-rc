@@ -1,5 +1,6 @@
 
 
+
 	XREF	__init
 	XREF	__low_rom
 
@@ -21,11 +22,15 @@
 	XREF	check_alt_firmware_rst_10
 	XREF	_rst_rc2014_bank_switch
 	XREF	_default_mi_handler_hook
+
+
 _reset:
 _rst0:
 	di
 	stmix
 	jp.lil	__init
+
+IFNDEF RC2014_ALT_FIRMWARE
 
 	ORG	ROM_BASE+%08
 _rst8:
@@ -60,12 +65,15 @@ _rst38:
 _nmi:
 	jp.lil	__default_nmi_handler
 
+ENDIF
 
 ;*****************************************************************************
 ; Startup code
 	DEFINE .STARTUP, SPACE = ROM
 	SEGMENT .STARTUP
 	.ASSUME ADL=1
+
+IFNDEF RC2014_ALT_FIRMWARE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Default Non-Maskable Interrupt handler
@@ -134,6 +142,8 @@ _uart0_receive_isr_rom_hook:
 _marshall_isr_rom_hook:
 	JP	_marshall_isr_hook
 
+ENDIF
+
 	PUBLIC	_marshall_isr
 	XREF	_marshall_isr_hook
 
@@ -174,6 +184,7 @@ skip_24_reg_save:
 	EI
 	RETI.L			; return rom interrupt - back to ADL 0 or 1
 
+
 ;*****************************************************************************
 ; Interrupt Vector Table
 ;  - this segment must be aligned on a 256 byte boundary anywhere below
@@ -181,6 +192,8 @@ skip_24_reg_save:
 ;  - each 2-byte entry is a 2-byte vector address
 	DEFINE .IVECTS, SPACE = ROM, ALIGN = 100h
 	SEGMENT .IVECTS
+
+IFNDEF RC2014_ALT_FIRMWARE
 
 	PUBLIC	__vector_table
 	EXTERN	_system_timer_isr_hook
@@ -237,4 +250,5 @@ __vector_table:
 	dw	_default_mi_2E_handler		; 5CH - Port D6
 	dw	_default_mi_2F_handler		; 5EH - Port D7
 
+ENDIF
 	END
