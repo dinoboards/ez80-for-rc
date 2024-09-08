@@ -46,6 +46,8 @@ uint8_t IFL_GetPage(const uint32_t addr);
 int8_t  IFL_ErasePages(const uint32_t addr, uint8_t num_pages);
 int8_t  IFL_Program(const uint32_t addr, const uint8_t *hSrc, const uint16_t length);
 
+void IFL_Read(uint8_t *pDst, uint32_t addr, uint8_t length);
+
 int8_t IFL_EraseInfoPage(const uint8_t addr);
 int8_t IFL_ProgramInfoPage(uint8_t addr, uint8_t *hSrc, uint8_t length);
 int8_t IFL_ReadInfoPage(uint8_t *pDst, uint8_t addr, uint8_t length);

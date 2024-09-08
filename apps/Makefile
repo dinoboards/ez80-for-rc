@@ -6,7 +6,7 @@ all:
 z88dk:
 	@docker run -v .:/src/ -it z88dk/z88dk
 
-apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com $(BIN)fwupdate.com $(BIN)fwmain.com
+apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com $(BIN)fwupdate.com $(BIN)fwmain.com $(BIN)fwstatus.com
 
 format:
 	@$(MAKE) -C i2cscan format --no-print-directory
@@ -42,3 +42,7 @@ $(BIN)fwupdate.com:
 .PHONY: $(BIN)fwmain.com
 $(BIN)fwmain.com:
 	@$(MAKE) -C fwmain --no-print-directory
+
+.PHONY: $(BIN)fwstatus.com
+$(BIN)fwstatus.com:
+	@$(MAKE) -C fwstatus --no-print-directory

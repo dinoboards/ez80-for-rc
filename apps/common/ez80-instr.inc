@@ -177,6 +177,10 @@
 					LD B, 8 \ \
 					EZ80_FN
 
+#define EZ80_IFL_READINFOWORD24		LD A, 7 \ \
+					LD B, 9 \ \
+					EZ80_FN
+
 #define RET_L				DB	$49 \ \
 					RET
 
@@ -196,19 +200,21 @@
 #define OUT0_H(p)	DB	$ED,$21,p
 #define OUT0_L(p)	DB	$ED,$29,p
 
-#define LDHLMM.LIL(Mmn)	\
+#define LDHLMM_LIL(Mmn)	\
 					DB	$5B \ \
 					LD	HL, Mmn \ \
 					DB	(Mmn >> 16) & $FF
 
-#define LDBCMM.LIL(Mmn)	\
-					DB	$5B \ \
+#define LDBCMM_LIL(Mmn)			DB	$5B \ \
 					LD	BC, Mmn \ \
 					DB	(Mmn >> 16) & $FF
 
-#define SBCHLBC.LIL \ \
+#define SBCHLBC_LIL \ \
 					DB	$49 \ \
 					SBC	HL, BC
+
+#define LDIR_LIL 			DB	$5B \ \
+					LDIR
 
 IO_SEGMENT	EQU		$FF		; THE UPPER 8-BIT ADDRESS FOR I/O
 

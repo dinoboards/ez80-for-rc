@@ -4,11 +4,19 @@
 #include <stdint.h>
 #include <stdio.h>
 
+const uint8_t zeroed[2] = {0, 0};
+
 uint8_t main(const int argc, const char *argv[]) {
   argc;
   argv;
-  const uint8_t stat = IFL_ErasePages(0x01FC00, 1);
-  printf("IFL_ErasePages: %02X\n", stat);
+  uint8_t stat = IFL_ErasePages(0x01FC00, 1);
+  if (stat != 0) {
+    printf("Erasing flash errored: %02X\n", stat);
+    return 1;
+  }
+
+  stat = IFL_ProgramInfoPage(0xFE, zeroed, 2);
+
   printf("On next boot, main bios will be loaded\n");
   return 0;
 }
