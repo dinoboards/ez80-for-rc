@@ -343,7 +343,9 @@ rc2014-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
 
 $(WORKDIR_ESCSPACE)\build-date.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\build-date.c
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\build-date.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
 
 $(WORKDIR_ESCSPACE)\clib.obj :  \
@@ -370,7 +372,11 @@ $(WORKDIR_ESCSPACE)\cstartup.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
 
 $(WORKDIR_ESCSPACE)\dual-firmware.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\dual-firmware.s
+            $(PRJDIR_ESCSPACE)\src\startup\dual-firmware.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\dual-firmware.s"
 
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
@@ -577,6 +583,10 @@ $(WORKDIR_ESCSPACE)\uart-rx-variables.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm
+            $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
 
