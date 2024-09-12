@@ -45,7 +45,7 @@ _system_utils_dispatch:
 	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, ez80_version_exchange		; B = 0, SYSUTL_VER_EXCHANGE
 	DEC	A
-	;JR	Z, ...					; B = 1, DEPRECATED
+	JR	Z, ez80_bus_cycles_get			; B = 1, SYSUTL_BUSTM_GET
 	DEC	A
 	;JR	Z, ...					; B = 2, DEPRECATED
 	DEC	A
@@ -113,14 +113,22 @@ ENDIF
 	XOR	A
 	RET.L
 ;
-; Function B = 01 -- DEPRECATED
-;
+; Function B = 01 -- SYSUTL_BUSTM_GET
+; Get Bus cycles for external memory and I/O
 ;
 ; Input
-;
+;  None
 ;
 ; Output
-;
+; H	= CS3 External Memory Bus Cycles (1-15)
+; L	= CS2 External I/O Bus Cycles (1-15)
+; DE	= 0
+; A	= 0 -> SUCCESS
+ez80_bus_cycles_get:
+	LD	HL, (_cs_bus_timings)
+	LD	DE, 0
+	XOR	A
+	RET.L
 
 ; Function B = 02 -- DEPRECATED
 ;

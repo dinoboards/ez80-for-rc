@@ -24,7 +24,7 @@ all: $(addsuffix .com,$(APPS))
 $(TARGETS):
 	@set -e
 	mkdir -p $(BIN)$(APPS)
-	$(ZCC) $(ZCC_EXTRA) $(foreach lib,$(filter %.lib,$^),-l$(lib)) $(filter-out %.h,$(filter-out %.lib,$^)) -o $@ -create-app
+	$(ZCC) $(ZCC_EXTRA) $(foreach lib,$(filter %.lib,$^),-l$(lib)) $(filter-out %.inc,$(filter-out %.h,$(filter-out %.lib,$^))) -o $@ -create-app
 	filesize=$$(stat -c%s "$@")
 	echo "Compiled $(notdir $@) ($$filesize bytes) from $(notdir $(filter-out %.h,$(filter-out %.lib,$^)))"
 
@@ -70,10 +70,12 @@ IFL_LIB_FILES := $(patsubst ../common/ifl/%.asm,$(BIN)common/ifl/%.lib,$(IFL_ASM
 IFL_LIB=$(IFL_LIB_FILES) ../common/ifl.h
 
 EZ80_ASM_FILES := $(wildcard ../common/ez80-instr/*.asm)
+EZ80_O_FILES := $(patsubst ../common/ez80-instr/%.asm,$(BIN)common/ez80-instr/%.o,$(EZ80_ASM_FILES))
 EZ80_LIB_FILES := $(patsubst ../common/ez80-instr/%.asm,$(BIN)common/ez80-instr/%.lib,$(EZ80_ASM_FILES))
 EZ80_LIB=$(EZ80_LIB_FILES) #../common/ez80-instr.inc
 
 EZ80_FIRMWARE_ASM_FILES := $(wildcard ../common/ez80-firmware/*.asm)
+EZ80_FIRMWARE_O_FILES := $(patsubst ../common/ez80-firmware/%.asm,$(BIN)common/ez80-firmware/%.o,$(EZ80_FIRMWARE_ASM_FILES))
 EZ80_FIRMWARE_LIB_FILES := $(patsubst ../common/ez80-firmware/%.asm,$(BIN)common/ez80-firmware/%.lib,$(EZ80_FIRMWARE_ASM_FILES))
 EZ80_FIRMWARE_LIB=$(EZ80_FIRMWARE_LIB_FILES) #../common/ez80-instr.inc
 
@@ -81,3 +83,5 @@ HBIOS_LIB=$(BIN)common/hbios_sysget_tick.lib
 
 I2C_LIB=$(BIN)common/i2c.lib ../common/i2c.h
 
+
+$(EZ80_O_FILES) $(EZ80_FIRMWARE_O_FILES): ../common/ez80-instr.inc

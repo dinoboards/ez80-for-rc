@@ -9,6 +9,10 @@
 					LD B, 0 \ \
 					EZ80_FN
 
+#define EZ80_UTIL_GET_BUSTM 		XOR A \ \
+					LD B, 1 \ \
+					EZ80_FN
+
 #define EZ80_UTIL_SET_BUSTM 		XOR A \ \
 					LD B, 3 \ \
 					EZ80_FN
