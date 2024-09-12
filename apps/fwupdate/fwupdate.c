@@ -17,10 +17,19 @@ int8_t emit_to_null(const uint32_t offset, const uint8_t *data, const uint16_t l
 uint8_t main(const int argc, const char *argv[]) {
   argc;
   argv;
-  printf("Warning.  Potentially dangerous operation.\n");
 
   static FILE  *file;
   static int8_t stat;
+
+  printf("eZ80 for RCBus Firmware Updater\n");
+  printf("Version 1.0 (C) Copyright Dean Netherton 2024-09-12\n\r\n");
+  printf("Reading Firmware file: FW.HEX\n\n");
+
+  file = fopen("fw.hex", "r");
+  if (file == NULL) {
+    printf("Error opening file FW.HEX\n");
+    return 1;
+  }
 
   stat = IFL_Init();
   if (stat) {
@@ -40,14 +49,8 @@ uint8_t main(const int argc, const char *argv[]) {
     return 1;
   }
 
-  file = fopen("fw.hex", "r");
-  if (file == NULL) {
-    printf("Error opening file");
-    return 1;
-  }
-
   stat = process_hex_records(file, IFL_Program);
-  printf("\r\n");
+  printf("\r                                              \n");
   fclose(file);
 
   if (stat) {
@@ -68,5 +71,6 @@ uint8_t main(const int argc, const char *argv[]) {
     return 1;
   }
 
+  printf("Firmware update complete\n");
   return 0;
 }
