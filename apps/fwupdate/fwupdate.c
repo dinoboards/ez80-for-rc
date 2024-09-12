@@ -5,98 +5,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-/*
-
-New firmware model
-
-First 64K is the main bios, and not typically updated - a good know simple bios
-The second 64K is an alt bios, that can be switched over to from the main bios
-
-00 0000 -> 00 FFFF : 64K - main bios - with support for booting alt bios
-01 0000 -> 01 FFFF : 64K - alt bios - no need for alt bios support
-
-
-startup code:
-  1. configures ROM/RAM, disables interrupts, no handlers, and other I/O defaulted-disabled
-  2. do a read and calculate a checksum for echo 60k bios image
-  3. read special flash to discover current boot bios
-  5. if boot bios X is marked as booting, try the other BIOS
-  6. if both BIOS are marked as booting, then bios corrupted.
-  4. mark special flash byte to say booting bios X
-  4. boot the bios
-  5. expect bios to boot and update the special flash to say all ok
-
-  1. configures ROM/RAM, disables interrupts, no handlers, and other I/O defaulted-disabled
-  2. read special flash flag, to see if alt bios available
-  3. if alt bios was booting, then mark alt bios as bad and not available, and continue with main bios
-  4. if alt bios was not booting and marked available, then mark as booting
-  5. boot the alt bios
-  6. expect alt bios to boot and update the special flash to say all ok
-
-> HBIOS must invoke RST %10 function to indicate successful boot - perhaps after menu selection?
-> perhaps an additional option to manually mark as working?
-
-
-*/
-
-/* App to reflash the on chip rom */
-
-// Design constraint: can not use any RST %10 helpers - including IO - as the
-// ROM will go off line Interrupts must therefore also be disabled until
-// completed. System probably needs to be rebooted after completion
-//
-
-void spike_flash_info(void) {
-  uint8_t data1[6] = {0, 0, 0, 0, 0, 0};
-  uint8_t stat     = IFL_ReadInfoPage(data1, 0, 6);
-  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
-         data1[5]);
-
-  stat = IFL_WriteInfoByte(0, 0x55);
-  printf("IFL_WriteInfoByte: %02X\n", stat);
-
-  stat = IFL_ReadInfoPage(data1, 0, 6);
-  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
-         data1[5]);
-
-  stat = IFL_WriteInfoByte(1, 0x66);
-  printf("IFL_WriteInfoByte: %02X\n", stat);
-
-  stat = IFL_ReadInfoPage(data1, 0, 6);
-  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
-         data1[5]);
-
-  stat = IFL_WriteInfoByte(2, data1[2] + 1);
-  printf("IFL_WriteInfoByte: %02X\n", stat);
-
-  stat = IFL_ReadInfoPage(data1, 0, 6);
-  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
-         data1[5]);
-  // stat = IFL_EraseInfoPage();
-  // printf("IFL_EraseInfoPage: %02X\n", stat);
-
-  // stat = IFL_ReadInfoPage(data1, 0, 2);
-  // printf("IFL_ReadInfoPage: %02X, %02X, %02X\n", stat, data1[0], data1[1]);
-
-  // uint8_t data[4] = {0x55, 0x66, 0x77, 0x88};
-  // stat            = IFL_ProgramInfoPage(0, data, 4);
-  // printf("IFL_ProgramInfoPage: %02X\n", stat);
-
-  stat = IFL_ReadInfoPage(data1, 0, 6);
-  printf("IFL_ReadInfoPage: %02X, %02X, %02X, %02X, %02X, %02X, %02X\n", stat, data1[0], data1[1], data1[2], data1[3], data1[4],
-         data1[5]);
-}
-
-void spike_flash_read_write(void) {
-  uint32_t flash = (uint32_t)0x010000;
-
-  int8_t stat = IFL_ErasePages(flash, 1);
-  printf("IFL_ErasePages: %02X\n", stat);
-
-  uint8_t data[4] = {0x55, 0x66, 0x77, 0x88};
-  stat            = IFL_Program(flash, data, 4);
-  printf("IFL_Program: %02X\n", stat);
-}
 
 int8_t emit_to_null(const uint32_t offset, const uint8_t *data, const uint16_t len) {
   offset;
@@ -105,9 +13,6 @@ int8_t emit_to_null(const uint32_t offset, const uint8_t *data, const uint16_t l
 
   return ZFL_ERR_SUCCESS;
 }
-
-// TODO: Check we are on the main bios
-// if you attempt this on the alt bios, it will fail
 
 uint8_t main(const int argc, const char *argv[]) {
   argc;
@@ -123,25 +28,6 @@ uint8_t main(const int argc, const char *argv[]) {
     return 1;
   }
 
-  // FILE *file = fopen("fw.hex", "r");
-  // if (file == NULL) {
-  //   printf("Error opening file");
-  //   return 1;
-  // }
-
-  // stat = process_hex_records(file, emit_to_null);
-  // fclose(file);
-
-  // if (stat) {
-  //   fclose(file);
-  //   printf("Failure processing hex records\n");
-  //   return 1;
-  // }
-
-  // erase the last page - to ensure alt bios is now marked as invalid
-  // if we run this code, under alt-bios, the other commands will fail - as we will attempt
-  // to erase running code
-  // but at least on next boot, the system should switch back to main bios
   stat = IFL_ErasePages(0x01FC00, 1);
   if (stat) {
     printf("Flash erase failure: %02X\n", stat);
@@ -161,6 +47,7 @@ uint8_t main(const int argc, const char *argv[]) {
   }
 
   stat = process_hex_records(file, IFL_Program);
+  printf("\r\n");
   fclose(file);
 
   if (stat) {

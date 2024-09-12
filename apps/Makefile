@@ -1,7 +1,8 @@
 BIN=./bin/
+MAKEFLAGS += --no-print-directory
 
-all:
-	@docker run -v .:/src/ -it z88dk/z88dk make apps -B -j
+all: clean
+	@docker run -v .:/src/ -it z88dk/z88dk make apps -j --output-sync=recurse
 
 z88dk:
 	@docker run -v .:/src/ -it z88dk/z88dk
@@ -9,40 +10,43 @@ z88dk:
 apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com $(BIN)fwupdate.com $(BIN)fwmain.com $(BIN)fwstatus.com
 
 format:
-	@$(MAKE) -C i2cscan format --no-print-directory
-	$(MAKE) -C matrix8 format --no-print-directory
-	$(MAKE) -C dhry format --no-print-directory
-	$(MAKE) -C whet format --no-print-directory
-	$(MAKE) -C fwupdate format --no-print-directory
-	$(MAKE) -C fwmain format --no-print-directory
+	@$(MAKE) -C i2cscan format
+	$(MAKE) -C matrix8 format
+	$(MAKE) -C dhry format
+	$(MAKE) -C whet format
+	$(MAKE) -C fwupdate format
+	$(MAKE) -C fwmain format
 
 clean:
-	rm -rf $(BIN)
+	@rm -rf $(BIN)
+
+common-libs:
+	@$(MAKE) -C common
 
 .PHONY: $(BIN)i2cscan.com
-$(BIN)i2cscan.com:
-	@$(MAKE) -C i2cscan --no-print-directory
+$(BIN)i2cscan.com: common-libs
+	@$(MAKE) -C i2cscan
 
 .PHONY: $(BIN)matrix8.com
-$(BIN)matrix8.com:
-	@$(MAKE) -C matrix8 --no-print-directory
+$(BIN)matrix8.com: common-libs
+	@$(MAKE) -C matrix8
 
 .PHONY: $(BIN)dhry.com
-$(BIN)dhry.com:
-	@$(MAKE) -C dhry --no-print-directory
+$(BIN)dhry.com: common-libs
+	@$(MAKE) -C dhry
 
 .PHONY: $(BIN)whet.com
-$(BIN)whet.com:
-	@$(MAKE) -C whet --no-print-directory
+$(BIN)whet.com: common-libs
+	@$(MAKE) -C whet
 
 .PHONY: $(BIN)fwupdate.com
-$(BIN)fwupdate.com:
-	@$(MAKE) -C fwupdate --no-print-directory
+$(BIN)fwupdate.com: common-libs
+	@$(MAKE) -C fwupdate
 
 .PHONY: $(BIN)fwmain.com
-$(BIN)fwmain.com:
-	@$(MAKE) -C fwmain --no-print-directory
+$(BIN)fwmain.com: common-libs
+	@$(MAKE) -C fwmain
 
 .PHONY: $(BIN)fwstatus.com
-$(BIN)fwstatus.com:
-	@$(MAKE) -C fwstatus --no-print-directory
+$(BIN)fwstatus.com: common-libs
+	@$(MAKE) -C fwstatus
