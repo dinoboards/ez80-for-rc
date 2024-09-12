@@ -7,15 +7,7 @@ all: clean
 z88dk:
 	@docker run -v .:/src/ -it z88dk/z88dk
 
-apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com $(BIN)fwupdate.com $(BIN)fwmain.com $(BIN)fwstatus.com
-
-format:
-	@$(MAKE) -C i2cscan format
-	$(MAKE) -C matrix8 format
-	$(MAKE) -C dhry format
-	$(MAKE) -C whet format
-	$(MAKE) -C fwupdate format
-	$(MAKE) -C fwmain format
+apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com $(BIN)fwupdate.com $(BIN)fwmain.com $(BIN)fwstatus.com $(BIN)ez80.com
 
 clean:
 	@rm -rf $(BIN)
@@ -50,3 +42,7 @@ $(BIN)fwmain.com: common-libs
 .PHONY: $(BIN)fwstatus.com
 $(BIN)fwstatus.com: common-libs
 	@$(MAKE) -C fwstatus
+
+.PHONY: $(BIN)ez80.com
+$(BIN)ez80.com: common-libs
+	@$(MAKE) -C ez80

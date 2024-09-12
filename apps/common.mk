@@ -28,12 +28,6 @@ $(TARGETS):
 	filesize=$$(stat -c%s "$@")
 	echo "Compiled $(notdir $@) ($$filesize bytes) from $(notdir $(filter-out %.h,$(filter-out %.lib,$^)))"
 
-
-.PHONY: format
-format: SHELL:=/bin/bash
-format:
-	@find \( -name "*.c" -o -name "*.h" \) -exec echo "formating {}" \; -exec clang-format -i {} \;
-
 clean:
 	@rm -rf $(BIN)
 
@@ -79,6 +73,11 @@ EZ80_ASM_FILES := $(wildcard ../common/ez80-instr/*.asm)
 EZ80_LIB_FILES := $(patsubst ../common/ez80-instr/%.asm,$(BIN)common/ez80-instr/%.lib,$(EZ80_ASM_FILES))
 EZ80_LIB=$(EZ80_LIB_FILES) #../common/ez80-instr.inc
 
+EZ80_FIRMWARE_ASM_FILES := $(wildcard ../common/ez80-firmware/*.asm)
+EZ80_FIRMWARE_LIB_FILES := $(patsubst ../common/ez80-firmware/%.asm,$(BIN)common/ez80-firmware/%.lib,$(EZ80_FIRMWARE_ASM_FILES))
+EZ80_FIRMWARE_LIB=$(EZ80_FIRMWARE_LIB_FILES) #../common/ez80-instr.inc
+
 HBIOS_LIB=$(BIN)common/hbios_sysget_tick.lib
 
 I2C_LIB=$(BIN)common/i2c.lib ../common/i2c.h
+

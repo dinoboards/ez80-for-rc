@@ -299,7 +299,6 @@ ez80_cpu_freq_get:
 	LD	BC, (_cpu_freq_calculated)
 	LD	A, (_cpu_freq_calculated+3)
 
-	XOR	A
 	RET.L
 ;
 ; Function B = 06 -- SYSUTL_BANK_HELPER_SET
