@@ -45,9 +45,9 @@ _system_utils_dispatch:
 	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, ez80_version_exchange		; B = 0, SYSUTL_VER_EXCHANGE
 	DEC	A
-	JR	Z, ez80_reg_ehl_to_hl			; B = 1, SYSUTL_EHL_TO_HL
+	;JR	Z, ...					; B = 1, DEPRECATED
 	DEC	A
-	JR	Z, ez80_reg_hl_to_ehl			; B = 2, SYSUTL_HL_TO_EHL
+	;JR	Z, ...					; B = 2, DEPRECATED
 	DEC	A
 	JR	Z, ez80_bus_cycles_set			; B = 3, SYSUTL_BUSTM_SET
 	DEC	A
@@ -113,45 +113,23 @@ ENDIF
 	XOR	A
 	RET.L
 ;
-; Function B = 01 -- SYSUTL_HL_TO_EHL
-; register copy (8:16 -> 24) -- LD HL, E:HL
+; Function B = 01 -- DEPRECATED
+;
 ;
 ; Input
-;   E:HL	= 24 bit value to be copied
+;
 ;
 ; Output
-;   uHL		= E:HL
 ;
-; not re-entrant safe
-;
-ez80_reg_ehl_to_hl:
-	LD	(tmp), HL				; ONLY THE LOWER 16 BITS OF HL ARE VALID
-	LD	A, E
-	LD	(tmp+2), A				; SAVE THE UPPER 8 BITS OF THE 24 BIT VALUE
-	LD	HL, (tmp)
-	RET.L
 
-; Function B = 02 -- SYSUTL_HL_TO_EHL
-; register copy (24 -> 8:16) -- LD E:HL, HL
+; Function B = 02 -- DEPRECATED
+;
 ;
 ; Input
-;   uHL 	= 24 bit value to be copied
+;
 ;
 ; Output
-;   E:HL	= uHL
 ;
-; not re-entrant safe
-;
-ez80_reg_hl_to_ehl:
-	LD	(tmp), HL				; STORE THE FULL 24 BITS OF HL
-	LD	A, (tmp+2)				; RETRIEVE THE UPPER 8 BITS
-	LD	E, A
-	RET.L
-
-	SECTION BSS
-tmp:
-	DS	3
-
 	SECTION	CODE
 ;
 ; Function B = 03 -- SYSUTL_BUSTM_SET
