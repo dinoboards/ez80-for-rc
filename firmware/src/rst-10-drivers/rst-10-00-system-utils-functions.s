@@ -17,6 +17,7 @@
 	XREF	_platform_description
 	XREF	_SYS_CLK_FREQ
 	XREF	_system_ticks
+	XREF	_calculate_wait_state
 
 	XREF	_util_get_day_of_month
 	XREF	_util_get_month
@@ -58,6 +59,22 @@ _system_utils_dispatch:
 	JR	Z, ez80_bank_helper_set			; B = 6, SYSUTL_BANK_HELPER_SET
 	DEC	A
 	JR	Z, ez80_debug				; B = 7, SYSUTL_DEBUG
+
+	; temp new version of bus timing config functions
+	; will be swapped to indexes above, once full HBIOS conversion is completed
+
+	DEC	A					; B = 8, SYSUTL_MEMTM_SET
+	JR	Z, ez80_mem_bus_timing_set
+	DEC	A					; B = 9, SYSUTL_IOTM_SET
+	JR	Z, ez80_io_bus_timing_set
+	DEC	A					; B = 10, SYSUTL_MEMTM_GET
+	JR	Z, ez80_mem_bus_timing_get
+	DEC	A					; B = 11, SYSUTL_IOTM_GET
+	JR	Z, ez80_io_bus_timing_get
+	DEC	A					; B = 12, SYSUTL_MEMTMFQ_SET
+	JR	Z, ez80_mem_bus_timing_freq_set
+	DEC	A					; B = 13, SYSUTL_IOTMFQ_SET
+	JR	Z, ez80_io_bus_timing_freq_set
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -101,7 +118,7 @@ ENDIF
 	EXX
 	LD	D, 0
 	LD	E, 1
-	LD	H, 0
+	LD	H, 1
 	LD	L, 0
 
 IFDEF RC2014_ALT_FIRMWARE
@@ -343,3 +360,175 @@ ez80_bank_helper_set_not_supported:
 ;
 ez80_debug:
 	RET.L
+
+	XREF	_mem_bus_mode_and_timing
+	XREF	_io_bus_mode_and_timing
+;
+; Function B = 08 -- SYSUTL_MEMTM_SET
+; Set Bus cycles or wait state for external memory access
+; using CS3
+;
+; Input
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;
+; Output
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A 	= 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_mem_bus_timing_set:
+	LD	A, L
+
+	BIT	7, A
+	JR	NZ, ez80_mem_bus_z80_mode
+
+	AND	%07
+	LD	(_mem_bus_mode_and_timing), A
+
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR	CSX_TYPE_MEM | CSX_ENABLED
+	OUT0	(CS3_CTL), A
+
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	OUT0	(CS3_BMC), A
+
+ez80_mem_bus_timing_set_done:
+	LD	A, (_mem_bus_mode_and_timing)
+	LD	L, A
+	XOR	A
+	RET.L
+
+ez80_mem_bus_z80_mode:
+	AND	%8F
+	LD	(_mem_bus_mode_and_timing), A
+
+	; Assign CS3 bus mode
+	AND	%0F
+	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OUT0	(CS3_BMC), A
+
+	JR	ez80_mem_bus_timing_set_done
+
+;
+; Function B = 09 -- SYSUTL_IOTM_SET
+; Set Bus cycles or wait state for external memory access
+; using CS2
+;
+; Input
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;
+; Output
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A 	= 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_io_bus_timing_set:
+	LD	A, L
+
+	BIT	7, A
+	JR	NZ, ez80_io_bus_z80_mode
+
+	AND	%07
+	LD	(_io_bus_mode_and_timing), A
+
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR	CSX_TYPE_IO | CSX_ENABLED
+	OUT0	(CS2_CTL), A
+
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	OUT0	(CS2_BMC), A
+
+ez80_io_bus_timing_set_done:
+	LD	A, (_io_bus_mode_and_timing)
+	LD	L, A
+	XOR	A
+	RET.L
+
+ez80_io_bus_z80_mode:
+	AND	%8F
+	LD	(_io_bus_mode_and_timing), A
+
+	; Assign CS2 bus mode
+	AND	%0F
+	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OUT0	(CS2_BMC), A
+
+	JR	ez80_io_bus_timing_set_done
+
+;
+; Function B = 10 -- SYSUTL_MEMTM_GET
+; Get Bus cycles or wait state for external memory access
+; using CS3
+;
+; Output
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A 	= 0 -> SUCCESS
+;
+ez80_mem_bus_timing_get:
+	LD	A, (_mem_bus_mode_and_timing)
+	LD	L, A
+	XOR	A
+	RET.L
+
+;
+; Function B = 11 -- SYSUTL_IOTM_GET
+; Get Bus cycles or wait state for external memory access
+; using CS2
+;
+; Output
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A 	= 0 -> SUCCESS
+;
+ez80_io_bus_timing_get:
+	LD	A, (_io_bus_mode_and_timing)
+	LD	L, A
+	XOR	A
+	RET.L
+;
+; Function B = 12 -- SYSUTL_MEMTMFQ_SET
+; Identify and apply the appropriate W/S or switch to BUS cycles
+; to ensure a memory operation is given a minimum cycle duration.
+;
+; Input
+;   uHL = min cycle duration in nano seconds
+;   E => hard minimum number of w/s
+;
+; Output
+;   L  = BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A  = 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_mem_bus_timing_freq_set:
+	PUSH	DE
+	PUSH	HL
+	CALL	_calculate_wait_state
+	POP	HL
+	POP	DE
+	LD	L, A
+	JP	ez80_mem_bus_timing_set
+;
+; Function B = 13 -- SYSUTL_IOTMFQ_SET
+; Identify and apply the appropriate W/S or switch to BUS cycles
+; to ensure an I/O operation is given a minimum cycle duration.
+;
+; Input
+;   uHL = min cycle duration in nano seconds
+;   E => hard minimum number of w/s
+;
+; Output
+;   L  = BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A  = 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_io_bus_timing_freq_set:
+	PUSH	DE
+	PUSH	HL
+	CALL	_calculate_wait_state
+	POP	HL
+	POP	DE
+	LD	L, A
+	JP	ez80_io_bus_timing_set

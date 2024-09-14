@@ -22,6 +22,10 @@
 	PUBLIC	_cs2_bus_cycles
 	PUBLIC	_cs_bus_timings
 
+	PUBLIC	_mem_bus_timings
+	PUBLIC	_mem_bus_mode_and_timing
+	PUBLIC	_io_bus_mode_and_timing
+
 	PUBLIC	_system_ticks
 	PUBLIC	_ticks_frequency
 	PUBLIC	_ticks_per_10_us
@@ -89,6 +93,12 @@ _cs_bus_timings:
 _cs2_bus_cycles:
 	DS	1
 _cs3_bus_cycles:
+	DS	1
+
+_mem_bus_timings:
+_mem_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
+	DS	1
+_io_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
 	DS	1
 
 _flash_ram_content:

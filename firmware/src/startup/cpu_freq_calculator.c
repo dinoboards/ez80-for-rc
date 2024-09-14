@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 extern unsigned long cpu_freq_calculated;
 extern unsigned char ticks_per_10_us;
 
@@ -48,4 +50,36 @@ void assign_cpu_frequency(const unsigned de) {
     cpu_freq_calculated = 32000000;
 
   ticks_per_10_us = (cpu_freq_calculated / 16) / 100000;
+}
+
+uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_wait_states /* only 8 bit value accepted */) {
+  uint8_t  bc;
+  uint24_t ws;
+  uint24_t duration_kns;
+
+  uint24_t cpu_freq_khz     = cpu_freq_calculated / 1000;
+  uint24_t ns_per_cycle     = 1000000 / cpu_freq_khz;
+  uint24_t min_duration_kns = (min_nanoseconds * 1000);
+  minimum_wait_states       = (minimum_wait_states & 0xFF) * 1000;
+
+  for (ws = 500; ws < 44500; ws += 1000) {
+    duration_kns = (ns_per_cycle * ws);
+
+    if (duration_kns >= min_duration_kns)
+      break;
+  }
+
+  if (ws <= minimum_wait_states)
+    ws = (minimum_wait_states);
+
+  if (ws <= 7000)
+    return (uint8_t)(ws / 1000);
+
+  // Must use Z80 BUS CYCLES to get sufficient wait states
+  bc = (((ws + 1000) / 3) + 500) / 1000;
+
+  if (bc > 15)
+    bc = 15;
+
+  return bc | 0x80; // OR in Z80/BUS CYCLE mode flag
 }
