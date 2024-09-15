@@ -90,12 +90,12 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM
 "Z:\rc2014-ez80\firmware\bin\rc2014-release-firmware"= \
  ".\build-date.obj", \
  ".\clib.obj", \
- ".\cpu_freq_calculator.obj", \
+ ".\cpu-freq-calculator.obj", \
  ".\cstartup.obj", \
  ".\dual-firmware.obj", \
  ".\i2c-calculate.obj", \
- ".\init_clocks.obj", \
- ".\init_params_f92.obj", \
+ ".\init-clocks.obj", \
+ ".\init-f92.obj", \
  ".\main.obj", \
  ".\program-info-page-shim.obj", \
  ".\program-info-page.obj", \
@@ -110,7 +110,7 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM
  ".\rst-10-07-rom-flashing-functions.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-rc2014-bank-switch.obj", \
- ".\system_vars.obj", \
+ ".\system-vars.obj", \
  ".\test.obj", \
  ".\uart-calculate.obj", \
  ".\uart-rx-buffer-add-to.obj", \

@@ -104,14 +104,14 @@ clean:
             $(RM) "$(WORKDIR)\clib.lst"
 	@if exist "$(WORKDIR)\clib.src"  \
             $(RM) "$(WORKDIR)\clib.src"
-	@if exist "$(WORKDIR)\cpu_freq_calculator.obj"  \
-            $(RM) "$(WORKDIR)\cpu_freq_calculator.obj"
-	@if exist "$(WORKDIR)\cpu_freq_calculator.lis"  \
-            $(RM) "$(WORKDIR)\cpu_freq_calculator.lis"
-	@if exist "$(WORKDIR)\cpu_freq_calculator.lst"  \
-            $(RM) "$(WORKDIR)\cpu_freq_calculator.lst"
-	@if exist "$(WORKDIR)\cpu_freq_calculator.src"  \
-            $(RM) "$(WORKDIR)\cpu_freq_calculator.src"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.obj"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.obj"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.lis"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.lis"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.lst"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.lst"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.src"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.src"
 	@if exist "$(WORKDIR)\cstartup.obj"  \
             $(RM) "$(WORKDIR)\cstartup.obj"
 	@if exist "$(WORKDIR)\cstartup.lis"  \
@@ -132,18 +132,18 @@ clean:
             $(RM) "$(WORKDIR)\i2c-calculate.lst"
 	@if exist "$(WORKDIR)\i2c-calculate.src"  \
             $(RM) "$(WORKDIR)\i2c-calculate.src"
-	@if exist "$(WORKDIR)\init_clocks.obj"  \
-            $(RM) "$(WORKDIR)\init_clocks.obj"
-	@if exist "$(WORKDIR)\init_clocks.lis"  \
-            $(RM) "$(WORKDIR)\init_clocks.lis"
-	@if exist "$(WORKDIR)\init_clocks.lst"  \
-            $(RM) "$(WORKDIR)\init_clocks.lst"
-	@if exist "$(WORKDIR)\init_params_f92.obj"  \
-            $(RM) "$(WORKDIR)\init_params_f92.obj"
-	@if exist "$(WORKDIR)\init_params_f92.lis"  \
-            $(RM) "$(WORKDIR)\init_params_f92.lis"
-	@if exist "$(WORKDIR)\init_params_f92.lst"  \
-            $(RM) "$(WORKDIR)\init_params_f92.lst"
+	@if exist "$(WORKDIR)\init-clocks.obj"  \
+            $(RM) "$(WORKDIR)\init-clocks.obj"
+	@if exist "$(WORKDIR)\init-clocks.lis"  \
+            $(RM) "$(WORKDIR)\init-clocks.lis"
+	@if exist "$(WORKDIR)\init-clocks.lst"  \
+            $(RM) "$(WORKDIR)\init-clocks.lst"
+	@if exist "$(WORKDIR)\init-f92.obj"  \
+            $(RM) "$(WORKDIR)\init-f92.obj"
+	@if exist "$(WORKDIR)\init-f92.lis"  \
+            $(RM) "$(WORKDIR)\init-f92.lis"
+	@if exist "$(WORKDIR)\init-f92.lst"  \
+            $(RM) "$(WORKDIR)\init-f92.lst"
 	@if exist "$(WORKDIR)\main.obj"  \
             $(RM) "$(WORKDIR)\main.obj"
 	@if exist "$(WORKDIR)\main.lis"  \
@@ -234,12 +234,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lis"
 	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"  \
             $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"
-	@if exist "$(WORKDIR)\system_vars.obj"  \
-            $(RM) "$(WORKDIR)\system_vars.obj"
-	@if exist "$(WORKDIR)\system_vars.lis"  \
-            $(RM) "$(WORKDIR)\system_vars.lis"
-	@if exist "$(WORKDIR)\system_vars.lst"  \
-            $(RM) "$(WORKDIR)\system_vars.lst"
+	@if exist "$(WORKDIR)\system-vars.obj"  \
+            $(RM) "$(WORKDIR)\system-vars.obj"
+	@if exist "$(WORKDIR)\system-vars.lis"  \
+            $(RM) "$(WORKDIR)\system-vars.lis"
+	@if exist "$(WORKDIR)\system-vars.lst"  \
+            $(RM) "$(WORKDIR)\system-vars.lst"
 	@if exist "$(WORKDIR)\test.obj"  \
             $(RM) "$(WORKDIR)\test.obj"
 	@if exist "$(WORKDIR)\test.lis"  \
@@ -311,12 +311,12 @@ LIBS =
 OBJS =  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
             $(WORKDIR_ESCSPACE)\clib.obj  \
-            $(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj  \
+            $(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\dual-firmware.obj  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
-            $(WORKDIR_ESCSPACE)\init_clocks.obj  \
-            $(WORKDIR_ESCSPACE)\init_params_f92.obj  \
+            $(WORKDIR_ESCSPACE)\init-clocks.obj  \
+            $(WORKDIR_ESCSPACE)\init-f92.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\program-info-page-shim.obj  \
             $(WORKDIR_ESCSPACE)\program-info-page.obj  \
@@ -331,7 +331,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-07-rom-flashing-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
-            $(WORKDIR_ESCSPACE)\system_vars.obj  \
+            $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj  \
@@ -367,9 +367,9 @@ $(WORKDIR_ESCSPACE)\clib.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\clib.c"
 
-$(WORKDIR_ESCSPACE)\cpu_freq_calculator.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\cpu_freq_calculator.c
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\cpu_freq_calculator.c"
+$(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\cpu-freq-calculator.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\cpu-freq-calculator.c"
 
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
@@ -389,21 +389,13 @@ $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\i2c\i2c-calculate.c"
 
-$(WORKDIR_ESCSPACE)\init_clocks.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\init_clocks.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_clocks.s"
+$(WORKDIR_ESCSPACE)\init-clocks.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\init-clocks.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-clocks.s"
 
-$(WORKDIR_ESCSPACE)\init_params_f92.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\init_params_f92.asm  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init_params_f92.asm"
+$(WORKDIR_ESCSPACE)\init-f92.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\init-f92.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-f92.asm"
 
 $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\main.s  \
@@ -512,13 +504,9 @@ $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-18-rc2014-bank-switch.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-rc2014-bank-switch.s"
 
-$(WORKDIR_ESCSPACE)\system_vars.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\system_vars.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system_vars.s"
+$(WORKDIR_ESCSPACE)\system-vars.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\system-vars.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system-vars.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \
             $(PRJDIR_ESCSPACE)\src\test.s  \
