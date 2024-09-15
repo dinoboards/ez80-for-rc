@@ -54,7 +54,7 @@
          <useFlashRam>true</useFlashRam>
          <useInternalDataRam>true</useInternalDataRam>
       </Internal>
-      <waitStates>1</waitStates>
+      <waitStates>4</waitStates>
    </Memory>
    <cpu>EZ80F92</cpu>
    <schemaVersion>1.0.1</schemaVersion>

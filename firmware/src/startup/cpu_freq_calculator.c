@@ -3,7 +3,8 @@
 extern unsigned long cpu_freq_calculated;
 extern unsigned char ticks_per_10_us;
 
-#define TIMER_FACTOR (120)
+// Factor for evaluation loop, where on-chip rom has 4 wait states
+#define TIMER_FACTOR (270)
 
 #define UPPER_FOR_32MHZ ((32000000 / TIMER_FACTOR) + 64)
 #define LOWER_FOR_32MHZ (UPPER_FOR_32MHZ - 1024)

@@ -12,6 +12,7 @@
 	XREF	__c_startup
 	XREF	_attempt_alt_firmware
 	XREF	_IFL_Init
+	XREF	_configure_onchip_mem
 
 _main:
 	CALL	__c_startup

@@ -75,6 +75,12 @@ _system_utils_dispatch:
 	JR	Z, ez80_mem_bus_timing_freq_set
 	DEC	A					; B = 13, SYSUTL_IOTMFQ_SET
 	JR	Z, ez80_io_bus_timing_freq_set
+	DEC	A					; B = 14, SYSUTL_FLASHWS_SET
+	JR	Z, ez80_flash_ws_set
+	DEC	A					; B = 15, SYSUTL_FLASHWS_GET
+	JR	Z, ez80_flash_ws_get
+	DEC	A					; B = 16, SYSUTL_FLSHFQ_SET
+	JR	Z, ez80_flsh_freq_set
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -517,7 +523,7 @@ ez80_mem_bus_timing_freq_set:
 ; to ensure an I/O operation is given a minimum cycle duration.
 ;
 ; Input
-;   uHL = min cycle duration in nano seconds
+;   uHL = min access time in nano seconds
 ;   E => hard minimum number of w/s
 ;
 ; Output
@@ -532,3 +538,75 @@ ez80_io_bus_timing_freq_set:
 	POP	DE
 	LD	L, A
 	JP	ez80_io_bus_timing_set
+;
+; Function B = 14 -- SYSUTL_FLASHWS_SET
+; Set the wait state for the on-chip flash memory access
+; Default on boot up in 4 wait states
+;
+; Input
+;   L 	= wait state
+;
+; Output
+;   L 	= wait state
+;   A 	= 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_flash_ws_set:
+	LD	A, L
+	AND	7
+	LD	L, A
+
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR	%08		; keep flash enabled bit set
+
+	OUT0	(FLASH_CTRL), A
+	XOR	A
+	RET.L
+;
+; Function B = 15 -- SYSUTL_FLASHWS_GET
+; Get the wait state for the on-chip flash memory access
+;
+; Input
+;   None
+;
+; Output
+;   L 	= wait state
+;   A 	= 0 -> SUCCESS
+;
+ez80_flash_ws_get:
+	IN0	L, (FLASH_CTRL)
+	LD	A, L
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	AND	7
+	LD	L, A
+	XOR	A
+	RET.L
+
+;
+; Function B = 16 -- SYSUTL_FLSHFQ_SET
+; Identify and apply the appropriate W/S to the on-chip flash memory access
+; Zilog specified on-chip ROM needs 60ns at least (but this can typically be exceeded)
+;
+; Input
+;   uHL = min access time in nano seconds
+;
+; Output
+;   L  = wait state
+;   A  = 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_flsh_freq_set:
+	LD	DE, 0	; min 0 wait states allow
+	PUSH	DE
+	PUSH	HL
+	CALL	_calculate_wait_state
+	POP	HL
+	POP	DE
+	LD	L, A
+	JR	ez80_flash_ws_set
