@@ -221,6 +221,7 @@ TMR_CLK_DIV_256		equ	(3 << 2)
 TMR_SINGLE		equ	(0 << 4)
 TMR_CONTINUOUS		equ	(1 << 4)
 TMR_IRQ_EN		equ	(1 << 6)
+TMR_PRT_IRQ		equ	(1 << 7)
 
 P5_ALT2			EQU	(1<<5)
 P4_ALT2			EQU	(1<<4)

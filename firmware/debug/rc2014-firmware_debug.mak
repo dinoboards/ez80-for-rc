@@ -224,12 +224,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-functions.lis"
 	@if exist "$(WORKDIR)\rst-10-functions.lst"  \
             $(RM) "$(WORKDIR)\rst-10-functions.lst"
-	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.obj"  \
-            $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.obj"
-	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.lis"  \
-            $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lis"
-	@if exist "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"  \
-            $(RM) "$(WORKDIR)\rst-18-rc2014-bank-switch.lst"
+	@if exist "$(WORKDIR)\rst-18-delay.obj"  \
+            $(RM) "$(WORKDIR)\rst-18-delay.obj"
+	@if exist "$(WORKDIR)\rst-18-delay.lis"  \
+            $(RM) "$(WORKDIR)\rst-18-delay.lis"
+	@if exist "$(WORKDIR)\rst-18-delay.lst"  \
+            $(RM) "$(WORKDIR)\rst-18-delay.lst"
 	@if exist "$(WORKDIR)\system-vars.obj"  \
             $(RM) "$(WORKDIR)\system-vars.obj"
 	@if exist "$(WORKDIR)\system-vars.lis"  \
@@ -326,7 +326,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-07-rom-flashing-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj  \
+            $(WORKDIR_ESCSPACE)\rst-18-delay.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
@@ -364,7 +364,8 @@ $(WORKDIR_ESCSPACE)\clib.obj :  \
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\clib.c"
 
 $(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\cpu-freq-calculator.c
+            $(PRJDIR_ESCSPACE)\src\startup\cpu-freq-calculator.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\cpu-freq-calculator.c"
 
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
@@ -386,11 +387,19 @@ $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\i2c\i2c-calculate.c"
 
 $(WORKDIR_ESCSPACE)\init-clocks.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\init-clocks.s
+            $(PRJDIR_ESCSPACE)\src\startup\init-clocks.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-clocks.s"
 
 $(WORKDIR_ESCSPACE)\init-f92.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\init-f92.asm
+            $(PRJDIR_ESCSPACE)\src\startup\init-f92.asm  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-f92.asm"
 
 $(WORKDIR_ESCSPACE)\main.obj :  \
@@ -496,12 +505,16 @@ $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-functions.s"
 
-$(WORKDIR_ESCSPACE)\rst-18-rc2014-bank-switch.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-18-rc2014-bank-switch.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-rc2014-bank-switch.s"
+$(WORKDIR_ESCSPACE)\rst-18-delay.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-18-delay.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-delay.s"
 
 $(WORKDIR_ESCSPACE)\system-vars.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\system-vars.s
+            $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system-vars.s"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \

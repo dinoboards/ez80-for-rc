@@ -6,7 +6,6 @@
 
 	PUBLIC	_main
 	XREF	_uart0_init
-	XREF	_bank_init_z2
 	XREF	_rx_buffer_init
 	XREF	_init_clocks
 	XREF	__c_startup
@@ -17,7 +16,6 @@
 _main:
 	CALL	__c_startup
 	CALL	_init_clocks
-	CALL	_bank_init_z2
 	CALL	_rx_buffer_init
 	CALL	_uart0_init
 

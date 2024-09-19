@@ -73,22 +73,6 @@ ENDIF
 	OUT0	(RTC_CTRL), A			; the RTC to be synchronized to another
                              			; time source.
 
-	; set PB5 for RC2014 clock out
-	; out frequency = 18.432Mhz / (DIV * (RR*2))
-	;               = 18.432Mhz / (4 * 1 * 2)
-	;               =  2.304Mhz
-	;
-	;               = 20Mhz / 8 = 2.5Mhz
-	;               = 24MHz / 8 = 3Mhz
-
-	; divide cpu clock by 4
-	LD	A, 1
-	OUT0	(TMR5_RR_L), A
-	XOR	A
-	OUT0	(TMR5_RR_H), A
-	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4
-	OUT0	(TMR5_CTL), A
-
 	; CONFIGURE PB4 & PB5
 	; SEND TIMER 5 TO PB5
 	; GPIO MODE 7, ALT1 0, ALT2 1, DDR 1, DR 0

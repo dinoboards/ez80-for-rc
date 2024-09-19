@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-extern unsigned long cpu_freq_calculated;
-extern unsigned char ticks_per_10_us;
+extern uint32_t cpu_freq_calculated;
+extern uint8_t  ticks_per_10_us;
 
 // Factor for evaluation loop, where on-chip rom has 4 wait states
 #define TIMER_FACTOR (270)
@@ -24,7 +24,7 @@ extern unsigned char ticks_per_10_us;
 #define LOWER_FOR_7MHZ  (UPPER_FOR_7MHZ - 1024)
 
 void assign_cpu_frequency(const unsigned de) {
-  cpu_freq_calculated = ((long)de * (long)TIMER_FACTOR) / 100L * 100L;
+  cpu_freq_calculated = ((int32_t)de * (int32_t)TIMER_FACTOR) / 100L * 100L;
 
   if (de >= LOWER_FOR_7MHZ && de <= UPPER_FOR_7MHZ)
     cpu_freq_calculated = 7372800;
@@ -50,8 +50,15 @@ void assign_cpu_frequency(const unsigned de) {
   else if (de >= LOWER_FOR_32MHZ && de <= UPPER_FOR_32MHZ)
     cpu_freq_calculated = 32000000;
 
-  ticks_per_10_us = (cpu_freq_calculated / 16) / 100000;
+  ticks_per_10_us = cpu_freq_calculated / 1600000;
 }
+
+//
+// calculate the reload value for a div/4 timer
+// such that it triggers/loops after approx 5us
+// see EZ80_DELAY (check_alt_firmware_rst_18)
+//
+uint8_t calculate_tmr0_rr() { return (cpu_freq_calculated / 1282051); }
 
 uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_wait_states /* only 8 bit value accepted */) {
   uint8_t  bc;

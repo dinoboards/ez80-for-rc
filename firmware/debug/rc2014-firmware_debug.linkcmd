@@ -108,7 +108,7 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM
  ".\rst-10-04-i2c-functions.obj", \
  ".\rst-10-07-rom-flashing-functions.obj", \
  ".\rst-10-functions.obj", \
- ".\rst-18-rc2014-bank-switch.obj", \
+ ".\rst-18-delay.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
  ".\uart-calculate.obj", \

@@ -20,6 +20,7 @@
 
 	XREF	check_alt_firmware_rst_08
 	XREF	check_alt_firmware_rst_10
+	XREF	check_alt_firmware_rst_18
 	XREF	_rst_rc2014_bank_switch
 	XREF	_default_mi_handler_hook
 
@@ -42,7 +43,7 @@ _rst10:
 
 	org	ROM_BASE+%18
 _rst18:
-	jp.lil	_rst_rc2014_bank_switch
+	jp.lil	check_alt_firmware_rst_18
 
 	org	ROM_BASE+%20
 _rst20:

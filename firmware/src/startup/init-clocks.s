@@ -23,6 +23,7 @@
 	XREF	_cpu_freq_calculated
 	XREF	_assign_cpu_frequency
 	XREF	_rtc_enabled
+	XREF	_calculate_tmr0_rr
 
 	XREF	__lshru
 	XREF	__idivu
@@ -32,8 +33,8 @@ RTC_CLOCK_RATE EQU 32768
 COUNT_FOR_60HZ_RTC EQU RTC_CLOCK_RATE / 60
 
 _init_clocks:
-	; initialise TMR5 for maxmimum count and DIV4
 	CALL	configure_tmr4
+	CALL	configure_tmr5
 
 	IN0	A, (RTC_CTRL)
 	AND	%70 ; 01110000
@@ -109,7 +110,6 @@ configure_tmr1:
 	OUT0	(TMR1_RR_H), A
 	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_16 | TMR_IRQ_EN  ; CLK DIV NOT APPLIED IF BASED ON RTC CLOCK SOURCE
 	OUT0	(TMR1_CTL), A
-
 	RET
 
 _configure_tmr1_to_sysclk:
@@ -145,7 +145,20 @@ skip:
 	CALL	_assign_cpu_frequency
 	POP	DE
 
+	CALL	configure_tmr0
+
 	DI
+	RET
+;
+; Configure TMR0 for as a single shot timer for a duration of 5us
+;
+configure_tmr0:
+	CALL	_calculate_tmr0_rr
+	OUT0	(TMR0_RR_L), A
+	XOR	A
+	OUT0	(TMR0_RR_H), A
+	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
+	OUT0	(TMR0_CTL), A
 	RET
 ;
 ; Configure TMR4 as a continuous timer based on CPU clock /16
@@ -158,7 +171,24 @@ configure_tmr4:
 	OUT0	(TMR4_RR_H), A
 	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_16
 	OUT0	(TMR4_CTL), A
+	RET
 
+configure_tmr5:
+	; set PB5 for RC2014 clock out
+	; out frequency = 18.432Mhz / (DIV * (RR*2))
+	;               = 18.432Mhz / (4 * 1 * 2)
+	;               =  2.304Mhz
+	;
+	;               = 20Mhz / 8 = 2.5Mhz
+	;               = 24MHz / 8 = 3Mhz
+
+	; divide cpu clock by 4
+	LD	A, 1
+	OUT0	(TMR5_RR_L), A
+	XOR	A
+	OUT0	(TMR5_RR_H), A
+	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_4
+	OUT0	(TMR5_CTL), A
 	RET
 ;
 ; Determine the timer counter to generate a 50Hz or 60Hz timer based on the cpu clock

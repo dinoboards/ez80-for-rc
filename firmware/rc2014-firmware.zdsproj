@@ -24,7 +24,7 @@
 <file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-07-rom-flashing-functions.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
-<file filter-key="">src\rst-18-rc2014-bank-switch.s</file>
+<file filter-key="">src\rst-18-delay.s</file>
 <file filter-key="">src\startup\system-vars.s</file>
 <file filter-key="">src\test.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-calculate.c</file>
@@ -564,13 +564,6 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM</option>
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>86</line-number>
-<pathname>Z:\rc2014-ez80\firmware\src\rst-10-drivers\rst-10-00-system-utils-functions.s</pathname>
-<address>4453</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>
