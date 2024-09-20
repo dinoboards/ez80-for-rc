@@ -17,11 +17,11 @@
 
 	XREF	__INTERNAL_HIRAM_ROM
 	XREF	__INTERNAL_HIRAM_RAM
-	XREF	__LENGTH_ALT_BIOS_CTRL
+	XREF	__INTERNAL_HIRAM_LEN
 
-	XREF	__FLASH_ROM_CODE
-	XREF	__FLASH_RAM_CODE
-	XREF	__LENGTH_FLASH_CODE
+	XREF	__INTERNAL_RAM_ROM
+	XREF	__INTERNAL_RAM_RAM
+	XREF	__INTERNAL_RAM_LEN
 
 ;*****************************************************************************
 ; Startup code
@@ -63,33 +63,16 @@ _c_bss_done:
 	ldir			 		; Copy the data section
 _c_data_done:
 
-	;--------------------------------------------------
-	; Copy CODE (which may be in FLASH) to RAM if the
-	; copy_code_to_ram symbol is set in the link control file
-	ld	a, __copy_code_to_ram
-	or	a, a
-	jr	z, _copy_code_to_ram_done
-	ld	bc, __len_code			; [bc] = code length
-	ld	a, __len_code >> 16		; Check for non-zero length
-	or	a, c
-	or	a, b
-	jr	z, _copy_code_to_ram_done	; __len_code is zero-length ...
-	ld	hl, __low_romcode		; [hl] = code_copy
-	ld	de, __low_code			; [de] = code
-	ldir					; Copy the code section
-_copy_code_to_ram_done:
-	; C environment created, continue with the initialization process
-
 ; copy ALT_BIOS_CTRL code to top of RAM
 	LD	HL, __INTERNAL_HIRAM_ROM
 	LD	DE, __INTERNAL_HIRAM_RAM
-	LD	BC, __LENGTH_ALT_BIOS_CTRL
+	LD	BC, __INTERNAL_HIRAM_LEN
 	LDIR
 
 ; copy FLASH INFO helper code
-	LD	HL, __FLASH_ROM_CODE
-	LD	DE, __FLASH_RAM_CODE
-	LD	BC, __LENGTH_FLASH_CODE
+	LD	HL, __INTERNAL_RAM_ROM
+	LD	DE, __INTERNAL_RAM_RAM
+	LD	BC, __INTERNAL_RAM_LEN
 	LDIR
 
 	ret

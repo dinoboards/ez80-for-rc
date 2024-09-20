@@ -1,4 +1,4 @@
-#pragma modsect FLASH_INFO_PAGE
+#pragma modsect INTERNAL_RAM_ROM
 
 #include "rom-flashing.h"
 #include <critical-blocks.h>

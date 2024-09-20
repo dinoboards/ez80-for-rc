@@ -155,12 +155,6 @@ clean:
             $(RM) "$(WORKDIR)\main.lis"
 	@if exist "$(WORKDIR)\main.lst"  \
             $(RM) "$(WORKDIR)\main.lst"
-	@if exist "$(WORKDIR)\program-info-page-shim.obj"  \
-            $(RM) "$(WORKDIR)\program-info-page-shim.obj"
-	@if exist "$(WORKDIR)\program-info-page-shim.lis"  \
-            $(RM) "$(WORKDIR)\program-info-page-shim.lis"
-	@if exist "$(WORKDIR)\program-info-page-shim.lst"  \
-            $(RM) "$(WORKDIR)\program-info-page-shim.lst"
 	@if exist "$(WORKDIR)\program-info-page.obj"  \
             $(RM) "$(WORKDIR)\program-info-page.obj"
 	@if exist "$(WORKDIR)\program-info-page.lis"  \
@@ -318,7 +312,6 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
             $(WORKDIR_ESCSPACE)\internal-hiram.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
-            $(WORKDIR_ESCSPACE)\program-info-page-shim.obj  \
             $(WORKDIR_ESCSPACE)\program-info-page.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing.obj  \
@@ -420,14 +413,6 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
-
-$(WORKDIR_ESCSPACE)\program-info-page-shim.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\program-info-page-shim.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\program-info-page-shim.s"
 
 $(WORKDIR_ESCSPACE)\program-info-page.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\program-info-page.c  \
