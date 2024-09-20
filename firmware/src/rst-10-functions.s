@@ -7,7 +7,7 @@
 	XREF	_i2c_dispatch
 	XREF	_rom_flash_dispatch
 
-	SECTION CODE
+	SECTION INTERNAL_RAM_ROM
 
 	.assume adl=1
 

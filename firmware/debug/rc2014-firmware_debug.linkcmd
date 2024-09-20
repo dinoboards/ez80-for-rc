@@ -92,6 +92,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
  ".\cpu-freq-calculator.obj", \
  ".\cstartup.obj", \
  ".\dual-firmware.obj", \
+ ".\gpio-b4-isr-marshaller.obj", \
  ".\i2c-calculate.obj", \
  ".\init-clocks.obj", \
  ".\init-f92.obj", \

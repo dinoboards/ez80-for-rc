@@ -8,6 +8,7 @@
 <file filter-key="">src\startup\cpu-freq-calculator.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\startup\dual-firmware.s</file>
+<file filter-key="">src\gpio-b4-isr-marshaller.s</file>
 <file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
 <file filter-key="">src\startup\init-clocks.s</file>
 <file filter-key="">src\startup\init-f92.asm</file>

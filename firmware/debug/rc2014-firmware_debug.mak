@@ -120,6 +120,12 @@ clean:
             $(RM) "$(WORKDIR)\dual-firmware.lis"
 	@if exist "$(WORKDIR)\dual-firmware.lst"  \
             $(RM) "$(WORKDIR)\dual-firmware.lst"
+	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.obj"  \
+            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.obj"
+	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lis"  \
+            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lis"
+	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lst"  \
+            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lst"
 	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
             $(RM) "$(WORKDIR)\i2c-calculate.obj"
 	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
@@ -304,6 +310,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\dual-firmware.obj  \
+            $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
             $(WORKDIR_ESCSPACE)\init-clocks.obj  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
@@ -372,6 +379,10 @@ $(WORKDIR_ESCSPACE)\dual-firmware.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\dual-firmware.s"
+
+$(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
+            $(PRJDIR_ESCSPACE)\src\gpio-b4-isr-marshaller.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\gpio-b4-isr-marshaller.s"
 
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \

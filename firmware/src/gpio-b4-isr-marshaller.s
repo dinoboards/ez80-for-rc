@@ -1,0 +1,43 @@
+	include "./config.inc"
+
+	SECTION INTERNAL_RAM_ROM
+
+	.assume adl=1
+
+	PUBLIC	_marshall_isr
+_marshall_isr:	; defer to the external ISR routine
+	PUSH	IX			; BECAUSE DESPITE IT ONLY HAVE ACCESS TO THE
+	PUSH	IY			; LOWER 16 BIT OF REGISTERS, THE VARIOUS INSTRUCTIONS
+
+	PUSH	AF
+	EX	AF, AF'
+	PUSH	AF
+
+	PUSH	BC			; IF WE INTERRUPTED AN ADL ROUTINE,
+	PUSH	DE			; WE NEED TO SAVE ALL 24-BIT REGISTERS
+	PUSH	HL			; BEFORE JUMPING INTO Z80 CODE,
+	EXX				; CAN HAVE SIDE EFFECTS ON THE UPPER 8 BITS
+	PUSH	BC			; AF REGISTER PAIR DOES NOT HAVE AN UPPER 8 BITS TO BE
+	PUSH	DE			; IMPACTED, SO WE CAN SKIP IT
+	PUSH	HL
+
+skip_24_reg_save:
+	RST.S	%38			; marshall to ISR routine of external ROM
+
+	POP	HL
+	POP	DE
+	POP	BC
+	EXX
+	POP	HL
+	POP	DE
+	POP	BC
+
+	POP	AF
+	EX	AF, AF'
+	POP	AF
+
+	POP	IY
+	POP	IX
+
+	EI
+	RETI.L			; return rom interrupt - back to ADL 0 or 1

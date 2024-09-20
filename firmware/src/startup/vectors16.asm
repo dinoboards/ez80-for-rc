@@ -1,11 +1,3 @@
-
-
-
-	XREF	__init
-	XREF	__low_rom
-
-	XDEF	_reset
-
 	include "../config.inc"
 
         DEFINE	ZFL_nINT_Flash, SPACE = RAM
@@ -17,12 +9,14 @@
 	DEFINE	.RESET, SPACE = ROM
 	SEGMENT	.RESET
 
-
+	XREF	__init
+	XREF	__low_rom
+	XDEF	_reset
 	XREF	check_alt_firmware_rst_08
 	XREF	check_alt_firmware_rst_10
 	XREF	check_alt_firmware_rst_18
-	XREF	_rst_rc2014_bank_switch
 	XREF	_default_mi_handler_hook
+	XREF	_marshall_isr_hook
 
 
 _reset:
@@ -144,46 +138,6 @@ _marshall_isr_rom_hook:
 	JP	_marshall_isr_hook
 
 ENDIF
-
-	PUBLIC	_marshall_isr
-	XREF	_marshall_isr_hook
-
-_marshall_isr:	; defer to the external ISR routine
-	PUSH	IX			; BECAUSE DESPITE IT ONLY HAVE ACCESS TO THE
-	PUSH	IY			; LOWER 16 BIT OF REGISTERS, THE VARIOUS INSTRUCTIONS
-
-	PUSH	AF
-	EX	AF, AF'
-	PUSH	AF
-
-	PUSH	BC			; IF WE INTERRUPTED AN ADL ROUTINE,
-	PUSH	DE			; WE NEED TO SAVE ALL 24-BIT REGISTERS
-	PUSH	HL			; BEFORE JUMPING INTO Z80 CODE,
-	EXX				; CAN HAVE SIDE EFFECTS ON THE UPPER 8 BITS
-	PUSH	BC			; AF REGISTER PAIR DOES NOT HAVE AN UPPER 8 BITS TO BE
-	PUSH	DE			; IMPACTED, SO WE CAN SKIP IT
-	PUSH	HL
-
-skip_24_reg_save:
-	RST.S	%38			; marshall to ISR routine of external ROM
-
-	POP	HL
-	POP	DE
-	POP	BC
-	EXX
-	POP	HL
-	POP	DE
-	POP	BC
-
-	POP	AF
-	EX	AF, AF'
-	POP	AF
-
-	POP	IY
-	POP	IX
-
-	EI
-	RETI.L			; return rom interrupt - back to ADL 0 or 1
 
 
 ;*****************************************************************************

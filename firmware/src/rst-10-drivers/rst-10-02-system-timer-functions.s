@@ -33,7 +33,7 @@
 	XREF	_ticks_per_10_us
 	XREF	_marshall_isr
 
-	SEGMENT	CODE
+	SEGMENT	INTERNAL_RAM_ROM
 
 	.ASSUME ADL=1
 

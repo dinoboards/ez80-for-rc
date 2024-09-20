@@ -12,7 +12,7 @@
 	XREF	_rx_buffer_get_length
 	XREF	_get_brg
 
-	SECTION CODE
+	SECTION INTERNAL_RAM_ROM
 
 	.assume adl=1
 
