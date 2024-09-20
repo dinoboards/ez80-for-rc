@@ -92,7 +92,7 @@ uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_wa
     return (uint8_t)(ws / 1000);
 
   // Must use Z80 BUS CYCLES to get sufficient wait states
-  bc = (((ws + 1000) / 3) + 500) / 1000;
+  bc = (ws / 2000) + 1;
 
   if (bc > 15)
     bc = 15;
