@@ -15,8 +15,8 @@
         XREF	__low_code
         XREF	__low_romcode
 
-	XREF	__ALT_FIRMWARE_CTRL_ROM
-	XREF	__ALT_FIRMWARE_CTRL_RAM
+	XREF	__INTERNAL_HIRAM_ROM
+	XREF	__INTERNAL_HIRAM_RAM
 	XREF	__LENGTH_ALT_BIOS_CTRL
 
 	XREF	__FLASH_ROM_CODE
@@ -81,8 +81,8 @@ _copy_code_to_ram_done:
 	; C environment created, continue with the initialization process
 
 ; copy ALT_BIOS_CTRL code to top of RAM
-	LD	HL, __ALT_FIRMWARE_CTRL_ROM
-	LD	DE, __ALT_FIRMWARE_CTRL_RAM
+	LD	HL, __INTERNAL_HIRAM_ROM
+	LD	DE, __INTERNAL_HIRAM_RAM
 	LD	BC, __LENGTH_ALT_BIOS_CTRL
 	LDIR
 

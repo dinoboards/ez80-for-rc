@@ -299,7 +299,7 @@ tmr_throttle_start:
 ;  C: Duration in 10's of microseconds
 ;
 ; Outputs:
-;  None
+;   HL: Target time point for next delay
 ;
 tmr_throttle_wait:
 	;while (delay_point - jiffy >= 0)

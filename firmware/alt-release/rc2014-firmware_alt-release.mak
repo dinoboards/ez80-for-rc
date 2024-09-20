@@ -144,6 +144,12 @@ clean:
             $(RM) "$(WORKDIR)\init-f92.lis"
 	@if exist "$(WORKDIR)\init-f92.lst"  \
             $(RM) "$(WORKDIR)\init-f92.lst"
+	@if exist "$(WORKDIR)\internal-hiram.obj"  \
+            $(RM) "$(WORKDIR)\internal-hiram.obj"
+	@if exist "$(WORKDIR)\internal-hiram.lis"  \
+            $(RM) "$(WORKDIR)\internal-hiram.lis"
+	@if exist "$(WORKDIR)\internal-hiram.lst"  \
+            $(RM) "$(WORKDIR)\internal-hiram.lst"
 	@if exist "$(WORKDIR)\main.obj"  \
             $(RM) "$(WORKDIR)\main.obj"
 	@if exist "$(WORKDIR)\main.lis"  \
@@ -228,12 +234,6 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-functions.lis"
 	@if exist "$(WORKDIR)\rst-10-functions.lst"  \
             $(RM) "$(WORKDIR)\rst-10-functions.lst"
-	@if exist "$(WORKDIR)\rst-18-delay.obj"  \
-            $(RM) "$(WORKDIR)\rst-18-delay.obj"
-	@if exist "$(WORKDIR)\rst-18-delay.lis"  \
-            $(RM) "$(WORKDIR)\rst-18-delay.lis"
-	@if exist "$(WORKDIR)\rst-18-delay.lst"  \
-            $(RM) "$(WORKDIR)\rst-18-delay.lst"
 	@if exist "$(WORKDIR)\system-vars.obj"  \
             $(RM) "$(WORKDIR)\system-vars.obj"
 	@if exist "$(WORKDIR)\system-vars.lis"  \
@@ -317,6 +317,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
             $(WORKDIR_ESCSPACE)\init-clocks.obj  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
+            $(WORKDIR_ESCSPACE)\internal-hiram.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\program-info-page-shim.obj  \
             $(WORKDIR_ESCSPACE)\program-info-page.obj  \
@@ -330,7 +331,6 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-07-rom-flashing-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-18-delay.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
@@ -405,6 +405,14 @@ $(WORKDIR_ESCSPACE)\init-f92.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-f92.asm"
+
+$(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\internal-hiram.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\internal-hiram.s"
 
 $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\main.s  \
@@ -508,10 +516,6 @@ $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-18-delay.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-18-delay.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-delay.s"
 
 $(WORKDIR_ESCSPACE)\system-vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \

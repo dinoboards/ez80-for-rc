@@ -58,7 +58,15 @@ void assign_cpu_frequency(const unsigned de) {
 // such that it triggers/loops after approx 5us
 // see EZ80_DELAY (check_alt_firmware_rst_18)
 //
-uint8_t calculate_tmr0_rr() { return (cpu_freq_calculated / 1282051); }
+#define OVERHEAD_OFFSET 13
+uint8_t calculate_tmr0_rr() {
+  int16_t result = (cpu_freq_calculated / 800000) - OVERHEAD_OFFSET;
+
+  if (result <= 0)
+    return 1;
+
+  return (uint8_t)result;
+}
 
 uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_wait_states /* only 8 bit value accepted */) {
   uint8_t  bc;

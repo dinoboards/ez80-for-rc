@@ -1,10 +1,10 @@
 ;
 ; Configure timers and clocks
 ;
-; TMR5 -> generates a bus clock - CPU clock / 4, sent to PB5
-;         TMR5 is configured in init_params_f92.asm
+; TMR0 -> One shot timer for delay functions
 ; TMR1 -> system ticks - generates a 50Hz or 60Hz counter, based on RTC or CPU clock
 ; TMR4 -> continuous down counter, based on CPU clock / 16.  Uses to calculate microsecond delays
+; TMR5 -> generates a bus clock - CPU clock / 4, sent to PB5
 
         INCLUDE "..\config.inc"
 

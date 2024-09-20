@@ -11,6 +11,7 @@
 <file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
 <file filter-key="">src\startup\init-clocks.s</file>
 <file filter-key="">src\startup\init-f92.asm</file>
+<file filter-key="">src\internal-hiram.s</file>
 <file filter-key="">src\main.s</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\program-info-page-shim.s</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\program-info-page.c</file>
@@ -24,7 +25,6 @@
 <file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-07-rom-flashing-functions.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
-<file filter-key="">src\rst-18-delay.s</file>
 <file filter-key="">src\startup\system-vars.s</file>
 <file filter-key="">src\test.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-calculate.c</file>
@@ -123,11 +123,11 @@ COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-CHANGE ALT_FIRMWARE_CTRL_ROM=ALT_FIRMWARE_CTRL_RAM
-COPY ALT_FIRMWARE_CTRL_RAM ROM
-DEFINE __ALT_FIRMWARE_CTRL_ROM = COPY BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __ALT_FIRMWARE_CTRL_RAM = BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM</option>
+CHANGE INTERNAL_HIRAM_ROM=INTERNAL_HIRAM_RAM
+COPY INTERNAL_HIRAM_RAM ROM
+DEFINE __INTERNAL_HIRAM_ROM = COPY BASE OF INTERNAL_HIRAM_RAM
+DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -252,11 +252,11 @@ COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-CHANGE ALT_FIRMWARE_CTRL_ROM=ALT_FIRMWARE_CTRL_RAM
-COPY ALT_FIRMWARE_CTRL_RAM ROM
-DEFINE __ALT_FIRMWARE_CTRL_ROM = COPY BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __ALT_FIRMWARE_CTRL_RAM = BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM</option>
+CHANGE INTERNAL_HIRAM_ROM=INTERNAL_HIRAM_RAM
+COPY INTERNAL_HIRAM_RAM ROM
+DEFINE __INTERNAL_HIRAM_ROM = COPY BASE OF INTERNAL_HIRAM_RAM
+DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -381,11 +381,11 @@ COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-CHANGE ALT_FIRMWARE_CTRL_ROM=ALT_FIRMWARE_CTRL_RAM
-COPY ALT_FIRMWARE_CTRL_RAM ROM
-DEFINE __ALT_FIRMWARE_CTRL_ROM = COPY BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __ALT_FIRMWARE_CTRL_RAM = BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM</option>
+CHANGE INTERNAL_HIRAM_ROM=INTERNAL_HIRAM_RAM
+COPY INTERNAL_HIRAM_RAM ROM
+DEFINE __INTERNAL_HIRAM_ROM = COPY BASE OF INTERNAL_HIRAM_RAM
+DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -510,11 +510,11 @@ COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-CHANGE ALT_FIRMWARE_CTRL_ROM=ALT_FIRMWARE_CTRL_RAM
-COPY ALT_FIRMWARE_CTRL_RAM ROM
-DEFINE __ALT_FIRMWARE_CTRL_ROM = COPY BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __ALT_FIRMWARE_CTRL_RAM = BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM</option>
+CHANGE INTERNAL_HIRAM_ROM=INTERNAL_HIRAM_RAM
+COPY INTERNAL_HIRAM_RAM ROM
+DEFINE __INTERNAL_HIRAM_ROM = COPY BASE OF INTERNAL_HIRAM_RAM
+DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>

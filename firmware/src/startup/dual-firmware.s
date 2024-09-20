@@ -1,35 +1,6 @@
 ; -----------------------------------------------------------------------------
 ; Dual Firmware Boot Process
 ; -----------------------------------------------------------------------------
-; This assembly file implements the logic to manage a dual firmware boot process.
-; The main firmware will attempt to run the alternate firmware up to 3 times,
-; tracking unsuccessful boots in the flash info page (ALT_FIRMWARE_BOOT_INFO).
-;
-; The process is as follows:
-;
-; 1. First check the main firmware performs is to see if the special marker at 0x01FF00 is set to "RC2014"
-;   - If it is not, then no alt firmware is present, so continue with the main bios startup
-;
-; 2. Next the main bios inspect the flash infor bytes (0xFE...0xFF) and determine the current status of the alt-firmware
-;
-; if ALT_FIRMWARE_STAT == 0x5A and ALT_FIRMWARE_BOOT_COUNT == 0, then a new image has been flash and has yet to be booted into.
-;
-; thereafter, on each reboot of the platform, the main firmware will continue to increment the ALT_FIRMWARE_BOOT_COUNT
-; if the count reaches 3, then the alt-firmware is considered bad and the main firmware will consider the alt-firmware as bas and
-; continue with the its startup
-;
-; if the bios running under the alt-firmware invoks the RST %10 function SYSUTL_BOOT_VERIFIED, then a value of 0x2F is written to the
-; to the ALT_FIRMWARE_BOOT_INFO byte, indicating that the alt-firmware has successfully booted and is considered good and will always henceforth
-; be booted into.
-;
-; -----------------------------------------------------------------------------
-
-
-
-;
-; -----------------------------------------------------------------------------
-; Dual Firmware Boot Process
-; -----------------------------------------------------------------------------
 ; This assembly file implements the logic to manage a dual firmware boot process.  The main firmware will attempt to
 ; run an alternate firmware up to 3 times, tracking any unsuccessful boots in the flash info page
 ; at ALT_FIRMWARE_BOOT_INFO.
@@ -89,12 +60,6 @@
 ; -----------------------------------------------------------------------------
 
 	include "..\config.inc"
-
-	DEFINE	ALT_FIRMWARE_CTRL_ROM, SPACE = ROM
-	SEGMENT	ALT_FIRMWARE_CTRL_ROM
-
-	DEFINE	ALT_FIRMWARE_CTRL_RAM, SPACE = RAM, ORG=%02FF00
-	SEGMENT	ALT_FIRMWARE_CTRL_RAM
 
 	XREF	_IFL_ReadInfoWord24
 	XREF	_IFL_WriteInfoByte
@@ -179,55 +144,7 @@ compare_loop:
 	POP	HL
 	JP	ALT_FIRMWARE_BASE
 
-
 STRING_TO_CHECK:
 	DB	"RC2014"
 
-
 ENDIF
-
-	SEGMENT	ALT_FIRMWARE_CTRL_ROM
-
-	PUBLIC	FIRMWARE_RAM_RESERVED
-FIRMWARE_RAM_RESERVED:
-_firmware_ram_reseved:
-
-	XREF	_rst_08_functions
-	PUBLIC	check_alt_firmware_rst_08
-check_alt_firmware_rst_08:
-	JP	_rst_08_functions
-
-	XREF	_rst_10_functions
-	PUBLIC	check_alt_firmware_rst_10
-check_alt_firmware_rst_10:
-	JP	_rst_10_functions
-
-	XREF	_system_timer_isr
-	PUBLIC	_system_timer_isr_hook
-_system_timer_isr_hook:
-	JP	_system_timer_isr
-
-	XREF	_marshall_isr
-	PUBLIC	_marshall_isr_hook
-_marshall_isr_hook:
-	JP	_marshall_isr
-
-	XREF	_uart0_receive_isr
-	PUBLIC	_uart0_receive_isr_hook
-_uart0_receive_isr_hook:
-	JP	_uart0_receive_isr
-
-	PUBLIC	_default_mi_handler_hook
-_default_mi_handler_hook:					; if alt-firmware wants to handle a default interrupt
-	POP	AF					; it can change this to be a 'jump' to its own handler
-	EI						; a will indicate the index of the interrupt
-	RETI.L
-	DB	0, 0, 0, 0
-
-
-
-_reserved:
-	DB	0, 0, 0, 0, 0, 0, 0, 0
-	DB	0, 0, 0, 0, 0, 0, 0, 0
-
-

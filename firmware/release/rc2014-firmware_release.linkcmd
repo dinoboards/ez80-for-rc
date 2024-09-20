@@ -71,7 +71,7 @@ DEFINE __RAM_ADDR_U_INIT_PARAM = $02
 DEFINE __FLASH_CTL_INIT_PARAM = $88
 DEFINE __FLASH_ADDR_U_INIT_PARAM = $00
 
-define _SYS_CLK_FREQ = 18432000
+define _SYS_CLK_FREQ = 20000000
 
 
 /* additional user-defined directives */
@@ -80,11 +80,11 @@ COPY FLASH_RAM_CODE ROM
 DEFINE __FLASH_ROM_CODE = COPY BASE OF FLASH_RAM_CODE
 DEFINE __FLASH_RAM_CODE = BASE OF FLASH_RAM_CODE
 DEFINE __LENGTH_FLASH_CODE = LENGTH OF FLASH_RAM_CODE
-CHANGE ALT_FIRMWARE_CTRL_ROM=ALT_FIRMWARE_CTRL_RAM
-COPY ALT_FIRMWARE_CTRL_RAM ROM
-DEFINE __ALT_FIRMWARE_CTRL_ROM = COPY BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __ALT_FIRMWARE_CTRL_RAM = BASE OF ALT_FIRMWARE_CTRL_RAM
-DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM
+CHANGE INTERNAL_HIRAM_ROM=INTERNAL_HIRAM_RAM
+COPY INTERNAL_HIRAM_RAM ROM
+DEFINE __INTERNAL_HIRAM_ROM = COPY BASE OF INTERNAL_HIRAM_RAM
+DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
+DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF INTERNAL_HIRAM_RAM
 /* end additional user-defined directives */
 
 "Z:\rc2014-ez80\firmware\bin\rc2014-release-firmware"= \
@@ -96,6 +96,7 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM
  ".\i2c-calculate.obj", \
  ".\init-clocks.obj", \
  ".\init-f92.obj", \
+ ".\internal-hiram.obj", \
  ".\main.obj", \
  ".\program-info-page-shim.obj", \
  ".\program-info-page.obj", \
@@ -109,7 +110,6 @@ DEFINE __LENGTH_ALT_BIOS_CTRL = LENGTH OF ALT_FIRMWARE_CTRL_RAM
  ".\rst-10-04-i2c-functions.obj", \
  ".\rst-10-07-rom-flashing-functions.obj", \
  ".\rst-10-functions.obj", \
- ".\rst-18-delay.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
  ".\uart-calculate.obj", \
