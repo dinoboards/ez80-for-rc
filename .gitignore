@@ -14,3 +14,4 @@ hardware/bin
 hardware/bin/**/*.doc
 
 apps/bin/
+releases/
