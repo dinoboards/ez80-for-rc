@@ -6,6 +6,7 @@
 *.hex
 *.lis
 *.src
+Thumbs.db
 
 hardware/bin
 *.mx
