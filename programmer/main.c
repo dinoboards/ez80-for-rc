@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "pico/stdlib.h"
+#include <stdio.h>
 #ifdef CYW43_WL_GPIO_LED_PIN
 #include "pico/cyw43_arch.h"
 #endif
@@ -10,7 +10,14 @@
 #define ZDI_ZCL_PIN 15
 #define ZDI_ZDA_PIN 14
 
-#define DELAY() sleep_us(1);
+#define DELAY_HALF() sleep_us(1)
+#define DELAY()                                                                                                                    \
+  {                                                                                                                                \
+    DELAY_HALF();                                                                                                                  \
+    DELAY_HALF();                                                                                                                  \
+  }
+
+// #define DELAY() {for(int i = 0; i < 20; i++) { __asm volatile ("nop\n"); } }
 
 static inline void float_pin_high(const uint8_t pin) { gpio_set_dir(pin, GPIO_IN); }
 
@@ -37,16 +44,16 @@ int init_zdi_pins(void) {
 
 void start_condition() {
   float_pin_high(ZDI_ZDA_PIN);
-  DELAY()
+  DELAY();
 
   float_pin_high(ZDI_ZCL_PIN);
-  DELAY()
+  DELAY_HALF();
 
   pin_low(ZDI_ZDA_PIN);
-  DELAY()
+  DELAY_HALF();
 
   pin_low(ZDI_ZCL_PIN);
-  DELAY()
+  DELAY_HALF();
 }
 
 void send_bit(const bool bit) {
@@ -55,11 +62,11 @@ void send_bit(const bool bit) {
   else
     pin_low(ZDI_ZDA_PIN);
 
-  DELAY()
+  DELAY_HALF();
   float_pin_high(ZDI_ZCL_PIN);
-  DELAY()
+  DELAY();
   pin_low(ZDI_ZCL_PIN);
-  DELAY()
+  DELAY_HALF();
 }
 
 bool send_address(uint8_t dat, bool read_write, bool separator) {
@@ -72,18 +79,22 @@ bool send_address(uint8_t dat, bool read_write, bool separator) {
   }
 
   send_bit(read_write);
+  send_bit(separator);
+}
 
-  if (separator)
-    float_pin_high(ZDI_ZDA_PIN);
-  else
-    pin_low(ZDI_ZDA_PIN);
+uint8_t read_bit() {
+  uint8_t result = 0;
 
-  DELAY()
+  DELAY_HALF();
   float_pin_high(ZDI_ZCL_PIN);
-  DELAY()
-  float_pin_high(ZDI_ZDA_PIN);
-  DELAY()
+  DELAY_HALF();
+  if (gpio_get(ZDI_ZDA_PIN))
+    result = 1;
+  DELAY_HALF();
   pin_low(ZDI_ZCL_PIN);
+  DELAY_HALF();
+
+  return result;
 }
 
 uint8_t read_byte() {
@@ -93,20 +104,14 @@ uint8_t read_byte() {
 
   for (uint8_t i = 0; i < 8; i++) {
     result <<= 1;
-    float_pin_high(ZDI_ZCL_PIN);
-    DELAY();
-    if (gpio_get(ZDI_ZDA_PIN))
-      result |= 1;
-    DELAY();
-    pin_low(ZDI_ZCL_PIN);
-    DELAY();
+    result |= read_bit();
   }
 
   return result;
 }
 
 uint8_t read_reg_byte(const uint8_t reg_addr) {
-  send_address(reg_addr, 1, 1);
+  send_address(reg_addr, 1, 0);
   return read_byte();
 }
 
