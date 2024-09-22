@@ -1,6 +1,11 @@
+$version = $env:version
+if (-not $version) {
+    $version = (Get-Date).ToString("yy-MM-dd")
+}
+
 # Define the output zip file name
 $releaseDir = "releases"
-$zipFile = "$releaseDir/release.zip"
+$zipFile = "$releaseDir/release-$version.zip"
 
 # Define the directories to include
 $firmwareBin = "firmware/bin"
