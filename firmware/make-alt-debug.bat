@@ -1,3 +1,3 @@
 
 cd alt-debug
-make -B -f .\rc2014-firmware_alt-debug.mak
+make -B -f .\ez80-for-rc-firmware_alt-debug.mak

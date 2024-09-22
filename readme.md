@@ -1,5 +1,5 @@
 
-## eZ80 Firmware for the RC2014 Platform
+## eZ80 Firmware for the RC2014/RCBus Platform
 
 This repo contains the code required for operating the eZ80 CPU on an RCBus/RC2014 platform.  It is has been primarily designed to support the EZ80 configuration within RomWBW.
 
@@ -34,9 +34,9 @@ This is a ZDSII ez80Acclaim (5.3.5) project.
 The build process requires a windows installation, and that the source be placed in a specific absolute path:
 
 Recommend process:
-* Clone repo to `Z:\rc2014-ez80`
+* Clone repo to `Z:\ez80-for-rc`
 * Install the ZDS IDE to `Z:\ZDS`
-* Using ZDSII IDE, open the project file in Z:\rc2014-ez80\firmware\rc2014-firmware.zdsproj
+* Using ZDSII IDE, open the project file in Z:\ez80-for-rc\firmware\ez80-for-rc-firmware.zdsproj
 
 > Many of the configuration files created and managed by the ZDSII IDE include full absolute paths to files.  So if you try open the project file
 under a different local path, many of the project files will be updated to that path.  It may possibly still work -- but if you wish to contribute to this repo, you would need to undo all these path changes.

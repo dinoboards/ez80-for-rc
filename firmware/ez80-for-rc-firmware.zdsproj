@@ -113,7 +113,7 @@
 </tool>
 <tool name="Librarian">
 <options>
-<option name="outfile" type="string" change-action="build">.\release\rc2014-firmware.lib</option>
+<option name="outfile" type="string" change-action="build">.\release\ez80-for-rc-firmware.lib</option>
 </options>
 </tool>
 <tool name="Linker">
@@ -134,7 +134,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="map" type="boolean" change-action="none">true</option>
 <option name="maxhexlen" type="integer" change-action="build">64</option>
 <option name="objlibmods" type="string" change-action="build"></option>
-<option name="of" type="string" change-action="build">bin\rc2014-release-firmware</option>
+<option name="of" type="string" change-action="build">bin\ez80-rc-firmware-release</option>
 <option name="quiet" type="boolean" change-action="none">true</option>
 <option name="relist" type="boolean" change-action="build">false</option>
 <option name="startuptype" type="string" change-action="build">Included</option>
@@ -242,7 +242,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM</option>
 </tool>
 <tool name="Librarian">
 <options>
-<option name="outfile" type="string" change-action="build">.\debug\rc2014-firmware.lib</option>
+<option name="outfile" type="string" change-action="build">.\debug\ez80-for-rc-firmware.lib</option>
 </options>
 </tool>
 <tool name="Linker">
@@ -263,7 +263,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="map" type="boolean" change-action="none">true</option>
 <option name="maxhexlen" type="integer" change-action="build">64</option>
 <option name="objlibmods" type="string" change-action="build"></option>
-<option name="of" type="string" change-action="build">bin\rc2014-debug-firmware</option>
+<option name="of" type="string" change-action="build">bin\ez80-rc-firmware-debug</option>
 <option name="quiet" type="boolean" change-action="none">true</option>
 <option name="relist" type="boolean" change-action="build">false</option>
 <option name="startuptype" type="string" change-action="build">Included</option>
@@ -371,7 +371,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM</option>
 </tool>
 <tool name="Librarian">
 <options>
-<option name="outfile" type="string" change-action="build">.\alt-debug\rc2014-firmware.lib</option>
+<option name="outfile" type="string" change-action="build">.\alt-debug\ez80-for-rc-firmware.lib</option>
 </options>
 </tool>
 <tool name="Linker">
@@ -392,7 +392,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="map" type="boolean" change-action="none">true</option>
 <option name="maxhexlen" type="integer" change-action="build">64</option>
 <option name="objlibmods" type="string" change-action="build"></option>
-<option name="of" type="string" change-action="build">bin\rc2014-alt-debug-firmware</option>
+<option name="of" type="string" change-action="build">bin\ez80-rc-firmware-alt-debug</option>
 <option name="quiet" type="boolean" change-action="none">true</option>
 <option name="relist" type="boolean" change-action="build">false</option>
 <option name="startuptype" type="string" change-action="build">Included</option>
@@ -500,7 +500,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM</option>
 </tool>
 <tool name="Librarian">
 <options>
-<option name="outfile" type="string" change-action="build">.\alt-release\rc2014-firmware.lib</option>
+<option name="outfile" type="string" change-action="build">.\alt-release\ez80-for-rc-firmware.lib</option>
 </options>
 </tool>
 <tool name="Linker">
@@ -521,7 +521,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM</option>
 <option name="map" type="boolean" change-action="none">true</option>
 <option name="maxhexlen" type="integer" change-action="build">64</option>
 <option name="objlibmods" type="string" change-action="build"></option>
-<option name="of" type="string" change-action="build">bin\rc2014-alt-release-firmware</option>
+<option name="of" type="string" change-action="build">bin\ez80-rc-firmware-alt-release</option>
 <option name="quiet" type="boolean" change-action="none">true</option>
 <option name="relist" type="boolean" change-action="build">false</option>
 <option name="startuptype" type="string" change-action="build">Included</option>

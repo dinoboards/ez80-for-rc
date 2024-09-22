@@ -1,3 +1,3 @@
 
 cd release
-make -B -f .\rc2014-firmware_release.mak
+make -B -f .\ez80-for-rc-firmware_release.mak
