@@ -44,8 +44,8 @@
          <CS3>
             <busMode>4F</busMode>
             <controlRegister>E8</controlRegister>
-            <lower>B9</lower>
-            <upper>B9</upper>
+            <lower>30</lower>
+            <upper>30</upper>
          </CS3>
       </ChipSelects>
       <Internal>
