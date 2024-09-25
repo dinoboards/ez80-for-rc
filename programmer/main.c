@@ -1,8 +1,10 @@
 #include "pico/stdlib.h"
 #include <stdio.h>
 #ifdef CYW43_WL_GPIO_LED_PIN
+#include "main.h"
 #include "pico/cyw43_arch.h"
 #endif
+#include "read_line.h"
 
 #define LOW  false
 #define HIGH true
@@ -11,10 +13,10 @@
 #define ZDI_ZDA_PIN 22
 #define GPIO_22     22
 
-#define ZDI_READ  1
-#define ZDI_WRITE 0
+#define ZDI_READ     1
+#define ZDI_WRITE    0
 #define ZDI_CONTINUE 0
-#define ZDI_ENDED 1
+#define ZDI_ENDED    1
 
 #define IN_RAM __attribute__((noinline, long_call, section(".time_critical")))
 
@@ -125,22 +127,27 @@ uint8_t IN_RAM read_reg_byte(const uint8_t reg_addr) {
   return read_single_byte();
 }
 
-int IN_RAM main() {
-  int rc = init_zdi_pins();
-  hard_assert(rc == PICO_OK);
+int main() {
+  // int rc = init_zdi_pins();
+  // hard_assert(rc == PICO_OK);
 
   stdio_init_all();
 
   while (true) {
-    gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
-
-    while (gpio_get(ZDI_ZDA_PIN) == 0 || gpio_get(ZDI_ZCL_PIN) == 0)
-      ;
-
-    uint8_t r0 = read_reg_byte(3);
-    gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
-
-    printf("R0 = %02X\r\n", r0);
-    sleep_ms(500);
+    read_line();
+    printf("\r\n%s\n", input_buffer);
   }
+
+  // while (true) {
+  //   gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
+
+  //   while (gpio_get(ZDI_ZDA_PIN) == 0 || gpio_get(ZDI_ZCL_PIN) == 0)
+  //     ;
+
+  //   uint8_t r0 = read_reg_byte(3);
+  //   gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
+
+  //   printf("R0 = %02X\r\n", r0);
+  //   sleep_ms(500);
+  // }
 }

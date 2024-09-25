@@ -50,6 +50,7 @@ set_source_files_properties(
 
 add_executable(programmer
     main.c
+    read_line.c
     )
 
 # pull in common dependencies
