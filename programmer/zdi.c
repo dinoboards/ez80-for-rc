@@ -99,11 +99,10 @@ void IN_RAM pin_high(uint8_t pin) { gpio_put(pin, HIGH); }
 void IN_RAM pin_low(uint8_t pin) { gpio_put(pin, LOW); }
 
 void wait_for_zda() {
+  gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
 
-  // gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
-
-  // while (gpio_get(ZDI_ZDA_PIN) == 0 || gpio_get(ZDI_ZCL_PIN) == 0)
-  //   ;
+  while (gpio_get(ZDI_ZDA_PIN) == 0 || gpio_get(ZDI_ZCL_PIN) == 0)
+    ;
 }
 
 void IN_RAM start_condition() {
