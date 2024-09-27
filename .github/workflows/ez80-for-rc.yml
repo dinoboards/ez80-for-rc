@@ -18,19 +18,36 @@ jobs:
           submodules: true
 
       - name: pull docker tool chain
-        run: docker pull dinoboards/ez80-rc-builder
+        run: |
+          docker pull dinoboards/ez80-rc-builder:0.0.1
+          docker pull z88dk/z88dk
+          docker pull dinoboards/pipico:0.0.1
+
+      - name: programmer build
+        run: |
+          docker run -v ./programmer:/programmer/ --privileged=true -t dinoboards/pipico:0.0.1 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
+
+      - name: Archive Programmer PI Pico Firmware
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: pi-pico-firmware
+          path: |
+            programmer/build/programmer.uf2
 
       - name: firmware make-debug
-        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-debug.bat
+        env:
+          DISPLAY: :1
+        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-debug.bat"
 
       - name: firmware make-alt-debug
-        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-alt-debug.bat
+        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-alt-debug.bat"
 
       - name: firmware make-release
-        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-release.bat
+        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-release.bat"
 
       - name: firmware make-alt-release
-        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-alt-release.bat
+        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-alt-release.bat"
 
       - name: Archive firmware
         uses: actions/upload-artifact@v4
@@ -39,3 +56,14 @@ jobs:
           name: firmware
           path: |
             firmware/bin
+
+      - name: build apps
+        run: docker run -v ./apps:/src/ -t z88dk/z88dk make apps -j RELEASE=true
+
+      - name: Archive apps
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: apps
+          path: |
+            apps/bin/release/*.COM
