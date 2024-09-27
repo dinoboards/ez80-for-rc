@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
-static uint8_t zdi_brk_ctl = 0;
+static uint8_t  zdi_brk_ctl   = 0;
+static uint32_t cpu_frequency = 20000000;
 
 void IN_RAM pin_low(uint8_t pin);
 void IN_RAM pin_high(uint8_t pin);
@@ -256,6 +257,15 @@ void zdi_full_reset() {
   // zdi_out0_nn_a(PC_DDR);
   // zdi_out0_nn_a(PD_DDR);
 
+  zdi_load_a_nn(0x00);
+  zdi_out0_nn_a(FLASH_ADDR_U); // flash at 0x00xxxx
+  zdi_load_a_nn(0x88);         // flash enabled, 4 wait state
+  zdi_out0_nn_a(FLASH_CTRL);
+
+  // FLASH_KEY  = FLASH_KEY_UNLOCK_1;
+  // FLASH_KEY  = FLASH_KEY_UNLOCK_2;
+  // FLASH_FDIV = fdiv;
+
   // zdi_wr_reg_byte(ZDI_WR_DATA_L, 0x00);
   // zdi_wr_reg_byte(ZDI_WR_DATA_H, 0x00);
   // zdi_wr_reg_byte(ZDI_WR_DATA_U, 0x00);
@@ -268,3 +278,7 @@ void zdi_full_reset() {
 
   zdi_set_mode_z80();
 }
+
+void zdi_set_cpu_freq(const uint32_t freq) { cpu_frequency = freq; }
+
+void zdi_erase_flash() {}

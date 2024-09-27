@@ -8,6 +8,9 @@
 
 extern uint32_t cpu_freq_calculated;
 
+// TODO: this function is overkill, just do
+//  return CEILING [cpu_freq_calculated x (5.1/1000000)]
+
 uint8_t calculate_fdiv(void) {
   uint32_t optimal_duration = 100000;
   uint8_t  optimal_fdiv     = 0;

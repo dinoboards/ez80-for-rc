@@ -84,4 +84,6 @@ void zdi_full_reset();
 void zdi_set_mode_adl();
 void zdi_set_mode_z80();
 
+void zdi_set_cpu_freq(const uint32_t freq);
+
 #endif
