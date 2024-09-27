@@ -57,6 +57,7 @@ wait_for_valid_connection:
   printf("\r\n");
 
   while (true) {
+    printf("ZDI> ");
     if (read_line(zdi_connection_lost))
       process_command();
     else

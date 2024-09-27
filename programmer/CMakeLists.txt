@@ -48,6 +48,8 @@ set_source_files_properties(
   read_line.c
   zdi.c
   command_dispatcher.c
+  hex_record.c
+  ifl.c
   PROPERTIES COMPILE_OPTIONS "-Wpedantic;-Werror;-Wall;-Wextra;-O3"
 )
 
@@ -56,6 +58,8 @@ add_executable(programmer
     read_line.c
     zdi.c
     command_dispatcher.c
+  hex_record.c
+  ifl.c
     )
 
 # pull in common dependencies
