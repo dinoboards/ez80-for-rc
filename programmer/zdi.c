@@ -1,4 +1,5 @@
 #include "zdi.h"
+#include "ez80f92.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
 #include <string.h>
@@ -221,4 +222,49 @@ void zdi_debug_break() {
 void zdi_debug_continue() {
   zdi_brk_ctl &= 0b01111111;
   zdi_wr_reg_byte(ZDI_WR_BRK_CTL, zdi_brk_ctl);
+}
+
+#define INSTR_DI      0x5F
+#define INSTR_LD_A_NN 0x3E
+#define OUT0_NN_A     ((int[]){0xED, 0x39})
+
+void zdi_instr_di() { zdi_wr_reg_byte(ZDI_WR_IS0, INSTR_DI); }
+
+void zdi_load_a_nn(uint8_t nn) {
+  zdi_wr_reg_byte(ZDI_WR_IS1, nn);
+  zdi_wr_reg_byte(ZDI_WR_IS0, INSTR_LD_A_NN);
+}
+
+void zdi_out0_nn_a(uint8_t nn) {
+  zdi_wr_reg_byte(ZDI_WR_IS2, nn);
+  zdi_wr_reg_byte(ZDI_WR_IS1, OUT0_NN_A[1]);
+  zdi_wr_reg_byte(ZDI_WR_IS0, OUT0_NN_A[0]);
+}
+
+void zdi_set_mode_adl() { zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_SET_ADL); }
+
+void zdi_set_mode_z80() { zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_RESET_ADL); }
+
+void zdi_full_reset() {
+  zdi_debug_break();
+  zdi_instr_di();
+
+  zdi_set_mode_adl();
+
+  // zdi_load_a_nn(0xFF);
+  // zdi_out0_nn_a(PB_DDR);
+  // zdi_out0_nn_a(PC_DDR);
+  // zdi_out0_nn_a(PD_DDR);
+
+  // zdi_wr_reg_byte(ZDI_WR_DATA_L, 0x00);
+  // zdi_wr_reg_byte(ZDI_WR_DATA_H, 0x00);
+  // zdi_wr_reg_byte(ZDI_WR_DATA_U, 0x00);
+  // zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_SP | RW_CTL_WR);
+
+  zdi_wr_reg_byte(ZDI_WR_DATA_L, 0x00);
+  zdi_wr_reg_byte(ZDI_WR_DATA_H, 0x00);
+  zdi_wr_reg_byte(ZDI_WR_DATA_U, 0x00);
+  zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_PC | RW_CTL_WR);
+
+  zdi_set_mode_z80();
 }
