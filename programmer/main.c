@@ -41,19 +41,29 @@ void report_zdi_id_failed(void) {
     printf("\b");
 }
 
+void conduct_test() {
+  zdi_configure_pins();
+
+  while (true) {
+    zdi_wr_reg_byte(ZDI_WR_BRK_CTL, 0x5A);
+    sleep_ms(1000);
+  }
+}
 int main() {
-  init_pins();
+  zdi_init_pins();
 
   stdio_init_all();
 
+  // conduct_test();
+
 wait_for_valid_connection:
   printf("\r\n---------------\r\n");
-  wait_for_detected_zdi_connection(report_connection, report_non_connection);
+  zdi_wait_for_connection(report_connection, report_non_connection);
   printf("\r\n");
 
-  configure_for_zdi_interface();
+  zdi_configure_pins();
 
-  wait_for_valid_identity(report_zdi_id, report_zdi_id_failed);
+  zdi_wait_for_valid_identity(report_zdi_id, report_zdi_id_failed);
   printf("\r\n");
 
   while (true) {
@@ -70,7 +80,7 @@ wait_for_valid_connection:
   //   while (gpio_get(ZDI_ZDA_PIN) == 0 || gpio_get(ZDI_ZCL_PIN) == 0)
   //     ;
 
-  //   uint8_t r0 = read_reg_byte(3);
+  //   uint8_t r0 = zdi_rd_reg_byte(3);
   //   gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
 
   //   printf("R0 = %02X\r\n", r0);

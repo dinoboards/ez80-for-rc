@@ -50,7 +50,7 @@ set_source_files_properties(
   command_dispatcher.c
   hex_record.c
   ifl.c
-  PROPERTIES COMPILE_OPTIONS "-Wpedantic;-Werror;-Wall;-Wextra;-O3"
+  PROPERTIES COMPILE_OPTIONS "-Werror;-Wall;-Wextra;-O3"
 )
 
 add_executable(programmer

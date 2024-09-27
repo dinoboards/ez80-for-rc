@@ -19,6 +19,8 @@
 #define ZDI_CONTINUE 0
 #define ZDI_ENDED    1
 
+#define ZDI_WR_BRK_CTL 0x10
+
 #define ZDI_RD_ID_L   0x00
 #define ZDI_RD_ID_H   0x01
 #define ZDI_RD_ID_REV 0x02
@@ -41,14 +43,16 @@ typedef void (*report_non_connection_fn_t)(void);
 typedef void (*report_ez80_id_fn_t)(uint8_t zdi_id_low, uint8_t zdi_id_high, uint8_t zdi_id_rev);
 typedef void (*report_ez80_id_failed_fn_t)(void);
 
-void init_pins(void);
-void wait_for_detected_zdi_connection(const report_connection_fn_t, const report_non_connection_fn_t);
-void configure_for_zdi_interface(void);
+void zdi_init_pins(void);
+void zdi_wait_for_connection(const report_connection_fn_t, const report_non_connection_fn_t);
+void zdi_configure_pins(void);
 bool zdi_connection_lost(void);
-void wait_for_valid_identity(const report_ez80_id_fn_t, const report_ez80_id_failed_fn_t);
+void zdi_wait_for_valid_identity(const report_ez80_id_fn_t, const report_ez80_id_failed_fn_t);
 
-void IN_RAM    pin_low(uint8_t pin);
-void IN_RAM    pin_high(uint8_t pin);
-uint8_t IN_RAM read_reg_byte(const uint8_t reg_addr);
+uint8_t IN_RAM zdi_rd_reg_byte(const uint8_t reg_addr);
+void IN_RAM    zdi_wr_reg_byte(const uint8_t reg_addr, const uint8_t value);
+
+void zdi_debug_break();
+void zdi_debug_continue();
 
 #endif
