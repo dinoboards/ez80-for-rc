@@ -1,0 +1,41 @@
+name: ez80-for-rc
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+jobs:
+  ez80-for-rc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: pull docker tool chain
+        run: docker pull dinoboards/ez80-rc-builder
+
+      - name: firmware make-debug
+        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-debug.bat
+
+      - name: firmware make-alt-debug
+        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-alt-debug.bat
+
+      - name: firmware make-release
+        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-release.bat
+
+      - name: firmware make-alt-release
+        run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-alt-release.bat
+
+      - name: Archive firmware
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: firmware
+          path: |
+            firmware/bin
