@@ -19,9 +19,17 @@
 #define ZDI_CONTINUE 0
 #define ZDI_ENDED    1
 
-#define ZDI_ID_L   0x00
-#define ZDI_ID_H   0x01
-#define ZDI_ID_REV 0x02
+#define ZDI_RD_ID_L   0x00
+#define ZDI_RD_ID_H   0x01
+#define ZDI_RD_ID_REV 0x02
+#define ZDI_RD_STAT   0x03
+
+// ZDI_STAT register masks
+#define ZDI_STAT_ACTIVE   (1 << 7)
+#define ZDI_STAT_HALT_SLP (1 << 5)
+#define ZDI_STAT_ADL      (1 << 4)
+#define ZDI_STAT_MADL     (1 << 3)
+#define ZDI_STAT_IEF1     (1 << 2)
 
 #define IN_RAM __attribute__((noinline, long_call, section(".time_critical")))
 

@@ -66,9 +66,9 @@ void wait_for_valid_identity(const report_ez80_id_fn_t        report_ez80_id_fn,
   bool valid = false;
 
   do {
-    uint8_t zdi_id_low  = read_reg_byte(ZDI_ID_L);
-    uint8_t zdi_id_high = read_reg_byte(ZDI_ID_H);
-    uint8_t zdi_id_rev  = read_reg_byte(ZDI_ID_REV);
+    uint8_t zdi_id_low  = read_reg_byte(ZDI_RD_ID_L);
+    uint8_t zdi_id_high = read_reg_byte(ZDI_RD_ID_H);
+    uint8_t zdi_id_rev  = read_reg_byte(ZDI_RD_ID_REV);
 
     report_ez80_id_fn(zdi_id_low, zdi_id_high, zdi_id_rev);
 
