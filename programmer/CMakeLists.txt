@@ -45,12 +45,17 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
 set_source_files_properties(
   main.c
+  read_line.c
+  zdi.c
+  command_dispatcher.c
   PROPERTIES COMPILE_OPTIONS "-Wpedantic;-Werror;-Wall;-Wextra;-O3"
 )
 
 add_executable(programmer
     main.c
     read_line.c
+    zdi.c
+    command_dispatcher.c
     )
 
 # pull in common dependencies

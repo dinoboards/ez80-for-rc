@@ -1,4 +1,6 @@
 #include "read_line.h"
+#include "pico/stdlib.h"
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -66,13 +68,41 @@ void handle_char_insertion() {
     printf("\b");
 }
 
-void read_line() {
+void strip_whitespaces() {
+  char *start = input_buffer;
+  char *end   = input_buffer + strlen(input_buffer) - 1;
+
+  // Move start pointer to the first non-whitespace character
+  while (isspace((unsigned char)*start)) {
+    start++;
+  }
+
+  // Move end pointer to the last non-whitespace character
+  while (end > start && isspace((unsigned char)*end)) {
+    end--;
+  }
+
+  // Calculate the new length of the trimmed string
+  size_t new_length = end - start + 1;
+
+  // Shift the trimmed string to the beginning of the buffer
+  memmove(input_buffer, start, new_length);
+
+  // Null-terminate the string
+  input_buffer[new_length] = '\0';
+}
+
+bool read_line(const pool_status_fn_t pool_status_fn) {
   memset(input_buffer, 0, BUFFER_SIZE);
   line_index = 0;
   cursor_pos = 0;
 
   while (true) {
-    ch = getchar();
+    do {
+      if (pool_status_fn())
+        return false;
+      ch = stdio_getchar_timeout_us(100);
+    } while (ch == PICO_ERROR_TIMEOUT);
 
     if (ch == '\r' || ch == '\n')
       break;
@@ -86,4 +116,7 @@ void read_line() {
       handle_char_insertion();
   }
   input_buffer[line_index] = '\0'; // Null-terminate the string
+
+  strip_whitespaces();
+  return true;
 }
