@@ -18,9 +18,11 @@ jobs:
           submodules: true
 
       - name: pull docker tool chain
-        run: docker pull dinoboards/ez80-rc-builder
+        run: docker pull dinoboards/ez80-rc-builder && docker pull z88dk/z88dk
 
       - name: firmware make-debug
+        env:
+          DISPLAY: :1
         run: docker run --rm -v .:/ez80-for-rc/ --privileged=true -t dinoboards/ez80-rc-builder wine cmd.exe /c "cd firmware & make-debug.bat"
 
       - name: firmware make-alt-debug
@@ -39,3 +41,15 @@ jobs:
           name: firmware
           path: |
             firmware/bin
+
+      - name: build apps
+        run: docker run -v ./apps:/src/ -t z88dk/z88dk make apps -j RELEASE=true
+
+      - name: Archive apps
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: apps
+          path: |
+            apps/bin/release/*.COM
+
