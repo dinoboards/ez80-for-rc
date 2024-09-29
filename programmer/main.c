@@ -44,8 +44,9 @@ void report_zdi_id_failed(void) {
 void conduct_test() {
   zdi_configure_pins();
 
+  uint8_t buffer[13] = {0x00, 0x5A, 0x00, 0x5A};
   while (true) {
-    zdi_wr_reg_byte(ZDI_WR_BRK_CTL, 0x5A);
+    zdi_flash_write_bytes(0x000000, buffer, 4);
     sleep_ms(1000);
   }
 }

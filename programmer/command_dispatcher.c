@@ -5,6 +5,7 @@
 #include "zdi.h"
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 /*
 
@@ -25,7 +26,7 @@ break or b
 continue or c
   continue the ez80
 
-reset or r
+reset
   reset the ez80 (internal only reset line is not triggered)
 
 mode or m [ADL|Z80]
@@ -33,6 +34,12 @@ mode or m [ADL|Z80]
 
 set cpu-freq [FREQ]
   Set the CPU frequency in Mhz or Hz
+
+set pc [ADDR]
+  Set the PC register to the specified address
+
+wr or read [ADDR]
+  Read 16 bytes from the eZ80 memory
 */
 
 void process_status_command(void);
@@ -42,6 +49,7 @@ void process_continue_command(void);
 void process_reset_command(void);
 void process_mode_command(void);
 void process_set_command(void);
+void process_read_command(void);
 
 void process_command(void) {
   printf("\r\n");
@@ -69,7 +77,7 @@ void process_command(void) {
            "continue or c\r\n"
            "  continue the ez80\r\n"
            "\r\n"
-           "reset or r\r\n"
+           "reset\r\n"
            "  reset the ez80 (internal only reset line is not triggered)\r\n"
            "\r\n"
            "mode or m [ADL|Z80]\r\n"
@@ -77,6 +85,15 @@ void process_command(void) {
            "\r\n"
            "set cpu-freq [FREQ]\r\n"
            "  Set the CPU frequency in Mhz or Hz\r\n"
+           "\r\n"
+           "set pc [ADDR]\r\n"
+           "  Set the PC register to the specified address\r\n"
+           "\r\n"
+           "wr or write [ADDR] [DATA]\r\n"
+           "  Write a byte to the eZ80 memory\r\n"
+           "\r\n"
+           "rd or read [ADDR]\r\n"
+           "  Read a byte from the eZ80 memory\r\n"
            "\r\n");
 
     return;
@@ -88,12 +105,14 @@ void process_command(void) {
     process_break_command();
   } else if (strcmp(input_buffer, "continue") == 0 || strcmp(input_buffer, "c") == 0) {
     process_continue_command();
-  } else if (strcmp(input_buffer, "reset") == 0 || strcmp(input_buffer, "r") == 0) {
+  } else if (strcmp(input_buffer, "reset") == 0) {
     process_reset_command();
   } else if (strcmp(input_buffer, "mode") == 0 || strcmp(input_buffer, "m") == 0) {
     process_mode_command();
   } else if (strcmp(input_buffer, "set") == 0) {
     process_set_command();
+  } else if (strcmp(input_buffer, "rd") == 0 || strcmp(input_buffer, "read") == 0) {
+    process_read_command();
   } else {
     printf("Unknown command: %s\r\n", input_buffer);
   }
@@ -110,13 +129,13 @@ void process_status_command(void) {
   printf("CPU MODE: %s; ", status & ZDI_STAT_ADL ? "ADL" : "Z80");
   printf("MADL: %s; ", status & ZDI_STAT_MADL ? "YES" : "NO");
   printf("INT: %s)\r\n", status & ZDI_STAT_IEF1 ? "EI" : "DI");
+
+  uint32_t pc = read_reg_pc();
+  printf("PC: 0x%06lX\r\n", pc);
 }
 
-int8_t emit_to_null(const uint32_t offset, const uint8_t *data, const uint16_t len) {
-  (void)offset;
-  (void)data;
-  (void)len;
-
+int8_t emit_to_flash(const uint32_t offset, const uint8_t *data, const uint16_t len) {
+  zdi_flash_write_bytes(offset, data, len);
   return ZFL_ERR_SUCCESS;
 }
 
@@ -124,10 +143,12 @@ void process_flash_command(void) {
   printf("Paste the intel hex file contents now..\r\n");
 
   zdi_full_reset();
-  // zdi_erase_flash();
-  // zdi_enable_flash_write();
+  zdi_flash_write_enable();
+  zdi_erase_flash();
 
-  process_hex_records(emit_to_null);
+  process_hex_records(emit_to_flash);
+
+  zdi_flash_write_disable();
   printf("\r\n");
 }
 
@@ -164,6 +185,9 @@ void process_mode_command(void) {
   }
 }
 
+void set_cpu_freq(void);
+void set_pc_addr(void);
+
 void process_set_command(void) {
   const char *command = strtok(NULL, " ");
   if (command == NULL) {
@@ -172,22 +196,67 @@ void process_set_command(void) {
   }
 
   if (strcmp(command, "cpu-freq") == 0) {
-    const char *freq_str = strtok(NULL, " ");
-    if (freq_str == NULL) {
-      printf("Set cpu-freq command requires a frequency (Mhz or full number)\r\n");
-      return;
-    }
-
-    const uint32_t freq = parse_frequency(freq_str);
-    if (freq == 0) {
-      printf("Invalid frequency: %s\r\n", freq_str);
-      return;
-    }
-
-    zdi_set_cpu_freq(freq);
-
-    printf("Set CPU frequency to %ld\r\n", freq);
+    set_cpu_freq();
+  } else if (strcmp(command, "pc") == 0) {
+    set_pc_addr();
   } else {
     printf("Unknown set command: %s\r\n", command);
   }
+}
+
+void set_cpu_freq() {
+  const char *freq_str = strtok(NULL, " ");
+  if (freq_str == NULL) {
+    printf("Set cpu-freq command requires a frequency (Mhz or full number)\r\n");
+    return;
+  }
+
+  const uint32_t freq = parse_frequency(freq_str);
+  if (freq == 0) {
+    printf("Invalid frequency: %s\r\n", freq_str);
+    return;
+  }
+
+  zdi_set_cpu_freq(freq);
+
+  printf("Set CPU frequency to %ld\r\n", freq);
+}
+
+void set_pc_addr(void) {
+  const char *addr_str = strtok(NULL, " ");
+  if (addr_str == NULL) {
+    printf("Set pc command requires an address\r\n");
+    return;
+  }
+
+  const uint32_t addr = strtoul(addr_str, NULL, 16);
+
+  write_reg_pc(addr);
+
+  printf("PC assigned to 0x%06lX\r\n", addr);
+}
+
+void process_read_command(void) {
+  const char *addr_str = strtok(NULL, " ");
+  if (addr_str == NULL) {
+    printf("Read command requires an address\r\n");
+    return;
+  }
+
+  const uint32_t addr = strtoul(addr_str, NULL, 16);
+
+  uint32_t pc = read_reg_pc();
+
+  uint8_t data[16];
+  for (int i = 0; i < 16; i++) {
+    data[i] = zdi_read_byte(addr + i);
+  }
+
+  printf("0x%06lX: ", addr);
+  for (int i = 0; i < 16; i++) {
+    printf("0x%02X ", data[i]);
+  }
+  printf("\r\n");
+
+  write_reg_pc(pc);
 }

@@ -179,7 +179,13 @@ int8_t process_hex_record_data(emit_func_t emit) {
 int8_t process_hex_records(emit_func_t emit) {
   static int8_t  status = ZFL_ERR_SUCCESS;
   static uint8_t record_type;
-  eof = false;
+
+  eof         = false;
+  length      = 0;
+  check_sum   = 0;
+  offset_high = 0;
+  offset_low  = 0;
+  base_addr   = 0;
 
   while (!eof) {
     record_type = process_hex_record_header();

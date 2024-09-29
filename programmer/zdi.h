@@ -14,10 +14,11 @@
 
 // #define GPIO_22     22
 
-#define ZDI_READ     1
-#define ZDI_WRITE    0
-#define ZDI_CONTINUE 0
-#define ZDI_ENDED    1
+#define ZDI_READ  1
+#define ZDI_WRITE 0
+
+#define ZDI_SEP_MORE 0
+#define ZDI_SEP_DONE 1
 
 #define ZDI_WR_BRK_CTL 0x10
 #define ZDI_WR_DATA_L  0x13
@@ -29,11 +30,16 @@
 #define ZDI_WR_IS2     0x23
 #define ZDI_WR_IS1     0x24
 #define ZDI_WR_IS0     0x25
+#define ZDI_WR_MEM     0x30
 
 #define ZDI_RD_ID_L   0x00
 #define ZDI_RD_ID_H   0x01
 #define ZDI_RD_ID_REV 0x02
 #define ZDI_RD_STAT   0x03
+#define ZDI_RD_DATA_L 0x10
+#define ZDI_RD_DATA_H 0x11
+#define ZDI_RD_DATA_U 0x12
+#define ZDI_RD_MEM    0x20
 
 // RW_CTL register codes
 
@@ -75,8 +81,11 @@ void zdi_configure_pins(void);
 bool zdi_connection_lost(void);
 void zdi_wait_for_valid_identity(const report_ez80_id_fn_t, const report_ez80_id_failed_fn_t);
 
-uint8_t IN_RAM zdi_rd_reg_byte(const uint8_t reg_addr);
-void IN_RAM    zdi_wr_reg_byte(const uint8_t reg_addr, const uint8_t value);
+uint8_t IN_RAM zdi_rd_reg(const uint8_t reg_addr, const uint8_t separator_id);
+void IN_RAM    zdi_wr_reg(const uint8_t reg_addr, const uint8_t value, const uint8_t separator_id);
+
+#define zdi_rd_reg_byte(reg_addr)        zdi_rd_reg(reg_addr, ZDI_SEP_DONE)
+#define zdi_wr_reg_byte(reg_addr, value) zdi_wr_reg(reg_addr, value, ZDI_SEP_DONE)
 
 void zdi_debug_break();
 void zdi_debug_continue();
@@ -85,5 +94,15 @@ void zdi_set_mode_adl();
 void zdi_set_mode_z80();
 
 void zdi_set_cpu_freq(const uint32_t freq);
+
+void zdi_flash_write_enable(void);
+void zdi_flash_write_disable(void);
+void zdi_erase_flash(void);
+void zdi_flash_write_bytes(const uint32_t address, const uint8_t *data, const uint16_t len);
+
+void     zdi_write_byte(const uint32_t address, const uint8_t data);
+uint8_t  zdi_read_byte(const uint32_t address);
+uint32_t read_reg_pc();
+void     write_reg_pc(const uint32_t pc);
 
 #endif

@@ -39,3 +39,5 @@ uint32_t parse_frequency(const char *str) {
   // Return the value multiplied by the appropriate factor, cast to int32_t
   return (uint32_t)(value * multiplier);
 }
+
+uint8_t calculate_flash_div(const uint32_t cpu_frequency) { return (uint8_t)((((cpu_frequency * 52L) / 100000L) + 50L) / 100L); }

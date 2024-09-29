@@ -1,6 +1,7 @@
 #include "zdi.h"
 #include "ez80f92.h"
 #include "pico/stdlib.h"
+#include "utils.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -165,7 +166,7 @@ void IN_RAM send_single_write_address(const uint8_t addr) {
   send_bit(1);
 }
 
-uint8_t IN_RAM read_single_byte() {
+uint8_t IN_RAM read_single_byte(const uint8_t separator_id) {
   uint8_t result = 0;
 
   result |= read_bit();
@@ -184,12 +185,12 @@ uint8_t IN_RAM read_single_byte() {
   result <<= 1;
   result |= read_bit();
 
-  send_bit(1);
+  send_bit(separator_id);
 
   return result;
 }
 
-void IN_RAM write_single_byte(const uint8_t value) {
+void IN_RAM write_single_byte(const uint8_t value, const uint8_t separator_id) {
   send_bit(value & 0x80);
   send_bit(value & 0x40);
   send_bit(value & 0x20);
@@ -198,21 +199,21 @@ void IN_RAM write_single_byte(const uint8_t value) {
   send_bit(value & 0x04);
   send_bit(value & 0x02);
   send_bit(value & 0x01);
-  send_bit(1);
+  send_bit(separator_id);
 }
 
-uint8_t IN_RAM zdi_rd_reg_byte(const uint8_t reg_addr) {
+uint8_t IN_RAM zdi_rd_reg(const uint8_t reg_addr, const uint8_t separator_id) {
   wait_for_zda();
   start_condition();
   send_single_read_address(reg_addr);
-  return read_single_byte();
+  return read_single_byte(separator_id);
 }
 
-void IN_RAM zdi_wr_reg_byte(const uint8_t reg_addr, const uint8_t value) {
+void IN_RAM zdi_wr_reg(const uint8_t reg_addr, const uint8_t value, const uint8_t separator_id) {
   wait_for_zda();
   start_condition();
   send_single_write_address(reg_addr);
-  write_single_byte(value);
+  write_single_byte(value, separator_id);
 }
 
 void zdi_debug_break() {
@@ -252,24 +253,18 @@ void zdi_full_reset() {
 
   zdi_set_mode_adl();
 
-  // zdi_load_a_nn(0xFF);
-  // zdi_out0_nn_a(PB_DDR);
-  // zdi_out0_nn_a(PC_DDR);
-  // zdi_out0_nn_a(PD_DDR);
-
   zdi_load_a_nn(0x00);
   zdi_out0_nn_a(FLASH_ADDR_U); // flash at 0x00xxxx
   zdi_load_a_nn(0x88);         // flash enabled, 4 wait state
   zdi_out0_nn_a(FLASH_CTRL);
 
-  // FLASH_KEY  = FLASH_KEY_UNLOCK_1;
-  // FLASH_KEY  = FLASH_KEY_UNLOCK_2;
-  // FLASH_FDIV = fdiv;
-
-  // zdi_wr_reg_byte(ZDI_WR_DATA_L, 0x00);
-  // zdi_wr_reg_byte(ZDI_WR_DATA_H, 0x00);
-  // zdi_wr_reg_byte(ZDI_WR_DATA_U, 0x00);
-  // zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_SP | RW_CTL_WR);
+  uint8_t fdiv = calculate_flash_div(cpu_frequency);
+  zdi_load_a_nn(FLASH_KEY_UNLOCK_1);
+  zdi_out0_nn_a(FLASH_KEY);
+  zdi_load_a_nn(FLASH_KEY_UNLOCK_2);
+  zdi_out0_nn_a(FLASH_KEY);
+  zdi_load_a_nn(fdiv);
+  zdi_out0_nn_a(FLASH_FDIV);
 
   zdi_wr_reg_byte(ZDI_WR_DATA_L, 0x00);
   zdi_wr_reg_byte(ZDI_WR_DATA_H, 0x00);
@@ -281,4 +276,78 @@ void zdi_full_reset() {
 
 void zdi_set_cpu_freq(const uint32_t freq) { cpu_frequency = freq; }
 
-void zdi_erase_flash() {}
+void zdi_flash_write_enable(void) {
+  zdi_load_a_nn(FLASH_KEY_UNLOCK_1);
+  zdi_out0_nn_a(FLASH_KEY);
+  zdi_load_a_nn(FLASH_KEY_UNLOCK_2);
+  zdi_out0_nn_a(FLASH_KEY);
+  zdi_load_a_nn(0);
+  zdi_out0_nn_a(FLASH_PROT);
+}
+
+void zdi_flash_write_disable(void) {
+  zdi_load_a_nn(FLASH_KEY_UNLOCK_1);
+  zdi_out0_nn_a(FLASH_KEY);
+  zdi_load_a_nn(FLASH_KEY_UNLOCK_2);
+  zdi_out0_nn_a(FLASH_KEY);
+  zdi_load_a_nn(0xFF);
+  zdi_out0_nn_a(FLASH_PROT);
+}
+
+void zdi_erase_flash(void) {
+  // issue full erase command
+  zdi_load_a_nn(FLASH_PGCTL_MASS_ERASE);
+  zdi_out0_nn_a(FLASH_PGCTL);
+
+  // we could poll that status or just sleep
+  sleep_ms(500);
+}
+
+void IN_RAM zdi_write_byte(const uint32_t address, const uint8_t data) {
+  // set PC to address
+  zdi_wr_reg_byte(ZDI_WR_DATA_L, address & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_DATA_H, (address >> 8) & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_DATA_U, (address >> 16) & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_PC | RW_CTL_WR);
+
+  sleep_us(3);
+  zdi_wr_reg_byte(ZDI_WR_MEM, data);
+}
+
+uint8_t IN_RAM zdi_read_byte(const uint32_t address) {
+  // set PC to address
+  zdi_wr_reg_byte(ZDI_WR_DATA_L, address & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_DATA_H, (address >> 8) & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_DATA_U, (address >> 16) & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_PC | RW_CTL_WR);
+
+  sleep_us(3);
+  return zdi_rd_reg_byte(ZDI_RD_MEM);
+}
+
+uint32_t read_reg_pc() {
+  zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_PC);
+
+  uint8_t l = zdi_rd_reg_byte(ZDI_RD_DATA_L);
+  uint8_t h = zdi_rd_reg_byte(ZDI_RD_DATA_H);
+  uint8_t u = zdi_rd_reg_byte(ZDI_RD_DATA_U);
+
+  return (u << 16) | (h << 8) | l;
+}
+
+void write_reg_pc(const uint32_t pc) {
+  zdi_wr_reg_byte(ZDI_WR_DATA_L, pc & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_DATA_H, (pc >> 8) & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_DATA_U, (pc >> 16) & 0xFF);
+  zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_PC | RW_CTL_WR);
+}
+
+void zdi_flash_write_bytes(const uint32_t address, const uint8_t *data, const uint16_t len) {
+
+  zdi_set_mode_adl();
+
+  for (int i = 0; i < len; i++) {
+    zdi_write_byte(address + i, data[i]);
+    sleep_ms(1);
+  }
+}

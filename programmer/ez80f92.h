@@ -1,3 +1,17 @@
+#ifndef __EZ80F92_H
+#define __EZ80F92_H
+
+/*
+ * Register bit values
+ */
+#define BIT7 (1 << 7)
+#define BIT6 (1 << 6)
+#define BIT5 (1 << 5)
+#define BIT4 (1 << 4)
+#define BIT3 (1 << 3)
+#define BIT2 (1 << 2)
+#define BIT1 (1 << 1)
+#define BIT0 (1 << 0)
 
 /* General-Purpose Input/Output Ports */
 #define PB_DR   0x9A
@@ -25,3 +39,18 @@
 #define FLASH_ROW    0xFD
 #define FLASH_COL    0xFE
 #define FLASH_PGCTL  0xFF
+
+/*
+ * Flash Key register (FLASH_KEY) unlock codes
+ */
+#define FLASH_KEY_UNLOCK_1 0xB6
+#define FLASH_KEY_UNLOCK_2 0x49
+
+/*
+ * Flash Program Control register (FLASH_PGCTL) bit definitions
+ */
+#define FLASH_PGCTL_ROW_PGM    BIT2
+#define FLASH_PGCTL_PG_ERASE   BIT1
+#define FLASH_PGCTL_MASS_ERASE BIT0
+
+#endif
