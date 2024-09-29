@@ -21,11 +21,11 @@ jobs:
         run: |
           docker pull dinoboards/ez80-rc-builder:0.0.1
           docker pull z88dk/z88dk
-          docker pull dinoboards/pipico:0.0.1
+          docker pull dinoboards/pipico:0.0.2
 
       - name: programmer build
         run: |
-          docker run -v ./programmer:/programmer/ --privileged=true -t dinoboards/pipico:0.0.1 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
+          docker run -v ./programmer:/programmer/ --privileged=true -t dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
 
       - name: Archive Programmer PI Pico Firmware
         uses: actions/upload-artifact@v4
