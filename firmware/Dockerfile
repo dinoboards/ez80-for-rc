@@ -1,7 +1,7 @@
 # Requires ZDS files to at ./ZDS
-# Requires ez800-for-rc files to be at ./ez80-for-rc
+# Requires ez80-for-rc files to be at ./ez80-for-rc
 
-# cd ../.. && docker build -f ez80-for-rc/firmware/Dockerfile --progress plain -t ez80-rc-builder .
+# docker build -f ez80-for-rc/firmware/Dockerfile --progress plain -t ez80-rc-builder .
 
 # from within firmware dir:
 # docker run -v ${PWD}:/ez80-for-rc/firmware --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-debug.bat"

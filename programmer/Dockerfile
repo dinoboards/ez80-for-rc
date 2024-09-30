@@ -1,6 +1,7 @@
-# docker build --progress plain -t pipico:0.0.2 .
-
 # from within the programmer dir
+#
+# docker build --progress plain -t pipico:0.0.2 .
+#
 # docker run -v ${PWD}:/programmer/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/pipico:0.0.2
 #
 # or
