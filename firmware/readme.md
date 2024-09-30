@@ -61,8 +61,8 @@ The silk screen on the PCB indicates the correct orientation for the IDC connect
 Refer to the following images for the correct installation orientation.
 
 <div style="display: flex; justify-content: space-evenly;">
-  <img src="../assets/eZ80-programmer-orientation.jpg" alt="eZ80 on RC2014" style="width: 35%;">
-  <img src="../assets/eZ80-programmer-installed.jpg" alt="eZ80 on RC2014" style="width: 35%;">
+  <img src="../docs/assets/eZ80-programmer-orientation.jpg" alt="eZ80 on RC2014" style="width: 35%;">
+  <img src="../docs/assets/eZ80-programmer-installed.jpg" alt="eZ80 on RC2014" style="width: 35%;">
 </div>
 
 <br/>
