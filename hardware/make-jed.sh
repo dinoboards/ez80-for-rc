@@ -17,5 +17,5 @@ wine ${WINCUPLPATH}cupl.exe -e -x -f - -ju ${WINCUPLPATH}\cupl.dl $NAME 2>>./bin
 sed -i '/Location/d' ./${NAME}.jed
 
 mv ${NAME}.jed ./bin
-mv ${NAME}.doc bin/${NAME}.doc
+mv ${NAME}.doc bin/${NAME}.txt
 mv ${NAME}.mx bin/${NAME}.mx

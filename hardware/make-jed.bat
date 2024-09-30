@@ -20,7 +20,7 @@ REM Removed the location entry - the TL866II Plus programmer seems to have loadi
 
 findstr /v /i /L /c:"Location" %PLD_SRC%.jed >bin\%PLD_SRC%.jed
 
-move %PLD_SRC%.doc bin\%PLD_SRC%.doc
+move %PLD_SRC%.doc bin\%PLD_SRC%.txt
 move %PLD_SRC%.mx bin\%PLD_SRC%.mx
 
 del %PLD_SRC%.jed
