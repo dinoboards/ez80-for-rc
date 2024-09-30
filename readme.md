@@ -1,11 +1,11 @@
 
-## eZ80 Firmware for the RC2014/RCBus Platform
+## eZ80 for the RCBus/RC2014
 
-This repo contains the code required for operating the eZ80 CPU on an RCBus/RC2014 platform.  It is has been primarily designed to support the EZ80 configuration within RomWBW.
+The eZ80 for RCBus/RC2014 is a module designed for the RCBus and RC2014 backplanes.
 
-The firmware will manage startup, configuration of on-chip devices, interrupt marshalling and handover to external ROM/RAM modules in Z80 compatibility mode.
+Its designed as a 'compatible upgrade' to the stock Z80 CPU.  The eZ80 is a CPU that was first released by Zilog about 20 years ago, and still available from the manufacturer today.
 
-Full description and progress at my hackaday project page: https://hackaday.io/project/196330-ez80-cpu-for-rc2014-and-other-backplanes
+If you want to read through the full development history of this project, have a look at my hackaday project page: https://hackaday.io/project/196330-ez80-cpu-for-rc2014-and-other-backplanes
 
 also mirrored at https://dinoboards.github.io/ez80-for-rc2014-backplanes/
 
@@ -13,65 +13,31 @@ also mirrored at https://dinoboards.github.io/ez80-for-rc2014-backplanes/
   <img src="./assets/eZ80-V1.7-installed-profile-front.jpg" alt="eZ80 on RC2014" width="50%">
 </div>
 
-## Solution
+# eZ80 CPU
 
-This firmware is for an eZ80 based RCBus/RC2014 compatible module. This module can be used instead of a stock Z80 CPU module.
+The eZ80 CPU is an enhanced version of the original Z80, largely maintaining compatibility with its predecessor while offering significant improvements. It can directly address up to 16MB of memory and achieves far greater performance per clock cycle due to increased instruction efficiency and pipelining. Additionally, it integrates various on-chip peripherals such as timers, UART, SPI, I2C, and GPIOs, reducing the need for external hardware components.
 
-It needs to be paired with a compatible ROM/RAM module running RomWBW (eg: the RC2014 Stock 512K ROM/RAM module).
+While the eZ80 might appear slow and limited by today's standards, it represents, I think, an interesting evolution from the original 1970s Z80 to the modern day embedded microcontrollers.
 
-The RomWBW image needs to be assembled with the EZ80 STD target (see RomWBW build instructions).
+# Repository Contents
+
+This repository includes:
+* [firmware](./firmware/readme.md): Firmware for the on-chip flash ROM of the eZ80
+* [programmer](./programmer/readme.md): Code and instructions for using a Raspberry Pi Pico module to flash the firmware (an alternative to the Zilog eZ80 Acclaim USB Smart Cable)
+* [hardware](./hardware/readme.md): PLD/JED code for the ATF16V8 PLD required for the eZ80 RCBus Interface Module
+* [apps](./apps/readme.md): A collection of CP/M applications to support and explore the eZ80
+
 
 ## RomWBW
 
-This firmware is designed to work in conjunction with HBIOS/RomWBW developed and maintained by Wayne Warthen.
+This eZ80 module needs to be installed into a RC2014 or RCBus compatible backplane, and paired with a compatible ROM/RAM module running RomWBW (eg: the RC2014 Stock 512K ROM/RAM module).
+
+The RomWBW image needs to be assembled with the EZ80 STD target (see RomWBW build instructions).
 
 See [RomWBW](https://github.com/wwarthen/RomWBW)
 
-## Building the firmware code
 
-This is a ZDSII ez80Acclaim (5.3.5) project.
-
-The build process requires a windows installation, and that the source be placed in a specific absolute path:
-
-Recommend process:
-* Clone repo to `Z:\ez80-for-rc`
-* Install the ZDS IDE to `Z:\ZDS`
-* Using ZDSII IDE, open the project file in Z:\ez80-for-rc\firmware\ez80-for-rc-firmware.zdsproj
-
-> Many of the configuration files created and managed by the ZDSII IDE include full absolute paths to files.  So if you try open the project file
-under a different local path, many of the project files will be updated to that path.  It may possibly still work -- but if you wish to contribute to this repo, you would need to undo all these path changes.
-
-### Using a local share to create a 'Z' drive on your PC
-
-If like me, you don't have an actual drive mounted as `Z:`, you can create a network mount to a directory on your computer.
-
-1. Choose/create any empty directory on your computer.
-2. Create a network share on this directory (typically right click on windows explorer and choose Properties, then choose 'Share' tab) - call it `EZ80`
-3. Mount a drive on your local computer to this newly created network share (you may have to manually enter the network path `\\<your-computer-name>\EZ80`)
-4. Mount and ensure you select 'Reconnect at sign-in'
-
-Once you have created a `Z:` drive, you can follow the recommended instruction above to clone this repo.
-
-### Zilog Tool set
-
-The Zilog ZDS IDE can be found at: https://zilog.com/index.php?option=com_zcm&task=view&soft_id=54&Itemid=74
-
-As mentioned above, recommended you install it into the path `Z:\ZDS`
-
-> You should end up with the executable files within the directory `Z:\ZDS\bin\`
-
-This is a very old tool set.  But it does allow for on-chip debugging.
-
-### Zilog Hardware Programmer Tool
-
-To load the firmware onto the eZ80 module, you will need the *Zilog eZ80 Acclaim USB Smart Cable*
-
-It can be purchased from suppliers such as digikey and mouser
-
-* Digikey link: https://www.digikey.com.au/en/products/detail/zilog/ZUSBASC0200ZACG/17374332
-* Mouser link: https://au.mouser.com/ProductDetail/692-ZUSBASC0200ZACG
-
-### Programming/Flashing
+### Programming/Flashing the eZ80
 
 The eZ80 CPU module features a 6-pin header for connecting the Zilog programmer's IDC connector. It is important to note that this header is not keyed, which means the connector can be attached in the incorrect orientation.
 

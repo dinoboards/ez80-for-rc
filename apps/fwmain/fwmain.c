@@ -17,6 +17,6 @@ uint8_t main(const int argc, const char *argv[]) {
 
   stat = IFL_ProgramInfoPage(0xFE, zeroed, 2);
 
-  printf("On next boot, main bios will be loaded\n");
+  printf("On next boot, main firmware will be loaded\n");
   return 0;
 }
