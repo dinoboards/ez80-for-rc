@@ -29,3 +29,8 @@ See the Wikipedia page for basic overview of the CPU (<a href="https://en.wikipe
   <li>Make it as easy as possible for builders to do their own tinkering and hacking of the eZ80.</li>
   <li>Develop a new Memory Module designed specifically for the <i>eZ80 for RC</i> to allow it to use it large linear memory access.</li>
 </ul>
+
+## Schematics
+
+* [eZ80 Interface Module](./assets/SCHEMATIC-EZ80-INTERFACE-2024-08-02.pdf)
+* [ez80 CPU Module](./assets/SCHEMATIC-EZ80-2024-08-02.pdf)
