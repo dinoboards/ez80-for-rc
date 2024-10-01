@@ -4,5 +4,5 @@ The eZ80 module has a *Programmable Logic Device* (PLD). This PLD provides some 
 
 ## Schematics
 
-* [eZ80 Interface Module](./assets/SCHEMATIC-EZ80-INTERFACE-2024-08-02.pdf)
-* [ez80 CPU Module](./assets/SCHEMATIC-EZ80-2024-08-02.pdf)
+* [eZ80 Interface Module](../docs/assets/SCHEMATIC-EZ80-INTERFACE-2024-08-02.pdf)
+* [ez80 CPU Module](../docs/assets/SCHEMATIC-EZ80-2024-08-02.pdf)
