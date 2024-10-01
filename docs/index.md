@@ -29,8 +29,8 @@ See the Wikipedia page for basic overview of the CPU (<a href="https://en.wikipe
 
 ### Schematics
 
-* [eZ80 Interface Module](./assets/SCHEMATIC-EZ80-INTERFACE-2024-08-02.pdf)
-* [ez80 CPU Module](./assets/SCHEMATIC-EZ80-2024-08-02.pdf)
+* [eZ80 Interface Module (v1.7)](./assets/SCHEMATIC-EZ80-INTERFACE-V1.7.pdf)
+* [ez80 CPU Module (v1.3)](./assets/SCHEMATIC-EZ80-V1.3.pdf)
 
 ### Kit Details
 
