@@ -5,9 +5,9 @@
 
 @font-face {
   font-family: 'GamePlayed';
-  src: url('/assets/fonts/game-played.woff2') format('woff2'),
-       url('/assets/fonts/game-played.woff') format('woff'),
-       url('/assets/fonts/game-played.otf') format('opentype');
+  src: url('{{ site.baseurl }}/assets/fonts/game-played.woff2') format('woff2'),
+       url('{{ site.baseurl }}/assets/fonts/game-played.woff') format('woff'),
+       url('{{ site.baseurl }}/assets/fonts/game-played.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
