@@ -69,16 +69,14 @@ See the Bill Of Material list for full details
 |   5    | 74HCT245                                 |
 |   1    | ATF16V8C-7PU                             |
 |   1    | TLV1117LV33DCYR                          |
-|   1    | BAT-HLD-012-SMT                          |
+|   1    | BAT-HLD-012-SMT*                         |
 |   1    | MCP130-475DI/TO                          |
 |   6    | 20 POS IC DIP SOCKET                     |
 |   1    | 4 POS SOCKET FOR OSCILLATOR              |
 |  1     | Interface PCB for RC2014/RCBus Backplane |
 |  1     | pre-assembled eZ80 CPU Module            |
 
-### Disclaimer
-
-Please note that this is a kit, produced by a non-professional (me) for hackers, DIYers' and retro lovers, to tinker with. I will do my best to answer any support questions you may have.
+\* The batter holder **BAT-HLD-012-SMT** can support battery types of CR1225 or CR1216.  Please note in the current PCB the silkscreen incorrectly states a battery size of CR2016.
 
 ### Images
 
@@ -135,7 +133,7 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
 <ol start="2">
   <li>Place the sockets into the Interface PCB. Ensure the PCB is placed on foam or elevated so the sockets can sit fully in place. Do not solder them yet.</li>
 
-  <li>Using precision tweezers, pick up one of the PCB pins and insert the shorter end into one of the sockets. Repeat this for all pins. Make sure each PCB pin is fully inserted; you should feel it click into place.</li>
+  <li>Using precision tweezers, pick up one of the PCB pins and insert the shorter end into one of the sockets. Repeat this for all pins. Make sure each PCB pin is fully inserted; you should hear it click into place.</li>
 </ol>
 
 <div class="image-gallery">
@@ -170,3 +168,7 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
 <ol start="6">
   <li>Solder the top of the CPU Module first. Then, flip it over and solder the sockets on the back of the main Interface PCB, ensuring the sockets are still fully inserted. Once both sides are soldered, remove the CPU module and continue assembling the rest of the Interface PCB.</li>
 </ol>
+
+### Disclaimer
+
+Please note that this is a kit, produced by a non-professional (me) for hackers, DIYers' and retro lovers, to tinker with. I will do my best to answer any support questions you may have.
