@@ -79,3 +79,13 @@ See the Bill Of Material list for full details
 Please note that this is a kit, produced by a non-professional (me) for hackers, DIYers' and retro lovers, to tinker with. I will do my best to answer any support questions you may have.
 
 ### Assembly Guide
+
+
+### Ready for soldering
+
+In this video you can see the the CPU PCB and the main Interface PCB are ready for soldering.
+
+https://github.com/user-attachments/assets/645ed147-ae53-40b0-8e25-bc5c669c47a4
+
+Solder the top of the CPU Module first, then turn over and solder the sockets on the back of the main interface PCB.  After soldering both sides, you can then remove the CPU module and assemble the rest of the Interface PCB.
+
