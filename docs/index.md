@@ -116,44 +116,51 @@ No surface mount soldering is needed, as all surface-mounted components are alre
 
 First I start with the PCB pins on the CPU PCB and the associated Round Machine Sockets on the main Interface PCB.  The PCB pins require careful attention, as they are quite small, and alignment is important otherwise you may have difficult inserting them into the sockets on the PCB.
 
-1. Cut the machine socket strips to the required lengths: 3 strips of 13 pins, 3 strips of 12 pins, and 2 strips of 9 pins. Be cautious when breaking the strips into the required lengths to avoid making a poor cut and losing or exposing the end pin. Using a sharp Stanley knife with some force can help achieve a clean break. Keep the knife straight.
-
-<img src="{{ site.baseurl }}/assets/breaking-socket-strip.jpg" width="65%" style="display: block; margin-left: auto; margin-right:40px;"/>
-
-<ol start="2">
-<li>Place the sockets into the Interface PCB. Ensure the PCB is placed on foam or elevated so the sockets can sit fully in place. Do not solder them yet.</li>
-
-<li>Using precision tweezers, pick up one of the PCB pins and insert the shorter end into one of the sockets. Repeat this for all pins. Make sure each PCB pin is fully inserted; you should feel it click into place.</li>
+<ol start="1">
+<li>Cut the machine socket strips to the required lengths: 3 strips of 13 pins, 3 strips of 12 pins, and 2 strips of 9 pins. Be cautious when breaking the strips into the required lengths to avoid making a poor cut and losing or exposing the end pin. Using a sharp Stanley knife with some force can help achieve a clean break. Keep the knife straight.</li>
 </ol>
 
 <div class="image-gallery">
   <div class="image-column">
-<img src="{{ site.baseurl }}/assets/closeup-of-pin.jpg" width="65%" style="display: block; margin-left: auto; margin-right:40px;"/>
+    <img src="{{ site.baseurl }}/assets/breaking-socket-strip.jpg"/>
   </div>
   <div class="image-column">
-
-<img src="{{ site.baseurl }}/assets/closeup-of-pins-in-socket.jpg" width="65%" style="display: block; margin-left: auto; margin-right:40px;"/>
+    <video style="width:100%"  controls>
+      <source src="https://github.com/user-attachments/assets/44a49dc0-0513-4445-9710-4ada5918bb3e" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
 </div>
 
-<div style="text-align: center;">
-<video width="400" height="400" controls>
-<source src="https://github.com/user-attachments/assets/44a49dc0-0513-4445-9710-4ada5918bb3e" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<ol start="2">
+  <li>Place the sockets into the Interface PCB. Ensure the PCB is placed on foam or elevated so the sockets can sit fully in place. Do not solder them yet.</li>
+
+  <li>Using precision tweezers, pick up one of the PCB pins and insert the shorter end into one of the sockets. Repeat this for all pins. Make sure each PCB pin is fully inserted; you should feel it click into place.</li>
+</ol>
+
+<div class="image-gallery">
+  <div class="image-column">
+    <img src="{{ site.baseurl }}/assets/closeup-of-pin.jpg" width="65%" style="display: block; margin-left: auto; margin-right:40px;"/>
+  </div>
+  <div class="image-column">
+    <img src="{{ site.baseurl }}/assets/closeup-of-pins-in-socket.jpg" width="65%" style="display: block; margin-left: auto; margin-right:40px;"/>
+  </div>
 </div>
 
+
 <ol start="4">
-<li>Once all the PCB pins are inserted, position the CPU module in place.</li>
+  <li>Once all the PCB pins are inserted, position the CPU module in place.<br>
+  In this video, you can see the CPU PCB and the main Interface PCB connected through the PCB pins and sockets, but they are not yet soldered.
+</li>
 </ol>
-In this video, you can see the CPU PCB and the main Interface PCB connected through the PCB pins and sockets, but they are not yet soldered.
 
 <div style="text-align: center;">
-<video width="400" height="400" controls>
-  <source src="https://github.com/user-attachments/assets/6dc4e6c8-8e58-4d5f-b291-fdaf545a1b6a" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+  <video width="400" height="400" controls>
+    <source src="https://github.com/user-attachments/assets/6dc4e6c8-8e58-4d5f-b291-fdaf545a1b6a" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 </div>
 
 <ol start="5">
-<li>Solder the top of the CPU Module first. Then, flip it over and solder the sockets on the back of the main Interface PCB, ensuring the sockets are still fully inserted. Once both sides are soldered, remove the CPU module and continue assembling the rest of the Interface PCB.</li>
+  <li>Solder the top of the CPU Module first. Then, flip it over and solder the sockets on the back of the main Interface PCB, ensuring the sockets are still fully inserted. Once both sides are soldered, remove the CPU module and continue assembling the rest of the Interface PCB.</li>
+</ol>
