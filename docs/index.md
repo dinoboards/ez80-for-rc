@@ -85,7 +85,12 @@ Please note that this is a kit, produced by a non-professional (me) for hackers,
 
 In this video you can see the the CPU PCB and the main Interface PCB are ready for soldering.
 
-https://github.com/user-attachments/assets/645ed147-ae53-40b0-8e25-bc5c669c47a4
+<div style="text-align: center;">
+<video width="400" height="400" controls>
+  <source src="https://github.com/user-attachments/assets/6dc4e6c8-8e58-4d5f-b291-fdaf545a1b6a" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</div>
 
 Solder the top of the CPU Module first, then turn over and solder the sockets on the back of the main interface PCB.  After soldering both sides, you can then remove the CPU module and assemble the rest of the Interface PCB.
 
