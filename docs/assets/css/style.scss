@@ -1,0 +1,43 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+@font-face {
+  font-family: 'GamePlayed';
+  src: url('/assets/fonts/game-played.woff2') format('woff2'),
+       url('/assets/fonts/game-played.woff') format('woff'),
+       url('/assets/fonts/game-played.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+header h1 {
+  font-family: 'GamePlayed', sans-serif;
+}
+
+h3 {
+  font-family: 'GamePlayed', sans-serif;
+}
+
+.image-gallery {
+  display: flex;
+  justify-content: space-between;
+}
+
+.image-column {
+  flex: 1;
+  padding: 10px;
+}
+
+.image-column img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+header {
+  background: #235d0f;
+  background-color: #235d0f;
+}
