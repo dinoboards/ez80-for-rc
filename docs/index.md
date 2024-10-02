@@ -136,6 +136,13 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
   </div>
 </div>
 
+<div style="text-align: center;">
+<video width="400" height="400" controls>
+<source src="https://github.com/user-attachments/assets/44a49dc0-0513-4445-9710-4ada5918bb3e" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</div>
+
 <ol start="4">
 <li>Once all the PCB pins are inserted, position the CPU module in place.</li>
 </ol>
