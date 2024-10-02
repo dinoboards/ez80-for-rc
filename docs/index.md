@@ -125,7 +125,7 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
     <img src="{{ site.baseurl }}/assets/breaking-socket-strip.jpg"/>
   </div>
   <div class="image-column">
-    <video style="width:100%"  controls>
+    <video style="width:100%"  controls poster="{{ site.baseurl }}/assets/demo-breaking-strip-poster.jpg">
       <source src="https://github.com/user-attachments/assets/44a49dc0-0513-4445-9710-4ada5918bb3e" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -147,11 +147,17 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
   </div>
 </div>
 
+<div style="text-align: center;">
+  <video width="400" controls poster="{{ site.baseurl }}/assets/inserting-pins-into-socket-poster.jpg">
+    <source src="https://github.com/user-attachments/assets/a3bd98f9-aa68-448f-8ef9-192bd0f10790" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 <ol start="4">
+  <li>Confirm the PCB pins are gripped within the socket - they should not fall out if the socket is turned upside down.</li>
   <li>Once all the PCB pins are inserted, position the CPU module in place.<br>
-  In this video, you can see the CPU PCB and the main Interface PCB connected through the PCB pins and sockets, but they are not yet soldered.
-</li>
+  In this video, you can see the CPU PCB and the main Interface PCB connected through the PCB pins and sockets, but they are not yet soldered.</li>
 </ol>
 
 <div style="text-align: center;">
@@ -161,6 +167,6 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
   </video>
 </div>
 
-<ol start="5">
+<ol start="6">
   <li>Solder the top of the CPU Module first. Then, flip it over and solder the sockets on the back of the main Interface PCB, ensuring the sockets are still fully inserted. Once both sides are soldered, remove the CPU module and continue assembling the rest of the Interface PCB.</li>
 </ol>
