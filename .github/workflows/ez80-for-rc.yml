@@ -51,16 +51,16 @@ jobs:
       - name: firmware make-debug
         env:
           DISPLAY: :1
-        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-debug.bat"
+        run: docker run --rm -e CI=${CI} -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-debug.bat"
 
       - name: firmware make-alt-debug
-        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-alt-debug.bat"
+        run: docker run --rm -e CI=${CI} -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-alt-debug.bat"
 
       - name: firmware make-release
-        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-release.bat"
+        run: docker run --rm -e CI=${CI} -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-release.bat"
 
       - name: firmware make-alt-release
-        run: docker run --rm -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-alt-release.bat"
+        run: docker run --rm -e CI=${CI} -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-alt-release.bat"
 
       - name: Archive firmware
         uses: actions/upload-artifact@v4

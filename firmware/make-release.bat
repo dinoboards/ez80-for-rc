@@ -1,8 +1,10 @@
 @echo off
-setlocal
+SETLOCAL
 
 cd release
 make -B -f .\ez80-for-rc-firmware_release.mak
+
+if defined CI exit 0
 
 copy ..\bin\ez80-rc-firmware-release.hex ..\..\programmer\
 
