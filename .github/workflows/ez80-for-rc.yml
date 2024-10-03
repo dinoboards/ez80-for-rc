@@ -8,7 +8,7 @@ on:
       - '**'
 
 jobs:
-  ez80-for-rc:
+  hardware:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,9 +19,6 @@ jobs:
 
       - name: pull docker tool chain
         run: |
-          docker pull dinoboards/ez80-rc-builder:0.0.1
-          docker pull z88dk/z88dk
-          docker pull dinoboards/pipico:0.0.2
           docker pull dinoboards/wincupl:0.0.1
 
       - name: build hardware jed file
@@ -36,6 +33,19 @@ jobs:
           path: |
             hardware/bin
 
+  programmer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: pull docker tool chain
+        run: |
+          docker pull dinoboards/pipico:0.0.2
+
       - name: programmer build
         run: |
           docker run -v ./programmer:/programmer/ --privileged=true -t dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
@@ -48,9 +58,20 @@ jobs:
           path: |
             programmer/build/programmer.uf2
 
+  firmware:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: pull docker tool chain
+        run: |
+          docker pull dinoboards/ez80-rc-builder:0.0.1
+
       - name: firmware make-debug
-        env:
-          DISPLAY: :1
         run: docker run --rm -e CI=${CI} -v ./firmware:/ez80-for-rc/firmware --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "make-debug.bat"
 
       - name: firmware make-alt-debug
@@ -69,6 +90,19 @@ jobs:
           name: firmware
           path: |
             firmware/bin
+
+  apps:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: pull docker tool chain
+        run: |
+          docker pull z88dk/z88dk
 
       - name: build apps
         run: docker run -v ./apps:/src/ -t z88dk/z88dk make apps -j RELEASE=true
