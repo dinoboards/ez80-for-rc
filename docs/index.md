@@ -68,8 +68,8 @@ See the Bill Of Material list for full details
 |   1    | 3.4mm 470Ω resistor                      |
 |   5    | 74HCT245                                 |
 |   1    | ATF16V8C-7PU                             |
-|   1    | TLV1117LV33DCYR                          |
-|   1    | BAT-HLD-012-SMT*                         |
+|   1    | TLV1117LV33DCYR**                        |
+|   1    | BAT-HLD-012-SMT* **                      |
 |   1    | MCP130-475DI/TO                          |
 |   6    | 20 POS IC DIP SOCKET                     |
 |   1    | 4 POS SOCKET FOR OSCILLATOR              |
@@ -77,6 +77,8 @@ See the Bill Of Material list for full details
 |  1     | pre-assembled eZ80 CPU Module            |
 
 \* The batter holder **BAT-HLD-012-SMT** can support battery types of CR1225 or CR1216.  Please note in the current PCB the silkscreen incorrectly states a battery size of CR2016.
+
+\** The battery holder and 3.3V (TLV1117) DC converter are surface mounted components - but are not hard to solder down with a conventional soldering iron.
 
 ### Images
 
@@ -166,8 +168,31 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
 </div>
 
 <ol start="6">
-  <li>Solder the top of the CPU Module first. Then, flip it over and solder the sockets on the back of the main Interface PCB, ensuring the sockets are still fully inserted. Once both sides are soldered, remove the CPU module and continue assembling the rest of the Interface PCB.</li>
+  <li>Solder the top of the CPU Module first. Then, flip it over and solder the sockets on the back of the main Interface PCB, ensuring the sockets are still fully inserted. Once both sides are soldered, remove the CPU module.</li>
+
+<li>Solder the 2x3 (6pin) programming header on the CPU Module.  That will complete the CPU Module.</li>
+
+
+<li>Before soldering the (CR1216/CR1225) battery holder, you may want to place a small amount of solder on its ground pad.  This will ensure a good contact when you insert a battery.</li>
+
+<div style="text-align: center;">
+<img src="{{ site.baseurl }}/assets/closeup-of-battery-ground-pad.jpg" width="50%" style="width: 50%;"/>
+</div>
+
+<li>Solder the SMD battery holder, then the SMD 3.3V (TLV1117LV33DCYR) DC converter.  Pay attention to the orientation of the battery holder otherwise you will not be able to insert a battery.</li>
+
+<div style="text-align: center;">
+<img src="{{ site.baseurl }}/assets/closeup-of-battery-and-converter.jpg" width="50%" style="width: 50%;"/>
+</div>
+
+<li>Next solder all the remaining passive through hole components, resistors, capacitors, then the sockets and headers</li>
+
+<div style="text-align: center;">
+<img src="{{ site.baseurl }}/assets/eZ80-V1.7-assembled.jpg" width="85%" style="width: 85%;"/>
+</div>
 </ol>
+
+> If installing this module in a case, take into account the available space and select the appropriate type for the 6-pin UART header. You can choose either a right-angle or straight header based on your requirements and preferences.
 
 ### Disclaimer
 
