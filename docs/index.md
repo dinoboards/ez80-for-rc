@@ -89,6 +89,14 @@ This kit is designed for RCBus and RC2014<strong>&trade;</strong>
   * [SC714 – RCBus Z80 Memory Module](https://smallcomputercentral.com/sc714-rcbus-z80-memory-module/)
 * As with the standard/stock RC2014/RCBus system, you need a way to connect your PC to the eZ80's UART interface.
 
+* An eZ80 configured build of [RomWBW](https://github.com/wwarthen/RomWBW?tab=readme-ov-file) flashed to the ROM of the external RAM/ROM Module.
+
+### Caveats
+
+* Only a limited number of RCBus/RC2014 modules have been tested to date. (Please see my [project development journal](https://hackaday.io/project/196330-ez80-cpu-for-rc2014-and-other-backplanes) describing the progress with porting and testing of various modules.)
+* The ez80's SPI interface has no software support nor has it been tested yet.
+* The I2C interface has limited software support at this stage.
+
 ### Images
 
 <div class="image-gallery">
