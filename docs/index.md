@@ -20,7 +20,7 @@ While the eZ80 might appear slow and limited by today's standards, it represents
 
 See the Wikipedia page for basic overview of the CPU (<a href="https://en.wikipedia.org/wiki/Zilog_eZ80">https://en.wikipedia.org/wiki/Zilog_eZ80</a>)
 
-### Key features of the eZ80 for RC
+### Key features
 
 <ul>
   <li>Compatibility with many existing RCBus and RC2014<strong>&trade;</strong> retro modules.</li>
@@ -28,6 +28,12 @@ See the Wikipedia page for basic overview of the CPU (<a href="https://en.wikipe
   <li>Works in conjunction with RomWBW/HBIOS ensuring a high degree of compatibility with existing OS and applications (HBIOS, CP/M, BASIC, etc).</li>
   <li>Lots of potential for to do your own hacking and tinkering with the eZ80.</li>
 </ul>
+
+### Demo Video
+
+Here's a video of the eZ80 for RC module running in the RC2014<strong>&trade;</strong> backplane with a few retro modules:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qMu8Gz7rkQ0?si=xwUMK4sWBoN0tg-j" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### Schematics
 
@@ -90,6 +96,19 @@ This kit is designed for RCBus and RC2014<strong>&trade;</strong>
 * As with the standard/stock RC2014/RCBus system, you need a way to connect your PC to the eZ80's UART interface.
 
 * An eZ80 configured build of [RomWBW](https://github.com/wwarthen/RomWBW?tab=readme-ov-file) flashed to the ROM of the external RAM/ROM Module.
+
+* You will also need a way to flash an image onto the eZ80's internal ROM. See next section **Flashing the internal ROM**
+
+### Flashing the internal ROM
+
+Before you can boot your RCBus/RC2014<strong>&trade;</strong> system, you will need to have written an image onto the eZ80's internal ROM.  For that you will need a 'programmer'.
+
+There are 2 options for the programmer.  The Zilog's official programmer (*Zilog eZ80 Acclaim USB Smart Cable*), available from many hardware suppliers such as digikey or mouse:
+
+* [Digikey link](https://www.digikey.com.au/en/products/detail/zilog/ZUSBASC0200ZACG/17374332)
+* [Mouser link](https://au.mouser.com/ProductDetail/692-ZUSBASC0200ZACG)
+
+An alternative and lower cost option is to use a Raspberry PI Pico.  [Click here for instructions of setting up a Pi Pico Programmer](./pi-pico-programmer)
 
 ### Caveats
 
