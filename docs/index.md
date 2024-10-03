@@ -36,7 +36,7 @@ See the Wikipedia page for basic overview of the CPU (<a href="https://en.wikipe
 
 ### Kit Details
 
-Coming soon to my Tindie Store, will be the *eZ80 for RC* kit.  For you to assemble and expand your RC2014<strong>&trade;</strong> or RCBus system
+Coming soon to my Tindie Store, will be the *eZ80 for RC* kit.  For you to assemble and expand your RC2014<strong>&trade;</strong> or RCBus system.
 
 
 #### What's included in the kit
@@ -47,8 +47,6 @@ The eZ80 CPU module will come with all the surface mounted components soldered. 
 
 A 20Mhz and an optional 25Mhz crystal to allow you to 'overclock' your eZ80.
 
-See the Bill Of Material list for full details
-
 ### Bill Of Materials
 
 |Quantity | Component|
@@ -58,7 +56,7 @@ See the Bill Of Material list for full details
 |   1    | 10uF Radial                              |
 |   2    | 1uF Radial                               |
 |   2    | HDR M 2.54 1x40                          |
-|   2    | Shunts 1x2                               |
+|   5    | Shunts 1x2                               |
 |   1    | 3mm Green LED                            |
 |   1    | 20MHz Crystal Oscillator                 |
 |   4    | 3.4mm 4.7kΩ resistor                     |
@@ -76,9 +74,20 @@ See the Bill Of Material list for full details
 |  1     | Interface PCB for RC2014/RCBus Backplane |
 |  1     | pre-assembled eZ80 CPU Module            |
 
-\* The batter holder **BAT-HLD-012-SMT** can support battery types of CR1225 or CR1216.  Please note in the current PCB the silkscreen incorrectly states a battery size of CR2016.
+\* The batter holder **BAT-HLD-012-SMT** can support battery types of CR1225 or CR1216.  Please note in the V1.7 of the PCB,  the silkscreen incorrectly states a battery size of CR2016.
 
-\** The battery holder and 3.3V (TLV1117) DC converter are surface mounted components - but are not hard to solder down with a conventional soldering iron.
+\** The battery holder and 3.3V (TLV1117) DC converter are surface mounted components - but are not hard to solder with a conventional soldering iron.
+
+### What else is needed
+
+This kit is designed for RCBus and RC2014<strong>&trade;</strong>
+
+* A compatible RCBus or RC2014<strong>&trade;</strong> backplane
+  * recommended full 80 lane backplane
+* A external RAM/ROM Module.  These 2 modules have been tested and verified:
+  * [RC2014 512K RAM/ROM module](https://rc2014.co.uk/modules/512k-rom-512k-ram-module/), or
+  * [SC714 – RCBus Z80 Memory Module](https://smallcomputercentral.com/sc714-rcbus-z80-memory-module/)
+* As with the standard/stock RC2014/RCBus system, you need a way to connect your PC to the eZ80's UART interface.
 
 ### Images
 
@@ -107,12 +116,51 @@ See the Bill Of Material list for full details
   </div>
 </div>
 
+### Jumpers/Headers
+
+#### J1 - UART 5V Enable
+
+* Short to enable 5V passthrough from/to the UART header (H2).
+
+#### J2 - Bus Isolation
+
+Reserved for future use.  Enable Bus Isolation.
+
+* Pins 1 & 2 should be shorted together.
+* Pins 3 & 4 should be shorted together.
+
+#### J3 - Bus Clock Enable
+
+* Short to enable eZ80 to supply a clock signal to the RCBus/RC2014<strong>&trade;</strong> backplane.
+
+The clock frequency will be the CPU Clock Frequency divided by 4.
+
+#### J4 - I2C Voltage Selection
+
+The voltage level for operating the I2C bus.
+
+* Short pins 1 & 3 and 2 & 4 for 5V operation
+* Short pins 3 & 5 and 4 & 6 for 3.3V operation.
+
+#### H1 - GPIO
+
+* The eZ80 GPIO's - PC1 to PC7
+
+#### H2 - UART
+
+* The eZ80 UART0 interface.
+
+#### H3 - I2C
+
+* The eZ80's I2C interface, plus its RESET and INT signals.
+
+#### H4 - SPI
+
+* The eZ80's SPI interface.
 
 ### Assembly Guide
 
 Here are my recommendation for how to approach assembling and soldering the eZ80 Interface PCB and the CPU Module.
-
-No surface mount soldering is needed, as all surface-mounted components are already soldered.
 
 First I start with the PCB pins on the CPU PCB and the associated Round Machine Sockets on the main Interface PCB.  The PCB pins require careful attention, as they are quite small, and alignment is important otherwise you may have difficult inserting them into the sockets on the PCB.
 
@@ -137,6 +185,8 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
 
   <li>Using precision tweezers, pick up one of the PCB pins and insert the shorter end into one of the sockets. Repeat this for all pins. Make sure each PCB pin is fully inserted; you should hear it click into place.</li>
 </ol>
+
+> Handle the PCB pins with care, as they can easily slip from your tweezers and flick away in any direction, including towards your eyes.
 
 <div class="image-gallery">
   <div class="image-column">
@@ -185,7 +235,7 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
 <img src="{{ site.baseurl }}/assets/closeup-of-battery-and-converter.jpg" width="50%" style="width: 50%;"/>
 </div>
 
-<li>Next solder all the remaining passive through hole components, resistors, capacitors, then the sockets and headers</li>
+<li>Next solder all the remaining passive through hole components, resistors, capacitors, then the sockets and headers.</li>
 
 <div style="text-align: center;">
 <img src="{{ site.baseurl }}/assets/eZ80-V1.7-assembled.jpg" width="85%" style="width: 85%;"/>
@@ -196,4 +246,6 @@ First I start with the PCB pins on the CPU PCB and the associated Round Machine 
 
 ### Disclaimer
 
-Please note that this is a kit, produced by a non-professional (me) for hackers, DIYers' and retro lovers, to tinker with. I will do my best to answer any support questions you may have.
+Please note that this is a kit, produced by a non-expert (me) for hackers, DIYers' and retro lovers, to tinker with. Please exercise caution and follow good safety practices. You will be working with sharp knives, a hot soldering iron, and small metal components. Be mindful of the risks involved in the build process. I will do my best to answer any questions you may have.
+
+This kit is provided as-is, with no guarantees or warranties. By assembling and using this kit, you acknowledge that you do so at your own risk. The creator cannot be held responsible for any damage, injury, or loss that may occur during the assembly or operation of this kit.
