@@ -1,12 +1,11 @@
-#include "pico/stdlib.h"
-#include <stdio.h>
-#ifdef CYW43_WL_GPIO_LED_PIN
 #include "main.h"
-#include "pico/cyw43_arch.h"
-#endif
 #include "command_dispatcher.h"
+#include "firmware_version.h"
+#include "pico/stdlib.h"
 #include "read_line.h"
 #include "zdi.h"
+#include <stdio.h>
+#include <string.h>
 
 void report_connection(bool power_detected, bool reset_detected, bool zda_detected, bool zcl_detected, bool connection_detected) {
   char buffer[256]; // Adjust the buffer size as needed
@@ -66,6 +65,9 @@ wait_for_valid_connection:
 
   zdi_wait_for_valid_identity(report_zdi_id, report_zdi_id_failed);
   printf("\r\n");
+
+  printf("Available Firmware Version: %d.%d.%d.%d (%s)\r\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, REVISION_VERSION,
+         FIRMWARE_DATE);
 
   while (true) {
     printf("ZDI> ");

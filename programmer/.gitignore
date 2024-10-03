@@ -1,1 +1,3 @@
 build
+!/ez80-rc-firmware-release.hex
+firmware_version.h

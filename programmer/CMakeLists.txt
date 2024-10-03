@@ -24,7 +24,7 @@ if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
 # ====================================================================================
-set(PICO_BOARD pico_w CACHE STRING "Board type")
+set(PICO_BOARD pico CACHE STRING "Board type")
 # set(PICO_COPY_TffO_RAM true CACHE BOOL "Copy to RAM")
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
@@ -43,6 +43,31 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 # Set optimization level for all C++ files (if applicable)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
+# Define the path to the .hex file and the generated .c file
+set(HEX_FILE_PATH "../ez80-rc-firmware-release.hex")
+set(GENERATED_C_FILE "./ez80_rc_firmware_release.c")
+
+# Define the path to the .hex file and the generated .c file
+set(INC_FILE_PATH "../firmware-version.inc")
+set(GENERATED_H_FILE "../firmware_version.h")
+
+# Add a custom command to generate the .c file from the .hex file
+add_custom_command(
+    OUTPUT ${GENERATED_C_FILE}
+    COMMAND ${CMAKE_COMMAND} -E echo "Converting ${HEX_FILE_PATH} to ${GENERATED_C_FILE}"
+    COMMAND bash -c "../convert_hex_to_c.sh ${HEX_FILE_PATH} ${GENERATED_C_FILE}"
+    DEPENDS ${HEX_FILE_PATH}
+)
+
+# Add a custom command to generate the .c file from the .hex file
+add_custom_command(
+    OUTPUT ${GENERATED_H_FILE}
+    COMMAND ${CMAKE_COMMAND} -E echo "Converting ${INC_FILE_PATH} to ${GENERATED_H_FILE}"
+    COMMAND bash -c "ls;pwd"
+    COMMAND echo bash -c "../convert_hex_to_c.sh ${INC_FILE_PATH} ${GENERATED_H_FILE}"
+    COMMAND bash -c "../convert_inc_to_c.sh ${INC_FILE_PATH} ${GENERATED_H_FILE}"
+    DEPENDS ${INC_FILE_PATH}
+)
 set_source_files_properties(
   main.c
   read_line.c
@@ -51,6 +76,7 @@ set_source_files_properties(
   hex_record.c
   ifl.c
   utils.c
+  ez80_rc_firmware_release.c
   PROPERTIES COMPILE_OPTIONS "-Werror;-Wall;-Wextra;-O3"
 )
 
@@ -62,6 +88,8 @@ add_executable(programmer
     hex_record.c
     ifl.c
     utils.c
+    firmware_version.h
+    ez80_rc_firmware_release.c
 )
 
 # pull in common dependencies

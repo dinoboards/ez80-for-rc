@@ -8,6 +8,7 @@
 ; and configure the eZ80 bus cycles for external memory and I/O.
 ;
         INCLUDE "..\config.inc"
+	INCLUDE "..\version.inc"
 
 	XREF	__ladd_b
 	XREF	__ldivu
@@ -123,10 +124,10 @@ ENDIF
 	POP	BC
 	LD	E, A
 	EXX
-	LD	D, 0
-	LD	E, 1
-	LD	H, 2
-	LD	L, 0
+	LD	D, MAJOR_VERSION
+	LD	E, MINOR_VERSION
+	LD	H, PATCH_VERSION
+	LD	L, REVISION_VERSION
 
 IFDEF RC2014_ALT_FIRMWARE
 	LD	C, %80

@@ -1,3 +1,4 @@
+#include "firmware_version.h"
 #include "hex_record.h"
 #include "ifl.h"
 #include "read_line.h"
@@ -17,7 +18,7 @@ help or h
 status or s
   Display the ZDI status register (ZDI_STAT)
 
-flash or f
+flash [upload]
   Flash the eZ80 with a new firmware image - intel hex file
 
 break or b
@@ -40,6 +41,10 @@ set pc [ADDR]
 
 wr or read [ADDR]
   Read 16 bytes from the eZ80 memory
+
+reboot
+  Reset and restart the eZ80 firmware
+
 */
 
 void process_status_command(void);
@@ -50,6 +55,7 @@ void process_reset_command(void);
 void process_mode_command(void);
 void process_set_command(void);
 void process_read_command(void);
+void process_reboot_command(void);
 
 void process_command(void) {
   printf("\r\n");
@@ -68,8 +74,10 @@ void process_command(void) {
            "status or s\r\n"
            "  Display the ZDI status register (ZDI_STAT)\r\n"
            "\r\n"
-           "flash or f\r\n"
-           "  Flash the eZ80 with a new firmware image - intel hex file\r\n"
+           "flash [upload]\r\n"
+           "  Flash the eZ80 with a new firmware image\r\n"
+           "  default loads the firmware stored on Pi Pico\r\n"
+           "  upload: expects an intel hex file to be streamed over stdin\r\n"
            "\r\n"
            "break or b\r\n"
            "  break the ez80  \r\n"
@@ -94,7 +102,9 @@ void process_command(void) {
            "\r\n"
            "rd or read [ADDR]\r\n"
            "  Read a byte from the eZ80 memory\r\n"
-           "\r\n");
+           "\r\n"
+           "reboot\r\n"
+           "  Reset and restart the eZ80 firmware\r\n");
 
     return;
   } else if (strcmp(input_buffer, "status") == 0 || strcmp(input_buffer, "s") == 0) {
@@ -113,6 +123,8 @@ void process_command(void) {
     process_set_command();
   } else if (strcmp(input_buffer, "rd") == 0 || strcmp(input_buffer, "read") == 0) {
     process_read_command();
+  } else if (strcmp(input_buffer, "reboot") == 0) {
+    process_reboot_command();
   } else {
     printf("Unknown command: %s\r\n", input_buffer);
   }
@@ -140,13 +152,23 @@ int8_t emit_to_flash(const uint32_t offset, const uint8_t *data, const uint16_t 
 }
 
 void process_flash_command(void) {
-  printf("Paste the intel hex file contents now..\r\n");
+  bool  internal = true;
+  char *mode     = strtok(NULL, " ");
+  if (mode == NULL) {
+    printf("Flashing eZ80 with firmware %d.%d.%d.%d (%s)\r\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, REVISION_VERSION,
+           FIRMWARE_DATE);
+  }
+
+  if (strcmp(mode, "upload") == 0) {
+    printf("Paste the intel hex file contents now..\r\n");
+    internal = false;
+  }
 
   zdi_full_reset();
   zdi_flash_write_enable();
   zdi_erase_flash();
 
-  process_hex_records(emit_to_flash);
+  process_hex_records(internal, emit_to_flash);
 
   zdi_flash_write_disable();
   printf("\r\n");
@@ -164,7 +186,7 @@ void process_continue_command(void) {
 
 void process_reset_command(void) {
   zdi_full_reset();
-  printf("eZ80 Reset: PC: 0, ADL: Z80, INT: DI, OnChip IO: Reset State\r\n");
+  printf("eZ80 Reset: PC: 0, MODE: ADL, INT: DI, OnChip IO: Reset State\r\n");
 }
 
 void process_mode_command(void) {
@@ -259,4 +281,13 @@ void process_read_command(void) {
   printf("\r\n");
 
   write_reg_pc(pc);
+}
+
+void process_reboot_command(void) {
+  zdi_debug_break();
+  zdi_full_reset();
+  write_reg_pc(0);
+  zdi_debug_continue();
+
+  printf("eZ80 Reset: PC: 0, ADL: Z80, INT: DI, OnChip IO: Reset State\r\n");
 }

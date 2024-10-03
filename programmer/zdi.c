@@ -270,8 +270,6 @@ void zdi_full_reset() {
   zdi_wr_reg_byte(ZDI_WR_DATA_H, 0x00);
   zdi_wr_reg_byte(ZDI_WR_DATA_U, 0x00);
   zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_REG_PC | RW_CTL_WR);
-
-  zdi_set_mode_z80();
 }
 
 void zdi_set_cpu_freq(const uint32_t freq) { cpu_frequency = freq; }
