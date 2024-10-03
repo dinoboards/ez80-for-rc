@@ -33,31 +33,6 @@ jobs:
           path: |
             hardware/bin
 
-  programmer:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: pull docker tool chain
-        run: |
-          docker pull dinoboards/pipico:0.0.2
-
-      - name: programmer build
-        run: |
-          docker run -v ./programmer:/programmer/ --privileged=true -t dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
-
-      - name: Archive Programmer PI Pico Firmware
-        uses: actions/upload-artifact@v4
-        with:
-          compression-level: 0
-          name: pi-pico-firmware
-          path: |
-            programmer/build/programmer.uf2
-
   firmware:
     runs-on: ubuntu-latest
 
@@ -90,6 +65,60 @@ jobs:
           name: firmware
           path: |
             firmware/bin
+
+      - name: Release HEX file
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: z80-rc-firmware-release.hex
+          path: |
+            firmware/bin/ez80-rc-firmware-release.hex
+
+      - name: Version File
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: version.inc
+          path: |
+            firmware/src/version.inc
+
+  programmer:
+    runs-on: ubuntu-latest
+    needs: firmware
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: copy z80-rc-firmware-release.hex
+        uses: actions/download-artifact@v4
+        with:
+          name: z80-rc-firmware-release.hex
+          path: programmer/build/
+
+      - name: copy version.inc
+        uses: actions/download-artifact@v4
+        with:
+          name: version.inc
+          path: programmer/
+
+      - name: pull docker tool chain
+        run: |
+          docker pull dinoboards/pipico:0.0.2
+
+      - name: programmer build
+        run: |
+          docker run -v ./programmer:/programmer/ --privileged=true -t dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
+
+      - name: Archive Programmer PI Pico Firmware
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: pi-pico-firmware
+          path: |
+            programmer/build/programmer.uf2
 
   apps:
     runs-on: ubuntu-latest
