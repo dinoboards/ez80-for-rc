@@ -20,7 +20,7 @@ lastRelease=$(git tag -l | sort | tail -n 1)
 echo "$lastRelease"
 
 # Define the release file path
-relfile="./releases/release-$version.md"
+relfile="./releases/CHANGELOG.md"
 
 # Remove the release file if it exists
 rm -f "$relfile"
