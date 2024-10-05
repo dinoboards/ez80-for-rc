@@ -468,7 +468,8 @@ $(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\version.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-00-system-utils-functions.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj :  \
