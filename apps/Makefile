@@ -1,48 +1,25 @@
+SHELL := /bin/sh
 BIN=./bin/
 MAKEFLAGS += --no-print-directory
 
-all: clean
-	@docker run -v .:/src/ -it z88dk/z88dk make apps -j --output-sync=recurse
+# Define the binaries
+BINARIES := matrix8 i2cscan dhry whet fwupdate fwmain fwstatus ez80
 
-z88dk:
-	@docker run -v .:/src/ -it z88dk/z88dk
+# Default target
+all: $(BINARIES:%=$(BIN)%.com)
+	@
 
-apps: $(BIN)matrix8.com $(BIN)i2cscan.com $(BIN)dhry.com $(BIN)whet.com $(BIN)fwupdate.com $(BIN)fwmain.com $(BIN)fwstatus.com $(BIN)ez80.com
+# Pattern rule to build each binary
+.PHONY: $(BIN)%.com
+$(BIN)%.com: common-libs
+	@$(MAKE) -C $*
 
-clean:
-	@rm -rf $(BIN)
-
+.PHONY: common-libs
 common-libs:
 	@$(MAKE) -C common
 
-.PHONY: $(BIN)i2cscan.com
-$(BIN)i2cscan.com: common-libs
-	@$(MAKE) -C i2cscan
+z88dk:
+	@docker run -w /host/${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -it z88dk/z88dk
 
-.PHONY: $(BIN)matrix8.com
-$(BIN)matrix8.com: common-libs
-	@$(MAKE) -C matrix8
-
-.PHONY: $(BIN)dhry.com
-$(BIN)dhry.com: common-libs
-	@$(MAKE) -C dhry
-
-.PHONY: $(BIN)whet.com
-$(BIN)whet.com: common-libs
-	@$(MAKE) -C whet
-
-.PHONY: $(BIN)fwupdate.com
-$(BIN)fwupdate.com: common-libs
-	@$(MAKE) -C fwupdate
-
-.PHONY: $(BIN)fwmain.com
-$(BIN)fwmain.com: common-libs
-	@$(MAKE) -C fwmain
-
-.PHONY: $(BIN)fwstatus.com
-$(BIN)fwstatus.com: common-libs
-	@$(MAKE) -C fwstatus
-
-.PHONY: $(BIN)ez80.com
-$(BIN)ez80.com: common-libs
-	@$(MAKE) -C ez80
+clean:
+	@rm -rf $(BIN)

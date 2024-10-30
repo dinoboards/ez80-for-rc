@@ -6,20 +6,25 @@ MAKEFLAGS += --no-builtin-rules
 
 ZCC_EXTRA := --vc -Cs --Werror
 
+USER_ID := $(shell id -u ${USER})
+GROUP_ID := $(shell id -g ${USER})
+Z88DK_DOCKER := docker run -w /host/$${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -t z88dk/z88dk
+Z88DK_DOCKER_MAKE := $(Z88DK_DOCKER)
+
 ifdef RELEASE
 	BIN = ../bin/release/
   ZCC_EXTRA += -SO3 --max-allocs-per-node200000
 else
 	BIN = ../bin/debug/
 endif
-ZCC := zcc +cpm -compiler=sdcc -lm -I../common
+ZCC := $(Z88DK_DOCKER_MAKE) zcc +cpm -compiler=sdcc -lm -I../common
 
 TARGETS := $(addsuffix .com,$(addprefix $(BIN),$(APPS)))
 
 all: $(addsuffix .com,$(APPS))
 
 %.com: $(BIN)%.com
-	@
+	@echo > /dev/null
 
 $(TARGETS):
 	@set -e
@@ -30,7 +35,6 @@ $(TARGETS):
 
 clean:
 	@rm -rf $(BIN)
-
 
 define compile
 	@set -e
@@ -49,7 +53,7 @@ endef
 define buildlib
 	@set -e
 	@mkdir -p $(dir $@)
-	z88dk-z80asm -x$@ $<
+	$(Z88DK_DOCKER_MAKE) z88dk-z80asm -x$@ $<
 	echo "Packaged $(notdir $@) from $(notdir $<)"
 endef
 
