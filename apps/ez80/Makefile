@@ -3,8 +3,8 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-all: ez80.com
+all: EZ80.COM
 
-.PHONY: ez80.com
-ez80.com:
-	@ez80-cc --output-dir ../bin --iquote ../common ez80.c ez80_bus_cycles_get.asm ez80_cpu_freq_get.asm
+.PHONY: EZ80.COM
+EZ80.COM:
+	@ez80-cc --output-dir ../bin --iquote ../common EZ80.COM ez80.c ez80_bus_cycles_get.asm ez80_cpu_freq_get.asm

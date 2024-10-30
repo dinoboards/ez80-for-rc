@@ -11,19 +11,15 @@ GROUP_ID := $(shell id -g ${USER})
 Z88DK_DOCKER := docker run -w /host/$${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -t z88dk/z88dk
 Z88DK_DOCKER_MAKE := $(Z88DK_DOCKER)
 
-ifdef RELEASE
-	BIN = ../bin/release/
-  ZCC_EXTRA += -SO3 --max-allocs-per-node200000
-else
-	BIN = ../bin/debug/
-endif
-ZCC := $(Z88DK_DOCKER_MAKE) zcc +cpm -compiler=sdcc -lm -I../common
+# ZCC_EXTRA += -SO3 --max-allocs-per-node200000
+BIN = ../bin/
+ZCC := $(Z88DK_DOCKER_MAKE) zcc +cpm -compiler=sdcc -lm -I../common -SO3 --max-allocs-per-node200000
 
-TARGETS := $(addsuffix .com,$(addprefix $(BIN),$(APPS)))
+TARGETS := $(addsuffix .COM,$(addprefix $(BIN),$(APPS)))
 
-all: $(addsuffix .com,$(APPS))
+all: $(addsuffix .COM,$(APPS))
 
-%.com: $(BIN)%.com
+%.COM: $(BIN)%.COM
 	@echo > /dev/null
 
 $(TARGETS):
@@ -31,6 +27,7 @@ $(TARGETS):
 	mkdir -p $(BIN)$(APPS)
 	$(ZCC) $(ZCC_EXTRA) $(foreach lib,$(filter %.lib,$^),-l$(lib)) $(filter-out %.inc,$(filter-out %.h,$(filter-out %.lib,$^))) -o $@ -create-app
 	filesize=$$(stat -c%s "$@")
+	rm -f $(BIN)$(APPS)_CODE.bin
 	echo "Compiled $(notdir $@) ($$filesize bytes) from $(notdir $(filter-out %.h,$(filter-out %.lib,$^)))"
 
 clean:
@@ -86,6 +83,5 @@ EZ80_FIRMWARE_LIB=$(EZ80_FIRMWARE_LIB_FILES) #../common/ez80-instr.inc
 HBIOS_LIB=$(BIN)common/hbios_sysget_tick.lib
 
 I2C_LIB=$(BIN)common/i2c.lib ../common/i2c.h
-
 
 $(EZ80_O_FILES) $(EZ80_FIRMWARE_O_FILES): ../common/ez80-instr.inc

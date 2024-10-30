@@ -3,16 +3,17 @@ BIN=./bin/
 MAKEFLAGS += --no-print-directory
 
 # Define the binaries
-BINARIES := matrix8 i2cscan dhry whet fwupdate fwmain fwstatus ez80
+BINARIES := MATRIX8 I2CSCAN DHRY WHET FWUPDATE FWMAIN FWSTATUS EZ80 HELLO-WORLD-Z80 HELLO-WORLD-ADL MBROT
 
 # Default target
-all: $(BINARIES:%=$(BIN)%.com)
+all: $(BINARIES:%=$(BIN)%.COM)
 	@
 
 # Pattern rule to build each binary
-.PHONY: $(BIN)%.com
-$(BIN)%.com: common-libs
-	@$(MAKE) -C $*
+.PHONY: $(BIN)%.COM
+$(BIN)%.COM: common-libs
+	@LOWERCASE_STEM=$(shell echo $* | tr '[:upper:]' '[:lower:]') && \
+	$(MAKE) -C $${LOWERCASE_STEM}
 
 .PHONY: common-libs
 common-libs:

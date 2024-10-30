@@ -3,8 +3,8 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-all: mbrot.com
+all: MBROT.COM
 
-.PHONY: mbrot.com
-mbrot.com:
-	@ez80-cc --output-dir ../bin mbrot.c config_request.c v9958.asm v9958.c
+.PHONY: MBROT.COM
+MBROT.COM:
+	@ez80-cc --output-dir ../bin MBROT.COM mbrot.c config_request.c v9958.asm v9958.c
