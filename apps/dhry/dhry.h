@@ -426,7 +426,7 @@ typedef enum { Ident_1, Ident_2, Ident_3, Ident_4, Ident_5, Indent_Unknown } Enu
 #define Null NULL
 /* Value of a Null pointer */
 
-#define true 1
+#define true  1
 #define false 0
 
 typedef int  One_Thirty;

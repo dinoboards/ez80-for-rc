@@ -2,8 +2,8 @@
 #define __V9958
 
 #include <stdbool.h>
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #define PAL  1
 #define NTSC 2
@@ -24,6 +24,9 @@ extern void setMode7(uint8_t lines, uint8_t mode);
 extern void clearScreenBank0(uint8_t color);
 extern void clearScreenBank1(uint8_t color);
 extern void _writeRegister(uint16_t rd);
+extern void outPal(uint8_t b);
+extern void outRegIndInt(uint16_t b);
+extern void outRegIndByte(uint8_t b);
 
 #define writeRegister(a, b) _writeRegister(a * 256 + b)
 

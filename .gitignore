@@ -7,6 +7,9 @@
 *.lis
 *.src
 Thumbs.db
+**/*.o
+**/*.map
+**/*.s
 
 hardware/bin
 *.mx

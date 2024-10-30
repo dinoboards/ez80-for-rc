@@ -11,8 +11,8 @@ see http://en.wikipedia.org/wiki/Portable_pixmap
 to see the file use external application ( graphic viewer)
  */
 #include "config_request.h"
-#include "cpm.h"
 #include "v9958.h"
+#include <cpm.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -78,7 +78,7 @@ int main(void) {
         Zy2 = Zy * Zy;
       };
 
-      if (cRawIo() != 0)
+      if (cpm_rawio() != 0)
         return 0;
 
       pointSet(iX, iY, iteration, CMD_LOGIC_IMP);

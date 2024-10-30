@@ -7,4 +7,4 @@ all: mbrot.com
 
 .PHONY: mbrot.com
 mbrot.com:
-	@ez80-cc --output-dir ../bin mbrot.c config_request.c v9958.asm
+	@ez80-cc --output-dir ../bin mbrot.c config_request.c v9958.asm v9958.c

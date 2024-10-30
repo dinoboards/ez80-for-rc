@@ -2,91 +2,9 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-// clang-format off
-#define DI        \
-        __asm     \
-        DI        \
-        __endasm
+#define DI __asm__("DI")
 
-#define EI        \
-        __asm     \
-        EI        \
-        __endasm
-// clang-format on
-
-void outPal(uint8_t b) {
-  (void *)b;
-  // clang-format off
-  __asm
-  LD  A, L
-  OUT (0x9A), A
-  __endasm;
-  // clang-format on
-}
-
-void outRegIndByte(uint8_t b) {
-  (void *)b;
-  // clang-format off
-  __asm
-  LD  A, L
-  OUT (0x9B), A
-  __endasm;
-  // clang-format on
-}
-
-void outRegIndInt(uint16_t b) {
-  (void *)b;
-  // clang-format off
-  __asm
-  LD  A, L
-  OUT (0x9B), A
-  LD  A, H
-  OUT (0x9B), A
-  __endasm;
-  // clang-format on
-}
-
-uint8_t inDat(void) __naked {
-  // clang-format off
-  __asm
-  IN A, (0x98)
-  LD  L, A
-  RET
-  __endasm;
-  // clang-format on
-}
-
-uint8_t readStatus(uint8_t r) __naked {
-  writeRegister(15, r);
-  // clang-format off
-  __asm
-	IN    A, (0x99)
-  PUSH  AF
-  __endasm;
-  // clang-format on
-  writeRegister(15, 0);
-  // clang-format off
-  __asm
-  POP   AF
-  LD    L, A
-  RET
-  __endasm;
-  // clang-format on
-}
-
-void _writeRegister(uint16_t rd) {
-  (void)rd;
-  // clang-format off
-  __asm
-	LD	A, L
-	OUT	(0x99), a
-
-	LD	A, 128
-  OR  H
-	OUT	(0x99), A
-  __endasm;
-  // clang-format on
-}
+#define EI __asm__("EI")
 
 void setBaseRegisters(uint8_t *pReg) {
   DI;
