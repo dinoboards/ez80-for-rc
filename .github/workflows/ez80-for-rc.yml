@@ -134,7 +134,8 @@ jobs:
           docker pull z88dk/z88dk
 
       - name: build apps
-        run: docker run -v ./apps:/src/ -t z88dk/z88dk make apps -j RELEASE=true
+        working-directory: apps
+        run: make
 
       - name: Archive apps
         uses: actions/upload-artifact@v4
