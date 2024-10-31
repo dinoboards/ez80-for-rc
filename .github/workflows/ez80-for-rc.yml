@@ -133,9 +133,18 @@ jobs:
         run: |
           docker pull z88dk/z88dk
 
+      - name: install ez80-clang
+        run: |
+          wget --progress=dot:giga https://github.com/dinoboards/ez80-clang/releases/download/v0.0.5/ez80-clang-0.0.5.tar.gz
+          tar -xzvf ez80-clang-0.0.5.tar.gz
+          cd ez80-clang-0.0.5
+          sudo ./install.sh
+
       - name: build apps
         working-directory: apps
-        run: make
+        run: |
+          source /home/runner/.ez80-clang
+          make
 
       - name: Archive apps
         uses: actions/upload-artifact@v4
@@ -143,7 +152,7 @@ jobs:
           compression-level: 0
           name: apps
           path: |
-            apps/bin/release/*.COM
+            apps/bin/*.COM
 
   release-notes:
     runs-on: ubuntu-latest
