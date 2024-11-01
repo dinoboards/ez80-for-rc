@@ -28,7 +28,7 @@ extern void outPal(uint8_t b);
 extern void outRegIndInt(uint16_t b);
 extern void outRegIndByte(uint8_t b);
 
-#define writeRegister(a, b) _writeRegister(a * 256 + b)
+#define writeRegister(a, b) _writeRegister((a)*256 + (b))
 
 #define REGISTER_COUNT 12
 

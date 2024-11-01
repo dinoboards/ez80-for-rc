@@ -3,6 +3,10 @@
 	RST.L	$10
 .endm
 
+.macro EZ80_DELAY
+	RST.L	$18
+.endm
+
 .macro EZ80_UTIL_GET_BUSTM
 	XOR	A
 	LD	B, 1
@@ -12,7 +16,13 @@
 .macro EZ80_UTIL_GET_CPU_FQ
 	XOR	A
 	LD	B, 5
-    	EZ80_FN
+	EZ80_FN
+.endm
+
+.macro EZ80_UTIL_DEBUG
+	XOR	A
+	LD	B, 7
+	EZ80_FN
 .endm
 
 

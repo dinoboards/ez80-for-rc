@@ -10,8 +10,8 @@ create 24 bit color graphic file ,  portable pixmap file = PPM
 see http://en.wikipedia.org/wiki/Portable_pixmap
 to see the file use external application ( graphic viewer)
  */
-#include "config_request.h"
-#include "v9958.h"
+#include "../common/config_request.h"
+#include "../common/v9958.h"
 #include <cpm.h>
 #include <math.h>
 #include <stdio.h>
@@ -42,7 +42,7 @@ float Zx2;
 float Zy2;
 
 /* screen ( integer) coordinate */
-uint16_t iX, iY;
+uint24_t iX, iY;
 uint8_t  iteration;
 
 int main(void) {
@@ -78,7 +78,7 @@ int main(void) {
         Zy2 = Zy * Zy;
       };
 
-      if (cpm_rawio() != 0)
+      if (((iX & 15) == 0) && cpm_rawio() != 0)
         return 0;
 
       pointSet(iX, iY, iteration, CMD_LOGIC_IMP);

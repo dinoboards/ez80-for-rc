@@ -11,23 +11,34 @@ VDP_STAT:	equ	$FF99		; VDP status (read only)
 VDP_PALT:	equ	$FF9A		; VDP palette latch (write only)
 VDP_REGS:	equ	$FF9B		; VDP register access (write only)
 
+
+.macro	DELAY_1_7US  ; approx 1.7 us @25Mhz CPU
+	PUSH	AF
+	POP	AF
+	PUSH	AF
+	POP	AF
+	NOP
+	NOP
+.endm
+
 	.global	_outDat
 ; void outDat(uint8_t b)
 _outDat:
 	LD	IY, 0
 	ADD	IY, SP
-	LD	L, (IY + 3)
+	LD	A, (IY + 3)
 	LD	BC, VDP_DATA
-	OUT	(BC), L
+	OUT	(BC), A
 	RET
 
 	.global	_outCmd
-; void outCmd(uint8_t b) __z88dk_fastcall
+; void outCmd(uint8_t b)
 _outCmd:
 	LD	IY, 0
 	ADD	IY, SP
-	LD	L, (IY + 3)
+	LD	A, (IY + 3)
 	LD	BC, VDP_ADDR
+	OUT	(BC), A
 	RET
 
 	.global	_commandDrawLine
@@ -37,8 +48,11 @@ _commandDrawLine:
 	LD	BC, VDP_ADDR
 	LD	A, 2
 	OUT	(BC), A
-	LD	A, 0x80 | 15
+	DELAY_1_7US					; DELAY and LD provde the ~2us required delay
+	LD	A, 0x80 | 15				; measured on CPU running @25Mhz
 	OUT	(BC), A
+
+	DELAY_1_7US
 
 	; WAIT FOR ANY PREVIOUS COMMAND TO COMPLETE
 _commandDrawLineReady:
@@ -48,19 +62,32 @@ _commandDrawLineReady:
 
 	; SET INDIRECT REGISTER TO 36
 	LD	A, 36
+	DELAY_1_7US
 	OUT	(BC), A
-	LD	A, 0x80 | 17
+	DELAY_1_7US					; DELAY and LD provde the ~2us required delay
+	LD	A, 0x80 | 17				; measured on CPU running @25Mhz
 	OUT	(BC), A
 
 	LD	HL, __fromX
-	LD	DE, VDP_REGS
-	LD	BC, 11
-	OTIRX
+	LD	BC, VDP_REGS
+	LD	A, 11
+.outs:							; loop calibrated to have appro 2us
+	PUSH	AF					; between rights
+	POP	AF
+	NOP						; spec seems to indicate we should have a period
+							; of 8us after the 2nd byte is written
+	LD	E, (HL)					; but we seem to get a way with 2us just fine???
+	OUT	(BC), E
+	INC	HL
+	DEC	A
+	JR	NZ, .outs
 
 	LD	BC, VDP_ADDR
 	XOR	A
+	DELAY_1_7US
 	OUT	(BC), A
-	LD	A, 0x80 | 15
+	DELAY_1_7US					; DELAY and LD provde the ~2us required delay
+	LD	A, 0x80 | 15				; measured on CPU running @25Mhz
 	OUT	(BC), A
 
 	EI
@@ -74,8 +101,11 @@ _waitForCommandCompletion:
 
 	LD	A, 2
 	OUT	(BC), A
-	LD	A, 0x80 | 15
+	DELAY_1_7US					; DELAY and LD provde the ~2us required delay
+	LD	A, 0x80 | 15				; measured on CPU running @25Mhz
 	OUT	(BC), A
+
+	DELAY_1_7US
 
 _waitForCommandCompletionLoop:
 	IN	A, (BC)
@@ -83,8 +113,10 @@ _waitForCommandCompletionLoop:
 	JR	C, _waitForCommandCompletionLoop
 
 	XOR	A
+	DELAY_1_7US
 	OUT	(BC), A
-	LD	A, 0x80 | 15
+	DELAY_1_7US					; DELAY and LD provde the ~2us required delay
+	LD	A, 0x80 | 15				; measured on CPU running @25Mhz
 	OUT	(BC), A
 
 	EI
@@ -107,7 +139,7 @@ _outRegIndByte:
 	LD	IY, 0
 	ADD	IY, SP
 	LD	A, (IY + 3)
-	LD	BC, VDP_ADDR
+	LD	BC, VDP_REGS
 	OUT	(BC), A
 	RET
 
@@ -117,11 +149,11 @@ _outRegIndInt:
 	LD	IY, 0
 	ADD	IY, SP
 	LD	HL, (IY + 3)
-	LD	BC, VDP_ADDR
-	LD	A, L
-	OUT	(BC), A
-	LD	A, H
-	OUT	(BC), A
+	LD	BC, VDP_REGS
+	OUT	(BC), L
+	DELAY_1_7US					; DELAY and LD provde the ~2us required delay
+	LD	A, 0					; measured on CPU running @25Mhz
+	OUT	(BC), H
 	RET
 
 	.global	inDat
@@ -142,16 +174,20 @@ _readStatus:
 
 	; SET READ REGISTER TO 15
 	OUT	(BC), L
+	DELAY_1_7US
 	LD	A, 0x80 | 15
 	OUT	(BC), A
 
 	LD	HL, 0
-	IN	L, (BC)		; READ STATUS
+	IN	L, (BC)					; READ STATUS
+
+	DELAY_1_7US
 
 	; RESTORE READ REGISTER TO DEFAULT OF 0
 	XOR	A
 	OUT	(BC), A
-	LD	A, 0x80 | 15
+	DELAY_1_7US					; DELAY and LD provde the ~2us required delay
+	LD	A, 0x80 | 15				; measured on CPU running @25Mhz
 	OUT	(BC), A
 	RET
 
@@ -162,12 +198,11 @@ __writeRegister:
 	ADD	IY, SP
 	LD	HL, (IY + 3)
 	LD	BC, VDP_ADDR
-
 	OUT	(BC), L
 	LD	A, 0x80
 	OR	H
+	DELAY_1_7US
 	OUT	(BC), A
-
 	RET
 
 

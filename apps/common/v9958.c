@@ -2,15 +2,18 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define DI __asm__("DI")
+#include <stdio.h>
 
+#define DI __asm__("DI")
 #define EI __asm__("EI")
 
 void setBaseRegisters(uint8_t *pReg) {
   DI;
 
-  for (uint8_t i = 0; i < REGISTER_COUNT; i++)
-    writeRegister(i, *pReg++);
+  for (uint8_t i = 0; i < REGISTER_COUNT; i++) {
+    writeRegister(i, *pReg); // if we inline the increment, the compiler (with -Oz seems to pre-increment the pointer)
+    pReg++;
+  }
 
   EI;
 }
@@ -81,12 +84,14 @@ void clearAllMemory(void) {
   writeRegister(14, 0);
   outCmd(0);
   outCmd(0x40);
-  for (long i = 0; i < 0x10000; i++)
-    outDat(0x00);
-  for (long i = 0x10000; i < 0x20000; i++)
+  for (int i = 0; i < 0x10000; i++)
+    outDat(0x41);
+  for (int i = 0x10000; i < 0x20000; i++)
     outDat(0x00);
   EI;
 }
+
+extern void delay(void);
 
 void clearScreenBank0(uint8_t color) {
   DI;
