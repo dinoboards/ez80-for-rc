@@ -46,12 +46,12 @@ uint24_t iX, iY;
 uint8_t  iteration;
 
 int main(void) {
-  const uint8_t mode  = getVideoMode();
-  const uint8_t lines = getLineCount();
+  const uint8_t refresh_rate = getVideoMode();
+  const uint8_t lines        = getLineCount();
 
-  setMode6(lines, mode);
-  setPalette(palette);
-  clearScreenBank0(0);
+  vdp_set_mode(6, lines, refresh_rate);
+  vdp_set_palette(palette);
+  vdp_erase_bank0(0);
 
   printf("Press any key to abort\r\n");
 

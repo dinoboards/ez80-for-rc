@@ -1,24 +1,20 @@
 #include "v9958.h"
+#include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include <stdio.h>
-
-#define DI __asm__("DI")
-#define EI __asm__("EI")
-
-void setBaseRegisters(uint8_t *pReg) {
+static void set_base_registers(uint8_t *pReg) {
   DI;
 
   for (uint8_t i = 0; i < REGISTER_COUNT; i++) {
-    writeRegister(i, *pReg); // if we inline the increment, the compiler (with -Oz seems to pre-increment the pointer)
+    vdp_reg_write(i, *pReg); // if we inline the increment, the compiler (with -Oz seems to pre-increment the pointer)
     pReg++;
   }
 
   EI;
 }
 
-void setVideoSignal(uint8_t *pReg, uint8_t lines, uint8_t mode) {
+static void set_video_signal(uint8_t *pReg, uint8_t lines, uint8_t mode) {
   if (lines == 212)
     pReg[9] |= 0x80;
 
@@ -26,7 +22,7 @@ void setVideoSignal(uint8_t *pReg, uint8_t lines, uint8_t mode) {
     pReg[9] |= 0x02;
 }
 
-uint8_t mode6Reg[REGISTER_COUNT] = {
+static uint8_t mode_6_registers[REGISTER_COUNT] = {
     0x0A, // R0 - M5 = 1, M4 = 0, M3 = 1
     0x40, // R1 - ENABLE SCREEN, DISABLE INTERRUPTS, M1 = 0, M2 = 0
     0x1F, // R2 - PATTERN NAME TABLE := 0, A16 = 0
@@ -42,12 +38,7 @@ uint8_t mode6Reg[REGISTER_COUNT] = {
     0x01  // R11 - SPRITE ATTRIBUTE TABLE -> FA00
 };
 
-void setMode6(uint8_t lines, uint8_t mode) {
-  setVideoSignal(mode6Reg, lines, mode);
-  setBaseRegisters(mode6Reg);
-}
-
-uint8_t mode7Reg[REGISTER_COUNT] = {
+static uint8_t mode_7_registers[REGISTER_COUNT] = {
     0x0E, // R0 - M5 = 1, M4 = 1, M3 = 1
     0x40, // R1 - ENABLE SCREEN, DISABLE INTERRUPTS, M1 = 0, M2 = 0
     0x1F, // R2 - PATTERN NAME TABLE := 0, A16 = 0
@@ -63,98 +54,102 @@ uint8_t mode7Reg[REGISTER_COUNT] = {
     0x01  // R11 - SPRITE ATTRIBUTE TABLE -> FA00
 };
 
-void setMode7(uint8_t lines, uint8_t mode) {
-  setVideoSignal(mode7Reg, lines, mode);
-  setBaseRegisters(mode7Reg);
+void vdp_set_mode(const uint8_t mode, const uint8_t lines, const uint8_t refresh_rate) {
+  switch (mode) {
+  case 6:
+    set_video_signal(mode_6_registers, lines, refresh_rate);
+    set_base_registers(mode_6_registers);
+    break;
+  case 7:
+    set_video_signal(mode_7_registers, lines, mode);
+    set_base_registers(mode_7_registers);
+    break;
+  }
 }
 
-void setPalette(RGB *pPalette) {
+void vdp_set_palette(RGB *pPalette) {
   DI;
-  writeRegister(16, 0);
+  vdp_reg_write(16, 0);
   for (uint8_t c = 0; c < 16; c++) {
-    outPal(pPalette->red * 16 + pPalette->blue);
-    outPal(pPalette->green);
+    vdp_out_pal(pPalette->red * 16 + pPalette->blue);
+    vdp_out_pal(pPalette->green);
     pPalette++;
   }
   EI;
 }
 
-void clearAllMemory(void) {
+void vdp_clear_all_memory(void) {
   DI;
-  writeRegister(14, 0);
-  outCmd(0);
-  outCmd(0x40);
-  for (int i = 0; i < 0x10000; i++)
-    outDat(0x41);
-  for (int i = 0x10000; i < 0x20000; i++)
-    outDat(0x00);
+  vdp_reg_write(14, 0);
+  vdp_out_cmd(0);
+  vdp_out_cmd(0x40);
+  for (int i = 0; i < 0x20000; i++)
+    vdp_out_dat(0);
   EI;
 }
 
 extern void delay(void);
 
-void clearScreenBank0(uint8_t color) {
+void vdp_erase_bank0(uint8_t color) {
   DI;
   // Clear bitmap data from 0x0000 to 0x3FFF
 
-  writeRegister(17, 36);             // Set Indirect register Access
-  outRegIndInt(0);                   // DX
-  outRegIndInt(0);                   // DY
-  outRegIndInt(512);                 // NX
-  outRegIndInt(212);                 // NY
-  outRegIndByte(color * 16 + color); // COLOUR for both pixels (assuming G7 mode)
-  outRegIndByte(0);                  // Direction: VRAM, Right, Down
-  outRegIndByte(CMD_VDP_TO_VRAM);
+  vdp_reg_write(17, 36);                // Set Indirect register Access
+  vdp_out_reg_int16(0);                 // DX
+  vdp_out_reg_int16(0);                 // DY
+  vdp_out_reg_int16(512);               // NX
+  vdp_out_reg_int16(212);               // NY
+  vdp_out_reg_byte(color * 16 + color); // COLOUR for both pixels (assuming G7 mode)
+  vdp_out_reg_byte(0);                  // Direction: VRAM, Right, Down
+  vdp_out_reg_byte(CMD_VDP_TO_VRAM);
   EI;
 
-  waitForCommandCompletion();
+  vdp_cmd_wait_completion();
 }
 
-void clearScreenBank1(uint8_t color) {
+void vdp_erase_bank1(uint8_t color) {
   DI;
   // Clear bitmap data from 0x0000 to 0x3FFF
 
-  writeRegister(17, 36);             // Set Indirect register Access
-  outRegIndInt(512);                 // DX
-  outRegIndInt(212);                 // DY
-  outRegIndInt(512);                 // NX
-  outRegIndInt(212);                 // NY
-  outRegIndByte(color * 16 + color); // COLOUR for both pixels (assuming G7 mode)
-  outRegIndByte(0x0);                // Direction: ExpVRAM, Right, Down
-  outRegIndByte(CMD_VDP_TO_VRAM);
+  vdp_reg_write(17, 36);                // Set Indirect register Access
+  vdp_out_reg_int16(512);               // DX
+  vdp_out_reg_int16(212);               // DY
+  vdp_out_reg_int16(512);               // NX
+  vdp_out_reg_int16(212);               // NY
+  vdp_out_reg_byte(color * 16 + color); // COLOUR for both pixels (assuming G7 mode)
+  vdp_out_reg_byte(0x0);                // Direction: ExpVRAM, Right, Down
+  vdp_out_reg_byte(CMD_VDP_TO_VRAM);
   EI;
 
-  waitForCommandCompletion();
+  vdp_cmd_wait_completion();
 }
 
-static uint16_t t;
-static uint16_t y;
-static uint16_t x;
-uint16_t        _toX;
-uint16_t        _toY;
+void _drawLine(uint16_t toX, uint16_t toY) {
+  uint16_t t;
+  uint16_t y;
+  uint16_t x;
 
-void _drawLine(void) {
-  if (_fromY > _toY) {
-    t      = _fromY;
-    _fromY = _toY;
-    _toY   = t;
+  if (vdp_cmdp_from_y > toY) {
+    t               = vdp_cmdp_from_y;
+    vdp_cmdp_from_y = toY;
+    toY             = t;
   };
-  if (_fromX > _toX) {
-    t      = _fromX;
-    _fromX = _toX;
-    _toX   = t;
+  if (vdp_cmdp_from_x > toX) {
+    t               = vdp_cmdp_from_x;
+    vdp_cmdp_from_x = toX;
+    toX             = t;
   };
-  y   = _toY - _fromY;
-  x   = _toX - _fromX;
-  dir = (y > x);
+  y            = toY - vdp_cmdp_from_y;
+  x            = toX - vdp_cmdp_from_x;
+  vdp_cmdp_dir = (y > x);
 
-  if (y > x) {
-    longSide  = y;
-    shortSide = x;
+  if (vdp_cmdp_dir) {
+    vdp_cmdp_long_side  = y;
+    vdp_cmdp_short_side = x;
   } else {
-    longSide  = x;
-    shortSide = y;
+    vdp_cmdp_long_side  = x;
+    vdp_cmdp_short_side = y;
   }
 
-  commandDrawLine();
+  vmd_cmd_draw_line();
 }

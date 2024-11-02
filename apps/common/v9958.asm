@@ -21,28 +21,8 @@ VDP_REGS:	equ	$FF9B		; VDP register access (write only)
 	NOP
 .endm
 
-	.global	_outDat
-; void outDat(uint8_t b)
-_outDat:
-	LD	IY, 0
-	ADD	IY, SP
-	LD	A, (IY + 3)
-	LD	BC, VDP_DATA
-	OUT	(BC), A
-	RET
-
-	.global	_outCmd
-; void outCmd(uint8_t b)
-_outCmd:
-	LD	IY, 0
-	ADD	IY, SP
-	LD	A, (IY + 3)
-	LD	BC, VDP_ADDR
-	OUT	(BC), A
-	RET
-
-	.global	_commandDrawLine
-_commandDrawLine:
+	.global	_vmd_cmd_draw_line
+_vmd_cmd_draw_line:
 	DI
 	; Set read register to 2 (status)
 	LD	BC, VDP_ADDR
@@ -55,10 +35,10 @@ _commandDrawLine:
 	DELAY_1_7US
 
 	; WAIT FOR ANY PREVIOUS COMMAND TO COMPLETE
-_commandDrawLineReady:
+_vmd_cmd_draw_line_wait:
 	IN	A, (BC)
 	RRCA
-	JR	C, _commandDrawLineReady
+	JR	C, _vmd_cmd_draw_line_wait
 
 	; SET INDIRECT REGISTER TO 36
 	LD	A, 36
@@ -68,7 +48,7 @@ _commandDrawLineReady:
 	LD	A, 0x80 | 17				; measured on CPU running @25Mhz
 	OUT	(BC), A
 
-	LD	HL, __fromX
+	LD	HL, _vdp_cmdp_from_x
 	LD	BC, VDP_REGS
 	LD	A, 11
 .outs:							; loop calibrated to have appro 2us
@@ -93,8 +73,8 @@ _commandDrawLineReady:
 	EI
 	RET
 
-	.global _waitForCommandCompletion
-_waitForCommandCompletion:
+	.global _vdp_cmd_wait_completion
+_vdp_cmd_wait_completion:
 	DI
 	; Set read register to 2
 	LD	BC, VDP_ADDR
@@ -107,10 +87,10 @@ _waitForCommandCompletion:
 
 	DELAY_1_7US
 
-_waitForCommandCompletionLoop:
+_vdp_cmd_wait_completion_wait:
 	IN	A, (BC)
 	RRCA
-	JR	C, _waitForCommandCompletionLoop
+	JR	C, _vdp_cmd_wait_completion_wait
 
 	XOR	A
 	DELAY_1_7US
@@ -122,30 +102,9 @@ _waitForCommandCompletionLoop:
 	EI
 	RET
 
-
-	.global	_outPal
-; void outPal(uint8_t b)
-_outPal:
-	LD	IY, 0
-	ADD	IY, SP
-	LD	A, (IY + 3)
-	LD	BC, VDP_PALT
-	OUT	(BC), A
-	RET
-
-	.global	_outRegIndByte
-; void outRegIndByte(uint8_t b)
-_outRegIndByte:
-	LD	IY, 0
-	ADD	IY, SP
-	LD	A, (IY + 3)
-	LD	BC, VDP_REGS
-	OUT	(BC), A
-	RET
-
-	.global	_outRegIndInt
-; void outRegIndInt(uint16_t b)
-_outRegIndInt:
+	.global	_vdp_out_reg_int16
+; void vdp_out_reg_int16(uint16_t b)
+_vdp_out_reg_int16:
 	LD	IY, 0
 	ADD	IY, SP
 	LD	HL, (IY + 3)
@@ -191,9 +150,9 @@ _readStatus:
 	OUT	(BC), A
 	RET
 
-	.global	__writeRegister
-; void __writeRegister(uint16_t rd)
-__writeRegister:
+	.global	__vdp_reg_write
+; void __vdp_reg_write(uint16_t rd)
+__vdp_reg_write:
 	LD	IY, 0
 	ADD	IY, SP
 	LD	HL, (IY + 3)
@@ -208,13 +167,13 @@ __writeRegister:
 
 	section	.data,"aw",@progbits
 
-	.global	__fromX, __fromY, __color, __operation, _longSide, _shortSide, _dir
+	.global	_vdp_cmdp_from_x, _vdp_cmdp_from_y, _vdp_cmdp_color, _vdp_cmdp_operation, _vdp_cmdp_long_side, _vdp_cmdp_short_side, _vdp_cmdp_dir
 
-__fromX:	DW	0
-__fromY:	DW	0
-_longSide:	DW	0
-_shortSide:	DW	0
-__color:	DB	0
-_dir:		DB	0
-__operation:	DB	0
+_vdp_cmdp_from_x:	DW	0
+_vdp_cmdp_from_y:	DW	0
+_vdp_cmdp_long_side:	DW	0
+_vdp_cmdp_short_side:	DW	0
+_vdp_cmdp_color:	DB	0
+_vdp_cmdp_dir:		DB	0
+_vdp_cmdp_operation:	DB	0
 
