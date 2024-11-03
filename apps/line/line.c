@@ -1,8 +1,8 @@
 #include "../common/config_request.h"
-#include "../common/v9958.h"
 #include <cpm.h>
 #include <math.h>
 #include <stdio.h>
+#include <v99x8.h>
 //
 extern uint8_t get_random_seed(void);
 

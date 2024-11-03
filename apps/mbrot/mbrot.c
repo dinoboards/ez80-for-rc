@@ -11,10 +11,10 @@ see http://en.wikipedia.org/wiki/Portable_pixmap
 to see the file use external application ( graphic viewer)
  */
 #include "../common/config_request.h"
-#include "../common/v9958.h"
 #include <cpm.h>
 #include <math.h>
 #include <stdio.h>
+#include <v99x8.h>
 
 RGB palette[16] = {
     {0, 0, 0}, {1, 0, 0}, {2, 0, 0},  {3, 0, 0},  {4, 0, 0},  {5, 0, 0},  {6, 0, 0},  {7, 0, 0},
