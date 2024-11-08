@@ -133,10 +133,9 @@ void write_vdp_memory(uint24_t address, uint8_t value) {
 
   vdp_reg_write(14, A16_A14);
   vdp_out_cmd(A7_A0);
-  vdp_out_cmd(A13_A8 | 0x40);   //enable write
+  vdp_out_cmd(A13_A8 | 0x40); // enable write
   vdp_out_dat(value);
 }
-
 
 int main(/*const int argc, const char *argv[]*/) {
 
