@@ -16,5 +16,5 @@ files_to_format=$(echo "$all_files" | grep -v -E "$grep_pattern")
 # Format the filtered files
 for file in $files_to_format; do
     echo "formatting $file"
-    clang-format -i "$file"
+    ez80-clang-format -i "$file"
 done
