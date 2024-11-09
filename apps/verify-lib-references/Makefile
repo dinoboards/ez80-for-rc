@@ -7,7 +7,7 @@ all: VFYADL.COM VFYZ80.COM
 
 .PHONY: VFYADL.COM
 VFYADL.COM:
-	@ez80-cc --output-dir ../bin VFYADL.COM main.c
+	@ez80-cc --output-dir ../bin -DEZ80CLANG=1 VFYADL.COM main.c
 
 
 APPS := VFYZ80

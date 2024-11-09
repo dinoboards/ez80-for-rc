@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include "main.h"
 
 void test_strcmp(void) {
   char str1[] = "Hello, World!";
@@ -40,9 +41,24 @@ void test_echo_args(const int argc, const char *argv[]) {
   }
 }
 
+// extern int test_getopt(int argc, char *argv[]);
+
+
+
+int NO_INLINE conduct__inot(int a) {
+  return ~a;
+}
+void NO_INLINE test___inot(int a) {
+  if (conduct__inot(a) == -4113)
+    printf("__inot: OKr\n");
+  else
+    printf("__inot: FAIL\r\n");
+}
+
 int main(const int argc, const char *argv[]) {
   test_echo_args(argc, argv);
 
+  test___inot(4112);
   test_strcmp();
   test_strcpy();
   test_strchr();
