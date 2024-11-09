@@ -1,7 +1,7 @@
+#include "main.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include "main.h"
 
 void test_strcmp(void) {
   char str1[] = "Hello, World!";
@@ -25,8 +25,8 @@ void test_strcpy(void) {
 }
 
 void test_strchr(void) {
-  char str[] = "Hello, World!";
-  char *ptr = strchr(str, 'W');
+  char  str[] = "Hello, World!";
+  char *ptr   = strchr(str, 'W');
   if (ptr != NULL && strcmp(ptr, "World!") == 0) {
     printf("strchr: OK\r\n");
   } else {
@@ -34,20 +34,9 @@ void test_strchr(void) {
   }
 }
 
-void test_echo_args(const int argc, const char *argv[]) {
-  printf("argc: %d\r\n", argc);
-  for (int i = 0; i < argc; i++) {
-    printf("argv[%d]: %s\r\n", i, argv[i]);
-  }
-}
+extern int test_getopt(int argc, char *argv[]);
 
-// extern int test_getopt(int argc, char *argv[]);
-
-
-
-int NO_INLINE conduct__inot(int a) {
-  return ~a;
-}
+int NO_INLINE  conduct__inot(int a) { return ~a; }
 void NO_INLINE test___inot(int a) {
   if (conduct__inot(a) == -4113)
     printf("__inot: OKr\n");
@@ -55,8 +44,8 @@ void NO_INLINE test___inot(int a) {
     printf("__inot: FAIL\r\n");
 }
 
-int main(const int argc, const char *argv[]) {
-  test_echo_args(argc, argv);
+int main(int argc, char *argv[]) {
+  test_getopt(argc, argv);
 
   test___inot(4112);
   test_strcmp();
