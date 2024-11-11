@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/ez80-clang/include/"
+            ],
+            "defines": [
+                "__clang__"
+            ],
+            "compilerPath": "/opt/ez80-clang/bin/ez80-clang-15",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "compilerArgs": [
+                "-nostdinc"
+            ]
+        }
+    ],
+    "version": 4
+}

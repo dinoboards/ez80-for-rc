@@ -1,6 +1,9 @@
+#include <cpm.h>
+#include <ez80.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+
 char input[4];
 
 int main(void) {

@@ -18,4 +18,5 @@ hardware/bin/**/*.doc
 
 apps/bin/
 releases/
-.vscode
+.vscode/*
+!/.vscode/c_cpp_properties.json
