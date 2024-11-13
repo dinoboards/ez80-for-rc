@@ -13,4 +13,4 @@ ez80-clang ${INCLUDE_PATHS} -nostdinc -ffunction-sections -fdata-sections -Oz -W
 echo "Compiling main.s -> main.o"
 ez80-as -march=ez80+full -a=./main.lst ./main.s -o ./main.o
 
-# ez80-ld -T /opt/ez80-clang/linker-scripts/cpm-64k.ld --relax -O1 --strip-discarded --orphan-handling=error -L/opt/ez80-clang/lib/ -lcrt cube.o --start-group -llibc -lcrt -lcpm -lv99x8-standard -lez80 --end-group --oformat binary -o ../bin/CUBE.COM
+ez80-ld -T /opt/ez80-clang/linker-scripts/cpm-64k.ld --relax -O1 --strip-discarded --orphan-handling=error -L/opt/ez80-clang/lib/ -lcrt main.o --start-group -llibc -lcrt -lcpm -lv99x8-standard -lez80 --end-group --oformat binary -o ../bin/TEST.COM

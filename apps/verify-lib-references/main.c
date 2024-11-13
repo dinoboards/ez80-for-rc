@@ -2,9 +2,11 @@
 #include <cpm.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-
-// uint16_t NO_INLINE spike(uint16_t a, uint16_t b) { return ((a << 1) - b); }
+#ifdef __clang__
+#include <ez80.h>
+#endif
 
 void test_strcmp(void) {
   char str1[] = "Hello, World!";
@@ -64,18 +66,68 @@ void test_cpmfcb_address(void) {
     printf("cpmfcb_address: FAIL\r\n");
   }
 }
+
+#endif
+
+volatile int size = 14;
+
+void NO_INLINE test_memcpy(void) {
+  char src[] = "Hello, World!";
+  char dst[14];
+  memcpy(dst, src, size);
+  if (strcmp(dst, src) == 0) {
+    printf("memcpy: OK\r\n");
+  } else {
+    printf("memcpy: FAIL\r\n");
+  }
+}
+
+#ifdef __clang__
+void test_calloc() {
+  printf("HEAP IS FROM %p. SPL: %p, SPS: %p \r\n\r\n", _heap, _get_spl(), _get_sps());
+  printf("Initializing int array of size 5 using calloc() : ");
+
+#define FIRST_SIZE  5
+#define SECOND_SIZE 7
+
+  int *arr = (int *)calloc(sizeof(int), FIRST_SIZE);
+  printf("%p ->  ", arr);
+
+  for (int i = 0; i < FIRST_SIZE; i++)
+    arr[i] = i;
+
+  for (int i = 0; i < FIRST_SIZE; i++)
+    printf("%d, ", arr[i]);
+
+  printf("\r\nResizing it to size 10 using realloc(): ");
+
+  arr = (int *)realloc(arr, SECOND_SIZE * sizeof(int));
+  printf("%p ->  ", arr);
+
+  for (int i = 0; i < SECOND_SIZE; i++) {
+    printf("%d, ", arr[i]);
+  }
+
+  printf("\r\n");
+}
 #endif
 
 int main(int argc, char *argv[]) {
-  test_getopt(argc, argv);
+#ifdef __clang__
+  malloc_init(1024); // declare heap from end of bss upto stack pointer minus buffer
+#endif
 
+  test_getopt(argc, argv);
+  test_memcpy();
   test___inot(4112);
   test_strcmp();
   test_strcpy();
   test_strchr();
 
+
 #ifdef __clang__
   test_cpmfcb_address();
+  test_calloc();
 #endif
   return 0;
 }
