@@ -124,10 +124,12 @@ int main(int argc, char *argv[]) {
   test_strcpy();
   test_strchr();
 
-
 #ifdef __clang__
   test_cpmfcb_address();
   test_calloc();
+  cpm_term();
+  printf("Should never get here\r\n");
 #endif
+
   return 0;
 }
