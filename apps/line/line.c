@@ -26,7 +26,7 @@ int main(void) {
 
   // for (unsigned int i = 0; i < 4000; i++) {
   while (true) {
-    if (cpm_rawio() != 0)
+    if (cpm_c_rawio() != 0)
       return 0;
     vdp_draw_line(rand() % 512, i % lines, rand() % 512, i % lines, rand() & 15, CMD_LOGIC_IMP);
     i++;

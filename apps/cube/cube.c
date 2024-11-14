@@ -149,7 +149,7 @@ int main(/*const int argc, const char *argv[]*/) {
 
   uint24_t time = 0;
   while (true) {
-    if (cpm_rawio() != 0)
+    if (cpm_c_rawio() != 0)
       return 0;
     draw_cube(time);
     time += 10;

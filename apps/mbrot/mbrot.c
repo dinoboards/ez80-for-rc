@@ -78,7 +78,7 @@ int main(void) {
         Zy2 = Zy * Zy;
       };
 
-      if (((iX & 15) == 0) && cpm_rawio() != 0)
+      if (((iX & 15) == 0) && cpm_c_rawio() != 0)
         return 0;
 
       pointSet(iX, iY, iteration, CMD_LOGIC_IMP);

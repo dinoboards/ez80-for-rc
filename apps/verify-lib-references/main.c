@@ -110,6 +110,43 @@ void test_calloc() {
 
   printf("\r\n");
 }
+
+void test_cpm_c_write() {
+  cpm_c_write('C');
+  cpm_c_write('P');
+  cpm_c_write('/');
+  cpm_c_write('M');
+  cpm_c_write('\r');
+  cpm_c_write('\n');
+}
+
+void test_cpm_get_iobyte() {
+  uint8_t iobyte = cpm_get_iobyte();
+  const uint8_t console = CPM_IOBYTE_GET_CONSOLE(iobyte);
+  const uint8_t reader = CPM_IOBYTE_GET_READER(iobyte);
+  const uint8_t punch = CPM_IOBYTE_GET_PUNCH(iobyte);
+  const uint8_t list = CPM_IOBYTE_GET_LIST(iobyte);
+
+  printf("cpm_get_iobyte: %X\r\n", iobyte);
+  printf("Console: %X, Reader: %X, Punch: %X, List: %X\r\n", console, reader, punch, list);
+
+  const char *list_device = cpm_get_list_device();
+  printf("List device: %s\r\n", list_device);
+
+  const char* punch_device = cpm_get_punch_device();
+  printf("Punch device: %s\r\n", punch_device);
+
+  const char* reader_device = cpm_get_reader_device();
+  printf("Reader device: %s\r\n", reader_device);
+
+  const char* console_device = cpm_get_console_device();
+  printf("Console device: %s\r\n", console_device);
+}
+
+
+void test_cpm_c_writestr() {
+  cpm_c_writestr(AS_NEAR_PTR("CP/M\r\n$"));
+}
 #endif
 
 int main(int argc, char *argv[]) {
@@ -127,6 +164,13 @@ int main(int argc, char *argv[]) {
 #ifdef __clang__
   test_cpmfcb_address();
   test_calloc();
+
+  test_cpm_c_write();
+
+  test_cpm_c_writestr();
+
+  test_cpm_get_iobyte();
+
   cpm_term();
   printf("Should never get here\r\n");
 #endif
