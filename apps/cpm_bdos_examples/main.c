@@ -1,3 +1,4 @@
+#include <sys/stat.h>
 #include <cpm.h>
 #include <ctype.h>
 #include <errno.h>
@@ -192,6 +193,21 @@ void test_cpm_f_usernum() {
   printf("cpm_f_usernum(0): %d, OK\r\n", r);
 }
 
+void test_cpm_f_first_next() {
+  memset(&fcb, 0, sizeof(fcb));
+  fcb.drive = 3;
+  strncpy(fcb.name, "BO?     ", 8);
+  strncpy(fcb.ext, "TXT", 3);
+
+  uint16_t r = cpm_f_sfirst(AS_NEAR_PTR(&fcb));
+
+  printf("cpm_f_first: %d, (errno: %d) OK\r\n", r, errno);
+
+  r = cpm_f_snext(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_next: %d, (errno: %d) OK\r\n", r, errno);
+}
+
+
 void test_c_file_read() {
   FILE *f = fopen("C:BOB.TXT", "r");
   printf("fopen: %p\r\n", f);
@@ -210,6 +226,12 @@ void test_c_file_read() {
 
   int r = fclose(f);
   printf("fclose: %d, (errno: %d) OK\r\n", r, errno);
+}
+
+void test_c_stat() {
+  struct stat st;
+  int          r = stat("C:BOX.TXT", &st);
+  printf("stat: %d, (errno: %d) OK\r\n", r, errno);
 }
 
 int flags = 123;
@@ -240,13 +262,17 @@ int main(/*int argc, char *argv[]*/) {
 
   test_cpm_f_open();
 
+  test_cpm_f_first_next();
+
   test_c_file_read();
+
+  test_c_stat();
 
   test_cpm_f_usernum();
 
-  // cpm_term();
+  cpm_term();
 
-  // printf("Should never get here\r\n");
+  printf("Should never get here\r\n");
 
   return 0;
 }
