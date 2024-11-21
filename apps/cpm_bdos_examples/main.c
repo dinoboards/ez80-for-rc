@@ -1,4 +1,3 @@
-#include <sys/stat.h>
 #include <cpm.h>
 #include <ctype.h>
 #include <errno.h>
@@ -6,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 FCB  fcb;
 char buffer[150];
@@ -207,7 +207,6 @@ void test_cpm_f_first_next() {
   printf("cpm_f_next: %d, (errno: %d) OK\r\n", r, errno);
 }
 
-
 void test_c_file_read() {
   FILE *f = fopen("C:BOB.TXT", "r");
   printf("fopen: %p\r\n", f);
@@ -230,7 +229,7 @@ void test_c_file_read() {
 
 void test_c_stat() {
   struct stat st;
-  int          r = stat("C:BOX.TXT", &st);
+  int         r = stat("C:BOX.TXT", &st);
   printf("stat: %d, (errno: %d) OK\r\n", r, errno);
 }
 
