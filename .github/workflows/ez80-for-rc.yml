@@ -42,6 +42,18 @@ jobs:
         with:
           submodules: true
 
+      - name: Read version numbers
+        id: read_version
+        run: |
+          MAJOR_VERSION=$(grep 'MAJOR_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          MINOR_VERSION=$(grep 'MINOR_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          PATCH_VERSION=$(grep 'PATCH_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          REVISION_VERSION=$(grep 'REVISION_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          echo "MAJOR_VERSION=$MAJOR_VERSION" >> $GITHUB_ENV
+          echo "MINOR_VERSION=$MINOR_VERSION" >> $GITHUB_ENV
+          echo "PATCH_VERSION=$PATCH_VERSION" >> $GITHUB_ENV
+          echo "REVISION_VERSION=$REVISION_VERSION" >> $GITHUB_ENV
+
       - name: pull docker tool chain
         run: |
           docker pull dinoboards/ez80-rc-builder:0.0.1
@@ -62,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           compression-level: 0
-          name: firmware
+          name: firmware-${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}.${{ env.REVISION_VERSION }}
           path: |
             firmware/bin
 
@@ -70,15 +82,15 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           compression-level: 0
-          name: z80-rc-firmware-release.hex
+          name: ez80-rc-firmware-release.hex
           path: |
             firmware/bin/ez80-rc-firmware-release.hex
 
-      - name: Version File
+      - name: Firmware Version File
         uses: actions/upload-artifact@v4
         with:
           compression-level: 0
-          name: version.inc
+          name: firmware-version.inc
           path: |
             firmware/src/version.inc
 
@@ -92,16 +104,16 @@ jobs:
         with:
           submodules: true
 
-      - name: copy z80-rc-firmware-release.hex
+      - name: copy ez80-rc-firmware-release.hex
         uses: actions/download-artifact@v4
         with:
-          name: z80-rc-firmware-release.hex
+          name: ez80-rc-firmware-release.hex
           path: programmer/build/
 
       - name: copy version.inc
         uses: actions/download-artifact@v4
         with:
-          name: version.inc
+          name: firmware-version.inc
           path: programmer/
 
       - name: pull docker tool chain
