@@ -18,12 +18,11 @@
 	PUBLIC	_romwbw_ramsize
 	PUBLIC	_romwbw_romsize
 
-	PUBLIC	_cs3_bus_cycles
-	PUBLIC	_cs2_bus_cycles
-	PUBLIC	_cs_bus_timings
 
 	PUBLIC	_mem_bus_timings
 	PUBLIC	_mem_bus_mode_and_timing
+	PUBLIC	_mem0_bus_mode_and_timing
+	PUBLIC	_mem1_bus_mode_and_timing
 	PUBLIC	_io_bus_mode_and_timing
 
 	PUBLIC	_system_ticks
@@ -89,15 +88,18 @@ _i2c_bus_freq:
 _line_control:
 	DS	1
 
-_cs_bus_timings:
-_cs2_bus_cycles:
-	DS	1
-_cs3_bus_cycles:
-	DS	1
-
 _mem_bus_timings:
 _mem_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
 	DS	1
+
+; Memory timing for CS0
+_mem0_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
+	DS	1
+
+; Memory timing for CS1
+_mem1_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
+	DS	1
+
 _io_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
 	DS	1
 

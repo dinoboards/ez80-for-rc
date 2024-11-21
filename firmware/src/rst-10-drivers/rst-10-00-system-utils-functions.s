@@ -47,9 +47,9 @@ _system_utils_dispatch:
 	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, ez80_version_exchange		; B = 0, SYSUTL_VER_EXCHANGE
 	DEC	A
-	JR	Z, not_supported			; B = 1, DEPRECATED
+	JR	Z, ez80_mem0_bus_timing_set		; B = 1, SYSUTL_MEM0TM_SET
 	DEC	A
-	JR	Z, not_supported			; B = 2, DEPRECATED
+	JR	Z, ez80_mem1_bus_timing_set		; B = 2, SYSUTL_MEM1TM_SET
 	DEC	A
 	JR	Z, not_supported			; B = 3, DEPRECATED
 	DEC	A
@@ -64,17 +64,17 @@ _system_utils_dispatch:
 	; temp new version of bus timing config functions
 	; will be swapped to indexes above, once full HBIOS conversion is completed
 
-	DEC	A					; B = 8, SYSUTL_MEMTM_SET
+	DEC	A					; B = 8, SYSUTL_MEMTM_SET (CS3)
 	JR	Z, ez80_mem_bus_timing_set
 	DEC	A					; B = 9, SYSUTL_IOTM_SET
 	JR	Z, ez80_io_bus_timing_set
-	DEC	A					; B = 10, SYSUTL_MEMTM_GET
+	DEC	A					; B = 10, SYSUTL_MEMTM_GET (CS3, CS1, CS0)
 	JR	Z, ez80_mem_bus_timing_get
 	DEC	A					; B = 11, SYSUTL_IOTM_GET
 	JR	Z, ez80_io_bus_timing_get
-	DEC	A					; B = 12, SYSUTL_MEMTMFQ_SET
+	DEC	A					; B = 12, SYSUTL_MEMTMFQ_SET (CS3)
 	JR	Z, ez80_mem_bus_timing_freq_set
-	DEC	A					; B = 13, SYSUTL_IOTMFQ_SET
+	DEC	A					; B = 13, SYSUTL_IOTMFQ_SE
 	JR	Z, ez80_io_bus_timing_freq_set
 	DEC	A					; B = 14, SYSUTL_FLASHWS_SET
 	JR	Z, ez80_flash_ws_set
@@ -82,6 +82,10 @@ _system_utils_dispatch:
 	JR	Z, ez80_flash_ws_get
 	DEC	A					; B = 16, SYSUTL_FLSHFQ_SET
 	JR	Z, ez80_flsh_freq_set
+	DEC	A
+	JR	Z, ez80_mem0_bus_timing_freq_set	; B = 17, SYSUTL_MEMTMFQ_SET (CS0)
+	DEC	A
+	JR	Z, ez80_mem1_bus_timing_freq_set	; B = 18, SYSUTL_MEMTMFQ_SET (CS1)
 
 not_supported:
 	LD	A, %FF					; UNKNOWN FUNCTION
@@ -138,24 +142,101 @@ ENDIF
 	XOR	A
 	RET.L
 ;
-; Function B = 01 -- DEPRECATED
-;
-;
-; Input
-;  None
-;
-; Output
-;
-
-; Function B = 02 -- DEPRECATED
-;
+; Function B = 01 -- SYSUTL_MEM0TM_SET
+; Set Bus cycles or wait state for external linear memory access
+; using CS0
 ;
 ; Input
-;
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
 ;
 ; Output
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A 	= 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
 ;
+ez80_mem0_bus_timing_set:
+	LD	A, L
 
+	BIT	7, A
+	JR	NZ, ez80_mem0_bus_z80_mode
+
+	AND	%07
+	LD	(_mem0_bus_mode_and_timing), A
+
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR	CSX_TYPE_MEM | CSX_ENABLED
+	OUT0	(CS0_CTL), A
+
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	OUT0	(CS0_BMC), A
+
+ez80_mem0_bus_timing_set_done:
+	LD	A, (_mem0_bus_mode_and_timing)
+	LD	L, A
+	XOR	A
+	RET.L
+
+ez80_mem0_bus_z80_mode:
+	AND	%8F
+	LD	(_mem0_bus_mode_and_timing), A
+
+	; Assign CS3 bus mode
+	AND	%0F
+	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OUT0	(CS0_BMC), A
+
+	JR	ez80_mem0_bus_timing_set_done
+
+; Function B = 02 -- SYSUTL_MEM1TM_SET
+; Set Bus cycles or wait state for external linear memory access
+; using CS1
+;
+; Input
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;
+; Output
+;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A 	= 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_mem1_bus_timing_set:
+	LD	A, L
+
+	BIT	7, A
+	JR	NZ, ez80_mem1_bus_z80_mode
+
+	AND	%07
+	LD	(_mem1_bus_mode_and_timing), A
+
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR	CSX_TYPE_MEM | CSX_ENABLED
+	OUT0	(CS1_CTL), A
+
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	OUT0	(CS1_BMC), A
+
+ez80_mem1_bus_timing_set_done:
+	LD	A, (_mem1_bus_mode_and_timing)
+	LD	L, A
+	XOR	A
+	RET.L
+
+ez80_mem1_bus_z80_mode:
+	AND	%8F
+	LD	(_mem1_bus_mode_and_timing), A
+
+	; Assign CS3 bus mode
+	AND	%0F
+	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OUT0	(CS1_BMC), A
+
+	JR	ez80_mem1_bus_timing_set_done
 ;
 ; Function B = 03 -- DEPRECATED
 ;
@@ -222,7 +303,10 @@ ez80_cpu_freq_get:
 ez80_debug:
 	RET.L
 
+	XREF	_mem_bus_timings
 	XREF	_mem_bus_mode_and_timing
+	XREF	_mem0_bus_mode_and_timing
+	XREF	_mem1_bus_mode_and_timing
 	XREF	_io_bus_mode_and_timing
 ;
 ; Function B = 08 -- SYSUTL_MEMTM_SET
@@ -332,8 +416,7 @@ ez80_io_bus_z80_mode:
 ;   A 	= 0 -> SUCCESS
 ;
 ez80_mem_bus_timing_get:
-	LD	A, (_mem_bus_mode_and_timing)
-	LD	L, A
+	LD	HL, (_mem_bus_timings)
 	XOR	A
 	RET.L
 
@@ -465,3 +548,45 @@ ez80_flsh_freq_set:
 	POP	DE
 	LD	L, A
 	JR	ez80_flash_ws_set
+;
+; Function B = 17 -- SYSUTL_MEMTMFQ_SET (CS0)
+; Identify and apply the appropriate W/S or switch to BUS cycles
+; to ensure a memory operation is given a minimum cycle duration.
+;
+; Input
+;   uHL = min cycle duration in nano seconds
+;   E => hard minimum number of w/s
+;
+; Output
+;   L  = BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A  = 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_mem0_bus_timing_freq_set:
+	PUSH	DE
+	PUSH	HL
+	CALL	_calculate_wait_state
+	POP	HL
+	POP	DE
+	LD	L, A
+	JP	ez80_mem0_bus_timing_set
+;
+; Function B = 18 -- SYSUTL_MEMTMFQ_SET (CS1)
+; Identify and apply the appropriate W/S or switch to BUS cycles
+; to ensure a memory operation is given a minimum cycle duration.
+;
+; Input
+;   uHL = min cycle duration in nano seconds
+;   E => hard minimum number of w/s
+;
+; Output
+;   L  = BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   A  = 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
+;
+ez80_mem1_bus_timing_freq_set:
+	PUSH	DE
+	PUSH	HL
+	CALL	_calculate_wait_state
+	POP	HL
+	POP	DE
+	LD	L, A
+	JP	ez80_mem1_bus_timing_set

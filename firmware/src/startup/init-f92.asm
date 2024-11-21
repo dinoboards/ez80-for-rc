@@ -25,8 +25,9 @@
 
 	XREF	_system_sub_second_count
 
-	XREF	_cs2_bus_cycles
-	XREF	_cs3_bus_cycles
+	XREF	_mem_bus_mode_and_timing
+	XREF	_mem0_bus_mode_and_timing
+	XREF	_io_bus_mode_and_timing
 
 	XREF	FIRMWARE_RAM_RESERVED
 
@@ -108,10 +109,8 @@ ENDIF
 	OUT0	(CS2_LBR), A
 	OUT0	(CS2_UBR), A
 
-	LD	A, IO_BUS_CYCLES
-	AND	%0F
-	LD	(_cs2_bus_cycles), A
-	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	LD	A, IO_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPERATE
+	; OR	BMX_BM_Z80 | BMX_AD_SEPERATE
 	OUT0	(CS2_BMC), A
 	LD	A, CSX_TYPE_IO | CSX_ENABLED
 	OUT0	(CS2_CTL), A
@@ -120,13 +119,22 @@ ENDIF
 	LD	A, Z80_ADDR_MBASE
 	OUT0	(CS3_LBR), A
 	OUT0	(CS3_UBR), A
-	LD	A, MEM_BUS_CYCLES
-	AND	%0F
-	LD	(_cs3_bus_cycles), A
-	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	LD	A, MEM_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPERATE
+	; OR	BMX_BM_Z80 | BMX_AD_SEPERATE
 	OUT0	(CS3_BMC), A
 	LD	A, CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS3_CTL), A
+
+	; CS0 is enabled for memory @ $200000 -> $3FFFFF
+	LD	A, %20
+	OUT0	(CS0_LBR), A
+	LD	A, %3F
+	OUT0	(CS0_UBR), A
+	LD	A, MEM_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPERATE
+	; OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OUT0	(CS0_BMC), A
+	LD	A, CSX_TYPE_MEM | CSX_ENABLED
+	OUT0	(CS0_CTL), A
 
 	; enable internal memory
 	LD	A, __FLASH_ADDR_U_INIT_PARAM
