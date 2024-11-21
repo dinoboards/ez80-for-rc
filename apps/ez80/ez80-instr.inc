@@ -1,34 +1,39 @@
 
-.macro EZ80_FN
+.macro	EZ80_FN
 	RST.L	$10
 .endm
 
-.macro EZ80_DELAY
+.macro	EZ80_DELAY
 	RST.L	$18
 .endm
 
-.macro EZ80_UTIL_GET_CPU_FQ
-	XOR	A
-	LD	B, 5
+.macro	EZ80_UTIL_GET_CPU_FQ
+	xor	a
+	ld	b, 5
 	EZ80_FN
 .endm
 
-.macro EZ80_UTIL_MEMTM_GET
-	XOR	A
-	LD	B, 10
-    	EZ80_FN
+.macro	EZ80_UTIL_MEMTM_GET
+	xor	a
+	ld	b, 10
+	EZ80_FN
 .endm
 
-.macro EZ80_UTIL_IOTM_GET
-	XOR	A
-	LD	B, 11
-    	EZ80_FN
+.macro	EZ80_UTIL_IOTM_GET
+	xor	a
+	ld	b, 11
+	EZ80_FN
 .endm
 
+.macro	EZ80_UTIL_MEM0TM_SET
+	xor	a
+	ld	b, 1
+	EZ80_FN
+.endm
 
-.macro EZ80_UTIL_DEBUG
-	XOR	A
-	LD	B, 7
+.macro	EZ80_UTIL_DEBUG
+	xor	a
+	ld	b, 7
 	EZ80_FN
 .endm
 
