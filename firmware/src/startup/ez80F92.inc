@@ -193,7 +193,7 @@ BMX_BM_EZ80		equ	(%00 << 6)
 BMX_BM_Z80		equ	(%01 << 6)
 BMX_BM_INTEL		equ	(%02 << 6)
 BMX_BM_MOTOROLA		equ	(%03 << 6)
-BMX_AD_SEPERATE		equ	(%0 << 5)
+BMX_AD_SEPARATE		equ	(%0 << 5)
 BMX_AD_MULTIPLEX	equ	(%1 << 5)
 BMX_BC_0		equ	%00
 BMX_BC_1		equ	%01

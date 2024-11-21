@@ -170,7 +170,7 @@ ez80_mem0_bus_timing_set:
 	OR	CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS0_CTL), A
 
-	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPARATE
 	OUT0	(CS0_BMC), A
 
 ez80_mem0_bus_timing_set_done:
@@ -185,7 +185,7 @@ ez80_mem0_bus_z80_mode:
 
 	; Assign CS3 bus mode
 	AND	%0F
-	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OR	BMX_BM_Z80 | BMX_AD_SEPARATE
 	OUT0	(CS0_BMC), A
 
 	JR	ez80_mem0_bus_timing_set_done
@@ -218,7 +218,7 @@ ez80_mem1_bus_timing_set:
 	OR	CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS1_CTL), A
 
-	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPARATE
 	OUT0	(CS1_BMC), A
 
 ez80_mem1_bus_timing_set_done:
@@ -233,7 +233,7 @@ ez80_mem1_bus_z80_mode:
 
 	; Assign CS3 bus mode
 	AND	%0F
-	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OR	BMX_BM_Z80 | BMX_AD_SEPARATE
 	OUT0	(CS1_BMC), A
 
 	JR	ez80_mem1_bus_timing_set_done
@@ -337,7 +337,7 @@ ez80_mem_bus_timing_set:
 	OR	CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS3_CTL), A
 
-	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPARATE
 	OUT0	(CS3_BMC), A
 
 ez80_mem_bus_timing_set_done:
@@ -352,7 +352,7 @@ ez80_mem_bus_z80_mode:
 
 	; Assign CS3 bus mode
 	AND	%0F
-	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OR	BMX_BM_Z80 | BMX_AD_SEPARATE
 	OUT0	(CS3_BMC), A
 
 	JR	ez80_mem_bus_timing_set_done
@@ -386,7 +386,7 @@ ez80_io_bus_timing_set:
 	OR	CSX_TYPE_IO | CSX_ENABLED
 	OUT0	(CS2_CTL), A
 
-	LD	A, BMX_BM_EZ80 | BMX_AD_SEPERATE
+	LD	A, BMX_BM_EZ80 | BMX_AD_SEPARATE
 	OUT0	(CS2_BMC), A
 
 ez80_io_bus_timing_set_done:
@@ -401,7 +401,7 @@ ez80_io_bus_z80_mode:
 
 	; Assign CS2 bus mode
 	AND	%0F
-	OR	BMX_BM_Z80 | BMX_AD_SEPERATE
+	OR	BMX_BM_Z80 | BMX_AD_SEPARATE
 	OUT0	(CS2_BMC), A
 
 	JR	ez80_io_bus_timing_set_done
