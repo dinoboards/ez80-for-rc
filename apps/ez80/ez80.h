@@ -3,10 +3,6 @@
 
 #include <stdint.h>
 
-extern void find_extended_memory(void);
-extern void report_memory_timing(void);
-extern void show_help(void);
-
 typedef enum { WAIT_STATE, BUS_CYCLE } wait_type_t;
 
 typedef struct {
@@ -14,6 +10,11 @@ typedef struct {
   wait_type_t type;
 } mem_config_t;
 
-void config_mem0(mem_config_t mem_config);
+extern void find_extended_memory(void);
+extern void report_memory_timing(void);
+extern void show_help(void);
+extern void validate_mem_set_value(const char *value, mem_config_t *mem_config);
+extern void config_mem0(mem_config_t mem_config);
+extern void config_mem(mem_config_t mem_config);
 
 #endif
