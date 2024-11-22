@@ -412,7 +412,9 @@ ez80_io_bus_z80_mode:
 ; using CS3
 ;
 ; Output
-;   L 	= BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   L 	= MODE for CS3 (main memory) BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   H   = Mode for CS0 (extended memory) BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
+;   u	= Mode for CS1 (extended memory) BIT 7 = BUS MODE - 0 = EZ80, 1 = Z80, BITS 0 to 2 = cycles or wait state
 ;   A 	= 0 -> SUCCESS
 ;
 ez80_mem_bus_timing_get:

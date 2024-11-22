@@ -1,5 +1,5 @@
-#include "ez80-firmware.h"
 #include "ez80.h"
+#include <ez80-firmware.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
