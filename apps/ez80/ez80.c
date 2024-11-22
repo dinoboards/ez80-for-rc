@@ -15,52 +15,77 @@ void show_help() {
   printf("  -? /?            Show this help message\r\n");
 }
 
+typedef enum { CMD_NONE, CMD_HELP, CMD_M0, CMD_S0 } mem0_type_t;
+
+static mem0_type_t cmd       = CMD_NONE;
+static const char *cmd_value = NULL;
+
+bool argument_M0(const char *arg) {
+  if (strncmp(arg, "-M0=", 4) != 0 && strncmp(arg, "/M0=", 4) != 0)
+    return false;
+
+  if (cmd != CMD_NONE) {
+    printf("Error: Conflicting options.\r\n");
+    show_help();
+    abort();
+  }
+
+  cmd       = CMD_M0;
+  cmd_value = arg + 4;
+
+  return true;
+}
+
+bool argument_S0(const char *arg) {
+  if (strcmp(arg, "-S0") != 0 && strcmp(arg, "/S0") != 0)
+    return false;
+
+  if (cmd != CMD_NONE) {
+    printf("Error: Conflicting options.\r\n");
+    show_help();
+    abort();
+  }
+
+  cmd = CMD_S0;
+  return true;
+}
+
+bool argument_help(const char *arg) {
+  if (strcmp(arg, "-?") == 0 || strcmp(arg, "/?") == 0) {
+    show_help();
+    exit(0);
+  }
+
+  return false;
+}
+
 int main(const int argc, const char *argv[]) {
-  bool        mem0_set         = false;
-  bool        scan_ext_mem_set = false;
-  const char *mem0_value       = NULL;
 
   if (argc == 1) {
     report_memory_timing();
     return 0;
   }
 
-  // First loop: Validate parameters
   for (int i = 1; i < argc; i++) {
-    if (strncmp(argv[i], "-M0=", 4) == 0 || strncmp(argv[i], "/M0=", 4) == 0) {
-      if (scan_ext_mem_set) {
-        printf("Error: -M0 and -S0 options are mutually exclusive.\r\n");
-        show_help();
-        return 1;
-      }
-      mem0_set   = true;
-      mem0_value = argv[i] + 4;
+    if (argument_M0(argv[i]))
+      continue;
 
-    } else if (strcmp(argv[i], "-S0") == 0 || strcmp(argv[i], "/S0") == 0 || strcmp(argv[i], "-s") == 0) {
-      if (mem0_set) {
-        printf("Error: -M0 and -S0 options are mutually exclusive.\r\n");
-        show_help();
-        return 1;
-      }
-      scan_ext_mem_set = true;
+    if (argument_S0(argv[i]))
+      continue;
 
-    } else if (strcmp(argv[i], "-?") == 0 || strcmp(argv[i], "/?") == 0) {
-      show_help();
-      return 0;
+    if (argument_help(argv[i]))
+      continue;
 
-    } else if (strcmp(argv[i], "-?") != 0 && strcmp(argv[i], "/?") != 0) {
-      printf("Unknown argument: %s\r\n", argv[i]);
-      show_help();
-      return 1;
-    }
+    printf("Unknown argument: %s\r\n", argv[i]);
+    show_help();
+    return 1;
   }
 
-  if (mem0_set) {
-    config_mem0(mem0_value);
+  if (cmd == CMD_M0)
+    config_mem0(cmd_value);
 
-  } else if (scan_ext_mem_set) {
+  else if (cmd == CMD_S0)
     find_extended_memory();
-  }
 
   return 0;
 }
