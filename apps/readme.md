@@ -53,7 +53,7 @@ A benchmarking tool using the whetstone measurement process.  See its [readme](.
 
 ## Building
 
-### Prerequists
+### Prerequisites
 
 * Linux - tested with ubuntu/Debian. For windows users, WSL will work
 * Docker
@@ -67,9 +67,9 @@ eZ80-clang is a port of clang to target and build for the eZ80 CPU.  More detail
 To install:
 
 ```
-wget https://github.com/dinoboards/ez80-clang/releases/download/v0.0.11/ez80-clang-0.0.11.tar.gz
-tar -xzvf ez80-clang-0.0.11.tar.gz
-cd ez80-clang-0.0.11
+wget https://github.com/dinoboards/ez80-clang/releases/download/v0.0.12/ez80-clang-0.0.12.tar.gz
+tar -xzvf ez80-clang-0.0.12.tar.gz
+cd ez80-clang-0.0.12
 sudo ./install.sh
 ```
 
