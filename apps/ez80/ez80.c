@@ -16,9 +16,9 @@ void show_help() {
 }
 
 int main(const int argc, const char *argv[]) {
-  bool mem0_set = false;
-  bool scan_ext_mem_set = false;
-  const char* mem0_value = NULL;
+  bool        mem0_set         = false;
+  bool        scan_ext_mem_set = false;
+  const char *mem0_value       = NULL;
 
   if (argc == 1) {
     report_memory_timing();
@@ -33,7 +33,7 @@ int main(const int argc, const char *argv[]) {
         show_help();
         return 1;
       }
-      mem0_set = true;
+      mem0_set   = true;
       mem0_value = argv[i] + 4;
 
     } else if (strcmp(argv[i], "-S0") == 0 || strcmp(argv[i], "/S0") == 0 || strcmp(argv[i], "-s") == 0) {
@@ -55,7 +55,7 @@ int main(const int argc, const char *argv[]) {
     }
   }
 
-  if(mem0_set) {
+  if (mem0_set) {
     config_mem0(mem0_value);
 
   } else if (scan_ext_mem_set) {
