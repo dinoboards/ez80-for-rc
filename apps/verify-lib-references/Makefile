@@ -9,7 +9,6 @@ all: VFYADL.COM VFYZ80.COM
 VFYADL.COM:
 	@ez80-cc --output-dir ../bin -DEZ80CLANG=1 --optimise size VFYADL.COM main.c test_getopt.c
 
-
 APPS := VFYZ80
 
 include ../common.mk
