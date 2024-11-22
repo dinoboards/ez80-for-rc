@@ -16,27 +16,50 @@ void show_help() {
 }
 
 int main(const int argc, const char *argv[]) {
+  bool mem0_set = false;
+  bool scan_ext_mem_set = false;
+  const char* mem0_value = NULL;
 
   if (argc == 1) {
     report_memory_timing();
     return 0;
   }
 
+  // First loop: Validate parameters
   for (int i = 1; i < argc; i++) {
     if (strncmp(argv[i], "-M0=", 4) == 0 || strncmp(argv[i], "/M0=", 4) == 0) {
-      config_mem0(argv[i] + 4);
+      if (scan_ext_mem_set) {
+        printf("Error: -M0 and -S0 options are mutually exclusive.\r\n");
+        show_help();
+        return 1;
+      }
+      mem0_set = true;
+      mem0_value = argv[i] + 4;
 
-    } else if (strcmp(argv[i], "-S0") == 0 || strcmp(argv[i], "/S0") == 0) {
-      find_extended_memory();
+    } else if (strcmp(argv[i], "-S0") == 0 || strcmp(argv[i], "/S0") == 0 || strcmp(argv[i], "-s") == 0) {
+      if (mem0_set) {
+        printf("Error: -M0 and -S0 options are mutually exclusive.\r\n");
+        show_help();
+        return 1;
+      }
+      scan_ext_mem_set = true;
 
     } else if (strcmp(argv[i], "-?") == 0 || strcmp(argv[i], "/?") == 0) {
       show_help();
       return 0;
-    } else {
-      printf("Unknown argument: %s\n", argv[i]);
+
+    } else if (strcmp(argv[i], "-?") != 0 && strcmp(argv[i], "/?") != 0) {
+      printf("Unknown argument: %s\r\n", argv[i]);
       show_help();
       return 1;
     }
+  }
+
+  if(mem0_set) {
+    config_mem0(mem0_value);
+
+  } else if (scan_ext_mem_set) {
+    find_extended_memory();
   }
 
   return 0;
