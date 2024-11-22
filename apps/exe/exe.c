@@ -1,34 +1,40 @@
 #include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
+
+extern int main_func(int argc, const char **argv);
+
+extern const uint8_t start_marshalling[];
+extern const uint8_t end_marshalling[];
+
+uint8_t *const marshalling_vectors = (uint8_t *)(0x200000);
 
 int main(const int argc, const char *argv[]) {
-  if (argc != 2) {
-    printf("Usage: %s <filename>\r\n", argv[0]);
+  size_t n;
+
+  if (argc < 2) {
+    printf("Usage: %s <filename> <...arguments>\r\n", argv[0]);
     return 1;
   }
 
   const char *filename = argv[1];
-  uint8_t    *ptr      = (uint8_t *)0x200000;
+  uint8_t    *ptr      = (uint8_t *)0x200400;
 
   FILE *f = fopen(filename, "r");
-  printf("fopen: %p\r\n", f);
   if (f == NULL) {
-    printf("fopen: %p, (errno: %d) FAIL\r\n", f, errno);
+    printf("Failed to open file %s\r\n", filename);
     return 1;
   }
-
-  size_t n;
 
   do {
     n = fread(ptr, 1, 512, f);
     ptr += 512;
-
-    printf("fread to %p: %d, (errno: %d) OK\r\n", ptr, n, errno);
   } while (n > 0);
 
-  int r = fclose(f);
-  printf("fclose: %d, (errno: %d) OK\r\n", r, errno);
+  fclose(f);
 
-  return 0;
+  memcpy(marshalling_vectors, start_marshalling, end_marshalling - start_marshalling);
+
+  return main_func(argc - 1, &argv[1]);
 }

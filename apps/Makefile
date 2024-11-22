@@ -2,7 +2,7 @@ SHELL := /bin/sh
 BIN=./bin/
 MAKEFLAGS += --no-print-directory
 
-# Define the binaries
+# Define the sub directories to be built
 BINARIES := CPMEXMPL CUBE DHRY EXE EZ80 FWMAIN FWSTATUS FWUPDATE HWADL HWZ80 I2CSCAN LINE MATRIX8 MBROT VFYADL VFYADL VFYZ80 WHET
 
 # Default target

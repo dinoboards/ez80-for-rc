@@ -7,4 +7,4 @@ all: EXE.COM
 
 .PHONY: EXE.COM
 EXE.COM:
-	@ez80-cc --output-dir ../bin EXE.COM exe.c
+	@ez80-cc --output-dir ../bin EXE.COM exe.c marshaller.asm

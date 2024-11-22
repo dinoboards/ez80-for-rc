@@ -3,8 +3,13 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-all: HWADL.COM
+all: HWADL.COM HWADL.EXE
 
 .PHONY: HWADL.COM
 HWADL.COM:
 	@ez80-cc --output-dir ../bin HWADL.COM hello-world.c
+
+.PHONY: HWADL.EXE
+HWADL.EXE:
+	@ez80-cc --mem-model 2MB --output-dir ../bin HWADL.EXE hello-world.c
+
