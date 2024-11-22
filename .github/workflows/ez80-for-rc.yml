@@ -223,6 +223,18 @@ jobs:
         with:
           submodules: true
 
+      - name: Read version numbers
+        id: read_version
+        run: |
+          MAJOR_VERSION=$(grep 'MAJOR_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          MINOR_VERSION=$(grep 'MINOR_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          PATCH_VERSION=$(grep 'PATCH_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          REVISION_VERSION=$(grep 'REVISION_VERSION' ./firmware/src/version.inc | awk '{print $3}')
+          echo "MAJOR_VERSION=$MAJOR_VERSION" >> $GITHUB_ENV
+          echo "MINOR_VERSION=$MINOR_VERSION" >> $GITHUB_ENV
+          echo "PATCH_VERSION=$PATCH_VERSION" >> $GITHUB_ENV
+          echo "REVISION_VERSION=$REVISION_VERSION" >> $GITHUB_ENV
+
       - name: Download hardware artifact
         uses: actions/download-artifact@v4
         with:
