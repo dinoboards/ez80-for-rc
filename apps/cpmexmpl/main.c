@@ -1,11 +1,8 @@
 #include <cpm.h>
-#include <ctype.h>
 #include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
 
 FCB  fcb;
 char buffer[150];
@@ -122,22 +119,56 @@ void test_cpm_drv_set_get() {
 
 void test_cpm_f_make() {
   memset(&fcb, 0, sizeof(fcb));
-  fcb.drive = 1;
+  fcb.drive = 3;
   strncpy(fcb.name, "BOB     ", 8);
   strncpy(fcb.ext, "TXT", 3);
 
-  uint16_t r = cpm_f_make(AS_NEAR_PTR(&fcb));
-  printf("cpm_f_make: %d, (errno: %d) OK\r\n", r, errno);
+  cpm_f_error_t r = cpm_f_make(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_make: %d OK\r\n", r);
 
   cpm_f_dmaoff(AS_NEAR_PTR(buffer));
   memset(buffer, 26, 129);
   strcpy(buffer, "Hello World\r\n");
 
-  uint16_t rr = cpm_f_write(AS_NEAR_PTR(&fcb));
+  cpm_f_error_t rr = cpm_f_write(AS_NEAR_PTR(&fcb));
   printf("cpm_f_write: %X OK\r\n", rr);
 
   rr = cpm_f_close(AS_NEAR_PTR(&fcb));
   printf("cpm_f_close: %X OK\r\n", rr);
+}
+
+void test_cpm_f_make_write_rand() {
+  memset(&fcb, 0, sizeof(fcb));
+  fcb.drive = 3;
+  strncpy(fcb.name, "BOB     ", 8);
+  strncpy(fcb.ext, "TXT", 3);
+
+  cpm_f_error_t r = cpm_f_delete(AS_NEAR_PTR(&fcb));
+  if (r == 0)
+    printf("cpm_f_delete: OK\r\n");
+  else
+    printf("cpm_f_delete: %d ERROR\r\n", r);
+
+  r = cpm_f_delete(AS_NEAR_PTR(&fcb));
+  if (r == 0)
+    printf("cpm_f_delete: ERROR\r\n");
+  else
+    printf("cpm_f_delete: %d OK\r\n", r);
+
+
+  r = cpm_f_make(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_make: %d OK\r\n", r);
+
+  cpm_f_dmaoff(AS_NEAR_PTR(buffer));
+  memset(buffer, 26, 129);
+  strcpy(buffer, "Hello World\r\n");
+
+  fcb.ranrec = 0;
+  r = cpm_f_writerand(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_write: %X OK\r\n", r);
+
+  r = cpm_f_close(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_close: %X OK\r\n", r);
 }
 
 void test_cpm_f_open() {
@@ -146,37 +177,28 @@ void test_cpm_f_open() {
   strncpy(fcb.name, "BOB     ", 8);
   strncpy(fcb.ext, "TXT", 3);
 
-  uint16_t r = cpm_f_open(AS_NEAR_PTR(&fcb));
-  printf("cpm_f_open: %d, (errno: %d) OK\r\n", r, errno);
+  cpm_f_error_t r = cpm_f_open(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_open: %d OK\r\n", r);
 
   cpm_f_dmaoff(AS_NEAR_PTR(buffer));
   memset(buffer, 0, sizeof(buffer));
   strcpy(buffer, "SHOULD NOT SEE THIS!\r\n");
 
   fcb.ranrec = 0;
-  uint16_t rr;
 
   do {
-    rr = cpm_f_readrand(AS_NEAR_PTR(&fcb));
-    printf("cpm_f_readrand: %X OK\r\n", rr);
+    r = cpm_f_readrand(AS_NEAR_PTR(&fcb));
+    printf("cpm_f_readrand: %d OK\r\n", r);
 
-    // uint16_t rr = cpm_f_read(AS_NEAR_PTR(&fcb));
-    // printf("cpm_f_read: %X OK\r\n", rr);
     printf("fcb.next_record: %d\r\n", fcb.next_record);
     printf("fcb.ranrec: %d\r\n", fcb.ranrec);
     fcb.ranrec++;
-  } while (rr == 0);
+  } while (r == 0);
 
   printf("buffer: %s\r\n", buffer);
 
-  // cpm_f_dmaoff(AS_NEAR_PTR(buffer));
-  // rr = cpm_f_read(AS_NEAR_PTR(&fcb));
-  // printf("cpm_f_read: %X OK\r\n", rr);
-  // printf("fcb.next_record: %d\r\n", fcb.next_record);
-  // printf("fcb.ranrec: %d\r\n", fcb.ranrec);
-
-  rr = cpm_f_close(AS_NEAR_PTR(&fcb));
-  printf("cpm_f_close: %X OK\r\n", rr);
+  r = cpm_f_close(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_close: %X OK\r\n", r);
 }
 
 void test_cpm_f_usernum() {
@@ -199,38 +221,12 @@ void test_cpm_f_first_next() {
   strncpy(fcb.name, "BO?     ", 8);
   strncpy(fcb.ext, "TXT", 3);
 
-  uint16_t r = cpm_f_sfirst(AS_NEAR_PTR(&fcb));
+  int8_t r = cpm_f_sfirst(AS_NEAR_PTR(&fcb));
 
-  printf("cpm_f_first: %d, (errno: %d) OK\r\n", r, errno);
+  printf("cpm_f_first: %d OK\r\n", r);
 
   r = cpm_f_snext(AS_NEAR_PTR(&fcb));
-  printf("cpm_f_next: %d, (errno: %d) OK\r\n", r, errno);
-}
-
-void test_c_file_read() {
-  FILE *f = fopen("C:BOB.TXT", "r");
-  printf("fopen: %p\r\n", f);
-  if (f == NULL) {
-    printf("fopen: %p, (errno: %d) FAIL\r\n", f, errno);
-    return;
-  }
-  memset(buffer, 0, sizeof(buffer));
-
-  size_t n;
-
-  do {
-    n = fread(buffer, 1, sizeof(buffer), f);
-    printf("fread: %d, (errno: %d) OK\r\n", n, errno);
-  } while (n > 0);
-
-  int r = fclose(f);
-  printf("fclose: %d, (errno: %d) OK\r\n", r, errno);
-}
-
-void test_c_stat() {
-  struct stat st;
-  int         r = stat("C:BOX.TXT", &st);
-  printf("stat: %d, (errno: %d) OK\r\n", r, errno);
+  printf("cpm_f_snext: %d OK\r\n", r);
 }
 
 int flags = 123;
@@ -259,19 +255,17 @@ int main(/*int argc, char *argv[]*/) {
 
   test_cpm_f_make();
 
+  test_cpm_f_make_write_rand();
+
   test_cpm_f_open();
 
   test_cpm_f_first_next();
 
-  test_c_file_read();
-
-  test_c_stat();
-
   test_cpm_f_usernum();
 
-  cpm_term();
+  // cpm_term();
 
-  printf("Should never get here\r\n");
+  // printf("Should never get here\r\n");
 
   return 0;
 }
