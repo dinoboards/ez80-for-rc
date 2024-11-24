@@ -155,7 +155,6 @@ void test_cpm_f_make_write_rand() {
   else
     printf("cpm_f_delete: %d OK\r\n", r);
 
-
   r = cpm_f_make(AS_NEAR_PTR(&fcb));
   printf("cpm_f_make: %d OK\r\n", r);
 
@@ -164,7 +163,7 @@ void test_cpm_f_make_write_rand() {
   strcpy(buffer, "Hello World\r\n");
 
   fcb.ranrec = 0;
-  r = cpm_f_writerand(AS_NEAR_PTR(&fcb));
+  r          = cpm_f_writerand(AS_NEAR_PTR(&fcb));
   printf("cpm_f_write: %X OK\r\n", r);
 
   r = cpm_f_close(AS_NEAR_PTR(&fcb));
