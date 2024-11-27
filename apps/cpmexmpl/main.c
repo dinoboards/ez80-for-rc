@@ -4,20 +4,20 @@
 #include <stdio.h>
 #include <string.h>
 
-FCB  fcb;
-char buffer[150];
+CPM_FCB fcb;
+char    buffer[150];
 
 void test_cpmfcb_address(void) {
-  if ((uint24_t)CPM_FCB == 0x03005C)
+  if ((uint24_t)CPM_SYS_FCB == 0x03005C)
     printf("fcb_address: OK\r\n");
   else {
     printf("fcb_address: FAIL\r\n");
   }
 
-  CPM_FCB[0] = 'A';
-  CPM_FCB[1] = 0;
+  CPM_SYS_FCB[0] = 'A';
+  CPM_SYS_FCB[1] = 0;
 
-  if (CPM_FCB[0] == 'A' && CPM_FCB[1] == 0)
+  if (CPM_SYS_FCB[0] == 'A' && CPM_SYS_FCB[1] == 0)
     printf("fcb update: OK\r\n");
   else {
     printf("fcb update: FAIL\r\n");
@@ -200,6 +200,22 @@ void test_cpm_f_open() {
   printf("cpm_f_close: %X OK\r\n", r);
 }
 
+void test_cpm_f_size() {
+  memset(&fcb, 0, sizeof(fcb));
+  fcb.drive = 3;
+  strncpy(fcb.name, "BOB     ", 8);
+  strncpy(fcb.ext, "TXT", 3);
+
+  fcb.ranrec      = 0;
+  fcb.next_record = 0;
+
+  cpm_f_error_t r = cpm_f_size(AS_NEAR_PTR(&fcb));
+  printf("cpm_f_size: %d OK\r\n", r);
+
+  printf("fcb.next_record: %d\r\n", fcb.next_record);
+  printf("fcb.ranrec: %d\r\n", fcb.ranrec);
+}
+
 void test_cpm_f_usernum() {
   uint8_t r = cpm_f_usernum(0xFF);
   printf("cpm_f_usernum(0xFF): %d, OK\r\n", r);
@@ -257,6 +273,8 @@ int main(/*int argc, char *argv[]*/) {
   test_cpm_f_make_write_rand();
 
   test_cpm_f_open();
+
+  test_cpm_f_size();
 
   test_cpm_f_first_next();
 

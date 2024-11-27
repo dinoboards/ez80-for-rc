@@ -3,9 +3,15 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-all: CFILES.COM
+all: CFILES.COM CFILESZ.COM
 
 .PHONY: CFILES.COM
 CFILES.COM:
 	@ez80-cc --output-dir ../bin --optimise size CFILES.COM cfiles.c
 
+
+APPS := CFILESZ
+
+include ../common.mk
+
+$(BIN)$(APPS).COM: $(BIN)$(APPS)/cfiles.c.o
