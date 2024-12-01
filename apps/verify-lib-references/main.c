@@ -276,6 +276,14 @@ void test_exp2f(void) {
     printf("exp2f: FAIL %d\r\n", (int)(x * 1000.0));
 }
 
+void test_tan(float a, float low, float high) {
+  float x = tan(a);
+  if (x >= low && x <= high)
+    printf("tan: OK %d\r\n", (int)(x * 1000.0));
+  else
+    printf("tan: FAIL %d\r\n", (int)(x * 1000.0));
+}
+
 #endif
 
 int main(int argc, char *argv[]) {
@@ -326,6 +334,8 @@ int main(int argc, char *argv[]) {
   test_expf();
 
   test_exp2f();
+
+  test_tan(0.50, 0.42, 0.43);
 
   abort();
 #endif
