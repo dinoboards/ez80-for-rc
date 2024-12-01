@@ -241,6 +241,43 @@ void test_libc() {
 }
 #endif
 
+#ifdef __clang__
+double xx = 2.0;
+
+void test_ldexpf(float a, int b) {
+  float x = ldexpf(a, b);
+  if (x >= 3.9 && x <= 4.1)
+    printf("ldexpf: OK %d\r\n", (int)(x * 1000.0));
+  else
+    printf("ldexpf: FAIL %d\r\n", (int)(x * 1000.0));
+}
+
+void test_expf(void) {
+  float x = expf(xx);
+  if (x >= 7.3 && x <= 7.4) //7.389
+    printf("expf: OK %d\r\n", (int)(x * 1000.0));
+  else
+    printf("expf: FAIL %d\r\n", (int)(x * 1000.0));
+}
+
+void test_pow(float base, float expnt, float low, float high) {
+  float x = pow(base, expnt);
+  if (x >= low && x <= high)
+    printf("pow: OK %d\r\n", (int)(x * 1000.0));
+  else
+    printf("pow: FAIL %d\r\n", (int)(x * 1000.0));
+}
+
+void test_exp2f(void) {
+  float x = exp2f(xx);
+  if (x >= 3.9 && x <= 4.1)
+    printf("exp2f: OK %d\r\n", (int)(x * 1000.0));
+  else
+    printf("exp2f: FAIL %d\r\n", (int)(x * 1000.0));
+}
+
+#endif
+
 int main(int argc, char *argv[]) {
 #ifdef __clang__
   malloc_init(1024); // declare heap from end of bss upto stack pointer minus buffer
@@ -277,6 +314,18 @@ int main(int argc, char *argv[]) {
   test_neg_16(true);
 
   test_libc();
+
+  test_pow(2.0, 2.0, 3.9, 4.1);
+  test_pow(2.0, 3.0, 7.9, 8.1);
+  test_pow(2.2, 3.3, 13.4, 13.6);
+  test_pow(-2.2, 4.4, 0.0, 0.1);
+  test_pow(-2.2, -3.3, 0.0, 0.0);
+
+  test_ldexpf(1.0, 2);
+
+  test_expf();
+
+  test_exp2f();
 
   abort();
 #endif

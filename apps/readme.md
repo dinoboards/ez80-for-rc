@@ -67,9 +67,9 @@ eZ80-clang is a port of clang to target and build for the eZ80 CPU.  More detail
 To install:
 
 ```
-wget https://github.com/dinoboards/ez80-clang/releases/download/v0.0.13-rc.45/ez80-clang-v0.0.13-rc.45.tar.gz
-tar -xzvf ez80-clang-v0.0.13-rc.45.tar.gz
-cd ez80-clang-v0.0.13-rc.45
+wget https://github.com/dinoboards/ez80-clang/releases/download/v0.0.13-rc.49/ez80-clang-v0.0.13-rc.49.tar.gz
+tar -xzvf ez80-clang-v0.0.13-rc.49.tar.gz
+cd ez80-clang-v0.0.13-rc.49
 sudo ./install.sh
 ```
 
