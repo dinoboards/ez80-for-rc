@@ -11,7 +11,7 @@ VFYADL.COM:
 
 .PHONY: VFYADL.EXE
 VFYADL.EXE:
-	@ez80-cc --mem-model 2MB --output-dir ../bin -DEZ80CLANG=1 --optimise size VFYADL.EXE main.c test_getopt.c
+	@ez80-cc --mem-model 2MB --output-dir ../bin -DEXE=1 -DEZ80CLANG=1 --optimise size VFYADL.EXE main.c test_getopt.c
 
 
 APPS := VFYZ80

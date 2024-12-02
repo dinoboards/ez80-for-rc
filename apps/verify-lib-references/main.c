@@ -318,7 +318,7 @@ int main(int argc, char *argv[]) {
   atexit(report_exit);
 
 #ifdef __clang__
-  malloc_init(1024); // declare heap from end of bss upto stack pointer minus buffer
+  malloc_init(4096); // declare 4096 bytes of heap memory
 #endif
 
   test_getopt(argc, argv);
