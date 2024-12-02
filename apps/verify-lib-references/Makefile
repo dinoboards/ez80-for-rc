@@ -3,11 +3,16 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-all: VFYADL.COM VFYZ80.COM
+all: VFYADL.COM VFYADL.EXE VFYZ80.COM
 
 .PHONY: VFYADL.COM
 VFYADL.COM:
 	@ez80-cc --output-dir ../bin -DEZ80CLANG=1 --optimise size VFYADL.COM main.c test_getopt.c
+
+.PHONY: VFYADL.EXE
+VFYADL.EXE:
+	@ez80-cc --mem-model 2MB --output-dir ../bin -DEZ80CLANG=1 --optimise size VFYADL.EXE main.c test_getopt.c
+
 
 APPS := VFYZ80
 

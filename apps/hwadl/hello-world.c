@@ -10,8 +10,8 @@ void do_exit() {
   printf("Exiting...\r\n");
   exit(2);
 }
-int main(const int argc, const char *argv[]) {
 
+int main(const int argc, const char *argv[]) {
   printf("argc: %d\r\n", argc);
   for (int i = 0; i < argc; i++) {
     printf("argv[%d]: %s\r\n", i, argv[i]);

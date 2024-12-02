@@ -308,7 +308,15 @@ void test_vsprintf(void) {
 
 #endif
 
+void report_exit(void) { printf("Exiting...\r\n"); }
+
 int main(int argc, char *argv[]) {
+  printf("argc: %d\r\n", argc);
+  for (int i = 0; i < argc; i++) {
+    printf("argv[%d]: %s\r\n", i, argv[i]);
+  }
+  atexit(report_exit);
+
 #ifdef __clang__
   malloc_init(1024); // declare heap from end of bss upto stack pointer minus buffer
 #endif
