@@ -284,12 +284,38 @@ void test_tan(float a, float low, float high) {
     printf("tan: FAIL %d\r\n", (int)(x * 1000.0));
 }
 
+const char *world = "World";
+
+void formatString(char *buffer, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    vsprintf(buffer, format, args);
+    va_end(args);
+}
+
+
+void test_vsprintf(void) {
+  char buffer[100];
+  memset(buffer, 0, 100);
+
+  formatString(buffer, "Hello, %s!", world);
+
+  buffer[99] = 0;
+  if (strcmp(buffer, "Hello, World!") == 0)
+    printf("vsprintf: OK\r\n");
+  else
+    printf("vsprintf: FAIL (%s)\r\n", buffer);
+}
+
 #endif
+
+
 
 int main(int argc, char *argv[]) {
 #ifdef __clang__
   malloc_init(1024); // declare heap from end of bss upto stack pointer minus buffer
 #endif
+
 
   test_getopt(argc, argv);
   test_memcpy();
@@ -299,6 +325,8 @@ int main(int argc, char *argv[]) {
   test_strchr();
 
 #ifdef __clang__
+  test_vsprintf();
+
   test_calloc();
 
   test_unsigned_8_bit_div();
