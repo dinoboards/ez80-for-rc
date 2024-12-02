@@ -18,7 +18,10 @@ uint8_t        buffer[SECSIZE] __attribute__((section(".bss_z80")));
 int extract_filename_parts(const char *input, CPM_FCB *fcb) {
   // Initialize output buffers
   fcb->drive = 0;
-  memset(fcb->name, ' ', 8 + 3); // includes ext
+  memset(fcb->name, ' ', 8); // includes ext
+  fcb->ext[0] = 'E';
+  fcb->ext[1] = 'X';
+  fcb->ext[2] = 'E';
 
   const char *ptr      = input;
   int         name_len = 0;
@@ -84,8 +87,6 @@ int main(const int argc, const char *argv[]) {
       printf("Error reading file %s\r\n", filename);
       return 1;
     }
-
-    printf(".");
 
     memcpy(ptr, buffer, SECSIZE);
     ptr += SECSIZE;
