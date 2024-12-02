@@ -254,7 +254,7 @@ void test_ldexpf(float a, int b) {
 
 void test_expf(void) {
   float x = expf(xx);
-  if (x >= 7.3 && x <= 7.4) //7.389
+  if (x >= 7.3 && x <= 7.4) // 7.389
     printf("expf: OK %d\r\n", (int)(x * 1000.0));
   else
     printf("expf: FAIL %d\r\n", (int)(x * 1000.0));
@@ -287,12 +287,11 @@ void test_tan(float a, float low, float high) {
 const char *world = "World";
 
 void formatString(char *buffer, const char *format, ...) {
-    va_list args;
-    va_start(args, format);
-    vsprintf(buffer, format, args);
-    va_end(args);
+  va_list args;
+  va_start(args, format);
+  vsprintf(buffer, format, args);
+  va_end(args);
 }
-
 
 void test_vsprintf(void) {
   char buffer[100];
@@ -309,13 +308,10 @@ void test_vsprintf(void) {
 
 #endif
 
-
-
 int main(int argc, char *argv[]) {
 #ifdef __clang__
   malloc_init(1024); // declare heap from end of bss upto stack pointer minus buffer
 #endif
-
 
   test_getopt(argc, argv);
   test_memcpy();

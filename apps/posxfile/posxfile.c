@@ -10,6 +10,12 @@ void test_stat() {
   struct stat st;
   int         r = stat("C:SAMPLE.TXT", &st);
   printf("stat: %d, (errno: %d) OK\r\n", r, errno);
+
+  r = stat("c:sample.txt", &st);
+  printf("stat: %d, (errno: %d) OK\r\n", r, errno);
+
+  r = stat("sample.txt", &st);
+  printf("stat: %d, (errno: %d) OK\r\n", r, errno);
 }
 
 void test_file_create_write() {
@@ -82,7 +88,6 @@ void test_file_lseek_read() {
 }
 
 int main(/*int argc, char *argv[]*/) {
-
   test_file_create_write();
 
   test_file_lseek_read();
