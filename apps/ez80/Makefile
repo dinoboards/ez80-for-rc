@@ -8,6 +8,7 @@ all: EZ80.COM
 .PHONY: EZ80.COM
 EZ80.COM:
 	@ez80-cc --optimise speed --output-dir ../bin --iquote ../common EZ80.COM \
+	config-io.c \
 	config-mem.c \
 	config-mem0.c \
 	ez80.c \

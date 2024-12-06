@@ -12,11 +12,12 @@ void show_help() {
   printf("  -M=number[W|B]   Set Segmented Memory Wait States or Bus Cycles (CS0)\r\n");
   printf("  -M0=number[W|B]  Set Extended Memory Wait States or Bus Cycles (CS0)\r\n");
   printf("                   Wait States: 0-7, Bus Cycles: 1-15\r\n");
+  printf("  -I=number[W|B]   Set I/O Wait States or Bus Cycles\r\n");
   printf("  -S0              Scan extended memory\r\n");
   printf("  -? /?            Show this help message\r\n");
 }
 
-typedef enum { CMD_NONE, CMD_HELP, CMD_M, CMD_M0, CMD_S0 } mem0_type_t;
+typedef enum { CMD_NONE, CMD_HELP, CMD_M, CMD_I, CMD_M0, CMD_S0 } mem0_type_t;
 
 static mem_config_t mem_config;
 static mem0_type_t  cmd = CMD_NONE;
@@ -36,6 +37,23 @@ bool argument_M(const char *arg) {
 
   return true;
 }
+
+bool argument_I(const char *arg) {
+  if (strncmp(arg, "-I=", 3) != 0 && strncmp(arg, "/I=", 3) != 0)
+    return false;
+
+  if (cmd == CMD_S0) {
+    printf("Error: Conflicting options.\r\n");
+    show_help();
+    abort();
+  }
+
+  cmd = CMD_I;
+  validate_mem_set_value(arg + 3, &mem_config);
+
+  return true;
+}
+
 bool argument_M0(const char *arg) {
   if (strncmp(arg, "-M0=", 4) != 0 && strncmp(arg, "/M0=", 4) != 0)
     return false;
@@ -86,6 +104,9 @@ int main(const int argc, const char *argv[]) {
     if (argument_M(argv[i]))
       continue;
 
+    if (argument_I(argv[i]))
+      continue;
+
     if (argument_M0(argv[i]))
       continue;
 
@@ -102,6 +123,8 @@ int main(const int argc, const char *argv[]) {
 
   if (cmd == CMD_M) {
     config_mem(mem_config);
+  } else if (cmd == CMD_I) {
+    config_io(mem_config);
   } else if (cmd == CMD_M0)
     config_mem0(mem_config);
 
