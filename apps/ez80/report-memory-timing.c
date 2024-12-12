@@ -10,6 +10,7 @@ void report_memory_timing(void) {
   printf("              CPU frequency: %ld Hz\r\n", (cpu_frequency));
 
   uint24_t mem_bus_cycles          = ez80_mem_bus_cycles_get();
+  uint8_t  flash_wait_cycles       = ez80_flash_wait_cycles_get();
   uint8_t  main_mem_bus_cycles     = mem_bus_cycles & 0xFF;
   uint8_t  extended_mem_bus_cycles = (mem_bus_cycles >> 8) & 0xFF;
 
@@ -21,6 +22,8 @@ void report_memory_timing(void) {
   main_mem_bus_cycles &= 0x7F;
   extended_mem_bus_cycles &= 0x7F;
   io_bus_cycles &= 0x7F;
+
+  printf("  On-chip Flash Wait States: %u\r\n", flash_wait_cycles);
 
   if (mem_bus_mode) {
     printf("     Main Memory Bus Cycles: %u\r\n", main_mem_bus_cycles);

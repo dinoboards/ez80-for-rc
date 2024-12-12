@@ -9,18 +9,35 @@
 void show_help() {
   printf("Usage: ez80 [options]\r\n");
   printf("Options:\r\n");
-  printf("  -M=number[W|B]   Set Segmented Memory Wait States or Bus Cycles (CS0)\r\n");
-  printf("  -M0=number[W|B]  Set Extended Memory Wait States or Bus Cycles (CS0)\r\n");
-  printf("                   Wait States: 0-7, Bus Cycles: 1-15\r\n");
-  printf("  -I=number[W|B]   Set I/O Wait States or Bus Cycles\r\n");
-  printf("  -S0              Scan extended memory\r\n");
-  printf("  -? /?            Show this help message\r\n");
+  printf("  -F=<number>W      Set On-chip Flash Wait States\r\n");
+  printf("  -M=<number>[W|B]  Set Main Memory Wait States or Bus Cycles (CS3)\r\n");
+  printf("  -M0=<number>[W|B] Set Extended Memory Wait States or Bus Cycles (CS0)\r\n");
+  printf("                    Wait States: 0-7, Bus Cycles: 1-15\r\n");
+  printf("  -I=<number>[W|B]  Set I/O Wait States or Bus Cycles (CS2)\r\n");
+  printf("  -S0               Scan extended memory\r\n");
+  printf("  -? /?             Show this help message\r\n");
 }
 
-typedef enum { CMD_NONE, CMD_HELP, CMD_M, CMD_I, CMD_M0, CMD_S0 } mem0_type_t;
+typedef enum { CMD_NONE, CMD_HELP, CMD_M, CMD_I, CMD_M0, CMD_S0, CMD_F } mem0_type_t;
 
 static mem_config_t mem_config;
 static mem0_type_t  cmd = CMD_NONE;
+
+bool argument_F(const char *arg) {
+  if (strncmp(arg, "-F=", 3) != 0 && strncmp(arg, "/F=", 3) != 0)
+    return false;
+
+  if (cmd == CMD_S0) {
+    printf("Error: Conflicting options.\r\n");
+    show_help();
+    abort();
+  }
+
+  cmd = CMD_F;
+  validate_wait_only_set_value(arg + 3, &mem_config);
+
+  return true;
+}
 
 bool argument_M(const char *arg) {
   if (strncmp(arg, "-M=", 3) != 0 && strncmp(arg, "/M=", 3) != 0)
@@ -113,6 +130,9 @@ int main(const int argc, const char *argv[]) {
     if (argument_S0(argv[i]))
       continue;
 
+    if (argument_F(argv[i]))
+      continue;
+
     if (argument_help(argv[i]))
       continue;
 
@@ -121,15 +141,23 @@ int main(const int argc, const char *argv[]) {
     return 1;
   }
 
-  if (cmd == CMD_M) {
+  if (cmd == CMD_S0) {
+    find_extended_memory();
+    return 0;
+  }
+
+  if (cmd == CMD_F)
+    config_flash(mem_config);
+
+  if (cmd == CMD_M)
     config_mem(mem_config);
-  } else if (cmd == CMD_I) {
+
+  if (cmd == CMD_I)
     config_io(mem_config);
-  } else if (cmd == CMD_M0)
+
+  if (cmd == CMD_M0)
     config_mem0(mem_config);
 
-  else if (cmd == CMD_S0)
-    find_extended_memory();
-
+  report_memory_timing();
   return 0;
 }

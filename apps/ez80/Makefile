@@ -14,4 +14,5 @@ EZ80.COM:
 	ez80.c \
 	find-extended-memory.c \
 	report-memory-timing.c \
-	validate-mem-set-value.c
+	validate-mem-set-value.c \
+	config-flash.c
