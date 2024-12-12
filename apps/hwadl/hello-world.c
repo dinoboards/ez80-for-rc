@@ -11,11 +11,34 @@ void do_exit() {
   exit(2);
 }
 
+extern uint8_t start_of_on_chip[];
+extern uint8_t end_of_on_chip[];
+extern uint8_t start_of_bss_on_chip[];
+extern uint8_t end_of_bss_on_chip[];
+extern uint8_t on_chip_source[];
+extern uint8_t length_of_on_chip[];
+
+int foo __bss_on_chip;
+int bar __data_on_chip = 42;
+
+void __func_on_chip spike() { printf("Executing in fast on-chip ram! Bar=%d\r\n", bar); }
+
 int main(const int argc, const char *argv[]) {
   printf("argc: %d\r\n", argc);
   for (int i = 0; i < argc; i++) {
     printf("argv[%d]: %s\r\n", i, argv[i]);
   }
+
+  printf("Foo stored at %p\r\n", &foo);
+  printf("bar stored at %p\r\n", &bar);
+  printf("Spike function at %p\r\n", &spike);
+  printf("Main function at %p\r\n", &main);
+
+  printf("Text on chip: %p to %p\r\n", start_of_on_chip, end_of_on_chip);
+  printf("BSS on chip: %p to %p\r\n", start_of_bss_on_chip, end_of_bss_on_chip);
+  printf("Text on chip source: %p\r\n", on_chip_source);
+
+  spike();
 
   uint24_t a = 1;
   uint24_t b = 2;

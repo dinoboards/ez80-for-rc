@@ -14,7 +14,7 @@ void test_cpmfcb_address(void) {
     printf("fcb_address: FAIL\r\n");
   }
 
-  CPM_SYS_FCB.drive = 'A';
+  CPM_SYS_FCB.drive   = 'A';
   CPM_SYS_FCB.name[0] = 0;
 
   if (CPM_SYS_FCB.drive == 'A' && CPM_SYS_FCB.name[0] == 0)

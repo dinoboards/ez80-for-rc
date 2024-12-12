@@ -11,5 +11,5 @@ HWADL.COM:
 
 .PHONY: HWADL.EXE
 HWADL.EXE:
-	@ez80-cc --mem-model 2MB --output-dir ../bin HWADL.EXE hello-world.c
+	@ez80-cc -DMEM_MODEL=2MB --mem-model 2MB --output-dir ../bin HWADL.EXE hello-world.c
 
