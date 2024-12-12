@@ -18,23 +18,32 @@ void show_help() {
   printf("  -? /?             Show this help message\r\n");
 }
 
-typedef enum { CMD_NONE, CMD_HELP, CMD_M, CMD_I, CMD_M0, CMD_S0, CMD_F } mem0_type_t;
+#define CMD_NONE 0
+#define CMD_HELP 1
+#define CMD_M    2
+#define CMD_I    4
+#define CMD_M0   8
+#define CMD_S0   16
+#define CMD_F    32
 
+static mem_config_t flash_config;
 static mem_config_t mem_config;
-static mem0_type_t  cmd = CMD_NONE;
+static mem_config_t io_config;
+static mem_config_t mem0_config;
+static uint24_t     cmd = 0;
 
 bool argument_F(const char *arg) {
   if (strncmp(arg, "-F=", 3) != 0 && strncmp(arg, "/F=", 3) != 0)
     return false;
 
-  if (cmd == CMD_S0) {
+  if (cmd & CMD_S0) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
   }
 
-  cmd = CMD_F;
-  validate_wait_only_set_value(arg + 3, &mem_config);
+  cmd |= CMD_F;
+  validate_wait_only_set_value(arg + 3, &flash_config);
 
   return true;
 }
@@ -43,13 +52,13 @@ bool argument_M(const char *arg) {
   if (strncmp(arg, "-M=", 3) != 0 && strncmp(arg, "/M=", 3) != 0)
     return false;
 
-  if (cmd == CMD_S0) {
+  if (cmd & CMD_S0) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
   }
 
-  cmd = CMD_M;
+  cmd |= CMD_M;
   validate_mem_set_value(arg + 3, &mem_config);
 
   return true;
@@ -59,14 +68,14 @@ bool argument_I(const char *arg) {
   if (strncmp(arg, "-I=", 3) != 0 && strncmp(arg, "/I=", 3) != 0)
     return false;
 
-  if (cmd == CMD_S0) {
+  if (cmd & CMD_S0) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
   }
 
-  cmd = CMD_I;
-  validate_mem_set_value(arg + 3, &mem_config);
+  cmd |= CMD_I;
+  validate_mem_set_value(arg + 3, &io_config);
 
   return true;
 }
@@ -75,14 +84,14 @@ bool argument_M0(const char *arg) {
   if (strncmp(arg, "-M0=", 4) != 0 && strncmp(arg, "/M0=", 4) != 0)
     return false;
 
-  if (cmd == CMD_S0) {
+  if (cmd & CMD_S0) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
   }
 
-  cmd = CMD_M0;
-  validate_mem_set_value(arg + 4, &mem_config);
+  cmd |= CMD_M0;
+  validate_mem_set_value(arg + 4, &mem0_config);
 
   return true;
 }
@@ -91,7 +100,7 @@ bool argument_S0(const char *arg) {
   if (strcmp(arg, "-S0") != 0 && strcmp(arg, "/S0") != 0)
     return false;
 
-  if (cmd == CMD_M || cmd == CMD_M0) {
+  if (cmd & ~CMD_S0) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
@@ -146,17 +155,17 @@ int main(const int argc, const char *argv[]) {
     return 0;
   }
 
-  if (cmd == CMD_F)
-    config_flash(mem_config);
+  if (cmd & CMD_F)
+    config_flash(flash_config);
 
-  if (cmd == CMD_M)
+  if (cmd & CMD_M)
     config_mem(mem_config);
 
-  if (cmd == CMD_I)
-    config_io(mem_config);
+  if (cmd & CMD_I)
+    config_io(io_config);
 
-  if (cmd == CMD_M0)
-    config_mem0(mem_config);
+  if (cmd & CMD_M0)
+    config_mem0(mem0_config);
 
   report_memory_timing();
   return 0;
