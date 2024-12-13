@@ -67,6 +67,8 @@ void NO_INLINE test_memcpy(void) {
   }
 }
 
+extern void mem_alloc_dump(void);
+
 #ifdef __clang__
 void test_calloc() {
   printf("HEAP IS FROM %p. SPL: %p, SPS: %p \r\n\r\n", _heap, _get_spl(), _get_sps());
@@ -76,7 +78,7 @@ void test_calloc() {
 #define SECOND_SIZE 7
 
   int *arr = (int *)calloc(sizeof(int), FIRST_SIZE);
-  printf("%p ->  ", arr);
+  printf("%p ->  \r\n", arr);
 
   for (int i = 0; i < FIRST_SIZE; i++)
     arr[i] = i;
@@ -93,7 +95,30 @@ void test_calloc() {
     printf("%d, ", arr[i]);
   }
 
+  void *block2 = malloc(1024);
+  printf("\r\nAllocating 1024 bytes using malloc(): %p\r\n", block2);
+
+  void *block3 = malloc(16);
+  printf("Allocating 16 bytes using malloc(): %p\r\n", block3);
+
+  printf("Freeing the 1024 bytes block\r\n");
+  free(block2);
+
+  block2 = malloc(1024);
+  printf("Allocating 1024 bytes using malloc(): %p\r\n", block2);
+
+  block2 = malloc(4024);
+  printf("Allocating 4024 bytes using malloc(): %p\r\n", block2);
+
   printf("\r\n");
+
+#ifdef EXE
+  printf("Allocating 512KB of memory using malloc(): ");
+  const void *p = malloc(512 * 1024);
+  printf("%p\r\n", p);
+#endif
+
+  mem_alloc_dump();
 }
 
 uint8_t dividend = 0x80;
@@ -318,7 +343,11 @@ int main(int argc, char *argv[]) {
   atexit(report_exit);
 
 #ifdef __clang__
+#ifdef EXE
+  malloc_init(0x400000 - (int)_heap); // allocate all
+#else
   malloc_init(4096); // declare 4096 bytes of heap memory
+#endif
 #endif
 
   test_getopt(argc, argv);
