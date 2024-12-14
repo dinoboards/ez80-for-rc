@@ -1,7 +1,9 @@
 // WL_MAIN.C
 
 #include <ez80.h>
+#include <fcntl.h>
 #include <unistd.h>
+#include <v99x8.h>
 
 #include "id_vl.h"
 #include "wl_def.h"
@@ -18,7 +20,7 @@
 =============================================================================
 */
 
-extern byte signon[];
+// extern byte signon[];
 
 /*
 =============================================================================
@@ -757,12 +759,34 @@ void SetupWalls(void) {
 
 void SignonScreen(void) // VGA version
 {
-  VL_SetVGAPlaneMode();
+  printf("Showing signon screen\r\n");
+  VL_SetVGAPlaneMode(); // setup V9958 for appropriate screen mode
 
-  printf("S1\r\n");
-  VL_MungePic(signon, 320, 200);
-  printf("S2\r\n");
-  VL_MemToScreen(signon, 320, 200, 0, 0);
+  uint8_t *buffer = malloc(256 * 200);
+  if (buffer == NULL) {
+    Quit("Error: Unable to allocate buffer\r\n");
+  }
+
+  FILE *f = fopen("signon.img", "rb");
+  if (f == NULL) {
+    Quit("Error: Unable to open file SIGNON.IMG\r\n");
+  }
+
+  int r = fread(buffer, 1, 256 * 200, f);
+  if (r != 256 * 200) {
+    printf("Error: Unable to read file SIGNON.IMG\r\n");
+    fclose(f);
+    return;
+  }
+  fclose(f);
+
+  vdp_cpu_to_vram0(buffer, 256 * 200);
+
+  free(buffer);
+  // printf("S1\r\n");
+  // VL_MungePic(signon, 320, 200); // dont munge inmemory pic, rather malloc, read file, render, and free
+  // printf("S2\r\n");
+  // VL_MemToScreen(signon, 320, 200, 0, 0); // fastest mem to vdp as possible
 }
 
 /*

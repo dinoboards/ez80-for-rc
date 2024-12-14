@@ -70,7 +70,7 @@ typedef struct {
   Point ul, lr;
 } Rect;
 
-void Quit(const char *errorStr, ...);
+void Quit(const char *errorStr, ...) __attribute__((noreturn));
 
 #include "id_ca.h"
 #include "id_in.h"

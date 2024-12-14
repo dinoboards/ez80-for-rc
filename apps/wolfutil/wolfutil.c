@@ -1,6 +1,7 @@
 #include <cpm.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <v99x8.h>
 
@@ -125,13 +126,20 @@ void create_signon_image(void) {
 #endif
 
 void display_img_file() {
+
+  uint8_t *buffer = malloc(256 * 200);
+  if (buffer == NULL) {
+    printf("Error: Unable to allocate buffer\r\n");
+    return;
+  }
+
   FILE *f = fopen(filename, "rb");
   if (f == NULL) {
     printf("Error: Unable to open file %s\r\n", filename);
     return;
   }
 
-  int r = fread(temp, 1, 256 * 200, f);
+  int r = fread(buffer, 1, 256 * 200, f);
   if (r != 256 * 200) {
     printf("Error: Unable to read file %s\r\n", filename);
     fclose(f);
@@ -141,17 +149,10 @@ void display_img_file() {
 
   vdp_set_mode(7, 212, PAL);
   erase_page_0();
-  vdp_cmd_vdp_to_vram(0, 0, 256, 200, 0, 0); //???
 
-  vdp_reg_write(14, 0);
-  vdp_out_cmd(0);
-  vdp_out_cmd(0x40);
+  vdp_cpu_to_vram0(buffer, 256 * 200);
 
-  const uint8_t *c = temp;
-
-  for (int y = 0; y < 256 * 200; y++) {
-    VDP_DATA = *c++;
-  }
+  free(buffer);
 }
 
 void parse_test_swap_file() {
@@ -253,7 +254,7 @@ int main(const int argc, const char *argv[]) {
   printf("Heap size: %d\r\n", heap_size);
   malloc_init(heap_size);
 
-  void*p = malloc(1024*512);
+  void *p = malloc(1024 * 512);
   printf("malloc: %p\r\n", p);
 
   for (int i = 1; i < argc; i++) {

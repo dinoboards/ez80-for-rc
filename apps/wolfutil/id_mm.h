@@ -13,8 +13,8 @@ typedef uint8_t *memptr;
 
 //==========================================================================
 
-extern memptr     bufferseg;
-extern boolean    mmerror;
+extern memptr  bufferseg;
+extern boolean mmerror;
 
 extern void (*beforesort)(void);
 extern void (*aftersort)(void);

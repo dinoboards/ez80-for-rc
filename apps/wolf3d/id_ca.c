@@ -435,7 +435,7 @@ void CAL_SetupGrFile(void) {
   int expectedsize = lengthof(grstarts);
 #endif
 
-//(sizeof(x) / sizeof(*(x)))
+  //(sizeof(x) / sizeof(*(x)))
   printf("sizeof grstarts: %d\r\n", sizeof(grstarts));
   printf("sizeof *grstarts: %d\r\n", sizeof(*grstarts));
   printf("length of grstarts: %d\r\n", lengthof(grstarts));
