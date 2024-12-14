@@ -8,7 +8,6 @@
 #include "id_defs.h"
 #include "id_mm.h"
 
-
 #define LOCKBIT        0x80 // if set in attributes, block cannot be moved
 #define PURGEBITS      3    // 0-3 level, 0= unpurgable, 3= purge first
 #define PURGEMASK      0xfffc
@@ -23,7 +22,6 @@ typedef struct mmblockstruct {
   memptr               *useptr;     // pointer to the segment start
   struct mmblockstruct *next;
 } mmblocktype;
-
 
 #define GETNEWBLOCK                                                                                                                \
   {                                                                                                                                \
@@ -48,8 +46,8 @@ typedef struct mmblockstruct {
 =============================================================================
 */
 
-memptr     bufferseg;
-boolean    mmerror;
+memptr  bufferseg;
+boolean mmerror;
 
 void (*beforesort)(void);
 void (*aftersort)(void);
@@ -69,7 +67,6 @@ void *heap;
 mmblocktype mmblocks[MAXBLOCKS], *mmhead, *mmfree, *mmrover, *mmnew;
 
 boolean bombonerror;
-
 
 //==========================================================================
 
@@ -111,13 +108,12 @@ void MML_ClearBlock(void) {
 ===================
 */
 
-
 void MM_Startup(void) {
   int      i;
   uint24_t length;
   uint8_t *start;
 
-  //lets just use the last 512K or memory for this testing
+  // lets just use the last 512K or memory for this testing
 
   if (mmstarted)
     MM_Shutdown();
@@ -133,8 +129,8 @@ void MM_Startup(void) {
     mmblocks[i].next = &mmblocks[i + 1];
   mmblocks[i].next = NULL;
 
-  length     = 512*1024;
-  start      = malloc(length);
+  length = 512 * 1024;
+  start  = malloc(length);
   if (start == 0) {
     Quit("MM_Startup: Could not allocate heap!");
   }
@@ -392,9 +388,9 @@ void MM_SetLock(memptr *baseptr, boolean locked) {
 
 void MM_SortMem(void) {
   mmblocktype far *scan, far *last, far *next;
-  memptr    start;
-  memptr    source;
-  memptr    dest;
+  memptr   start;
+  memptr   source;
+  memptr   dest;
   uint24_t length;
   // int      playing;
 
@@ -494,18 +490,17 @@ void MM_DumpMemoryBlocks(void) {
 
   printf("--Free Blocks--\r\n");
   mmblocktype *prev = mmhead;
-  scan = mmhead->next;
+  scan              = mmhead->next;
 
   while (scan) {
-    memptr end_of_previous = prev->start + prev->length;
-    uint24_t gap = scan->start - end_of_previous;
+    memptr   end_of_previous = prev->start + prev->length;
+    uint24_t gap             = scan->start - end_of_previous;
     if (gap > 0)
       printf("start: %X, length: %X, end: %X\r\n", (int)end_of_previous, gap, (int)scan->start);
     prev = scan;
     scan = scan->next;
   }
   printf("---\r\n");
-
 }
 
 void MM_ShowMemory(void) {

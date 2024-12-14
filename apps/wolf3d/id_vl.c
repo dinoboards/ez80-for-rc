@@ -3,6 +3,7 @@
 #include "crt.h"
 #include "wl_def.h"
 #include <string.h>
+#include <v99x8.h>
 
 // Uncomment the following line, if you get destination out of bounds
 // assertion errors and want to ignore them during debugging
@@ -95,69 +96,8 @@ void VL_Shutdown(void) {
 */
 
 void VL_SetVGAPlaneMode(void) {
-  // #ifdef SPEAR
-  // 	const char* title = "Spear of Destiny";
-  // #else
-  // 	const char* title = "Wolfenstein 3D";
-  // #endif
-
-  // 	//ATSB: Adjust W/H depending on current screen resolution
-  // 	SDL_DisplayMode DispMode;
-  // 	SDL_GetCurrentDisplayMode(0, &DispMode);
-
-  // 	//Adjust height so the screen is 4:3 aspect ratio
-  // 	//ATSB: Stuck in my DisplayMode as local variables for the SDL window and video scaling only
-  // 	//ATSB: So that it looks better upscaled to a decent resolution, however all scaling
-  // 	//ATSB: Remains at 4:3 320x200 so that nothing is stretched on widescreen resolutions.
-
-  // 	screenWidth = DispMode.w * 3.0 / 4.0;
-  // 	screenHeight = DispMode.h * 3.0 / 4.0;
-
-  // 	window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight,
-  // 		(fullscreen ? SDL_WINDOW_FULLSCREEN : 0) | SDL_WINDOW_OPENGL);
-
-  // 	screen = SDL_GetWindowSurface(window);
-
-  // 	if (!screen)
-  // 	{
-  // 		printf("Unable to set %ix%ix%i video mode: %s\n", screenWidth, screenHeight, screenBits, SDL_GetError());
-  // 		exit(1);
-  // 	}
-
-  // 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-  // 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-  // 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
-
-  // 	SDL_ShowCursor(SDL_DISABLE);
-
-  // 	SDL_SetPaletteColors(screen->format->palette, gamepal, 0, 256);
-  // 	memcpy(curpal, gamepal, sizeof(SDL_Color) * 256);
-
-  // 	screenWidth = 320;
-  // 	screenHeight = 200;
-
-  // 	screenBuffer = SDL_CreateRGBSurface(0, screenWidth,
-  // 		screenHeight, 8, 0, 0, 0, 0);
-  // 	if (!screenBuffer)
-  // 	{
-  // 		printf("Unable to create screen buffer surface: %s\n", SDL_GetError());
-  // 		exit(1);
-  // 	}
-  // 	SDL_SetPaletteColors(screenBuffer->format->palette, gamepal, 0, 256);
-
-  // 	screenPitch = screen->pitch;
-  // 	bufferPitch = screenBuffer->pitch;
-
-  // 	curSurface = screenBuffer;
-  // 	curPitch = bufferPitch;
-
-  // 	scaleFactor = screenWidth / 320;
-  // 	if (screenHeight / 200 < scaleFactor) scaleFactor = screenHeight / 200;
-
-  // 	pixelangle = (short*)malloc(screenWidth * sizeof(short));
-  // 	CHECKMALLOCRESULT(pixelangle);
-  // 	wallheight = (int*)malloc(screenWidth * sizeof(int));
-  // 	CHECKMALLOCRESULT(wallheight);
+  vdp_set_mode(7, 212, PAL);
+  vdp_cmd_vdp_to_vram(0, 0, 256, 212, 0, 0);
 }
 
 /*
