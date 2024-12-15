@@ -251,55 +251,51 @@ void VL_GetPalette(SDL_Color *palette) { memcpy(palette, curpal, sizeof(SDL_Colo
 =================
 */
 
-void VL_FadeOut(int start __attribute__((unused)),
-                int end __attribute__((unused)),
-                int red __attribute__((unused)),
-                int green __attribute__((unused)),
-                int blue __attribute__((unused)),
-                int steps __attribute__((unused))) {
-  // int         i, j, orig, delta;
-  // SDL_Color* origptr, * newptr;
+void VL_FadeOut(int start, int end, int red, int green, int blue, int steps) {
+  int        i, j, orig, delta;
+  SDL_Color *origptr, *newptr;
 
-  // red = red * 255 / 63;
-  // green = green * 255 / 63;
-  // blue = blue * 255 / 63;
+  red   = red * 255 / 63;
+  green = green * 255 / 63;
+  blue  = blue * 255 / 63;
 
-  // VL_WaitVBL(1);
-  // VL_GetPalette(palette1);
-  // memcpy(palette2, palette1, sizeof(SDL_Color) * 256);
+  VL_WaitVBL(1);
+  VL_GetPalette(palette1);
+  memcpy(palette2, palette1, sizeof(SDL_Color) * 256);
 
-  // //
-  // // fade through intermediate frames
-  // //
-  // for (i = 0; i < steps; i++)
-  // {
-  // 	origptr = &palette1[start];
-  // 	newptr = &palette2[start];
-  // 	for (j = start; j <= end; j++)
-  // 	{
-  // 		orig = origptr->r;
-  // 		delta = red - orig;
-  // 		newptr->r = orig + delta * i / steps;
-  // 		orig = origptr->g;
-  // 		delta = green - orig;
-  // 		newptr->g = orig + delta * i / steps;
-  // 		orig = origptr->b;
-  // 		delta = blue - orig;
-  // 		newptr->b = orig + delta * i / steps;
-  // 		origptr++;
-  // 		newptr++;
-  // 	}
+  //
+  // fade through intermediate frames
+  //
+  for (i = 0; i < steps; i++) {
+    origptr = &palette1[start];
+    newptr  = &palette2[start];
+    for (j = start; j <= end; j++) {
+      orig              = RED_FRM_GRB(*origptr);
+      delta             = red - orig;
+      uint8_t new_red   = orig + delta * i / steps;
+      orig              = GREEN_FRM_GRB(*origptr);
+      delta             = green - orig;
+      uint8_t new_green = orig + delta * i / steps;
+      orig              = BLUE_FRM_GRB(*origptr);
+      delta             = blue - orig;
+      uint8_t new_blue  = orig + delta * i / steps;
 
-  // 	if (!usedoublebuffering || screenBits == 8) VL_WaitVBL(1);
-  // 	VL_SetPalette(palette2, true);
-  // }
+      *newptr = GRB(new_green, new_red, new_blue);
+      origptr++;
+      newptr++;
+    }
 
-  // //
-  // // final color
-  // //
-  // VL_FillPalette(red, green, blue);
+    if (!usedoublebuffering || screenBits == 8)
+      VL_WaitVBL(1);
+    VL_SetPalette(palette2, true);
+  }
 
-  // screenfaded = true;
+  //
+  // final color
+  //
+  VL_FillPalette(red, green, blue);
+
+  screenfaded = true;
 }
 
 /*
@@ -394,14 +390,12 @@ void VL_Plot(int x __attribute__((unused)), int y __attribute__((unused)), int c
 */
 
 byte VL_GetPixel(int x __attribute__((unused)), int y __attribute__((unused))) {
-  // assert_ret(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_GetPixel: Pixel out of bounds!");
+  assert_ret(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_GetPixel: Pixel out of bounds!");
 
   // VL_LockSurface(curSurface);
-  // byte col = ((byte *)curSurface->pixels)[y * curPitch + x];
+  byte col = ((byte *)curSurface->pixels)[y * curPitch + x];
   // VL_UnlockSurface(curSurface);
-  // return col;
-
-  return 0;
+  return col;
 }
 
 /*
