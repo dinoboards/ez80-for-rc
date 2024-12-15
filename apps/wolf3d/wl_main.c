@@ -760,17 +760,18 @@ void SignonScreen(void) {
   printf("Showing signon screen\r\n");
   VL_SetVGAPlaneMode();
 
-  uint8_t *buffer = malloc(256 * 200);
-  if (buffer == NULL) {
-    Quit("Error: Unable to allocate buffer\r\n");
-  }
+  // uint8_t *buffer = malloc(256 * 200);
+  // if (buffer == NULL) {
+  //   Quit("Error: Unable to allocate buffer\r\n");
+  // }
 
   FILE *f = fopen("signon.img", "rb");
   if (f == NULL) {
     Quit("Error: Unable to open file SIGNON.IMG\r\n");
   }
 
-	byte* vbuf = LOCK();
+  printf("Reading file SIGNON.IMG\r\n");
+  byte *vbuf = LOCK();
 
   int r = fread(vbuf, 1, 256 * 200, f);
   if (r != 256 * 200) {
@@ -780,7 +781,12 @@ void SignonScreen(void) {
   }
   fclose(f);
 
-  vdp_cpu_to_vram0(vbuf, 256 * 200);
+  printf("Showing signon screen\r\n");
+  VH_UpdateScreen();
+
+  printf("Shown\r\n");
+
+  // vdp_cpu_to_vram0(vbuf, 256 * 200);
 }
 
 /*

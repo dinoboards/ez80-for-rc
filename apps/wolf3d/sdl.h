@@ -892,12 +892,12 @@ extern void                SDL_GameControllerClose(SDL_GameController *gamecontr
 #define SDL_BUTTON_X1MASK SDL_BUTTON(SDL_BUTTON_X1)
 #define SDL_BUTTON_X2MASK SDL_BUTTON(SDL_BUTTON_X2)
 
-typedef struct SDL_Color {
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
-  uint8_t a;
-} SDL_Color;
+typedef uint8_t SDL_Color;
+
+#define RED_FRM_GRB(grb)   ((grb & 0x1C) >> 2)
+#define GREEN_FRM_GRB(grb) ((grb & 0xE0) >> 5)
+#define BLUE_FRM_GRB(grb)  (grb & 0x03)
+#define GRB(g, r, b)       (g >> 3) << 5 | (r >> 3) << 2 | (b >> 4)
 
 #define MIX_CHANNELS 8
 

@@ -91,5 +91,3 @@ boolean FizzleFade(SDL_Surface *source, int x1, int y1, unsigned width, unsigned
 
 #define NUMLATCHPICS 100
 extern SDL_Surface *latchpics[NUMLATCHPICS];
-
-void apply_palette(uint8_t *pixels, uint16_t width, uint16_t height);
