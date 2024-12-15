@@ -456,26 +456,26 @@ void VL_Vlin(int x __attribute__((unused)),
 =================
 */
 
-void VL_BarScaledCoord(int scx __attribute__((unused)),
-                       int scy __attribute__((unused)),
-                       int scwidth __attribute__((unused)),
-                       int scheight __attribute__((unused)),
-                       int color __attribute__((unused))) {
+void VL_BarScaledCoord(int scx,
+                       int scy,
+                       int scwidth,
+                       int scheight,
+                       int color) {
 
   // printf("VL_BarScaledCoord\r\n");
   // printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
 
-  vdp_cmd_vdp_to_vram(scx, scy, scwidth, scheight, color, 0);
+  // vdp_cmd_vdp_to_vram(scx, scy, scwidth, scheight, color, 0);
   // assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&
   //        "VL_BarScaledCoord: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
-  // uint8_t *dest = ((byte *)curSurface->pixels) + scy * curPitch + scx;
+  uint8_t *dest = ((byte *)curSurface->pixels) + scy * curPitch + scx;
 
-  // while (scheight--) {
-  //   memset(dest, color, scwidth);
-  //   dest += curPitch;
-  // }
+  while (scheight--) {
+    memset(dest, color, scwidth);
+    dest += curPitch;
+  }
   // VL_UnlockSurface(curSurface);
 }
 
