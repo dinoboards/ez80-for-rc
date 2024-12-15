@@ -831,7 +831,6 @@ void CAL_ExpandGrChunk(int chunk, int32_t *source) {
   // Sprites need to have shifts made and various other junk
   //
   grsegs[chunk] = (byte *)malloc(expanded);
-  printf("grsegs[%d]: %d = %p\r\n", chunk, (int)expanded, grsegs[chunk]);
   CHECKMALLOCRESULT(grsegs[chunk]);
   CAL_HuffExpand((byte *)source, grsegs[chunk], expanded, grhuffman);
 }
@@ -859,10 +858,8 @@ void CA_CacheGrChunk(int chunk) {
   // a larger buffer
   //
 
-  printf("CA_CacheGrChunk(%d)\r\n", chunk);
   pos = GRFILEPOS(chunk);
 
-  printf("pos: %d\r\n", (int)pos);
   if (pos < 0) // $FFFFFFFF start is a sparse tile
     return;
 
@@ -870,21 +867,15 @@ void CA_CacheGrChunk(int chunk) {
   while (GRFILEPOS(next) == -1) // skip past any sparse tiles
     next++;
 
-  printf("next: %d\r\n", next);
-
   compressed = GRFILEPOS(next) - pos;
-
-  printf("compressed: %d\r\n", (int)compressed);
 
   lseek(grhandle, pos, SEEK_SET);
 
   if (compressed <= BUFFERSIZE) {
-    printf("reading into bufferseg\r\n");
     read(grhandle, bufferseg, compressed);
     source = bufferseg;
   } else {
     source = (int32_t *)malloc(compressed);
-    printf("reading into source: %p\r\n", source);
     CHECKMALLOCRESULT(source);
     read(grhandle, source, compressed);
   }

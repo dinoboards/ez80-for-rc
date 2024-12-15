@@ -489,23 +489,23 @@ void VL_BarScaledCoord(int scx __attribute__((unused)),
 =================
 */
 
-void VL_MemToLatch(byte        *source __attribute__((unused)),
-                   int          width __attribute__((unused)),
-                   int          height __attribute__((unused)),
-                   SDL_Surface *destSurface __attribute__((unused)),
-                   int          x __attribute__((unused)),
-                   int          y __attribute__((unused))) {
-  // assert(x >= 0 && (unsigned)x + width <= screenWidth && y >= 0 && (unsigned)y + height <= screenHeight &&
-  //        "VL_MemToLatch: Destination rectangle out of bounds!");
+void VL_MemToLatch(byte        *source,
+                   int          width,
+                   int          height,
+                   SDL_Surface *destSurface,
+                   int          x,
+                   int          y) {
+  assert(x >= 0 && (unsigned)x + width <= screenWidth && y >= 0 && (unsigned)y + height <= screenHeight &&
+         "VL_MemToLatch: Destination rectangle out of bounds!");
 
   // VL_LockSurface(destSurface);
-  // int   pitch = destSurface->pitch;
-  // byte *dest  = (byte *)destSurface->pixels + y * pitch + x;
-  // for (int ysrc = 0; ysrc < height; ysrc++) {
-  //   for (int xsrc = 0; xsrc < width; xsrc++) {
-  //     dest[ysrc * pitch + xsrc] = source[(ysrc * (width >> 2) + (xsrc >> 2)) + (xsrc & 3) * (width >> 2) * height];
-  //   }
-  // }
+  int   pitch = destSurface->pitch;
+  byte *dest  = (byte *)destSurface->pixels + y * pitch + x;
+  for (int ysrc = 0; ysrc < height; ysrc++) {
+    for (int xsrc = 0; xsrc < width; xsrc++) {
+      dest[ysrc * pitch + xsrc] = source[(ysrc * (width >> 2) + (xsrc >> 2)) + (xsrc & 3) * (width >> 2) * height];
+    }
+  }
   // VL_UnlockSurface(destSurface);
 }
 
