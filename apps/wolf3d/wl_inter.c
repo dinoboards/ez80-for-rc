@@ -20,7 +20,7 @@ void Write(int x, int y, const char *string);
 void ClearSplitVWB(void) {
   WindowX = 0;
   WindowY = 0;
-  WindowW = 320;
+  WindowW = 256;
   WindowH = 160;
 }
 

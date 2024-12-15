@@ -12,7 +12,7 @@ typedef struct SDL_PixelFormat {
 } SDL_PixelFormat;
 
 typedef struct {
-  uint16_t             pitch;
+  uint16_t pitch;
   uint16_t w;
   uint16_t h;
   uint8_t  pixels[];
@@ -1146,7 +1146,7 @@ typedef enum SDL_EventType {
 
 extern int          SDL_UpperBlit(SDL_Surface *src, const SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect);
 extern SDL_Surface *SDL_CreateRGBSurface(
-    /*uint32_t flags, */int width, int height/*, int depth, uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask*/);
+    /*uint32_t flags, */ int width, int height /*, int depth, uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask*/);
 
 typedef struct SDL_Palette {
   int        ncolors;

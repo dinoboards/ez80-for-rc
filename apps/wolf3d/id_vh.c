@@ -19,9 +19,15 @@ void VWB_DrawPropString(const char *string) {
 
   byte *vbuf = LOCK();
 
+  printf("VWB_DrawPropString(%s)\r\n", string);
+
   font   = (fontstruct *)grsegs[STARTFONT + fontnumber];
   height = font->height;
-  dest   = vbuf + scaleFactor * (py * curPitch + px);
+  dest   = vbuf + (py * curPitch + px);
+
+  printf("fontnumber: %d\r\n", fontnumber);
+  printf("font: %p, height: %d, dest: %p\r\n", font, height, dest);
+  printf("curPitch: %d, px: %d, py: %d\r\n", curPitch, px, py);
 
   while ((ch = (byte)*string++) != 0) {
     width = step = font->width[ch];
@@ -29,15 +35,13 @@ void VWB_DrawPropString(const char *string) {
     while (width--) {
       for (int i = 0; i < height; i++) {
         if (source[i * step]) {
-          for (unsigned sy = 0; sy < scaleFactor; sy++)
-            for (unsigned sx = 0; sx < scaleFactor; sx++)
-              dest[(scaleFactor * i + sy) * curPitch + sx] = fontcolor;
+          dest[i * curPitch] = fontcolor;
         }
       }
 
       source++;
       px++;
-      dest += scaleFactor;
+      dest += 1;
     }
   }
 
@@ -108,8 +112,13 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 */
 
 void VH_UpdateScreen() {
-  SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-  SDL_Flip(screen);
+  // apply palette
+  apply_palette(screenBuffer->pixels, screenWidth, screenHeight);
+
+  vdp_cpu_to_vram0(screenBuffer->pixels, screenWidth * screenHeight);
+
+  // SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
+  // SDL_Flip(screen);
 }
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
@@ -195,9 +204,9 @@ void LatchDrawPicScaledCoord(unsigned scx, unsigned scy, unsigned picnum) {
 ===================
 */
 
-void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
+void apply_palette(uint8_t *pixels, uint16_t width, uint16_t height) {
 
-  uint8_t *c = surface;
+  uint8_t *c = pixels;
 
   for (uint8_t y = 0; y < height; y++) {
     for (uint16_t x = 0; x < width; x++) {
@@ -221,7 +230,7 @@ void LoadLatchMem(void) {
   // tile 8s
   //
 
-  surf = SDL_CreateRGBSurface(/*0,*/ 8 * 8, ((NUMTILE8 + 7) / 8) * 8/*, 8, 0, 0, 0, 0*/);
+  surf = SDL_CreateRGBSurface(/*0,*/ 8 * 8, ((NUMTILE8 + 7) / 8) * 8 /*, 8, 0, 0, 0, 0*/);
   if (surf == NULL) {
     Quit("Unable to create surface for tiles!");
   }
@@ -247,7 +256,7 @@ void LoadLatchMem(void) {
     width  = pictable[i - STARTPICS].width;
     height = pictable[i - STARTPICS].height;
 
-    surf = SDL_CreateRGBSurface(/*0,*/ width, height/*, 8, 0, 0, 0, 0*/);
+    surf = SDL_CreateRGBSurface(/*0,*/ width, height /*, 8, 0, 0, 0, 0*/);
     if (surf == NULL) {
       Quit("Unable to create surface for picture!");
     }
@@ -258,7 +267,6 @@ void LoadLatchMem(void) {
     VL_MemToLatch(grsegs[i], width, height, surf, 0, 0);
     UNCACHEGRCHUNK(i);
   }
-  Quit("WIP\r\n");
 }
 
 //==========================================================================
@@ -388,7 +396,7 @@ boolean FizzleFade(SDL_Surface *source, int x1, int y1, unsigned width, unsigned
           byte     col     = *(srcptr + (y1 + y) * source->pitch + x1 + x);
           uint32_t fullcol = SDL_MapRGB(/*screen->format,*/ curpal[col].r, curpal[col].g, curpal[col].b);
           memcpy(destptr + (y1 + y) * screen->pitch + (x1 + x) /* screen->format->BytesPerPixel*/, &fullcol,
-                 1/*screen->format->BytesPerPixel*/);
+                 1 /*screen->format->BytesPerPixel*/);
         }
 
         if (rndval == 0) // entire sequence has been completed

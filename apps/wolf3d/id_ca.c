@@ -435,13 +435,6 @@ void CAL_SetupGrFile(void) {
   int expectedsize = lengthof(grstarts);
 #endif
 
-  //(sizeof(x) / sizeof(*(x)))
-  printf("sizeof grstarts: %d\r\n", sizeof(grstarts));
-  printf("sizeof *grstarts: %d\r\n", sizeof(*grstarts));
-  printf("length of grstarts: %d\r\n", lengthof(grstarts));
-  printf("Number of episodes missing: %d\r\n", numEpisodesMissing);
-  printf("headersize: %ld\r\n", headersize);
-
   if (!param_ignorenumchunks && headersize / 3 != expectedsize)
     Quit("Wolf3D was not compiled for these data files:\r\n"
          "%s contains a wrong number of offsets (%d instead of %d)!\r\n\n"
@@ -831,6 +824,7 @@ void CAL_ExpandGrChunk(int chunk, int32_t *source) {
   // Sprites need to have shifts made and various other junk
   //
   grsegs[chunk] = (byte *)malloc(expanded);
+  printf(".");
   CHECKMALLOCRESULT(grsegs[chunk]);
   CAL_HuffExpand((byte *)source, grsegs[chunk], expanded, grhuffman);
 }
