@@ -75,7 +75,7 @@ char configname[13] = "config.";
 // Command line parameter variables
 //
 boolean param_debugmode     = false;
-boolean param_nowait        = false;
+boolean param_nowait        = true;
 int     param_difficulty    = 1;  // default is "normal"
 int     param_tedlevel      = -1; // default is not to start a level
 int     param_joystickindex = 0;
@@ -770,7 +770,9 @@ void SignonScreen(void) {
     Quit("Error: Unable to open file SIGNON.IMG\r\n");
   }
 
-  int r = fread(buffer, 1, 256 * 200, f);
+	byte* vbuf = LOCK();
+
+  int r = fread(vbuf, 1, 256 * 200, f);
   if (r != 256 * 200) {
     printf("Error: Unable to read file SIGNON.IMG\r\n");
     fclose(f);
@@ -778,9 +780,7 @@ void SignonScreen(void) {
   }
   fclose(f);
 
-  vdp_cpu_to_vram0(buffer, 256 * 200);
-
-  free(buffer);
+  vdp_cpu_to_vram0(vbuf, 256 * 200);
 }
 
 /*
@@ -815,8 +815,8 @@ void FinishSignon(void) {
   VH_UpdateScreen();
   printf("%s:%d\r\n", __FILE__, __LINE__);
 
-  // if (!param_nowait)
-  //   IN_Ack();
+  if (!param_nowait)
+    IN_Ack();
 
   Quit("WIP\r\n");
 
