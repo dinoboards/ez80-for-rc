@@ -795,11 +795,13 @@ void FinishSignon(void) {
 #ifndef SPEAR
   VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
   WindowX = 0;
-  WindowW = 320;
+  WindowW = 256;
   PrintY  = 190;
 
 #ifndef JAPAN
   SETFONTCOLOR(14, 4);
+
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #ifdef SPANISH
   US_CPrint("Oprima una tecla");
@@ -809,32 +811,38 @@ void FinishSignon(void) {
 
 #endif
 
+  printf("%s:%d\r\n", __FILE__, __LINE__);
   VH_UpdateScreen();
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
-  if (!param_nowait)
-    IN_Ack();
+  // if (!param_nowait)
+  //   IN_Ack();
 
-#ifndef JAPAN
-  VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
+  Quit("WIP\r\n");
 
-  PrintY = 190;
-  SETFONTCOLOR(10, 4);
+//   printf("%s:%d\r\n", __FILE__, __LINE__);
 
-#ifdef SPANISH
-  US_CPrint("pensando...");
-#else
-  US_CPrint("Working...");
-#endif
+// #ifndef JAPAN
+//   VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
 
-  VH_UpdateScreen();
-#endif
+//   PrintY = 190;
+//   SETFONTCOLOR(10, 4);
 
-  SETFONTCOLOR(0, 15);
-#else
-  VH_UpdateScreen();
+// #ifdef SPANISH
+//   US_CPrint("pensando...");
+// #else
+//   US_CPrint("Working...");
+// #endif
 
-  if (!param_nowait)
-    VW_WaitVBL(3 * 70);
+//   VH_UpdateScreen();
+// #endif
+
+//   SETFONTCOLOR(0, 15);
+// #else
+//   VH_UpdateScreen();
+
+//   if (!param_nowait)
+//     VW_WaitVBL(3 * 70);
 #endif
 }
 
@@ -1152,19 +1160,25 @@ static void InitGame() {
   printf("%s:%d\r\n", __FILE__, __LINE__);
 
   LoadLatchMem();
+  printf("%s:%d\r\n", __FILE__, __LINE__);
   BuildTables(); // trig tables
+  printf("%s:%d\r\n", __FILE__, __LINE__);
   SetupWalls();
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   NewViewSize(viewsize);
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   //
   // initialize variables
   //
   InitRedShifts();
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 #ifndef SPEARDEMO
   if (!didjukebox)
 #endif
     FinishSignon();
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #ifdef NOTYET
   vdisp = (byte *)(0xa0000 + PAGE1START);
@@ -1488,7 +1502,11 @@ int main(/*int argc, char* argv[]*/) {
 
   InitGame();
 
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+
   DemoLoop();
+
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   Quit("Demo loop exited???");
   return 1;

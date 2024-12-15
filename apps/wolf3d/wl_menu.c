@@ -1629,7 +1629,7 @@ void DrawMouseSens(void) {
 #endif
 
   WindowX = 0;
-  WindowW = 320;
+  WindowW = 256;
   PrintY = 82;
   SETFONTCOLOR(READCOLOR, BKGDCOLOR);
   US_CPrint(STR_MOUSEADJ);
@@ -1740,7 +1740,7 @@ void DrawCtlScreen(void) {
   DrawWindow(CTL_X - 8, CTL_Y - 5, CTL_W, CTL_H, BKGDCOLOR);
 #endif
   WindowX = 0;
-  WindowW = 320;
+  WindowW = 256;
   SETFONTCOLOR(TEXTCOLOR, BKGDCOLOR);
 
   if (IN_JoyPresent())
@@ -2175,7 +2175,7 @@ void DrawCustomScreen(void) {
 #else
   ClearMScreen();
   WindowX = 0;
-  WindowW = 320;
+  WindowW = 256;
   VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
   DrawStripes(10);
   VWB_DrawPic(80, 0, C_CUSTOMIZEPIC);
@@ -2185,7 +2185,7 @@ void DrawCustomScreen(void) {
   //
   SETFONTCOLOR(READCOLOR, BKGDCOLOR);
   WindowX = 0;
-  WindowW = 320;
+  WindowW = 256;
 
 #ifndef SPEAR
   PrintY = CST_Y;

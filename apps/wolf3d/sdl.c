@@ -1,5 +1,6 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "sdl.h"
 
@@ -75,9 +76,10 @@ SDL_Surface *SDL_CreateRGBSurface(/*uint32_t flags IG,*/
 
   int          size    = sizeof(SDL_Surface) + width * height;
   SDL_Surface *surface = (SDL_Surface *)malloc(size);
-  surface->w           = width;
-  surface->pitch       = width;
-  surface->h           = height;
+  memset(surface->pixels, 0, width * height);
+  surface->w     = width;
+  surface->pitch = width;
+  surface->h     = height;
   return surface;
 }
 

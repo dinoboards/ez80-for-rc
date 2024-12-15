@@ -27,7 +27,7 @@ boolean usedoublebuffering = true;
 
 // ATSB: Global resolution for correct display of various things in the game like intermissions.
 // ATSB: This goes along with the scaling to ensure it all looks nice.
-unsigned screenWidth  = 320;
+unsigned screenWidth  = 256;
 unsigned screenHeight = 200;
 
 unsigned screenBits = -1; // use "best" color depth according to libSDL
@@ -43,7 +43,7 @@ unsigned     bufferPitch;
 SDL_Renderer *renderer = NULL;
 
 SDL_Surface *curSurface = NULL;
-unsigned     curPitch;
+unsigned     curPitch = 256;
 
 // unsigned scaleFactor;
 
@@ -98,6 +98,12 @@ void VL_Shutdown(void) {
 void VL_SetVGAPlaneMode(void) {
   vdp_set_mode(7, 212, PAL);
   vdp_cmd_vdp_to_vram(0, 0, 256, 212, 0, 0);
+
+  screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
+  bufferPitch = screenBuffer->pitch;
+
+	curSurface = screenBuffer;
+	curPitch = bufferPitch;
 }
 
 /*
@@ -489,12 +495,7 @@ void VL_BarScaledCoord(int scx __attribute__((unused)),
 =================
 */
 
-void VL_MemToLatch(byte        *source,
-                   int          width,
-                   int          height,
-                   SDL_Surface *destSurface,
-                   int          x,
-                   int          y) {
+void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface, int x, int y) {
   assert(x >= 0 && (unsigned)x + width <= screenWidth && y >= 0 && (unsigned)y + height <= screenHeight &&
          "VL_MemToLatch: Destination rectangle out of bounds!");
 
