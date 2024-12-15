@@ -824,31 +824,29 @@ void FinishSignon(void) {
   if (!param_nowait)
     IN_Ack();
 
-  Quit("WIP\r\n");
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
-//   printf("%s:%d\r\n", __FILE__, __LINE__);
+#ifndef JAPAN
+  VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
 
-// #ifndef JAPAN
-//   VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
+  PrintY = 190;
+  SETFONTCOLOR(10, 4);
 
-//   PrintY = 190;
-//   SETFONTCOLOR(10, 4);
+#ifdef SPANISH
+  US_CPrint("pensando...");
+#else
+  US_CPrint("Working...");
+#endif
 
-// #ifdef SPANISH
-//   US_CPrint("pensando...");
-// #else
-//   US_CPrint("Working...");
-// #endif
+  VH_UpdateScreen();
+#endif
 
-//   VH_UpdateScreen();
-// #endif
+  SETFONTCOLOR(0, 15);
+#else
+  VH_UpdateScreen();
 
-//   SETFONTCOLOR(0, 15);
-// #else
-//   VH_UpdateScreen();
-
-//   if (!param_nowait)
-//     VW_WaitVBL(3 * 70);
+  if (!param_nowait)
+    VW_WaitVBL(3 * 70);
 #endif
 }
 

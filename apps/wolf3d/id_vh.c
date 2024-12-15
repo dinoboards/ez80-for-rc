@@ -114,7 +114,7 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 uint8_t renderBuffer[screenWidth * screenHeight];
 
 static void apply_palette(uint8_t *surface, const uint24_t length) {
-  uint8_t *c = surface;
+  uint8_t *c    = surface;
   uint8_t *dest = renderBuffer;
 
   for (uint24_t i = 0; i < length; i++)
@@ -208,7 +208,6 @@ void LatchDrawPicScaledCoord(unsigned scx, unsigned scy, unsigned picnum) {
 =
 ===================
 */
-
 
 void LoadLatchMem(void) {
   int          i, width, height, start, end;
