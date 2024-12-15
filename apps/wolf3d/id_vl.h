@@ -20,8 +20,12 @@ extern SDL_Surface  *screen, *screenBuffer, *curSurface;
 extern SDL_Window   *window;
 extern SDL_Renderer *renderer;
 
-extern boolean  fullscreen, usedoublebuffering;
-extern unsigned screenWidth, screenHeight, screenBits, screenPitch, bufferPitch, curPitch;
+extern boolean fullscreen, usedoublebuffering;
+// extern uint24_t screenWidth, screenHeight;
+#define screenWidth  256
+#define screenHeight 212
+
+extern unsigned screenBits, screenPitch, bufferPitch, curPitch;
 // extern unsigned scaleFactor;
 
 #define scaleFactor 1

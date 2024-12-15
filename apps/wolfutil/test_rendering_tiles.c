@@ -11,7 +11,7 @@ extern uint8_t tiles[];
 extern uint8_t kifePic[];
 extern uint8_t gunpick[];
 
-void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
+static void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
 
   uint8_t *c = surface;
 

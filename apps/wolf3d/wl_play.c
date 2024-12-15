@@ -2,6 +2,8 @@
 
 #include "wl_def.h"
 
+#include "sdl.h"
+
 /*
 =============================================================================
 
@@ -810,12 +812,14 @@ void InitRedShifts(void) {
     baseptr = gamepal;
 
     for (j = 0; j <= 255; j++) {
-      delta      = 256 - baseptr->r;
-      workptr->r = baseptr->r + delta * i / REDSTEPS;
-      delta      = -baseptr->g;
-      workptr->g = baseptr->g + delta * i / REDSTEPS;
-      delta      = -baseptr->b;
-      workptr->b = baseptr->b + delta * i / REDSTEPS;
+      delta                   = 256 - RED_FRM_GRB(*baseptr);
+      const uint8_t new_red   = RED_FRM_GRB(*baseptr) + delta * i / REDSTEPS;
+      delta                   = -GREEN_FRM_GRB(*baseptr);
+      const uint8_t new_green = GREEN_FRM_GRB(*baseptr) + delta * i / REDSTEPS;
+      delta                   = -BLUE_FRM_GRB(*baseptr);
+      const uint8_t new_blue  = BLUE_FRM_GRB(*baseptr) + delta * i / REDSTEPS;
+
+      *workptr = GRB(new_green, new_red, new_blue);
       baseptr++;
       workptr++;
     }
@@ -826,12 +830,15 @@ void InitRedShifts(void) {
     baseptr = gamepal;
 
     for (j = 0; j <= 255; j++) {
-      delta      = 256 - baseptr->r;
-      workptr->r = baseptr->r + delta * i / WHITESTEPS;
-      delta      = 248 - baseptr->g;
-      workptr->g = baseptr->g + delta * i / WHITESTEPS;
-      delta      = 0 - baseptr->b;
-      workptr->b = baseptr->b + delta * i / WHITESTEPS;
+      delta             = 256 - RED_FRM_GRB(*baseptr);
+      uint8_t new_red   = RED_FRM_GRB(*baseptr) + delta * i / WHITESTEPS;
+      delta             = 248 - GREEN_FRM_GRB(*baseptr);
+      uint8_t new_green = GREEN_FRM_GRB(*baseptr) + delta * i / WHITESTEPS;
+      delta             = 0 - BLUE_FRM_GRB(*baseptr);
+      uint8_t new_blue  = BLUE_FRM_GRB(*baseptr) + delta * i / WHITESTEPS;
+
+      *workptr = GRB(new_green, new_red, new_blue);
+
       baseptr++;
       workptr++;
     }

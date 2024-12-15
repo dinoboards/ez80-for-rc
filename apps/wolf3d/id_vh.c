@@ -111,14 +111,19 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 =============================================================================
 */
 
+uint8_t renderBuffer[screenWidth * screenHeight];
+
+static void apply_palette(uint8_t *surface, const uint24_t length) {
+  uint8_t *c = surface;
+  uint8_t *dest = renderBuffer;
+
+  for (uint24_t i = 0; i < length; i++)
+    *dest++ = gamepal[*c++];
+}
+
 void VH_UpdateScreen() {
-  // apply palette
-  apply_palette(screenBuffer->pixels, screenWidth, screenHeight);
-
-  vdp_cpu_to_vram0(screenBuffer->pixels, screenWidth * screenHeight);
-
-  // SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-  // SDL_Flip(screen);
+  apply_palette(screenBuffer->pixels, screenWidth * screenHeight);
+  vdp_cpu_to_vram0(renderBuffer, screenWidth * screenHeight);
 }
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
@@ -204,22 +209,6 @@ void LatchDrawPicScaledCoord(unsigned scx, unsigned scy, unsigned picnum) {
 ===================
 */
 
-void apply_palette(uint8_t *pixels, uint16_t width, uint16_t height) {
-
-  uint8_t *c = pixels;
-
-  for (uint8_t y = 0; y < height; y++) {
-    for (uint16_t x = 0; x < width; x++) {
-      const uint8_t  i     = *c;
-      const uint16_t red   = (gamepal[i].r / 8);
-      const uint16_t green = (gamepal[i].g / 8);
-      const uint16_t blue  = (gamepal[i].b / 16);
-      const uint8_t  rgb   = green << 5 | red << 2 | blue;
-      *c                   = rgb;
-      c++;
-    }
-  }
-}
 
 void LoadLatchMem(void) {
   int          i, width, height, start, end;
@@ -393,8 +382,8 @@ boolean FizzleFade(SDL_Surface *source, int x1, int y1, unsigned width, unsigned
         if (screenBits == 8) {
           *(destptr + (y1 + y) * screen->pitch + x1 + x) = *(srcptr + (y1 + y) * source->pitch + x1 + x);
         } else {
-          byte     col     = *(srcptr + (y1 + y) * source->pitch + x1 + x);
-          uint32_t fullcol = SDL_MapRGB(/*screen->format,*/ curpal[col].r, curpal[col].g, curpal[col].b);
+          byte    col     = *(srcptr + (y1 + y) * source->pitch + x1 + x);
+          uint8_t fullcol = curpal[col]; // SDL_MapRGB(/*screen->format,*/ curpal[col].r, curpal[col].g, curpal[col].b);
           memcpy(destptr + (y1 + y) * screen->pitch + (x1 + x) /* screen->format->BytesPerPixel*/, &fullcol,
                  1 /*screen->format->BytesPerPixel*/);
         }

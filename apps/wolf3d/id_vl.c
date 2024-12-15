@@ -27,8 +27,8 @@ boolean usedoublebuffering = true;
 
 // ATSB: Global resolution for correct display of various things in the game like intermissions.
 // ATSB: This goes along with the scaling to ensure it all looks nice.
-unsigned screenWidth  = 256;
-unsigned screenHeight = 200;
+// const uint24_t screenWidth  = 256;
+// const uint24_t screenHeight = 212;
 
 unsigned screenBits = -1; // use "best" color depth according to libSDL
 
@@ -43,7 +43,7 @@ unsigned     bufferPitch;
 SDL_Renderer *renderer = NULL;
 
 SDL_Surface *curSurface = NULL;
-unsigned     curPitch = 256;
+unsigned     curPitch   = 256;
 
 // unsigned scaleFactor;
 
@@ -54,8 +54,10 @@ SDL_Color palette1[256], palette2[256];
 SDL_Color curpal[256];
 
 #define CASSERT(x) extern int ASSERT_COMPILE[((x) != 0) * 2 - 1];
-#define RGB(r, g, b)                                                                                                               \
-  { (r) * 255 / 63, (g)*255 / 63, (b)*255 / 63, 0 }
+// #define RGB(r, g, b)                                                                                                               \
+//   { (r) * 255 / 63, (g)*255 / 63, (b)*255 / 63, 0 }
+
+#define RGB(r, g, b) (g >> 3) << 5 | (r >> 3) << 2 | (b >> 4)
 
 SDL_Color gamepal[] = {
 #ifdef SPEAR
@@ -100,10 +102,10 @@ void VL_SetVGAPlaneMode(void) {
   vdp_cmd_vdp_to_vram(0, 0, 256, 212, 0, 0);
 
   screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
-  bufferPitch = screenBuffer->pitch;
+  bufferPitch  = screenBuffer->pitch;
 
-	curSurface = screenBuffer;
-	curPitch = bufferPitch;
+  curSurface = screenBuffer;
+  curPitch   = bufferPitch;
 }
 
 /*
@@ -126,9 +128,10 @@ void VL_SetVGAPlaneMode(void) {
 
 void VL_ConvertPalette(byte *srcpal, SDL_Color *destpal, int numColors) {
   for (int i = 0; i < numColors; i++) {
-    destpal[i].r = *srcpal++ * 255 / 63;
-    destpal[i].g = *srcpal++ * 255 / 63;
-    destpal[i].b = *srcpal++ * 255 / 63;
+    const uint8_t r = *srcpal++;
+    const uint8_t g = *srcpal++;
+    const uint8_t b = *srcpal++;
+    destpal[i]      = GRB(g, r, b);
   }
 }
 
@@ -191,12 +194,12 @@ void VL_SetColor(int color __attribute__((unused)),
 =================
 */
 
-void VL_GetColor(int color, int *red, int *green, int *blue) {
-  SDL_Color *col = &curpal[color];
-  *red           = col->r;
-  *green         = col->g;
-  *blue          = col->b;
-}
+// void VL_GetColor(int color, int *red, int *green, int *blue) {
+//   SDL_Color *col = &curpal[color];
+//   *red           = RED_FRM_GRB(col);
+//   *green         = GREEN_FRM_GRB(col);
+//   *blue          = BLUE_FRM_GRB(col);
+// }
 
 //===========================================================================
 
@@ -456,11 +459,7 @@ void VL_Vlin(int x __attribute__((unused)),
 =================
 */
 
-void VL_BarScaledCoord(int scx,
-                       int scy,
-                       int scwidth,
-                       int scheight,
-                       int color) {
+void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color) {
 
   // printf("VL_BarScaledCoord\r\n");
   // printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);

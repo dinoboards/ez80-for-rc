@@ -1,7 +1,11 @@
 #ifndef __WOLFUTIL_H__
 #define __WOLFUTIL_H__
 
+#include <stdint.h>
+
 extern void test_rendering_tiles();
+extern void display_img_file();
+extern void create_signon_image();
 
 #define LEFT   0
 #define RIGHT  256
@@ -10,7 +14,8 @@ extern void test_rendering_tiles();
 #define WIDTH  (RIGHT - LEFT)
 #define HEIGHT (BOTTOM - TOP)
 
-extern uint8_t signon[];
+extern uint8_t     signon[];
+extern const char *filename;
 
 // typedef struct SDL_Color {
 //   uint8_t r;

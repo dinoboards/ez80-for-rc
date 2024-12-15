@@ -19,60 +19,6 @@ uint8_t temp[320 * 200];
 #define GREEN_FRM_GRB(grb) ((grb & 0xE0) >> 5)
 #define BLUE_FRM_GRB(grb)  (grb & 0x03)
 
-void VL_ConvertForV9958(uint8_t *surface) {
-
-  // reduce the horizontal resolution of the image from 320x200 to 256x200
-
-  const uint8_t *c     = surface;
-  uint8_t       *dest  = surface;
-  uint8_t        sum_r = 0;
-  uint8_t        sum_g = 0;
-  uint8_t        sum_b = 0;
-
-  for (uint8_t y = 0; y < 200; y++) {
-    for (uint16_t x = 0; x < 320; x++) {
-      const uint8_t i     = *c++;
-      const uint8_t grb   = gamepal[i];
-      const uint8_t red   = RED_FRM_GRB(grb);
-      const uint8_t green = GREEN_FRM_GRB(grb);
-      const uint8_t blue  = BLUE_FRM_GRB(grb);
-
-      const uint8_t s = x % 5;
-      switch (s) {
-      case 0:
-      case 1:
-        *dest++ = grb;
-        break;
-      case 2:
-        *dest++ = grb;
-        sum_r   = red;
-        sum_g   = green;
-        sum_b   = blue;
-        break;
-
-      case 3:
-        sum_r += red;
-        sum_g += green;
-        sum_b += blue;
-        break;
-
-      case 4:
-        sum_r = (sum_r + red) / 3;
-        if (sum_r > 7)
-          sum_r = 7;
-        sum_g = (sum_g + green) / 3;
-        if (sum_g > 7)
-          sum_g = 7;
-        sum_b = (sum_b + blue) / 3;
-        if (sum_b > 3)
-          sum_b = 3;
-        *dest++ = (sum_g) << 5 | (sum_r) << 2 | (sum_b);
-        break;
-      }
-    }
-  }
-}
-
 void show_help() {
   printf("Usage: wolfutil [options]\r\n");
   printf("Common utility for converting/porting wolf3d assets\r\n");
@@ -95,49 +41,7 @@ bool argument_help(const char *arg) {
 }
 typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_X } command_type_t;
 static command_type_t cmd = CMD_NONE;
-static const char    *filename;
-
-#if 0
-void create_signon_image(void) {
-  VL_ConvertForV9958(signon);
-
-  FILE *f = fopen("SIGNON.IMG", "wb");
-  fwrite(signon, 1, 256 * 200, f);
-  fclose(f);
-
-  printf("SIGNON.IMG image created\r\n");
-}
-#endif
-
-void display_img_file() {
-
-  uint8_t *buffer = malloc(256 * 200);
-  if (buffer == NULL) {
-    printf("Error: Unable to allocate buffer\r\n");
-    return;
-  }
-
-  FILE *f = fopen(filename, "rb");
-  if (f == NULL) {
-    printf("Error: Unable to open file %s\r\n", filename);
-    return;
-  }
-
-  int r = fread(buffer, 1, 256 * 200, f);
-  if (r != 256 * 200) {
-    printf("Error: Unable to read file %s\r\n", filename);
-    fclose(f);
-    return;
-  }
-  fclose(f);
-
-  vdp_set_mode(7, 212, PAL);
-  erase_page_0();
-
-  vdp_cpu_to_vram0(buffer, 256 * 200);
-
-  free(buffer);
-}
+const char           *filename;
 
 void parse_test_swap_file() {
   FILE *f = fopen(filename, "rb");
@@ -274,13 +178,13 @@ int main(const int argc, const char *argv[]) {
     return 1;
   }
 
-#if 0
+#if 1
   if (cmd == CMD_I_SIGNON) {
     create_signon_image();
   } else
 #endif
 
-  if (cmd == CMD_S) {
+      if (cmd == CMD_S) {
     display_img_file();
   } else if (cmd == CMD_P) {
     parse_test_swap_file();
