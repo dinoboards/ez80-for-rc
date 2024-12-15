@@ -213,88 +213,51 @@ void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
 }
 
 void LoadLatchMem(void) {
-  // int i;
-  // // int          i, width, height, start, end;
-  // byte *src;
-  // // SDL_Surface *surf;
+  int          i, width, height, start, end;
+  byte        *src;
+  SDL_Surface *surf;
 
-  // //
-  // // tile 8s
-  // //
+  //
+  // tile 8s
+  //
 
-  // // surf = SDL_CreateRGBSurface(0, 8 * 8, ((NUMTILE8 + 7) / 8) * 8, 8, 0, 0, 0, 0);
-  // // if (surf == NULL) {
-  // //   Quit("Unable to create surface for tiles!");
-  // // }
-  // // SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
-  // SDL_SetPaletteColors(NULL, gamepal, 0, 256);
+  surf = SDL_CreateRGBSurface(/*0,*/ 8 * 8, ((NUMTILE8 + 7) / 8) * 8/*, 8, 0, 0, 0, 0*/);
+  if (surf == NULL) {
+    Quit("Unable to create surface for tiles!");
+  }
+  SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
 
-  // // latchpics[0] = surf;
+  latchpics[0] = surf;
   CA_CacheGrChunk(STARTTILE8);
-  uint8_t *src = grsegs[STARTTILE8];
+  src = grsegs[STARTTILE8];
 
-  for (int i = 0; i < NUMTILE8; i++) {
-    printf("Tile(%d) (8x8):\r\n", i);
-    //   // VL_MemToLatch(src, 8, 8, surf, (i & 7) * 8, (i >> 3) * 8);
-
-    //   // apply_palette(src, 8, 8);
-
-    // for (int j = 0; j < 64; j++) {
-    //   printf("0x%X,", src[j]);
-    // }
-    printf("\r\n");
-
-    //   // vdp_cpu_to_vram(src, i * 64, 64);
-
+  for (i = 0; i < NUMTILE8; i++) {
+    VL_MemToLatch(src, 8, 8, surf, (i & 7) * 8, (i >> 3) * 8);
     src += 64;
   }
   UNCACHEGRCHUNK(STARTTILE8);
 
-  // //
-  // // pics
-  // //
-  int start = LATCHPICS_LUMP_START;
-  // int end   = LATCHPICS_LUMP_END;
+  //
+  // pics
+  //
+  start = LATCHPICS_LUMP_START;
+  end   = LATCHPICS_LUMP_END;
 
-  for (int i = start; i <= start + 2; i++) {
-    int width  = pictable[i - STARTPICS].width;
-    int height = pictable[i - STARTPICS].height;
+  for (i = start; i <= end; i++) {
+    width  = pictable[i - STARTPICS].width;
+    height = pictable[i - STARTPICS].height;
 
-    CA_CacheGrChunk(i);
-
-    src = grsegs[i];
-
-    printf("Tile(%d) (%dx%d) @ %p\r\n", i, width, height, src);
-
-    for (int j = 0; j < width * height; j++) {
-      printf("0x%X,", src[j]);
+    surf = SDL_CreateRGBSurface(/*0,*/ width, height/*, 8, 0, 0, 0, 0*/);
+    if (surf == NULL) {
+      Quit("Unable to create surface for picture!");
     }
-    printf("\r\n");
+    SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
 
+    latchpics[2 + i - start] = surf;
+    CA_CacheGrChunk(i);
+    VL_MemToLatch(grsegs[i], width, height, surf, 0, 0);
     UNCACHEGRCHUNK(i);
   }
-
-  //   src = grsegs[i];
-
-  //   printf("Tile[i]: (%d, %d) %d\r\n", width, height, i);
-  //   for (int j = 0; j < width * height; j++) {
-  //     printf("0x%X,", src[j]);
-  //   }
-  //   printf("\r\n");
-  // }
-
-  //   surf = SDL_CreateRGBSurface(0, width, height, 8, 0, 0, 0, 0);
-  //   if (surf == NULL) {
-  //     Quit("Unable to create surface for picture!");
-  //   }
-  //   SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
-
-  //   latchpics[2 + i - start] = surf;
-  //   CA_CacheGrChunk(i);
-  //   VL_MemToLatch(grsegs[i], width, height, surf, 0, 0);
-  //   UNCACHEGRCHUNK(i);
-  // }
-
   Quit("WIP\r\n");
 }
 
@@ -423,9 +386,9 @@ boolean FizzleFade(SDL_Surface *source, int x1, int y1, unsigned width, unsigned
           *(destptr + (y1 + y) * screen->pitch + x1 + x) = *(srcptr + (y1 + y) * source->pitch + x1 + x);
         } else {
           byte     col     = *(srcptr + (y1 + y) * source->pitch + x1 + x);
-          uint32_t fullcol = SDL_MapRGB(screen->format, curpal[col].r, curpal[col].g, curpal[col].b);
-          memcpy(destptr + (y1 + y) * screen->pitch + (x1 + x) * screen->format->BytesPerPixel, &fullcol,
-                 screen->format->BytesPerPixel);
+          uint32_t fullcol = SDL_MapRGB(/*screen->format,*/ curpal[col].r, curpal[col].g, curpal[col].b);
+          memcpy(destptr + (y1 + y) * screen->pitch + (x1 + x) /* screen->format->BytesPerPixel*/, &fullcol,
+                 1/*screen->format->BytesPerPixel*/);
         }
 
         if (rndval == 0) // entire sequence has been completed

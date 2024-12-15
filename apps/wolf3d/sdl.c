@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "sdl.h"
 
@@ -62,18 +64,24 @@ void SDL_GameControllerClose(SDL_GameController *gamecontroller IG) {}
 
 int SDL_UpperBlit(SDL_Surface *src IG, const SDL_Rect *srcrect IG, SDL_Surface *dst IG, SDL_Rect *dstrect IG) { return 0; }
 
-SDL_Surface *SDL_CreateRGBSurface(uint32_t flags IG,
-                                  int width      IG,
-                                  int height     IG,
-                                  int depth      IG,
+SDL_Surface *SDL_CreateRGBSurface(/*uint32_t flags IG,*/
+                                  int width      ,
+                                  int height
+                                  /*int depth      IG,
                                   uint32_t Rmask IG,
                                   uint32_t Gmask IG,
                                   uint32_t Bmask IG,
-                                  uint32_t Amask IG) {
-  return NULL;
+                                  uint32_t Amask IG*/) {
+
+  int          size    = sizeof(SDL_Surface) + width * height;
+  SDL_Surface *surface = (SDL_Surface *)malloc(size);
+  surface->w           = width;
+  surface->pitch       = width;
+  surface->h           = height;
+  return surface;
 }
 
-uint32_t SDL_MapRGB(const SDL_PixelFormat *format IG, uint8_t r IG, uint8_t g IG, uint8_t b IG) { return 0; }
+uint32_t SDL_MapRGB(/*const SDL_PixelFormat *format IG,*/ uint8_t r IG, uint8_t g IG, uint8_t b IG) { return 0; }
 
 SDL_Texture *SDL_CreateTextureFromSurface(SDL_Renderer *renderer IG, SDL_Surface *surface IG) { return NULL; }
 

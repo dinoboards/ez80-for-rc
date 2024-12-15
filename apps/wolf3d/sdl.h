@@ -12,12 +12,14 @@ typedef struct SDL_PixelFormat {
 } SDL_PixelFormat;
 
 typedef struct {
-  int              pitch;
-  int              w;
-  int              h;
-  uint8_t         *pixels;
-  SDL_PixelFormat *format;
+  uint16_t             pitch;
+  uint16_t w;
+  uint16_t h;
+  uint8_t  pixels[];
+  // uint8_t         *pixels;
+  // SDL_PixelFormat *format;
 } SDL_Surface;
+
 typedef void SDL_Window;
 typedef void SDL_Renderer;
 typedef void SDL_Rect;
@@ -1144,7 +1146,7 @@ typedef enum SDL_EventType {
 
 extern int          SDL_UpperBlit(SDL_Surface *src, const SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect);
 extern SDL_Surface *SDL_CreateRGBSurface(
-    uint32_t flags, int width, int height, int depth, uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask);
+    /*uint32_t flags, */int width, int height/*, int depth, uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask*/);
 
 typedef struct SDL_Palette {
   int        ncolors;
@@ -1156,7 +1158,7 @@ typedef struct SDL_Palette {
 #define SDL_SetPaletteColors(...)
 #define SDL_ConvertSurface(...) NULL
 #define SDL_FreeSurface(...)
-extern uint32_t SDL_MapRGB(const SDL_PixelFormat *format, uint8_t r, uint8_t g, uint8_t b);
+extern uint32_t SDL_MapRGB(/*const SDL_PixelFormat *format,*/ uint8_t r, uint8_t g, uint8_t b);
 
 extern SDL_Texture *SDL_CreateTextureFromSurface(SDL_Renderer *renderer, SDL_Surface *surface);
 
