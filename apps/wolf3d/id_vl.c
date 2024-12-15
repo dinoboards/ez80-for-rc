@@ -455,6 +455,11 @@ void VL_BarScaledCoord(int scx __attribute__((unused)),
                        int scwidth __attribute__((unused)),
                        int scheight __attribute__((unused)),
                        int color __attribute__((unused))) {
+
+  // printf("VL_BarScaledCoord\r\n");
+  // printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
+
+  vdp_cmd_vdp_to_vram(scx, scy, scwidth, scheight, color, 0);
   // assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&
   //        "VL_BarScaledCoord: Destination rectangle out of bounds!");
 
@@ -521,8 +526,8 @@ void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, 
   printf("VL_MemToScreenScaledCoordA\r\n");
   printf("source: %p, width: %d, height: %d, destx: %d, desty: %d\r\n", source, width, height, destx, desty);
 
-  assert(destx >= 0 && destx + width * scaleFactor <= screenWidth && desty >= 0 && desty + height * scaleFactor <= screenHeight &&
-         "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
+  assert(destx >= 0 && destx + width * scaleFactor <= (int)screenWidth && desty >= 0 &&
+         desty + height * scaleFactor <= (int)screenHeight && "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
   // byte *vbuf = (byte *)curSurface->pixels;
@@ -559,8 +564,8 @@ void VL_MemToScreenScaledCoordN(
   printf("source: %p, origwidth: %d, origheight: %d, srcx: %d, srcy: %d, destx: %d, desty: %d, width: %d, height: %d\r\n", source,
          origwidth, origheight, srcx, srcy, destx, desty, width, height);
 
-  assert(destx >= 0 && destx + width * scaleFactor <= screenWidth && desty >= 0 && desty + height * scaleFactor <= screenHeight &&
-         "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
+  assert(destx >= 0 && destx + width * scaleFactor <= (int)screenWidth && desty >= 0 &&
+         desty + height * scaleFactor <= (int)screenHeight && "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
   // byte *vbuf = (byte *)curSurface->pixels;
@@ -593,8 +598,9 @@ void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int w
   printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d\r\n", source, xsrc, ysrc, width, height,
          scxdest, scydest);
 
-  assert(scxdest >= 0 && scxdest + width * scaleFactor <= screenWidth && scydest >= 0 &&
-         scydest + height * scaleFactor <= screenHeight && "VL_LatchToScreenScaledCoord7: Destination rectangle out of bounds!");
+  assert(scxdest >= 0 && scxdest + width * scaleFactor <= (int)screenWidth && scydest >= 0 &&
+         scydest + height * scaleFactor <= (int)screenHeight &&
+         "VL_LatchToScreenScaledCoord7: Destination rectangle out of bounds!");
 
   // if (scaleFactor == 1) {
   //   VL_LockSurface(source);

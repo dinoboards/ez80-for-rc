@@ -2,6 +2,6 @@
 
 set -e
 
-echo "Compiling vdp_cpu_to_vram.c -> vdp_cpu_to_vram.s"
-ez80-clang ${INCLUDE_PATHS} -nostdinc -ffunction-sections -fdata-sections -O3 -Wall -Wextra -Wunreachable-code -Werror -mllvm -z80-print-zero-offset -S vdp_cpu_to_vram.c -c -o vdp_cpu_to_vram.s
+echo "Compiling test_rendering_tiles.c -> test_rendering_tiles.s"
+ez80-clang ${INCLUDE_PATHS} -nostdinc -ffunction-sections -fdata-sections -O3 -Wall -Wextra -Wunreachable-code -Werror -mllvm -z80-print-zero-offset -S test_rendering_tiles.c -c -o test_rendering_tiles.s
 

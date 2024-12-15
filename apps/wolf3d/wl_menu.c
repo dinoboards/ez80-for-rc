@@ -553,6 +553,8 @@ void BossKey(void) {
     palette1[0][i] = 0;
 
   VL_SetPalette(&palette1[0][0]);
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+
   LoadLatchMem();
 #endif
 }
@@ -579,6 +581,8 @@ void BossKey(void) {
     palette1[0][i] = 0;
 
   VL_SetPalette(&palette1[0][0]);
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+
   LoadLatchMem();
 #endif
 }

@@ -756,11 +756,9 @@ void SetupWalls(void) {
 =
 ==========================
 */
-
-void SignonScreen(void) // VGA version
-{
+void SignonScreen(void) {
   printf("Showing signon screen\r\n");
-  VL_SetVGAPlaneMode(); // setup V9958 for appropriate screen mode
+  VL_SetVGAPlaneMode();
 
   uint8_t *buffer = malloc(256 * 200);
   if (buffer == NULL) {
@@ -783,10 +781,6 @@ void SignonScreen(void) // VGA version
   vdp_cpu_to_vram0(buffer, 256 * 200);
 
   free(buffer);
-  // printf("S1\r\n");
-  // VL_MungePic(signon, 320, 200); // dont munge inmemory pic, rather malloc, read file, render, and free
-  // printf("S2\r\n");
-  // VL_MemToScreen(signon, 320, 200, 0, 0); // fastest mem to vdp as possible
 }
 
 /*
@@ -1154,6 +1148,8 @@ static void InitGame() {
 
   CA_CacheGrChunk(STARTFONT);
   CA_CacheGrChunk(STATUSBARPIC);
+
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   LoadLatchMem();
   BuildTables(); // trig tables
