@@ -1,5 +1,7 @@
 #include "wl_def.h"
 
+#include <v99x8.h>
+
 pictabletype *pictable;
 SDL_Surface  *latchpics[NUMLATCHPICS];
 
@@ -193,53 +195,107 @@ void LatchDrawPicScaledCoord(unsigned scx, unsigned scy, unsigned picnum) {
 ===================
 */
 
-void LoadLatchMem(void) {
-  int          i, width, height, start, end;
-  byte        *src;
-  SDL_Surface *surf;
+void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
 
-  //
-  // tile 8s
-  //
+  uint8_t *c = surface;
 
-  surf = SDL_CreateRGBSurface(0, 8 * 8, ((NUMTILE8 + 7) / 8) * 8, 8, 0, 0, 0, 0);
-  if (surf == NULL) {
-    Quit("Unable to create surface for tiles!");
+  for (uint8_t y = 0; y < height; y++) {
+    for (uint16_t x = 0; x < width; x++) {
+      const uint8_t  i     = *c;
+      const uint16_t red   = (gamepal[i].r / 8);
+      const uint16_t green = (gamepal[i].g / 8);
+      const uint16_t blue  = (gamepal[i].b / 16);
+      const uint8_t  rgb   = green << 5 | red << 2 | blue;
+      *c                   = rgb;
+      c++;
+    }
   }
-  // SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
-  SDL_SetPaletteColors(NULL, gamepal, 0, 256);
+}
 
-  latchpics[0] = surf;
+void LoadLatchMem(void) {
+  // int i;
+  // // int          i, width, height, start, end;
+  // byte *src;
+  // // SDL_Surface *surf;
+
+  // //
+  // // tile 8s
+  // //
+
+  // // surf = SDL_CreateRGBSurface(0, 8 * 8, ((NUMTILE8 + 7) / 8) * 8, 8, 0, 0, 0, 0);
+  // // if (surf == NULL) {
+  // //   Quit("Unable to create surface for tiles!");
+  // // }
+  // // SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
+  // SDL_SetPaletteColors(NULL, gamepal, 0, 256);
+
+  // // latchpics[0] = surf;
   CA_CacheGrChunk(STARTTILE8);
-  src = grsegs[STARTTILE8];
+  uint8_t *src = grsegs[STARTTILE8];
 
-  for (i = 0; i < NUMTILE8; i++) {
-    VL_MemToLatch(src, 8, 8, surf, (i & 7) * 8, (i >> 3) * 8);
+  for (int i = 0; i < NUMTILE8; i++) {
+    printf("Tile(%d) (8x8):\r\n", i);
+    //   // VL_MemToLatch(src, 8, 8, surf, (i & 7) * 8, (i >> 3) * 8);
+
+    //   // apply_palette(src, 8, 8);
+
+    // for (int j = 0; j < 64; j++) {
+    //   printf("0x%X,", src[j]);
+    // }
+    printf("\r\n");
+
+    //   // vdp_cpu_to_vram(src, i * 64, 64);
+
     src += 64;
   }
   UNCACHEGRCHUNK(STARTTILE8);
 
-  //
-  // pics
-  //
-  start = LATCHPICS_LUMP_START;
-  end   = LATCHPICS_LUMP_END;
+  // //
+  // // pics
+  // //
+  int start = LATCHPICS_LUMP_START;
+  // int end   = LATCHPICS_LUMP_END;
 
-  for (i = start; i <= end; i++) {
-    width  = pictable[i - STARTPICS].width;
-    height = pictable[i - STARTPICS].height;
+  for (int i = start; i <= start + 2; i++) {
+    int width  = pictable[i - STARTPICS].width;
+    int height = pictable[i - STARTPICS].height;
 
-    surf = SDL_CreateRGBSurface(0, width, height, 8, 0, 0, 0, 0);
-    if (surf == NULL) {
-      Quit("Unable to create surface for picture!");
-    }
-    SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
-
-    latchpics[2 + i - start] = surf;
     CA_CacheGrChunk(i);
-    VL_MemToLatch(grsegs[i], width, height, surf, 0, 0);
+
+    src = grsegs[i];
+
+    printf("Tile(%d) (%dx%d) @ %p\r\n", i, width, height, src);
+
+    for (int j = 0; j < width * height; j++) {
+      printf("0x%X,", src[j]);
+    }
+    printf("\r\n");
+
     UNCACHEGRCHUNK(i);
   }
+
+  //   src = grsegs[i];
+
+  //   printf("Tile[i]: (%d, %d) %d\r\n", width, height, i);
+  //   for (int j = 0; j < width * height; j++) {
+  //     printf("0x%X,", src[j]);
+  //   }
+  //   printf("\r\n");
+  // }
+
+  //   surf = SDL_CreateRGBSurface(0, width, height, 8, 0, 0, 0, 0);
+  //   if (surf == NULL) {
+  //     Quit("Unable to create surface for picture!");
+  //   }
+  //   SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
+
+  //   latchpics[2 + i - start] = surf;
+  //   CA_CacheGrChunk(i);
+  //   VL_MemToLatch(grsegs[i], width, height, surf, 0, 0);
+  //   UNCACHEGRCHUNK(i);
+  // }
+
+  Quit("WIP\r\n");
 }
 
 //==========================================================================

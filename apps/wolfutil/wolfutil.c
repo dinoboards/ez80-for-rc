@@ -9,32 +9,15 @@
 
 #include "id_mm.h"
 
-#define LEFT   0
-#define RIGHT  256
-#define TOP    0
-#define BOTTOM (212)
-#define WIDTH  (RIGHT - LEFT)
-#define HEIGHT (BOTTOM - TOP)
+#include "wolfutil.h"
 
-extern uint8_t signon[];
-
-typedef struct SDL_Color {
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
-  uint8_t a;
-} SDL_Color;
-
-#define RGB(r, g, b)                                                                                                               \
-  { (r), (g), (b), 0 }
-
-SDL_Color gamepal[] = {
-#include "wolfpal.inc"
-};
-
-void erase_page_0() { vdp_cmd_vdp_to_vram(LEFT, TOP, WIDTH, HEIGHT, 0, 0); }
+void erase_page_0() { vdp_cmd_vdp_to_vram(LEFT, TOP, WIDTH, HEIGHT, 0x0, 0); }
 
 uint8_t temp[320 * 200];
+
+#define RED_FRM_GRB(grb)   ((grb & 0x1C) >> 2)
+#define GREEN_FRM_GRB(grb) ((grb & 0xE0) >> 5)
+#define BLUE_FRM_GRB(grb)  (grb & 0x03)
 
 void VL_ConvertForV9958(uint8_t *surface) {
 
@@ -48,20 +31,20 @@ void VL_ConvertForV9958(uint8_t *surface) {
 
   for (uint8_t y = 0; y < 200; y++) {
     for (uint16_t x = 0; x < 320; x++) {
-      const uint8_t  i     = *c++;
-      const uint16_t red   = (gamepal[i].r / 8);
-      const uint16_t green = (gamepal[i].g / 8);
-      const uint16_t blue  = (gamepal[i].b / 16);
-      const uint8_t  rgb   = green << 5 | red << 2 | blue;
+      const uint8_t i     = *c++;
+      const uint8_t grb   = gamepal[i];
+      const uint8_t red   = RED_FRM_GRB(grb);
+      const uint8_t green = GREEN_FRM_GRB(grb);
+      const uint8_t blue  = BLUE_FRM_GRB(grb);
 
       const uint8_t s = x % 5;
       switch (s) {
       case 0:
       case 1:
-        *dest++ = rgb;
+        *dest++ = grb;
         break;
       case 2:
-        *dest++ = rgb;
+        *dest++ = grb;
         sum_r   = red;
         sum_g   = green;
         sum_b   = blue;
@@ -98,6 +81,7 @@ void show_help() {
   printf("  -S=<filename>    Display a converted IMG file\r\n");
   printf("  -P=<swapfile>    Parse and test loading swap file\r\n");
   printf("  -T=MM            Test MM functions\r\n");
+  printf("  -X               Test rendering tiles\r\n");
   printf("  -? /?            Show this help message\r\n");
 }
 
@@ -109,7 +93,7 @@ bool argument_help(const char *arg) {
 
   return false;
 }
-typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM } command_type_t;
+typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_X } command_type_t;
 static command_type_t cmd = CMD_NONE;
 static const char    *filename;
 
@@ -248,6 +232,15 @@ bool argument_T_MM(const char *arg) {
   return true;
 }
 
+bool argument_X(const char *arg) {
+  if (strcmp(arg, "-X") != 0 && strcmp(arg, "/X") != 0)
+    return false;
+
+  cmd = CMD_X;
+
+  return true;
+}
+
 int main(const int argc, const char *argv[]) {
 
   const int heap_size = 0x400000 - (int)_heap;
@@ -270,6 +263,9 @@ int main(const int argc, const char *argv[]) {
     if (argument_T_MM(argv[i]))
       continue;
 
+    if (argument_X(argv[i]))
+      continue;
+
     if (argument_help(argv[i]))
       continue;
 
@@ -290,6 +286,8 @@ int main(const int argc, const char *argv[]) {
     parse_test_swap_file();
   } else if (cmd == CMD_T_MM) {
     test_mm_functions();
+  } else if (cmd == CMD_X) {
+    test_rendering_tiles();
   }
 
   return 0;
