@@ -8,13 +8,6 @@
 #include "id_defs.h"
 #include "id_mm.h"
 
-#define LOCKBIT        0x80 // if set in attributes, block cannot be moved
-#define PURGEBITS      3    // 0-3 level, 0= unpurgable, 3= purge first
-#define PURGEMASK      0xfffc
-#define BASEATTRIBUTES 0 // unlocked, non purgable
-
-#define MAXUMBS 10
-
 typedef struct mmblockstruct {
   memptr                start;
   uint24_t              length;

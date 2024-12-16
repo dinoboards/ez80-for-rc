@@ -6,6 +6,7 @@
 extern void test_rendering_tiles();
 extern void display_img_file();
 extern void create_signon_image();
+extern void test_mm_functions();
 
 #define LEFT   0
 #define RIGHT  256
