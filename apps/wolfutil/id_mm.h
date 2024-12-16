@@ -7,6 +7,11 @@
 
 #define MAXBLOCKS 700
 
+#define LOCKBIT        0x80 // if set in attributes, block cannot be moved
+#define PURGEBITS      3    // 0-3 level, 0= non-purgable, 3= purge first
+#define PURGEMASK      0xfffc
+#define BASEATTRIBUTES 0 // unlocked, non purgable
+
 //==========================================================================
 
 typedef uint8_t *memptr;
