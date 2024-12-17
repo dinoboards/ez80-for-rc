@@ -53,3 +53,5 @@ void validate_wait_only_set_value(const char *value, mem_config_t *mem_config) {
   show_help();
   exit(1);
 }
+
+void validate_number(const char *value, uint8_t *number) { *number = atoi(value); }
