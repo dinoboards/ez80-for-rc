@@ -180,8 +180,6 @@ void MM_Shutdown(void) {
 */
 
 void MM_GetPtr(memptr *baseptr, uint24_t size) {
-  printf("MM_GetPtr(%p, %u)\r\n", baseptr, size);
-
   mmblocktype *scan, *lastscan, *endscan, *purge, *next;
   int          search;
   uint24_t     needed;
@@ -242,7 +240,6 @@ void MM_GetPtr(memptr *baseptr, uint24_t size) {
           purge = next; // purge another if not at scan
         }
         mmrover = mmnew;
-        printf("MM_GetPtr: @ %p\r\n", *baseptr);
         return; // good allocation!
       }
 
@@ -278,7 +275,6 @@ void MM_GetPtr(memptr *baseptr, uint24_t size) {
 */
 
 void MM_FreePtr(memptr *baseptr) {
-  printf("MM_FreePtr(%p)\r\n", baseptr);
   mmblocktype *scan, *last;
 
   last = mmhead;

@@ -160,7 +160,7 @@ extern void        IN_ReadControl(int, ControlInfo *);
 extern void        IN_GetJoyAbs(word joy, word *xp, word *yp);
 extern void        IN_SetupJoy(word joy, word minx, word maxx, word miny, word maxy);
 extern void        IN_StopDemo(void), IN_FreeDemoBuffer(void), IN_Ack(void);
-extern boolean     IN_UserInput(longword delay);
+extern boolean     IN_UserInput(uint24_t delay);
 extern word        IN_GetJoyButtonsDB(word joy);
 extern const char *IN_GetScanName(ScanCode);
 

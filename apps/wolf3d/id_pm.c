@@ -20,19 +20,17 @@ void PM_Startup() {
   char fname[13] = "vswap.";
   strcat(fname, extension);
 
+  printf("Reading file %s\r\n", fname);
   FILE *file = fopen(fname, "rb");
   if (!file)
     CA_CannotOpen(fname);
 
   ChunksInFile = 0;
   fread(&ChunksInFile, sizeof(word), 1, file);
-  printf("ChunksInFile: %d\r\n", ChunksInFile);
   PMSpriteStart = 0;
   fread(&PMSpriteStart, sizeof(word), 1, file);
-  printf("PMSpriteStart: %d\r\n", PMSpriteStart);
   PMSoundStart = 0;
   fread(&PMSoundStart, sizeof(word), 1, file);
-  printf("PMSoundStart: %d\r\n", PMSoundStart);
 
   uint32_t *pageOffsets;
   MM_GetPtr((memptr *)&pageOffsets, (ChunksInFile + 1) * sizeof(int32_t));

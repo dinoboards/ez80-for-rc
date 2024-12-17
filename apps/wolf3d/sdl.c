@@ -1,3 +1,4 @@
+#include <ez80-firmware.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,13 +24,15 @@ int SDL_LockSurface(SDL_Surface *surface IG) { return 0; }
 
 int SDL_FillRect(SDL_Surface *dst IG, const SDL_Rect *rect IG, uint32_t color IG) { return 0; }
 
-uint32_t SDL_GetTicks(void) { return 0; }
+// uint32_t SDL_GetTicks(void) {
+//   return = ez80_timers_ticks_get();
+
+//   return milliseconds;
+// }
 
 int SDL_Init(int32_t flags IG) { return 0; }
 
 const char *SDL_GetError(void) { return NULL; }
-
-void SDL_Quit(void) {}
 
 #ifdef JOYSTICK_SUPPORT
 int SDL_NumJoysticks(void) { return 0; }

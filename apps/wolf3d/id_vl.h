@@ -80,8 +80,8 @@ void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int scx, in
 void VL_MemToScreenScaledCoordN(
     byte *source, int origwidth, int origheight, int srcx, int srcy, int destx, int desty, int width, int height);
 
-void inline VL_MemToScreen(byte *source, int width, int height, int x, int y) {
-  VL_MemToScreenScaledCoordA(source, width, height, scaleFactor * x, scaleFactor * y);
+static void inline VL_MemToScreen(byte *source, int width, int height, int x, int y) {
+  VL_MemToScreenScaledCoordA(source, width, height, x, y);
 }
 
 void VL_MaskedToScreen(byte *source, int width, int height, int x, int y);

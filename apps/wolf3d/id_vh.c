@@ -21,8 +21,6 @@ void VWB_DrawPropString(const char *string) {
 
   byte *vbuf = LOCK();
 
-  printf("VWB_DrawPropString(%s)\r\n", string);
-
   font   = (fontstruct *)grsegs[STARTFONT + fontnumber];
   height = font->height;
   dest   = vbuf + (py * curPitch + px);
@@ -136,7 +134,10 @@ void VWB_DrawPic(int x, int y, int chunknum) {
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
 
-  VL_MemToScreen(grsegs[chunknum], width, height, x, y);
+  printf("VWB_DrawPic(%d, %d, picnum: %d)\r\n", x, y, picnum);
+  printf("width: %d, height: %d\r\n", width, height);
+
+  VL_MemToScreen(grsegs[chunknum], width, height, 0, y);
 }
 
 void VWB_DrawPicScaledCoord(int scx, int scy, int chunknum) {
@@ -145,6 +146,9 @@ void VWB_DrawPicScaledCoord(int scx, int scy, int chunknum) {
 
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
+
+  printf("VWB_DrawPicScaledCoord(%d, %d, picnum: %d)\r\n", scx, scy, picnum);
+  printf("width: %d, height: %d\r\n", width, height);
 
   VL_MemToScreenScaledCoordA(grsegs[chunknum], width, height, scx, scy);
 }

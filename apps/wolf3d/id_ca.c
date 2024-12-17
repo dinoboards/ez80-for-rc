@@ -80,13 +80,17 @@ static const char gfilename[] = "vgagraph.";
 static const char gdictname[] = "vgadict.";
 static const char mheadname[] = "maphead.";
 
+#ifdef SOUND_ENABLED
 static const char aheadname[] = "audiohed.";
 static const char afilename[] = "audiot.";
+#endif
 
 void CA_CannotOpen(const char *string);
 
-static int32_t  grstarts[NUMCHUNKS + 1];
+static int32_t grstarts[NUMCHUNKS + 1];
+#ifdef SOUND_ENABLED
 static int32_t *audiostarts; // array of offsets in audio / audiot
+#endif
 
 #ifdef GRHEADERLINKED
 huffnode *grhuffman;
@@ -566,6 +570,7 @@ void CAL_SetupMapFile(void) {
 ======================
 */
 
+#ifdef SOUND_ENABLED
 void CAL_SetupAudioFile(void) {
   char fname[13];
 
@@ -590,6 +595,7 @@ void CAL_SetupAudioFile(void) {
   if (audiohandle == -1)
     CA_CannotOpen(fname);
 }
+#endif
 
 //==========================================================================
 
@@ -611,8 +617,9 @@ void CA_Startup(void) {
 
   CAL_SetupMapFile();
   CAL_SetupGrFile();
+#ifdef SOUND_ENABLED
   CAL_SetupAudioFile();
-
+#endif
   mapon = -1;
 }
 
@@ -904,10 +911,10 @@ void CA_CacheScreen(int chunk) {
   while (GRFILEPOS(next) == -1) // skip past any sparse tiles
     next++;
   compressed = GRFILEPOS(next) - pos;
-
   lseek(grhandle, pos, SEEK_SET);
 
   MM_GetPtr(&bigbufferseg, compressed);
+  printf("Reading from vgagraph.xxx (%d)\r\n", (int)pos);
   read(grhandle, bigbufferseg, compressed);
   source = (int32_t *)bigbufferseg;
 
@@ -921,13 +928,20 @@ void CA_CacheScreen(int chunk) {
   MM_GetPtr((memptr *)&pic, 64000);
   CAL_HuffExpand((byte *)source, pic, expanded, grhuffman);
 
+#define CLIP_LEFT 8
+#define CLIP_SKIP 5
+
   byte *vbuf = LOCK();
-  for (int y = 0, scy = 0; y < 200; y++, scy += scaleFactor) {
-    for (int x = 0, scx = 0; x < 320; x++, scx += scaleFactor) {
-      byte col = pic[(y * 80 + (x >> 2)) + (x & 3) * 80 * 200];
-      for (unsigned i = 0; i < scaleFactor; i++)
-        for (unsigned j = 0; j < scaleFactor; j++)
-          vbuf[(scy + i) * curPitch + scx + j] = col;
+  // int   cx   = CLIP_LEFT;
+  for (int y = 0; y < 200; y++) {
+    for (int x = 0; x < 256; x++) {
+      const byte col = pic[(y * 80 + (x >> 2)) + (x & 3) * 80 * 200];
+
+      vbuf[(y)*curPitch + x] = col;
+
+      // cx++;
+      // if (x % CLIP_SKIP == 0)
+      //   cx++;
     }
   }
   UNLOCK();

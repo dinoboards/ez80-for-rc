@@ -336,6 +336,8 @@ void US_ControlPanel(ScanCode scancode) {
   MenuFadeIn();
   StartGame = 0;
 
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+
   //
   // MAIN MENU LOOP
   //
