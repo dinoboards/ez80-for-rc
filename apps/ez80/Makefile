@@ -16,4 +16,5 @@ EZ80.COM:
 	find-extended-memory.c \
 	report-memory-timing.c \
 	validate-mem-set-value.c \
-	config-flash.c
+	config-flash.c \
+	config_set_tick_rate.c

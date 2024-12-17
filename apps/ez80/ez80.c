@@ -15,22 +15,44 @@ void show_help() {
   printf("                    Wait States: 0-7, Bus Cycles: 1-15\r\n");
   printf("  -I=<number>[W|B]  Set I/O Wait States or Bus Cycles (CS2)\r\n");
   printf("  -S0               Scan extended memory\r\n");
+  printf("  -T=<number>       Set tick frequency rate (50 or 60)\r\n");
   printf("  -? /?             Show this help message\r\n");
 }
 
-#define CMD_NONE 0
-#define CMD_HELP 1
-#define CMD_M    2
-#define CMD_I    4
-#define CMD_M0   8
-#define CMD_S0   16
-#define CMD_F    32
+#define CMD_NONE   0
+#define CMD_HELP   1
+#define CMD_M      2
+#define CMD_I      4
+#define CMD_M0     8
+#define CMD_S0     16
+#define CMD_F      32
+#define CMD_T_SET  64
+#define CMD_T_SHOW 128
 
 static mem_config_t flash_config;
 static mem_config_t mem_config;
 static mem_config_t io_config;
 static mem_config_t mem0_config;
+static uint8_t      tick_value;
 static uint24_t     cmd = 0;
+
+// if just -T, then CMD_T_SHOW
+// if -T=<number>, then CMD_T_SET
+bool argument_T(const char *arg) {
+  if (strncmp(arg, "-T=", 3) == 0 || strncmp(arg, "/T=", 3) == 0) {
+    cmd |= CMD_T_SET;
+    validate_number(arg + 3, &tick_value);
+
+    return true;
+  }
+
+  if (strcmp(arg, "-T") == 0 || strcmp(arg, "/T") == 0) {
+    cmd |= CMD_T_SHOW;
+    return true;
+  }
+
+  return false;
+}
 
 bool argument_F(const char *arg) {
   if (strncmp(arg, "-F=", 3) != 0 && strncmp(arg, "/F=", 3) != 0)
@@ -120,7 +142,6 @@ bool argument_help(const char *arg) {
 }
 
 int main(const int argc, const char *argv[]) {
-
   if (argc == 1) {
     report_memory_timing();
     return 0;
@@ -140,6 +161,9 @@ int main(const int argc, const char *argv[]) {
       continue;
 
     if (argument_F(argv[i]))
+      continue;
+
+    if (argument_T(argv[i]))
       continue;
 
     if (argument_help(argv[i]))
@@ -166,6 +190,9 @@ int main(const int argc, const char *argv[]) {
 
   if (cmd & CMD_M0)
     config_mem0(mem0_config);
+
+  if (cmd & CMD_T_SET)
+    config_set_tick_rate(tick_value);
 
   report_memory_timing();
   return 0;

@@ -42,4 +42,6 @@ void report_memory_timing(void) {
   } else {
     printf("            I/O Wait States: %u\r\n", io_bus_cycles);
   }
+
+  printf("             TMR1 Tick rate: %d (Counter: %u)\r\n", ez80_timers_freq_tick_get(), ez80_timers_ticks_get());
 }
