@@ -1,5 +1,7 @@
 #include "wl_def.h"
 
+#include "id_mm.h"
+
 #include <v99x8.h>
 
 pictabletype *pictable;
@@ -24,10 +26,6 @@ void VWB_DrawPropString(const char *string) {
   font   = (fontstruct *)grsegs[STARTFONT + fontnumber];
   height = font->height;
   dest   = vbuf + (py * curPitch + px);
-
-  printf("fontnumber: %d\r\n", fontnumber);
-  printf("font: %p, height: %d, dest: %p\r\n", font, height, dest);
-  printf("curPitch: %d, px: %d, py: %d\r\n", curPitch, px, py);
 
   while ((ch = (byte)*string++) != 0) {
     width = step = font->width[ch];
@@ -70,9 +68,8 @@ void VL_MungePic(byte *source, unsigned width, unsigned height) {
   //
   // copy the pic to a temp buffer
   //
-  temp = (byte *)malloc(size);
+  MM_GetPtr((memptr *)&temp, size);
   printf("temp: %p\r\n", temp);
-  CHECKMALLOCRESULT(temp);
   memcpy(temp, source, size);
 
   //
@@ -90,7 +87,7 @@ void VL_MungePic(byte *source, unsigned width, unsigned height) {
     }
   }
 
-  free(temp);
+  MM_FreePtr((memptr *)&temp);
 }
 
 void VWL_MeasureString(const char *string, word *width, word *height, fontstruct *font) {

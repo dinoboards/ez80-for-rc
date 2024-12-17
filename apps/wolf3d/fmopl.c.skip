@@ -84,6 +84,9 @@ Revision History:
 
 // #include "ymdeltat.h"
 
+#include "wl_def.h"
+#include "id_mm.h"
+
 #define logerror(...)
 
 #include "fmopl.h"
@@ -1840,7 +1843,7 @@ static void OPLResetChip(FM_OPL *OPL) {
 /* 'rate'  is sampling rate  */
 static FM_OPL *OPLCreate(int type, int clock, int rate) {
   char   *ptr;
-  FM_OPL *OPL;
+  // FM_OPL *OPL;
   int     state_size;
 
   if (OPL_LockTable() == -1)
@@ -1855,39 +1858,38 @@ static FM_OPL *OPLCreate(int type, int clock, int rate) {
 #endif
 
   /* allocate memory block */
-  ptr = (char *)malloc(state_size);
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+  MM_GetPtr((memptr*)&ptr, state_size);
+  Quit("update to support *ptr being updated if memory is compacted");
 
-  if (ptr == NULL)
-    return NULL;
+//   /* clear */
+//   memset(ptr, 0, state_size);
 
-  /* clear */
-  memset(ptr, 0, state_size);
+//   OPL = (FM_OPL *)(void *)ptr; // ptr comes from malloc, so it is correctly aligned
 
-  OPL = (FM_OPL *)(void *)ptr; // ptr comes from malloc, so it is correctly aligned
+//   ptr += sizeof(FM_OPL);
 
-  ptr += sizeof(FM_OPL);
+// #if BUILD_Y8950
+//   if (type & OPL_TYPE_ADPCM) {
+//     OPL->deltat = (YM_DELTAT *)ptr;
+//   }
+//   ptr += sizeof(YM_DELTAT);
+// #endif
 
-#if BUILD_Y8950
-  if (type & OPL_TYPE_ADPCM) {
-    OPL->deltat = (YM_DELTAT *)ptr;
-  }
-  ptr += sizeof(YM_DELTAT);
-#endif
+//   OPL->type  = type;
+//   OPL->clock = clock;
+//   OPL->rate  = rate;
 
-  OPL->type  = type;
-  OPL->clock = clock;
-  OPL->rate  = rate;
+//   /* init global tables */
+//   OPL_initalize(OPL);
 
-  /* init global tables */
-  OPL_initalize(OPL);
-
-  return OPL;
+//   return OPL;
 }
 
 /* Destroy one of virtual YM3812 */
 static void OPLDestroy(FM_OPL *OPL) {
   OPL_UnLockTable();
-  free(OPL);
+  // free(OPL);
 }
 
 /* Optional handlers */

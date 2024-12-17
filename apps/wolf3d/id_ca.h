@@ -9,15 +9,13 @@
 #define UNCACHEGRCHUNK(chunk)                                                                                                      \
   {                                                                                                                                \
     if (grsegs[chunk]) {                                                                                                           \
-      free(grsegs[chunk]);                                                                                                         \
-      grsegs[chunk] = NULL;                                                                                                        \
+      MM_FreePtr((memptr *)&grsegs[chunk]);                                                                                        \
     }                                                                                                                              \
   }
 #define UNCACHEAUDIOCHUNK(chunk)                                                                                                   \
   {                                                                                                                                \
     if (audiosegs[chunk]) {                                                                                                        \
-      free(audiosegs[chunk]);                                                                                                      \
-      audiosegs[chunk] = NULL;                                                                                                     \
+      MM_FreePtr((memptr *)&audiosegs[chunk]);                                                                                     \
     }                                                                                                                              \
   }
 
@@ -53,8 +51,13 @@ void CA_RLEWexpand(word *source, word *dest, int32_t length, word rlewtag);
 void CA_Startup(void);
 void CA_Shutdown(void);
 
+#ifdef SOUND_ENABLED
 int32_t CA_CacheAudioChunk(int chunk);
 void    CA_LoadAllSounds(void);
+#else
+#define CA_CacheAudioChunk(chunk) 0
+#define CA_LoadAllSounds()
+#endif
 
 void CA_CacheGrChunk(int chunk);
 void CA_CacheMap(int mapnum);

@@ -8,6 +8,8 @@
 #include "id_vl.h"
 #include "wl_def.h"
 
+#include "id_mm.h"
+
 /*
 =============================================================================
 
@@ -760,11 +762,6 @@ void SignonScreen(void) {
   printf("Showing signon screen\r\n");
   VL_SetVGAPlaneMode();
 
-  // uint8_t *buffer = malloc(256 * 200);
-  // if (buffer == NULL) {
-  //   Quit("Error: Unable to allocate buffer\r\n");
-  // }
-
   FILE *f = fopen("signon.img", "rb");
   if (f == NULL) {
     Quit("Error: Unable to open file SIGNON.IMG\r\n");
@@ -807,8 +804,6 @@ void FinishSignon(void) {
 #ifndef JAPAN
   SETFONTCOLOR(14, 4);
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
 #ifdef SPANISH
   US_CPrint("Oprima una tecla");
 #else
@@ -817,14 +812,10 @@ void FinishSignon(void) {
 
 #endif
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   VH_UpdateScreen();
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   if (!param_nowait)
     IN_Ack();
-
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #ifndef JAPAN
   VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
@@ -865,6 +856,7 @@ void FinishSignon(void) {
 //   0: player weapons
 //   1: boss weapons
 
+#ifdef SOUND_ENABLED
 static int wolfdigimap[] = {
 // These first sounds are in the upload version
 #ifndef SPEAR
@@ -938,6 +930,7 @@ void InitDigiMap(void) {
     SD_PrepareSound(map[1]);
   }
 }
+#endif
 
 #ifndef SPEAR
 CP_iteminfo MusicItems  = {CTL_X, CTL_Y, 6, 0, 32};
@@ -971,15 +964,15 @@ void DoJukebox(void) {
       INTROCW3_MUS, NAZI_RAP_MUS, TWELFTH_MUS,  ZEROHOUR_MUS,
       ULTIMATE_MUS, PACMAN_MUS
 #else
-      XFUNKIE_MUS,  // 0
-      XDEATH_MUS,   // 2
-      XTIPTOE_MUS,  // 4
-      XTHEEND_MUS,  // 7
-      XEVIL_MUS,    // 17
-      XJAZNAZI_MUS, // 18
-      XPUTIT_MUS,   // 21
-      XGETYOU_MUS,  // 22
-      XTOWER2_MUS   // 23
+      XFUNKIE_MUS,           // 0
+      XDEATH_MUS,            // 2
+      XTIPTOE_MUS,           // 4
+      XTHEEND_MUS,           // 7
+      XEVIL_MUS,             // 17
+      XJAZNAZI_MUS,          // 18
+      XPUTIT_MUS,            // 21
+      XGETYOU_MUS,           // 22
+      XTOWER2_MUS            // 23
 #endif
   };
 
@@ -1130,7 +1123,7 @@ static void InitGame() {
   //
   // build some tables
   //
-#ifdef TODO
+#ifdef SOUND_ENABLED
   // disable audio setup for now
   InitDigiMap();
 #endif
@@ -1161,28 +1154,20 @@ static void InitGame() {
   CA_CacheGrChunk(STARTFONT);
   CA_CacheGrChunk(STATUSBARPIC);
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
   LoadLatchMem();
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   BuildTables(); // trig tables
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   SetupWalls();
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   NewViewSize(viewsize);
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   //
   // initialize variables
   //
   InitRedShifts();
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 #ifndef SPEARDEMO
   if (!didjukebox)
 #endif
     FinishSignon();
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #ifdef NOTYET
   vdisp = (byte *)(0xa0000 + PAGE1START);
@@ -1394,7 +1379,6 @@ static void DemoLoop() {
 #endif
 #endif
 
-  printf("StartCPMMusic\n");
   StartCPMusic(INTROSONG);
 
 #ifndef JAPAN
@@ -1496,6 +1480,7 @@ static void DemoLoop() {
 */
 
 int main(/*int argc, char* argv[]*/) {
+  MM_Startup();
   // TODO: add ability to find all available memory
   // and assign to heap
   const int heap_size = 0x400000 - (int)_heap;
@@ -1503,6 +1488,8 @@ int main(/*int argc, char* argv[]*/) {
   malloc_init(heap_size); // heap size of 1.5MB
 
   CheckForEpisodes();
+
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   InitGame();
 

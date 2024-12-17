@@ -1259,6 +1259,12 @@ extern boolean  spearflag;
 
 #define ClearMemory SD_StopDigitized
 
+#ifndef ENABLE_SOUND
+#define PlaySoundLocTile(s, tx, ty)
+#define PlaySoundLocGlobal(...)
+#define PlaySoundLocActor(...)
+#define UpdateSoundLoc()
+#else
 // JAB
 #define PlaySoundLocTile(s, tx, ty)                                                                                                \
   PlaySoundLocGlobal(s, (((int32_t)(tx) << TILESHIFT) + (1L << (TILESHIFT - 1))),                                                  \
@@ -1267,6 +1273,7 @@ extern boolean  spearflag;
 void PlaySoundLocGlobal(word s, fixed gx, fixed gy);
 void UpdateSoundLoc(void);
 
+#endif
 /*
 =============================================================================
 

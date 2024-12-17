@@ -4,6 +4,8 @@
 
 #include "sdl.h"
 
+#include "id_mm.h"
+
 /*
 =============================================================================
 
@@ -765,7 +767,7 @@ void StartMusic() {
   SD_StartMusic(STARTMUSIC + lastmusicchunk);
 }
 
-void ContinueMusic(int offs) {
+void ContinueMusic(int offs __attribute__((unused))) {
   SD_MusicOff();
   lastmusicchunk = (musicnames)songs[gamestate.mapon + gamestate.episode * 10];
   SD_ContinueMusic(STARTMUSIC + lastmusicchunk, offs);

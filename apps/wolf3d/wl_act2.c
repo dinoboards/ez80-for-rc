@@ -4,6 +4,8 @@
 #include <math.h>
 #include <stdio.h>
 
+#include "id_mm.h"
+
 /*
 =============================================================================
 
@@ -1054,6 +1056,7 @@ void A_DeathScream(objtype *ob) {
     PlaySoundLocActor(AHHHGSND, ob);
     break;
 
+#ifdef ENABLE_SOUND
   case guardobj: {
     int sounds[9] = {DEATHSCREAM1SND, DEATHSCREAM2SND, DEATHSCREAM3SND,
 #ifndef APOGEE_1_0
@@ -1069,6 +1072,8 @@ void A_DeathScream(objtype *ob) {
 #endif
     break;
   }
+#endif
+
   case officerobj:
     PlaySoundLocActor(NEINSOVASSND, ob);
     break;
@@ -3460,8 +3465,7 @@ void T_BJJump(objtype *ob) {
 =
 ===============
 */
-
-void T_BJYell(objtype *ob) {
+void T_BJYell(objtype *ob __attribute__((unused))) {
   PlaySoundLocActor(YEAHSND, ob); // JAB
 }
 
