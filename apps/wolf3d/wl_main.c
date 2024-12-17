@@ -1410,7 +1410,7 @@ static void DemoLoop() {
       VW_UpdateScreen();
       printf("%s:%d\r\n", __FILE__, __LINE__);
 
-      VW_FadeIn();
+      // VW_FadeIn();
       printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #endif
@@ -1419,18 +1419,18 @@ static void DemoLoop() {
       // if (IN_UserInput(TickBase * 5))
       //   break;
 
-      VW_FadeOut();
+      // VW_FadeOut();
       //
       // credits page
       //
       CA_CacheScreen(CREDITSPIC);
       VW_UpdateScreen();
-      VW_FadeIn();
+      // VW_FadeIn();
 
       printf("%s:%d\r\n", __FILE__, __LINE__);
       // if (IN_UserInput(TickBase * 5))
       //   break;
-      VW_FadeOut();
+      // VW_FadeOut();
       //
       // high scores
       //
@@ -1439,7 +1439,7 @@ static void DemoLoop() {
 
       DrawHighScores();
       VW_UpdateScreen();
-      VW_FadeIn();
+      // VW_FadeIn();
 
       // if (IN_UserInput(TickBase * 5))
       //   break;
@@ -1457,7 +1457,7 @@ static void DemoLoop() {
 
       if (playstate == ex_abort)
         break;
-      VW_FadeOut();
+      // VW_FadeOut();
       if (screenHeight % 200 != 0)
         VL_ClearScreen(0);
       StartCPMusic(INTROSONG);
@@ -1465,7 +1465,7 @@ static void DemoLoop() {
 
     printf("%s:%d\r\n", __FILE__, __LINE__);
 
-    VW_FadeOut();
+    // VW_FadeOut();
 
     printf("%s:%d\r\n", __FILE__, __LINE__);
 

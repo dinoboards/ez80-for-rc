@@ -1075,7 +1075,7 @@ void DrawHighScores(void) {
     for (str = buffer; *str; str++)
       *str = *str + (129 - '0'); // Used fixed-width numbers (129...)
     USL_MeasureString(buffer, &w, &h);
-    PrintX = (34 * 8) - 8 - w;
+    PrintX = (32 * 8) - 8 - w;
 #else
     USL_MeasureString(buffer, &w, &h);
     PrintX = 292 - w;

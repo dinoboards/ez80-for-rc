@@ -196,7 +196,7 @@ boolean CA_LoadFile(const char *filename, memptr *ptr) {
 ============================================================================
 */
 
-static void CAL_HuffExpand(byte *source, byte *dest, int32_t length, huffnode *hufftable) {
+static void CAL_HuffExpand(byte *source, byte *dest, int24_t length, huffnode *hufftable) {
   byte     *end;
   huffnode *headptr, *huffptr;
 
@@ -914,8 +914,9 @@ void CA_CacheScreen(int chunk) {
   lseek(grhandle, pos, SEEK_SET);
 
   MM_GetPtr(&bigbufferseg, compressed);
-  printf("Reading from vgagraph.xxx (%d)\r\n", (int)pos);
+  printf("%d: Reading from vgagraph.xxx (%d)\r\n", ez80_timers_ticks_get(), (int)pos);
   read(grhandle, bigbufferseg, compressed);
+  printf("%d: Read %d bytes\r\n", ez80_timers_ticks_get(), (int)compressed);
   source = (int32_t *)bigbufferseg;
 
   expanded = *source++;
@@ -926,24 +927,28 @@ void CA_CacheScreen(int chunk) {
   //
   byte *pic;
   MM_GetPtr((memptr *)&pic, 64000);
+  printf("%d: Expanding %d bytes\r\n", ez80_timers_ticks_get(), (int)expanded);
   CAL_HuffExpand((byte *)source, pic, expanded, grhuffman);
+  printf("%d: Expanded\r\n", ez80_timers_ticks_get());
 
 #define CLIP_LEFT 8
 #define CLIP_SKIP 5
 
   byte *vbuf = LOCK();
-  // int   cx   = CLIP_LEFT;
   for (int y = 0; y < 200; y++) {
+    int cx = CLIP_LEFT;
+
     for (int x = 0; x < 256; x++) {
-      const byte col = pic[(y * 80 + (x >> 2)) + (x & 3) * 80 * 200];
+      const byte col = pic[(y * 80 + (cx >> 2)) + (cx & 3) * 80 * 200];
 
-      vbuf[(y)*curPitch + x] = col;
+      vbuf[y * curPitch + x] = col;
 
-      // cx++;
-      // if (x % CLIP_SKIP == 0)
-      //   cx++;
+      cx++;
+      if (x % CLIP_SKIP == 0)
+        cx++;
     }
   }
+  printf("%d: written to surface\r\n", ez80_timers_ticks_get());
   UNLOCK();
   MM_FreePtr((memptr *)&pic);
   MM_FreePtr((memptr *)&bigbufferseg);
