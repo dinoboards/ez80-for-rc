@@ -19,6 +19,8 @@ loaded into the data segment
 
 #include "wl_def.h"
 
+#include "id_mm.h"
+
 #define THREEBYTEGRSTARTS
 
 /*
@@ -166,14 +168,14 @@ boolean CA_WriteFile(const char *filename, void *ptr, int32_t length) {
 boolean CA_LoadFile(const char *filename, memptr *ptr) {
   int32_t size;
 
+  printf("Load Fille: %s\r\n", filename);
   const int handle = open(filename, O_RDONLY | O_BINARY);
   if (handle == -1)
     return false;
 
   size = lseek(handle, 0, SEEK_END);
   lseek(handle, 0, SEEK_SET);
-  *ptr = malloc(size);
-  CHECKMALLOCRESULT(*ptr);
+  MM_GetPtr((memptr *)&ptr, size);
   if (!read(handle, *ptr, size)) {
     close(handle);
     return false;
@@ -467,14 +469,13 @@ void CAL_SetupGrFile(void) {
   //
   // load the pic and sprite headers into the arrays in the data segment
   //
-  pictable = (pictabletype *)malloc(NUMPICS * sizeof(pictabletype));
-  CHECKMALLOCRESULT(pictable);
+  MM_GetPtr((memptr *)&pictable, NUMPICS * sizeof(pictabletype));
   CAL_GetGrChunkLength(STRUCTPIC); // position file pointer
-  compseg = (byte *)malloc(chunkcomplen);
-  CHECKMALLOCRESULT(compseg);
+
+  MM_GetPtr((memptr *)&compseg, chunkcomplen);
   read(grhandle, compseg, chunkcomplen);
   CAL_HuffExpand(compseg, (byte *)pictable, NUMPICS * sizeof(pictabletype), grhuffman);
-  free(compseg);
+  MM_FreePtr((memptr *)&compseg);
 }
 
 //==========================================================================
@@ -503,9 +504,9 @@ void CAL_SetupMapFile(void) {
   if (handle == -1)
     CA_CannotOpen(fname);
 
-  length            = NUMMAPS * 4 + 2; // used to be "filelength(handle);"
-  mapfiletype *tinf = (mapfiletype *)malloc(sizeof(mapfiletype));
-  CHECKMALLOCRESULT(tinf);
+  length = NUMMAPS * 4 + 2; // used to be "filelength(handle);"
+  mapfiletype *tinf;
+  MM_GetPtr((memptr *)&tinf, sizeof(mapfiletype));
 
   read(handle, tinf, length);
   close(handle);
@@ -540,20 +541,18 @@ void CAL_SetupMapFile(void) {
     if (pos < 0) // $FFFFFFFF start is a sparse map
       continue;
 
-    mapheaderseg[i] = (maptype *)malloc(sizeof(maptype));
-    CHECKMALLOCRESULT(mapheaderseg[i]);
+    MM_GetPtr((memptr *)&mapheaderseg[i], sizeof(maptype));
     lseek(maphandle, pos, SEEK_SET);
     read(maphandle, (memptr)mapheaderseg[i], sizeof(maptype));
   }
 
-  free(tinf);
+  MM_FreePtr((memptr *)&tinf);
 
   //
   // allocate space for 3 64*64 planes
   //
   for (i = 0; i < MAPPLANES; i++) {
-    mapsegs[i] = (word *)malloc(maparea * 2);
-    CHECKMALLOCRESULT(mapsegs[i]);
+    MM_GetPtr((memptr *)&mapsegs[i], maparea * 2);
   }
 }
 
@@ -641,7 +640,7 @@ void CA_Shutdown(void) {
 
   for (i = 0; i < NUMCHUNKS; i++)
     UNCACHEGRCHUNK(i);
-  free(pictable);
+  MM_FreePtr((memptr *)&pictable);
 
   switch (oldsoundmode) {
   case sdm_Off:
@@ -667,7 +666,7 @@ void CA_Shutdown(void) {
 =
 ======================
 */
-
+#ifdef SOUND_ENABLED
 int32_t CA_CacheAudioChunk(int chunk) {
   int32_t pos  = audiostarts[chunk];
   int32_t size = audiostarts[chunk + 1] - pos;
@@ -675,8 +674,8 @@ int32_t CA_CacheAudioChunk(int chunk) {
   if (audiosegs[chunk])
     return size; // already in memory
 
-  audiosegs[chunk] = (byte *)malloc(size);
-  CHECKMALLOCRESULT(audiosegs[chunk]);
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+  MM_GetPtr((memptr *)&audiosegs[chunk], size);
 
   lseek(audiohandle, pos, SEEK_SET);
   read(audiohandle, audiosegs[chunk], size);
@@ -694,8 +693,9 @@ void CA_CacheAdlibSoundChunk(int chunk) {
   lseek(audiohandle, pos, SEEK_SET);
   read(audiohandle, bufferseg, ORIG_ADLIBSOUND_SIZE - 1); // without data[1]
 
-  AdLibSound *sound = (AdLibSound *)malloc(size + sizeof(AdLibSound) - ORIG_ADLIBSOUND_SIZE);
-  CHECKMALLOCRESULT(sound);
+  AdLibSound *sound;
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+  MM_GetPtr((memptr *)&sound, size + sizeof(AdLibSound) - ORIG_ADLIBSOUND_SIZE);
 
   byte *ptr              = (byte *)bufferseg;
   sound->common.length   = READLONGWORD(&ptr);
@@ -722,6 +722,7 @@ void CA_CacheAdlibSoundChunk(int chunk) {
 
   audiosegs[chunk] = (byte *)sound;
 }
+#endif
 
 //===========================================================================
 
@@ -734,7 +735,7 @@ void CA_CacheAdlibSoundChunk(int chunk) {
 =
 ======================
 */
-
+#ifdef SOUND_ENABLED
 void CA_LoadAllSounds(void) {
   unsigned start, i;
 
@@ -776,7 +777,7 @@ cachein:
       CA_CacheAudioChunk(start);
   }
 }
-
+#endif
 //===========================================================================
 
 /*
@@ -823,9 +824,7 @@ void CAL_ExpandGrChunk(int chunk, int32_t *source) {
   // allocate final space, decompress it, and free bigbuffer
   // Sprites need to have shifts made and various other junk
   //
-  grsegs[chunk] = (byte *)malloc(expanded);
-  printf(".");
-  CHECKMALLOCRESULT(grsegs[chunk]);
+  MM_GetPtr((memptr *)&grsegs[chunk], expanded);
   CAL_HuffExpand((byte *)source, grsegs[chunk], expanded, grhuffman);
 }
 
@@ -869,15 +868,14 @@ void CA_CacheGrChunk(int chunk) {
     read(grhandle, bufferseg, compressed);
     source = bufferseg;
   } else {
-    source = (int32_t *)malloc(compressed);
-    CHECKMALLOCRESULT(source);
+    MM_GetPtr((memptr *)&source, compressed);
     read(grhandle, source, compressed);
   }
 
   CAL_ExpandGrChunk(chunk, source);
 
   if (compressed > BUFFERSIZE)
-    free(source);
+    MM_FreePtr((memptr *)&source);
 }
 
 //==========================================================================
@@ -909,8 +907,7 @@ void CA_CacheScreen(int chunk) {
 
   lseek(grhandle, pos, SEEK_SET);
 
-  bigbufferseg = malloc(compressed);
-  CHECKMALLOCRESULT(bigbufferseg);
+  MM_GetPtr(&bigbufferseg, compressed);
   read(grhandle, bigbufferseg, compressed);
   source = (int32_t *)bigbufferseg;
 
@@ -920,8 +917,8 @@ void CA_CacheScreen(int chunk) {
   // allocate final space, decompress it, and free bigbuffer
   // Sprites need to have shifts made and various other junk
   //
-  byte *pic = (byte *)malloc(64000);
-  CHECKMALLOCRESULT(pic);
+  byte *pic;
+  MM_GetPtr((memptr *)&pic, 64000);
   CAL_HuffExpand((byte *)source, pic, expanded, grhuffman);
 
   byte *vbuf = LOCK();
@@ -934,8 +931,8 @@ void CA_CacheScreen(int chunk) {
     }
   }
   UNLOCK();
-  free(pic);
-  free(bigbufferseg);
+  MM_FreePtr((memptr *)&pic);
+  MM_FreePtr((memptr *)&bigbufferseg);
 }
 
 //==========================================================================
@@ -979,8 +976,7 @@ void CA_CacheMap(int mapnum) {
     if (compressed <= BUFFERSIZE)
       source = (word *)bufferseg;
     else {
-      bigbufferseg = malloc(compressed);
-      CHECKMALLOCRESULT(bigbufferseg);
+      MM_GetPtr(&bigbufferseg, compressed);
       source = (word *)bigbufferseg;
     }
 
@@ -994,11 +990,10 @@ void CA_CacheMap(int mapnum) {
     //
     expanded = *source;
     source++;
-    buffer2seg = (word *)malloc(expanded);
-    CHECKMALLOCRESULT(buffer2seg);
+    MM_GetPtr((memptr *)&buffer2seg, expanded);
     CAL_CarmackExpand((byte *)source, buffer2seg, expanded);
     CA_RLEWexpand(buffer2seg + 1, dest, size, RLEWtag);
-    free(buffer2seg);
+    MM_FreePtr((memptr *)&buffer2seg);
 
 #else
     //
@@ -1008,7 +1003,7 @@ void CA_CacheMap(int mapnum) {
 #endif
 
     if (compressed > BUFFERSIZE)
-      free(bigbufferseg);
+      MM_FreePtr((memptr *)&bigbufferseg);
   }
 }
 

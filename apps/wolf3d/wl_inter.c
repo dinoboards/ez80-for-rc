@@ -2,6 +2,8 @@
 
 #include "wl_def.h"
 
+#include "id_mm.h"
+
 LRstruct LevelRatios[LRpack];
 int32_t  lastBreathTime = 0;
 
@@ -621,17 +623,21 @@ void LevelCompleted(void) {
           SD_PlaySound(ENDBONUS1SND);
         if (!usedoublebuffering || !(i % (PAR_AMOUNT / 50)))
           VW_UpdateScreen();
+#ifdef SOUND_ENABLED
         while (SD_SoundPlaying())
           BJ_Breathe();
+#endif
         if (IN_CheckAck())
           goto done;
       }
 
       VW_UpdateScreen();
 
+#ifdef SOUND_ENABLED
       SD_PlaySound(ENDBONUS2SND);
       while (SD_SoundPlaying())
         BJ_Breathe();
+#endif
     }
 
 #ifdef SPANISH
@@ -651,9 +657,10 @@ void LevelCompleted(void) {
         SD_PlaySound(ENDBONUS1SND);
       if (!usedoublebuffering || !(i & 1))
         VW_UpdateScreen();
+#ifdef SOUND_ENABLED
       while (SD_SoundPlaying())
         BJ_Breathe();
-
+#endif
       if (IN_CheckAck())
         goto done;
     }
@@ -674,9 +681,10 @@ void LevelCompleted(void) {
       SD_PlaySound(ENDBONUS2SND);
 
     VW_UpdateScreen();
+#ifdef SOUND_ENABLED
     while (SD_SoundPlaying())
       BJ_Breathe();
-
+#endif
     //
     // SECRET RATIO
     //
@@ -689,9 +697,11 @@ void LevelCompleted(void) {
         SD_PlaySound(ENDBONUS1SND);
       if (!usedoublebuffering || !(i & 1))
         VW_UpdateScreen();
+
+#ifdef SOUND_ENABLED
       while (SD_SoundPlaying())
         BJ_Breathe();
-
+#endif
       if (IN_CheckAck())
         goto done;
     }
@@ -711,9 +721,10 @@ void LevelCompleted(void) {
     } else
       SD_PlaySound(ENDBONUS2SND);
     VW_UpdateScreen();
+#ifdef SOUND_ENABLED
     while (SD_SoundPlaying())
       BJ_Breathe();
-
+#endif
     //
     // TREASURE RATIO
     //
@@ -726,8 +737,10 @@ void LevelCompleted(void) {
         SD_PlaySound(ENDBONUS1SND);
       if (!usedoublebuffering || !(i & 1))
         VW_UpdateScreen();
+#ifdef SOUND_ENABLED
       while (SD_SoundPlaying())
         BJ_Breathe();
+#endif
       if (IN_CheckAck())
         goto done;
     }
@@ -747,9 +760,10 @@ void LevelCompleted(void) {
     } else
       SD_PlaySound(ENDBONUS2SND);
     VW_UpdateScreen();
+#ifdef SOUND_ENABLED
     while (SD_SoundPlaying())
       BJ_Breathe();
-
+#endif
     //
     // JUMP STRAIGHT HERE IF KEY PRESSED
     //

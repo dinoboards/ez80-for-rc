@@ -4,6 +4,8 @@
 #include "wl_def.h"
 #include <math.h>
 
+#include "id_mm.h"
+
 #ifdef MYPROFILE
 #include <TIME.H>
 #endif
@@ -151,32 +153,32 @@ void SetSoundLoc(fixed gx, fixed gy) {
 =
 ==========================
 */
-void PlaySoundLocGlobal(word s, fixed gx, fixed gy) {
-  SetSoundLoc(gx, gy);
-  SD_PositionSound(leftchannel, rightchannel);
+// void PlaySoundLocGlobal(word s, fixed gx, fixed gy) {
+//   SetSoundLoc(gx, gy);
+//   SD_PositionSound(leftchannel, rightchannel);
 
-  int channel = SD_PlaySound((soundnames)s);
-  if (channel) {
-    channelSoundPos[channel - 1].globalsoundx = gx;
-    channelSoundPos[channel - 1].globalsoundy = gy;
-    channelSoundPos[channel - 1].valid        = 1;
-  }
-}
+//   int channel = SD_PlaySound((soundnames)s);
+//   if (channel) {
+//     channelSoundPos[channel - 1].globalsoundx = gx;
+//     channelSoundPos[channel - 1].globalsoundy = gy;
+//     channelSoundPos[channel - 1].valid        = 1;
+//   }
+// }
 
-void UpdateSoundLoc(void) {
-  /*    if (SoundPositioned)
-          {
-                  SetSoundLoc(globalsoundx,globalsoundy);
-                  SD_SetPosition(leftchannel,rightchannel);
-          }*/
+// void UpdateSoundLoc(void) {
+//   /*    if (SoundPositioned)
+//           {
+//                   SetSoundLoc(globalsoundx,globalsoundy);
+//                   SD_SetPosition(leftchannel,rightchannel);
+//           }*/
 
-  for (int i = 0; i < MIX_CHANNELS; i++) {
-    if (channelSoundPos[i].valid) {
-      SetSoundLoc(channelSoundPos[i].globalsoundx, channelSoundPos[i].globalsoundy);
-      SD_SetPosition(i, leftchannel, rightchannel);
-    }
-  }
-}
+//   for (int i = 0; i < MIX_CHANNELS; i++) {
+//     if (channelSoundPos[i].valid) {
+//       SetSoundLoc(channelSoundPos[i].globalsoundx, channelSoundPos[i].globalsoundy);
+//       SD_SetPosition(i, leftchannel, rightchannel);
+//     }
+//   }
+// }
 
 /*
 **      JAB End
@@ -909,8 +911,7 @@ char demoname[13] = "DEMO?.";
 #define MAXDEMOSIZE 8192
 
 void StartDemoRecord(int levelnumber) {
-  demobuffer = malloc(MAXDEMOSIZE);
-  CHECKMALLOCRESULT(demobuffer);
+  MM_GetPtr(&demobuffer, MAXDEMOSIZE);
   demoptr     = (int8_t *)demobuffer;
   lastdemoptr = demoptr + MAXDEMOSIZE;
 
@@ -955,7 +956,7 @@ void FinishDemoRecord(void) {
     }
   }
 
-  free(demobuffer);
+  MM_FreePtr((memptr *)&demobuffer);
 }
 
 //==========================================================================
@@ -1097,7 +1098,7 @@ void PlayDemo(int demonumber) {
 #ifdef DEMOSEXTERN
   UNCACHEGRCHUNK(dems[demonumber]);
 #else
-  MM_FreePtr(&demobuffer);
+  MM_FreePtr((memptr *)&demobuffer);
 #endif
 
   demoplayback = false;

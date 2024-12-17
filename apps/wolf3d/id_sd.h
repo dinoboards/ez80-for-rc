@@ -8,7 +8,11 @@
 #ifndef __ID_SD__
 #define __ID_SD__
 
-#define alOut(n, b) YM3812Write(0, n, b)
+// #define alOut(n, b) YM3812Write(0, n, b)
+#define alOut(n, b)
+#define YM3812UpdateOne(...)
+#define YM3812Init(...)
+#define YM3812Write(...)
 
 #define TickBase 70 // 70Hz per tick - used as a base for timer 0
 
@@ -107,27 +111,49 @@ static inline void Delay(int wolfticks) {
 }
 
 // Function prototypes
-extern void SD_Startup(void), SD_Shutdown(void);
+// extern void SD_Startup(void);
+// extern void SD_Shutdown(void);
 
-extern int     SD_GetChannelForDigi(int which);
-extern void    SD_PositionSound(int leftvol, int rightvol);
-extern boolean SD_PlaySound(soundnames sound);
-extern void    SD_SetPosition(int channel, int leftvol, int rightvol);
-extern void    SD_StopSound(void), SD_WaitSoundDone(void);
+extern int  SD_GetChannelForDigi(int which);
+extern void SD_PositionSound(int leftvol, int rightvol);
+// extern boolean SD_PlaySound(soundnames sound);
+extern void SD_SetPosition(int channel, int leftvol, int rightvol);
+extern void SD_StopSound(void);
+extern void SD_WaitSoundDone(void);
 
-extern void SD_StartMusic(int chunk);
-extern void SD_ContinueMusic(int chunk, int startoffs);
-extern void SD_MusicOn(void), SD_FadeOutMusic(void);
-extern int  SD_MusicOff(void);
+// extern void SD_StartMusic(int chunk);
+// extern void SD_ContinueMusic(int chunk, int startoffs);
+// extern void SD_MusicOn(void);
+extern void SD_FadeOutMusic(void);
+// extern int  SD_MusicOff(void);
 
 extern boolean SD_MusicPlaying(void);
-extern boolean SD_SetSoundMode(SDMode mode);
-extern boolean SD_SetMusicMode(SMMode mode);
-extern word    SD_SoundPlaying(void);
+// extern boolean SD_SetSoundMode(SDMode mode);
+// extern boolean SD_SetMusicMode(SMMode mode);
+// extern word    SD_SoundPlaying(void);
 
-extern void SD_SetDigiDevice(SDSMode);
-extern void SD_PrepareSound(int which);
-extern int  SD_PlayDigitized(word which, int leftpos, int rightpos);
-extern void SD_StopDigitized(void);
+// extern void SD_SetDigiDevice(SDSMode);
+// extern void SD_PrepareSound(int which);
+extern int SD_PlayDigitized(word which, int leftpos, int rightpos);
+// extern void SD_StopDigitized(void);
+
+#define SD_StopDigitized()
+#define SD_PlaySound(...)
+#define SD_StartMusic(...)
+#define SD_MusicOff(...) 0
+#define SD_ContinueMusic(...)
+#define SD_MusicOn()
+#define SD_StopSound()
+#define SD_SetMusicMode(...)
+#define SD_SetDigiDevice(...)
+#define SD_SetSoundMode(...)
+#define SD_WaitSoundDone(...)
+#define SD_Startup()
+#define SD_Shutdown()
+#define SD_PrepareSound(...)
+#define SD_SoundPlaying() 0
+
+#define SoundBlasterPresent 0
+#define AdLibPresent        0
 
 #endif

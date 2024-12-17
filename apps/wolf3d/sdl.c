@@ -13,6 +13,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "wl_def.h"
+
+#include "id_mm.h"
+
 void SDL_Delay(uint32_t ms IG) {}
 
 int SDL_LockSurface(SDL_Surface *surface IG) { return 0; }
@@ -74,8 +78,9 @@ SDL_Surface *SDL_CreateRGBSurface(/*uint32_t flags IG,*/
                                   uint32_t Bmask IG,
                                   uint32_t Amask IG*/) {
 
-  int          size    = sizeof(SDL_Surface) + width * height;
-  SDL_Surface *surface = (SDL_Surface *)malloc(size);
+  int          size = sizeof(SDL_Surface) + width * height;
+  SDL_Surface *surface;
+  MM_GetPtr((memptr *)&surface, size);
   memset(surface->pixels, 0, width * height);
   surface->w     = width;
   surface->pitch = width;

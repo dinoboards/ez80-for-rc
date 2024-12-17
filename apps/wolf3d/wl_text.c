@@ -2,6 +2,8 @@
 
 #include "wl_def.h"
 
+#include "id_mm.h"
+
 /*
 =============================================================================
 
@@ -721,7 +723,7 @@ void HelpScreens(void) {
 #ifdef ARTSEXTERN
   UNCACHEGRCHUNK(artnum);
 #else
-  free(layout);
+  MM_FreePtr((memptr *)&layout);
 #endif
 
   VW_FadeOut();
@@ -769,7 +771,7 @@ void EndText(void) {
 #ifdef ARTSEXTERN
   UNCACHEGRCHUNK(artnum);
 #else
-  free(layout);
+  MM_FreePtr((memptr *)&layout);
 #endif
 
   VW_FadeOut();

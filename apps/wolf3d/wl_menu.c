@@ -10,6 +10,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "id_mm.h"
+
 extern int lastgamemusicoffset;
 extern int numEpisodesMissing;
 
@@ -553,7 +555,6 @@ void BossKey(void) {
     palette1[0][i] = 0;
 
   VL_SetPalette(&palette1[0][0]);
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   LoadLatchMem();
 #endif
@@ -581,7 +582,6 @@ void BossKey(void) {
     palette1[0][i] = 0;
 
   VL_SetPalette(&palette1[0][0]);
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   LoadLatchMem();
 #endif
@@ -3190,8 +3190,8 @@ void       ReadAnyControl(ControlInfo *ci) {
 //
 ////////////////////////////////////////////////////////////////////
 int Confirm(const char *string) {
-  int         xit = 0, x, y, tick = 0, lastBlinkTime;
-  int         whichsnd[2] = {ESCPRESSEDSND, SHOOTSND};
+  int xit = 0, x, y, tick = 0, lastBlinkTime;
+  // int         whichsnd[2] = {ESCPRESSEDSND, SHOOTSND};
   ControlInfo ci;
 
   Message(string);

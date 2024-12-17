@@ -1,3 +1,17 @@
+#ifndef SOUND_ENABLED
+#include "sdl.h"
+#include "wl_def.h"
+
+#include "id_mm.h"
+
+#include "id_sd.h"
+
+SMMode  MusicMode = smm_Off;
+SDSMode DigiMode  = sds_Off;
+SDMode  SoundMode = sdm_Off;
+
+#else
+
 //
 //      ID Engine
 //      ID_SD.c - Sound Manager for Wolfenstein 3D
@@ -27,9 +41,11 @@
 //                      NeedsMusic - load music?
 //
 
-#include "fmopl.h"
+// #include "fmopl.h"
 #include "sdl.h"
 #include "wl_def.h"
+
+#include "id_mm.h"
 
 #define ORIGSAMPLERATE 7042
 
@@ -159,7 +175,7 @@ static inline void YM3812UpdateOne(DBOPL::Chip &which, int16_t *stream, int leng
 
 #else
 
-static const int oplChip = 0;
+// static const int oplChip = 0;
 
 #endif
 
@@ -170,27 +186,27 @@ static void SDL_SoundFinished(void) {
 
 #ifdef NOTYET
 
-void        SDL_turnOnPCSpeaker(word timerval);
-#pragma aux SDL_turnOnPCSpeaker = "mov    al,0b6h"                                                                                 \
-                                  "out    43h,al"                                                                                  \
-                                  "mov    al,bl"                                                                                   \
-                                  "out    42h,al"                                                                                  \
-                                  "mov    al,bh"                                                                                   \
-                                  "out    42h,al"                                                                                  \
-                                  "in     al,61h"                                                                                  \
-                                  "or     al,3"                                                                                    \
-                                  "out    61h,al" parm[bx] modify exact[al]
+void SDL_turnOnPCSpeaker(word timerval);
+#pragma aux SDL_turnOnPCSpeaker                                                        = "mov    al,0b6h"                          \
+                                                                                         "out    43h,al"                           \
+                                                                                         "mov    al,bl"                            \
+                                                                                         "out    42h,al"                           \
+                                                                                         "mov    al,bh"                            \
+                                                                                         "out    42h,al"                           \
+                                                                                         "in     al,61h"                           \
+                                                                                         "or     al,3"                             \
+                                                                                         "out    61h,al" parm[bx] modify exact[al]
 
-void        SDL_turnOffPCSpeaker();
-#pragma aux SDL_turnOffPCSpeaker = "in     al,61h"                                                                                 \
-                                   "and    al,0fch"                                                                                \
+void SDL_turnOffPCSpeaker();
+#pragma aux                                                       SDL_turnOffPCSpeaker = "in     al,61h"                           \
+                                                                                         "and    al,0fch"                          \
                                    "out    61h,al" modify exact[al]
 
-void        SDL_setPCSpeaker(byte val);
-#pragma aux SDL_setPCSpeaker = "in     al,61h"                                                                                     \
-                               "and    al,0fch"                                                                                    \
-                               "or     al,ah"                                                                                      \
-                               "out    61h,al" parm[ah] modify exact[al]
+void SDL_setPCSpeaker(byte val);
+#pragma aux                                               SDL_setPCSpeaker             = "in     al,61h"                           \
+                                                                                         "and    al,0fch"                          \
+                                                                                         "or     al,ah"                            \
+                                           "out    61h,al" parm[ah] modify exact[al]
 
 void inline SDL_DoFX() {
   if (pcSound) {
@@ -559,9 +575,9 @@ void SD_PrepareSound(int which) {
 
   int destsamples = (int)((float)size * (float)param_samplerate / (float)ORIGSAMPLERATE);
 
-  byte *wavebuffer = (byte *)malloc(sizeof(headchunk) + sizeof(wavechunk) + destsamples * 2); // dest are 16-bit samples
-  if (wavebuffer == NULL)
-    Quit("Unable to allocate wave buffer for sound %i!\n", which);
+  byte *wavebuffer;
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+  MM_GetPtr((memptr *)&wavebuffer, sizeof(headchunk) + sizeof(wavechunk) + destsamples * 2); // dest are 16-bit samples
 
   headchunk head     = {{'R', 'I', 'F', 'F'},
                         0,
@@ -590,7 +606,7 @@ void SD_PrepareSound(int which) {
 
   SoundChunks[which] = Mix_LoadWAV_RW(SDL_RWFromMem(wavebuffer, sizeof(headchunk) + sizeof(wavechunk) + destsamples * 2), 1);
 
-  free(wavebuffer);
+  MM_FreePtr((memptr *)&wavebuffer);
 }
 
 int SD_PlayDigitized(word which, int leftpos, int rightpos) {
@@ -655,7 +671,8 @@ void SDL_SetupDigi(void) {
   word *soundInfoPage = (word *)(void *)PM_GetPage(ChunksInFile - 1);
   NumDigi             = (word)PM_GetPageSize(ChunksInFile - 1) / 4;
 
-  DigiList = (digiinfo *)malloc(NumDigi * sizeof(digiinfo));
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+  MM_GetPtr((memptr *)&DigiList, NumDigi * sizeof(digiinfo));
   int i;
   for (i = 0; i < NumDigi; i++) {
     // Calculate the size of the digi from the sizes of the pages between
@@ -714,25 +731,25 @@ static void SDL_ALStopSound(void) {
   alOut(alFreqH + 0, 0);
 }
 
-static void SDL_AlSetFXInst(Instrument *inst) {
-  byte c, m;
+static void SDL_AlSetFXInst(Instrument *inst __attribute__((unused))) {
+  // byte c, m;
 
-  m = 0; // modulator cell for channel 0
-  c = 3; // carrier cell for channel 0
-  alOut(m + alChar, inst->mChar);
-  alOut(m + alScale, inst->mScale);
-  alOut(m + alAttack, inst->mAttack);
-  alOut(m + alSus, inst->mSus);
-  alOut(m + alWave, inst->mWave);
-  alOut(c + alChar, inst->cChar);
-  alOut(c + alScale, inst->cScale);
-  alOut(c + alAttack, inst->cAttack);
-  alOut(c + alSus, inst->cSus);
-  alOut(c + alWave, inst->cWave);
+  // m = 0; // modulator cell for channel 0
+  // c = 3; // carrier cell for channel 0
+  // alOut(m + alChar, inst->mChar);
+  // alOut(m + alScale, inst->mScale);
+  // alOut(m + alAttack, inst->mAttack);
+  // alOut(m + alSus, inst->mSus);
+  // alOut(m + alWave, inst->mWave);
+  // alOut(c + alChar, inst->cChar);
+  // alOut(c + alScale, inst->cScale);
+  // alOut(c + alAttack, inst->cAttack);
+  // alOut(c + alSus, inst->cSus);
+  // alOut(c + alWave, inst->cWave);
 
-  // Note: Switch commenting on these lines for old MUSE compatibility
-  //    alOutInIRQ(alFeedCon,inst->nConn);
-  alOut(alFeedCon, 0);
+  // // Note: Switch commenting on these lines for old MUSE compatibility
+  // //    alOutInIRQ(alFeedCon,inst->nConn);
+  // alOut(alFeedCon, 0);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -939,65 +956,67 @@ longword curAlLengthLeft  = 0;
 int      soundTimeCounter = 5;
 int      samplesPerMusicTick;
 
-void SDL_IMFMusicPlayer(void *udata __attribute__((unused)), uint8_t *stream, int len) {
-  int      stereolen  = len >> 1;
-  int      sampleslen = stereolen >> 1;
-  int16_t *stream16   = (int16_t *)(void *)stream; // expect correct alignment
+void SDL_IMFMusicPlayer(void    *udata __attribute__((unused)),
+                        uint8_t *stream __attribute__((unused)),
+                        int      len __attribute__((unused))) {
+  // int      stereolen  = len >> 1;
+  // int      sampleslen = stereolen >> 1;
+  // int16_t *stream16   = (int16_t *)(void *)stream; // expect correct alignment
 
-  while (1) {
-    if (numreadysamples) {
-      if (numreadysamples < sampleslen) {
-        YM3812UpdateOne(oplChip, stream16, numreadysamples);
-        stream16 += numreadysamples * 2;
-        sampleslen -= numreadysamples;
-      } else {
-        YM3812UpdateOne(oplChip, stream16, sampleslen);
-        numreadysamples -= sampleslen;
-        return;
-      }
-    }
-    soundTimeCounter--;
-    if (!soundTimeCounter) {
-      soundTimeCounter = 5;
-      if (curAlSound != alSound) {
-        curAlSound = curAlSoundPtr = alSound;
-        curAlLengthLeft            = alLengthLeft;
-      }
-      if (curAlSound) {
-        if (*curAlSoundPtr) {
-          alOut(alFreqL, *curAlSoundPtr);
-          alOut(alFreqH, alBlock);
-        } else
-          alOut(alFreqH, 0);
-        curAlSoundPtr++;
-        curAlLengthLeft--;
-        if (!curAlLengthLeft) {
-          curAlSound = alSound = 0;
-          SoundNumber          = (soundnames)0;
-          SoundPriority        = 0;
-          alOut(alFreqH, 0);
-        }
-      }
-    }
-    if (sqActive) {
-      do {
-        if (sqHackTime > alTimeCount)
-          break;
-        sqHackTime = alTimeCount + *(sqHackPtr + 1);
-        alOut(*(byte *)sqHackPtr, *(((byte *)sqHackPtr) + 1));
-        sqHackPtr += 2;
-        sqHackLen -= 4;
-      } while (sqHackLen > 0);
-      alTimeCount++;
-      if (!sqHackLen) {
-        sqHackPtr   = sqHack;
-        sqHackLen   = sqHackSeqLen;
-        sqHackTime  = 0;
-        alTimeCount = 0;
-      }
-    }
-    numreadysamples = samplesPerMusicTick;
-  }
+  // while (1) {
+  //   if (numreadysamples) {
+  //     if (numreadysamples < sampleslen) {
+  //       YM3812UpdateOne(oplChip, stream16, numreadysamples);
+  //       stream16 += numreadysamples * 2;
+  //       sampleslen -= numreadysamples;
+  //     } else {
+  //       YM3812UpdateOne(oplChip, stream16, sampleslen);
+  //       numreadysamples -= sampleslen;
+  //       return;
+  //     }
+  //   }
+  //   soundTimeCounter--;
+  //   if (!soundTimeCounter) {
+  //     soundTimeCounter = 5;
+  //     if (curAlSound != alSound) {
+  //       curAlSound = curAlSoundPtr = alSound;
+  //       curAlLengthLeft            = alLengthLeft;
+  //     }
+  //     if (curAlSound) {
+  //       if (*curAlSoundPtr) {
+  //         alOut(alFreqL, *curAlSoundPtr);
+  //         alOut(alFreqH, alBlock);
+  //       } else
+  //         alOut(alFreqH, 0);
+  //       curAlSoundPtr++;
+  //       curAlLengthLeft--;
+  //       if (!curAlLengthLeft) {
+  //         curAlSound = alSound = 0;
+  //         SoundNumber          = (soundnames)0;
+  //         SoundPriority        = 0;
+  //         alOut(alFreqH, 0);
+  //       }
+  //     }
+  //   }
+  //   if (sqActive) {
+  //     do {
+  //       if (sqHackTime > alTimeCount)
+  //         break;
+  //       sqHackTime = alTimeCount + *(sqHackPtr + 1);
+  //       alOut(*(byte *)sqHackPtr, *(((byte *)sqHackPtr) + 1));
+  //       sqHackPtr += 2;
+  //       sqHackLen -= 4;
+  //     } while (sqHackLen > 0);
+  //     alTimeCount++;
+  //     if (!sqHackLen) {
+  //       sqHackPtr   = sqHack;
+  //       sqHackLen   = sqHackSeqLen;
+  //       sqHackTime  = 0;
+  //       alTimeCount = 0;
+  //     }
+  //   }
+  //   numreadysamples = samplesPerMusicTick;
+  // }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1007,46 +1026,46 @@ void SDL_IMFMusicPlayer(void *udata __attribute__((unused)), uint8_t *stream, in
 //
 ///////////////////////////////////////////////////////////////////////////
 void SD_Startup(void) {
-  int i;
+  // int i;
 
-  if (SD_Started)
-    return;
+  // if (SD_Started)
+  //   return;
 
-  if (Mix_OpenAudio(param_samplerate, AUDIO_S16, 2, param_audiobuffer)) {
-    printf("Unable to open audio: %s\n", Mix_GetError());
-    return;
-  }
+  // if (Mix_OpenAudio(param_samplerate, AUDIO_S16, 2, param_audiobuffer)) {
+  //   printf("Unable to open audio: %s\n", Mix_GetError());
+  //   return;
+  // }
 
-  Mix_ReserveChannels(2);                    // reserve player and boss weapon channels
-  Mix_GroupChannels(2, MIX_CHANNELS - 1, 1); // group remaining channels
+  // Mix_ReserveChannels(2);                    // reserve player and boss weapon channels
+  // Mix_GroupChannels(2, MIX_CHANNELS - 1, 1); // group remaining channels
 
-  // Init music
+  // // Init music
 
-  samplesPerMusicTick = param_samplerate / 700; // SDL_t0FastAsmService played at 700Hz
+  // samplesPerMusicTick = param_samplerate / 700; // SDL_t0FastAsmService played at 700Hz
 
-  if (YM3812Init(1, 3579545, param_samplerate)) {
-    printf("Unable to create virtual OPL!!\n");
-  }
+  // if (YM3812Init(1, 3579545, param_samplerate)) {
+  //   printf("Unable to create virtual OPL!!\n");
+  // }
 
-  for (i = 1; i < 0xf6; i++)
-    YM3812Write(oplChip, i, 0);
+  // for (i = 1; i < 0xf6; i++)
+  //   YM3812Write(oplChip, i, 0);
 
-  YM3812Write(oplChip, 1, 0x20); // Set WSE=1
-  //    YM3812Write(0,8,0); // Set CSM=0 & SEL=0		 // already set in for statement
+  // YM3812Write(oplChip, 1, 0x20); // Set WSE=1
+  // //    YM3812Write(0,8,0); // Set CSM=0 & SEL=0		 // already set in for statement
 
-  Mix_HookMusic(SDL_IMFMusicPlayer, 0);
-  Mix_ChannelFinished(SD_ChannelFinished);
-  AdLibPresent        = true;
-  SoundBlasterPresent = true;
+  // Mix_HookMusic(SDL_IMFMusicPlayer, 0);
+  // Mix_ChannelFinished(SD_ChannelFinished);
+  // AdLibPresent        = true;
+  // SoundBlasterPresent = true;
 
-  alTimeCount = 0;
+  // alTimeCount = 0;
 
-  SD_SetSoundMode(sdm_Off);
-  SD_SetMusicMode(smm_Off);
+  // SD_SetSoundMode(sdm_Off);
+  // SD_SetMusicMode(smm_Off);
 
-  SDL_SetupDigi();
+  // SDL_SetupDigi();
 
-  SD_Started = true;
+  // SD_Started = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1067,7 +1086,7 @@ void SD_Shutdown(void) {
       Mix_FreeChunk(SoundChunks[i]);
   }
 
-  free(DigiList);
+  MM_FreePtr((memptr *)&DigiList);
 
   SD_Started = false;
 }
@@ -1154,7 +1173,7 @@ boolean SD_PlaySound(soundnames sound) {
     //            SDL_PCPlaySound((PCSound *)s);
     break;
   case sdm_AdLib:
-#ifdef ADDEDFIX               // 2
+#ifdef ADDEDFIX // 2
     curAlSound = alSound = 0; // Tricob
     alOut(alFreqH, 0);
 #endif
@@ -1287,46 +1306,46 @@ void SD_StartMusic(int chunk) {
   }
 }
 
-void SD_ContinueMusic(int chunk, int startoffs) {
-  SD_MusicOff();
+void SD_ContinueMusic(int chunk __attribute__((unused)), int startoffs __attribute__((unused))) {
+  //   SD_MusicOff();
 
-  if (MusicMode == smm_AdLib) {
-    int32_t chunkLen = CA_CacheAudioChunk(chunk);
-    sqHack           = (word *)(void *)audiosegs[chunk]; // alignment is correct
-    if (*sqHack == 0)
-      sqHackLen = sqHackSeqLen = chunkLen;
-    else
-      sqHackLen = sqHackSeqLen = *sqHack++;
-    sqHackPtr = sqHack;
+  //   if (MusicMode == smm_AdLib) {
+  //     int32_t chunkLen = CA_CacheAudioChunk(chunk);
+  //     sqHack           = (word *)(void *)audiosegs[chunk]; // alignment is correct
+  //     if (*sqHack == 0)
+  //       sqHackLen = sqHackSeqLen = chunkLen;
+  //     else
+  //       sqHackLen = sqHackSeqLen = *sqHack++;
+  //     sqHackPtr = sqHack;
 
-    if (startoffs >= sqHackLen) {
-#ifdef ADDEDFIX // 7                     // Andy, improved by Chris Chokan
-      startoffs = 0;
-#else
-      Quit("SD_StartMusic: Illegal startoffs provided!");
-#endif
-    }
+  //     if (startoffs >= sqHackLen) {
+  // #ifdef ADDEDFIX // 7                     // Andy, improved by Chris Chokan
+  //       startoffs = 0;
+  // #else
+  //       Quit("SD_StartMusic: Illegal startoffs provided!");
+  // #endif
+  //     }
 
-    // fast forward to correct position
-    // (needed to reconstruct the instruments)
+  //     // fast forward to correct position
+  //     // (needed to reconstruct the instruments)
 
-    for (int i = 0; i < startoffs; i += 2) {
-      byte reg = *(byte *)sqHackPtr;
-      byte val = *(((byte *)sqHackPtr) + 1);
-      if (reg >= 0xb1 && reg <= 0xb8)
-        val &= 0xdf; // disable play note flag
-      else if (reg == 0xbd)
-        val &= 0xe0; // disable drum flags
+  //     for (int i = 0; i < startoffs; i += 2) {
+  //       byte reg = *(byte *)sqHackPtr;
+  //       byte val = *(((byte *)sqHackPtr) + 1);
+  //       if (reg >= 0xb1 && reg <= 0xb8)
+  //         val &= 0xdf; // disable play note flag
+  //       else if (reg == 0xbd)
+  //         val &= 0xe0; // disable drum flags
 
-      alOut(reg, val);
-      sqHackPtr += 2;
-      sqHackLen -= 4;
-    }
-    sqHackTime  = 0;
-    alTimeCount = 0;
+  //       alOut(reg, val);
+  //       sqHackPtr += 2;
+  //       sqHackLen -= 4;
+  //     }
+  //     sqHackTime  = 0;
+  //     alTimeCount = 0;
 
-    SD_MusicOn();
-  }
+  //     SD_MusicOn();
+  //   }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -1367,3 +1386,4 @@ boolean SD_MusicPlaying(void) {
 
   return (result);
 }
+#endif

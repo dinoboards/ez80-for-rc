@@ -1,5 +1,7 @@
 #include "wl_def.h"
 
+#include "id_mm.h"
+
 int ChunksInFile;
 int PMSpriteStart;
 int PMSoundStart;
@@ -32,14 +34,12 @@ void PM_Startup() {
   fread(&PMSoundStart, sizeof(word), 1, file);
   printf("PMSoundStart: %d\r\n", PMSoundStart);
 
-  printf("Allocating %d bytes for pageOffsets\r\n", (ChunksInFile + 1) * sizeof(int32_t));
-  uint32_t *pageOffsets = (uint32_t *)malloc((ChunksInFile + 1) * sizeof(int32_t));
-  CHECKMALLOCRESULT(pageOffsets);
+  uint32_t *pageOffsets;
+  MM_GetPtr((memptr *)&pageOffsets, (ChunksInFile + 1) * sizeof(int32_t));
   fread(pageOffsets, sizeof(uint32_t), ChunksInFile, file);
 
-  printf("Allocating: %d bytes for pageOffsets\r\n", (ChunksInFile + 1) * sizeof(int32_t));
-  word *pageLengths = (word *)malloc(ChunksInFile * sizeof(word));
-  CHECKMALLOCRESULT(pageLengths);
+  word *pageLengths;
+  MM_GetPtr((memptr *)&pageLengths, ChunksInFile * sizeof(word));
   fread(pageLengths, sizeof(word), ChunksInFile, file);
 
   fseek(file, 0, SEEK_END);
@@ -75,12 +75,9 @@ void PM_Startup() {
     alignPadding++;
 
   PMPageDataSize = (size_t)pageDataSize + alignPadding;
-  printf("allocating %d bytes for PMPageData\r\n", PMPageDataSize);
-  PMPageData = (uint32_t *)malloc(PMPageDataSize);
-  CHECKMALLOCRESULT(PMPageData);
+  MM_GetPtr((memptr *)&PMPageData, PMPageDataSize);
 
-  PMPages = (uint8_t **)malloc((ChunksInFile + 1) * sizeof(uint8_t *));
-  CHECKMALLOCRESULT(PMPages);
+  MM_GetPtr((memptr *)&PMPages, (ChunksInFile + 1) * sizeof(uint8_t *));
 
   // Load pages and initialize PMPages pointers
   uint8_t *ptr = (uint8_t *)PMPageData;
@@ -117,12 +114,12 @@ void PM_Startup() {
   // last page points after page buffer
   PMPages[ChunksInFile] = ptr;
 
-  free(pageLengths);
-  free(pageOffsets);
+  MM_FreePtr((memptr *)&pageLengths);
+  MM_FreePtr((memptr *)&pageOffsets);
   fclose(file);
 }
 
 void PM_Shutdown() {
-  free(PMPages);
-  free(PMPageData);
+  MM_FreePtr((memptr *)&PMPages);
+  MM_FreePtr((memptr *)&PMPageData);
 }
