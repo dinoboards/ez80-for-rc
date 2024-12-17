@@ -21,6 +21,8 @@ loaded into the data segment
 
 #include "id_mm.h"
 
+#include "id_ca.h"
+
 #define THREEBYTEGRSTARTS
 
 /*
@@ -31,9 +33,7 @@ loaded into the data segment
 =============================================================================
 */
 
-typedef struct {
-  word bit0, bit1; // 0-255 is a character, > is a pointer to a node
-} huffnode;
+
 
 #pragma pack(push, 1)
 typedef struct {
@@ -188,55 +188,6 @@ boolean CA_LoadFile(const char *filename, memptr *ptr) {
   return true;
 }
 
-/*
-============================================================================
-
-                                COMPRESSION routines, see JHUFF.C for more
-
-============================================================================
-*/
-
-static void CAL_HuffExpand(byte *source, byte *dest, int24_t length, huffnode *hufftable) {
-  byte     *end;
-  huffnode *headptr, *huffptr;
-
-  if (!length || !dest) {
-    Quit("length or dest is null!");
-    return;
-  }
-
-  headptr = hufftable + 254; // head node is always node 254
-
-  // int written = 0;
-
-  end = dest + length;
-
-  byte val  = *source++;
-  byte mask = 1;
-  word nodeval;
-  huffptr = headptr;
-  while (1) {
-    if (!(val & mask))
-      nodeval = huffptr->bit0;
-    else
-      nodeval = huffptr->bit1;
-    if (mask == 0x80) {
-      val  = *source++;
-      mask = 1;
-    } else
-      mask <<= 1;
-
-    if (nodeval < 256) {
-      *dest++ = (byte)nodeval;
-      // written++;
-      huffptr = headptr;
-      if (dest >= end)
-        break;
-    } else {
-      huffptr = hufftable + (nodeval - 256);
-    }
-  }
-}
 
 /*
 ======================
@@ -478,7 +429,7 @@ void CAL_SetupGrFile(void) {
 
   MM_GetPtr((memptr *)&compseg, chunkcomplen);
   read(grhandle, compseg, chunkcomplen);
-  CAL_HuffExpand(compseg, (byte *)pictable, NUMPICS * sizeof(pictabletype), grhuffman);
+  CAL_HuffExpand(compseg, (byte *)pictable, NUMPICS * sizeof(pictabletype)/*, grhuffman*/);
   MM_FreePtr((memptr *)&compseg);
 }
 
@@ -832,7 +783,7 @@ void CAL_ExpandGrChunk(int chunk, int32_t *source) {
   // Sprites need to have shifts made and various other junk
   //
   MM_GetPtr((memptr *)&grsegs[chunk], expanded);
-  CAL_HuffExpand((byte *)source, grsegs[chunk], expanded, grhuffman);
+  CAL_HuffExpand((byte *)source, grsegs[chunk], expanded /*, grhuffman*/);
 }
 
 /*
@@ -928,7 +879,7 @@ void CA_CacheScreen(int chunk) {
   byte *pic;
   MM_GetPtr((memptr *)&pic, 64000);
   printf("%d: Expanding %d bytes\r\n", ez80_timers_ticks_get(), (int)expanded);
-  CAL_HuffExpand((byte *)source, pic, expanded, grhuffman);
+  CAL_HuffExpand((byte *)source, pic, expanded/*, grhuffman*/);
   printf("%d: Expanded\r\n", ez80_timers_ticks_get());
 
 #define CLIP_LEFT 8
