@@ -800,9 +800,15 @@ void DrawPlayBorder(void) {
     DrawStatusBorder(bordercol);
   else {
     const int statusborderw = (screenWidth - px * 320) / 2;
+    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
+
     VWB_BarScaledCoord(0, screenHeight - px * STATUSLINES, statusborderw + px * 8, px * STATUSLINES, bordercol);
+    VW_UpdateScreen(); // test
+
+    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
     VWB_BarScaledCoord(screenWidth - statusborderw - px * 8, screenHeight - px * STATUSLINES, statusborderw + px * 8,
                        px * STATUSLINES, bordercol);
+    VW_UpdateScreen(); // test
   }
 
   if ((unsigned)viewheight == screenHeight)
@@ -812,7 +818,10 @@ void DrawPlayBorder(void) {
 
   const int xl = screenWidth / 2 - viewwidth / 2;
   const int yl = (screenHeight - px * STATUSLINES - viewheight) / 2;
+  printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
+
   VWB_BarScaledCoord(xl, yl, viewwidth, viewheight, 0);
+  VW_UpdateScreen(); // test
 
   if (xl != 0) {
     // Paint game view border lines
@@ -825,6 +834,8 @@ void DrawPlayBorder(void) {
     // Just paint a lower border line
     VWB_BarScaledCoord(0, yl + viewheight, viewwidth, px, bordercol - 2); // lower border
   }
+
+  VW_UpdateScreen(); // test
 }
 
 /*
@@ -836,7 +847,7 @@ void DrawPlayBorder(void) {
 */
 
 void DrawPlayScreen(void) {
-  VWB_DrawPicScaledCoord((screenWidth - scaleFactor * 320) / 2, screenHeight - scaleFactor * STATUSLINES, STATUSBARPIC);
+  VWB_DrawPicScaledCoord(0, screenHeight - STATUSLINES, STATUSBARPIC);
   DrawPlayBorder();
 
   DrawFace();
@@ -1065,6 +1076,8 @@ void PlayDemo(int demonumber) {
   int dems[1]     = {T_DEMO0};
 #endif
 
+  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+
   CA_CacheGrChunk(dems[demonumber]);
   demoptr = (int8_t *)grsegs[dems[demonumber]];
 #else
@@ -1072,6 +1085,8 @@ void PlayDemo(int demonumber) {
   CA_LoadFile(demoname, &demobuffer);
   demoptr = (int8_t *)demobuffer;
 #endif
+
+  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   NewGame(1, 0);
   gamestate.mapon      = *demoptr++;
@@ -1083,15 +1098,21 @@ void PlayDemo(int demonumber) {
   lastdemoptr = demoptr - 4 + length;
 
   VW_FadeOut();
+  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   SETFONTCOLOR(0, 15);
   DrawPlayScreen();
+
+  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   startgame    = false;
   demoplayback = true;
 
   SetupGameLevel();
+  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+
   StartMusic();
+  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   PlayLoop();
 

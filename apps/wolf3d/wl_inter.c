@@ -295,17 +295,25 @@ void Victory(void) {
 */
 
 void PG13(void) {
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+
   VW_FadeOut();
   VWB_Bar(0, 0, 320, 200, 0x82); // background
+
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   CA_CacheGrChunk(PG13PIC);
   VWB_DrawPic(216, 110, PG13PIC);
   VW_UpdateScreen();
 
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+
   UNCACHEGRCHUNK(PG13PIC);
 
   VW_FadeIn();
-  IN_UserInput(TickBase * 7);
+  IN_UserInput(TickBase * 2);
+
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   VW_FadeOut();
 }
@@ -1021,10 +1029,11 @@ void DrawHighScores(void) {
     // name
     //
 #ifndef SPEAR
-    PrintX = 4 * 8;
+    PrintX = 3 * 8;
 #else
     PrintX = 16;
 #endif
+
     US_Print(s->name);
 
     //
@@ -1035,7 +1044,7 @@ void DrawHighScores(void) {
     for (str = buffer; *str; str++)
       *str = *str + (129 - '0'); // Used fixed-width numbers (129...)
     USL_MeasureString(buffer, &w, &h);
-    PrintX = (22 * 8) - w;
+    PrintX = (21 * 8) - w;
 #else
     USL_MeasureString(buffer, &w, &h);
     PrintX = 194 - w;
@@ -1061,7 +1070,7 @@ void DrawHighScores(void) {
     //
     // score
     //
-    sprintf(buffer, "%ld", s->score);
+    sprintf(buffer, "%d", (int)s->score); //%ld not supported - so int32 score not supported!
 #ifndef SPEAR
     for (str = buffer; *str; str++)
       *str = *str + (129 - '0'); // Used fixed-width numbers (129...)
@@ -1517,7 +1526,7 @@ void CopyProtection(void) {
 
       VW_UpdateScreen();
       SD_PlaySound(NOWAYSND);
-      IN_UserInput(TickBase * 6);
+      IN_UserInput(TickBase * 2);
       VW_FadeOut();
       attempt++;
     } else {

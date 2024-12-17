@@ -203,11 +203,6 @@ void US_CPrintLine(const char *s) {
 
   USL_MeasureString(s, &w, &h);
 
-  printf("String measure: w: %d, h: %d\r\n", w, h);
-
-  printf("WindowX: %d\r\n", WindowX);
-  printf("WindowW: %d\r\n", WindowW);
-
   if (w > WindowW)
     Quit("US_CPrintLine() - String exceeds width");
 

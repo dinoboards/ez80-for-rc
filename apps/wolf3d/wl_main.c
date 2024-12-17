@@ -759,7 +759,6 @@ void SetupWalls(void) {
 ==========================
 */
 void SignonScreen(void) {
-  printf("Showing signon screen\r\n");
   VL_SetVGAPlaneMode();
 
   FILE *f = fopen("signon.img", "rb");
@@ -778,12 +777,7 @@ void SignonScreen(void) {
   }
   fclose(f);
 
-  printf("Showing signon screen\r\n");
   VH_UpdateScreen();
-
-  printf("Shown\r\n");
-
-  // vdp_cpu_to_vram0(vbuf, 256 * 200);
 }
 
 /*
@@ -984,7 +978,7 @@ void DoJukebox(void) {
 
 #ifndef SPEAR
 #ifndef UPLOAD
-  start = ((SDL_GetTicks() / 10) % 3) * 6;
+  start = SDL_GetTicks();
 #else
   start = 0;
 #endif
@@ -1068,7 +1062,6 @@ static void InitGame() {
     printf("Unable to init SDL: %s\n", SDL_GetError());
     exit(1);
   }
-  atexit(SDL_Quit);
 
 #ifdef JOYSTICK_SUPPORT
   int numJoysticks = SDL_NumJoysticks();
@@ -1081,26 +1074,18 @@ static void InitGame() {
   }
 #endif
 
-  printf("Y1\r\n");
   SignonScreen();
-  printf("Y2\r\n");
 
   VH_Startup();
-  printf("Y3\r\n");
   IN_Startup();
-  printf("Y4\r\n");
 
   PM_Startup();
-  printf("Y5\r\n");
 
   SD_Startup();
-  printf("Y6\r\n");
 
   CA_Startup();
-  printf("Y7\r\n");
 
   US_Startup();
-  printf("Y8\r\n");
   // TODO: Will any memory checking be needed someday??
 #ifdef NOTYET
 #ifndef SPEAR
@@ -1336,7 +1321,6 @@ static void DemoLoop() {
   //
   // check for launch from ted
   //
-  printf("param_tedlevel = %d\n", param_tedlevel);
   if (param_tedlevel != -1) {
     param_nowait = true;
     EnableEndGameMenuItem();
@@ -1379,17 +1363,24 @@ static void DemoLoop() {
 #endif
 #endif
 
+  printf("%s:%d\r\n", __FILE__, __LINE__);
   StartCPMusic(INTROSONG);
+  printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #ifndef JAPAN
   if (!param_nowait)
     PG13();
 #endif
 
+  printf("%s:%d\r\n", __FILE__, __LINE__);
+
 #endif
 
   while (1) {
-    while (!param_nowait) {
+    printf("%s:%d\r\n", __FILE__, __LINE__);
+
+    // while (!param_nowait) {
+    while (true) {
       printf(".");
       //
       // title page
@@ -1413,12 +1404,21 @@ static void DemoLoop() {
 
       UNCACHEGRCHUNK(TITLEPALETTE);
 #else
+      printf("TITLEPIC: %s:%d\r\n", __FILE__, __LINE__);
       CA_CacheScreen(TITLEPIC);
+      printf("TITLEPIC: %s:%d\r\n", __FILE__, __LINE__);
       VW_UpdateScreen();
+      printf("%s:%d\r\n", __FILE__, __LINE__);
+
       VW_FadeIn();
+      printf("%s:%d\r\n", __FILE__, __LINE__);
+
 #endif
-      if (IN_UserInput(TickBase * 15))
-        break;
+      printf("CREDITSPIC:%s:%d\r\n", __FILE__, __LINE__);
+
+      // if (IN_UserInput(TickBase * 5))
+      //   break;
+
       VW_FadeOut();
       //
       // credits page
@@ -1426,24 +1426,30 @@ static void DemoLoop() {
       CA_CacheScreen(CREDITSPIC);
       VW_UpdateScreen();
       VW_FadeIn();
-      if (IN_UserInput(TickBase * 10))
-        break;
+
+      printf("%s:%d\r\n", __FILE__, __LINE__);
+      // if (IN_UserInput(TickBase * 5))
+      //   break;
       VW_FadeOut();
       //
       // high scores
       //
+
+      printf("HighScore: %s:%d\r\n", __FILE__, __LINE__);
+
       DrawHighScores();
       VW_UpdateScreen();
       VW_FadeIn();
 
-      if (IN_UserInput(TickBase * 10))
-        break;
+      // if (IN_UserInput(TickBase * 5))
+      //   break;
 #endif
-        //
-        // demo
-        //
+      //
+      // demo
+      //
 
 #ifndef SPEARDEMO
+      printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
       PlayDemo(LastDemo++ % 4);
 #else
       PlayDemo(0);
@@ -1457,9 +1463,15 @@ static void DemoLoop() {
       StartCPMusic(INTROSONG);
     }
 
+    printf("%s:%d\r\n", __FILE__, __LINE__);
+
     VW_FadeOut();
 
+    printf("%s:%d\r\n", __FILE__, __LINE__);
+
     US_ControlPanel(0);
+
+    printf("%s:%d\r\n", __FILE__, __LINE__);
 
     if (startgame || loadedgame) {
       GameLoop();
@@ -1481,11 +1493,6 @@ static void DemoLoop() {
 
 int main(/*int argc, char* argv[]*/) {
   MM_Startup();
-  // TODO: add ability to find all available memory
-  // and assign to heap
-  const int heap_size = 0x400000 - (int)_heap;
-  printf("Heap size: %d\r\n", heap_size);
-  malloc_init(heap_size); // heap size of 1.5MB
 
   CheckForEpisodes();
 
@@ -1499,6 +1506,7 @@ int main(/*int argc, char* argv[]*/) {
 
   printf("%s:%d\r\n", __FILE__, __LINE__);
 
+  printf("ENDED!!!!!!\r\n");
   Quit("Demo loop exited???");
   return 1;
 }

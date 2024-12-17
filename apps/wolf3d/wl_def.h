@@ -1633,7 +1633,7 @@ static inline fixed FixedMul(fixed a, fixed b) { return (fixed)(((int64_t)a * b 
 
 #define DEMOCOND_SDL (!DEMOCOND_ORIG)
 
-#define GetTicks() ((SDL_GetTicks() * 7) / 100)
+#define GetTicks() (SDL_GetTicks())
 
 #define ISPOINTER(x) ((((uintptr_t)(x)) & ~0xffff) != 0)
 

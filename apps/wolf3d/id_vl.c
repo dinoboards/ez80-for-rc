@@ -516,25 +516,25 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
 */
 
 // TODO: Change this to work with the V9958
+// TODO: should this function drop pixels to fit into the 256 width?
 void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, int desty) {
-  printf("VL_MemToScreenScaledCoordA\r\n");
+  printf("VL_MemToScreenScaledCoordA(");
   printf("source: %p, width: %d, height: %d, destx: %d, desty: %d\r\n", source, width, height, destx, desty);
 
-  assert(destx >= 0 && destx + width * scaleFactor <= (int)screenWidth && desty >= 0 &&
-         desty + height * scaleFactor <= (int)screenHeight && "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
+  assert(destx >= 0 && destx + width <= (int)320 && desty >= 0 && desty + height <= (int)screenHeight &&
+         "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
-  // byte *vbuf = (byte *)curSurface->pixels;
-  // for (int j = 0, scj = 0; j < height; j++, scj += scaleFactor) {
-  //   for (int i = 0, sci = 0; i < width; i++, sci += scaleFactor) {
-  //     byte col = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
-  //     for (unsigned m = 0; m < scaleFactor; m++) {
-  //       for (unsigned n = 0; n < scaleFactor; n++) {
-  //         vbuf[(scj + m + desty) * curPitch + sci + n + destx] = col;
-  //       }
-  //     }
-  //   }
-  // }
+  byte *vbuf = (byte *)curSurface->pixels;
+  for (int j = 0; j < height; j++) {
+    for (int i = 0; i < width; i++) {
+      if (i + destx > 255) // brute force clip right side
+        continue;
+      const byte col = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
+
+      vbuf[(j + desty) * curPitch + i + destx] = col;
+    }
+  }
   // VL_UnlockSurface(curSurface);
 }
 

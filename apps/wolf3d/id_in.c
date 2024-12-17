@@ -16,9 +16,13 @@
 //      LastASCII - The ASCII value of the last key pressed
 //  DEBUG - there are more globals
 //
+#include <stdint.h>
 
 #include "id_vl.h"
+
 #include "wl_def.h"
+
+#include "id_sd.h"
 
 /*
 =============================================================================
@@ -634,10 +638,8 @@ void IN_Ack(void) {
 //      button up.
 //
 ///////////////////////////////////////////////////////////////////////////
-boolean IN_UserInput(longword delay) {
-  longword lasttime;
-
-  lasttime = GetTimeCount();
+boolean IN_UserInput(uint24_t delay) {
+  const uint24_t lasttime = GetTimeCount();
   IN_StartAck();
   do {
     IN_ProcessEvents();
