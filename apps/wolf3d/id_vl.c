@@ -99,7 +99,9 @@ void VL_Shutdown(void) {
 
 void VL_SetVGAPlaneMode(void) {
   vdp_set_mode(7, 212, PAL);
+  vdp_cmd_wait_completion();
   vdp_cmd_vdp_to_vram(0, 0, 256, 212, 0, 0);
+  vdp_cmd_wait_completion();
 
   screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
   bufferPitch  = screenBuffer->pitch;

@@ -66,4 +66,11 @@ void CA_CacheScreen(int chunk);
 
 void CA_CannotOpen(const char *name);
 
+typedef struct {
+  word bit0;
+  word bit1; // 0-255 is a character, > is a pointer to a node
+} huffnode;
+
+extern void CAL_HuffExpand(byte *source, byte *dest, int24_t length/*, huffnode *hufftable*/);
+
 #endif
