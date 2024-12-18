@@ -7,7 +7,6 @@
 
 #include "id_ca.h"
 
-
 extern huffnode grhuffman[255];
 
 /*
@@ -18,7 +17,7 @@ extern huffnode grhuffman[255];
 ============================================================================
 */
 
-void CAL_HuffExpand(byte *source, byte *dest, int24_t length/*, huffnode *hufftable*/) {
+void CAL_HuffExpand(byte *source, byte *dest, int24_t length /*, huffnode *hufftable*/) {
   byte     *end;
   huffnode *huffptr;
 

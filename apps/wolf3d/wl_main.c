@@ -181,8 +181,8 @@ void ReadConfig(void) {
 
     if (viewsize < 4)
       viewsize = 4;
-    else if (viewsize > 21)
-      viewsize = 21;
+    else if (viewsize > 16)
+      viewsize = 16;
 
     MainMenu[6].active = 1;
     MainItems.curpos   = 0;
@@ -210,7 +210,7 @@ void ReadConfig(void) {
     if (IN_JoyPresent())
       joystickenabled = true;
 
-    viewsize        = 19; // start with a good size
+    viewsize        = 14; // start with a good size
     mouseadjustment = 5;
   }
 
@@ -790,7 +790,7 @@ void SignonScreen(void) {
 
 void FinishSignon(void) {
 #ifndef SPEAR
-  VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
+  VW_Bar(0, 189, 256, 11, VL_GetPixel(0, 0));
   WindowX = 0;
   WindowW = 256;
   PrintY  = 190;
@@ -812,7 +812,7 @@ void FinishSignon(void) {
     IN_Ack();
 
 #ifndef JAPAN
-  VW_Bar(0, 189, 300, 11, VL_GetPixel(0, 0));
+  VW_Bar(0, 189, 256 - 16, 11, VL_GetPixel(0, 0));
 
   PrintY = 190;
   SETFONTCOLOR(10, 4);
@@ -1143,6 +1143,7 @@ static void InitGame() {
   BuildTables(); // trig tables
   SetupWalls();
 
+  printf("View size: %d\n", viewsize);
   NewViewSize(viewsize);
 
   //
@@ -1222,7 +1223,7 @@ void NewViewSize(int width) {
   else if (viewsize == 20)
     SetViewSize(screenWidth, screenHeight - scaleFactor * STATUSLINES);
   else
-    SetViewSize(width * 16 * screenWidth / 320, (unsigned)(width * 16 * HEIGHTRATIO * screenHeight / 200));
+    SetViewSize(width * 16, (unsigned)(width * 16 * HEIGHTRATIO * screenHeight / 200));
 }
 
 //===========================================================================
@@ -1363,21 +1364,16 @@ static void DemoLoop() {
 #endif
 #endif
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   StartCPMusic(INTROSONG);
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #ifndef JAPAN
   if (!param_nowait)
     PG13();
 #endif
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
 #endif
 
   while (1) {
-    printf("%s:%d\r\n", __FILE__, __LINE__);
 
     // while (!param_nowait) {
     while (true) {
@@ -1404,14 +1400,11 @@ static void DemoLoop() {
 
       UNCACHEGRCHUNK(TITLEPALETTE);
 #else
-      printf("TITLEPIC: %s:%d\r\n", __FILE__, __LINE__);
       CA_CacheScreen(TITLEPIC);
       printf("TITLEPIC: %s:%d\r\n", __FILE__, __LINE__);
       VW_UpdateScreen();
-      printf("%s:%d\r\n", __FILE__, __LINE__);
 
       // VW_FadeIn();
-      printf("%s:%d\r\n", __FILE__, __LINE__);
 
 #endif
       printf("CREDITSPIC:%s:%d\r\n", __FILE__, __LINE__);
@@ -1427,15 +1420,12 @@ static void DemoLoop() {
       VW_UpdateScreen();
       // VW_FadeIn();
 
-      printf("%s:%d\r\n", __FILE__, __LINE__);
       // if (IN_UserInput(TickBase * 5))
       //   break;
       // VW_FadeOut();
       //
       // high scores
       //
-
-      printf("HighScore: %s:%d\r\n", __FILE__, __LINE__);
 
       DrawHighScores();
       VW_UpdateScreen();
@@ -1463,15 +1453,9 @@ static void DemoLoop() {
       StartCPMusic(INTROSONG);
     }
 
-    printf("%s:%d\r\n", __FILE__, __LINE__);
-
     // VW_FadeOut();
 
-    printf("%s:%d\r\n", __FILE__, __LINE__);
-
     US_ControlPanel(0);
-
-    printf("%s:%d\r\n", __FILE__, __LINE__);
 
     if (startgame || loadedgame) {
       GameLoop();
@@ -1496,11 +1480,7 @@ int main(/*int argc, char* argv[]*/) {
 
   CheckForEpisodes();
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
   InitGame();
-
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   DemoLoop();
 

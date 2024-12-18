@@ -33,8 +33,6 @@ loaded into the data segment
 =============================================================================
 */
 
-
-
 #pragma pack(push, 1)
 typedef struct {
   word    RLEWtag;
@@ -187,7 +185,6 @@ boolean CA_LoadFile(const char *filename, memptr *ptr) {
   close(handle);
   return true;
 }
-
 
 /*
 ======================
@@ -429,7 +426,7 @@ void CAL_SetupGrFile(void) {
 
   MM_GetPtr((memptr *)&compseg, chunkcomplen);
   read(grhandle, compseg, chunkcomplen);
-  CAL_HuffExpand(compseg, (byte *)pictable, NUMPICS * sizeof(pictabletype)/*, grhuffman*/);
+  CAL_HuffExpand(compseg, (byte *)pictable, NUMPICS * sizeof(pictabletype) /*, grhuffman*/);
   MM_FreePtr((memptr *)&compseg);
 }
 
@@ -879,7 +876,7 @@ void CA_CacheScreen(int chunk) {
   byte *pic;
   MM_GetPtr((memptr *)&pic, 64000);
   printf("%d: Expanding %d bytes\r\n", ez80_timers_ticks_get(), (int)expanded);
-  CAL_HuffExpand((byte *)source, pic, expanded/*, grhuffman*/);
+  CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
   printf("%d: Expanded\r\n", ez80_timers_ticks_get());
 
 #define CLIP_LEFT 8

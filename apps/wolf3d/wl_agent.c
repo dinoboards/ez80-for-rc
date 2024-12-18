@@ -234,8 +234,11 @@ void ControlMovement(objtype *ob) {
 */
 
 void StatusDrawPic(unsigned x, unsigned y, unsigned picnum) {
-  LatchDrawPicScaledCoord((screenWidth - scaleFactor * 320) / 16 + scaleFactor * x, screenHeight - scaleFactor * (STATUSLINES - y),
-                          picnum);
+  printf("StatusDrawPic(%d, %d, %d)\r\n", x, y, picnum);
+  LatchDrawPicScaledCoord(x, screenHeight - (STATUSLINES - y), picnum);
+  // LatchDrawPicScaledCoord((screenWidth - scaleFactor * 320) / 16 + scaleFactor * x, screenHeight - scaleFactor * (STATUSLINES -
+  // y),
+  //                         picnum);
 }
 
 void StatusDrawFace(unsigned picnum) { StatusDrawPic(17, 4, picnum); }
@@ -314,11 +317,11 @@ void UpdateFace(void) {
 ===============
 */
 
-static void LatchNumber(int x, int y, unsigned width, int32_t number) {
+static void LatchNumber(int x, int y, unsigned width, int24_t number) {
   unsigned length, c;
   char     str[20];
 
-  sprintf(str, "%ld", number);
+  sprintf(str, "%d", number);
 
   length = (unsigned)strlen(str);
 

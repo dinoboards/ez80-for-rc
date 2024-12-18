@@ -6,6 +6,8 @@
 
 #include "id_mm.h"
 
+#include <cpm.h>
+
 #ifdef MYPROFILE
 #include <TIME.H>
 #endif
@@ -799,7 +801,7 @@ void DrawPlayBorder(void) {
   if (bordercol != VIEWCOLOR)
     DrawStatusBorder(bordercol);
   else {
-    const int statusborderw = (screenWidth - px * 320) / 2;
+    const int statusborderw = (screenWidth - px * 256) / 2;
     printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
     VWB_BarScaledCoord(0, screenHeight - px * STATUSLINES, statusborderw + px * 8, px * STATUSLINES, bordercol);
@@ -824,6 +826,8 @@ void DrawPlayBorder(void) {
   VW_UpdateScreen(); // test
 
   if (xl != 0) {
+    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
+
     // Paint game view border lines
     VWB_BarScaledCoord(xl - px, yl - px, viewwidth + px, px, 0);                         // upper border
     VWB_BarScaledCoord(xl, yl + viewheight, viewwidth + px, px, bordercol - 2);          // lower border
@@ -831,9 +835,13 @@ void DrawPlayBorder(void) {
     VWB_BarScaledCoord(xl + viewwidth, yl - px, px, viewheight + 2 * px, bordercol - 2); // right border
     VWB_BarScaledCoord(xl - px, yl + viewheight, px, px, bordercol - 3);                 // lower left highlight
   } else {
+    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
+
     // Just paint a lower border line
     VWB_BarScaledCoord(0, yl + viewheight, viewwidth, px, bordercol - 2); // lower border
   }
+
+  printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
   VW_UpdateScreen(); // test
 }
@@ -846,18 +854,65 @@ void DrawPlayBorder(void) {
 ===================
 */
 
-void DrawPlayScreen(void) {
-  VWB_DrawPicScaledCoord(0, screenHeight - STATUSLINES, STATUSBARPIC);
-  DrawPlayBorder();
+void waitForKey(void) {
+  while (cpm_c_rawio() == 0)
+    ;
+}
 
+void DrawPlayScreen(void) {
+  VW_UpdateScreen(); // test
+
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
+  VWB_DrawPicScaledCoord(0, screenHeight - STATUSLINES, STATUSBARPIC);
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
+  DrawPlayBorder();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawFace();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawHealth();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawLives();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawLevel();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawAmmo();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawKeys();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawWeapon();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawScore();
+  VW_UpdateScreen(); // test
+
+  waitForKey();
+  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
 }
 
 // Uses LatchDrawPic instead of StatusDrawPic
@@ -1076,8 +1131,6 @@ void PlayDemo(int demonumber) {
   int dems[1]     = {T_DEMO0};
 #endif
 
-  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
-
   CA_CacheGrChunk(dems[demonumber]);
   demoptr = (int8_t *)grsegs[dems[demonumber]];
 #else
@@ -1085,8 +1138,6 @@ void PlayDemo(int demonumber) {
   CA_LoadFile(demoname, &demobuffer);
   demoptr = (int8_t *)demobuffer;
 #endif
-
-  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   NewGame(1, 0);
   gamestate.mapon      = *demoptr++;
@@ -1098,18 +1149,14 @@ void PlayDemo(int demonumber) {
   lastdemoptr = demoptr - 4 + length;
 
   VW_FadeOut();
-  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   SETFONTCOLOR(0, 15);
   DrawPlayScreen();
-
-  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   startgame    = false;
   demoplayback = true;
 
   SetupGameLevel();
-  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   StartMusic();
   printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);

@@ -457,12 +457,12 @@ void VL_Vlin(int x __attribute__((unused)),
 
 void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color) {
 
-  // printf("VL_BarScaledCoord\r\n");
-  // printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
+  printf("VL_BarScaledCoord\r\n");
+  printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
 
   // vdp_cmd_vdp_to_vram(scx, scy, scwidth, scheight, color, 0);
-  // assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&
-  //        "VL_BarScaledCoord: Destination rectangle out of bounds!");
+  assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&
+         "VL_BarScaledCoord: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
   uint8_t *dest = ((byte *)curSurface->pixels) + scy * curPitch + scx;
@@ -530,11 +530,13 @@ void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, 
   byte *vbuf = (byte *)curSurface->pixels;
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
-      if (i + destx > 255) // brute force clip right side
-        continue;
+      // can we tune on the assumption that i, destx are on specific bounaries?
+      //  if (i + destx > 255) // brute force clip right side
+      //    continue;
       const byte col = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
 
-      vbuf[(j + desty) * curPitch + i + destx] = col;
+      const uint8_t xx = scale_points[i + destx]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
+      vbuf[(j + desty) * curPitch + xx] = col;
     }
   }
   // VL_UnlockSurface(curSurface);
@@ -594,28 +596,26 @@ void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int w
   printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d\r\n", source, xsrc, ysrc, width, height,
          scxdest, scydest);
 
-  assert(scxdest >= 0 && scxdest + width * scaleFactor <= (int)screenWidth && scydest >= 0 &&
-         scydest + height * scaleFactor <= (int)screenHeight &&
+  assert(scxdest >= 0 && scxdest + width <= 320 && scydest >= 0 && scydest + height <= (int)screenHeight &&
          "VL_LatchToScreenScaledCoord7: Destination rectangle out of bounds!");
 
-  // if (scaleFactor == 1) {
-  //   VL_LockSurface(source);
-  //   byte    *src      = (byte *)source->pixels;
-  //   unsigned srcPitch = source->pitch; // number of bytes to be added, to get to next row
+  // VL_LockSurface(source);
+  byte    *src      = (byte *)source->pixels;
+  unsigned srcPitch = source->pitch; // number of bytes to be added, to get to next row
 
-  //   VL_LockSurface(curSurface);
-  //   byte *vbuf = (byte *)curSurface->pixels;
-  //   for (int j = 0; j < height; j++) {
-  //     for (int i = 0; i < width; i++) {
+  // VL_LockSurface(curSurface);
+  byte *vbuf = (byte *)curSurface->pixels;
+  for (int j = 0; j < height; j++) {
+    for (int i = 0; i < width; i++) {
 
-  //       byte col = src[(ysrc + j) * srcPitch + xsrc + i];
+      byte col = src[(ysrc + j) * srcPitch + xsrc + i];
 
-  //       vbuf[(scydest + j) * curPitch + scxdest + i] = col;
-  //     }
-  //   }
-  //   VL_UnlockSurface(curSurface);
-  //   VL_UnlockSurface(source);
-  // }
+      const uint8_t xx = scale_points[i + scxdest]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
+      vbuf[(scydest + j) * curPitch + xx] = col;
+    }
+  }
+  // VL_UnlockSurface(curSurface);
+  // VL_UnlockSurface(source);
 }
 
 //===========================================================================
