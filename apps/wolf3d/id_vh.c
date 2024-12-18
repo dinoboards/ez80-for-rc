@@ -53,8 +53,6 @@ void VWB_DrawPropString(const char *string) {
 */
 
 void VL_MungePic(byte *source, unsigned width, unsigned height) {
-  printf("VL_MungePic\r\n");
-  printf("source: %p, width: %d, height: %d\r\n", source, width, height);
   unsigned x, y, plane, size, pwidth;
   byte    *temp, *dest, *srcline;
 
@@ -67,7 +65,6 @@ void VL_MungePic(byte *source, unsigned width, unsigned height) {
   // copy the pic to a temp buffer
   //
   MM_GetPtr((memptr *)&temp, size);
-  printf("temp: %p\r\n", temp);
   memcpy(temp, source, size);
 
   //
@@ -134,21 +131,16 @@ void VWB_DrawPic(int x, int y, int chunknum) {
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
 
-  printf("VWB_DrawPic(%d, %d, picnum: %d)\r\n", x, y, picnum);
-  printf("width: %d, height: %d\r\n", width, height);
-
-  VL_MemToScreen(grsegs[chunknum], width, height, 0, y);
+  VL_MemToScreen(grsegs[chunknum], width, height, x, y);
 }
 
 void VWB_DrawPicScaledCoord(int scx, int scy, int chunknum) {
+  printf("VWB_DrawPicScaledCoord(%d, %d, chunknum: %d)\r\n", scx, scy, chunknum);
   int      picnum = chunknum - STARTPICS;
   unsigned width, height;
 
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
-
-  printf("VWB_DrawPicScaledCoord(%d, %d, picnum: %d)\r\n", scx, scy, picnum);
-  printf("width: %d, height: %d\r\n", width, height);
 
   VL_MemToScreenScaledCoordA(grsegs[chunknum], width, height, scx, scy);
 }
@@ -197,6 +189,7 @@ void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
 }
 
 void LatchDrawPicScaledCoord(unsigned scx, unsigned scy, unsigned picnum) {
+  printf("LatchDrawPicScaledCoord(%d, %d, picnum: %d)\r\n", scx, scy, picnum);
   VL_LatchToScreenScaledCoord3(latchpics[2 + picnum - LATCHPICS_LUMP_START], scx * 8, scy);
 }
 

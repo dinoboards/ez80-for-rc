@@ -1174,4 +1174,6 @@ extern const uint8_t *SDL_GetKeyboardState(int *numkeys);
 #define SDL_BlitScaled(...)
 #define SDL_SaveBMP(...)
 
+extern const uint8_t scale_points[320];
+
 #endif

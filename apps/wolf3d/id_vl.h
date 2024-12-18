@@ -92,6 +92,7 @@ static void inline VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int
   VL_LatchToScreenScaledCoord7(source, xsrc, ysrc, width, height, scaleFactor * xdest, scaleFactor * ydest);
 }
 static void inline VL_LatchToScreenScaledCoord3(SDL_Surface *source, int scx, int scy) {
+  printf("VL_LatchToScreenScaledCoord3(%p, %d, %d)\r\n", source, scx, scy);
   VL_LatchToScreenScaledCoord7(source, 0, 0, source->w, source->h, scx, scy);
 }
 

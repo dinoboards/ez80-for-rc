@@ -1625,9 +1625,9 @@ void DrawMouseSens(void) {
   ClearMScreen();
   VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
 #ifdef SPANISH
-  DrawWindow(10, 80, 300, 43, BKGDCOLOR);
+  DrawWindow(10, 80, 256 - 16, 43, BKGDCOLOR);
 #else
-  DrawWindow(10, 80, 300, 30, BKGDCOLOR);
+  DrawWindow(10, 80, 256 - 16, 30, BKGDCOLOR);
 #endif
 
   WindowX = 0;
@@ -2495,6 +2495,7 @@ int CP_ChangeView(int _ __attribute__((unused))) {
   if (oldview != newview) {
     SD_PlaySound(SHOOTSND);
     Message(STR_THINK "...");
+    printf("Viewsize: %d\n", newview);
     NewViewSize(newview);
   }
 
@@ -2621,30 +2622,30 @@ void IntroScreen(void) {
   }
 #else
   for (i = 0; i < 10; i++)
-    VWB_Bar(49, 163 - 8 * i, 6, 5, MAINCOLOR - i);
+    VWB_Bar(39, 163 - 8 * i, 5, 5, MAINCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(89, 163 - 8 * i, 6, 5, EMSCOLOR - i);
+    VWB_Bar(71, 163 - 8 * i, 5, 5, EMSCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(129, 163 - 8 * i, 6, 5, XMSCOLOR - i);
+    VWB_Bar(103, 163 - 8 * i, 5, 5, XMSCOLOR - i);
 #endif
 
   //
   // FILL BOXES
   //
   if (MousePresent)
-    VWB_Bar(164, 82, 12, 2, FILLCOLOR);
+    VWB_Bar(131, 82, 10, 2, FILLCOLOR);
 
   if (IN_JoyPresent())
-    VWB_Bar(164, 105, 12, 2, FILLCOLOR);
+    VWB_Bar(131, 105, 10, 2, FILLCOLOR);
 
   if (AdLibPresent && !SoundBlasterPresent)
-    VWB_Bar(164, 128, 12, 2, FILLCOLOR);
+    VWB_Bar(131, 128, 10, 2, FILLCOLOR);
 
   if (SoundBlasterPresent)
-    VWB_Bar(164, 151, 12, 2, FILLCOLOR);
+    VWB_Bar(131, 151, 10, 2, FILLCOLOR);
 
   //    if (SoundSourcePresent)
-  //        VWB_Bar (164, 174, 12, 2, FILLCOLOR);
+  //        VWB_Bar (131, 174, 10, 2, FILLCOLOR);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -2662,7 +2663,7 @@ void IntroScreen(void) {
 ////////////////////////////////////////////////////////////////////
 void ClearMScreen(void) {
 #ifndef SPEAR
-  VWB_Bar(0, 0, 320, 200, BORDCOLOR);
+  VWB_Bar(0, 0, 256, 212, BORDCOLOR);
 #else
   VWB_DrawPic(0, 0, C_BACKDROPPIC);
 #endif
@@ -3620,11 +3621,11 @@ void DrawMenuGun(CP_iteminfo *iteminfo) {
 ///////////////////////////////////////////////////////////////////////////
 void DrawStripes(int y) {
 #ifndef SPEAR
-  VWB_Bar(0, y, 320, 24, 0);
-  VWB_Hlin(0, 319, y + 22, STRIPE);
+  VWB_Bar(0, y, 256, 24, 0);
+  VWB_Hlin(0, 255, y + 22, STRIPE);
 #else
-  VWB_Bar(0, y, 320, 22, 0);
-  VWB_Hlin(0, 319, y + 23, 0);
+  VWB_Bar(0, y, 256, 22, 0);
+  VWB_Hlin(0, 255, y + 23, 0);
 #endif
 }
 

@@ -298,22 +298,16 @@ void PG13(void) {
   printf("%s:%d\r\n", __FILE__, __LINE__);
 
   VW_FadeOut();
-  VWB_Bar(0, 0, 320, 200, 0x82); // background
-
-  printf("%s:%d\r\n", __FILE__, __LINE__);
+  VWB_Bar(0, 0, 256, 200, 0x82); // background
 
   CA_CacheGrChunk(PG13PIC);
   VWB_DrawPic(216, 110, PG13PIC);
   VW_UpdateScreen();
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
   UNCACHEGRCHUNK(PG13PIC);
 
   VW_FadeIn();
   IN_UserInput(TickBase * 2);
-
-  printf("%s:%d\r\n", __FILE__, __LINE__);
 
   VW_FadeOut();
 }
