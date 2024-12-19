@@ -11,6 +11,9 @@
 
 #include "wolfutil.h"
 
+#define NANOPRINTF_IMPLEMENTATION
+#include <nanoprintf.h>
+
 void erase_page_0() { vdp_cmd_vdp_to_vram(LEFT, TOP, WIDTH, HEIGHT, 0x0, 0); }
 
 uint8_t temp[320 * 200];
@@ -27,6 +30,7 @@ void show_help() {
   printf("  -S=<filename>    Display a converted IMG file\r\n");
   printf("  -P=<swapfile>    Parse and test loading swap file\r\n");
   printf("  -T=MM            Test MM functions\r\n");
+  printf("  -T=FP            Test Fixed Point functions\r\n");
   printf("  -X               Test rendering tiles\r\n");
   printf("  -? /?            Show this help message\r\n");
 }
@@ -39,7 +43,7 @@ bool argument_help(const char *arg) {
 
   return false;
 }
-typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_X } command_type_t;
+typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_T_FP, CMD_X } command_type_t;
 static command_type_t cmd = CMD_NONE;
 const char           *filename;
 
@@ -92,6 +96,15 @@ bool argument_T_MM(const char *arg) {
   return true;
 }
 
+bool argument_T_FP(const char *arg) {
+  if (strcmp(arg, "-T=FP") != 0 && strcmp(arg, "/T=FP") != 0)
+    return false;
+
+  cmd = CMD_T_FP;
+
+  return true;
+}
+
 bool argument_X(const char *arg) {
   if (strcmp(arg, "-X") != 0 && strcmp(arg, "/X") != 0)
     return false;
@@ -123,6 +136,9 @@ int main(const int argc, const char *argv[]) {
     if (argument_T_MM(argv[i]))
       continue;
 
+    if (argument_T_FP(argv[i]))
+      continue;
+
     if (argument_X(argv[i]))
       continue;
 
@@ -146,6 +162,8 @@ int main(const int argc, const char *argv[]) {
     parse_test_swap_file();
   } else if (cmd == CMD_T_MM) {
     test_mm_functions();
+  } else if (cmd == CMD_T_FP) {
+    test_fixed_mul();
   } else if (cmd == CMD_X) {
     test_rendering_tiles();
   }
