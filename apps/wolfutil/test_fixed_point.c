@@ -4,11 +4,11 @@
 
 typedef int32_t fixed;
 
-#define GLOBAL1       (1l << 16)
+#define GLOBAL1 (1l << 16)
 
 extern void spike(int32_t a);
 
-extern fixed FixedMul (fixed a, fixed b);
+extern fixed FixedMul(fixed a, fixed b);
 
 // fixed FixedMul (fixed a, fixed b)
 // 	return (a>>8)*(b>>8);
@@ -34,7 +34,6 @@ fixed FixedByFracOrig(fixed a, fixed b) {
     res = -res;
   return res;
 }
-
 
 // For player movement in demos exactly as in the original Wolf3D v1.4 source code
 void test_fixed_mul() {
@@ -94,7 +93,7 @@ void test_fixed_mul() {
     abort();
   }
 
-    // Test 6: 60000.45 * 4
+  // Test 6: 60000.45 * 4
   a = (fixed)(60000.45 * GLOBAL1);
   b = (fixed)(4 * GLOBAL1);
   c = FixedMul(a, b);
@@ -102,7 +101,6 @@ void test_fixed_mul() {
     printf("FixedMul(%ld, %ld) = %ld\n", a, b, c);
     abort();
   }
-
 
   printf("All FixedMul tests passed.\n");
 }

@@ -175,6 +175,9 @@ void Quit(const char *errorStr, ...) __attribute__((noreturn));
 
 #define MINDIST (0x5800l)
 
+#define MAXSCALEHEIGHT 256 // largest scale on largest view
+#define MAXVIEWWIDTH   256
+
 #define mapshift 6
 #define MAPSIZE  (1 << mapshift)
 #define maparea  MAPSIZE *MAPSIZE
@@ -1384,11 +1387,11 @@ void PreloadGraphics(void);
 //
 // math tables
 //
-extern short  *pixelangle;
+extern short   pixelangle[MAXVIEWWIDTH];
 extern int32_t finetangent[FINEANGLES / 4];
 extern fixed   sintable[];
 extern fixed  *costable;
-extern int    *wallheight;
+extern int     wallheight[MAXVIEWWIDTH];
 extern word    horizwall[], vertwall[];
 extern int32_t lasttimecount;
 extern int32_t frameon;
@@ -1625,7 +1628,8 @@ extern void EndText(void);
 =============================================================================
 */
 
-static inline fixed FixedMul(fixed a, fixed b) { return (fixed)(((int64_t)a * b + 0x8000) >> 16); }
+static inline fixed FixedMul(fixed a, fixed b) { return (a >> 8) * (b >> 8); }
+// extern fixed FixedMul(fixed a, fixed b);
 
 #define DEMOCHOOSE_ORIG_SDL(orig, sdl) ((demorecord || demoplayback) ? (orig) : (sdl))
 #define DEMOCOND_ORIG                  (demorecord || demoplayback)

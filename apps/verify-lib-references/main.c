@@ -396,7 +396,7 @@ int main(int argc, char *argv[]) {
 
   test_exp2f();
 
-  test_tan(0.50, 0.42, 0.43);
+  test_tan(0.50, 0.545, 0.547);
 
   abort();
 #endif

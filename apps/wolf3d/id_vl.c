@@ -457,8 +457,8 @@ void VL_Vlin(int x __attribute__((unused)),
 
 void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color) {
 
-  printf("VL_BarScaledCoord\r\n");
-  printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
+  // printf("VL_BarScaledCoord\r\n");
+  // printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
 
   // vdp_cmd_vdp_to_vram(scx, scy, scwidth, scheight, color, 0);
   assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&
@@ -520,8 +520,8 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
 // TODO: Change this to work with the V9958
 // TODO: should this function drop pixels to fit into the 256 width?
 void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, int desty) {
-  printf("VL_MemToScreenScaledCoordA(");
-  printf("source: %p, width: %d, height: %d, destx: %d, desty: %d\r\n", source, width, height, destx, desty);
+  // printf("VL_MemToScreenScaledCoordA(");
+  // printf("source: %p, width: %d, height: %d, destx: %d, desty: %d\r\n", source, width, height, destx, desty);
 
   assert(destx >= 0 && destx + width <= (int)320 && desty >= 0 && desty + height <= (int)screenHeight &&
          "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
@@ -592,9 +592,10 @@ void VL_MemToScreenScaledCoordN(
 
 void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
 
-  printf("VL_LatchToScreenScaledCoord7\r\n");
-  printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d\r\n", source, xsrc, ysrc, width, height,
-         scxdest, scydest);
+  // printf("VL_LatchToScreenScaledCoord7\r\n");
+  // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d\r\n", source, xsrc, ysrc, width,
+  // height,
+  //        scxdest, scydest);
 
   assert(scxdest >= 0 && scxdest + width <= 320 && scydest >= 0 && scydest + height <= (int)screenHeight &&
          "VL_LatchToScreenScaledCoord7: Destination rectangle out of bounds!");
