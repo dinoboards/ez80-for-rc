@@ -1628,8 +1628,7 @@ extern void EndText(void);
 =============================================================================
 */
 
-static inline fixed FixedMul(fixed a, fixed b) { return (a >> 8) * (b >> 8); }
-// extern fixed FixedMul(fixed a, fixed b);
+extern fixed FixedMul(fixed a, fixed b);
 
 #define DEMOCHOOSE_ORIG_SDL(orig, sdl) ((demorecord || demoplayback) ? (orig) : (sdl))
 #define DEMOCOND_ORIG                  (demorecord || demoplayback)

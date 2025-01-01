@@ -1,3 +1,4 @@
+#include <ez80.h>
 // WL_DRAW.C
 
 #include "wl_def.h"
@@ -267,7 +268,7 @@ int CalcHeight() {
 byte *postsource;
 int   postx;
 
-void ScalePost() {
+void __func_on_chip ScalePost() {
   int  ywcount, yoffs, yw, yd, yendoffs;
   byte col;
 
