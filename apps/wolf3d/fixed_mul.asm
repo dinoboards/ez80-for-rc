@@ -1,7 +1,7 @@
-	section	.text, "ax", @progbits
+	section	.text_on_chip, "ax", @progbits
 	.assume	adl=1
 	.global	_FixedMul
-	.extern __lmulu
+	.extern	__lmulu
 
 ; typedef int32_t fixed;
 ;
@@ -45,17 +45,16 @@ _FixedMul:
 ;    O: euhl=EUHL*AUBC
 ;   FO: --
 ;   CC: 93*r(PC)+15*w(SPL)+15*r(SPL)+41
-;				; a		ude		uhl		uix		u(sp)
+;				; a		ude		uhl		uy		u(sp)
 Mul_EUHL_AUBC_EUHL:		;--------------+---------------+---------------+---------------+----------------------------------------
 	push	af		;								u(sp)=AF
 	push	de		;									u(sp)=UDE
-	; push	ix		;										u(sp)=UIX
 	ld	d, c		;		 de=CE
 	mlt	de		;		ude=E*C
 	ld	d, a		;		 d =A
 	ld	a, e		; a=E*C
 	ld	e, l		; 		 de=AL
-	ld	iyl, e		;						 ixl=L
+	ld	iyl, e		;						 iyl=L
 	mlt	de		;		ude=L*A
 	add	a, e		; a=E*C+L*A
 	dec	sp
@@ -66,7 +65,7 @@ Mul_EUHL_AUBC_EUHL:		;--------------+---------------+---------------+-----------
 	inc	sp
 	inc	sp		;											 (sp)=[BCU][HLU]
 	ld	d, h		;		 d =H
-	ld	iyh, d		;						 ix=HL
+	ld	iyh, d		;						 iy=HL
 	pop	hl		;				 hl=[BCU][HLU]						--
 	ld	e, h		;		 de=H[BCU]
 	mlt	de		;		ude=H*BCU
@@ -111,7 +110,6 @@ Mul_EUHL_AUBC_EUHL:		;--------------+---------------+---------------+-----------
 	mlt	de		;		ude=L*C
 	add	hl, de		;				uhl=L*C+(H*C+L*B<<8)+(HLU*C+H*B+L*BCU<<16)
 	adc	a, 0		; a=L*C+(H*C+L*B<<8)+(HLU*C+H*B+L*BCU<<16)+(E*C+HLU*B+H*BCU+L*A<<24)>>24
-	; pop	ix		;						uix=UIX				--
 	pop	de		;		ude=UDE							--
 	ld	e, a		;		  e=H*C+L*B+(HLU*C+H*B+L*BCU<<8)+(E*C+HLU*B+H*BCU+L*A<<16)>>16
 	pop	af		; a=A								--

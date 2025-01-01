@@ -10,9 +10,9 @@ extern void spike(int32_t a);
 
 extern fixed FixedMul(fixed a, fixed b);
 
-// fixed FixedMul (fixed a, fixed b)
-// 	return (a>>8)*(b>>8);
-// }
+fixed FixedMulORG(fixed a, fixed b) { return (a >> 8) * (b >> 8); }
+
+// #define FixedMul FixedMulORG
 
 // For player movement in demos exactly as in the original Wolf3D v1.4 source code
 fixed FixedByFracOrig(fixed a, fixed b) {
@@ -53,7 +53,7 @@ void test_fixed_mul() {
   b = 2 * GLOBAL1;
   c = FixedMul(a, b);
   if (c != 4 * GLOBAL1) {
-    printf("FixedMul(%ld, %ld) = %ld\n", a, b, c);
+    printf("2x2: FixedMul(%ld, %ld) = %ld\n", a, b, c);
     abort();
   }
 
@@ -62,7 +62,7 @@ void test_fixed_mul() {
   b = 1 * GLOBAL1;
   c = FixedMul(a, b);
   if (c != -1 * GLOBAL1) {
-    printf("FixedMul(%ld, %ld) = %ld\n", a, b, c);
+    printf("-1*1: FixedMul(%ld, %ld) = %ld\n", a, b, c);
     abort();
   }
 
@@ -71,7 +71,7 @@ void test_fixed_mul() {
   b = 2 * GLOBAL1;
   c = FixedMul(a, b);
   if (c != 3 * GLOBAL1) {
-    printf("FixedMul(%ld, %ld) = %ld\n", a, b, c);
+    printf("1.5*2: FixedMul(%ld, %ld) = %ld\n", a, b, c);
     abort();
   }
 
@@ -80,7 +80,7 @@ void test_fixed_mul() {
   b = -2 * GLOBAL1;
   c = FixedMul(a, b);
   if (c != 4 * GLOBAL1) {
-    printf("FixedMul(%ld, %ld) = %ld\n", a, b, c);
+    printf("-2*-2: FixedMul(%ld, %ld) = %ld\n", a, b, c);
     abort();
   }
 
@@ -89,7 +89,7 @@ void test_fixed_mul() {
   b = (fixed)(0.5 * GLOBAL1);
   c = FixedMul(a, b);
   if (c != (fixed)(0.25 * GLOBAL1)) {
-    printf("FixedMul(%ld, %ld) = %ld\n", a, b, c);
+    printf("0.5*0.5: FixedMul(%ld, %ld) = %ld\n", a, b, c);
     abort();
   }
 
@@ -98,9 +98,28 @@ void test_fixed_mul() {
   b = (fixed)(4 * GLOBAL1);
   c = FixedMul(a, b);
   if (c != (fixed)(240001.8 * GLOBAL1)) {
+    printf("60000.45*4: FixedMul(%ld, %ld) = %ld\n", a, b, c);
+    abort();
+  }
+
+  // Test 6: -0.5 * 0.5 = -0.25
+  a = (fixed)(-0.5 * GLOBAL1);
+  b = (fixed)(0.5 * GLOBAL1);
+  c = FixedMul(a, b);
+  if (c != (fixed)(-0.25 * GLOBAL1)) {
+    printf("-0.5*0.5: FixedMul(%ld, %ld) = %ld\n", a, b, c);
+    abort();
+  }
+
+  a = -4640; // FFFF FFFF FFFF EDE0 ?? -0.07080078125
+  b = 54866; // 0.837188720703125
+  // -0.0592736154794693 -3884.5556640625
+  c = FixedMul(a, b);
+  if (c != -4066) {
     printf("FixedMul(%ld, %ld) = %ld\n", a, b, c);
     abort();
   }
+  //  FixedMul(-4640, 54866) = -4066 -- -704647138
 
   printf("All FixedMul tests passed.\n");
 }
