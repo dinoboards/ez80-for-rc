@@ -1,5 +1,6 @@
 	include ".\config.inc"
 
+
 	DEFINE	INTERNAL_HIRAM_ROM, SPACE = ROM
 	SEGMENT	INTERNAL_HIRAM_ROM
 
@@ -49,7 +50,7 @@ _default_mi_handler_hook:				; if alt-firmware wants to handle a default interru
 
 ; EZ80_DELAY (RST %18)
 ; Wait 5 to 6 us (approx) for the eZ80
-; indepedent of the clock speed
+; independent of the clock speed
 ;
 ; Input
 ;  None
