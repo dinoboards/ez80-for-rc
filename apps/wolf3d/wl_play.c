@@ -1055,6 +1055,8 @@ think:
 int32_t funnyticount;
 
 void PlayLoop(void) {
+  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+
   playstate     = ex_stillplaying;
   lasttimecount = GetTimeCount();
   frameon       = 0;
@@ -1070,18 +1072,28 @@ void PlayLoop(void) {
   do {
     PollControls();
 
+    printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+
     //
     // actor thinking
     //
     madenoise = false;
 
+    printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+
     MoveDoors();
+    printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+
     MovePWalls();
 
     for (obj = player; obj; obj = obj->next)
       DoActor(obj);
 
+    printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+
     UpdatePaletteShifts();
+
+    printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
     ThreeDRefresh();
 
@@ -1103,6 +1115,8 @@ void PlayLoop(void) {
     UpdateSoundLoc(); // JAB
     if (screenfaded)
       VW_FadeIn();
+
+    printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
     CheckKeys();
 

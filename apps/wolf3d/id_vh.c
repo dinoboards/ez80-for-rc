@@ -189,7 +189,7 @@ void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
 }
 
 void LatchDrawPicScaledCoord(unsigned scx, unsigned scy, unsigned picnum) {
-  printf("LatchDrawPicScaledCoord(%d, %d, picnum: %d)\r\n", scx, scy, picnum);
+  // printf("LatchDrawPicScaledCoord(%d, %d, picnum: %d)\r\n", scx, scy, picnum);
   VL_LatchToScreenScaledCoord3(latchpics[2 + picnum - LATCHPICS_LUMP_START], scx * 8, scy);
 }
 

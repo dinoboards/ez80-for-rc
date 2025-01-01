@@ -2,6 +2,7 @@
 
 #include "wl_def.h"
 
+#include "id_vh.h"
 /*
 =============================================================================
 
@@ -32,13 +33,14 @@ boolean fpscounter;
 
 int fps_frames = 0, fps_time = 0, fps = 0;
 
-int *wallheight;
-int  min_wallheight;
+int wallheight[MAXVIEWWIDTH];
+
+int min_wallheight;
 
 //
 // math tables
 //
-short  *pixelangle;
+short   pixelangle[MAXVIEWWIDTH];
 int32_t finetangent[FINEANGLES / 4];
 fixed   sintable[ANGLES + ANGLES / 4];
 fixed  *costable = sintable + (ANGLES / 4);
@@ -70,7 +72,7 @@ int     lasttexture;
 // ray tracing variables
 //
 short    focaltx, focalty, viewtx, viewty;
-longword xpartialup, xpartialdown, ypartialup, ypartialdown;
+uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 
 short midangle, angle;
 
@@ -289,8 +291,9 @@ void ScalePost() {
     }
     yendoffs--;
   }
-  if (yw < 0)
+  if (yw < 0) {
     return;
+  }
 
   col = postsource[yw];
 
@@ -311,11 +314,11 @@ void ScalePost() {
   }
 }
 
-void GlobalScalePost(byte *vidbuf, unsigned pitch) {
-  vbuf      = vidbuf;
-  vbufPitch = pitch;
-  ScalePost();
-}
+// void GlobalScalePost(byte *vidbuf, unsigned pitch) {
+//   vbuf      = vidbuf;
+//   vbufPitch = pitch;
+//   ScalePost();
+// }
 
 /*
 ====================
@@ -987,15 +990,17 @@ void CalcTics(void) {
 
 void AsmRefresh() {
   int32_t  xstep, ystep;
-  longword xpartial, ypartial;
+  uint24_t xpartial, ypartial;
   boolean  playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
   for (pixx = 0; pixx < viewwidth; pixx++) {
     short angl = midangle + pixelangle[pixx];
     if (angl < 0)
       angl += FINEANGLES;
+
     if (angl >= 3600)
       angl -= FINEANGLES;
+
     if (angl < 900) {
       xtilestep = 1;
       ytilestep = -1;
@@ -1047,6 +1052,7 @@ void AsmRefresh() {
           ytile      = (short)(yintercept >> TILESHIFT);
           tilehit    = pwalltile;
           HitVertWall();
+
           continue;
         }
       } else if ((pwalldir == di_south && ytilestep == 1) || (pwalldir == di_north && ytilestep == -1)) {
@@ -1076,12 +1082,12 @@ void AsmRefresh() {
         if (xtile < 0)
           xintercept = 0, xtile = 0;
         else if (xtile >= mapwidth)
-          xintercept = mapwidth << TILESHIFT, xtile = mapwidth - 1;
+          xintercept = (int32_t)mapwidth << TILESHIFT, xtile = mapwidth - 1;
         else
           xtile = (short)(xintercept >> TILESHIFT);
         if (yintercept < 0)
           yintercept = 0, ytile = 0;
-        else if (yintercept >= (mapheight << TILESHIFT))
+        else if (yintercept >= ((int32_t)mapheight << TILESHIFT))
           yintercept = mapheight << TILESHIFT, ytile = mapheight - 1;
         yspot   = 0xffff;
         tilehit = 0;
@@ -1099,7 +1105,7 @@ void AsmRefresh() {
           if ((word)yintbuf < doorposition[tilehit & 0x7f])
             goto passvert;
           yintercept = yintbuf;
-          xintercept = (xtile << TILESHIFT) | 0x8000;
+          xintercept = ((int32_t)xtile << TILESHIFT) | 0x8000;
           ytile      = (short)(yintercept >> TILESHIFT);
           HitVertDoor();
         } else {
@@ -1123,7 +1129,7 @@ void AsmRefresh() {
                 if ((yintbuf >> 16) != (yintercept >> 16))
                   goto passvert;
 
-                xintercept = (xtile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
+                xintercept = ((int32_t)xtile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
                 yintercept = yintbuf;
                 ytile      = (short)(yintercept >> TILESHIFT);
                 tilehit    = pwalltile;
@@ -1133,7 +1139,7 @@ void AsmRefresh() {
                 if ((yintbuf >> 16) != (yintercept >> 16))
                   goto passvert;
 
-                xintercept = (xtile << TILESHIFT) - (pwallposinv << 10);
+                xintercept = ((int32_t)xtile << TILESHIFT) - (pwallposinv << 10);
                 yintercept = yintbuf;
                 ytile      = (short)(yintercept >> TILESHIFT);
                 tilehit    = pwalltile;
@@ -1160,7 +1166,7 @@ void AsmRefresh() {
                   HitHorizWall();
                 } else {
                   texdelta   = -(pwallposi << 10);
-                  xintercept = xtile << TILESHIFT;
+                  xintercept = (int32_t)xtile << TILESHIFT;
                   ytile      = (short)(yintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitVertWall();
@@ -1168,7 +1174,7 @@ void AsmRefresh() {
               } else {
                 if (((uint32_t)yintercept >> 16) == pwally && xtile == pwallx) {
                   texdelta   = -(pwallposi << 10);
-                  xintercept = xtile << TILESHIFT;
+                  xintercept = (int32_t)xtile << TILESHIFT;
                   ytile      = (short)(yintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitVertWall();
@@ -1189,7 +1195,7 @@ void AsmRefresh() {
               }
             }
           } else {
-            xintercept = xtile << TILESHIFT;
+            xintercept = (int32_t)xtile << TILESHIFT;
             ytile      = (short)(yintercept >> TILESHIFT);
             HitVertWall();
           }
@@ -1200,7 +1206,7 @@ void AsmRefresh() {
       *((byte *)spotvis + xspot) = 1;
       xtile += xtilestep;
       yintercept += ystep;
-      xspot = (word)((xtile << mapshift) + ((uint32_t)yintercept >> 16));
+      xspot = (word)(((uint32_t)xtile << mapshift) + ((uint32_t)yintercept >> 16));
     } while (1);
     continue;
 
@@ -1214,13 +1220,13 @@ void AsmRefresh() {
         if (ytile < 0)
           yintercept = 0, ytile = 0;
         else if (ytile >= mapheight)
-          yintercept = mapheight << TILESHIFT, ytile = mapheight - 1;
+          yintercept = (int32_t)mapheight << TILESHIFT, ytile = mapheight - 1;
         else
           ytile = (short)(yintercept >> TILESHIFT);
         if (xintercept < 0)
           xintercept = 0, xtile = 0;
-        else if (xintercept >= (mapwidth << TILESHIFT))
-          xintercept = mapwidth << TILESHIFT, xtile = mapwidth - 1;
+        else if (xintercept >= ((int32_t)mapwidth << TILESHIFT))
+          xintercept = (int32_t)mapwidth << TILESHIFT, xtile = mapwidth - 1;
         xspot   = 0xffff;
         tilehit = 0;
         HitVertBorder();
@@ -1237,7 +1243,7 @@ void AsmRefresh() {
           if ((word)xintbuf < doorposition[tilehit & 0x7f])
             goto passhoriz;
           xintercept = xintbuf;
-          yintercept = (ytile << TILESHIFT) + 0x8000;
+          yintercept = ((int32_t)ytile << TILESHIFT) + 0x8000;
           xtile      = (short)(xintercept >> TILESHIFT);
           HitHorizDoor();
         } else {
@@ -1259,7 +1265,7 @@ void AsmRefresh() {
                 if ((xintbuf >> 16) != (xintercept >> 16))
                   goto passhoriz;
 
-                yintercept = (ytile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
+                yintercept = ((int32_t)ytile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
                 xintercept = xintbuf;
                 xtile      = (short)(xintercept >> TILESHIFT);
                 tilehit    = pwalltile;
@@ -1269,7 +1275,7 @@ void AsmRefresh() {
                 if ((xintbuf >> 16) != (xintercept >> 16))
                   goto passhoriz;
 
-                yintercept = (ytile << TILESHIFT) - (pwallposinv << 10);
+                yintercept = ((int32_t)ytile << TILESHIFT) - (pwallposinv << 10);
                 xintercept = xintbuf;
                 xtile      = (short)(xintercept >> TILESHIFT);
                 tilehit    = pwalltile;
@@ -1291,12 +1297,12 @@ void AsmRefresh() {
                   else
                     xintercept = (xintercept & 0xffff0000) - TILEGLOBAL + (pwallposi << 10);
                   yintercept = yintercept - ((ystep * (64 - pwallpos)) >> 6);
-                  ytile      = (short)(yintercept >> TILESHIFT);
+                  ytile      = (short)((int32_t)yintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitVertWall();
                 } else {
                   texdelta   = -(pwallposi << 10);
-                  yintercept = ytile << TILESHIFT;
+                  yintercept = (int32_t)ytile << TILESHIFT;
                   xtile      = (short)(xintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1304,7 +1310,7 @@ void AsmRefresh() {
               } else {
                 if (((uint32_t)xintercept >> 16) == pwallx && ytile == pwally) {
                   texdelta   = -(pwallposi << 10);
-                  yintercept = ytile << TILESHIFT;
+                  yintercept = (int32_t)ytile << TILESHIFT;
                   xtile      = (short)(xintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1325,7 +1331,7 @@ void AsmRefresh() {
               }
             }
           } else {
-            yintercept = ytile << TILESHIFT;
+            yintercept = (int32_t)ytile << TILESHIFT;
             xtile      = (short)(xintercept >> TILESHIFT);
             HitHorizWall();
           }
@@ -1358,18 +1364,17 @@ void WallRefresh(void) {
   min_wallheight = viewheight;
   lastside       = -1; // the first pixel is on a new wall
   AsmRefresh();
+
   ScalePost(); // no more optimization on last post
 }
 
 void CalcViewVariables() {
   viewangle = player->angle;
-  // printf("\nvieangle=%d\n",viewangle);
-  midangle = viewangle * (FINEANGLES / ANGLES);
-  viewsin  = sintable[viewangle];
-  viewcos  = costable[viewangle];
-  // printf("%d\n",viewcos);
-  viewx = player->x - FixedMul(focallength, viewcos);
-  viewy = player->y + FixedMul(focallength, viewsin);
+  midangle  = viewangle * (FINEANGLES / ANGLES);
+  viewsin   = sintable[viewangle];
+  viewcos   = costable[viewangle];
+  viewx     = player->x - FixedMul(focallength, viewcos);
+  viewy     = player->y + FixedMul(focallength, viewsin);
 
   focaltx = (short)(viewx >> TILESHIFT);
   focalty = (short)(viewy >> TILESHIFT);
@@ -1444,8 +1449,9 @@ void ThreeDRefresh(void) {
     }
 #endif
 
-    SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-    SDL_Flip(screen);
+    VH_UpdateScreen();
+    // SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
+    // SDL_Flip(screen);
   }
 
 #ifndef REMDEBUG

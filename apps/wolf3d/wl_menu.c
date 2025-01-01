@@ -274,7 +274,7 @@ static byte *ExtScanNames[] =   // Names corresponding to ExtScanCodes
 //
 ////////////////////////////////////////////////////////////////////
 void US_ControlPanel(ScanCode scancode) {
-  int which;
+  // int which;
 
   if (ingame) {
     if (CP_CheckQuick(scancode))
@@ -336,13 +336,12 @@ void US_ControlPanel(ScanCode scancode) {
   MenuFadeIn();
   StartGame = 0;
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
   //
   // MAIN MENU LOOP
   //
   do {
-    which = HandleMenu(&MainItems, &MainMenu[0], NULL);
+    // which = HandleMenu(&MainItems, &MainMenu[0], NULL);
+    NewGame(1, 0);
 
 #ifdef SPEAR
 #ifndef SPEARDEMO
@@ -390,35 +389,35 @@ void US_ControlPanel(ScanCode scancode) {
 #endif
 #endif
 
-    switch (which) {
-    case viewscores:
-      if (MainMenu[viewscores].routine == NULL) {
-        if (CP_EndGame(0))
-          StartGame = 1;
-      } else {
-        DrawMainMenu();
-        MenuFadeIn();
-      }
-      break;
+    // switch (which) {
+    // case viewscores:
+    //   if (MainMenu[viewscores].routine == NULL) {
+    //     if (CP_EndGame(0))
+    //       StartGame = 1;
+    //   } else {
+    //     DrawMainMenu();
+    //     MenuFadeIn();
+    //   }
+    //   break;
 
-    case backtodemo:
-      StartGame = 1;
-      if (!ingame)
-        StartCPMusic(INTROSONG);
-      VL_FadeOut(0, 255, 0, 0, 0, 10);
-      break;
+    // case backtodemo:
+    StartGame = 1;
+    if (!ingame)
+      StartCPMusic(INTROSONG);
+    VL_FadeOut(0, 255, 0, 0, 0, 10);
+    //   break;
 
-    case -1:
-    case quit:
-      CP_Quit(0);
-      break;
+    // case -1:
+    // case quit:
+    //   CP_Quit(0);
+    //   break;
 
-    default:
-      if (!StartGame) {
-        DrawMainMenu();
-        MenuFadeIn();
-      }
-    }
+    // default:
+    //   if (!StartGame) {
+    //     DrawMainMenu();
+    //     MenuFadeIn();
+    //   }
+    // }
 
     //
     // "EXIT OPTIONS" OR "NEW GAME" EXITS

@@ -1143,7 +1143,6 @@ static void InitGame() {
   BuildTables(); // trig tables
   SetupWalls();
 
-  printf("View size: %d\n", viewsize);
   NewViewSize(viewsize);
 
   //
@@ -1375,8 +1374,8 @@ static void DemoLoop() {
 
   while (1) {
 
-    // while (!param_nowait) {
-    while (true) {
+    while (!param_nowait) {
+      // while (true) {
       printf(".");
       //
       // title page
