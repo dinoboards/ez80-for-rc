@@ -69,3 +69,48 @@ Refer to the following images for the correct installation orientation.
 <br/>
 
 > Incorrect orientation may result in damage to the CPU and or the programmer.  I have yet to do it to find out what happens!
+
+### Memory Map
+
+| Address Range    | Description |
+| ---------------- | ----------- |
+| 000000 -> 01FFFF | ON-CHIP ROM |
+| 02E000 -> 02FFFF | ON-CHIP RAM (__RAM_ADDR_U_INIT_PARAM) |
+| 030000 -> 03FFFF | EXTERNAL RAM (CS3) |
+| 040000 -> 23FFFF | WIP EXTERNAL FLAT RAM (CS0) 2MB |
+| 240000 -> FFFFFF | WIP OTHER (CS1) 14MB |
+
+### Firmware Segments
+
+#### ROM Segments
+| Name | Description |
+| ----  | --- |
+| .RESET   | Hard reset/power on startup @ 0x000000 |
+| .IVECTS  | Interrupt jump vectors @ 0x000100 |
+| .STARTUP | C Runtime Startup code |
+| CODE     | Main C/Assembly code |
+| TEXT | read only data/strings |
+| STRSECT | read only data/strings |
+| DATA | Copied for write access to RAM on startup |
+| INTERNAL_HIRAM_RAM |
+
+#### RAM Segments/sequence
+
+RAM is assigned top down.
+
+| Name | Location | Description |
+| ----  | --- | --- |
+| INTERNAL_HIRAM_RAM | @ 0x02FF00 | Reserved firmware jump vectors |
+| BSS                | @ (BASE OF INTERNAL_HIRAM_RAM) - $100 | C uninitialised variables. Zeroed on startup. |
+| DATA               | @ (BASE OF BSS) - $10 | C initialised variables |
+| INTERNAL_RAM_ROM -> INTERNAL_RAM_RAM   | @ BASE OF DATA - $630 | firmware code to be copied to and run from RAM |
+| SPL_BASE           | BASE OF INTERNAL_RAM_RAM | Stack Top |
+
+
+### I/O Addressing
+| Address Range    | Description |
+| ---------------- | ----------- |
+| 0000 -> 00FF     | Reserved ON-CHIP IO |
+| 0100 -> FEFF     | Unassigned |
+| FF00 -> FFFF		 | External 8-Bit IO (CS2) |
+

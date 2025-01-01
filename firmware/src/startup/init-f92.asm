@@ -29,7 +29,7 @@
 	XREF	_mem0_bus_mode_and_timing
 	XREF	_io_bus_mode_and_timing
 
-	XREF	FIRMWARE_RAM_RESERVED
+	XREF	SPL_BASE
 
 ;*****************************************************************************
 ; Startup code
@@ -144,7 +144,7 @@ ENDIF
 	LD	A, __RAM_CTL_INIT_PARAM
 	OUT0	(RAM_CTL), A
 
-	ld	sp, FIRMWARE_RAM_RESERVED
+	ld	sp, SPL_BASE
 
 	JP	_main
 

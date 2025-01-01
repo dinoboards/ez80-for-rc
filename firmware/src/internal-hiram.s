@@ -1,5 +1,6 @@
 	include ".\config.inc"
 
+
 	DEFINE	INTERNAL_HIRAM_ROM, SPACE = ROM
 	SEGMENT	INTERNAL_HIRAM_ROM
 
