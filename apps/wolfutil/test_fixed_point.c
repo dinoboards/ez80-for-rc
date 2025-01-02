@@ -63,6 +63,22 @@ void test_shift_functions() {
     abort();
   }
 
+  // extern int32_t sr_s32_s32_6(int32_t val);
+
+  a = 0x12345678L;
+  b = sr_s32_s32_6(a);
+  if (b != 0x48D159) {
+    printf("5: sr_s32_s32_6(%lx) = %lx\n", a, b);
+    abort();
+  }
+
+  a = 0xFEDCBA98L;
+  b = sr_s32_s32_6(a);
+  if (b != (int32_t)0xFFFB72EA) {
+    printf("6: sr_s32_s32_6(%lx) = %lx\n", a, b);
+    abort();
+  }
+
   printf("All shift functions tests passed\n");
 }
 

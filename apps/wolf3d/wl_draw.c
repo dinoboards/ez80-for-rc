@@ -1101,7 +1101,7 @@ void AsmRefresh() {
                     yintercept = (yintercept & 0xffff0000) + (pwallposi << 10);
                   else
                     yintercept = (yintercept & 0xffff0000) - TILEGLOBAL + (pwallposi << 10);
-                  xintercept = xintercept - ((xstep * (64 - pwallpos)) >> 6);
+                  xintercept = xintercept - (sr_s32_s32_6(xstep * (64 - pwallpos)));
                   xtile      = (short)(xintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1128,7 +1128,7 @@ void AsmRefresh() {
                     yintercept = (yintercept & 0xffff0000) - ((64 - pwallpos) << 10);
                   else
                     yintercept = (yintercept & 0xffff0000) + ((64 - pwallpos) << 10);
-                  xintercept = xintercept - ((xstep * pwallpos) >> 6);
+                  xintercept = xintercept - (sr_s32_s32_6(xstep * pwallpos));
                   xtile      = (short)(xintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1202,7 +1202,7 @@ void AsmRefresh() {
               }
               if ((pwalldir == di_south && ytile == pwally && (fixed_rounded_down(xintercept)) == pwallx) ||
                   (pwalldir == di_north && !(ytile == pwally && (fixed_rounded_down(xintercept)) == pwallx))) {
-                xintbuf = xintercept + ((xstep * pwallposnorm) >> 6);
+                xintbuf = xintercept + (sr_s32_s32_6(xstep * pwallposnorm));
                 if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
                   goto passhoriz;
 
@@ -1212,7 +1212,7 @@ void AsmRefresh() {
                 tilehit    = pwalltile;
                 HitHorizWall();
               } else {
-                xintbuf = xintercept + ((xstep * pwallposinv) >> 6);
+                xintbuf = xintercept + (sr_s32_s32_6(xstep * pwallposinv));
                 if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
                   goto passhoriz;
 
@@ -1237,7 +1237,7 @@ void AsmRefresh() {
                     xintercept = (xintercept & 0xffff0000) + (pwallposi << 10);
                   else
                     xintercept = (xintercept & 0xffff0000) - TILEGLOBAL + (pwallposi << 10);
-                  yintercept = yintercept - ((ystep * (64 - pwallpos)) >> 6);
+                  yintercept = yintercept - (sr_s32_s32_6(ystep * (64 - pwallpos)));
                   ytile      = (short)((int32_t)yintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitVertWall();
@@ -1264,7 +1264,7 @@ void AsmRefresh() {
                     xintercept = (xintercept & 0xffff0000) - ((64 - pwallpos) << 10);
                   else
                     xintercept = (xintercept & 0xffff0000) + ((64 - pwallpos) << 10);
-                  yintercept = yintercept - ((ystep * pwallpos) >> 6);
+                  yintercept = yintercept - (sr_s32_s32_6(ystep * pwallpos));
                   ytile      = (short)(yintercept >> TILESHIFT);
                   tilehit    = pwalltile;
                   HitVertWall();
