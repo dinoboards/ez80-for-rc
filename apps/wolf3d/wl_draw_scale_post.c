@@ -14,9 +14,8 @@
 =
 ===================
 */
-extern unsigned     vbufPitch;
-extern  byte *vbuf;
-
+extern unsigned vbufPitch;
+extern byte    *vbuf;
 
 extern byte *postsource;
 extern int   postx;

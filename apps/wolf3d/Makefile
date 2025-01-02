@@ -17,7 +17,7 @@ CFLAGS := -mllvm -z80-print-zero-offset -target ez80-none-elf -nostdinc -isystem
 
 .PHONY: WOLF3D.EXE
 WOLF3D.EXE:
-	ez80-clang ${CFLAGS}  -S wl_draw_scale_post.c -c -o wl_draw_scale_post.asm
-	ez80-clang ${CFLAGS}  -S wl_draw_calc_height.c -c -o wl_draw_calc_height.asm
-	ez80-clang ${CFLAGS}  -S cal_huff_expand.c -c -o cal_huff_expand.asm
+	@ez80-clang ${CFLAGS}  -S wl_draw_scale_post.c -c -o wl_draw_scale_post.asm
+	@ez80-clang ${CFLAGS}  -S wl_draw_calc_height.c -c -o wl_draw_calc_height.asm
+	@ez80-clang ${CFLAGS}  -S cal_huff_expand.c -c -o cal_huff_expand.asm
 	@ez80-cc --mem-model 2MB --lib v99x8-hdmi --output-dir ../bin --optimise size WOLF3D.EXE $(SRC_FILES)

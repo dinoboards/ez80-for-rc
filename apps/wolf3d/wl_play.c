@@ -6,6 +6,8 @@
 
 #include "id_mm.h"
 
+#include "keyboard.h"
+
 /*
 =============================================================================
 
@@ -49,8 +51,8 @@ unsigned tics;
 // control info
 //
 boolean mouseenabled, joystickenabled;
-int     dirscan[4]             = {sc_UpArrow, sc_RightArrow, sc_DownArrow, sc_LeftArrow};
-int     buttonscan[NUMBUTTONS] = {sc_Control, sc_Alt, sc_LShift, sc_Space, sc_1, sc_2, sc_3, sc_4};
+int     dirscan[4]             = {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT};
+int     buttonscan[NUMBUTTONS] = {KEY_ENTER, KEY_RIGHTCTRL, KEY_LEFTSHIFT, KEY_SPACE, KEY_1, KEY_2, KEY_3, KEY_4};
 int     buttonmouse[4]         = {bt_attack, bt_strafe, bt_use, bt_nobutton};
 int     buttonjoy[32]          = {
     bt_attack,     bt_strafe,     bt_use,      bt_run,      bt_strafeleft, bt_straferight, bt_esc,      bt_pause,
@@ -439,7 +441,7 @@ void PollControls(void) {
 //              middle of the screen
 //
 ///////////////////////////////////////////////////////////////////////////
-#define MAXX 320
+#define MAXX SCREEN_WIDTH_FACTOR(320)
 #define MAXY 160
 
 void CenterWindow(word w, word h) { US_DrawWindow(((MAXX / 8) - w) / 2, ((MAXY / 8) - h) / 2, w, h); }
@@ -487,7 +489,7 @@ void CheckKeys(void) {
   //
   // SECRET CHEAT CODE: 'MLI'
   //
-  if (Keyboard[sc_M] && Keyboard[sc_L] && Keyboard[sc_I]) {
+  if (Keyboard[KEY_M] && Keyboard[KEY_L] && Keyboard[KEY_I]) {
     gamestate.health = 100;
     gamestate.ammo   = 99;
     gamestate.keys   = 3;
@@ -517,7 +519,7 @@ void CheckKeys(void) {
   //
   // TRYING THE KEEN CHEAT CODE!
   //
-  if (Keyboard[sc_B] && Keyboard[sc_A] && Keyboard[sc_T]) {
+  if (Keyboard[KEY_B] && Keyboard[KEY_A] && Keyboard[KEY_T]) {
     ClearMemory();
     CA_CacheGrChunk(STARTFONT + 1);
     ClearSplitVWB();
@@ -556,9 +558,9 @@ void CheckKeys(void) {
   //
   if (
 #ifndef DEBCHECK
-      scan == sc_F10 ||
+      scan == KEY_F10 ||
 #endif
-      scan == sc_F9 || scan == sc_F7 || scan == sc_F8) // pop up quit dialog
+      scan == KEY_F9 || scan == KEY_F7 || scan == KEY_F8) // pop up quit dialog
   {
     ClearMemory();
     ClearSplitVWB();
@@ -571,12 +573,13 @@ void CheckKeys(void) {
     return;
   }
 
-  if ((scan >= sc_F1 && scan <= sc_F9) || scan == sc_Escape || buttonstate[bt_esc]) {
+  printf("Check keys: %x\r\n", scan);
+  if ((scan >= KEY_F1 && scan <= KEY_F9) || scan == KEY_ESC || buttonstate[bt_esc]) {
     int lastoffs = StopMusic();
     ClearMemory();
     VW_FadeOut();
 
-    US_ControlPanel(buttonstate[bt_esc] ? sc_Escape : scan);
+    US_ControlPanel(buttonstate[bt_esc] ? KEY_ESC : scan);
 
     SETFONTCOLOR(0, 15);
     IN_ClearKeysDown();

@@ -73,7 +73,7 @@ void EndSpear(void) {
 
   PrintX = 0;
   PrintY = 180;
-  VWB_Bar(0, 180, 320, 20, 0);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 180, SCREEN_WIDTH_FACTOR(320), 20, 0);
   US_CPrint(STR_ENDGAME3 "\n");
   US_CPrint(STR_ENDGAME4);
   VW_UpdateScreen();
@@ -124,7 +124,7 @@ void Victory(void) {
   CA_CacheGrChunk(BJCOLLAPSE3PIC);
   CA_CacheGrChunk(BJCOLLAPSE4PIC);
 
-  VWB_Bar(0, 0, 320, 200, VIEWCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 200, VIEWCOLOR);
   VWB_DrawPic(124, 44, BJCOLLAPSE1PIC);
   VW_UpdateScreen();
   VW_FadeIn();
@@ -155,7 +155,7 @@ void Victory(void) {
   CA_CacheGrChunk(C_TIMECODEPIC);
 #endif
 
-  VWB_Bar(0, 0, 320, screenHeight / scaleFactor - STATUSLINES + 1, VIEWCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), screenHeight / scaleFactor - STATUSLINES + 1, VIEWCOLOR);
   if (bordercol != VIEWCOLOR)
     DrawStatusBorder(VIEWCOLOR);
 
@@ -298,7 +298,7 @@ void PG13(void) {
   printf("%s:%d\r\n", __FILE__, __LINE__);
 
   VW_FadeOut();
-  VWB_Bar(0, 0, 256, 200, 0x82); // background
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 200, 0x82); // background
 
   CA_CacheGrChunk(PG13PIC);
   VWB_DrawPic(216, 110, PG13PIC);
@@ -513,7 +513,7 @@ void LevelCompleted(void) {
 
   CacheLump(LEVELEND_LUMP_START, LEVELEND_LUMP_END);
   ClearSplitVWB(); // set up for double buffering in split screen
-  VWB_Bar(0, 0, 320, screenHeight / scaleFactor - STATUSLINES + 1, VIEWCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), screenHeight / scaleFactor - STATUSLINES + 1, VIEWCOLOR);
 
   if (bordercol != VIEWCOLOR)
     DrawStatusBorder(VIEWCOLOR);
@@ -1163,7 +1163,7 @@ void CheckHighScore(int32_t score, word other) {
 #else
     PrintX = 16;
     fontnumber = 1;
-    VWB_Bar(PrintX - 2, PrintY - 2, 145, 15, 0x9c);
+    VWB_Bar(PrintX - 2, PrintY - 2, SCREEN_WIDTH_FACTOR(145), 15, 0x9c);
     VW_UpdateScreen();
     backcolor = 0x9c;
     fontcolor = 15;

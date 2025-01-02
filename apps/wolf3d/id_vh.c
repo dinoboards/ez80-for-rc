@@ -14,6 +14,8 @@ int  fontnumber;
 //==========================================================================
 
 void VWB_DrawPropString(const char *string) {
+  printf("VWB_DrawPropString(%s)\r\n", string);
+
   fontstruct *font;
   int         width, step, height;
   byte       *source, *dest;
@@ -148,24 +150,24 @@ void VWB_DrawPicScaledCoord(int scx, int scy, int chunknum) {
 void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
 
 void VWB_Plot(int x, int y, int color) {
-  if (scaleFactor == 1)
-    VW_Plot(x, y, color);
-  else
-    VW_Bar(x, y, 1, 1, color);
+  // if (scaleFactor == 1)
+  VW_Plot(x, y, color);
+  // else
+  //   VW_Bar(x, y, 1, 1, color);
 }
 
 void VWB_Hlin(int x1, int x2, int y, int color) {
-  if (scaleFactor == 1)
-    VW_Hlin(x1, x2, y, color);
-  else
-    VW_Bar(x1, y, x2 - x1 + 1, 1, color);
+  // if (scaleFactor == 1)
+  VW_Hlin(x1, x2, y, color);
+  // else
+  //   VW_Bar(x1, y, x2 - x1 + 1, 1, color);
 }
 
 void VWB_Vlin(int y1, int y2, int x, int color) {
-  if (scaleFactor == 1)
-    VW_Vlin(y1, y2, x, color);
-  else
-    VW_Bar(x, y1, 1, y2 - y1 + 1, color);
+  // if (scaleFactor == 1)
+  VW_Vlin(y1, y2, x, color);
+  // else
+  //   VW_Bar(x, y1, 1, y2 - y1 + 1, color);
 }
 
 /*

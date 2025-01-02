@@ -4,6 +4,9 @@
 #include "wl_def.h"
 
 #include "id_vh.h"
+
+#include "keyboard.h"
+
 /*
 =============================================================================
 
@@ -25,8 +28,8 @@
 =============================================================================
 */
 
-byte *vbuf      = NULL;
-unsigned     vbufPitch = 0;
+byte    *vbuf      = NULL;
+unsigned vbufPitch = 0;
 
 int32_t lasttimecount;
 int32_t frameon;
@@ -257,7 +260,6 @@ byte *postsource;
 int   postx;
 
 extern void __func_on_chip ScalePost();
-
 
 /*
 ====================
@@ -1360,7 +1362,7 @@ void ThreeDRefresh(void) {
 
   DrawPlayerWeapon(); // draw player's hands
 
-  if (Keyboard[sc_Tab] && viewsize == 21 && (int)gamestate.weapon != -1)
+  if (Keyboard[KEY_TAB] && viewsize == 21 && (int)gamestate.weapon != -1)
     ShowActStatus();
 
   VL_UnlockSurface(screenBuffer);
@@ -1382,7 +1384,7 @@ void ThreeDRefresh(void) {
       SETFONTCOLOR(7, 127);
       PrintX = 4;
       PrintY = 1;
-      VWB_Bar(0, 0, 50, 10, bordercol);
+      VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(50), 10, bordercol);
       US_PrintSigned(fps);
       US_Print(" fps");
     }

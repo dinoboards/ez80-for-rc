@@ -10,6 +10,8 @@
 
 #include "id_mm.h"
 
+#include "keyboard.h"
+
 /*
 =============================================================================
 
@@ -77,7 +79,7 @@ char configname[13] = "config.";
 // Command line parameter variables
 //
 boolean param_debugmode     = false;
-boolean param_nowait        = true;
+boolean param_nowait        = false;
 int     param_difficulty    = 1;  // default is "normal"
 int     param_tedlevel      = -1; // default is not to start a level
 int     param_joystickindex = 0;
@@ -790,7 +792,7 @@ void SignonScreen(void) {
 
 void FinishSignon(void) {
 #ifndef SPEAR
-  VW_Bar(0, 189, 256, 11, VL_GetPixel(0, 0));
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(320), 11, VL_GetPixel(0, 0));
   WindowX = 0;
   WindowW = 256;
   PrintY  = 190;
@@ -812,7 +814,7 @@ void FinishSignon(void) {
     IN_Ack();
 
 #ifndef JAPAN
-  VW_Bar(0, 189, 256 - 16, 11, VL_GetPixel(0, 0));
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(300), 11, VL_GetPixel(0, 0));
 
   PrintY = 190;
   SETFONTCOLOR(10, 4);
@@ -927,7 +929,7 @@ void InitDigiMap(void) {
 #endif
 
 #ifndef SPEAR
-CP_iteminfo MusicItems  = {CTL_X, CTL_Y, 6, 0, 32};
+CP_iteminfo MusicItems  = {CTL_X, CTL_Y, 6, 0, SCREEN_WIDTH_FACTOR(32)};
 CP_itemtype MusicMenu[] = {{1, "Get Them!", 0},         {1, "Searching", 0},         {1, "P.O.W.", 0},
                            {1, "Suspense", 0},          {1, "War March", 0},         {1, "Around The Corner!", 0},
 
@@ -937,7 +939,7 @@ CP_itemtype MusicMenu[] = {{1, "Get Them!", 0},         {1, "Searching", 0},    
                            {1, "Kill the S.O.B.", 0},   {1, "The Nazi Rap", 0},      {1, "Twelfth Hour", 0},
                            {1, "Zero Hour", 0},         {1, "Ultimate Conquest", 0}, {1, "Wolfpack", 0}};
 #else
-CP_iteminfo MusicItems = {CTL_X, CTL_Y - 20, 9, 0, 32};
+CP_iteminfo MusicItems = {CTL_X, CTL_Y - 20, 9, 0, SCREEN_WIDTH_FACTOR(32)};
 CP_itemtype MusicMenu[] = {{1, "Funky Colonel Bill", 0},      {1, "Death To The Nazis", 0},   {1, "Tiptoeing Around", 0},
                            {1, "Is This THE END?", 0},        {1, "Evil Incarnate", 0},       {1, "Jazzin' Them Nazis", 0},
                            {1, "Puttin' It To The Enemy", 0}, {1, "The SS Gonna Get You", 0}, {1, "Towering Above", 0}};
@@ -1121,7 +1123,7 @@ static void InitGame() {
   // HOLDING DOWN 'M' KEY?
   //
 #ifndef SPEARDEMO
-  if (Keyboard[sc_M]) {
+  if (Keyboard[KEY_M]) {
     DoJukebox();
     didjukebox = true;
   } else
@@ -1143,6 +1145,7 @@ static void InitGame() {
   BuildTables(); // trig tables
   SetupWalls();
 
+  viewsize = 10;
   NewViewSize(viewsize);
 
   //
@@ -1375,7 +1378,6 @@ static void DemoLoop() {
   while (1) {
 
     while (!param_nowait) {
-      // while (true) {
       printf(".");
       //
       // title page

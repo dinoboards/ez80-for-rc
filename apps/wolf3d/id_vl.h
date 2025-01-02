@@ -55,9 +55,7 @@ void VL_GetPalette(SDL_Color *palette);
 void VL_FadeOut(int start, int end, int red, int green, int blue, int steps);
 void VL_FadeIn(int start, int end, SDL_Color *palette, int steps);
 
-static inline byte *VL_LockSurface(SDL_Surface *surface) {
-  return (byte *)surface->pixels;
-}
+static inline byte *VL_LockSurface(SDL_Surface *surface) { return (byte *)surface->pixels; }
 #define VL_UnlockSurface(surface) /* no-op */
 
 #define LOCK()   VL_LockSurface(curSurface)
@@ -68,9 +66,7 @@ void VL_Plot(int x, int y, int color);
 void VL_Hlin(unsigned x, unsigned y, unsigned width, int color);
 void VL_Vlin(int x, int y, int height, int color);
 void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color);
-static void inline VL_Bar(int x, int y, int width, int height, int color) {
-  VL_BarScaledCoord(scaleFactor * x, scaleFactor * y, scaleFactor * width, scaleFactor * height, color);
-}
+static void inline VL_Bar(int x, int y, int width, int height, int color) { VL_BarScaledCoord(x, y, width, height, color); }
 static void inline VL_ClearScreen(int color) { SDL_FillRect(curSurface, NULL, color); }
 
 void VL_MungePic(byte *source, unsigned width, unsigned height);

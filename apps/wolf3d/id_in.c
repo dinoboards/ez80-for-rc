@@ -24,6 +24,7 @@
 
 #include "id_sd.h"
 
+#include "keyboard.h"
 /*
 =============================================================================
 
@@ -41,97 +42,23 @@ boolean forcegrabmouse;
 //  Global variables
 boolean Keyboard[NumCodes];
 
-// extern boolean Keyboard[] = {
-// 	{sc_None, false},
-// 	{sc_Return, false},
-// 	{sc_Escape, false},
-// 	{sc_Space, false},
-// 	{sc_BackSpace, false},
-// 	{sc_Tab, false},
-// 	{sc_Alt, false},
-// 	{sc_Control, false},
-// 	{sc_CapsLock, false},
-// 	{sc_LShift, false},
-// 	{sc_RShift, false},
-// 	{sc_UpArrow, false},
-// 	{sc_DownArrow, false},
-// 	{sc_LeftArrow, false},
-// 	{sc_RightArrow, false},
-// 	{sc_Insert, false},
-// 	{sc_Delete, false},
-// 	{sc_Home, false},
-// 	{sc_End, false},
-// 	{sc_PgUp, false},
-// 	{sc_PgDn, false},
-// 	{sc_F1, false},
-// 	{sc_F2, false},
-// 	{sc_F3, false},
-// 	{sc_F4, false},
-// 	{sc_F5, false},
-// 	{sc_F6, false},
-// 	{sc_F7, false},
-// 	{sc_F8, false},
-// 	{sc_F9, false},
-// 	{sc_F10, false},
-// 	{sc_F11, false},
-// 	{sc_F12, false},
-// 	{sc_ScrollLock, false},
-// 	{sc_PrintScreen, false},
-// 	{sc_1, false},
-// 	{sc_2, false},
-// 	{sc_3, false},
-// 	{sc_4, false},
-// 	{sc_5, false},
-// 	{sc_6, false},
-// 	{sc_7, false},
-// 	{sc_8, false},
-// 	{sc_9, false},
-// 	{sc_0, false},
-// 	{sc_A, false},
-// 	{sc_B, false},
-// 	{sc_C, false},
-// 	{sc_D, false},
-// 	{sc_E, false},
-// 	{sc_F, false},
-// 	{sc_G, false},
-// 	{sc_H, false},
-// 	{sc_I, false},
-// 	{sc_J, false},
-// 	{sc_K, false},
-// 	{sc_L, false},
-// 	{sc_M, false},
-// 	{sc_N, false},
-// 	{sc_O, false},
-// 	{sc_P, false},
-// 	{sc_Q, false},
-// 	{sc_R, false},
-// 	{sc_S, false},
-// 	{sc_T, false},
-// 	{sc_U, false},
-// 	{sc_V, false},
-// 	{sc_W, false},
-// 	{sc_X, false},
-// 	{sc_Y, false},
-// 	{sc_Z, false}
-// };
-
 volatile boolean  Paused;
 volatile char     LastASCII;
 volatile ScanCode LastScan;
 
 // KeyboardDef   KbdDefs = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
-static KeyboardDef KbdDefs = {
-    sc_Control,    // button0
-    sc_Alt,        // button1
-    sc_Home,       // upleft
-    sc_UpArrow,    // up
-    sc_PgUp,       // upright
-    sc_LeftArrow,  // left
-    sc_RightArrow, // right
-    sc_End,        // downleft
-    sc_DownArrow,  // down
-    sc_PgDn        // downright
-};
+// static KeyboardDef KbdDefs = {
+//     sc_Control,    // button0
+//     sc_Alt,        // button1
+//     sc_Home,       // upleft
+//     sc_UpArrow,    // up
+//     sc_PgUp,       // upright
+//     sc_LeftArrow,  // left
+//     sc_RightArrow, // right
+//     sc_End,        // downleft
+//     sc_DownArrow,  // down
+//     sc_PgDn        // downright
+// };
 
 // static SDL_Joystick* Joystick;
 static SDL_GameController *GameController;
@@ -320,126 +247,39 @@ int IN_JoyAxes(void) {
   return res;
 }
 
-static void processEvent(SDL_Event *event) {
-  switch (event->type) {
-    // exit if the window is closed
-  case SDL_QUIT:
-    Quit(NULL);
+static void processEvent() {
+  KeyEventInfo key_event;
 
-    // check for keypresses
-  case SDL_KEYDOWN: {
-    if (event->key.keysym.sym == SDLK_SCROLLLOCK || event->key.keysym.sym == SDLK_F12) {
-      GrabInput = !GrabInput;
-      // SDL_SetRelativeMouseMode(GrabInput ? SDL_TRUE : SDL_FALSE);
-      return;
-    }
+  if (!poll_for_key_event(&key_event))
+    return;
 
-    LastScan       = event->key.keysym.sym;
-    SDL_Keymod mod = SDL_GetModState();
-    if (Keyboard[(uint8_t)sc_Alt]) {
-      if (LastScan == SDLK_F4)
-        Quit(NULL);
-    }
-
-    if (LastScan == SDLK_KP_ENTER)
-      LastScan = SDLK_RETURN;
-    else if (LastScan == SDLK_RSHIFT)
-      LastScan = SDLK_LSHIFT;
-    else if (LastScan == SDLK_RALT)
-      LastScan = SDLK_LALT;
-    else if (LastScan == SDLK_RCTRL)
-      LastScan = SDLK_LCTRL;
-    else {
-      if ((mod & KMOD_NUM) == 0) {
-        switch (LastScan) {
-        case SDLK_KP_2:
-          LastScan = SDLK_DOWN;
-          break;
-        case SDLK_KP_4:
-          LastScan = SDLK_LEFT;
-          break;
-        case SDLK_KP_6:
-          LastScan = SDLK_RIGHT;
-          break;
-        case SDLK_KP_8:
-          LastScan = SDLK_UP;
-          break;
-        }
-      }
-    }
-
-    int sym = LastScan;
-    if (sym >= 'a' && sym <= 'z')
-      sym -= 32; // convert to uppercase
-
-    if (mod & (KMOD_SHIFT | KMOD_CAPS)) {
-      if (sym < (int)lengthof(ShiftNames) && ShiftNames[sym])
-        LastASCII = ShiftNames[sym];
-    } else {
-      if (sym < (int)lengthof(ASCIINames) && ASCIINames[sym])
-        LastASCII = ASCIINames[sym];
-    }
-
-    int intLasScan       = LastScan;
-    Keyboard[intLasScan] = 1;
-
-    if (LastScan == SDLK_PAUSE)
-      Paused = true;
+  switch (key_event.event) {
+  case EVENT_KEY_DOWN: {
+    LastScan           = key_event.scan_code;
+    Keyboard[LastScan] = 1;
+    printf("Key down: %x\r\n", LastScan);
     break;
   }
 
-  case SDL_KEYUP: {
-    int key = event->key.keysym.sym;
-    if (key == SDLK_KP_ENTER)
-      key = SDLK_RETURN;
-    else if (key == SDLK_RSHIFT)
-      key = SDLK_LSHIFT;
-    else if (key == SDLK_RALT)
-      key = SDLK_LALT;
-    else if (key == SDLK_RCTRL)
-      key = SDLK_LCTRL;
-    else {
-      if ((SDL_GetModState() & KMOD_NUM) == 0) {
-        switch (key) {
-        case SDLK_KP_2:
-          key = SDLK_DOWN;
-          break;
-        case SDLK_KP_4:
-          key = SDLK_LEFT;
-          break;
-        case SDLK_KP_6:
-          key = SDLK_RIGHT;
-          break;
-        case SDLK_KP_8:
-          key = SDLK_UP;
-          break;
-        }
-      }
-    }
-
-    Keyboard[key] = 0;
-
+  case EVENT_KEY_UP: {
+    Keyboard[key_event.scan_code] = 0;
+    printf("Key up: %x\r\n", key_event.scan_code);
     break;
   }
   }
 }
+
+// block waiting for a key event
+// key events are key down, followed eventually by keyup
 
 void IN_WaitAndProcessEvents() {
-  SDL_Event event;
-  if (!SDL_WaitEvent(&event))
-    return;
-  do {
-    processEvent(&event);
-  } while (SDL_PollEvent(&event));
+  while (!key_event_pending())
+    ;
+
+  processEvent();
 }
 
-void IN_ProcessEvents() {
-  SDL_Event event;
-
-  while (SDL_PollEvent(&event)) {
-    processEvent(&event);
-  }
-}
+void IN_ProcessEvents() { processEvent(); }
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -471,7 +311,7 @@ void IN_Startup(void) {
   }
 
   // I didn't find a way to ask libSDL whether a mouse is present, yet...
-  MousePresent = true;
+  MousePresent = false;
 
   IN_Started = true;
 }
@@ -497,13 +337,11 @@ void IN_Shutdown(void) {
 //
 ///////////////////////////////////////////////////////////////////////////
 void IN_ClearKeysDown(void) {
-  LastScan  = sc_None;
-  LastASCII = key_None;
+  LastScan  = 0;
+  LastASCII = 0;
 
   memset(Keyboard, 0, sizeof(Keyboard));
-  // for (auto &pair : Keyboard) {
-  //   pair.second = false;
-  // }
+  printf("Clear keys down\r\n");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -523,32 +361,32 @@ void IN_ReadControl(int player __attribute__((unused)), ControlInfo *info) {
 
   IN_ProcessEvents();
 
-  if (Keyboard[KbdDefs.upleft])
-    mx = motion_Left, my = motion_Up;
-  else if (Keyboard[KbdDefs.upright])
-    mx = motion_Right, my = motion_Up;
-  else if (Keyboard[KbdDefs.downleft])
-    mx = motion_Left, my = motion_Down;
-  else if (Keyboard[KbdDefs.downright])
-    mx = motion_Right, my = motion_Down;
+  // if (Keyboard[KbdDefs.xupleft])
+  //   mx = motion_Left, my = motion_Up;
+  // else if (Keyboard[KbdDefs.upright])
+  //   mx = motion_Right, my = motion_Up;
+  // else if (Keyboard[KbdDefs.downleft])
+  //   mx = motion_Left, my = motion_Down;
+  // else if (Keyboard[KbdDefs.downright])
+  //   mx = motion_Right, my = motion_Down;
 
-  if (Keyboard[KbdDefs.up])
+  if (Keyboard[KEY_UP])
     my = motion_Up;
-  else if (Keyboard[KbdDefs.down])
+  else if (Keyboard[KEY_DOWN])
     my = motion_Down;
 
-  if (Keyboard[KbdDefs.left])
+  if (Keyboard[KEY_LEFT])
     mx = motion_Left;
-  else if (Keyboard[KbdDefs.right])
+  else if (Keyboard[KEY_RIGHT])
     mx = motion_Right;
 
-  if (Keyboard[KbdDefs.button0])
-    buttons += 1 << 0;
-  if (Keyboard[KbdDefs.button1])
-    buttons += 1 << 1;
+  // if (Keyboard[KbdDefs.button0])
+  //   buttons += 1 << 0;
+  // if (Keyboard[KbdDefs.button1])
+  //   buttons += 1 << 1;
 
-  dx = mx * 127;
-  dy = my * 127;
+  dx = mx * 31;
+  dy = my * 31;
 
   info->x       = dx;
   info->xaxis   = mx;
@@ -589,10 +427,13 @@ void IN_StartAck(void) {
 }
 
 boolean IN_CheckAck(void) {
+  printf("IN_CheckAck\r\n");
   IN_ProcessEvents();
   //
   // see if something has been pressed
   //
+
+  printf("%s:%d: LastScan: %x\r\n", __FILE__, __LINE__, LastScan);
   if (LastScan)
     return true;
 

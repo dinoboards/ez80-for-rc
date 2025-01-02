@@ -42,9 +42,9 @@
 #define CENTERX   ((int)screenWidth / 2)
 #define CENTERY   ((int)screenHeight / 2)
 
-#define MENU_X 76
+#define MENU_X SCREEN_WIDTH_FACTOR(76)
 #define MENU_Y 55
-#define MENU_W 178
+#define MENU_W 190 /*SCREEN_WIDTH_FACTOR(190)*/
 #ifndef SPEAR
 #ifndef GOODTIMES
 #define MENU_H 13 * 10 + 6
@@ -55,8 +55,8 @@
 #define MENU_H 13 * 9 + 6
 #endif
 
-#define SM_X 48
-#define SM_W 250
+#define SM_X SCREEN_WIDTH_FACTOR(48)
+#define SM_W SCREEN_WIDTH_FACTOR(250)
 
 #define SM_Y1 20
 #define SM_H1 4 * 13 - 7
@@ -65,24 +65,24 @@
 #define SM_Y3 SM_Y2 + 5 * 13
 #define SM_H3 3 * 13 - 7
 
-#define CTL_X 24
+#define CTL_X SCREEN_WIDTH_FACTOR(24)
 #define CTL_Y 86
-#define CTL_W 284
+#define CTL_W SCREEN_WIDTH_FACTOR(284)
 #define CTL_H 60
 
-#define LSM_X 85
+#define LSM_X SCREEN_WIDTH_FACTOR(85)
 #define LSM_Y 55
-#define LSM_W 175
+#define LSM_W SCREEN_WIDTH_FACTOR(175)
 #define LSM_H 10 * 13 + 10
 
-#define NM_X 50
+#define NM_X SCREEN_WIDTH_FACTOR(50)
 #define NM_Y 100
-#define NM_W 225
+#define NM_W 225 /*SCREEN_WIDTH_FACTOR(225)*/
 #define NM_H 13 * 4 + 15
 
-#define NE_X 10
+#define NE_X SCREEN_WIDTH_FACTOR(10)
 #define NE_Y 23
-#define NE_W 320 - NE_X * 2
+#define NE_W 252 /*SCREEN_WIDTH_FACTOR(320 - NE_X * 2)*/
 #define NE_H 200 - NE_Y * 2
 
 #define CST_X     20

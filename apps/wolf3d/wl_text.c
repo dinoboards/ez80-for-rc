@@ -4,6 +4,8 @@
 
 #include "id_mm.h"
 
+#include "keyboard.h"
+
 /*
 =============================================================================
 
@@ -187,7 +189,7 @@ void HandleCommand(void) {
     picx      = ParseNumber();
     picwidth  = ParseNumber();
     picheight = ParseNumber();
-    VWB_Bar(picx, picy, picwidth, picheight, BACKCOLOR);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(picx), picy, SCREEN_WIDTH_FACTOR(picwidth), picheight, BACKCOLOR);
     RipToEOL();
     break;
   case ';': // comment
@@ -393,7 +395,7 @@ void PageLayout(boolean shownumber) {
   //
   // clear the screen
   //
-  VWB_Bar(0, 0, 320, 200, BACKCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 200, BACKCOLOR);
   VWB_DrawPic(0, 0, H_TOPWINDOWPIC);
   VWB_DrawPic(0, 8, H_LEFTWINDOWPIC);
   VWB_DrawPic(312, 8, H_RIGHTWINDOWPIC);
@@ -583,7 +585,7 @@ void ShowArticle(char *article)
   oldfontnumber = fontnumber;
   fontnumber    = 0;
   CA_CacheGrChunk(STARTFONT);
-  VWB_Bar(0, 0, 320, 200, BACKCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 200, BACKCOLOR);
   CacheLayoutGraphics();
 #endif
 
@@ -621,16 +623,16 @@ void ShowArticle(char *article)
       if (ci.button0)
         dir = dir_South;
       switch (LastScan) {
-      case sc_UpArrow:
-      case sc_PgUp:
-      case sc_LeftArrow:
+      case KEY_UP:
+      case KEY_PAGEUP:
+      case KEY_LEFT:
         dir = dir_North;
         break;
 
-      case sc_Return:
-      case sc_DownArrow:
-      case sc_PgDn:
-      case sc_RightArrow:
+      case KEY_ENTER:
+      case KEY_DOWN:
+      case KEY_PAGEDOWN:
+      case KEY_RIGHT:
         dir = dir_South;
         break;
       }
@@ -666,7 +668,7 @@ void ShowArticle(char *article)
     default:
       break;
     }
-  } while (LastScan != sc_Escape && !ci.button1);
+  } while (LastScan != KEY_ESC && !ci.button1);
 
   IN_ClearKeysDown();
   fontnumber = oldfontnumber;

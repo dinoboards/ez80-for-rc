@@ -3543,6 +3543,7 @@ void A_StartDeathCam(objtype *ob) {
 
   gamestate.victoryflag = true;
   unsigned fadeheight   = viewsize != 21 ? screenHeight - scaleFactor * STATUSLINES : screenHeight;
+  printf("%s:%d\r\n", __FILE__, __LINE__);
   VL_BarScaledCoord(0, 0, screenWidth, fadeheight, bordercol);
   FizzleFade(screenBuffer, 0, 0, screenWidth, fadeheight, 70, false);
 
