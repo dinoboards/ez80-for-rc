@@ -433,8 +433,8 @@ void VL_Vlin(int x __attribute__((unused)),
 
 void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color) {
 
-  printf("VL_BarScaledCoord\r\n");
-  printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
+  // printf("VL_BarScaledCoord\r\n");
+  // printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
 
   // vdp_cmd_vdp_to_vram(scx, scy, scwidth, scheight, color, 0);
   assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&

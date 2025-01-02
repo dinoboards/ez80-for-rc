@@ -294,9 +294,9 @@ boolean ProjectileTryMove(objtype *ob) {
 void T_Projectile(objtype *ob) {
   int32_t deltax, deltay;
   int     damage;
-  int32_t speed;
+  fixed   speed;
 
-  speed = (int32_t)ob->speed * tics;
+  speed = ob->speed * tics;
 
   deltax = FixedMul(speed, costable[ob->angle]);
   deltay = -FixedMul(speed, sintable[ob->angle]);
@@ -3087,7 +3087,7 @@ void T_Ghosts(objtype *ob) {
 
 void T_DogChase(objtype *ob) {
   int32_t move;
-  int32_t dx, dy;
+  fixed   dx, dy;
 
   if (ob->dir == nodir) {
     SelectDodgeDir(ob);

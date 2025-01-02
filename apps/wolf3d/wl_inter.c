@@ -295,8 +295,6 @@ void Victory(void) {
 */
 
 void PG13(void) {
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
   VW_FadeOut();
   VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 200, 0x82); // background
 

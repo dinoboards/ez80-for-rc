@@ -144,10 +144,8 @@ void Quit(const char *errorStr, ...) __attribute__((noreturn));
 #define LRpack 20
 #endif
 
-#define PLAYERSIZE MINDIST // player radius
-#define MINACTORDIST                                                                                                               \
-  0x10000l // minimum dist from player center
-           // to any actor center
+#define PLAYERSIZE   MINDIST  /* fixed? player radius*/
+#define MINACTORDIST 0x10000l /* fixed? minimum dist from player center to any actor center*/
 
 #define NUMLATCHPICS 100
 
@@ -1102,9 +1100,9 @@ typedef struct objstruct {
   word  viewheight;
   fixed transx, transy; // in global coord
 
-  short   angle;
-  short   hitpoints;
-  int32_t speed;
+  short angle;
+  short hitpoints;
+  fixed speed;
 
   short             temp1, temp2, hidden;
   struct objstruct *next, *prev;
@@ -1629,7 +1627,8 @@ extern void EndText(void);
 =============================================================================
 */
 
-extern fixed FixedMul(fixed a, fixed b);
+extern fixed   FixedMul(fixed a, fixed b);
+extern int16_t fixed_rounded_down(fixed a);
 
 #define DEMOCHOOSE_ORIG_SDL(orig, sdl) ((demorecord || demoplayback) ? (orig) : (sdl))
 #define DEMOCOND_ORIG                  (demorecord || demoplayback)

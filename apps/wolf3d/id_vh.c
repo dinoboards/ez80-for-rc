@@ -14,8 +14,6 @@ int  fontnumber;
 //==========================================================================
 
 void VWB_DrawPropString(const char *string) {
-  printf("VWB_DrawPropString(%s)\r\n", string);
-
   fontstruct *font;
   int         width, step, height;
   byte       *source, *dest;
