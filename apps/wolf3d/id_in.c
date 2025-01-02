@@ -427,13 +427,11 @@ void IN_StartAck(void) {
 }
 
 boolean IN_CheckAck(void) {
-  printf("IN_CheckAck\r\n");
   IN_ProcessEvents();
   //
   // see if something has been pressed
   //
 
-  printf("%s:%d: LastScan: %x\r\n", __FILE__, __LINE__, LastScan);
   if (LastScan)
     return true;
 
