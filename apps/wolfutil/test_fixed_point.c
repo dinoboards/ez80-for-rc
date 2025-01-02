@@ -1,3 +1,4 @@
+#include "../wolf3d/shift_functions/shift_functions.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,13 +7,11 @@ typedef int32_t fixed;
 
 #define GLOBAL1 (1l << 16)
 
-extern void spike(int32_t a);
+static inline int16_t fixed_rounded_down(fixed a) { return sr_s32_s16_16(a); }
 
 extern fixed FixedMul(fixed a, fixed b);
 
 fixed FixedMulORG(fixed a, fixed b) { return (a >> 8) * (b >> 8); }
-
-extern int16_t fixed_rounded_down(fixed a);
 
 // For player movement in demos exactly as in the original Wolf3D v1.4 source code
 fixed FixedByFracOrig(fixed a, fixed b) {
@@ -33,6 +32,24 @@ fixed FixedByFracOrig(fixed a, fixed b) {
   if (sign)
     res = -res;
   return res;
+}
+
+void test_shift_functions() {
+  int32_t a = 0x12345678L;
+  int32_t b = sr_s32_s32_8(a);
+  if (b != 0x123456) {
+    printf("1: sr_s32_s32_8(%lx) = %lx\n", a, b);
+    abort();
+  }
+
+  a = 0xFEDCBA98L;
+  b = sr_s32_s32_8(a);
+  if (b != (int32_t)0xFFFEDCBA) {
+    printf("2: sr_s32_s32_8(%lx) = %lx\n", a, b);
+    abort();
+  }
+
+  printf("All shift functions tests passed\n");
 }
 
 // For player movement in demos exactly as in the original Wolf3D v1.4 source code
@@ -170,5 +187,5 @@ void test_fixed_mul() {
 
   //  FixedMul(-4640, 54866) = -4066 -- -704647138
 
-  printf("All FixedMul tests passed.\n");
+  printf("All fixed tests passed.\n");
 }

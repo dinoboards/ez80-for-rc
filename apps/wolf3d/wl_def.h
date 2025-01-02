@@ -5,7 +5,7 @@
 #include "version.h"
 
 #include "assert.h"
-
+#include "shift_functions/shift_functions.h"
 #include <ctype.h>
 #include <fcntl.h>
 #include <math.h>
@@ -1627,8 +1627,8 @@ extern void EndText(void);
 =============================================================================
 */
 
-extern fixed   FixedMul(fixed a, fixed b);
-extern int16_t fixed_rounded_down(fixed a);
+extern fixed          FixedMul(fixed a, fixed b);
+static inline int16_t fixed_rounded_down(fixed a) { return sr_s32_s16_16(a); }
 
 #define DEMOCHOOSE_ORIG_SDL(orig, sdl) ((demorecord || demoplayback) ? (orig) : (sdl))
 #define DEMOCOND_ORIG                  (demorecord || demoplayback)

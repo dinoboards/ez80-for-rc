@@ -8,6 +8,7 @@ extern void display_img_file();
 extern void create_signon_image();
 extern void test_mm_functions();
 extern void test_fixed_mul();
+extern void test_shift_functions();
 extern void test_key_serial_to_event(void);
 
 #define LEFT   0
