@@ -184,10 +184,12 @@ void Quit(const char *errorStr, ...) __attribute__((noreturn));
 #define mapheight MAPSIZE
 #define mapwidth  MAPSIZE
 
-#define TEXTURESHIFT          6
-#define TEXTURESIZE           (1 << TEXTURESHIFT)
-#define TEXTUREFROMFIXEDSHIFT 4
-#define TEXTUREMASK           (TEXTURESIZE * (TEXTURESIZE - 1))
+#define TEXTURESHIFT 6
+#define TEXTURESIZE  (1 << TEXTURESHIFT)
+// #define TEXTUREFROMFIXEDSHIFT 4
+static inline int32_t TextureFromFixedShift(fixed a) { return sr_s32_s32_4(a); }
+
+#define TEXTUREMASK (TEXTURESIZE * (TEXTURESIZE - 1))
 
 #define SPRITESCALEFACTOR 2
 

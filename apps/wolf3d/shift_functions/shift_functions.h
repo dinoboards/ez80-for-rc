@@ -5,6 +5,7 @@
 
 extern int16_t sr_s32_s16_16(int32_t val);
 extern int32_t sr_s32_s32_8(int32_t val);
+extern int32_t sr_s32_s32_4(int32_t val);
 extern int32_t sr_s32_s32_11(int32_t val);
 
 // extern uint16_t rr_u24_8(uint24_t val);

@@ -49,6 +49,20 @@ void test_shift_functions() {
     abort();
   }
 
+  a = 0x12345678L;
+  b = sr_s32_s32_4(a);
+  if (b != 0x1234567) {
+    printf("3: sr_s32_s32_4(%lx) = %lx\n", a, b);
+    abort();
+  }
+
+  a = 0xFEDCBA98L;
+  b = sr_s32_s32_4(a);
+  if (b != (int32_t)0xFFEDCBA9L) {
+    printf("4: sr_s32_s32_4(%lx) = %lx\n", a, b);
+    abort();
+  }
+
   printf("All shift functions tests passed\n");
 }
 
