@@ -37,9 +37,9 @@ boolean fpscounter;
 
 int fps_frames = 0, fps_time = 0, fps = 0;
 
-int wallheight[MAXVIEWWIDTH];
+int16_t wallheight[MAXVIEWWIDTH];
 
-int min_wallheight;
+int16_t min_wallheight;
 
 //
 // math tables
@@ -80,8 +80,8 @@ uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 
 short midangle, angle;
 
-word tilehit;
-int  pixx;
+word         tilehit;
+int16_t pixx __data_on_chip;
 
 short xtile, ytile;
 short xtilestep, ytilestep;
@@ -256,8 +256,8 @@ extern int __func_on_chip CalcHeight();
 ===================
 */
 
-byte *postsource;
-int   postx;
+byte   *postsource;
+int16_t postx;
 
 extern void __func_on_chip ScalePost();
 
@@ -1190,9 +1190,9 @@ void AsmRefresh() {
         } else {
           if (tilehit == 64) {
             if (pwalldir == di_north || pwalldir == di_south) {
-              int32_t xintbuf;
-              int     pwallposnorm;
-              int     pwallposinv;
+              fixed xintbuf;
+              int   pwallposnorm;
+              int   pwallposinv;
               if (pwalldir == di_north) {
                 pwallposnorm = 64 - pwallpos;
                 pwallposinv  = pwallpos;

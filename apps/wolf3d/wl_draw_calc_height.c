@@ -16,16 +16,13 @@
 ====================
 */
 
-extern int32_t xintercept, yintercept;
-extern int     min_wallheight;
+extern fixed   xintercept, yintercept;
+extern int16_t min_wallheight;
 
-int __func_on_chip CalcHeight() {
-  fixed z = FixedMul(xintercept - viewx, viewcos) - FixedMul(yintercept - viewy, viewsin);
+int16_t __func_on_chip CalcHeight() {
+  const fixed z = FixedMul(xintercept - viewx, viewcos) - FixedMul(yintercept - viewy, viewsin);
 
-  if (z < MINDIST)
-    z = MINDIST;
-
-  int height = heightnumerator / (z >> 8);
+  const int16_t height = z < MINDIST ? heightnumerator / (MINDIST >> 8) : heightnumerator / (z >> 8);
 
   if (height < min_wallheight)
     min_wallheight = height;

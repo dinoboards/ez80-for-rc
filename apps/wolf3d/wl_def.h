@@ -1390,7 +1390,7 @@ extern short   pixelangle[MAXVIEWWIDTH];
 extern int32_t finetangent[FINEANGLES / 4];
 extern fixed   sintable[];
 extern fixed  *costable;
-extern int     wallheight[MAXVIEWWIDTH];
+extern int16_t wallheight[MAXVIEWWIDTH];
 extern word    horizwall[], vertwall[];
 extern int32_t lasttimecount;
 extern int32_t frameon;
