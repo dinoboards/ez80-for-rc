@@ -314,7 +314,7 @@ void __func_on_chip ScalePost() {
 ====================
 */
 
-void HitVertWall(void) {
+void __func_on_chip HitVertWall(void) {
   int wallpic;
   int texture;
 
@@ -372,7 +372,7 @@ void HitVertWall(void) {
 ====================
 */
 
-void HitHorizWall(void) {
+void __func_on_chip HitHorizWall(void) {
   int wallpic;
   int texture;
 
@@ -429,7 +429,7 @@ void HitHorizWall(void) {
 ====================
 */
 
-void HitHorizDoor(void) {
+void __func_on_chip HitHorizDoor(void) {
   int doorpage;
   int doornum;
   int texture;
@@ -489,7 +489,7 @@ void HitHorizDoor(void) {
 ====================
 */
 
-void HitVertDoor(void) {
+void __func_on_chip HitVertDoor(void) {
   int doorpage;
   int doornum;
   int texture;
