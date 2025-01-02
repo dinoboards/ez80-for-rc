@@ -1,6 +1,8 @@
 #ifndef __ID_PM__
 #define __ID_PM__
 
+#include <ez80.h>
+
 #define PMPageSize 4096
 
 extern int ChunksInFile;
@@ -23,8 +25,11 @@ static inline uint32_t PM_GetPageSize(int page) {
 }
 
 static inline uint8_t *PM_GetPage(int page) {
+#if 0
   if (page < 0 || page >= ChunksInFile)
     Quit("PM_GetPage: Tried to access illegal page: %i", page);
+#endif
+
   return PMPages[page];
 }
 
