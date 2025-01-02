@@ -234,11 +234,8 @@ void ControlMovement(objtype *ob) {
 */
 
 void StatusDrawPic(unsigned x, unsigned y, unsigned picnum) {
-  printf("StatusDrawPic(%d, %d, %d)\r\n", x, y, picnum);
+  // printf("StatusDrawPic(%d, %d, %d)\r\n", x, y, picnum);
   LatchDrawPicScaledCoord(x, screenHeight - (STATUSLINES - y), picnum);
-  // LatchDrawPicScaledCoord((screenWidth - scaleFactor * 320) / 16 + scaleFactor * x, screenHeight - scaleFactor * (STATUSLINES -
-  // y),
-  //                         picnum);
 }
 
 void StatusDrawFace(unsigned picnum) { StatusDrawPic(17, 4, picnum); }
