@@ -32,6 +32,7 @@ void show_help() {
   printf("  -T=MM            Test MM functions\r\n");
   printf("  -T=FP            Test Fixed Point functions\r\n");
   printf("  -X               Test rendering tiles\r\n");
+  printf("  -K               Test key serial to event simulator\r\n");
   printf("  -? /?            Show this help message\r\n");
 }
 
@@ -43,7 +44,7 @@ bool argument_help(const char *arg) {
 
   return false;
 }
-typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_T_FP, CMD_X } command_type_t;
+typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_T_FP, CMD_X, CMD_K } command_type_t;
 static command_type_t cmd = CMD_NONE;
 const char           *filename;
 
@@ -114,6 +115,15 @@ bool argument_X(const char *arg) {
   return true;
 }
 
+bool argument_K(const char *arg) {
+  if (strcmp(arg, "-K") != 0 && strcmp(arg, "/K") != 0)
+    return false;
+
+  cmd = CMD_K;
+
+  return true;
+}
+
 int main(const int argc, const char *argv[]) {
 
   const int heap_size = 0x400000 - (int)_heap;
@@ -142,6 +152,9 @@ int main(const int argc, const char *argv[]) {
     if (argument_X(argv[i]))
       continue;
 
+    if (argument_K(argv[i]))
+      continue;
+
     if (argument_help(argv[i]))
       continue;
 
@@ -166,6 +179,8 @@ int main(const int argc, const char *argv[]) {
     test_fixed_mul();
   } else if (cmd == CMD_X) {
     test_rendering_tiles();
+  } else if (cmd == CMD_K) {
+    test_key_serial_to_event();
   }
 
   return 0;

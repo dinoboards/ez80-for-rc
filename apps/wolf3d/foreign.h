@@ -54,10 +54,10 @@
 #define STR_SENS    "Mouse Sensitivity"
 #define STR_CUSTOM  "Customize controls"
 
-#define STR_DADDY   "Can I play, Daddy?"
+#define STR_DADDY   "Can I play?"
 #define STR_HURTME  "Don't hurt me."
 #define STR_BRINGEM "Bring 'em on!"
-#define STR_DEATH   "I am Death incarnate!"
+#define STR_DEATH   "I am Death!"
 
 #define STR_MOUSEADJ "Adjust Mouse Sensitivity"
 #define STR_SLOW     "Slow"

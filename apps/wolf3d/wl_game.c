@@ -1268,6 +1268,7 @@ void Died(void) {
   if (usedoublebuffering)
     VH_UpdateScreen();
 
+  printf("%s:%d\r\n", __FILE__, __LINE__);
   VL_BarScaledCoord(viewscreenx, viewscreeny, viewwidth, viewheight, 4);
 
   IN_ClearKeysDown();

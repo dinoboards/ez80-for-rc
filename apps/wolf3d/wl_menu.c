@@ -12,6 +12,8 @@
 
 #include "id_mm.h"
 
+#include "keyboard.h"
+
 extern int lastgamemusicoffset;
 extern int numEpisodesMissing;
 
@@ -138,12 +140,12 @@ CP_itemtype NewEmenu[] = {
 #else
     {1,
      "Episode 1\n"
-     "Escape from Wolfenstein",
+     "Wolfenstein",
      0},
     {0, "", 0},
     {3,
      "Episode 2\n"
-     "Operation: Eisenfaust",
+     "Eisenfaust",
      0},
     {0, "", 0},
     {3,
@@ -185,13 +187,15 @@ CP_itemtype CusMenu[] = {{1, "", 0}, {0, "", 0}, {0, "", 0}, {1, "", 0}, {0, "",
                          {0, "", 0}, {1, "", 0}, {0, "", 0}, {1, "", 0}};
 
 // CP_iteminfo struct format: short x, y, amount, curpos, indent;
-CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, 24}, SndItems = {SM_X, SM_Y1, lengthof(SndMenu), 0, 52},
-            LSItems = {LSM_X, LSM_Y, lengthof(LSMenu), 0, 24}, CtlItems = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, 56},
-            CusItems = {8, CST_Y + 13 * 2, lengthof(CusMenu), -1, 0},
+CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, SCREEN_WIDTH_FACTOR(24)},
+            SndItems  = {SM_X, SM_Y1, lengthof(SndMenu), 0, SCREEN_WIDTH_FACTOR(52)},
+            LSItems   = {LSM_X, LSM_Y, lengthof(LSMenu), 0, SCREEN_WIDTH_FACTOR(24)},
+            CtlItems  = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, SCREEN_WIDTH_FACTOR(56)},
+            CusItems  = {SCREEN_WIDTH_FACTOR(8), CST_Y + 13 * 2, lengthof(CusMenu), -1, 0},
 #ifndef SPEAR
-            NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, 88},
+            NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, SCREEN_WIDTH_FACTOR(88)},
 #endif
-            NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, 24};
+            NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, SCREEN_WIDTH_FACTOR(24)};
 
 int color_hlite[] = {DEACTIVE, HIGHLIGHT, READHCOLOR, 0x67};
 
@@ -274,7 +278,8 @@ static byte *ExtScanNames[] =   // Names corresponding to ExtScanCodes
 //
 ////////////////////////////////////////////////////////////////////
 void US_ControlPanel(ScanCode scancode) {
-  // int which;
+  printf("US_ControlPanel(%x)\r\n", scancode);
+  int which;
 
   if (ingame) {
     if (CP_CheckQuick(scancode))
@@ -288,7 +293,7 @@ void US_ControlPanel(ScanCode scancode) {
   // F-KEYS FROM WITHIN GAME
   //
   switch (scancode) {
-  case sc_F1:
+  case KEY_F1:
 #ifdef SPEAR
     BossKey();
 #else
@@ -300,23 +305,23 @@ void US_ControlPanel(ScanCode scancode) {
 #endif
     goto finishup;
 
-  case sc_F2:
+  case KEY_F2:
     CP_SaveGame(0);
     goto finishup;
 
-  case sc_F3:
+  case KEY_F3:
     CP_LoadGame(0);
     goto finishup;
 
-  case sc_F4:
+  case KEY_F4:
     CP_Sound(0);
     goto finishup;
 
-  case sc_F5:
+  case KEY_F5:
     CP_ChangeView(0);
     goto finishup;
 
-  case sc_F6:
+  case KEY_F6:
     CP_Control(0);
     goto finishup;
 
@@ -340,8 +345,9 @@ void US_ControlPanel(ScanCode scancode) {
   // MAIN MENU LOOP
   //
   do {
-    // which = HandleMenu(&MainItems, &MainMenu[0], NULL);
-    NewGame(1, 0);
+    which = HandleMenu(&MainItems, &MainMenu[0], NULL);
+    printf("which = %d\r\n", which);
+    // NewGame(1, 0);
 
 #ifdef SPEAR
 #ifndef SPEARDEMO
@@ -389,35 +395,35 @@ void US_ControlPanel(ScanCode scancode) {
 #endif
 #endif
 
-    // switch (which) {
-    // case viewscores:
-    //   if (MainMenu[viewscores].routine == NULL) {
-    //     if (CP_EndGame(0))
-    //       StartGame = 1;
-    //   } else {
-    //     DrawMainMenu();
-    //     MenuFadeIn();
-    //   }
-    //   break;
+    switch (which) {
+    case viewscores:
+      if (MainMenu[viewscores].routine == NULL) {
+        if (CP_EndGame(0))
+          StartGame = 1;
+      } else {
+        DrawMainMenu();
+        MenuFadeIn();
+      }
+      break;
 
-    // case backtodemo:
-    StartGame = 1;
-    if (!ingame)
-      StartCPMusic(INTROSONG);
-    VL_FadeOut(0, 255, 0, 0, 0, 10);
-    //   break;
+    case backtodemo:
+      StartGame = 1;
+      if (!ingame)
+        StartCPMusic(INTROSONG);
+      VL_FadeOut(0, 255, 0, 0, 0, 10);
+      break;
 
-    // case -1:
-    // case quit:
-    //   CP_Quit(0);
-    //   break;
+    case -1:
+    case quit:
+      CP_Quit(0);
+      break;
 
-    // default:
-    //   if (!StartGame) {
-    //     DrawMainMenu();
-    //     MenuFadeIn();
-    //   }
-    // }
+    default:
+      if (!StartGame) {
+        DrawMainMenu();
+        MenuFadeIn();
+      }
+    }
 
     //
     // "EXIT OPTIONS" OR "NEW GAME" EXITS
@@ -546,7 +552,7 @@ void BossKey(void) {
 		mov eax, 3 int 0x10}
   puts("C>");
   SetTextCursor(2, 0);
-  //      while (!Keyboard[sc_Escape])
+  //      while (!Keyboard[KEY_ESC])
   IN_Ack();
   IN_ClearKeysDown();
 
@@ -573,7 +579,7 @@ void BossKey(void) {
 		mov eax, 3 int 0x10}
   puts("C>");
   SetTextCursor(2, 0);
-  //      while (!Keyboard[sc_Escape])
+  //      while (!Keyboard[KEY_ESC])
   IN_Ack();
   IN_ClearKeysDown();
 
@@ -600,7 +606,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // END GAME
     //
-  case sc_F7:
+  case KEY_F7:
     CA_CacheGrChunk(STARTFONT + 1);
 
     WindowH = 160;
@@ -623,7 +629,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // QUICKSAVE
     //
-  case sc_F8:
+  case KEY_F8:
     if (SaveGamesAvail[LSItems.curpos] && pickquick) {
       CA_CacheGrChunk(STARTFONT + 1);
       fontnumber = 1;
@@ -680,7 +686,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // QUICKLOAD
     //
-  case sc_F9:
+  case KEY_F9:
     if (SaveGamesAvail[LSItems.curpos] && pickquick) {
       char string[100] = STR_LGC;
 
@@ -745,7 +751,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // QUIT
     //
-  case sc_F10:
+  case KEY_F10:
     CA_CacheGrChunk(STARTFONT + 1);
 
     WindowX = WindowY = 0;
@@ -1003,7 +1009,7 @@ void DrawNewGame(void) {
   VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
 
   SETFONTCOLOR(READHCOLOR, BKGDCOLOR);
-  PrintX = NM_X + 20;
+  PrintX = NM_X; //+ 20;
   PrintY = NM_Y - 32;
 
 #ifndef SPEAR
@@ -1030,7 +1036,7 @@ void DrawNewGame(void) {
 //
 // DRAW NEW GAME GRAPHIC
 //
-void DrawNewGameDiff(int w) { VWB_DrawPic(NM_X + 185, NM_Y + 7, w + C_BABYMODEPIC); }
+void DrawNewGameDiff(int w) { VWB_DrawPic(NM_X + 200, NM_Y + 7, w + C_BABYMODEPIC); }
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -1651,10 +1657,10 @@ void DrawMouseSens(void) {
 #endif
 #endif
 
-  VWB_Bar(60, 97, 200, 10, TEXTCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(60), 97, SCREEN_WIDTH_FACTOR(200), 10, TEXTCOLOR);
   DrawOutline(60, 97, 200, 10, 0, HIGHLIGHT);
   DrawOutline(60 + 20 * mouseadjustment, 97, 20, 10, 0, READCOLOR);
-  VWB_Bar(61 + 20 * mouseadjustment, 98, 19, 9, READHCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(61 + 20) * mouseadjustment, 98, SCREEN_WIDTH_FACTOR(19), 9, READHCOLOR);
 
   VW_UpdateScreen();
   MenuFadeIn();
@@ -1678,10 +1684,10 @@ int MouseSensitivity(int _ __attribute__((unused))) {
     case dir_West:
       if (mouseadjustment) {
         mouseadjustment--;
-        VWB_Bar(60, 97, 200, 10, TEXTCOLOR);
+        VWB_Bar(SCREEN_WIDTH_FACTOR(60), 97, SCREEN_WIDTH_FACTOR(200), 10, TEXTCOLOR);
         DrawOutline(60, 97, 200, 10, 0, HIGHLIGHT);
         DrawOutline(60 + 20 * mouseadjustment, 97, 20, 10, 0, READCOLOR);
-        VWB_Bar(61 + 20 * mouseadjustment, 98, 19, 9, READHCOLOR);
+        VWB_Bar(SCREEN_WIDTH_FACTOR(61 + 20 * mouseadjustment), 98, SCREEN_WIDTH_FACTOR(19), 9, READHCOLOR);
         VW_UpdateScreen();
         SD_PlaySound(MOVEGUN1SND);
         TicDelay(20);
@@ -1692,10 +1698,10 @@ int MouseSensitivity(int _ __attribute__((unused))) {
     case dir_East:
       if (mouseadjustment < 9) {
         mouseadjustment++;
-        VWB_Bar(60, 97, 200, 10, TEXTCOLOR);
+        VWB_Bar(SCREEN_WIDTH_FACTOR(60), 97, SCREEN_WIDTH_FACTOR(200), 10, TEXTCOLOR);
         DrawOutline(60, 97, 200, 10, 0, HIGHLIGHT);
         DrawOutline(60 + 20 * mouseadjustment, 97, 20, 10, 0, READCOLOR);
-        VWB_Bar(61 + 20 * mouseadjustment, 98, 19, 9, READHCOLOR);
+        VWB_Bar(SCREEN_WIDTH_FACTOR(61 + 20 * mouseadjustment), 98, SCREEN_WIDTH_FACTOR(19), 9, READHCOLOR);
         VW_UpdateScreen();
         SD_PlaySound(MOVEGUN1SND);
         TicDelay(20);
@@ -1706,9 +1712,9 @@ int MouseSensitivity(int _ __attribute__((unused))) {
       break;
     }
 
-    if (ci.button0 || Keyboard[sc_Space] || Keyboard[sc_Return])
+    if (ci.button0 || Keyboard[KEY_SPACE] || Keyboard[KEY_ENTER])
       exit = 1;
-    else if (ci.button1 || Keyboard[sc_Escape])
+    else if (ci.button1 || Keyboard[KEY_ESC])
       exit = 2;
   } while (!exit);
 
@@ -1905,7 +1911,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
     ReadAnyControl(&ci);
 
     if (type == MOUSE || type == JOYSTICK)
-      if (IN_KeyDown(sc_Return) || IN_KeyDown(sc_Control) || IN_KeyDown(sc_Alt)) {
+      if (IN_KeyDown(KEY_ENTER) /*|| IN_KeyDown(KEY_LEFTCTRL) || IN_KeyDown(KEY_LEFTALT)*/) {
         IN_ClearKeysDown();
         ci.button0 = ci.button1 = false;
       }
@@ -1914,7 +1920,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
     // CHANGE BUTTON VALUE?
     //
     if (((type != KEYBOARDBTNS && type != KEYBOARDMOVE) && (ci.button0 | ci.button1 | ci.button2 | ci.button3)) ||
-        ((type == KEYBOARDBTNS || type == KEYBOARDMOVE) && LastScan == sc_Return)) {
+        ((type == KEYBOARDBTNS || type == KEYBOARDMOVE) && LastScan == KEY_ENTER)) {
       lastFlashTime = GetTimeCount();
       tick = picked = 0;
       SETFONTCOLOR(0, TEXTCOLOR);
@@ -1931,7 +1937,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
         if (GetTimeCount() - lastFlashTime > 10) {
           switch (tick) {
           case 0:
-            VWB_Bar(x, PrintY + 1, CST_SPC - 2, 10, TEXTCOLOR);
+            VWB_Bar(SCREEN_WIDTH_FACTOR(x), PrintY + 1, SCREEN_WIDTH_FACTOR(CST_SPC - 2), 10, TEXTCOLOR);
             break;
           case 1:
             PrintX = x;
@@ -2000,7 +2006,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
           break;
 
         case KEYBOARDBTNS:
-          if (LastScan && LastScan != sc_Escape) {
+          if (LastScan && LastScan != KEY_ESC) {
             buttonscan[order[which]] = LastScan;
             picked                   = 1;
             ShootSnd();
@@ -2009,7 +2015,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
           break;
 
         case KEYBOARDMOVE:
-          if (LastScan && LastScan != sc_Escape) {
+          if (LastScan && LastScan != KEY_ESC) {
             dirscan[moveorder[which]] = LastScan;
             picked                    = 1;
             ShootSnd();
@@ -2021,7 +2027,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
         //
         // EXIT INPUT?
         //
-        if (IN_KeyDown(sc_Escape) || (type != JOYSTICK && ci.button1)) {
+        if (IN_KeyDown(KEY_ESC) || (type != JOYSTICK && ci.button1)) {
           picked = 1;
           SD_PlaySound(ESCPRESSEDSND);
         }
@@ -2038,7 +2044,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
       continue;
     }
 
-    if (ci.button1 || IN_KeyDown(sc_Escape))
+    if (ci.button1 || IN_KeyDown(KEY_ESC))
       exit = 1;
 
     //
@@ -2480,9 +2486,9 @@ int CP_ChangeView(int _ __attribute__((unused))) {
       break;
     }
 
-    if (ci.button0 || Keyboard[sc_Return])
+    if (ci.button0 || Keyboard[KEY_ENTER])
       exit = 1;
-    else if (ci.button1 || Keyboard[sc_Escape]) {
+    else if (ci.button1 || Keyboard[KEY_ESC]) {
       SD_PlaySound(ESCPRESSEDSND);
       MenuFadeOut();
       if (screenHeight % 200 != 0)
@@ -2513,7 +2519,7 @@ int CP_ChangeView(int _ __attribute__((unused))) {
 void DrawChangeView(int view) {
   int rescaledHeight = screenHeight / scaleFactor;
   if (view != 21)
-    VWB_Bar(0, rescaledHeight - 40, 320, 40, bordercol);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(0), rescaledHeight - 40, SCREEN_WIDTH_FACTOR(320), 40, bordercol);
 
 #ifdef JAPAN
   CA_CacheScreen(S_CHANGEPIC);
@@ -2598,7 +2604,7 @@ void IntroScreen(void) {
   memory = (1023l + mminfo.nearheap + mminfo.farheap) / 1024l;
   for (i = 0; i < 10; i++)
     if (memory >= main[i])
-      VWB_Bar(49, 163 - 8 * i, 6, 5, MAINCOLOR - i);
+      VWB_Bar(SCREEN_WIDTH_FACTOR(49), 163 - 8 * i, SCREEN_WIDTH_FACTOR(6), 5, MAINCOLOR - i);
 
   //
   // DRAW EMS MEMORY
@@ -2607,7 +2613,7 @@ void IntroScreen(void) {
     emshere = 4l * EMSPagesAvail;
     for (i = 0; i < 10; i++)
       if (emshere >= ems[i])
-        VWB_Bar(89, 163 - 8 * i, 6, 5, EMSCOLOR - i);
+        VWB_Bar(SCREEN_WIDTH_FACTOR(89), 163 - 8 * i, SCREEN_WIDTH_FACTOR(6), 5, EMSCOLOR - i);
   }
 
   //
@@ -2617,34 +2623,34 @@ void IntroScreen(void) {
     xmshere = 4l * XMSPagesAvail;
     for (i = 0; i < 10; i++)
       if (xmshere >= xms[i])
-        VWB_Bar(129, 163 - 8 * i, 6, 5, XMSCOLOR - i);
+        VWB_Bar(SCREEN_WIDTH_FACTOR(129), 163 - 8 * i, SCREEN_WIDTH_FACTOR(6), 5, XMSCOLOR - i);
   }
 #else
   for (i = 0; i < 10; i++)
-    VWB_Bar(39, 163 - 8 * i, 5, 5, MAINCOLOR - i);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(39), 163 - 8 * i, SCREEN_WIDTH_FACTOR(5), 5, MAINCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(71, 163 - 8 * i, 5, 5, EMSCOLOR - i);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(71), 163 - 8 * i, SCREEN_WIDTH_FACTOR(5), 5, EMSCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(103, 163 - 8 * i, 5, 5, XMSCOLOR - i);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(103), 163 - 8 * i, SCREEN_WIDTH_FACTOR(5), 5, XMSCOLOR - i);
 #endif
 
   //
   // FILL BOXES
   //
   if (MousePresent)
-    VWB_Bar(131, 82, 10, 2, FILLCOLOR);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 82, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
 
   if (IN_JoyPresent())
-    VWB_Bar(131, 105, 10, 2, FILLCOLOR);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 105, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
 
   if (AdLibPresent && !SoundBlasterPresent)
-    VWB_Bar(131, 128, 10, 2, FILLCOLOR);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 128, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
 
   if (SoundBlasterPresent)
-    VWB_Bar(131, 151, 10, 2, FILLCOLOR);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 151, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
 
   //    if (SoundSourcePresent)
-  //        VWB_Bar (131, 174, 10, 2, FILLCOLOR);
+  //        VWB_Bar (SCREEN_WIDTH_FACTOR(131), 174, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -2662,7 +2668,7 @@ void IntroScreen(void) {
 ////////////////////////////////////////////////////////////////////
 void ClearMScreen(void) {
 #ifndef SPEAR
-  VWB_Bar(0, 0, 256, 212, BORDCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 212, BORDCOLOR);
 #else
   VWB_DrawPic(0, 0, C_BACKDROPPIC);
 #endif
@@ -2694,7 +2700,7 @@ void UnCacheLump(int lumpstart, int lumpend) {
 //
 ////////////////////////////////////////////////////////////////////
 void DrawWindow(int x, int y, int w, int h, int wcolor) {
-  VWB_Bar(x, y, w, h, wcolor);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(x), y, SCREEN_WIDTH_FACTOR(w), h, wcolor);
   DrawOutline(x, y, w, h, BORD2COLOR, DEACTIVE);
 }
 
@@ -2784,6 +2790,7 @@ void CleanupControlPanel(void) {
 //
 ////////////////////////////////////////////////////////////////////
 int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) {
+  printf("HandleMenu\r\n");
   char        key;
   static int  redrawitem = 1, lastitem = -1;
   int         i, x, y, basey, exit, which, shape;
@@ -2944,11 +2951,11 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
       break;
     }
 
-    if (ci.button0 || Keyboard[sc_Space] || Keyboard[sc_Return])
+    if (ci.button0 || Keyboard[KEY_SPACE] || Keyboard[KEY_ENTER])
       exit = 1;
 
-    if (ci.button1 && (!Keyboard[(uint8_t)sc_Alt] || Keyboard[sc_Escape]))
-      exit = 2;
+    // if (ci.button1 && (/*!Keyboard[(uint8_t)KEY_LEFTALT] ||*/ !false || Keyboard[KEY_ESC]))
+    // exit = 2;
   } while (!exit);
 
   IN_ClearKeysDown();
@@ -2957,7 +2964,7 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
   // ERASE EVERYTHING
   //
   if (lastitem != which) {
-    VWB_Bar(x - 1, y, 25, 16, BKGDCOLOR);
+    VWB_Bar(SCREEN_WIDTH_FACTOR(x - 1), y, 25, SCREEN_WIDTH_FACTOR(16), BKGDCOLOR);
     PrintX = item_i->x + item_i->indent;
     PrintY = item_i->y + which * 13;
     US_Print((items + which)->string);
@@ -2996,7 +3003,7 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
 // ERASE GUN & DE-HIGHLIGHT STRING
 //
 void EraseGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int y, int which) {
-  VWB_Bar(x - 1, y, 25, 16, BKGDCOLOR);
+  VWB_Bar(x - 1, y, 25 /*SCREEN_WIDTH_FACTOR(25)*/, 16, BKGDCOLOR);
   SetTextColor(items + which, 0);
 
   PrintX = item_i->x + item_i->indent;
@@ -3019,7 +3026,7 @@ void DrawHalfStep(int x, int y) {
 // DRAW GUN AT NEW POSITION
 //
 void DrawGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int *y, int which, int basey, void (*routine)(int w)) {
-  VWB_Bar(x - 1, *y, 25, 16, BKGDCOLOR);
+  VWB_Bar(x - 1, *y, 25 /*SCREEN_WIDTH_FACTOR(25)*/, 16, BKGDCOLOR);
   *y = basey + which * 13;
   VWB_DrawPic(x, *y, C_CURSOR1PIC);
   SetTextColor(items + which, 1);
@@ -3062,7 +3069,7 @@ void DrawMenu(CP_iteminfo *item_i, CP_itemtype *items) {
 
   WindowX = PrintX = item_i->x + item_i->indent;
   WindowY = PrintY = item_i->y;
-  WindowW          = 320;
+  WindowW          = SCREEN_WIDTH_FACTOR(320);
   WindowH          = 200;
 
   for (i = 0; i < item_i->amount; i++) {
@@ -3102,7 +3109,7 @@ void SetTextColor(CP_itemtype *items, int hlight) {
 void WaitKeyUp(void) {
   ControlInfo ci;
   while (ReadAnyControl(&ci),
-         ci.button0 | ci.button1 | ci.button2 | ci.button3 | Keyboard[sc_Space] | Keyboard[sc_Return] | Keyboard[sc_Escape]) {
+         ci.button0 | ci.button1 | ci.button2 | ci.button3 | Keyboard[KEY_SPACE] | Keyboard[KEY_ENTER] | Keyboard[KEY_ESC]) {
     IN_WaitAndProcessEvents();
   }
 }
@@ -3213,7 +3220,7 @@ int Confirm(const char *string) {
     if (GetTimeCount() - lastBlinkTime >= 10) {
       switch (tick) {
       case 0:
-        VWB_Bar(x, y, 8, 13, TEXTCOLOR);
+        VWB_Bar(SCREEN_WIDTH_FACTOR(x), y, SCREEN_WIDTH_FACTOR(8), 13, TEXTCOLOR);
         break;
       case 1:
         PrintX = x;
@@ -3227,9 +3234,9 @@ int Confirm(const char *string) {
       SDL_Delay(5);
 
 #ifdef SPANISH
-  } while (!Keyboard[sc_S] && !Keyboard[sc_N] && !Keyboard[sc_Escape]);
+  } while (!Keyboard[sc_S] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC]);
 #else
-  } while (!Keyboard[sc_Y] && !Keyboard[sc_N] && !Keyboard[sc_Escape] && !ci.button0 && !ci.button1);
+  } while (!Keyboard[KEY_Y] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC] && !ci.button0 && !ci.button1);
 #endif
 
 #ifdef SPANISH
@@ -3238,7 +3245,7 @@ int Confirm(const char *string) {
     ShootSnd();
   }
 #else
-  if (Keyboard[sc_Y] || ci.button0) {
+  if (Keyboard[KEY_Y] || ci.button0) {
     xit = 1;
     ShootSnd();
   }
@@ -3275,9 +3282,9 @@ int GetYorN(int x, int y, int pic) {
 #endif
 
 #ifdef SPANISH
-  } while (!Keyboard[sc_S] && !Keyboard[sc_N] && !Keyboard[sc_Escape]);
+  } while (!Keyboard[sc_S] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC]);
 #else
-  } while (!Keyboard[sc_Y] && !Keyboard[sc_N] && !Keyboard[sc_Escape]);
+  } while (!Keyboard[KEY_Y] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC]);
 #endif
 
 #ifdef SPANISH
@@ -3286,17 +3293,17 @@ int GetYorN(int x, int y, int pic) {
     ShootSnd();
   }
 
-  while (Keyboard[sc_S] || Keyboard[sc_N] || Keyboard[sc_Escape])
+  while (Keyboard[sc_S] || Keyboard[KEY_N] || Keyboard[KEY_ESC])
     IN_WaitAndProcessEvents();
 
 #else
 
-  if (Keyboard[sc_Y]) {
+  if (Keyboard[KEY_Y]) {
     xit = 1;
     ShootSnd();
   }
 
-  while (Keyboard[sc_Y] || Keyboard[sc_N] || Keyboard[sc_Escape])
+  while (Keyboard[KEY_Y] || Keyboard[KEY_N] || Keyboard[KEY_ESC])
     IN_WaitAndProcessEvents();
 #endif
 
@@ -3620,10 +3627,10 @@ void DrawMenuGun(CP_iteminfo *iteminfo) {
 ///////////////////////////////////////////////////////////////////////////
 void DrawStripes(int y) {
 #ifndef SPEAR
-  VWB_Bar(0, y, 256, 24, 0);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), y, SCREEN_WIDTH_FACTOR(320), 24, 0);
   VWB_Hlin(0, 255, y + 22, STRIPE);
 #else
-  VWB_Bar(0, y, 256, 22, 0);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), y, SCREEN_WIDTH_FACTOR(320), 22, 0);
   VWB_Hlin(0, 255, y + 23, 0);
 #endif
 }

@@ -175,8 +175,9 @@ void Quit(const char *errorStr, ...) __attribute__((noreturn));
 
 #define MINDIST (0x5800l)
 
-#define MAXSCALEHEIGHT 256 // largest scale on largest view
-#define MAXVIEWWIDTH   256
+#define MAXSCALEHEIGHT         256 // largest scale on largest view
+#define MAXVIEWWIDTH           256
+#define SCREEN_WIDTH_FACTOR(w) (((w)*1024) / 1280)
 
 #define mapshift 6
 #define MAPSIZE  (1 << mapshift)
