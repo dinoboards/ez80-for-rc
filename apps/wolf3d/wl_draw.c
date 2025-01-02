@@ -241,7 +241,7 @@ boolean TransformTile(int tx, int ty, short *dispx, short *dispheight) {
 ====================
 */
 
-int CalcHeight() {
+int __func_on_chip CalcHeight() {
   fixed z = FixedMul(xintercept - viewx, viewcos) - FixedMul(yintercept - viewy, viewsin);
 
   if (z < MINDIST)
@@ -314,12 +314,6 @@ void __func_on_chip ScalePost() {
     yendoffs -= vbufPitch;
   }
 }
-
-// void GlobalScalePost(byte *vidbuf, unsigned pitch) {
-//   vbuf      = vidbuf;
-//   vbufPitch = pitch;
-//   ScalePost();
-// }
 
 /*
 ====================
