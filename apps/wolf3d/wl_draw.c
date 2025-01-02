@@ -241,19 +241,7 @@ boolean TransformTile(int tx, int ty, short *dispx, short *dispheight) {
 ====================
 */
 
-int __func_on_chip CalcHeight() {
-  fixed z = FixedMul(xintercept - viewx, viewcos) - FixedMul(yintercept - viewy, viewsin);
-
-  if (z < MINDIST)
-    z = MINDIST;
-
-  int height = heightnumerator / (z >> 8);
-
-  if (height < min_wallheight)
-    min_wallheight = height;
-
-  return height;
-}
+extern int __func_on_chip CalcHeight();
 
 //==========================================================================
 
