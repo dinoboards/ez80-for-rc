@@ -25,7 +25,7 @@
 =============================================================================
 */
 
-static byte *vbuf      = NULL;
+byte *vbuf      = NULL;
 unsigned     vbufPitch = 0;
 
 int32_t lasttimecount;
@@ -256,52 +256,8 @@ extern int __func_on_chip CalcHeight();
 byte *postsource;
 int   postx;
 
-void __func_on_chip ScalePost() {
-  int  ywcount, yoffs, yw, yd, yendoffs;
-  byte col;
+extern void __func_on_chip ScalePost();
 
-  ywcount = yd = wallheight[postx] >> 3;
-  if (yd <= 0)
-    yd = 100;
-
-  yoffs = (viewheight / 2 - ywcount) * vbufPitch;
-  if (yoffs < 0)
-    yoffs = 0;
-  yoffs += postx;
-
-  yendoffs = viewheight / 2 + ywcount - 1;
-  yw       = TEXTURESIZE - 1;
-
-  while (yendoffs >= viewheight) {
-    ywcount -= TEXTURESIZE / 2;
-    while (ywcount <= 0) {
-      ywcount += yd;
-      yw--;
-    }
-    yendoffs--;
-  }
-  if (yw < 0) {
-    return;
-  }
-
-  col = postsource[yw];
-
-  yendoffs = yendoffs * vbufPitch + postx;
-  while (yoffs <= yendoffs) {
-    vbuf[yendoffs] = col;
-    ywcount -= TEXTURESIZE / 2;
-    if (ywcount <= 0) {
-      do {
-        ywcount += yd;
-        yw--;
-      } while (ywcount <= 0);
-      if (yw < 0)
-        break;
-      col = postsource[yw];
-    }
-    yendoffs -= vbufPitch;
-  }
-}
 
 /*
 ====================

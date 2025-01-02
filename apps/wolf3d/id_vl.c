@@ -343,29 +343,6 @@ void VL_FadeIn(int        start __attribute__((unused)),
   // screenfaded = false;
 }
 
-/*
-=============================================================================
-
-                                                        PIXEL OPS
-
-=============================================================================
-*/
-
-byte *VL_LockSurface(SDL_Surface *surface) {
-  // if (SDL_MUSTLOCK(surface))
-  // {
-  // 	if (SDL_LockSurface(surface) < 0)
-  // 		return NULL;
-  // }
-  return (byte *)surface->pixels;
-}
-
-void VL_UnlockSurface(SDL_Surface *surface __attribute__((unused))) {
-  // if (SDL_MUSTLOCK(surface))
-  // {
-  // 	SDL_UnlockSurface(surface);
-  // }
-}
 
 /*
 =================
