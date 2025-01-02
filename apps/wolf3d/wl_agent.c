@@ -911,7 +911,7 @@ static fixed FixedByFracOrig(fixed a, fixed b) {
     a    = -a;
     sign = !sign;
   }
-  fixed res = (fixed)(((int64_t)a * b) >> 16);
+  fixed res = FixedMul(a, b);
 
   if (sign)
     res = -res;

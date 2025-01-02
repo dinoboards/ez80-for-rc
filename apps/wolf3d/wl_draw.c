@@ -44,10 +44,10 @@ int min_wallheight;
 //
 // math tables
 //
-short   pixelangle[MAXVIEWWIDTH];
-int32_t finetangent[FINEANGLES / 4];
-fixed   sintable[ANGLES + ANGLES / 4];
-fixed  *costable = sintable + (ANGLES / 4);
+short  pixelangle[MAXVIEWWIDTH];
+fixed  finetangent[FINEANGLES / 4];
+fixed  sintable[ANGLES + ANGLES / 4];
+fixed *costable = sintable + (ANGLES / 4);
 
 //
 // refresh variables
@@ -67,10 +67,10 @@ void ThreeDRefresh(void);
 //
 // wall optimization variables
 //
-int     lastside; // true for vertical
-int32_t lastintercept;
-int     lasttilehit;
-int     lasttexture;
+int   lastside; // true for vertical
+short lastintercept;
+int   lasttilehit;
+int   lasttexture;
 
 //
 // ray tracing variables
@@ -83,12 +83,12 @@ short midangle, angle;
 word tilehit;
 int  pixx;
 
-short   xtile, ytile;
-short   xtilestep, ytilestep;
-int32_t xintercept, yintercept;
-word    xstep, ystep;
-word    xspot, yspot;
-int     texdelta;
+short xtile, ytile;
+short xtilestep, ytilestep;
+fixed xintercept, yintercept;
+word  xstep, ystep;
+word  xspot, yspot;
+int   texdelta;
 
 word horizwall[MAXWALLTILES], vertwall[MAXWALLTILES];
 
@@ -930,7 +930,7 @@ void CalcTics(void) {
 //==========================================================================
 
 void AsmRefresh() {
-  int32_t  xstep, ystep;
+  fixed    xstep, ystep;
   uint24_t xpartial, ypartial;
   boolean  playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
@@ -973,17 +973,17 @@ void AsmRefresh() {
     }
     yintercept = FixedMul(ystep, xpartial) + viewy;
     xtile      = focaltx + xtilestep;
-    xspot      = (word)((xtile << mapshift) + ((uint32_t)yintercept >> 16));
+    xspot      = (word)((xtile << mapshift) + fixed_rounded_down(yintercept));
     xintercept = FixedMul(xstep, ypartial) + viewx;
     ytile      = focalty + ytilestep;
-    yspot      = (word)((((uint32_t)xintercept >> 16) << mapshift) + ytile);
+    yspot      = (word)(((fixed_rounded_down(xintercept)) << mapshift) + ytile);
     texdelta   = 0;
 
     // Special treatment when player is in back tile of pushwall
     if (playerInPushwallBackTile) {
       if ((pwalldir == di_east && xtilestep == 1) || (pwalldir == di_west && xtilestep == -1)) {
-        int32_t yintbuf = yintercept - ((ystep * (64 - pwallpos)) >> 6);
-        if ((yintbuf >> 16) == focalty) // ray hits pushwall back?
+        fixed yintbuf = yintercept - ((ystep * (64 - pwallpos)) >> 6);
+        if ((fixed_rounded_down(yintbuf)) == focalty) // ray hits pushwall back?
         {
           if (pwalldir == di_east)
             xintercept = (focaltx << TILESHIFT) + (pwallpos << 10);
@@ -997,8 +997,8 @@ void AsmRefresh() {
           continue;
         }
       } else if ((pwalldir == di_south && ytilestep == 1) || (pwalldir == di_north && ytilestep == -1)) {
-        int32_t xintbuf = xintercept - ((xstep * (64 - pwallpos)) >> 6);
-        if ((xintbuf >> 16) == focaltx) // ray hits pushwall back?
+        fixed xintbuf = xintercept - ((xstep * (64 - pwallpos)) >> 6);
+        if (fixed_rounded_down(xintbuf) == focaltx) // ray hits pushwall back?
         {
           xintercept = xintbuf;
           if (pwalldir == di_south)
@@ -1014,9 +1014,9 @@ void AsmRefresh() {
     }
 
     do {
-      if (ytilestep == -1 && (yintercept >> 16) <= ytile)
+      if (ytilestep == -1 && fixed_rounded_down(yintercept) <= ytile)
         goto horizentry;
-      if (ytilestep == 1 && (yintercept >> 16) >= ytile)
+      if (ytilestep == 1 && fixed_rounded_down(yintercept) >= ytile)
         goto horizentry;
     vertentry:
       if ((uint32_t)yintercept > mapheight * 65536 - 1 || (word)xtile >= mapwidth) {
@@ -1040,8 +1040,8 @@ void AsmRefresh() {
       tilehit = ((byte *)tilemap)[xspot];
       if (tilehit) {
         if (tilehit & 0x80) {
-          int32_t yintbuf = yintercept + (ystep >> 1);
-          if ((yintbuf >> 16) != (yintercept >> 16))
+          fixed yintbuf = yintercept + (ystep >> 1);
+          if (fixed_rounded_down(yintbuf) != fixed_rounded_down(yintercept))
             goto passvert;
           if ((word)yintbuf < doorposition[tilehit & 0x7f])
             goto passvert;
@@ -1052,9 +1052,9 @@ void AsmRefresh() {
         } else {
           if (tilehit == 64) {
             if (pwalldir == di_west || pwalldir == di_east) {
-              int32_t yintbuf;
-              int     pwallposnorm;
-              int     pwallposinv;
+              fixed yintbuf;
+              int   pwallposnorm;
+              int   pwallposinv;
               if (pwalldir == di_west) {
                 pwallposnorm = 64 - pwallpos;
                 pwallposinv  = pwallpos;
@@ -1062,12 +1062,12 @@ void AsmRefresh() {
                 pwallposnorm = pwallpos;
                 pwallposinv  = 64 - pwallpos;
               }
-              if ((pwalldir == di_east && xtile == pwallx && ((uint32_t)yintercept >> 16) == pwally) ||
-                  (pwalldir == di_west && !(xtile == pwallx && ((uint32_t)yintercept >> 16) == pwally))
+              if ((pwalldir == di_east && xtile == pwallx && (fixed_rounded_down(yintercept)) == pwally) ||
+                  (pwalldir == di_west && !(xtile == pwallx && (fixed_rounded_down(yintercept)) == pwally))
 
               ) {
                 yintbuf = yintercept + ((ystep * pwallposnorm) >> 6);
-                if ((yintbuf >> 16) != (yintercept >> 16))
+                if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
                   goto passvert;
 
                 xintercept = ((int32_t)xtile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
@@ -1077,7 +1077,7 @@ void AsmRefresh() {
                 HitVertWall();
               } else {
                 yintbuf = yintercept + ((ystep * pwallposinv) >> 6);
-                if ((yintbuf >> 16) != (yintercept >> 16))
+                if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
                   goto passvert;
 
                 xintercept = ((int32_t)xtile << TILESHIFT) - (pwallposinv << 10);
@@ -1092,7 +1092,7 @@ void AsmRefresh() {
                 pwallposi = 64 - pwallpos;
               if ((pwalldir == di_south && (word)yintercept < (pwallposi << 10)) ||
                   (pwalldir == di_north && (word)yintercept > (pwallposi << 10))) {
-                if (((uint32_t)yintercept >> 16) == pwally && xtile == pwallx) {
+                if ((fixed_rounded_down(yintercept)) == pwally && xtile == pwallx) {
                   if ((pwalldir == di_south && (int32_t)((word)yintercept) + ystep < (pwallposi << 10)) ||
                       (pwalldir == di_north && (int32_t)((word)yintercept) + ystep > (pwallposi << 10)))
                     goto passvert;
@@ -1113,7 +1113,7 @@ void AsmRefresh() {
                   HitVertWall();
                 }
               } else {
-                if (((uint32_t)yintercept >> 16) == pwally && xtile == pwallx) {
+                if ((fixed_rounded_down(yintercept)) == pwally && xtile == pwallx) {
                   texdelta   = -(pwallposi << 10);
                   xintercept = (int32_t)xtile << TILESHIFT;
                   ytile      = (short)(yintercept >> TILESHIFT);
@@ -1147,14 +1147,14 @@ void AsmRefresh() {
       *((byte *)spotvis + xspot) = 1;
       xtile += xtilestep;
       yintercept += ystep;
-      xspot = (word)(((uint32_t)xtile << mapshift) + ((uint32_t)yintercept >> 16));
+      xspot = (word)(((uint32_t)xtile << mapshift) + (fixed_rounded_down(yintercept)));
     } while (1);
     continue;
 
     do {
-      if (xtilestep == -1 && (xintercept >> 16) <= xtile)
+      if (xtilestep == -1 && (fixed_rounded_down(xintercept)) <= xtile)
         goto vertentry;
-      if (xtilestep == 1 && (xintercept >> 16) >= xtile)
+      if (xtilestep == 1 && (fixed_rounded_down(xintercept)) >= xtile)
         goto vertentry;
     horizentry:
       if ((uint32_t)xintercept > mapwidth * 65536 - 1 || (word)ytile >= mapheight) {
@@ -1179,7 +1179,7 @@ void AsmRefresh() {
       if (tilehit) {
         if (tilehit & 0x80) {
           int32_t xintbuf = xintercept + (xstep >> 1);
-          if ((xintbuf >> 16) != (xintercept >> 16))
+          if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
             goto passhoriz;
           if ((word)xintbuf < doorposition[tilehit & 0x7f])
             goto passhoriz;
@@ -1200,10 +1200,10 @@ void AsmRefresh() {
                 pwallposnorm = pwallpos;
                 pwallposinv  = 64 - pwallpos;
               }
-              if ((pwalldir == di_south && ytile == pwally && ((uint32_t)xintercept >> 16) == pwallx) ||
-                  (pwalldir == di_north && !(ytile == pwally && ((uint32_t)xintercept >> 16) == pwallx))) {
+              if ((pwalldir == di_south && ytile == pwally && (fixed_rounded_down(xintercept)) == pwallx) ||
+                  (pwalldir == di_north && !(ytile == pwally && (fixed_rounded_down(xintercept)) == pwallx))) {
                 xintbuf = xintercept + ((xstep * pwallposnorm) >> 6);
-                if ((xintbuf >> 16) != (xintercept >> 16))
+                if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
                   goto passhoriz;
 
                 yintercept = ((int32_t)ytile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
@@ -1213,7 +1213,7 @@ void AsmRefresh() {
                 HitHorizWall();
               } else {
                 xintbuf = xintercept + ((xstep * pwallposinv) >> 6);
-                if ((xintbuf >> 16) != (xintercept >> 16))
+                if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
                   goto passhoriz;
 
                 yintercept = ((int32_t)ytile << TILESHIFT) - (pwallposinv << 10);
@@ -1228,7 +1228,7 @@ void AsmRefresh() {
                 pwallposi = 64 - pwallpos;
               if ((pwalldir == di_east && (word)xintercept < (pwallposi << 10)) ||
                   (pwalldir == di_west && (word)xintercept > (pwallposi << 10))) {
-                if (((uint32_t)xintercept >> 16) == pwallx && ytile == pwally) {
+                if ((fixed_rounded_down(xintercept)) == pwallx && ytile == pwally) {
                   if ((pwalldir == di_east && (int32_t)((word)xintercept) + xstep < (pwallposi << 10)) ||
                       (pwalldir == di_west && (int32_t)((word)xintercept) + xstep > (pwallposi << 10)))
                     goto passhoriz;
@@ -1249,7 +1249,7 @@ void AsmRefresh() {
                   HitHorizWall();
                 }
               } else {
-                if (((uint32_t)xintercept >> 16) == pwallx && ytile == pwally) {
+                if ((fixed_rounded_down(xintercept)) == pwallx && ytile == pwally) {
                   texdelta   = -(pwallposi << 10);
                   yintercept = (int32_t)ytile << TILESHIFT;
                   xtile      = (short)(xintercept >> TILESHIFT);
@@ -1283,7 +1283,7 @@ void AsmRefresh() {
       *((byte *)spotvis + yspot) = 1;
       ytile += ytilestep;
       xintercept += xstep;
-      yspot = (word)((((uint32_t)xintercept >> 16) << mapshift) + ytile);
+      yspot = (word)(((fixed_rounded_down(xintercept)) << mapshift) + ytile);
     } while (1);
   }
 }
