@@ -276,7 +276,7 @@ void __func_on_chip HitVertWall(void) {
   int wallpic;
   int texture;
 
-  texture = ((yintercept + texdelta) >> TEXTUREFROMFIXEDSHIFT) & TEXTUREMASK;
+  texture = (TextureFromFixedShift(yintercept + texdelta)) & TEXTUREMASK;
   if (xtilestep == -1) {
     texture = TEXTUREMASK - texture;
     xintercept += TILEGLOBAL;
@@ -334,7 +334,7 @@ void __func_on_chip HitHorizWall(void) {
   int wallpic;
   int texture;
 
-  texture = ((xintercept + texdelta) >> TEXTUREFROMFIXEDSHIFT) & TEXTUREMASK;
+  texture = (TextureFromFixedShift(xintercept + texdelta)) & TEXTUREMASK;
   if (ytilestep == -1)
     yintercept += TILEGLOBAL;
   else
@@ -393,7 +393,7 @@ void __func_on_chip HitHorizDoor(void) {
   int texture;
 
   doornum = tilehit & 0x7f;
-  texture = ((xintercept - doorposition[doornum]) >> TEXTUREFROMFIXEDSHIFT) & TEXTUREMASK;
+  texture = (TextureFromFixedShift(xintercept - doorposition[doornum])) & TEXTUREMASK;
 
   if (lasttilehit == tilehit) {
     if ((pixx & 3) && texture == lasttexture) {
@@ -453,7 +453,7 @@ void __func_on_chip HitVertDoor(void) {
   int texture;
 
   doornum = tilehit & 0x7f;
-  texture = ((yintercept - doorposition[doornum]) >> TEXTUREFROMFIXEDSHIFT) & TEXTUREMASK;
+  texture = (TextureFromFixedShift(yintercept - doorposition[doornum])) & TEXTUREMASK;
 
   if (lasttilehit == tilehit) {
     if ((pixx & 3) && texture == lasttexture) {
