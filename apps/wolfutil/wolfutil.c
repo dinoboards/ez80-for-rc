@@ -31,6 +31,7 @@ void show_help() {
   printf("  -P=<swapfile>    Parse and test loading swap file\r\n");
   printf("  -T=MM            Test MM functions\r\n");
   printf("  -T=FP            Test Fixed Point functions\r\n");
+  printf("  -T=SF            Test Shift functions\r\n");
   printf("  -X               Test rendering tiles\r\n");
   printf("  -K               Test key serial to event simulator\r\n");
   printf("  -? /?            Show this help message\r\n");
@@ -44,7 +45,7 @@ bool argument_help(const char *arg) {
 
   return false;
 }
-typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_T_FP, CMD_X, CMD_K } command_type_t;
+typedef enum { CMD_NONE, CMD_HELP, CMD_I_SIGNON, CMD_S, CMD_P, CMD_T_MM, CMD_T_FP, CMD_T_SF, CMD_X, CMD_K } command_type_t;
 static command_type_t cmd = CMD_NONE;
 const char           *filename;
 
@@ -106,6 +107,15 @@ bool argument_T_FP(const char *arg) {
   return true;
 }
 
+bool argument_T_SF(const char *arg) {
+  if (strcmp(arg, "-T=SF") != 0 && strcmp(arg, "/T=SF") != 0)
+    return false;
+
+  cmd = CMD_T_SF;
+
+  return true;
+}
+
 bool argument_X(const char *arg) {
   if (strcmp(arg, "-X") != 0 && strcmp(arg, "/X") != 0)
     return false;
@@ -149,6 +159,9 @@ int main(const int argc, const char *argv[]) {
     if (argument_T_FP(argv[i]))
       continue;
 
+    if (argument_T_SF(argv[i]))
+      continue;
+
     if (argument_X(argv[i]))
       continue;
 
@@ -177,6 +190,8 @@ int main(const int argc, const char *argv[]) {
     test_mm_functions();
   } else if (cmd == CMD_T_FP) {
     test_fixed_mul();
+  } else if (cmd == CMD_T_SF) {
+    test_shift_functions();
   } else if (cmd == CMD_X) {
     test_rendering_tiles();
   } else if (cmd == CMD_K) {

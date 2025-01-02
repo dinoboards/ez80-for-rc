@@ -164,7 +164,7 @@ void TransformActor(objtype *ob) {
   //
   // calculate height (heightnumerator/(nx>>8))
   //
-  ob->viewheight = (word)(heightnumerator / (nx >> 8));
+  ob->viewheight = (word)(heightnumerator / sr_s32_s32_8(nx));
 }
 
 //==========================================================================
@@ -220,7 +220,7 @@ boolean TransformTile(int tx, int ty, short *dispx, short *dispheight) {
     *dispheight = 0;
   else {
     *dispx      = (short)(centerx + ny * scale / nx);
-    *dispheight = (short)(heightnumerator / (nx >> 8));
+    *dispheight = (short)(heightnumerator / sr_s32_s32_8(nx));
   }
 
   //
