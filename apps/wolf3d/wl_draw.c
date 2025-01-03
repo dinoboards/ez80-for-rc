@@ -573,18 +573,26 @@ int CalcRotate(objtype *ob) {
   return angle / (ANGLES / 8);
 }
 
-void ScaleShape(int xcenter, int shapenum, unsigned height, uint32_t flags __attribute__((unused))) {
+void ScaleShape(int xcenter, int shapenum, unsigned height) {
   t_compshape *shape;
-  unsigned     scale, pixheight;
-  unsigned     starty, endy;
-  word        *cmdptr;
+  uint24_t     scale;
+  uint24_t     pixheight;
+  uint24_t     starty, endy;
+  uint16_t    *cmdptr;
   byte        *cline;
   byte        *line;
   byte        *vmem;
-  int          actx, i, upperedge;
-  short        newstart;
-  int          scrstarty, screndy, lpix, rpix, pixcnt, ycnt;
-  unsigned     j;
+  int24_t      actx;
+  uint24_t      i;
+  int24_t      upperedge;
+  int16_t      newstart;
+  int24_t      scrstarty;
+  int24_t      screndy;
+  int24_t      lpix;
+  int24_t      rpix;
+  int24_t      pixcnt;
+  int24_t      ycnt;
+  uint24_t     j;
   byte         col;
 
   shape = (t_compshape *)PM_GetSprite(shapenum);
@@ -748,8 +756,6 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
 
 typedef struct {
   short viewx, viewheight, shapenum;
-  short flags; // this must be changed to uint32_t, when you
-               // you need more than 16-flags for drawing
 } visobj_t;
 
 visobj_t  vislist[MAXVISABLE];
@@ -785,10 +791,7 @@ void DrawScaleds(void) {
       continue; // to close to the object
 
     if (visptr < &vislist[MAXVISABLE - 1]) // don't let it overflow
-    {
-      visptr->flags = (short)statptr->flags;
       visptr++;
-    }
   }
 
   //
@@ -823,11 +826,8 @@ void DrawScaleds(void) {
         visptr->shapenum += CalcRotate(obj);
 
       if (visptr < &vislist[MAXVISABLE - 1]) // don't let it overflow
-      {
-        visptr->flags = (short)obj->flags;
-
         visptr++;
-      }
+
       obj->flags |= FL_VISABLE;
     } else
       obj->flags &= ~FL_VISABLE;
@@ -854,7 +854,7 @@ void DrawScaleds(void) {
     //
     // draw farthest
     //
-    ScaleShape(farthest->viewx, farthest->shapenum, farthest->viewheight, farthest->flags);
+    ScaleShape(farthest->viewx, farthest->shapenum, farthest->viewheight);
 
     farthest->viewheight = 32000;
   }
