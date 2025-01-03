@@ -577,13 +577,14 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
   t_compshape *shape;
   uint24_t     scale;
   uint24_t     pixheight;
-  uint24_t     starty, endy;
+  uint16_t     starty;
+  uint16_t     endy;
   uint16_t    *cmdptr;
   byte        *cline;
   byte        *line;
   byte        *vmem;
   int24_t      actx;
-  uint24_t     i;
+  uint16_t     i;
   int24_t      upperedge;
   int16_t      newstart;
   int24_t      scrstarty;
@@ -592,7 +593,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
   int24_t      rpix;
   int24_t      pixcnt;
   int24_t      ycnt;
-  uint24_t     j;
+  uint16_t     j;
   byte         col;
 
   shape = (t_compshape *)PM_GetSprite(shapenum);
@@ -1157,7 +1158,7 @@ void AsmRefresh() {
       if (xtilestep == 1 && (fixed_rounded_down(xintercept)) >= xtile)
         goto vertentry;
     horizentry:
-      if ((uint32_t)xintercept > mapwidth * 65536 - 1 || (word)ytile >= mapheight) {
+      if (xintercept > mapwidth * 65536 - 1 || (word)ytile >= mapheight) {
         if (ytile < 0)
           yintercept = 0, ytile = 0;
         else if (ytile >= mapheight)
