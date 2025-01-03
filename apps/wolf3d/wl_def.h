@@ -72,6 +72,10 @@ typedef struct {
 
 void Quit(const char *errorStr, ...) __attribute__((noreturn));
 
+/**** ADDITIONAL FOR EZ80/CPM BUILD */
+extern uint8_t signon_default_colour;
+
+
 #include "id_ca.h"
 #include "id_in.h"
 #include "id_pm.h"

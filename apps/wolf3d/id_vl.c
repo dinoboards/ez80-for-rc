@@ -344,29 +344,10 @@ void VL_FadeIn(int        start __attribute__((unused)),
 =================
 */
 
-void VL_Plot(int x __attribute__((unused)), int y __attribute__((unused)), int color __attribute__((unused))) {
-  // assert(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_Plot: Pixel out of bounds!");
+void VL_Plot(int x, int y, int color) {
+  assert(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_Plot: Pixel out of bounds!");
 
-  // VL_LockSurface(curSurface);
-  // ((byte *)curSurface->pixels)[y * SCREEN_WIDTH + x] = color;
-  // VL_UnlockSurface(curSurface);
-}
-
-/*
-=================
-=
-= VL_GetPixel
-=
-=================
-*/
-
-byte VL_GetPixel(int x __attribute__((unused)), int y __attribute__((unused))) {
-  assert_ret(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_GetPixel: Pixel out of bounds!");
-
-  // VL_LockSurface(curSurface);
-  byte col = ((byte *)curSurface->pixels)[y * SCREEN_WIDTH + x];
-  // VL_UnlockSurface(curSurface);
-  return col;
+  curSurface->pixels[y * SCREEN_WIDTH + x] = color;
 }
 
 /*
