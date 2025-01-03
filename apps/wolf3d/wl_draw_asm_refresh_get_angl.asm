@@ -1,6 +1,7 @@
 
 	section	.text, "ax", @progbits
 	.global	_asm_refresh_get_angl
+	.global _asm_refresh_find_quarter
 	.extern	_pixx
 	.extern	_pixelangle
 	.extern	_midangle
@@ -61,4 +62,34 @@ is_not_neg:
 hl_was_less_than_fine_angles:
 	ld	de, FINEANGLES+1	; restore HL's original value
 	add	hl, de
+	ret
+
+_asm_refresh_find_quarter:
+	ld	hl, (_angl)
+
+	or	a
+	ld	de, 900
+	sbc.sis	hl, de
+
+	jr	c, less_than_90
+
+	sbc.sis	hl, de
+	jr	c, less_than_180
+
+	sbc.sis	hl, de
+	jr	c, less_than_270
+
+	ld	a, 3
+	ret
+
+less_than_90:
+	xor	a
+	ret
+
+less_than_180:
+	ld	a, 1
+	ret
+
+less_than_270:
+	ld	a, 2
 	ret
