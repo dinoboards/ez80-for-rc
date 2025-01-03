@@ -139,4 +139,15 @@ _scale_post_calc_ycount:
 	inc	hl
 	ld	(hl), d
 
+	; ld	hl, (_viewheight)
+
+	; srl	h		; hl = viewheight >> 1
+	; rr	l
+
+	; ld	de, (_ywcount)
+	; or	a
+	; sbc.sis	hl, de		; hl -= ywcount
+
+
+
 	ret

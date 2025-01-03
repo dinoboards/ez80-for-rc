@@ -24,8 +24,7 @@ extern boolean fullscreen, usedoublebuffering;
 #define screenWidth  MAXVIEWWIDTH
 #define screenHeight 212
 
-extern unsigned screenBits, screenPitch, bufferPitch, curPitch;
-// extern unsigned scaleFactor;
+extern unsigned screenBits, screenPitch;
 
 #define scaleFactor 1
 

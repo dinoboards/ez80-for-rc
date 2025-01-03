@@ -889,7 +889,7 @@ void CA_CacheScreen(int chunk) {
     for (int x = 0; x < 256; x++) {
       const byte col = pic[(y * 80 + (cx >> 2)) + (cx & 3) * 80 * 200];
 
-      vbuf[y * curPitch + x] = col;
+      vbuf[y * SCREEN_WIDTH + x] = col;
 
       cx++;
       if (x % CLIP_SKIP == 0)

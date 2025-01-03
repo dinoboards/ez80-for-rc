@@ -28,8 +28,7 @@
 =============================================================================
 */
 
-byte    *vbuf      = NULL;
-unsigned vbufPitch = 0;
+byte *vbuf = NULL;
 
 uint24_t lasttimecount;
 int32_t  frameon;
@@ -530,10 +529,10 @@ void VGAClearScreen(void) {
   int   y;
   byte *ptr = vbuf;
 
-  for (y = 0; y < viewheight / 2; y++, ptr += vbufPitch)
+  for (y = 0; y < viewheight / 2; y++, ptr += SCREEN_WIDTH)
     memset(ptr, ceiling, viewwidth);
 
-  for (; y < viewheight; y++, ptr += vbufPitch)
+  for (; y < viewheight; y++, ptr += SCREEN_WIDTH)
     memset(ptr, 0x19, viewwidth);
 }
 
@@ -639,7 +638,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
             if (screndy < 0)
               vmem = vbuf + lpix;
             else
-              vmem = vbuf + screndy * vbufPitch + lpix;
+              vmem = vbuf + screndy * SCREEN_WIDTH + lpix;
 
             for (; j < endy; j++) {
               scrstarty = screndy;
@@ -656,7 +655,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
 
                 while (scrstarty < screndy) {
                   *vmem = col;
-                  vmem += vbufPitch;
+                  vmem += SCREEN_WIDTH;
                   scrstarty++;
                 }
               }
@@ -716,7 +715,7 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
           if (screndy < 0)
             vmem = vbuf + lpix;
           else
-            vmem = vbuf + screndy * vbufPitch + lpix;
+            vmem = vbuf + screndy * SCREEN_WIDTH + lpix;
           for (; j < endy; j++) {
             scrstarty = screndy;
             ycnt += pixheight;
@@ -730,7 +729,7 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
 
               while (scrstarty < screndy) {
                 *vmem = col;
-                vmem += vbufPitch;
+                vmem += SCREEN_WIDTH;
                 scrstarty++;
               }
             }
@@ -1356,7 +1355,6 @@ void ThreeDRefresh(void) {
 
   vbuf = VL_LockSurface(screenBuffer);
   vbuf += screenofs;
-  vbufPitch = bufferPitch;
 
   CalcViewVariables();
 
