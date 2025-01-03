@@ -16,7 +16,7 @@ size_t    PMPageDataSize;
 
 // ChunksInFile+1 pointers to page starts.
 // The last pointer points one byte after the last page.
-uint8_t **PMPages;
+uint8_t **PMPages __data_on_chip;
 
 void PM_Startup() {
   char fname[13] = "vswap.";
