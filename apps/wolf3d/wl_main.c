@@ -792,7 +792,7 @@ void SignonScreen(void) {
 
 void FinishSignon(void) {
 #ifndef SPEAR
-  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(320), 11, VL_GetPixel(0, 0));
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(320), 11, 0);
   WindowX = 0;
   WindowW = 256;
   PrintY  = 190;
@@ -814,7 +814,7 @@ void FinishSignon(void) {
     IN_Ack();
 
 #ifndef JAPAN
-  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(300), 11, VL_GetPixel(0, 0));
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(300), 11, 0);
 
   PrintY = 190;
   SETFONTCOLOR(10, 4);

@@ -1071,7 +1071,11 @@ void PlayLoop(void) {
     IN_StartAck();
 
   do {
+    // int24_t start = ez80_timers_ticks_get();
+
     PollControls();
+
+    // uint24_t stage1 = ez80_timers_ticks_get() - start;
 
     //
     // actor thinking
@@ -1080,15 +1084,24 @@ void PlayLoop(void) {
 
     MoveDoors();
 
+    // uint24_t stage2 = ez80_timers_ticks_get() - start;
+
     MovePWalls();
+
+    // uint24_t stage3 = ez80_timers_ticks_get() - start;
 
     for (obj = player; obj; obj = obj->next)
       DoActor(obj);
 
+    // uint24_t stage4 = ez80_timers_ticks_get() - start;
+
     UpdatePaletteShifts();
+
+    // uint24_t stage5 = ez80_timers_ticks_get() - start;
 
     ThreeDRefresh();
 
+    // uint24_t stage6 = ez80_timers_ticks_get() - start;
     //
     // MAKE FUNNY FACE IF BJ DOESN'T MOVE FOR AWHILE
     //
@@ -1126,6 +1139,11 @@ void PlayLoop(void) {
         playstate = ex_abort;
       }
     }
+
+    // int24_t stage7 = ez80_timers_ticks_get() - start;
+
+    // printf("s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d, s7: %d\r", stage1, stage2, stage3, stage4, stage5, stage6, stage7);
+
   } while (!playstate && !startgame);
 
   if (playstate != ex_died)

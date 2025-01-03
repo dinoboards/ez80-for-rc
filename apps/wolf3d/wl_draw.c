@@ -306,7 +306,7 @@ void __func_on_chip HitVertWall(void) {
   postx            = pixx;
 
   if (tilehit & 0x40) { // check for adjacent doors
-    ytile = (short)(yintercept >> TILESHIFT);
+    ytile = (short)(fixed_rounded_down(yintercept));
     if (tilemap[xtile - xtilestep][ytile] & 0x80)
       wallpic = DOORWALL + 3;
     else
@@ -364,7 +364,7 @@ void __func_on_chip HitHorizWall(void) {
   postx            = pixx;
 
   if (tilehit & 0x40) { // check for adjacent doors
-    xtile = (short)(xintercept >> TILESHIFT);
+    xtile = (short)(fixed_rounded_down(xintercept));
     if (tilemap[xtile][ytile - ytilestep] & 0x80)
       wallpic = DOORWALL + 2;
     else
@@ -1000,7 +1000,7 @@ void AsmRefresh() {
           else
             xintercept = (focaltx << TILESHIFT) - TILEGLOBAL + ((64 - pwallpos) << 10);
           yintercept = yintbuf;
-          ytile      = (short)(yintercept >> TILESHIFT);
+          ytile      = (short)(fixed_rounded_down(yintercept));
           tilehit    = pwalltile;
           HitVertWall();
 
@@ -1015,7 +1015,7 @@ void AsmRefresh() {
             yintercept = (focalty << TILESHIFT) + (pwallpos << 10);
           else
             yintercept = (focalty << TILESHIFT) - TILEGLOBAL + ((64 - pwallpos) << 10);
-          xtile   = (short)(xintercept >> TILESHIFT);
+          xtile   = (short)(fixed_rounded_down(xintercept));
           tilehit = pwalltile;
           HitHorizWall();
           continue;
@@ -1035,7 +1035,7 @@ void AsmRefresh() {
         else if (xtile >= mapwidth)
           xintercept = (int32_t)mapwidth << TILESHIFT, xtile = mapwidth - 1;
         else
-          xtile = (short)(xintercept >> TILESHIFT);
+          xtile = (short)(fixed_rounded_down(xintercept));
         if (yintercept < 0)
           yintercept = 0, ytile = 0;
         else if (yintercept >= ((int32_t)mapheight << TILESHIFT))
@@ -1057,7 +1057,7 @@ void AsmRefresh() {
             goto passvert;
           yintercept = yintbuf;
           xintercept = ((int32_t)xtile << TILESHIFT) | 0x8000;
-          ytile      = (short)(yintercept >> TILESHIFT);
+          ytile      = (short)(fixed_rounded_down(yintercept));
           HitVertDoor();
         } else {
           if (tilehit == 64) {
@@ -1082,7 +1082,7 @@ void AsmRefresh() {
 
                 xintercept = ((int32_t)xtile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
                 yintercept = yintbuf;
-                ytile      = (short)(yintercept >> TILESHIFT);
+                ytile      = (short)(fixed_rounded_down(yintercept));
                 tilehit    = pwalltile;
                 HitVertWall();
               } else {
@@ -1092,7 +1092,7 @@ void AsmRefresh() {
 
                 xintercept = ((int32_t)xtile << TILESHIFT) - (pwallposinv << 10);
                 yintercept = yintbuf;
-                ytile      = (short)(yintercept >> TILESHIFT);
+                ytile      = (short)(fixed_rounded_down(yintercept));
                 tilehit    = pwalltile;
                 HitVertWall();
               }
@@ -1112,13 +1112,13 @@ void AsmRefresh() {
                   else
                     yintercept = (yintercept & 0xffff0000) - TILEGLOBAL + (pwallposi << 10);
                   xintercept = xintercept - (sr_s32_s32_6(xstep * (64 - pwallpos)));
-                  xtile      = (short)(xintercept >> TILESHIFT);
+                  xtile      = (short)(fixed_rounded_down(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 } else {
                   texdelta   = -(pwallposi << 10);
                   xintercept = (int32_t)xtile << TILESHIFT;
-                  ytile      = (short)(yintercept >> TILESHIFT);
+                  ytile      = (short)(fixed_rounded_down(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 }
@@ -1126,7 +1126,7 @@ void AsmRefresh() {
                 if ((fixed_rounded_down(yintercept)) == pwally && xtile == pwallx) {
                   texdelta   = -(pwallposi << 10);
                   xintercept = (int32_t)xtile << TILESHIFT;
-                  ytile      = (short)(yintercept >> TILESHIFT);
+                  ytile      = (short)(fixed_rounded_down(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 } else {
@@ -1139,7 +1139,7 @@ void AsmRefresh() {
                   else
                     yintercept = (yintercept & 0xffff0000) + ((64 - pwallpos) << 10);
                   xintercept = xintercept - (sr_s32_s32_6(xstep * pwallpos));
-                  xtile      = (short)(xintercept >> TILESHIFT);
+                  xtile      = (short)(fixed_rounded_down(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 }
@@ -1147,7 +1147,7 @@ void AsmRefresh() {
             }
           } else {
             xintercept = (int32_t)xtile << TILESHIFT;
-            ytile      = (short)(yintercept >> TILESHIFT);
+            ytile      = (short)(fixed_rounded_down(yintercept));
             HitVertWall();
           }
         }
@@ -1173,7 +1173,7 @@ void AsmRefresh() {
         else if (ytile >= mapheight)
           yintercept = (int32_t)mapheight << TILESHIFT, ytile = mapheight - 1;
         else
-          ytile = (short)(yintercept >> TILESHIFT);
+          ytile = (short)(fixed_rounded_down(yintercept));
         if (xintercept < 0)
           xintercept = 0, xtile = 0;
         else if (xintercept >= ((int32_t)mapwidth << TILESHIFT))
@@ -1195,7 +1195,7 @@ void AsmRefresh() {
             goto passhoriz;
           xintercept = xintbuf;
           yintercept = ((int32_t)ytile << TILESHIFT) + 0x8000;
-          xtile      = (short)(xintercept >> TILESHIFT);
+          xtile      = (short)(fixed_rounded_down(xintercept));
           HitHorizDoor();
         } else {
           if (tilehit == 64) {
@@ -1218,7 +1218,7 @@ void AsmRefresh() {
 
                 yintercept = ((int32_t)ytile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
                 xintercept = xintbuf;
-                xtile      = (short)(xintercept >> TILESHIFT);
+                xtile      = (short)(fixed_rounded_down(xintercept));
                 tilehit    = pwalltile;
                 HitHorizWall();
               } else {
@@ -1228,7 +1228,7 @@ void AsmRefresh() {
 
                 yintercept = ((int32_t)ytile << TILESHIFT) - (pwallposinv << 10);
                 xintercept = xintbuf;
-                xtile      = (short)(xintercept >> TILESHIFT);
+                xtile      = (short)(fixed_rounded_down(xintercept));
                 tilehit    = pwalltile;
                 HitHorizWall();
               }
@@ -1248,13 +1248,13 @@ void AsmRefresh() {
                   else
                     xintercept = (xintercept & 0xffff0000) - TILEGLOBAL + (pwallposi << 10);
                   yintercept = yintercept - (sr_s32_s32_6(ystep * (64 - pwallpos)));
-                  ytile      = (short)((int32_t)yintercept >> TILESHIFT);
+                  ytile      = (short)((int32_t)fixed_rounded_down(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 } else {
                   texdelta   = -(pwallposi << 10);
                   yintercept = (int32_t)ytile << TILESHIFT;
-                  xtile      = (short)(xintercept >> TILESHIFT);
+                  xtile      = (short)(fixed_rounded_down(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 }
@@ -1262,7 +1262,7 @@ void AsmRefresh() {
                 if ((fixed_rounded_down(xintercept)) == pwallx && ytile == pwally) {
                   texdelta   = -(pwallposi << 10);
                   yintercept = (int32_t)ytile << TILESHIFT;
-                  xtile      = (short)(xintercept >> TILESHIFT);
+                  xtile      = (short)(fixed_rounded_down(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 } else {
@@ -1275,7 +1275,7 @@ void AsmRefresh() {
                   else
                     xintercept = (xintercept & 0xffff0000) + ((64 - pwallpos) << 10);
                   yintercept = yintercept - (sr_s32_s32_6(ystep * pwallpos));
-                  ytile      = (short)(yintercept >> TILESHIFT);
+                  ytile      = (short)(fixed_rounded_down(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 }
@@ -1283,7 +1283,7 @@ void AsmRefresh() {
             }
           } else {
             yintercept = (int32_t)ytile << TILESHIFT;
-            xtile      = (short)(xintercept >> TILESHIFT);
+            xtile      = (short)(fixed_rounded_down(xintercept));
             HitHorizWall();
           }
         }
@@ -1327,11 +1327,11 @@ void CalcViewVariables() {
   viewx     = player->x - FixedMul(focallength, viewcos);
   viewy     = player->y + FixedMul(focallength, viewsin);
 
-  focaltx = (short)(viewx >> TILESHIFT);
-  focalty = (short)(viewy >> TILESHIFT);
+  focaltx = (short)(fixed_rounded_down(viewx));
+  focalty = (short)(fixed_rounded_down(viewy));
 
-  viewtx = (short)(player->x >> TILESHIFT);
-  viewty = (short)(player->y >> TILESHIFT);
+  viewtx = (short)(fixed_rounded_down(player->x));
+  viewty = (short)(fixed_rounded_down(player->y));
 }
 
 //==========================================================================
@@ -1347,6 +1347,8 @@ void CalcViewVariables() {
 int24_t last_system_tick = 0;
 
 void ThreeDRefresh(void) {
+  int24_t start = ez80_timers_ticks_get();
+
   //
   // clear out the traced array
   //
@@ -1358,18 +1360,26 @@ void ThreeDRefresh(void) {
 
   CalcViewVariables();
 
+  uint24_t stage1 = ez80_timers_ticks_get() - start;
+
   //
   // follow the walls from there to the right, drawing as we go
   //
   VGAClearScreen();
 
+  uint24_t stage2 = ez80_timers_ticks_get() - start;
+
   WallRefresh();
+
+  uint24_t stage3 = ez80_timers_ticks_get() - start;
 
   //
   // draw all the scaled images
   //
 
   DrawScaleds(); // draw scaled stuff
+
+  uint24_t stage4 = ez80_timers_ticks_get() - start;
 
   DrawPlayerWeapon(); // draw player's hands
 
@@ -1378,6 +1388,8 @@ void ThreeDRefresh(void) {
 
   VL_UnlockSurface(screenBuffer);
   vbuf = NULL;
+
+  uint24_t stage5 = ez80_timers_ticks_get() - start;
 
   //
   // show screen and time last cycle
@@ -1389,10 +1401,15 @@ void ThreeDRefresh(void) {
 
     lasttimecount = GetTimeCount(); // don't make a big tic count
   } else {
+    VH_UpdateScreen();
+
+    uint24_t stage6 = ez80_timers_ticks_get() - start;
+
     int24_t  x    = ez80_timers_ticks_get() * 1000 / 50;
     uint24_t diff = x - last_system_tick;
 
-    printf(" diff: %d, t: %d\r", diff, x);
+    printf(" diff: %d, t: %d, s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d    \r", diff, x, stage1 * 1000 / 50,
+           stage2 * 1000 / 50, stage3 * 1000 / 50, stage4 * 1000 / 50, stage5 * 1000 / 50, stage6 * 1000 / 50);
 
     last_system_tick = x;
 
@@ -1406,7 +1423,6 @@ void ThreeDRefresh(void) {
     //   US_Print(" fps");
     // }
 
-    VH_UpdateScreen();
     // SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
     // SDL_Flip(screen);
   }
