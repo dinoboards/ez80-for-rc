@@ -929,38 +929,44 @@ void CalcTics(void) {
 
 //==========================================================================
 
-extern short asm_refresh_get_angl();
+extern short   asm_refresh_get_angl();
+extern uint8_t asm_refresh_find_quarter();
+short angl     __data_on_chip;
+fixed xstep __data_on_chip, ystep __data_on_chip;
+uint24_t xpartial __data_on_chip, ypartial __data_on_chip;
 
 void AsmRefresh() {
-  fixed    xstep, ystep;
-  uint24_t xpartial, ypartial;
-  boolean  playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
+  boolean playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
   for (pixx = 0; pixx < viewwidth; pixx++) {
-    short angl = asm_refresh_get_angl();
+    angl = asm_refresh_get_angl();
 
-    if (angl < 900) {
+    switch (asm_refresh_find_quarter()) {
+    case 0: // 0-90
       xtilestep = 1;
       ytilestep = -1;
       xstep     = finetangent[900 - 1 - angl];
       ystep     = -finetangent[angl];
       xpartial  = xpartialup;
       ypartial  = ypartialdown;
-    } else if (angl < 1800) {
+      break;
+    case 1: // 90-180
       xtilestep = -1;
       ytilestep = -1;
       xstep     = -finetangent[angl - 900];
       ystep     = -finetangent[1800 - 1 - angl];
       xpartial  = xpartialdown;
       ypartial  = ypartialdown;
-    } else if (angl < 2700) {
+      break;
+    case 2: // 180-270
       xtilestep = -1;
       ytilestep = 1;
       xstep     = -finetangent[2700 - 1 - angl];
       ystep     = finetangent[angl - 1800];
       xpartial  = xpartialdown;
       ypartial  = ypartialup;
-    } else if (angl < 3600) {
+      break;
+    default: // 270-360
       xtilestep = 1;
       ytilestep = 1;
       xstep     = finetangent[angl - 2700];
