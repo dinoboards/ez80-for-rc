@@ -86,8 +86,8 @@ uint16_t pixx __data_on_chip;
 short xtile, ytile;
 short xtilestep, ytilestep;
 fixed xintercept, yintercept;
-word xspot, yspot;
-int  texdelta;
+word  xspot, yspot;
+int   texdelta;
 
 word horizwall[MAXWALLTILES], vertwall[MAXWALLTILES];
 
@@ -938,12 +938,6 @@ void AsmRefresh() {
 
   for (pixx = 0; pixx < viewwidth; pixx++) {
     short angl = asm_refresh_get_angl();
-
-    if (angl < 0)
-      angl += FINEANGLES;
-
-    if (angl >= 3600)
-      angl -= FINEANGLES;
 
     if (angl < 900) {
       xtilestep = 1;
