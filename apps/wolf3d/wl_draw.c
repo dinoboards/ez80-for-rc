@@ -80,15 +80,14 @@ uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 
 short midangle, angle;
 
-word         tilehit;
-int16_t pixx __data_on_chip;
+word          tilehit;
+uint16_t pixx __data_on_chip;
 
 short xtile, ytile;
 short xtilestep, ytilestep;
 fixed xintercept, yintercept;
-word  xstep, ystep;
-word  xspot, yspot;
-int   texdelta;
+word xspot, yspot;
+int  texdelta;
 
 word horizwall[MAXWALLTILES], vertwall[MAXWALLTILES];
 
@@ -930,13 +929,16 @@ void CalcTics(void) {
 
 //==========================================================================
 
+extern short asm_refresh_get_angl();
+
 void AsmRefresh() {
   fixed    xstep, ystep;
   uint24_t xpartial, ypartial;
   boolean  playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
   for (pixx = 0; pixx < viewwidth; pixx++) {
-    short angl = midangle + pixelangle[pixx];
+    short angl = asm_refresh_get_angl();
+
     if (angl < 0)
       angl += FINEANGLES;
 
@@ -972,6 +974,7 @@ void AsmRefresh() {
       xpartial  = xpartialup;
       ypartial  = ypartialup;
     }
+
     yintercept = FixedMul(ystep, xpartial) + viewy;
     xtile      = focaltx + xtilestep;
     xspot      = (word)((xtile << mapshift) + fixed_rounded_down(yintercept));
