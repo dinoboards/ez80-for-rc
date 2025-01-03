@@ -147,12 +147,9 @@ void VWB_DrawPicScaledCoord(int scx, int scy, int chunknum) {
 
 void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
 
-void VWB_Plot(int x, int y, int color) {
-  // if (scaleFactor == 1)
-  VW_Plot(x, y, color);
-  // else
-  //   VW_Bar(x, y, 1, 1, color);
-}
+// void VWB_Plot(int x, int y, int color) {
+//   VW_Plot(x, y, color);
+// }
 
 void VWB_Hlin(int x1, int x2, int y, int color) {
   // if (scaleFactor == 1)

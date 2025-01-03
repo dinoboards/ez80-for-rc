@@ -60,7 +60,6 @@ static inline byte *VL_LockSurface(SDL_Surface *surface) { return (byte *)surfac
 #define LOCK()   VL_LockSurface(curSurface)
 #define UNLOCK() VL_UnlockSurface(curSurface)
 
-byte VL_GetPixel(int x, int y);
 void VL_Plot(int x, int y, int color);
 void VL_Hlin(unsigned x, unsigned y, unsigned width, int color);
 void VL_Vlin(int x, int y, int height, int color);
