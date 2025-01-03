@@ -17,8 +17,6 @@ typedef struct {
   uint16_t w;
   uint16_t h;
   uint8_t  pixels[];
-  // uint8_t         *pixels;
-  // SDL_PixelFormat *format;
 } SDL_Surface;
 
 typedef void SDL_Window;

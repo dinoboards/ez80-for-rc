@@ -862,47 +862,35 @@ void waitForKey(void) {
 void DrawPlayScreen(void) {
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   VWB_DrawPicScaledCoord(0, screenHeight - STATUSLINES, STATUSBARPIC);
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawPlayBorder();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawFace();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawHealth();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawLives();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawLevel();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawAmmo();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawKeys();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawWeapon();
   VW_UpdateScreen(); // test
 
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
   DrawScore();
   VW_UpdateScreen(); // test
-
-  printf("DrawPlayScreen: %s:%d\r\n", __FILE__, __LINE__);
 }
 
 // Uses LatchDrawPic instead of StatusDrawPic
