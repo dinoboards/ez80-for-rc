@@ -60,7 +60,7 @@ fixed    focallength;
 unsigned screenofs;
 int      viewscreenx, viewscreeny;
 int      viewwidth;
-int      viewheight;
+uint16_t viewheight;
 short    centerx;
 int      shootdelta; // pixels away from centerx a target can be
 fixed    scale;

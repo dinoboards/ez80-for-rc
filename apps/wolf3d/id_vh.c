@@ -23,7 +23,7 @@ void VWB_DrawPropString(const char *string) {
 
   font   = (fontstruct *)grsegs[STARTFONT + fontnumber];
   height = font->height;
-  dest   = vbuf + (py * curPitch + px);
+  dest   = vbuf + (py * SCREEN_WIDTH + px);
 
   while ((ch = (byte)*string++) != 0) {
     width = step = font->width[ch];
@@ -31,7 +31,7 @@ void VWB_DrawPropString(const char *string) {
     while (width--) {
       for (int i = 0; i < height; i++) {
         if (source[i * step]) {
-          dest[i * curPitch] = fontcolor;
+          dest[i * SCREEN_WIDTH] = fontcolor;
         }
       }
 

@@ -175,6 +175,7 @@ void Quit(const char *errorStr, ...) __attribute__((noreturn));
 
 #define MAXSCALEHEIGHT         256 // largest scale on largest view
 #define MAXVIEWWIDTH           256
+#define SCREEN_WIDTH           256
 #define SCREEN_WIDTH_FACTOR(w) (((w)*1024) / 1280)
 
 #define mapshift 6
@@ -1187,14 +1188,14 @@ extern int   mapon;
 =============================================================================
 */
 
-extern boolean loadedgame;
-extern fixed   focallength;
-extern int     viewscreenx, viewscreeny;
-extern int     viewwidth;
-extern int     viewheight;
-extern short   centerx;
-extern int32_t heightnumerator;
-extern fixed   scale;
+extern boolean  loadedgame;
+extern fixed    focallength;
+extern int      viewscreenx, viewscreeny;
+extern int      viewwidth;
+extern uint16_t viewheight;
+extern short    centerx;
+extern int32_t  heightnumerator;
+extern fixed    scale;
 
 extern int dirangle[9];
 

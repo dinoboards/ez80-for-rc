@@ -14,8 +14,7 @@
 =
 ===================
 */
-extern unsigned vbufPitch;
-extern byte    *vbuf;
+extern byte *vbuf;
 
 extern byte   *postsource;
 extern int16_t postx;
@@ -28,7 +27,7 @@ void __func_on_chip ScalePost() {
 
   scale_post_calc_ycount();
 
-  yoffs = ((viewheight >> 1) - ywcount) * vbufPitch;
+  yoffs = ((viewheight >> 1) - ywcount) * SCREEN_WIDTH;
   if (yoffs < 0)
     yoffs = 0;
   yoffs += (int16_t)postx;
@@ -50,7 +49,7 @@ void __func_on_chip ScalePost() {
 
   col = postsource[yw];
 
-  yendoffs = yendoffs * vbufPitch + (int)postx;
+  yendoffs = yendoffs * SCREEN_WIDTH + (int)postx;
   while (yoffs <= yendoffs) {
     vbuf[yendoffs] = col;
     ywcount -= TEXTURESIZE / 2;
@@ -63,6 +62,6 @@ void __func_on_chip ScalePost() {
         break;
       col = postsource[yw];
     }
-    yendoffs -= vbufPitch;
+    yendoffs -= SCREEN_WIDTH;
   }
 }

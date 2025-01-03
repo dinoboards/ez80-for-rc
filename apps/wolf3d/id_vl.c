@@ -38,14 +38,10 @@ unsigned     screenPitch;
 SDL_Window *window = NULL;
 
 SDL_Surface *screenBuffer = NULL;
-unsigned     bufferPitch;
 
 SDL_Renderer *renderer = NULL;
 
 SDL_Surface *curSurface = NULL;
-unsigned     curPitch   = 256;
-
-// unsigned scaleFactor;
 
 boolean  screenfaded;
 unsigned bordercolor;
@@ -104,10 +100,7 @@ void VL_SetVGAPlaneMode(void) {
   vdp_cmd_wait_completion();
 
   screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
-  bufferPitch  = screenBuffer->pitch;
-
-  curSurface = screenBuffer;
-  curPitch   = bufferPitch;
+  curSurface   = screenBuffer;
 }
 
 /*
@@ -355,7 +348,7 @@ void VL_Plot(int x __attribute__((unused)), int y __attribute__((unused)), int c
   // assert(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_Plot: Pixel out of bounds!");
 
   // VL_LockSurface(curSurface);
-  // ((byte *)curSurface->pixels)[y * curPitch + x] = color;
+  // ((byte *)curSurface->pixels)[y * SCREEN_WIDTH + x] = color;
   // VL_UnlockSurface(curSurface);
 }
 
@@ -371,7 +364,7 @@ byte VL_GetPixel(int x __attribute__((unused)), int y __attribute__((unused))) {
   assert_ret(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_GetPixel: Pixel out of bounds!");
 
   // VL_LockSurface(curSurface);
-  byte col = ((byte *)curSurface->pixels)[y * curPitch + x];
+  byte col = ((byte *)curSurface->pixels)[y * SCREEN_WIDTH + x];
   // VL_UnlockSurface(curSurface);
   return col;
 }
@@ -393,7 +386,7 @@ void VL_Hlin(unsigned x __attribute__((unused)),
   // 	&& "VL_Hlin: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
-  // uint8_t* dest = ((byte*)curSurface->pixels) + y * curPitch + x;
+  // uint8_t* dest = ((byte*)curSurface->pixels) + y * SCREEN_WIDTH + x;
   // memset(dest, color, width);
   // VL_UnlockSurface(curSurface);
 }
@@ -414,11 +407,11 @@ void VL_Vlin(int x __attribute__((unused)),
   //        "VL_Vlin: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
-  // uint8_t *dest = ((byte *)curSurface->pixels) + y * curPitch + x;
+  // uint8_t *dest = ((byte *)curSurface->pixels) + y * SCREEN_WIDTH + x;
 
   // while (height--) {
   //   *dest = color;
-  //   dest += curPitch;
+  //   dest += SCREEN_WIDTH;
   // }
   // VL_UnlockSurface(curSurface);
 }
@@ -441,11 +434,11 @@ void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color) {
          "VL_BarScaledCoord: Destination rectangle out of bounds!");
 
   // VL_LockSurface(curSurface);
-  uint8_t *dest = ((byte *)curSurface->pixels) + scy * curPitch + scx;
+  uint8_t *dest = ((byte *)curSurface->pixels) + scy * SCREEN_WIDTH + scx;
 
   while (scheight--) {
     memset(dest, color, scwidth);
-    dest += curPitch;
+    dest += SCREEN_WIDTH;
   }
   // VL_UnlockSurface(curSurface);
 }
@@ -512,7 +505,7 @@ void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, 
       const byte col = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
 
       const uint8_t xx = scale_points[i + destx]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
-      vbuf[(j + desty) * curPitch + xx] = col;
+      vbuf[(j + desty) * SCREEN_WIDTH + xx] = col;
     }
   }
   // VL_UnlockSurface(curSurface);
@@ -548,7 +541,7 @@ void VL_MemToScreenScaledCoordN(
   //     byte col = source[((j + srcy) * (origwidth >> 2) + ((i + srcx) >> 2)) + ((i + srcx) & 3) * (origwidth >> 2) * origheight];
   //     for (unsigned m = 0; m < scaleFactor; m++) {
   //       for (unsigned n = 0; n < scaleFactor; n++) {
-  //         vbuf[(scj + m + desty) * curPitch + sci + n + destx] = col;
+  //         vbuf[(scj + m + desty) * SCREEN_WIDTH + sci + n + destx] = col;
   //       }
   //     }
   //   }
@@ -588,7 +581,7 @@ void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int w
       byte col = src[(ysrc + j) * srcPitch + xsrc + i];
 
       const uint8_t xx = scale_points[i + scxdest]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
-      vbuf[(scydest + j) * curPitch + xx] = col;
+      vbuf[(scydest + j) * SCREEN_WIDTH + xx] = col;
     }
   }
   // VL_UnlockSurface(curSurface);
