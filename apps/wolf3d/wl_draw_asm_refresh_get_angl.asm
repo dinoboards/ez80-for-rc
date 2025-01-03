@@ -1,7 +1,7 @@
 
 	section	.text, "ax", @progbits
 	.global	_asm_refresh_get_angl
-	.global _asm_refresh_find_quarter
+	.global	_asm_refresh_find_quarter
 	.extern	_pixx
 	.extern	_pixelangle
 	.extern	_midangle
@@ -99,8 +99,8 @@ less_than_270:
 ; }
 
 	.global	_scale_post_calc_ycount
-	.extern _postx
-	.extern _wallheight
+	.extern	_postx
+	.extern	_wallheight
 
 _scale_post_calc_ycount:
 	ld	hl, (_postx)		; retrieve 16bit value postx
@@ -124,5 +124,19 @@ _scale_post_calc_ycount:
 
 	srl	h			; hl =>> 1
 	rr	l
+
+	ld	de, 0
+	ld	e, l
+	ld	d, h
+
+	ld	hl, _yd
+	ld	(hl), e
+	inc	hl
+	ld	(hl), d
+
+	ld	hl, _ywcount
+	ld	(hl), e
+	inc	hl
+	ld	(hl), d
 
 	ret

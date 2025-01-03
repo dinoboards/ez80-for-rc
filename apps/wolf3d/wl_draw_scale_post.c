@@ -20,18 +20,18 @@ extern byte    *vbuf;
 extern byte   *postsource;
 extern int16_t postx;
 
-extern uint16_t scale_post_calc_ycount();
-int ywcount __data_on_chip, yoffs __data_on_chip, yw __data_on_chip, yd __data_on_chip, yendoffs __data_on_chip;
+extern void     scale_post_calc_ycount();
+int16_t ywcount __data_on_chip, yoffs __data_on_chip, yw __data_on_chip, yd __data_on_chip, yendoffs __data_on_chip;
 
 void __func_on_chip ScalePost() {
   byte col;
 
-  ywcount = yd = scale_post_calc_ycount();
+  scale_post_calc_ycount();
 
-  yoffs = (viewheight / 2 - ywcount) * vbufPitch;
+  yoffs = ((viewheight >> 1) - ywcount) * vbufPitch;
   if (yoffs < 0)
     yoffs = 0;
-  yoffs += (int)postx;
+  yoffs += (int16_t)postx;
 
   yendoffs = viewheight / 2 + ywcount - 1;
   yw       = TEXTURESIZE - 1;
