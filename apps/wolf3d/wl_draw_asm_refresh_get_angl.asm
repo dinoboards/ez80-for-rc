@@ -93,3 +93,36 @@ less_than_180:
 less_than_270:
 	ld	a, 2
 	ret
+
+; int scale_post_calc_ycount() {
+;   return wallheight[postx] >> 3;
+; }
+
+	.global	_scale_post_calc_ycount
+	.extern _postx
+	.extern _wallheight
+
+_scale_post_calc_ycount:
+	ld	hl, (_postx)		; retrieve 16bit value postx
+	ld	de, 0
+
+	sla	l			; mlt by 2
+	rl	h
+	ld	e, l
+	ld	d, h			; de = (short) postx*2
+
+	ld	hl, _wallheight
+	add	hl, de			; add it to wallheight array
+
+	ld	hl, (hl)		; de = wallheight[postx]
+
+	srl	h			; hl =>> 1
+	rr	l
+
+	srl	h			; hl =>> 1
+	rr	l
+
+	srl	h			; hl =>> 1
+	rr	l
+
+	ret

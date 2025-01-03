@@ -1388,14 +1388,14 @@ void PreloadGraphics(void);
 //
 // math tables
 //
-extern short   pixelangle[MAXVIEWWIDTH];
-extern int32_t finetangent[FINEANGLES / 4];
-extern fixed   sintable[];
-extern fixed  *costable;
-extern int16_t wallheight[MAXVIEWWIDTH];
-extern word    horizwall[], vertwall[];
-extern int32_t lasttimecount;
-extern int32_t frameon;
+extern short    pixelangle[MAXVIEWWIDTH];
+extern int32_t  finetangent[FINEANGLES / 4];
+extern fixed    sintable[];
+extern fixed   *costable;
+extern uint16_t wallheight[MAXVIEWWIDTH];
+extern word     horizwall[], vertwall[];
+extern uint24_t lasttimecount;
+extern int32_t  frameon;
 
 extern unsigned screenloc[3];
 

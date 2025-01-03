@@ -20,11 +20,13 @@ extern byte    *vbuf;
 extern byte   *postsource;
 extern int16_t postx;
 
+extern uint16_t scale_post_calc_ycount();
+int             ywcount, yoffs, yw, yd, yendoffs;
+
 void __func_on_chip ScalePost() {
-  int  ywcount, yoffs, yw, yd, yendoffs;
   byte col;
 
-  ywcount = yd = wallheight[postx] >> 3;
+  ywcount = yd = scale_post_calc_ycount();
   if (yd <= 0)
     yd = 100;
 

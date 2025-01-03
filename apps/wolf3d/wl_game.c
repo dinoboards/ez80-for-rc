@@ -963,7 +963,7 @@ void ShowActStatus() {
 
 char demoname[13] = "DEMO?.";
 
-#ifndef REMDEBUG
+#ifdef APP_DEBUG
 #define MAXDEMOSIZE 8192
 
 void StartDemoRecord(int levelnumber) {
