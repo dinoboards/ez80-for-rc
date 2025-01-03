@@ -1,39 +1,29 @@
 	.assume	adl = 1
 	section	.text_on_chip,"ax",@progbits
-	.global	_sr_s32_s32_4
+	.global	_sr_u24_u24_3
 
-; extern int32_t sr_s32_s32_4(int32_t val);
+; extern uint24_t sr_u24_u24_3(uint24_t val);
 
 ; iy + 3  Low
-; iy + 4
-; iy + 5
-; iy + 6  High
+; iy + 4  High
+; iy + 5  Upper
 
-_sr_s32_s32_4:
+_sr_u24_u24_3:
 	ld	iy, 0				; reference stack frame
 	add	iy, sp
 
 	ld	hl, (iy+3)
 	ld	a, (iy+5)			; u of hl
-	ld	e, (iy+6)			; high byte of val
 
-	sra	e				; val >> 1
-	rra
+	srl	a				; val >> 1
 	rr	h
 	rr	l
 
-	sra	e				; val >> 1
-	rra
+	srl	a				; val >> 1
 	rr	h
 	rr	l
 
-	sra	e				; val >> 1
-	rra
-	rr	h
-	rr	l
-
-	sra	e				; val >> 1
-	rra
+	srl	a				; val >> 1
 	rr	h
 	rr	l
 

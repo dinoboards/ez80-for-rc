@@ -79,6 +79,20 @@ void test_shift_functions() {
     abort();
   }
 
+  uint24_t c = 0x123456;
+  uint24_t d = sr_u24_u24_3(c);
+  if (d != 0x2468A) {
+    printf("7: sr_u24_u24_3(%x) = %x\n", c, d);
+    abort();
+  }
+
+  c = 0xFEDCBA;
+  d = sr_u24_u24_3(c);
+  if (d != 0x1FDB97) {
+    printf("8: sr_u24_u24_3(%x) = %x\n", c, d);
+    abort();
+  }
+
   printf("All shift functions tests passed\n");
 }
 

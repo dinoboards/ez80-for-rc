@@ -2,7 +2,7 @@
 	section	.text_on_chip,"ax",@progbits
 	.global	_sr_s32_s32_6
 
-; extern int24_t sr_s32_s32_6(int32_t val);
+; extern int32_t sr_s32_s32_6(int32_t val);
 
 ; iy + 3  Low
 ; iy + 4

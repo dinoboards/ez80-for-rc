@@ -573,7 +573,7 @@ int CalcRotate(objtype *ob) {
   return angle / (ANGLES / 8);
 }
 
-void ScaleShape(int xcenter, int shapenum, unsigned height) {
+void ScaleShape(int xcenter, int shapenum, uint24_t height) {
   t_compshape *shape;
   uint24_t     scale;
   uint24_t     pixheight;
@@ -583,7 +583,7 @@ void ScaleShape(int xcenter, int shapenum, unsigned height) {
   byte        *line;
   byte        *vmem;
   int24_t      actx;
-  uint24_t      i;
+  uint24_t     i;
   int24_t      upperedge;
   int16_t      newstart;
   int24_t      scrstarty;
@@ -597,7 +597,7 @@ void ScaleShape(int xcenter, int shapenum, unsigned height) {
 
   shape = (t_compshape *)PM_GetSprite(shapenum);
 
-  scale = height >> 3; // low three bits are fractional
+  scale = sr_u24_u24_3(height); // >> 3; // low three bits are fractional
   if (!scale)
     return; // too close or far away
 
@@ -626,7 +626,7 @@ void ScaleShape(int xcenter, int shapenum, unsigned height) {
       cline = (byte *)shape + *cmdptr;
 
       while (lpix < rpix) {
-        if (wallheight[lpix] <= (int)height) {
+        if (wallheight[lpix] <= (int16_t)height) {
           line = cline;
           while ((endy = READWORD(&line)) != 0) {
             endy >>= 1;
