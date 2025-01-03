@@ -31,13 +31,13 @@
 byte    *vbuf      = NULL;
 unsigned vbufPitch = 0;
 
-int32_t lasttimecount;
-int32_t frameon;
-boolean fpscounter;
+uint24_t lasttimecount;
+int32_t  frameon;
+// boolean fpscounter;
 
 int fps_frames = 0, fps_time = 0, fps = 0;
 
-int16_t wallheight[MAXVIEWWIDTH];
+uint16_t wallheight[MAXVIEWWIDTH];
 
 int16_t min_wallheight;
 
@@ -243,7 +243,7 @@ boolean TransformTile(int tx, int ty, short *dispx, short *dispheight) {
 ====================
 */
 
-extern int __func_on_chip CalcHeight();
+extern uint16_t __func_on_chip CalcHeight();
 
 //==========================================================================
 
@@ -906,25 +906,32 @@ void DrawPlayerWeapon(void) {
 =====================
 */
 
+uint24_t offset = 0;
+uint24_t calibrated_timer_get() {
+  uint24_t t = ez80_timers_ticks_get();
+
+  // convert to ms?
+  t = t * 1000 / 50;
+
+  return offset - t;
+}
+
 void CalcTics(void) {
   //
   // calculate tics since last refresh for adaptive timing
   //
-  if (lasttimecount > (int32_t)GetTimeCount())
-    lasttimecount = GetTimeCount(); // if the game was paused a LONG time
+  if (lasttimecount > calibrated_timer_get())
+    lasttimecount = calibrated_timer_get(); // if the game was paused a LONG time
 
-  uint32_t curtime = SDL_GetTicks();
-  tics             = (curtime * 7) / 100 - lasttimecount;
-  if (!tics) {
-    // wait until end of current tic
-    SDL_Delay(((lasttimecount + 1) * 100) / 7 - curtime);
-    tics = 1;
-  }
+  uint24_t newtime = calibrated_timer_get();
+  tics             = newtime - lasttimecount;
 
-  lasttimecount += tics;
+  if (tics > MAXTICS) {
+    offset = (tics - MAXTICS);
 
-  if (tics > MAXTICS)
     tics = MAXTICS;
+  } else
+    offset = 0;
 }
 
 //==========================================================================
@@ -1338,6 +1345,8 @@ void CalcViewVariables() {
 ========================
 */
 
+int24_t last_system_tick = 0;
+
 void ThreeDRefresh(void) {
   //
   // clear out the traced array
@@ -1382,33 +1391,38 @@ void ThreeDRefresh(void) {
 
     lasttimecount = GetTimeCount(); // don't make a big tic count
   } else {
-#ifndef REMDEBUG
-    if (fpscounter) {
-      fontnumber = 0;
-      SETFONTCOLOR(7, 127);
-      PrintX = 4;
-      PrintY = 1;
-      VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(50), 10, bordercol);
-      US_PrintSigned(fps);
-      US_Print(" fps");
-    }
-#endif
+    int24_t  x    = ez80_timers_ticks_get() * 1000 / 50;
+    uint24_t diff = x - last_system_tick;
+
+    printf(" diff: %d, t: %d\r", diff, x);
+
+    last_system_tick = x;
+
+    // if (fpscounter) {
+    //   fontnumber = 0;
+    //   SETFONTCOLOR(7, 127);
+    //   PrintX = 4;
+    //   PrintY = 1;
+    //   VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(50), 10, bordercol);
+    //   US_PrintSigned(fps);
+    //   US_Print(" fps");
+    // }
 
     VH_UpdateScreen();
     // SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
     // SDL_Flip(screen);
   }
 
-#ifndef REMDEBUG
-  if (fpscounter) {
-    fps_frames++;
-    fps_time += tics;
+#ifdef APP_DEBUG
+  // if (fpscounter) {
+  fps_frames++;
+  fps_time += tics;
 
-    if (fps_time > 35) {
-      fps_time -= 35;
-      fps        = fps_frames << 1;
-      fps_frames = 0;
-    }
+  if (fps_time > 35) {
+    fps_time -= 35;
+    fps        = fps_frames << 1;
+    fps_frames = 0;
   }
+  // }
 #endif
 }
