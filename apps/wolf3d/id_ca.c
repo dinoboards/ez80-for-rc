@@ -746,7 +746,7 @@ cachein:
 */
 
 void CAL_ExpandGrChunk(int chunk, int32_t *source) {
-  int32_t expanded;
+  uint24_t expanded;
 
   if (chunk >= STARTTILE8 && chunk < STARTEXTERNS) {
     //
@@ -882,7 +882,7 @@ void CA_CacheScreen(int chunk) {
 #define CLIP_LEFT 8
 #define CLIP_SKIP 5
 
-  byte *vbuf = LOCK();
+  byte *vbuf = screenBuffer->xpixels;
   for (int y = 0; y < 200; y++) {
     int cx = CLIP_LEFT;
 
@@ -897,7 +897,6 @@ void CA_CacheScreen(int chunk) {
     }
   }
   printf("%d: written to surface\r\n", ez80_timers_ticks_get());
-  UNLOCK();
   MM_FreePtr((memptr *)&pic);
   MM_FreePtr((memptr *)&bigbufferseg);
 }
