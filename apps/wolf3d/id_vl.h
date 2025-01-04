@@ -22,7 +22,7 @@ extern SDL_Renderer *renderer;
 
 extern boolean fullscreen, usedoublebuffering;
 #define screenWidth  MAXVIEWWIDTH
-#define screenHeight 212
+#define screenHeight 192
 
 extern unsigned screenBits, screenPitch;
 
