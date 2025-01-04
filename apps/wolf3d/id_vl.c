@@ -41,13 +41,8 @@ SDL_Surface *screenBuffer = NULL;
 
 SDL_Renderer *renderer = NULL;
 
-SDL_Surface *curSurface = NULL;
-
 boolean  screenfaded;
 unsigned bordercolor;
-
-SDL_Color palette1[256], palette2[256];
-SDL_Color curpal[256];
 
 #define CASSERT(x) extern int ASSERT_COMPILE[((x) != 0) * 2 - 1];
 // #define RGB(r, g, b)                                                                                                               \
@@ -55,7 +50,7 @@ SDL_Color curpal[256];
 
 #define RGB(r, g, b) (g >> 3) << 5 | (r >> 3) << 2 | (b >> 4)
 
-SDL_Color gamepal[] = {
+SDL_Color gamepal[] __data_on_chip = {
 #ifdef SPEAR
 #include "sodpal.inc"
 #else
@@ -100,7 +95,6 @@ void VL_SetVGAPlaneMode(void) {
   vdp_cmd_wait_completion();
 
   screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
-  curSurface   = screenBuffer;
 }
 
 /*
@@ -173,7 +167,7 @@ void VL_SetColor(int color __attribute__((unused)),
   // 	SDL_SetPaletteColors(screen->format->palette, &col, color, 1);
   // else
   // {
-  // 	SDL_SetPaletteColors(curSurface->format->palette, &col, color, 1);
+  // 	SDL_SetPaletteColors(screenBuffer->format->palette, &col, color, 1);
   // 	SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
   // 	SDL_Flip(screen);
   // }
@@ -206,14 +200,14 @@ void VL_SetColor(int color __attribute__((unused)),
 =================
 */
 
-void VL_SetPalette(SDL_Color *palette, bool forceupdate __attribute__((unused))) {
-  memcpy(curpal, palette, sizeof(SDL_Color) * 256);
+void VL_SetPalette(SDL_Color *palette  __attribute__((unused)), bool forceupdate __attribute__((unused))) {
+  // memcpy(curpal, palette, sizeof(SDL_Color) * 256);
 
   // if (screenBits == 8)
   // 	SDL_SetPaletteColors(screen->format->palette, palette, 0, 256);
   // else
   // {
-  // 	SDL_SetPaletteColors(curSurface->format->palette, palette, 0, 256);
+  // 	SDL_SetPaletteColors(screenBuffer->format->palette, palette, 0, 256);
   // 	if (forceupdate)
   // 	{
   // 		SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
@@ -232,7 +226,7 @@ void VL_SetPalette(SDL_Color *palette, bool forceupdate __attribute__((unused)))
 =================
 */
 
-void VL_GetPalette(SDL_Color *palette) { memcpy(palette, curpal, sizeof(SDL_Color) * 256); }
+// void VL_GetPalette(SDL_Color *palette) { memcpy(palette, curpal, sizeof(SDL_Color) * 256); }
 
 //===========================================================================
 
@@ -246,51 +240,51 @@ void VL_GetPalette(SDL_Color *palette) { memcpy(palette, curpal, sizeof(SDL_Colo
 =================
 */
 
-void VL_FadeOut(int start, int end, int red, int green, int blue, int steps) {
-  int        i, j, orig, delta;
-  SDL_Color *origptr, *newptr;
+void VL_FadeOut(int start __attribute__((unused)), int end __attribute__((unused)), int red __attribute__((unused)), int green __attribute__((unused)), int blue __attribute__((unused)), int steps __attribute__((unused))) {
+  // int        i, j, orig, delta;
+  // SDL_Color *origptr, *newptr;
 
-  red   = red * 255 / 63;
-  green = green * 255 / 63;
-  blue  = blue * 255 / 63;
+  // red   = red * 255 / 63;
+  // green = green * 255 / 63;
+  // blue  = blue * 255 / 63;
 
-  VL_WaitVBL(1);
-  VL_GetPalette(palette1);
-  memcpy(palette2, palette1, sizeof(SDL_Color) * 256);
+  // VL_WaitVBL(1);
+  // VL_GetPalette(palette1);
+  // memcpy(palette2, palette1, sizeof(SDL_Color) * 256);
 
-  //
-  // fade through intermediate frames
-  //
-  for (i = 0; i < steps; i++) {
-    origptr = &palette1[start];
-    newptr  = &palette2[start];
-    for (j = start; j <= end; j++) {
-      orig              = RED_FRM_GRB(*origptr);
-      delta             = red - orig;
-      uint8_t new_red   = orig + delta * i / steps;
-      orig              = GREEN_FRM_GRB(*origptr);
-      delta             = green - orig;
-      uint8_t new_green = orig + delta * i / steps;
-      orig              = BLUE_FRM_GRB(*origptr);
-      delta             = blue - orig;
-      uint8_t new_blue  = orig + delta * i / steps;
+  // //
+  // // fade through intermediate frames
+  // //
+  // for (i = 0; i < steps; i++) {
+  //   origptr = &palette1[start];
+  //   newptr  = &palette2[start];
+  //   for (j = start; j <= end; j++) {
+  //     orig              = RED_FRM_GRB(*origptr);
+  //     delta             = red - orig;
+  //     uint8_t new_red   = orig + delta * i / steps;
+  //     orig              = GREEN_FRM_GRB(*origptr);
+  //     delta             = green - orig;
+  //     uint8_t new_green = orig + delta * i / steps;
+  //     orig              = BLUE_FRM_GRB(*origptr);
+  //     delta             = blue - orig;
+  //     uint8_t new_blue  = orig + delta * i / steps;
 
-      *newptr = GRB(new_green, new_red, new_blue);
-      origptr++;
-      newptr++;
-    }
+  //     *newptr = GRB(new_green, new_red, new_blue);
+  //     origptr++;
+  //     newptr++;
+  //   }
 
-    if (!usedoublebuffering || screenBits == 8)
-      VL_WaitVBL(1);
-    VL_SetPalette(palette2, true);
-  }
+  //   if (!usedoublebuffering || screenBits == 8)
+  //     VL_WaitVBL(1);
+  //   VL_SetPalette(palette2, true);
+  // }
 
-  //
-  // final color
-  //
-  VL_FillPalette(red, green, blue);
+  // //
+  // // final color
+  // //
+  // VL_FillPalette(red, green, blue);
 
-  screenfaded = true;
+  // screenfaded = true;
 }
 
 /*
@@ -347,7 +341,7 @@ void VL_FadeIn(int        start __attribute__((unused)),
 void VL_Plot(int x, int y, int color) {
   assert(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_Plot: Pixel out of bounds!");
 
-  curSurface->pixels[y * SCREEN_WIDTH + x] = color;
+  screenBuffer->xpixels[y * SCREEN_WIDTH + x] = color;
 }
 
 /*
@@ -366,10 +360,9 @@ void VL_Hlin(unsigned x __attribute__((unused)),
   // 	&& y >= 0 && y < screenHeight
   // 	&& "VL_Hlin: Destination rectangle out of bounds!");
 
-  // VL_LockSurface(curSurface);
-  // uint8_t* dest = ((byte*)curSurface->pixels) + y * SCREEN_WIDTH + x;
+  printf("TODO!!! VL_Hlin\r\n");
+  // uint8_t* dest = ((byte*)screenBuffer->pixels) + y * SCREEN_WIDTH + x;
   // memset(dest, color, width);
-  // VL_UnlockSurface(curSurface);
 }
 
 /*
@@ -387,14 +380,13 @@ void VL_Vlin(int x __attribute__((unused)),
   // assert(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y + height <= screenHeight &&
   //        "VL_Vlin: Destination rectangle out of bounds!");
 
-  // VL_LockSurface(curSurface);
-  // uint8_t *dest = ((byte *)curSurface->pixels) + y * SCREEN_WIDTH + x;
+  printf("TODO!!! VL_Vlin\r\n");
+  // uint8_t *dest = ((byte *)screenBuffer->pixels) + y * SCREEN_WIDTH + x;
 
   // while (height--) {
   //   *dest = color;
   //   dest += SCREEN_WIDTH;
   // }
-  // VL_UnlockSurface(curSurface);
 }
 
 /*
@@ -406,22 +398,15 @@ void VL_Vlin(int x __attribute__((unused)),
 */
 
 void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color) {
-
-  // printf("VL_BarScaledCoord\r\n");
-  // printf("scx: %d, scy: %d, scwidth: %d, scheight: %d, color: %d\r\n", scx, scy, scwidth, scheight, color);
-
-  // vdp_cmd_vdp_to_vram(scx, scy, scwidth, scheight, color, 0);
   assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&
          "VL_BarScaledCoord: Destination rectangle out of bounds!");
 
-  // VL_LockSurface(curSurface);
-  uint8_t *dest = ((byte *)curSurface->pixels) + scy * SCREEN_WIDTH + scx;
+  uint8_t *dest = ((byte *)screenBuffer->xpixels) + scy * SCREEN_WIDTH + scx;
 
   while (scheight--) {
     memset(dest, color, scwidth);
     dest += SCREEN_WIDTH;
   }
-  // VL_UnlockSurface(curSurface);
 }
 
 /*
@@ -444,15 +429,14 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
   assert(x >= 0 && (unsigned)x + width <= screenWidth && y >= 0 && (unsigned)y + height <= screenHeight &&
          "VL_MemToLatch: Destination rectangle out of bounds!");
 
-  // VL_LockSurface(destSurface);
   int   pitch = destSurface->pitch;
-  byte *dest  = (byte *)destSurface->pixels + y * pitch + x;
+  byte *dest  = (byte *)destSurface->xpixels + y * pitch + x;
   for (int ysrc = 0; ysrc < height; ysrc++) {
     for (int xsrc = 0; xsrc < width; xsrc++) {
-      dest[ysrc * pitch + xsrc] = source[(ysrc * (width >> 2) + (xsrc >> 2)) + (xsrc & 3) * (width >> 2) * height];
+      uint8_t color = source[(ysrc * (width >> 2) + (xsrc >> 2)) + (xsrc & 3) * (width >> 2) * height];
+      dest[ysrc * pitch + xsrc] = color;
     }
   }
-  // VL_UnlockSurface(destSurface);
 }
 
 //===========================================================================
@@ -462,34 +446,26 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
 =
 = VL_MemToScreenScaledCoord
 =
-= Draws a block of data to the screen with scaling according to scaleFactor.
+= Draws a block of data to the screen.
 =
 =================
 */
 
-// TODO: Change this to work with the V9958
-// TODO: should this function drop pixels to fit into the 256 width?
 void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, int desty) {
-  // printf("VL_MemToScreenScaledCoordA(");
-  // printf("source: %p, width: %d, height: %d, destx: %d, desty: %d\r\n", source, width, height, destx, desty);
 
   assert(destx >= 0 && destx + width <= (int)320 && desty >= 0 && desty + height <= (int)screenHeight &&
          "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
-  // VL_LockSurface(curSurface);
-  byte *vbuf = (byte *)curSurface->pixels;
+  //TODO!!!
+  byte *vbuf = (byte *)screenBuffer->xpixels;
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
-      // can we tune on the assumption that i, destx are on specific bounaries?
-      //  if (i + destx > 255) // brute force clip right side
-      //    continue;
-      const byte col = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
+      const byte color = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
 
       const uint8_t xx = scale_points[i + destx]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
-      vbuf[(j + desty) * SCREEN_WIDTH + xx] = col;
+      vbuf[(j + desty) * SCREEN_WIDTH + xx] = color;
     }
   }
-  // VL_UnlockSurface(curSurface);
 }
 
 /*
@@ -515,8 +491,8 @@ void VL_MemToScreenScaledCoordN(
   assert(destx >= 0 && destx + width * scaleFactor <= (int)screenWidth && desty >= 0 &&
          desty + height * scaleFactor <= (int)screenHeight && "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
-  // VL_LockSurface(curSurface);
-  // byte *vbuf = (byte *)curSurface->pixels;
+  printf("TODO!!!! VL_MemToScreenScaledCoordN\r\n");
+  // byte *vbuf = (byte *)screenBuffer->pixels;
   // for (int j = 0, scj = 0; j < height; j++, scj += scaleFactor) {
   //   for (int i = 0, sci = 0; i < width; i++, sci += scaleFactor) {
   //     byte col = source[((j + srcy) * (origwidth >> 2) + ((i + srcx) >> 2)) + ((i + srcx) & 3) * (origwidth >> 2) * origheight];
@@ -527,7 +503,6 @@ void VL_MemToScreenScaledCoordN(
   //     }
   //   }
   // }
-  // VL_UnlockSurface(curSurface);
 }
 
 //==========================================================================
@@ -541,7 +516,6 @@ void VL_MemToScreenScaledCoordN(
 */
 
 void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
-
   // printf("VL_LatchToScreenScaledCoord7\r\n");
   // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d\r\n", source, xsrc, ysrc, width,
   // height,
@@ -550,23 +524,19 @@ void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int w
   assert(scxdest >= 0 && scxdest + width <= 320 && scydest >= 0 && scydest + height <= (int)screenHeight &&
          "VL_LatchToScreenScaledCoord7: Destination rectangle out of bounds!");
 
-  // VL_LockSurface(source);
-  byte    *src      = (byte *)source->pixels;
+  byte    *src      = (byte *)source->xpixels;
   unsigned srcPitch = source->pitch; // number of bytes to be added, to get to next row
 
-  // VL_LockSurface(curSurface);
-  byte *vbuf = (byte *)curSurface->pixels;
+  byte *vbuf = (byte *)screenBuffer->xpixels;
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
 
-      byte col = src[(ysrc + j) * srcPitch + xsrc + i];
+      byte color = src[(ysrc + j) * srcPitch + xsrc + i];
 
       const uint8_t xx = scale_points[i + scxdest]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
-      vbuf[(scydest + j) * SCREEN_WIDTH + xx] = col;
+      vbuf[(scydest + j) * SCREEN_WIDTH + xx] = color;
     }
   }
-  // VL_UnlockSurface(curSurface);
-  // VL_UnlockSurface(source);
 }
 
 //===========================================================================

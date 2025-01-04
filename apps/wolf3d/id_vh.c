@@ -2,9 +2,10 @@
 
 #include "id_mm.h"
 
-#include <v99x8.h>
+#include "v99x8-hdmi/v99x8-wolf3d.h"
 
-pictabletype *pictable;
+pictabletype *pictable; //TODO this can be pre-allocated based on NUMPICS
+
 SDL_Surface  *latchpics[NUMLATCHPICS];
 
 int  px, py;
@@ -19,7 +20,7 @@ void VWB_DrawPropString(const char *string) {
   byte       *source, *dest;
   byte        ch;
 
-  byte *vbuf = LOCK();
+  byte *vbuf = screenBuffer->xpixels;
 
   font   = (fontstruct *)grsegs[STARTFONT + fontnumber];
   height = font->height;
@@ -40,8 +41,6 @@ void VWB_DrawPropString(const char *string) {
       dest += 1;
     }
   }
-
-  UNLOCK();
 }
 
 /*
@@ -103,19 +102,8 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 =============================================================================
 */
 
-uint8_t renderBuffer[screenWidth * screenHeight];
-
-static void apply_palette(uint8_t *surface, const uint24_t length) {
-  uint8_t *c    = surface;
-  uint8_t *dest = renderBuffer;
-
-  for (uint24_t i = 0; i < length; i++)
-    *dest++ = gamepal[*c++];
-}
-
 void VH_UpdateScreen() {
-  apply_palette(screenBuffer->pixels, screenWidth * screenHeight);
-  vdp_cpu_to_vram0(renderBuffer, screenWidth * screenHeight);
+  vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal);
 }
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
@@ -209,11 +197,11 @@ void LoadLatchMem(void) {
   // tile 8s
   //
 
-  surf = SDL_CreateRGBSurface(/*0,*/ 8 * 8, ((NUMTILE8 + 7) / 8) * 8 /*, 8, 0, 0, 0, 0*/);
+  surf = SDL_CreateRGBSurface(8 * 8, ((NUMTILE8 + 7) / 8) * 8);
   if (surf == NULL) {
     Quit("Unable to create surface for tiles!");
   }
-  SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
+  // SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
 
   latchpics[0] = surf;
   CA_CacheGrChunk(STARTTILE8);
@@ -308,104 +296,100 @@ void VH_Startup() {
   rndmask = rndmasks[rndbits - 17];
 }
 
-boolean FizzleFade(SDL_Surface *source, int x1, int y1, unsigned width, unsigned height, unsigned frames, boolean abortable) {
-  unsigned x, y, frame, pixperframe;
-  int32_t  rndval, lastrndval;
-  int      first = 1;
+// boolean FizzleFade(SDL_Surface *source, int x1, int y1, unsigned width, unsigned height, unsigned frames, boolean abortable) {
+//   unsigned x, y, frame, pixperframe;
+//   int32_t  rndval, lastrndval;
+//   int      first = 1;
 
-  lastrndval  = 0;
-  pixperframe = width * height / frames;
+//   lastrndval  = 0;
+//   pixperframe = width * height / frames;
 
-  IN_StartAck();
+//   IN_StartAck();
 
-  frame = GetTimeCount();
+//   frame = GetTimeCount();
 
-  // can't rely on screen as dest b/c crt.cpp writes over it with screenBuffer
-  // can't rely on screenBuffer as source for same reason: every flip it has to be updated
-  SDL_Surface *source_copy = SDL_ConvertSurface(source, source->format, source->flags);
-  SDL_Surface *screen_copy = SDL_ConvertSurface(screen, screen->format, screen->flags);
+//   // can't rely on screen as dest b/c crt.cpp writes over it with screenBuffer
+//   // can't rely on screenBuffer as source for same reason: every flip it has to be updated
+//   SDL_Surface *source_copy = SDL_ConvertSurface(source, source->format, source->flags);
+//   SDL_Surface *screen_copy = SDL_ConvertSurface(screen, screen->format, screen->flags);
 
-  byte *srcptr = VL_LockSurface(source_copy);
-  do {
-    if (abortable && IN_CheckAck()) {
-      VL_UnlockSurface(source_copy);
-      SDL_BlitSurface(screen_copy, NULL, screenBuffer, NULL);
-      SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-      SDL_Flip(screen);
-      SDL_FreeSurface(source_copy);
-      SDL_FreeSurface(screen_copy);
-      return true;
-    }
+//   byte *srcptr = source_copy->xpixels;
+//   do {
+//     if (abortable && IN_CheckAck()) {
+//       SDL_BlitSurface(screen_copy, NULL, screenBuffer, NULL);
+//       SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
+//       SDL_Flip(screen);
+//       SDL_FreeSurface(source_copy);
+//       SDL_FreeSurface(screen_copy);
+//       return true;
+//     }
 
-    byte *destptr = VL_LockSurface(screen_copy);
+//     byte *destptr = screen_copy->xpixels;
 
-    rndval = lastrndval;
+//     rndval = lastrndval;
 
-    // When using double buffering, we have to copy the pixels of the last AND the current frame.
-    // Only for the first frame, there is no "last frame"
-    for (int i = first; i < 2; i++) {
-      for (unsigned p = 0; p < pixperframe; p++) {
-        //
-        // seperate random value into x/y pair
-        //
+//     // When using double buffering, we have to copy the pixels of the last AND the current frame.
+//     // Only for the first frame, there is no "last frame"
+//     for (int i = first; i < 2; i++) {
+//       for (unsigned p = 0; p < pixperframe; p++) {
+//         //
+//         // seperate random value into x/y pair
+//         //
 
-        x = rndval >> rndbits_y;
-        y = rndval & ((1 << rndbits_y) - 1);
+//         x = rndval >> rndbits_y;
+//         y = rndval & ((1 << rndbits_y) - 1);
 
-        //
-        // advance to next random element
-        //
+//         //
+//         // advance to next random element
+//         //
 
-        rndval = (rndval >> 1) ^ (rndval & 1 ? 0 : rndmask);
+//         rndval = (rndval >> 1) ^ (rndval & 1 ? 0 : rndmask);
 
-        if (x >= width || y >= height) {
-          if (rndval == 0) // entire sequence has been completed
-            goto finished;
-          p--;
-          continue;
-        }
+//         if (x >= width || y >= height) {
+//           if (rndval == 0) // entire sequence has been completed
+//             goto finished;
+//           p--;
+//           continue;
+//         }
 
-        //
-        // copy one pixel
-        //
+//         //
+//         // copy one pixel
+//         //
 
-        if (screenBits == 8) {
-          *(destptr + (y1 + y) * screen->pitch + x1 + x) = *(srcptr + (y1 + y) * source->pitch + x1 + x);
-        } else {
-          byte    col     = *(srcptr + (y1 + y) * source->pitch + x1 + x);
-          uint8_t fullcol = curpal[col]; // SDL_MapRGB(/*screen->format,*/ curpal[col].r, curpal[col].g, curpal[col].b);
-          memcpy(destptr + (y1 + y) * screen->pitch + (x1 + x) /* screen->format->BytesPerPixel*/, &fullcol,
-                 1 /*screen->format->BytesPerPixel*/);
-        }
+//         if (screenBits == 8) {
+//           *(destptr + (y1 + y) * screen->pitch + x1 + x) = *(srcptr + (y1 + y) * source->pitch + x1 + x);
+//         } else {
+//           byte    col     = *(srcptr + (y1 + y) * source->pitch + x1 + x);
+//           uint8_t fullcol = curpal[col]; // SDL_MapRGB(/*screen->format,*/ curpal[col].r, curpal[col].g, curpal[col].b);
+//           memcpy(destptr + (y1 + y) * screen->pitch + (x1 + x) /* screen->format->BytesPerPixel*/, &fullcol,
+//                  1 /*screen->format->BytesPerPixel*/);
+//         }
 
-        if (rndval == 0) // entire sequence has been completed
-          goto finished;
-      }
+//         if (rndval == 0) // entire sequence has been completed
+//           goto finished;
+//       }
 
-      if (!i || first)
-        lastrndval = rndval;
-    }
+//       if (!i || first)
+//         lastrndval = rndval;
+//     }
 
-    // If there is no double buffering, we always use the "first frame" case
-    if (usedoublebuffering)
-      first = 0;
+//     // If there is no double buffering, we always use the "first frame" case
+//     if (usedoublebuffering)
+//       first = 0;
 
-    VL_UnlockSurface(screen_copy);
-    SDL_BlitSurface(screen_copy, NULL, screenBuffer, NULL);
-    SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-    SDL_Flip(screen);
+//     SDL_BlitSurface(screen_copy, NULL, screenBuffer, NULL);
+//     SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
+//     SDL_Flip(screen);
 
-    frame++;
-    Delay(frame - GetTimeCount()); // don't go too fast
-  } while (1);
+//     frame++;
+//     Delay(frame - GetTimeCount()); // don't go too fast
+//   } while (1);
 
-finished:
-  VL_UnlockSurface(source_copy);
-  VL_UnlockSurface(screen_copy);
-  SDL_BlitSurface(screen_copy, NULL, screenBuffer, NULL);
-  SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-  SDL_Flip(screen);
-  SDL_FreeSurface(source_copy);
-  SDL_FreeSurface(screen_copy);
-  return false;
-}
+// finished:
+//   SDL_BlitSurface(screen_copy, NULL, screenBuffer, NULL);
+//   SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
+//   SDL_Flip(screen);
+//   SDL_FreeSurface(source_copy);
+//   SDL_FreeSurface(screen_copy);
+//   return false;
+// }

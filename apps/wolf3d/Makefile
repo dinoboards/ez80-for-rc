@@ -9,7 +9,7 @@ all: WOLF3D.EXE
 SRC_FILES := $(wildcard *.c)
 OPTIMISED_C_FILES := cal_huff_expand.c wl_draw_calc_height.c wl_draw_scale_post.c
 OPTIMISED_ASM_FILES := $(OPTIMISED_C_FILES:.c=.asm)
-ASM_SRC_FILES := $(filter-out $(OPTIMISED_ASM_FILES), $(wildcard *.asm))
+ASM_SRC_FILES := $(filter-out $(OPTIMISED_ASM_FILES), $(wildcard *.asm) $(wildcard v99x8-hdmi/*.asm))
 
 SHIFT_SRC_FILES := $(wildcard shift_functions/*.asm)
 

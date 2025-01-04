@@ -16,7 +16,7 @@ void Quit(const char *error, ...);
 
 //===========================================================================
 
-extern SDL_Surface  *screen, *screenBuffer, *curSurface;
+extern SDL_Surface  *screenBuffer;
 extern SDL_Window   *window;
 extern SDL_Renderer *renderer;
 
@@ -54,18 +54,12 @@ void VL_GetPalette(SDL_Color *palette);
 void VL_FadeOut(int start, int end, int red, int green, int blue, int steps);
 void VL_FadeIn(int start, int end, SDL_Color *palette, int steps);
 
-static inline byte *VL_LockSurface(SDL_Surface *surface) { return (byte *)surface->pixels; }
-#define VL_UnlockSurface(surface) /* no-op */
-
-#define LOCK()   VL_LockSurface(curSurface)
-#define UNLOCK() VL_UnlockSurface(curSurface)
-
 void VL_Plot(int x, int y, int color);
 void VL_Hlin(unsigned x, unsigned y, unsigned width, int color);
 void VL_Vlin(int x, int y, int height, int color);
 void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color);
 static void inline VL_Bar(int x, int y, int width, int height, int color) { VL_BarScaledCoord(x, y, width, height, color); }
-static void inline VL_ClearScreen(int color) { SDL_FillRect(curSurface, NULL, color); }
+static void inline VL_ClearScreen(int color) { SDL_FillRect(screenBuffer, NULL, color); }
 
 void VL_MungePic(byte *source, unsigned width, unsigned height);
 void VL_DrawPicBare(int x, int y, byte *pic, int width, int height);
@@ -84,7 +78,7 @@ void VL_MaskedToScreen(byte *source, int width, int height, int x, int y);
 void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest);
 
 static void inline VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int xdest, int ydest) {
-  VL_LatchToScreenScaledCoord7(source, xsrc, ysrc, width, height, scaleFactor * xdest, scaleFactor * ydest);
+  VL_LatchToScreenScaledCoord7(source, xsrc, ysrc, width, height, xdest, ydest);
 }
 static void inline VL_LatchToScreenScaledCoord3(SDL_Surface *source, int scx, int scy) {
   // printf("VL_LatchToScreenScaledCoord3(%p, %d, %d)\r\n", source, scx, scy);
@@ -92,7 +86,7 @@ static void inline VL_LatchToScreenScaledCoord3(SDL_Surface *source, int scx, in
 }
 
 static void inline VL_LatchToScreenA(SDL_Surface *source, int x, int y) {
-  VL_LatchToScreenScaledCoord7(source, 0, 0, source->w, source->h, scaleFactor * x, scaleFactor * y);
+  VL_LatchToScreenScaledCoord7(source, 0, 0, source->w, source->h, x, y);
 }
 
 // void VL_MemToScreenScaledCoord(byte* source, int width, int height, int scx, int scy);

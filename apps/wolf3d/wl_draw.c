@@ -592,7 +592,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
   int24_t      pixcnt;
   int24_t      ycnt;
   uint16_t     j;
-  byte         col;
+  uint8_t         grb;
 
   shape = (t_compshape *)PM_GetSprite(shapenum);
 
@@ -645,7 +645,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
               ycnt += pixheight;
               screndy = (ycnt >> 6) + upperedge;
               if (scrstarty != screndy && screndy > 0) {
-                col = ((byte *)shape)[newstart + j];
+                grb = ((byte *)shape)[newstart + j];
 
                 if (scrstarty < 0)
                   scrstarty = 0;
@@ -654,7 +654,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
                   screndy = viewheight, j = endy;
 
                 while (scrstarty < screndy) {
-                  *vmem = col;
+                  *vmem = grb;
                   vmem += SCREEN_WIDTH;
                   scrstarty++;
                 }
@@ -1355,8 +1355,7 @@ void ThreeDRefresh(void) {
   memset(spotvis, 0, maparea);
   spotvis[player->tilex][player->tiley] = 1; // Detect all sprites over player fix
 
-  vbuf = VL_LockSurface(screenBuffer);
-  vbuf += screenofs;
+  vbuf = screenBuffer->xpixels + screenofs;
 
   CalcViewVariables();
 
@@ -1386,7 +1385,6 @@ void ThreeDRefresh(void) {
   if (Keyboard[KEY_TAB] && viewsize == 21 && (int)gamestate.weapon != -1)
     ShowActStatus();
 
-  VL_UnlockSurface(screenBuffer);
   vbuf = NULL;
 
   uint24_t stage5 = ez80_timers_ticks_get() - start;

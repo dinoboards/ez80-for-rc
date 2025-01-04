@@ -100,7 +100,7 @@ SDL_Surface *SDL_CreateRGBSurface(/*uint32_t flags IG,*/
   int          size = sizeof(SDL_Surface) + width * height;
   SDL_Surface *surface;
   MM_GetPtr((memptr *)&surface, size);
-  memset(surface->pixels, 0, width * height);
+  memset(surface->xpixels, 0, width * height);
   surface->w     = width;
   surface->pitch = width;
   surface->h     = height;

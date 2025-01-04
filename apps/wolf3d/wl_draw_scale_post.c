@@ -23,7 +23,7 @@ extern void     scale_post_calc_ycount();
 int16_t ywcount __data_on_chip, yoffs __data_on_chip, yw __data_on_chip, yd __data_on_chip, yendoffs __data_on_chip;
 
 void __func_on_chip ScalePost() {
-  byte col;
+  uint8_t grb;
 
   scale_post_calc_ycount();
 
@@ -47,11 +47,11 @@ void __func_on_chip ScalePost() {
     return;
   }
 
-  col = postsource[yw];
+  grb = postsource[yw];
 
   yendoffs = yendoffs * SCREEN_WIDTH + (int)postx;
   while (yoffs <= yendoffs) {
-    vbuf[yendoffs] = col;
+    vbuf[yendoffs] = grb;
     ywcount -= TEXTURESIZE / 2;
     if (ywcount <= 0) {
       do {
@@ -60,7 +60,7 @@ void __func_on_chip ScalePost() {
       } while (ywcount <= 0);
       if (yw < 0)
         break;
-      col = postsource[yw];
+      grb = postsource[yw];
     }
     yendoffs -= SCREEN_WIDTH;
   }

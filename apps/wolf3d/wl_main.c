@@ -772,7 +772,7 @@ void SignonScreen(void) {
   }
 
   printf("Reading file SIGNON.IMG\r\n");
-  byte *vbuf = LOCK();
+  byte *vbuf = screenBuffer->xpixels;
 
   int r = fread(vbuf, 1, 256 * 200, f);
   if (r != 256 * 200) {
@@ -783,7 +783,6 @@ void SignonScreen(void) {
   fclose(f);
 
   signon_default_colour = vbuf[0];
-
   VH_UpdateScreen();
 }
 
