@@ -456,7 +456,7 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
 =================
 */
 
-void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, int desty) {
+void VL_MemToScreen(byte *source, int width, int height, int destx, int desty) {
 
   assert(destx >= 0 && destx + width <= (int)320 && desty >= 0 && desty + height <= (int)screenHeight &&
          "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
@@ -525,19 +525,19 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
   // height,
   //        scxdest, scydest);
 
-  assert(scxdest >= 0 && scxdest + width <= 320 && scydest >= 0 && scydest + height <= (int)screenHeight &&
+  assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= (int)screenHeight &&
          "VL_LatchToScreen: Destination rectangle out of bounds!");
 
   byte    *src      = (byte *)source->xpixels;
   uint24_t srcPitch = source->pitch; // number of bytes to be added, to get to next row
 
   byte *vbuf = (byte *)screenBuffer->xpixels;
+
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
-
       byte color = src[(ysrc + j) * srcPitch + xsrc + i];
 
-      const uint8_t xx = scale_points[i + scxdest]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
+      const uint8_t xx                        = i + scxdest;
       vbuf[(scydest + j) * SCREEN_WIDTH + xx] = color;
     }
   }

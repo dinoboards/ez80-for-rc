@@ -121,14 +121,14 @@ void VWB_DrawPic(int x, int y, int chunknum) {
 }
 
 void VWB_DrawPicScaledCoord(int scx, int scy, int chunknum) {
-  printf("VWB_DrawPicScaledCoord(%d, %d, chunknum: %d)\r\n", scx, scy, chunknum);
+  // printf("VWB_DrawPicScaledCoord(%d, %d, chunknum: %d)\r\n", scx, scy, chunknum);
   int      picnum = chunknum - STARTPICS;
   unsigned width, height;
 
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
 
-  VL_MemToScreenScaledCoordA(grsegs[chunknum], width, height, scx, scy);
+  VL_MemToScreen(grsegs[chunknum], width, height, scx, scy);
 }
 
 void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
@@ -168,8 +168,9 @@ void VWB_Vlin(int y1, int y2, int x, int color) {
 */
 
 void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
+  // printf("LatchDrawPic(%d, %d, %d)\r\n", x, y, picnum);
   SDL_Surface *source = latchpics[2 + picnum - LATCHPICS_LUMP_START];
-  VL_LatchToScreen(source, 0, 0, source->w, source->h, x * 8, y);
+  VL_LatchToScreen(source, 0, 0, source->w, source->h, x, y);
 }
 
 //==========================================================================

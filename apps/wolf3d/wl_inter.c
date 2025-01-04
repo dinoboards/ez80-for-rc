@@ -410,7 +410,7 @@ void LevelCompleted(void) {
 
   int     x, i, min, sec, ratio, kr, sr, tr;
   char    tempstr[10];
-  int32_t bonus, timeleft = 0;
+  int24_t bonus, timeleft = 0;
   times   parTimes[] = {
 #ifndef SPEAR
       //
@@ -668,7 +668,7 @@ void LevelCompleted(void) {
       VW_WaitVBL(VBLWAIT);
       SD_StopSound();
       bonus += PERCENT100AMT;
-      sprintf(tempstr, "%ld", bonus);
+      sprintf(tempstr, "%d", bonus);
       x = (RATIOXX - 1) - (int)strlen(tempstr) * 2;
       Write(x, 7, tempstr);
       VW_UpdateScreen();
@@ -709,7 +709,7 @@ void LevelCompleted(void) {
       VW_WaitVBL(VBLWAIT);
       SD_StopSound();
       bonus += PERCENT100AMT;
-      sprintf(tempstr, "%ld", bonus);
+      sprintf(tempstr, "%d", bonus);
       x = (RATIOXX - 1) - (int)strlen(tempstr) * 2;
       Write(x, 7, tempstr);
       VW_UpdateScreen();
@@ -748,7 +748,7 @@ void LevelCompleted(void) {
       VW_WaitVBL(VBLWAIT);
       SD_StopSound();
       bonus += PERCENT100AMT;
-      sprintf(tempstr, "%ld", bonus);
+      sprintf(tempstr, "%d", bonus);
       x = (RATIOXX - 1) - (int)strlen(tempstr) * 2;
       Write(x, 7, tempstr);
       VW_UpdateScreen();
@@ -780,11 +780,11 @@ void LevelCompleted(void) {
     x = RATIOXX - (int)strlen(tempstr) * 2;
     Write(x, 18, tempstr);
 
-    bonus = (int32_t)timeleft * PAR_AMOUNT + (PERCENT100AMT * (kr >= 100)) + (PERCENT100AMT * (sr >= 100)) +
+    bonus = (int24_t)timeleft * PAR_AMOUNT + (PERCENT100AMT * (kr >= 100)) + (PERCENT100AMT * (sr >= 100)) +
             (PERCENT100AMT * (tr >= 100));
 
     GivePoints(bonus);
-    sprintf(tempstr, "%ld", bonus);
+    sprintf(tempstr, "%d", bonus);
     x = 36 - (int)strlen(tempstr) * 2;
     Write(x, 7, tempstr);
 
@@ -928,7 +928,7 @@ void PreloadGraphics(void) {
   ClearSplitVWB(); // set up for double buffering in split screen
 
   VWB_BarScaledCoord(0, 0, screenWidth, screenHeight - (STATUSLINES - 1), bordercol);
-  LatchDrawPic((screenWidth - 224) / 16, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
+  LatchDrawPic(((screenWidth - 224) / 16) * 8, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
 
   WindowX = (screenWidth - 224) / 2;
   WindowY = (screenHeight - (STATUSLINES + 48)) / 2;

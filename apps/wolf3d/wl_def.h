@@ -1151,7 +1151,7 @@ enum { gd_baby, gd_easy, gd_medium, gd_hard };
 typedef struct {
   short      difficulty;
   short      mapon;
-  int32_t    oldscore, score, nextextra;
+  int24_t    oldscore, score, nextextra;
   short      lives;
   short      health;
   short      ammo;
@@ -1462,7 +1462,7 @@ extern objtype *LastAttacker;
 void Thrust(int angle, int32_t speed);
 void SpawnPlayer(int tilex, int tiley, int dir);
 void TakeDamage(int points, objtype *attacker);
-void GivePoints(int32_t points);
+void GivePoints(int24_t points);
 void GetBonus(statobj_t *check);
 void GiveWeapon(int weapon);
 void GiveAmmo(int ammo);

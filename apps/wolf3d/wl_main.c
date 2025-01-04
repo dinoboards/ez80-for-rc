@@ -1372,9 +1372,11 @@ static void DemoLoop() {
 
   StartCPMusic(INTROSONG);
 
+#ifdef DISABLE
 #ifndef JAPAN
   if (!param_nowait)
     PG13();
+#endif
 #endif
 
 #endif
@@ -1405,13 +1407,16 @@ static void DemoLoop() {
 
       UNCACHEGRCHUNK(TITLEPALETTE);
 #else
+#ifdef DISABLE
       CA_CacheScreen(TITLEPIC);
       printf("TITLEPIC: %s:%d\r\n", __FILE__, __LINE__);
       VW_UpdateScreen();
-
+#endif
       // VW_FadeIn();
 
 #endif
+
+#ifdef DISABLE
       printf("CREDITSPIC:%s:%d\r\n", __FILE__, __LINE__);
 
       // if (IN_UserInput(TickBase * 5))
@@ -1434,6 +1439,7 @@ static void DemoLoop() {
 
       DrawHighScores();
       VW_UpdateScreen();
+#endif
       // VW_FadeIn();
 
       // if (IN_UserInput(TickBase * 5))
