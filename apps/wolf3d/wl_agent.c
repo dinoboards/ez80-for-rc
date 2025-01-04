@@ -238,7 +238,7 @@ void StatusDrawPic(unsigned x, unsigned y, unsigned picnum) {
   LatchDrawPic(x, screenHeight - (STATUSLINES - y), picnum);
 }
 
-void StatusDrawFace(unsigned picnum) { StatusDrawPic(17, 4, picnum); }
+void StatusDrawFace(unsigned picnum) { StatusDrawPic(SCREEN_WIDTH_FACTOR(17*8), 4, picnum); }
 
 /*
 ==================
@@ -324,7 +324,7 @@ static void LatchNumber(int x, int y, unsigned width, int24_t number) {
 
   while (length < width) {
     StatusDrawPic(x, y, N_BLANKPIC);
-    x++;
+    x+=8;
     width--;
   }
 
@@ -332,7 +332,7 @@ static void LatchNumber(int x, int y, unsigned width, int24_t number) {
 
   while (c < length) {
     StatusDrawPic(x, y, str[c] - '0' + N_0PIC);
-    x++;
+    x+=8;
     c++;
   }
 }
@@ -348,7 +348,9 @@ static void LatchNumber(int x, int y, unsigned width, int24_t number) {
 void DrawHealth(void) {
   if (viewsize == 21 && ingame)
     return;
-  LatchNumber(21, 16, 3, gamestate.health);
+  //X=136 for 256 width, was originally 21*8=1680 for width 320
+  //perhaps no room for % sign now?
+  LatchNumber(136, 16, 3, gamestate.health);
 }
 
 /*
@@ -444,7 +446,7 @@ void DrawLevel(void) {
 void DrawLives(void) {
   if (viewsize == 21 && ingame)
     return;
-  LatchNumber(14, 16, 1, gamestate.lives);
+  LatchNumber(SCREEN_WIDTH_FACTOR(14*8), 16, 1, gamestate.lives);
 }
 
 /*
@@ -475,7 +477,7 @@ void GiveExtraMan(void) {
 void DrawScore(void) {
   if (viewsize == 21 && ingame)
     return;
-  LatchNumber(6, 16, 6, gamestate.score);
+  LatchNumber(SCREEN_WIDTH_FACTOR(5*8), 16, 6, gamestate.score);
 }
 
 /*
@@ -486,7 +488,7 @@ void DrawScore(void) {
 ===============
 */
 
-void GivePoints(int32_t points) {
+void GivePoints(int24_t points) {
   gamestate.score += points;
   while (gamestate.score >= gamestate.nextextra) {
     gamestate.nextextra += EXTRAPOINTS;
@@ -508,7 +510,7 @@ void GivePoints(int32_t points) {
 void DrawWeapon(void) {
   if (viewsize == 21 && ingame)
     return;
-  StatusDrawPic(32, 8, KNIFEPIC + gamestate.weapon);
+  StatusDrawPic(SCREEN_WIDTH_FACTOR(32*8), 8, KNIFEPIC + gamestate.weapon);
 }
 
 /*
@@ -523,14 +525,14 @@ void DrawKeys(void) {
   if (viewsize == 21 && ingame)
     return;
   if (gamestate.keys & 1)
-    StatusDrawPic(30, 4, GOLDKEYPIC);
+    StatusDrawPic(SCREEN_WIDTH_FACTOR(30*8), 4, GOLDKEYPIC);
   else
-    StatusDrawPic(30, 4, NOKEYPIC);
+    StatusDrawPic(SCREEN_WIDTH_FACTOR(30*8), 4, NOKEYPIC);
 
   if (gamestate.keys & 2)
-    StatusDrawPic(30, 20, SILVERKEYPIC);
+    StatusDrawPic(SCREEN_WIDTH_FACTOR(30*8), 20, SILVERKEYPIC);
   else
-    StatusDrawPic(30, 20, NOKEYPIC);
+    StatusDrawPic(SCREEN_WIDTH_FACTOR(30*8), 20, NOKEYPIC);
 }
 
 /*
@@ -563,7 +565,7 @@ void GiveWeapon(int weapon) {
 void DrawAmmo(void) {
   if (viewsize == 21 && ingame)
     return;
-  LatchNumber(27, 16, 2, gamestate.ammo);
+  LatchNumber(SCREEN_WIDTH_FACTOR(27*8), 16, 2, gamestate.ammo);
 }
 
 /*

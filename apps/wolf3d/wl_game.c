@@ -862,7 +862,7 @@ void waitForKey(void) {
 void DrawPlayScreen(void) {
   VW_UpdateScreen(); // test
 
-  VWB_DrawPicScaledCoord(0, screenHeight - STATUSLINES, STATUSBARPIC);
+  VWB_DrawPic(0, screenHeight - STATUSLINES, STATUSBARPIC);
   VW_UpdateScreen(); // test
 
   DrawPlayBorder();
@@ -891,30 +891,6 @@ void DrawPlayScreen(void) {
 
   DrawScore();
   VW_UpdateScreen(); // test
-}
-
-// Uses LatchDrawPic instead of StatusDrawPic
-void LatchNumberHERE(int x, int y, unsigned width, int32_t number) {
-  unsigned length, c;
-  char     str[20];
-
-  sprintf(str, "%ld", number);
-
-  length = (unsigned)strlen(str);
-
-  while (length < width) {
-    LatchDrawPic(x, y, N_BLANKPIC);
-    x++;
-    width--;
-  }
-
-  c = length <= width ? 0 : length - width;
-
-  while (c < length) {
-    LatchDrawPic(x, y, str[c] - '0' + N_0PIC);
-    x++;
-    c++;
-  }
 }
 
 void ShowActStatus() {

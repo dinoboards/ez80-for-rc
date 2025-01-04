@@ -544,7 +544,7 @@ void CheckKeys(void) {
     Paused = true;
   if (Paused) {
     int lastoffs = StopMusic();
-    LatchDrawPic(20 - 4, 80 - 2 * 8, PAUSEDPIC);
+    LatchDrawPic(SCREEN_WIDTH_FACTOR((20 - 4)*8), 80 - 2 * 8, PAUSEDPIC);
     VH_UpdateScreen();
     IN_Ack();
     Paused = false;
