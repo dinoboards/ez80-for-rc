@@ -77,8 +77,4 @@ void VL_MaskedToScreen(byte *source, int width, int height, int x, int y);
 
 void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest);
 
-static void inline VL_SurfaceToScreen(SDL_Surface *source, int x, int y) {
-  VL_LatchToScreen(source, 0, 0, source->w, source->h, x, y);
-}
-
 #endif
