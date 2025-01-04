@@ -53,7 +53,6 @@ void VWB_DrawTile16M(int x, int y, int tile);
 void VWB_DrawPic(int x, int y, int chunknum);
 void VWB_DrawMPic(int x, int y, int chunknum);
 void VWB_Bar(int x, int y, int width, int height, int color);
-#define VWB_BarScaledCoord VL_BarScaledCoord
 void VWB_Plot(int x, int y, int color);
 #define VWB_PlotScaledCoord VW_Plot
 void VWB_Hlin(int x1, int x2, int y, int color);
@@ -61,7 +60,8 @@ void VWB_Vlin(int y1, int y2, int x, int color);
 #define VWB_HlinScaledCoord VW_Hlin
 #define VWB_VlinScaledCoord VW_Vlin
 
-void VH_UpdateScreen();
+void        VH_UpdateScreen();
+extern void update_view_port();
 
 #define VW_UpdateScreen VH_UpdateScreen
 

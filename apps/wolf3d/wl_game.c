@@ -727,8 +727,8 @@ void DrawPlayBorderSides(void) {
 
   const int sw = screenWidth;
   const int sh = screenHeight;
-  const int vw = viewwidth;
-  const int vh = viewheight;
+  const int vw = view_width;
+  const int vh = view_height;
   const int px = scaleFactor; // size of one "pixel"
 
   const int h  = sh - px * STATUSLINES;
@@ -736,25 +736,25 @@ void DrawPlayBorderSides(void) {
   const int yl = (h - vh) / 2;
 
   if (xl != 0) {
-    VWB_BarScaledCoord(0, 0, xl - px, h, bordercol);                // left side
-    VWB_BarScaledCoord(xl + vw + px, 0, xl - px * 2, h, bordercol); // right side
+    VWB_Bar(0, 0, xl - px, h, bordercol);                // left side
+    VWB_Bar(xl + vw + px, 0, xl - px * 2, h, bordercol); // right side
   }
 
   if (yl != 0) {
-    VWB_BarScaledCoord(0, 0, sw, yl - px, bordercol);            // upper side
-    VWB_BarScaledCoord(0, yl + vh + px, sw, yl - px, bordercol); // lower side
+    VWB_Bar(0, 0, sw, yl - px, bordercol);            // upper side
+    VWB_Bar(0, yl + vh + px, sw, yl - px, bordercol); // lower side
   }
 
   if (xl != 0) {
     // Paint game view border lines
-    VWB_BarScaledCoord(xl - px, yl - px, vw + px, px, 0);                 // upper border
-    VWB_BarScaledCoord(xl, yl + vh, vw + px, px, bordercol - 2);          // lower border
-    VWB_BarScaledCoord(xl - px, yl - px, px, vh + px, 0);                 // left border
-    VWB_BarScaledCoord(xl + vw, yl - px, px, vh + px * 2, bordercol - 2); // right border
-    VWB_BarScaledCoord(xl - px, yl + vh, px, px, bordercol - 3);          // lower left highlight
+    VWB_Bar(xl - px, yl - px, vw + px, px, 0);                 // upper border
+    VWB_Bar(xl, yl + vh, vw + px, px, bordercol - 2);          // lower border
+    VWB_Bar(xl - px, yl - px, px, vh + px, 0);                 // left border
+    VWB_Bar(xl + vw, yl - px, px, vh + px * 2, bordercol - 2); // right border
+    VWB_Bar(xl - px, yl + vh, px, px, bordercol - 3);          // lower left highlight
   } else {
     // Just paint a lower border line
-    VWB_BarScaledCoord(0, yl + vh, vw, px, bordercol - 2); // lower border
+    VWB_Bar(0, yl + vh, vw, px, bordercol - 2); // lower border
   }
 }
 
@@ -767,24 +767,18 @@ void DrawPlayBorderSides(void) {
 */
 
 void DrawStatusBorder(byte color) {
-  int statusborderw = (screenWidth - scaleFactor * 320) / 2;
+  int statusborderw = 1;
 
-  VWB_BarScaledCoord(0, 0, screenWidth, screenHeight - scaleFactor * (STATUSLINES - 3), color);
-  VWB_BarScaledCoord(0, screenHeight - scaleFactor * (STATUSLINES - 3), statusborderw + scaleFactor * 8,
-                     scaleFactor * (STATUSLINES - 4), color);
-  VWB_BarScaledCoord(0, screenHeight - scaleFactor * 2, screenWidth, scaleFactor * 2, color);
-  VWB_BarScaledCoord(screenWidth - statusborderw - scaleFactor * 8, screenHeight - scaleFactor * (STATUSLINES - 3),
-                     statusborderw + scaleFactor * 8, scaleFactor * (STATUSLINES - 4), color);
+  VWB_Bar(0, 0, screenWidth, screenHeight - (STATUSLINES - 3), color);
+  VWB_Bar(0, screenHeight - (STATUSLINES - 3), statusborderw + 8, (STATUSLINES - 4), color);
+  VWB_Bar(0, screenHeight - 2, screenWidth, 2, color);
+  VWB_Bar(screenWidth - statusborderw - 8, screenHeight - (STATUSLINES - 3), statusborderw + 8, (STATUSLINES - 4), color);
 
-  VWB_BarScaledCoord(statusborderw + scaleFactor * 9, screenHeight - scaleFactor * 3, scaleFactor * 97, scaleFactor * 1, color - 1);
-  VWB_BarScaledCoord(statusborderw + scaleFactor * 106, screenHeight - scaleFactor * 3, scaleFactor * 161, scaleFactor * 1,
-                     color - 2);
-  VWB_BarScaledCoord(statusborderw + scaleFactor * 267, screenHeight - scaleFactor * 3, scaleFactor * 44, scaleFactor * 1,
-                     color - 3);
-  VWB_BarScaledCoord(screenWidth - statusborderw - scaleFactor * 9, screenHeight - scaleFactor * (STATUSLINES - 4), scaleFactor * 1,
-                     scaleFactor * 20, color - 2);
-  VWB_BarScaledCoord(screenWidth - statusborderw - scaleFactor * 9, screenHeight - scaleFactor * (STATUSLINES / 2 - 4),
-                     scaleFactor * 1, scaleFactor * 14, color - 3);
+  VWB_Bar(statusborderw + 9, screenHeight - 3, 97, 1, color - 1);
+  VWB_Bar(statusborderw + 106, screenHeight - 3, 161, 1, color - 2);
+  VWB_Bar(statusborderw + 267, screenHeight - 3, 44, 1, color - 3);
+  VWB_Bar(screenWidth - statusborderw - 9, screenHeight - (STATUSLINES - 4), 1, 20, color - 2);
+  VWB_Bar(screenWidth - statusborderw - 9, screenHeight - (STATUSLINES / 2 - 4), 1, 14, color - 3);
 }
 
 /*
@@ -804,41 +798,41 @@ void DrawPlayBorder(void) {
     const int statusborderw = (screenWidth - px * 256) / 2;
     printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
-    VWB_BarScaledCoord(0, screenHeight - px * STATUSLINES, statusborderw + px * 8, px * STATUSLINES, bordercol);
+    VWB_Bar(0, screenHeight - px * STATUSLINES, statusborderw + px * 8, px * STATUSLINES, bordercol);
     VW_UpdateScreen(); // test
 
     printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
-    VWB_BarScaledCoord(screenWidth - statusborderw - px * 8, screenHeight - px * STATUSLINES, statusborderw + px * 8,
-                       px * STATUSLINES, bordercol);
+    VWB_Bar(screenWidth - statusborderw - px * 8, screenHeight - px * STATUSLINES, statusborderw + px * 8, px * STATUSLINES,
+            bordercol);
     VW_UpdateScreen(); // test
   }
 
-  if ((unsigned)viewheight == screenHeight)
+  if (view_height == screenHeight)
     return;
 
-  VWB_BarScaledCoord(0, 0, screenWidth, screenHeight - px * STATUSLINES, bordercol);
+  VWB_Bar(0, 0, screenWidth, screenHeight - px * STATUSLINES, bordercol);
 
-  const int xl = screenWidth / 2 - viewwidth / 2;
-  const int yl = (screenHeight - px * STATUSLINES - viewheight) / 2;
+  const int xl = screenWidth / 2 - view_width / 2;
+  const int yl = (screenHeight - px * STATUSLINES - view_height) / 2;
   printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
-  VWB_BarScaledCoord(xl, yl, viewwidth, viewheight, 0);
+  VWB_Bar(xl, yl, view_width, view_height, 0);
   VW_UpdateScreen(); // test
 
   if (xl != 0) {
     printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
     // Paint game view border lines
-    VWB_BarScaledCoord(xl - px, yl - px, viewwidth + px, px, 0);                         // upper border
-    VWB_BarScaledCoord(xl, yl + viewheight, viewwidth + px, px, bordercol - 2);          // lower border
-    VWB_BarScaledCoord(xl - px, yl - px, px, viewheight + px, 0);                        // left border
-    VWB_BarScaledCoord(xl + viewwidth, yl - px, px, viewheight + 2 * px, bordercol - 2); // right border
-    VWB_BarScaledCoord(xl - px, yl + viewheight, px, px, bordercol - 3);                 // lower left highlight
+    VWB_Bar(xl - px, yl - px, view_width + px, px, 0);                          // upper border
+    VWB_Bar(xl, yl + view_height, view_width + px, px, bordercol - 2);          // lower border
+    VWB_Bar(xl - px, yl - px, px, view_height + px, 0);                         // left border
+    VWB_Bar(xl + view_width, yl - px, px, view_height + 2 * px, bordercol - 2); // right border
+    VWB_Bar(xl - px, yl + view_height, px, px, bordercol - 3);                  // lower left highlight
   } else {
     printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
     // Just paint a lower border line
-    VWB_BarScaledCoord(0, yl + viewheight, viewwidth, px, bordercol - 2); // lower border
+    VWB_Bar(0, yl + view_height, view_width, px, bordercol - 2); // lower border
   }
 
   printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
@@ -899,8 +893,8 @@ void ShowActStatus() {
   int   picnum = STATUSBARPIC - STARTPICS;
   int   width  = pictable[picnum].width;
   int   height = pictable[picnum].height;
-  int   destx  = (screenWidth - scaleFactor * 320) / 2 + 9 * scaleFactor;
-  int   desty  = screenHeight - (height - 4) * scaleFactor;
+  int   destx  = 9;
+  int   desty  = screenHeight - (height - 4);
   VL_MemToScreenScaledCoordN(source, width, height, 9, 4, destx, desty, width - 18, height - 7);
 
   ingame = false;
@@ -1233,11 +1227,11 @@ void Died(void) {
     VH_UpdateScreen();
 
   printf("%s:%d\r\n", __FILE__, __LINE__);
-  VL_BarScaledCoord(viewscreenx, viewscreeny, viewwidth, viewheight, 4);
+  VL_Bar(viewscreenx, viewscreeny, view_width, view_height, 4);
 
   IN_ClearKeysDown();
 
-  FizzleFade(screenBuffer, viewscreenx, viewscreeny, viewwidth, viewheight, 70, false);
+  FizzleFade(screenBuffer, viewscreenx, viewscreeny, view_width, view_height, 70, false);
 
   IN_UserInput(100);
   SD_WaitSoundDone();

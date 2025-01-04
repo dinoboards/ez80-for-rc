@@ -515,25 +515,30 @@ byte vgaCeiling[] = {
 #endif
 };
 
-/*
-=====================
-=
-= VGAClearScreen
-=
-=====================
-*/
+// /*
+// =====================
+// =
+// = view_port_clear
+// =
+// =====================
+// */
 
-void VGAClearScreen(void) {
-  byte ceiling = vgaCeiling[gamestate.episode * 10 + mapon];
+/**
+ * @brief draw the ceiling and floor into the view port
+ *
+ * Globals:
+ * @param vgaCeliling - ceiling color
+ * @param gamestate.episode - episode number
+ * @param mapon - map number
+ * @param view_half_length - half of the view port length
+ * @param vbuf - view port buffer
+ */
+void view_port_clear() {
+  uint8_t ceiling = vgaCeiling[gamestate.episode * 10 + mapon];
+  memset(vbuf, ceiling, view_half_length);
 
-  int   y;
-  byte *ptr = vbuf;
-
-  for (y = 0; y < viewheight / 2; y++, ptr += SCREEN_WIDTH)
-    memset(ptr, ceiling, viewwidth);
-
-  for (; y < viewheight; y++, ptr += SCREEN_WIDTH)
-    memset(ptr, 0x19, viewwidth);
+  // TODO: pre-calculate vbuf + view_half_length
+  memset(vbuf + view_half_length, 0x19, view_half_length);
 }
 
 //==========================================================================
@@ -602,14 +607,14 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
 
   pixheight = scale * SPRITESCALEFACTOR;
   actx      = xcenter - scale;
-  upperedge = viewheight / 2 - scale;
+  upperedge = view_height / 2 - scale;
 
   cmdptr = (word *)shape->dataofs;
 
   for (i = shape->leftpix, pixcnt = i * pixheight, rpix = (pixcnt >> 6) + actx; i <= shape->rightpix; i++, cmdptr++) {
     lpix = rpix;
 
-    if (lpix >= viewwidth)
+    if (lpix >= view_width)
       break;
 
     pixcnt += pixheight;
@@ -619,8 +624,8 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
       if (lpix < 0)
         lpix = 0;
 
-      if (rpix > viewwidth)
-        rpix = viewwidth, i = shape->rightpix + 1;
+      if (rpix > view_width)
+        rpix = view_width, i = shape->rightpix + 1;
 
       cline = (byte *)shape + *cmdptr;
 
@@ -638,7 +643,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
             if (screndy < 0)
               vmem = vbuf + lpix;
             else
-              vmem = vbuf + screndy * SCREEN_WIDTH + lpix;
+              vmem = vbuf + screndy * view_width + lpix;
 
             for (; j < endy; j++) {
               scrstarty = screndy;
@@ -650,12 +655,12 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
                 if (scrstarty < 0)
                   scrstarty = 0;
 
-                if (screndy > viewheight)
-                  screndy = viewheight, j = endy;
+                if (screndy > view_height)
+                  screndy = view_height, j = endy;
 
                 while (scrstarty < screndy) {
                   *vmem = color;
-                  vmem += SCREEN_WIDTH;
+                  vmem += view_width;
                   scrstarty++;
                 }
               }
@@ -687,21 +692,21 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
   scale     = height >> 1;
   pixheight = scale * SPRITESCALEFACTOR;
   actx      = xcenter - scale;
-  upperedge = viewheight / 2 - scale;
+  upperedge = view_height / 2 - scale;
 
   cmdptr = shape->dataofs;
 
   for (i = shape->leftpix, pixcnt = i * pixheight, rpix = (pixcnt >> 6) + actx; i <= shape->rightpix; i++, cmdptr++) {
     lpix = rpix;
-    if (lpix >= viewwidth)
+    if (lpix >= view_width)
       break;
     pixcnt += pixheight;
     rpix = (pixcnt >> 6) + actx;
     if (lpix != rpix && rpix > 0) {
       if (lpix < 0)
         lpix = 0;
-      if (rpix > viewwidth)
-        rpix = viewwidth, i = shape->rightpix + 1;
+      if (rpix > view_width)
+        rpix = view_width, i = shape->rightpix + 1;
       cline = (byte *)shape + *cmdptr;
       while (lpix < rpix) {
         line = cline;
@@ -715,7 +720,7 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
           if (screndy < 0)
             vmem = vbuf + lpix;
           else
-            vmem = vbuf + screndy * SCREEN_WIDTH + lpix;
+            vmem = vbuf + screndy * view_width + lpix;
           for (; j < endy; j++) {
             scrstarty = screndy;
             ycnt += pixheight;
@@ -724,12 +729,12 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
               col = ((byte *)shape)[newstart + j];
               if (scrstarty < 0)
                 scrstarty = 0;
-              if (screndy > viewheight)
-                screndy = viewheight, j = endy;
+              if (screndy > view_height)
+                screndy = view_height, j = endy;
 
               while (scrstarty < screndy) {
                 *vmem = col;
-                vmem += SCREEN_WIDTH;
+                vmem += view_width;
                 scrstarty++;
               }
             }
@@ -880,7 +885,7 @@ void DrawPlayerWeapon(void) {
   if (gamestate.victoryflag) {
 #ifndef APOGEE_1_0
     if (player->state == &s_deathcam && (GetTimeCount() & 32))
-      SimpleScaleShape(viewwidth / 2, SPR_DEATHCAM, viewheight + 1);
+      SimpleScaleShape(view_width / 2, SPR_DEATHCAM, view_height + 1);
 #endif
     return;
   }
@@ -888,11 +893,11 @@ void DrawPlayerWeapon(void) {
 
   if ((int)gamestate.weapon != -1) {
     shapenum = weaponscale[gamestate.weapon] + gamestate.weaponframe;
-    SimpleScaleShape(viewwidth / 2, shapenum, viewheight + 1);
+    SimpleScaleShape(view_width / 2, shapenum, view_height + 1);
   }
 
   if (demorecord || demoplayback)
-    SimpleScaleShape(viewwidth / 2, SPR_DEMO, viewheight + 1);
+    SimpleScaleShape(view_width / 2, SPR_DEMO, view_height + 1);
 }
 
 //==========================================================================
@@ -944,7 +949,7 @@ uint24_t xpartial __data_on_chip, ypartial __data_on_chip;
 void AsmRefresh() {
   boolean playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
-  for (pixx = 0; pixx < viewwidth; pixx++) {
+  for (pixx = 0; pixx < view_width; pixx++) {
     angl = asm_refresh_get_angl();
 
     switch (asm_refresh_find_quarter()) {
@@ -1312,7 +1317,7 @@ void WallRefresh(void) {
   ypartialdown = viewy & (TILEGLOBAL - 1);
   ypartialup   = TILEGLOBAL - ypartialdown;
 
-  min_wallheight = viewheight;
+  min_wallheight = view_height;
   lastside       = -1; // the first pixel is on a new wall
   AsmRefresh();
 
@@ -1346,6 +1351,8 @@ void CalcViewVariables() {
 
 int24_t last_system_tick = 0;
 
+uint8_t view_port_buffer[SCREEN_WIDTH * SCREEN_HEIGHT];
+
 void ThreeDRefresh(void) {
   int24_t start = ez80_timers_ticks_get();
 
@@ -1355,7 +1362,9 @@ void ThreeDRefresh(void) {
   memset(spotvis, 0, maparea);
   spotvis[player->tilex][player->tiley] = 1; // Detect all sprites over player fix
 
-  vbuf = screenBuffer->xpixels + screenofs;
+  // vbuf = screenBuffer->xpixels + screenofs;
+  vbuf = view_port_buffer;
+  // chnage to a surface of the viewport
 
   CalcViewVariables();
 
@@ -1364,7 +1373,7 @@ void ThreeDRefresh(void) {
   //
   // follow the walls from there to the right, drawing as we go
   //
-  VGAClearScreen();
+  view_port_clear();
 
   uint24_t stage2 = ez80_timers_ticks_get() - start;
 
@@ -1399,7 +1408,9 @@ void ThreeDRefresh(void) {
 
     lasttimecount = GetTimeCount(); // don't make a big tic count
   } else {
-    VH_UpdateScreen();
+    // change to transmit viewport to screen
+    //   VH_UpdateScreen();
+    update_view_port();
 
     uint24_t stage6 = ez80_timers_ticks_get() - start;
 

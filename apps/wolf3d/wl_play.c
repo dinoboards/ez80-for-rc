@@ -573,7 +573,6 @@ void CheckKeys(void) {
     return;
   }
 
-  printf("Check keys: %x\r\n", scan);
   if ((scan >= KEY_F1 && scan <= KEY_F9) || scan == KEY_ESC || buttonstate[bt_esc]) {
     int lastoffs = StopMusic();
     ClearMemory();
@@ -1055,7 +1054,9 @@ think:
 =
 ===================
 */
+#ifdef SPEAR
 int32_t funnyticount;
+#endif
 
 void PlayLoop(void) {
   playstate     = ex_stillplaying;
@@ -1063,7 +1064,9 @@ void PlayLoop(void) {
   frameon       = 0;
   anglefrac     = 0;
   facecount     = 0;
-  funnyticount  = 0;
+#ifdef SPEAR
+  funnyticount = 0;
+#endif
   memset(buttonstate, 0, sizeof(buttonstate));
   ClearPaletteShifts();
 

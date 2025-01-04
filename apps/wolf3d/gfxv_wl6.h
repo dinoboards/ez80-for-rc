@@ -5,6 +5,8 @@
 //
 //////////////////////////////////////
 
+// chunks!
+
 typedef enum {
   // Lump Start
   H_BJPIC = 3,

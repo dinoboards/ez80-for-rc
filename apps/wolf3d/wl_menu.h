@@ -75,8 +75,8 @@
 #define LSM_W SCREEN_WIDTH_FACTOR(175)
 #define LSM_H 10 * 13 + 10
 
-#define NM_X SCREEN_WIDTH_FACTOR(50)
-#define NM_Y 100
+#define NM_X SCREEN_WIDTH_FACTOR(45)
+#define NM_Y 60
 #define NM_W 225 /*SCREEN_WIDTH_FACTOR(225)*/
 #define NM_H 13 * 4 + 15
 

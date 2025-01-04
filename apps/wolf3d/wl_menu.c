@@ -195,7 +195,7 @@ CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, SCREEN_W
 #ifndef SPEAR
             NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, SCREEN_WIDTH_FACTOR(88)},
 #endif
-            NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, SCREEN_WIDTH_FACTOR(24)};
+            NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, 24};
 
 int color_hlite[] = {DEACTIVE, HIGHLIGHT, READHCOLOR, 0x67};
 
@@ -755,7 +755,7 @@ int CP_CheckQuick(ScanCode scancode) {
     CA_CacheGrChunk(STARTFONT + 1);
 
     WindowX = WindowY = 0;
-    WindowW           = 320;
+    WindowW           = SCREEN_WIDTH_FACTOR(320);
     WindowH           = 160;
 #ifdef JAPAN
     if (GetYorN(7, 8, C_QUITMSGPIC))
@@ -1036,7 +1036,7 @@ void DrawNewGame(void) {
 //
 // DRAW NEW GAME GRAPHIC
 //
-void DrawNewGameDiff(int w) { VWB_DrawPic(NM_X + 200, NM_Y + 7, w + C_BABYMODEPIC); }
+void DrawNewGameDiff(int w) { VWB_DrawPic(SCREEN_WIDTH - 24 - 8, NM_Y + 7, w + C_BABYMODEPIC); }
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -2444,7 +2444,7 @@ int CP_ChangeView(int _ __attribute__((unused))) {
   ControlInfo ci;
 
   WindowX = WindowY = 0;
-  WindowW           = 320;
+  WindowW           = SCREEN_WIDTH_FACTOR(320);
   WindowH           = 200;
   newview = oldview = viewsize;
   DrawChangeView(oldview);
@@ -2668,7 +2668,7 @@ void IntroScreen(void) {
 ////////////////////////////////////////////////////////////////////
 void ClearMScreen(void) {
 #ifndef SPEAR
-  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 212, BORDCOLOR);
+  VWB_Bar(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, BORDCOLOR);
 #else
   VWB_DrawPic(0, 0, C_BACKDROPPIC);
 #endif
@@ -2798,7 +2798,7 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
   ControlInfo ci;
 
   which = item_i->curpos;
-  x     = item_i->x & -8;
+  x     = item_i->x /* & -8*/;
   basey = item_i->y - 2;
   y     = basey + which * 13;
 

@@ -27,15 +27,15 @@ void __func_on_chip ScalePost() {
 
   scale_post_calc_ycount();
 
-  yoffs = ((viewheight >> 1) - ywcount) * SCREEN_WIDTH;
+  yoffs = ((view_height >> 1) - ywcount) * view_width;
   if (yoffs < 0)
     yoffs = 0;
   yoffs += (int16_t)postx;
 
-  yendoffs = viewheight / 2 + ywcount - 1;
+  yendoffs = view_height / 2 + ywcount - 1;
   yw       = TEXTURESIZE - 1;
 
-  while (yendoffs >= viewheight) {
+  while (yendoffs >= view_height) {
     ywcount -= TEXTURESIZE / 2;
     while (ywcount <= 0) {
       ywcount += yd;
@@ -49,7 +49,7 @@ void __func_on_chip ScalePost() {
 
   grb = postsource[yw];
 
-  yendoffs = yendoffs * SCREEN_WIDTH + (int)postx;
+  yendoffs = yendoffs * view_width + postx;
   while (yoffs <= yendoffs) {
     vbuf[yendoffs] = grb;
     ywcount -= TEXTURESIZE / 2;
@@ -62,6 +62,6 @@ void __func_on_chip ScalePost() {
         break;
       grb = postsource[yw];
     }
-    yendoffs -= SCREEN_WIDTH;
+    yendoffs -= view_width;
   }
 }

@@ -14,8 +14,8 @@
 
 // #define   HELPTEXTLINKED
 
-#define MaxX 320
-#define MaxY 200
+#define MaxX 256
+#define MaxY 192
 
 #define MaxHelpLines 500
 

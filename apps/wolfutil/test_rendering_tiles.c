@@ -63,7 +63,9 @@ void test_rendering_tiles() {
 
     transform(c, 8, 8, buffer, 0, 0);
 
-    vdp_cmd_move_cpu_to_vram(buffer, x, y, 8, 8, 0, 8 * 8);
+    vdp_cmd_move_data_to_vram(buffer[0], x, y, 8, 8, 0, 8 * 8);
+    for (int j = 1; j < 8 * 8; j++)
+      vdp_cmd_send_byte(buffer[j]);
 
     x += 8;
     if (x == 0) {

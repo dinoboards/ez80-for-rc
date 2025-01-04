@@ -104,31 +104,25 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 
 void VH_UpdateScreen() { vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal); }
 
+extern uint8_t view_port_buffer[SCREEN_WIDTH * SCREEN_HEIGHT];
+void           update_view_port() {
+  vdp_cmd_move_cpu_to_vram_with_palette(view_port_buffer, viewscreenx, viewscreeny, view_width, view_height, 0, view_length,
+                                                  gamepal);
+}
+
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
 
+// Does this need to have a scale applied?? Probably!
 void VWB_DrawTile8M(int x, int y, int tile) { VL_MemToScreen(((byte *)grsegs[STARTTILE8M]) + tile * 64, 8, 8, x, y); }
 
 void VWB_DrawPic(int x, int y, int chunknum) {
   int      picnum = chunknum - STARTPICS;
   unsigned width, height;
 
-  x &= ~7;
-
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
 
   VL_MemToScreen(grsegs[chunknum], width, height, x, y);
-}
-
-void VWB_DrawPicScaledCoord(int scx, int scy, int chunknum) {
-  // printf("VWB_DrawPicScaledCoord(%d, %d, chunknum: %d)\r\n", scx, scy, chunknum);
-  int      picnum = chunknum - STARTPICS;
-  unsigned width, height;
-
-  width  = pictable[picnum].width;
-  height = pictable[picnum].height;
-
-  VL_MemToScreen(grsegs[chunknum], width, height, scx, scy);
 }
 
 void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
@@ -170,7 +164,7 @@ void VWB_Vlin(int y1, int y2, int x, int color) {
 void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
   // printf("LatchDrawPic(%d, %d, %d)\r\n", x, y, picnum);
   SDL_Surface *source = latchpics[2 + picnum - LATCHPICS_LUMP_START];
-  VL_LatchToScreen(source, 0, 0, source->w, source->h, x, y);
+  VL_SurfaceToScreen(source, x, y);
 }
 
 //==========================================================================

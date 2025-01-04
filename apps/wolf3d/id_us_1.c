@@ -313,6 +313,7 @@ void US_DrawWindow(word x, word y, word w, word h) {
 
   US_ClearWindow();
 
+  printf("US_DrawWindow: %d %d %d %d\r\n", x, y, w, h);
   VWB_DrawTile8(sx, sy, 0), VWB_DrawTile8(sx, sy + sh, 5);
   for (i = sx + 8; i <= sx + sw - 8; i += 8)
     VWB_DrawTile8(i, sy, 1), VWB_DrawTile8(i, sy + sh, 6);

@@ -59,8 +59,10 @@ int  dirangle[9] = {
 fixed    focallength;
 unsigned screenofs;
 int      viewscreenx, viewscreeny;
-int      viewwidth;
-uint16_t viewheight;
+uint16_t view_width;
+uint16_t view_height;
+uint24_t view_length;
+uint24_t view_half_length;
 short    centerx;
 int      shootdelta; // pixels away from centerx a target can be
 fixed    scale;
@@ -699,7 +701,7 @@ void CalcProjection(int32_t focal) {
 
   focallength = focal;
   facedist    = focal + MINDIST;
-  halfview    = viewwidth / 2; // half view in pixels
+  halfview    = view_width / 2; // half view in pixels
 
   //
   // calculate scale value for vertical height calculations
@@ -719,7 +721,7 @@ void CalcProjection(int32_t focal) {
 
   for (i = 0; i < halfview; i++) {
     // start 1/2 pixel over, so viewangle bisects two middle pixels
-    tang                         = (int32_t)i * VIEWGLOBAL / viewwidth / facedist;
+    tang                         = (int32_t)i * VIEWGLOBAL / view_width / facedist;
     angle                        = (float)atan(tang);
     intang                       = (int)(angle * radtoint);
     pixelangle[halfview - 1 - i] = intang;
@@ -796,7 +798,7 @@ void SignonScreen(void) {
 
 void FinishSignon(void) {
 #ifndef SPEAR
-  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189 - 4, SCREEN_WIDTH_FACTOR(320), 11 - 4, signon_default_colour);
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), SCREEN_HEIGHT - 11, SCREEN_WIDTH_FACTOR(320), 11, signon_default_colour);
   WindowX = 0;
   WindowW = 256;
   PrintY  = 190 - 8;
@@ -818,7 +820,7 @@ void FinishSignon(void) {
     IN_Ack();
 
 #ifndef JAPAN
-  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189 - 4, SCREEN_WIDTH_FACTOR(300), 11 - 4, signon_default_colour);
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), SCREEN_HEIGHT - 11, SCREEN_WIDTH_FACTOR(300), 11, signon_default_colour);
 
   PrintY = 190 - 8;
   SETFONTCOLOR(10, 4);
@@ -1017,7 +1019,7 @@ void DoJukebox(void) {
   SETFONTCOLOR(READHCOLOR, BKGDCOLOR);
   PrintY  = 15;
   WindowX = 0;
-  WindowY = 320;
+  WindowY = SCREEN_WIDTH_FACTOR(320);
   US_CPrint("Robert's Jukebox");
 
   SETFONTCOLOR(TEXTCOLOR, BKGDCOLOR);
@@ -1178,16 +1180,21 @@ static void InitGame() {
 */
 
 boolean SetViewSize(unsigned width, unsigned height) {
-  viewwidth  = width & ~15; // must be divisable by 16
-  viewheight = height & ~1; // must be even
-  centerx    = viewwidth / 2 - 1;
-  shootdelta = viewwidth / 10;
-  if ((unsigned)viewheight == screenHeight)
+  printf("SetViewSize(%d,%d)\r\n", width, height);
+  view_width       = width;  //& ~15; // must be divisable by 16
+  view_height      = height; //& ~1; // must be even
+  view_length      = width * height;
+  view_half_length = view_length / 2;
+  centerx          = view_width / 2 - 1;
+  shootdelta       = view_width / 10;
+  printf("  centerx: %d, shootdelta: %d\r\n", centerx, shootdelta);
+  if (view_height == screenHeight)
     viewscreenx = viewscreeny = screenofs = 0;
   else {
-    viewscreenx = (screenWidth - viewwidth) / 2;
-    viewscreeny = (screenHeight - scaleFactor * STATUSLINES - viewheight) / 2;
+    viewscreenx = (screenWidth - view_width) / 2;
+    viewscreeny = (screenHeight - STATUSLINES - view_height) / 2;
     screenofs   = viewscreeny * screenWidth + viewscreenx;
+    printf("  viewscreenx: %d, viewscreeny: %d, screenofs: %d\r\n", viewscreenx, viewscreeny, screenofs);
   }
 
   //
@@ -1201,25 +1208,25 @@ boolean SetViewSize(unsigned width, unsigned height) {
 void ShowViewSize(int width) {
   int oldwidth, oldheight;
 
-  oldwidth  = viewwidth;
-  oldheight = viewheight;
+  oldwidth  = view_width;
+  oldheight = view_height;
 
   if (width == 21) {
-    viewwidth  = screenWidth;
-    viewheight = screenHeight;
-    VWB_BarScaledCoord(0, 0, screenWidth, screenHeight, 0);
+    view_width  = screenWidth;
+    view_height = screenHeight;
+    VWB_Bar(0, 0, screenWidth, screenHeight, 0);
   } else if (width == 20) {
-    viewwidth  = screenWidth;
-    viewheight = screenHeight - scaleFactor * STATUSLINES;
+    view_width  = screenWidth;
+    view_height = screenHeight - STATUSLINES;
     DrawPlayBorder();
   } else {
-    viewwidth  = width * 16 * screenWidth / 320;
-    viewheight = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
+    view_width  = width * 16;
+    view_height = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
     DrawPlayBorder();
   }
 
-  viewwidth  = oldwidth;
-  viewheight = oldheight;
+  view_width  = oldwidth;
+  view_height = oldheight;
 }
 
 void NewViewSize(int width) {
@@ -1227,9 +1234,9 @@ void NewViewSize(int width) {
   if (viewsize == 21)
     SetViewSize(screenWidth, screenHeight);
   else if (viewsize == 20)
-    SetViewSize(screenWidth, screenHeight - scaleFactor * STATUSLINES);
+    SetViewSize(screenWidth, screenHeight - STATUSLINES);
   else
-    SetViewSize(width * 16, (unsigned)(width * 16 * HEIGHTRATIO * screenHeight / 200));
+    SetViewSize(width * 16, (unsigned)(width * 16 * HEIGHTRATIO));
 }
 
 //===========================================================================

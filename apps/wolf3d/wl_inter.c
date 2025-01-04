@@ -63,7 +63,7 @@ void EndSpear(void) {
   fontnumber = 0;
   fontcolor  = 0xd0;
   WindowX    = 0;
-  WindowW    = 320;
+  WindowW    = SCREEN_WIDTH_FACTOR(320);
   PrintX     = 0;
   PrintY     = 180;
   US_CPrint(STR_ENDGAME1 "\n");
@@ -124,7 +124,7 @@ void Victory(void) {
   CA_CacheGrChunk(BJCOLLAPSE3PIC);
   CA_CacheGrChunk(BJCOLLAPSE4PIC);
 
-  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 200, VIEWCOLOR);
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), SCREEN_HEIGHT, VIEWCOLOR);
   VWB_DrawPic(124, 44, BJCOLLAPSE1PIC);
   VW_UpdateScreen();
   VW_FadeIn();
@@ -296,7 +296,7 @@ void Victory(void) {
 
 void PG13(void) {
   VW_FadeOut();
-  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), 200, 0x82); // background
+  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), SCREEN_HEIGHT, 0x82); // background
 
   CA_CacheGrChunk(PG13PIC);
   VWB_DrawPic(216, 110, PG13PIC);
@@ -907,11 +907,11 @@ void LevelCompleted(void) {
 boolean PreloadUpdate(unsigned current, unsigned total) {
   unsigned w = WindowW - scaleFactor * 10;
 
-  VWB_BarScaledCoord(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w, scaleFactor * 2, BLACK);
+  VWB_Bar(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w, scaleFactor * 2, BLACK);
   w = ((int32_t)w * current) / total;
   if (w) {
-    VWB_BarScaledCoord(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w, scaleFactor * 2, 0x37); // SECONDCOLOR);
-    VWB_BarScaledCoord(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w - scaleFactor * 1, scaleFactor * 1, 0x32);
+    VWB_Bar(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w, scaleFactor * 2, 0x37); // SECONDCOLOR);
+    VWB_Bar(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w - scaleFactor * 1, scaleFactor * 1, 0x32);
   }
   VW_UpdateScreen();
   //      if (LastScan == sc_Escape)
@@ -927,7 +927,7 @@ void PreloadGraphics(void) {
   DrawLevel();
   ClearSplitVWB(); // set up for double buffering in split screen
 
-  VWB_BarScaledCoord(0, 0, screenWidth, screenHeight - (STATUSLINES - 1), bordercol);
+  VWB_Bar(0, 0, screenWidth, screenHeight - (STATUSLINES - 1), bordercol);
   LatchDrawPic(((screenWidth - 224) / 16) * 8, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
 
   WindowX = (screenWidth - 224) / 2;
@@ -1355,7 +1355,7 @@ void CopyProtection(void) {
     VWB_DrawPic(0, 0, COPYPROTTOPPIC);
     VWB_DrawPic(0, 20 * 8, COPYPROTBOXPIC);
     WindowX = WindowY = 0;
-    WindowW           = 320;
+    WindowW           = SCREEN_WIDTH_FACTOR(320);
     WindowH           = 200;
     PrintY            = 65;
 

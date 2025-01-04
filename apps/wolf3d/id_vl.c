@@ -1,9 +1,9 @@
 // ID_VL.C
 
 #include "crt.h"
+#include "v99x8-hdmi/v99x8-wolf3d.h"
 #include "wl_def.h"
 #include <string.h>
-#include <v99x8.h>
 
 // Uncomment the following line, if you get destination out of bounds
 // assertion errors and want to ignore them during debugging
@@ -402,9 +402,10 @@ void VL_Vlin(int x __attribute__((unused)),
 =================
 */
 
-void VL_BarScaledCoord(int scx, int scy, int scwidth, int scheight, int color) {
-  assert(scx >= 0 && (unsigned)scx + scwidth <= screenWidth && scy >= 0 && (unsigned)scy + scheight <= screenHeight &&
-         "VL_BarScaledCoord: Destination rectangle out of bounds!");
+void VL_Bar(int scx, int scy, int scwidth, int scheight, int color) {
+  // printf("VL_Bar(%d, %d, %d, %d, %d)\r\n", scx, scy, scwidth, scheight, color);
+  assert(scx >= 0 && (unsigned)scx + scwidth <= SCREEN_WIDTH && scy >= 0 && (unsigned)scy + scheight <= SCREEN_HEIGHT &&
+         "VL_Bar: Destination rectangle out of bounds!");
 
   uint8_t *dest = ((byte *)screenBuffer->xpixels) + scy * SCREEN_WIDTH + scx;
 
@@ -457,16 +458,37 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
 */
 
 void VL_MemToScreen(byte *source, int width, int height, int destx, int desty) {
-
-  assert(destx >= 0 && destx + width <= (int)320 && desty >= 0 && desty + height <= (int)screenHeight &&
+  assert(destx >= 0 && destx + width <= 320 && desty >= 0 && desty + height <= 200 &&
          "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
+  int clipped_width = width;
+  if (destx + width >= SCREEN_WIDTH) {
+    printf("Image Width clipped! VL_MemToScreen(%p, %d, %d, %d, %d)\r\n", source, width, height, destx, desty);
+
+    clipped_width = SCREEN_WIDTH - destx;
+    if (clipped_width <= 0) {
+      printf("Image fully clipped\r\n");
+      return;
+    }
+  }
+
+  int clipped_height = height;
+  if (desty + height > SCREEN_HEIGHT) {
+    printf("Image Height clipped! VL_MemToScreen(%p, %d, %d, %d, %d)\r\n", source, width, height, destx, desty);
+    clipped_height = SCREEN_HEIGHT - desty;
+
+    if (clipped_height <= 0) {
+      printf("Image fully clipped\r\n");
+      return;
+    }
+  }
+
   byte *vbuf = (byte *)screenBuffer->xpixels;
-  for (int j = 0; j < height; j++) {
-    for (int i = 0; i < width; i++) {
+  for (int j = 0; j < clipped_height; j++) {
+    for (int i = 0; i < clipped_width; i++) {
       const byte color = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
 
-      const uint8_t xx = scale_points[i + destx]; // TODO: this is sub-optimal - as it processes the same pixel multiple times
+      const uint8_t xx                      = i + destx;
       vbuf[(j + desty) * SCREEN_WIDTH + xx] = color;
     }
   }
@@ -492,8 +514,8 @@ void VL_MemToScreenScaledCoordN(
   printf("source: %p, origwidth: %d, origheight: %d, srcx: %d, srcy: %d, destx: %d, desty: %d, width: %d, height: %d\r\n", source,
          origwidth, origheight, srcx, srcy, destx, desty, width, height);
 
-  assert(destx >= 0 && destx + width * scaleFactor <= (int)screenWidth && desty >= 0 &&
-         desty + height * scaleFactor <= (int)screenHeight && "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
+  // assert(destx >= 0 && destx + width * scaleFactor <= (int)screenWidth && desty >= 0 &&
+  //        desty + height * scaleFactor <= (int)screenHeight && "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
   printf("TODO!!!! VL_MemToScreenScaledCoordN\r\n");
   // byte *vbuf = (byte *)screenBuffer->pixels;
@@ -519,6 +541,17 @@ void VL_MemToScreenScaledCoordN(
 =================
 */
 
+void VL_SurfaceToScreen(SDL_Surface *source, int scxdest, int scydest) {
+  const byte *src    = (byte *)source->xpixels;
+  const int   width  = source->w;
+  const int   height = source->h;
+
+  assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= SCREEN_HEIGHT &&
+         "VL_SurfaceToScreen: Destination rectangle out of bounds!");
+
+  vdp_cmd_move_cpu_to_vram_with_palette(src, scxdest, scydest, width, height, 0, width * height, gamepal);
+}
+
 void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
   // printf("VL_LatchToScreen(");
   // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d)\r\n", source, xsrc, ysrc, width,
@@ -531,14 +564,20 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
   byte    *src      = (byte *)source->xpixels;
   uint24_t srcPitch = source->pitch; // number of bytes to be added, to get to next row
 
-  byte *vbuf = (byte *)screenBuffer->xpixels;
+  uint8_t first_byte = src[(ysrc)*srcPitch + xsrc];
+
+  vdp_cmd_move_data_to_vram(gamepal[first_byte], scxdest, scydest, width, height, 0, width * height);
 
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
-      byte color = src[(ysrc + j) * srcPitch + xsrc + i];
+      if (i == 0 && j == 0) {
+        continue;
+      }
 
-      const uint8_t xx                        = i + scxdest;
-      vbuf[(scydest + j) * SCREEN_WIDTH + xx] = color;
+      byte    color = src[(ysrc + j) * srcPitch + xsrc + i];
+      uint8_t grb   = gamepal[color];
+
+      vdp_cmd_send_byte(grb);
     }
   }
 }

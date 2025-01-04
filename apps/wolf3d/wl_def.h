@@ -135,7 +135,7 @@ extern uint8_t signon_default_colour;
 
 #define SCREENBWIDE 80
 
-#define HEIGHTRATIO 0.50 // also defined in id_mm.c
+#define HEIGHTRATIO 0.40 // also defined in id_mm.c
 
 #define BORDERCOLOR 3
 #define FLASHCOLOR  5
@@ -179,6 +179,7 @@ extern uint8_t signon_default_colour;
 #define MAXSCALEHEIGHT         256 // largest scale on largest view
 #define MAXVIEWWIDTH           256
 #define SCREEN_WIDTH           256
+#define SCREEN_HEIGHT          192
 #define SCREEN_WIDTH_FACTOR(w) (((w)*1024) / 1280)
 
 #define mapshift 6
@@ -1194,8 +1195,10 @@ extern int   mapon;
 extern boolean  loadedgame;
 extern fixed    focallength;
 extern int      viewscreenx, viewscreeny;
-extern int      viewwidth;
-extern uint16_t viewheight;
+extern uint16_t view_width;
+extern uint16_t view_height;
+extern uint24_t view_length;
+extern uint24_t view_half_length;
 extern short    centerx;
 extern int32_t  heightnumerator;
 extern fixed    scale;
