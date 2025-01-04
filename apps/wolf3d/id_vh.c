@@ -4,9 +4,9 @@
 
 #include "v99x8-hdmi/v99x8-wolf3d.h"
 
-pictabletype *pictable; //TODO this can be pre-allocated based on NUMPICS
+pictabletype *pictable; // TODO this can be pre-allocated based on NUMPICS
 
-SDL_Surface  *latchpics[NUMLATCHPICS];
+SDL_Surface *latchpics[NUMLATCHPICS];
 
 int  px, py;
 byte fontcolor, backcolor;
@@ -102,9 +102,7 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 =============================================================================
 */
 
-void VH_UpdateScreen() {
-  vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal);
-}
+void VH_UpdateScreen() { vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal); }
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
 
@@ -170,12 +168,7 @@ void VWB_Vlin(int y1, int y2, int x, int color) {
 */
 
 void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
-  VL_LatchToScreenA(latchpics[2 + picnum - LATCHPICS_LUMP_START], x * 8, y);
-}
-
-void LatchDrawPicScaledCoord(unsigned scx, unsigned scy, unsigned picnum) {
-  // printf("LatchDrawPicScaledCoord(%d, %d, picnum: %d)\r\n", scx, scy, picnum);
-  VL_LatchToScreenScaledCoord3(latchpics[2 + picnum - LATCHPICS_LUMP_START], scx * 8, scy);
+  VL_SurfaceToScreen(latchpics[2 + picnum - LATCHPICS_LUMP_START], x * 8, y);
 }
 
 //==========================================================================

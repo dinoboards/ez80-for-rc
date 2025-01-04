@@ -3,7 +3,6 @@
 
 #include <v99x8.h>
 
-
 /**
  * @brief copy data from CPU to VRAM address 0x000000
  *

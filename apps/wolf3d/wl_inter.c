@@ -927,14 +927,13 @@ void PreloadGraphics(void) {
   DrawLevel();
   ClearSplitVWB(); // set up for double buffering in split screen
 
-  VWB_BarScaledCoord(0, 0, screenWidth, screenHeight - scaleFactor * (STATUSLINES - 1), bordercol);
-  LatchDrawPicScaledCoord((screenWidth - scaleFactor * 224) / 16, (screenHeight - scaleFactor * (STATUSLINES + 48)) / 2,
-                          GETPSYCHEDPIC);
+  VWB_BarScaledCoord(0, 0, screenWidth, screenHeight - (STATUSLINES - 1), bordercol);
+  LatchDrawPic((screenWidth - 224) / 16, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
 
-  WindowX = (screenWidth - scaleFactor * 224) / 2;
-  WindowY = (screenHeight - scaleFactor * (STATUSLINES + 48)) / 2;
-  WindowW = scaleFactor * 28 * 8;
-  WindowH = scaleFactor * 48;
+  WindowX = (screenWidth - 224) / 2;
+  WindowY = (screenHeight - (STATUSLINES + 48)) / 2;
+  WindowW = 28 * 8;
+  WindowH = 48;
 
   VW_UpdateScreen();
   VW_FadeIn();

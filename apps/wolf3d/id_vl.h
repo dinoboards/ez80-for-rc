@@ -75,22 +75,10 @@ static void inline VL_MemToScreen(byte *source, int width, int height, int x, in
 
 void VL_MaskedToScreen(byte *source, int width, int height, int x, int y);
 
-void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest);
+void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest);
 
-static void inline VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int xdest, int ydest) {
-  VL_LatchToScreenScaledCoord7(source, xsrc, ysrc, width, height, xdest, ydest);
+static void inline VL_SurfaceToScreen(SDL_Surface *source, int x, int y) {
+  VL_LatchToScreen(source, 0, 0, source->w, source->h, x, y);
 }
-static void inline VL_LatchToScreenScaledCoord3(SDL_Surface *source, int scx, int scy) {
-  // printf("VL_LatchToScreenScaledCoord3(%p, %d, %d)\r\n", source, scx, scy);
-  VL_LatchToScreenScaledCoord7(source, 0, 0, source->w, source->h, scx, scy);
-}
-
-static void inline VL_LatchToScreenA(SDL_Surface *source, int x, int y) {
-  VL_LatchToScreenScaledCoord7(source, 0, 0, source->w, source->h, x, y);
-}
-
-// void VL_MemToScreenScaledCoord(byte* source, int width, int height, int scx, int scy);
-// void VL_MemToScreenScaledCoordA(byte* source, int origwidth, int origheight, int srcx, int srcy,int destx, int desty, int width,
-// int height);
 
 #endif
