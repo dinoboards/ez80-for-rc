@@ -592,7 +592,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
   int24_t      pixcnt;
   int24_t      ycnt;
   uint16_t     j;
-  uint8_t         grb;
+  uint8_t      color;
 
   shape = (t_compshape *)PM_GetSprite(shapenum);
 
@@ -645,7 +645,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
               ycnt += pixheight;
               screndy = (ycnt >> 6) + upperedge;
               if (scrstarty != screndy && screndy > 0) {
-                grb = ((byte *)shape)[newstart + j];
+                color = ((byte *)shape)[newstart + j];
 
                 if (scrstarty < 0)
                   scrstarty = 0;
@@ -654,7 +654,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
                   screndy = viewheight, j = endy;
 
                 while (scrstarty < screndy) {
-                  *vmem = grb;
+                  *vmem = color;
                   vmem += SCREEN_WIDTH;
                   scrstarty++;
                 }

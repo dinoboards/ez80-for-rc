@@ -200,7 +200,7 @@ void VL_SetColor(int color __attribute__((unused)),
 =================
 */
 
-void VL_SetPalette(SDL_Color *palette  __attribute__((unused)), bool forceupdate __attribute__((unused))) {
+void VL_SetPalette(SDL_Color *palette __attribute__((unused)), bool forceupdate __attribute__((unused))) {
   // memcpy(curpal, palette, sizeof(SDL_Color) * 256);
 
   // if (screenBits == 8)
@@ -240,7 +240,12 @@ void VL_SetPalette(SDL_Color *palette  __attribute__((unused)), bool forceupdate
 =================
 */
 
-void VL_FadeOut(int start __attribute__((unused)), int end __attribute__((unused)), int red __attribute__((unused)), int green __attribute__((unused)), int blue __attribute__((unused)), int steps __attribute__((unused))) {
+void VL_FadeOut(int start __attribute__((unused)),
+                int end __attribute__((unused)),
+                int red __attribute__((unused)),
+                int green __attribute__((unused)),
+                int blue __attribute__((unused)),
+                int steps __attribute__((unused))) {
   // int        i, j, orig, delta;
   // SDL_Color *origptr, *newptr;
 
@@ -433,7 +438,7 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
   byte *dest  = (byte *)destSurface->xpixels + y * pitch + x;
   for (int ysrc = 0; ysrc < height; ysrc++) {
     for (int xsrc = 0; xsrc < width; xsrc++) {
-      uint8_t color = source[(ysrc * (width >> 2) + (xsrc >> 2)) + (xsrc & 3) * (width >> 2) * height];
+      uint8_t color             = source[(ysrc * (width >> 2) + (xsrc >> 2)) + (xsrc & 3) * (width >> 2) * height];
       dest[ysrc * pitch + xsrc] = color;
     }
   }
@@ -456,7 +461,6 @@ void VL_MemToScreenScaledCoordA(byte *source, int width, int height, int destx, 
   assert(destx >= 0 && destx + width <= (int)320 && desty >= 0 && desty + height <= (int)screenHeight &&
          "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
-  //TODO!!!
   byte *vbuf = (byte *)screenBuffer->xpixels;
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
@@ -515,14 +519,14 @@ void VL_MemToScreenScaledCoordN(
 =================
 */
 
-void VL_LatchToScreenScaledCoord7(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
-  // printf("VL_LatchToScreenScaledCoord7\r\n");
+void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
+  // printf("VL_LatchToScreen\r\n");
   // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d\r\n", source, xsrc, ysrc, width,
   // height,
   //        scxdest, scydest);
 
   assert(scxdest >= 0 && scxdest + width <= 320 && scydest >= 0 && scydest + height <= (int)screenHeight &&
-         "VL_LatchToScreenScaledCoord7: Destination rectangle out of bounds!");
+         "VL_LatchToScreen: Destination rectangle out of bounds!");
 
   byte    *src      = (byte *)source->xpixels;
   unsigned srcPitch = source->pitch; // number of bytes to be added, to get to next row
