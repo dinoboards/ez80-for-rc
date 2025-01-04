@@ -774,8 +774,8 @@ void SignonScreen(void) {
   printf("Reading file SIGNON.IMG\r\n");
   byte *vbuf = screenBuffer->xpixels;
 
-  int r = fread(vbuf, 1, 256 * 200, f);
-  if (r != 256 * 200) {
+  int r = fread(vbuf, 1, SCREEN_WIDTH * screenHeight, f);
+  if (r != SCREEN_WIDTH * screenHeight) {
     printf("Error: Unable to read file SIGNON.IMG\r\n");
     fclose(f);
     return;
@@ -796,10 +796,10 @@ void SignonScreen(void) {
 
 void FinishSignon(void) {
 #ifndef SPEAR
-  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(320), 11, signon_default_colour);
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189 - 4, SCREEN_WIDTH_FACTOR(320), 11 - 4, signon_default_colour);
   WindowX = 0;
   WindowW = 256;
-  PrintY  = 190;
+  PrintY  = 190 - 8;
 
 #ifndef JAPAN
   SETFONTCOLOR(14, 4);
@@ -818,9 +818,9 @@ void FinishSignon(void) {
     IN_Ack();
 
 #ifndef JAPAN
-  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189, SCREEN_WIDTH_FACTOR(300), 11, signon_default_colour);
+  VW_Bar(SCREEN_WIDTH_FACTOR(0), 189 - 4, SCREEN_WIDTH_FACTOR(300), 11 - 4, signon_default_colour);
 
-  PrintY = 190;
+  PrintY = 190 - 8;
   SETFONTCOLOR(10, 4);
 
 #ifdef SPANISH

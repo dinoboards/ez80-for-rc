@@ -28,7 +28,7 @@ boolean usedoublebuffering = true;
 // ATSB: Global resolution for correct display of various things in the game like intermissions.
 // ATSB: This goes along with the scaling to ensure it all looks nice.
 // const uint24_t screenWidth  = 256;
-// const uint24_t screenHeight = 212;
+// const uint24_t screenHeight = 192;
 
 unsigned screenBits = -1; // use "best" color depth according to libSDL
 
@@ -89,9 +89,9 @@ void VL_Shutdown(void) {
 */
 
 void VL_SetVGAPlaneMode(void) {
-  vdp_set_mode(7, 212, PAL);
+  vdp_set_mode(7, 192, PAL);
   vdp_cmd_wait_completion();
-  vdp_cmd_vdp_to_vram(0, 0, 256, 212, 0, 0);
+  vdp_cmd_vdp_to_vram(0, 0, 256, 192, 0, 0);
   vdp_cmd_wait_completion();
 
   screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
