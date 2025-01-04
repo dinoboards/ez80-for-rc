@@ -168,7 +168,8 @@ void VWB_Vlin(int y1, int y2, int x, int color) {
 */
 
 void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
-  VL_SurfaceToScreen(latchpics[2 + picnum - LATCHPICS_LUMP_START], x * 8, y);
+  SDL_Surface *source = latchpics[2 + picnum - LATCHPICS_LUMP_START];
+  VL_LatchToScreen(source, 0, 0, source->w, source->h, x * 8, y);
 }
 
 //==========================================================================

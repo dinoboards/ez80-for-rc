@@ -520,8 +520,8 @@ void VL_MemToScreenScaledCoordN(
 */
 
 void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
-  // printf("VL_LatchToScreen\r\n");
-  // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d\r\n", source, xsrc, ysrc, width,
+  // printf("VL_LatchToScreen(");
+  // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d)\r\n", source, xsrc, ysrc, width,
   // height,
   //        scxdest, scydest);
 
@@ -529,7 +529,7 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
          "VL_LatchToScreen: Destination rectangle out of bounds!");
 
   byte    *src      = (byte *)source->xpixels;
-  unsigned srcPitch = source->pitch; // number of bytes to be added, to get to next row
+  uint24_t srcPitch = source->pitch; // number of bytes to be added, to get to next row
 
   byte *vbuf = (byte *)screenBuffer->xpixels;
   for (int j = 0; j < height; j++) {
