@@ -306,7 +306,7 @@ void __func_on_chip HitVertWall(void) {
   postx            = pixx;
 
   if (tilehit & 0x40) { // check for adjacent doors
-    ytile = (short)(fixed_rounded_down(yintercept));
+    ytile = (short)(fixed_to_short(yintercept));
     if (tilemap[xtile - xtilestep][ytile] & 0x80)
       wallpic = DOORWALL + 3;
     else
@@ -364,7 +364,7 @@ void __func_on_chip HitHorizWall(void) {
   postx            = pixx;
 
   if (tilehit & 0x40) { // check for adjacent doors
-    xtile = (short)(fixed_rounded_down(xintercept));
+    xtile = (short)(fixed_to_short(xintercept));
     if (tilemap[xtile][ytile - ytilestep] & 0x80)
       wallpic = DOORWALL + 2;
     else
@@ -988,24 +988,24 @@ void AsmRefresh() {
 
     yintercept = FixedMul(ystep, xpartial) + viewy;
     xtile      = focaltx + xtilestep;
-    xspot      = (word)((xtile << mapshift) + fixed_rounded_down(yintercept));
+    xspot      = (word)((xtile << mapshift) + fixed_to_short(yintercept));
     xintercept = FixedMul(xstep, ypartial) + viewx;
     ytile      = focalty + ytilestep;
-    yspot      = (word)(((fixed_rounded_down(xintercept)) << mapshift) + ytile);
+    yspot      = (word)(((fixed_to_short(xintercept)) << mapshift) + ytile);
     texdelta   = 0;
 
     // Special treatment when player is in back tile of pushwall
     if (playerInPushwallBackTile) {
       if ((pwalldir == di_east && xtilestep == 1) || (pwalldir == di_west && xtilestep == -1)) {
         fixed yintbuf = yintercept - fixed_by_wallpos_by_16(ystep * (64 - pwallpos));
-        if ((fixed_rounded_down(yintbuf)) == focalty) // ray hits pushwall back?
+        if ((fixed_to_short(yintbuf)) == focalty) // ray hits pushwall back?
         {
           if (pwalldir == di_east)
             xintercept = (short_to_fixed(focaltx)) + wallpos_to_fixed(pwallpos);
           else
             xintercept = (short_to_fixed(focaltx)) - TILEGLOBAL + (wallpos_to_fixed(64 - pwallpos));
           yintercept = yintbuf;
-          ytile      = (short)(fixed_rounded_down(yintercept));
+          ytile      = (short)(fixed_to_short(yintercept));
           tilehit    = pwalltile;
           HitVertWall();
 
@@ -1013,14 +1013,14 @@ void AsmRefresh() {
         }
       } else if ((pwalldir == di_south && ytilestep == 1) || (pwalldir == di_north && ytilestep == -1)) {
         fixed xintbuf = xintercept - fixed_by_wallpos_by_16(xstep * (64 - pwallpos));
-        if (fixed_rounded_down(xintbuf) == focaltx) // ray hits pushwall back?
+        if (fixed_to_short(xintbuf) == focaltx) // ray hits pushwall back?
         {
           xintercept = xintbuf;
           if (pwalldir == di_south)
             yintercept = (short_to_fixed(focalty)) + wallpos_to_fixed(pwallpos);
           else
             yintercept = (short_to_fixed(focalty)) - TILEGLOBAL + (wallpos_to_fixed(64 - pwallpos));
-          xtile   = (short)(fixed_rounded_down(xintercept));
+          xtile   = (short)(fixed_to_short(xintercept));
           tilehit = pwalltile;
           HitHorizWall();
           continue;
@@ -1029,9 +1029,9 @@ void AsmRefresh() {
     }
 
     do {
-      if (ytilestep == -1 && fixed_rounded_down(yintercept) <= ytile)
+      if (ytilestep == -1 && fixed_to_short(yintercept) <= ytile)
         goto horizentry;
-      if (ytilestep == 1 && fixed_rounded_down(yintercept) >= ytile)
+      if (ytilestep == 1 && fixed_to_short(yintercept) >= ytile)
         goto horizentry;
     vertentry:
       if ((uint32_t)yintercept > mapheight * 65536 - 1 || (word)xtile >= mapwidth) {
@@ -1040,7 +1040,7 @@ void AsmRefresh() {
         else if (xtile >= mapwidth)
           xintercept = short_to_fixed(mapwidth), xtile = mapwidth - 1;
         else
-          xtile = (short)(fixed_rounded_down(xintercept));
+          xtile = (short)(fixed_to_short(xintercept));
         if (yintercept < 0)
           yintercept = 0, ytile = 0;
         else if (yintercept >= short_to_fixed(mapheight))
@@ -1056,13 +1056,13 @@ void AsmRefresh() {
       if (tilehit) {
         if (tilehit & 0x80) {
           fixed yintbuf = yintercept + (ystep >> 1);
-          if (fixed_rounded_down(yintbuf) != fixed_rounded_down(yintercept))
+          if (fixed_to_short(yintbuf) != fixed_to_short(yintercept))
             goto passvert;
           if ((word)yintbuf < doorposition[tilehit & 0x7f])
             goto passvert;
           yintercept = yintbuf;
           xintercept = short_to_fixed(xtile) | 0x8000;
-          ytile      = (short)(fixed_rounded_down(yintercept));
+          ytile      = (short)(fixed_to_short(yintercept));
           HitVertDoor();
         } else {
           if (tilehit == 64) {
@@ -1077,8 +1077,8 @@ void AsmRefresh() {
                 pwallposnorm = pwallpos;
                 pwallposinv  = 64 - pwallpos;
               }
-              if ((pwalldir == di_east && xtile == pwallx && (fixed_rounded_down(yintercept)) == pwally) ||
-                  (pwalldir == di_west && !(xtile == pwallx && (fixed_rounded_down(yintercept)) == pwally))
+              if ((pwalldir == di_east && xtile == pwallx && (fixed_to_short(yintercept)) == pwally) ||
+                  (pwalldir == di_west && !(xtile == pwallx && (fixed_to_short(yintercept)) == pwally))
 
               ) {
                 // ystep' = ystep / 64K
@@ -1088,22 +1088,22 @@ void AsmRefresh() {
                 // fixed point value there fore is: 1M/64K => 16
                 // so is this actually? yintercept + ystep' * pwallpsnorm' * 16??
                 yintbuf = yintercept + fixed_by_wallpos_by_16(ystep * pwallposnorm);
-                if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
+                if ((fixed_to_short(yintbuf)) != (fixed_to_short(yintercept)))
                   goto passvert;
 
                 xintercept = short_to_fixed(xtile) + TILEGLOBAL - wallpos_to_fixed(pwallposinv);
                 yintercept = yintbuf;
-                ytile      = (short)(fixed_rounded_down(yintercept));
+                ytile      = (short)(fixed_to_short(yintercept));
                 tilehit    = pwalltile;
                 HitVertWall();
               } else {
                 yintbuf = yintercept + fixed_by_wallpos_by_16(ystep * pwallposinv);
-                if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
+                if ((fixed_to_short(yintbuf)) != (fixed_to_short(yintercept)))
                   goto passvert;
 
                 xintercept = short_to_fixed(xtile) - wallpos_to_fixed(pwallposinv);
                 yintercept = yintbuf;
-                ytile      = (short)(fixed_rounded_down(yintercept));
+                ytile      = (short)(fixed_to_short(yintercept));
                 tilehit    = pwalltile;
                 HitVertWall();
               }
@@ -1113,7 +1113,7 @@ void AsmRefresh() {
                 pwallposi = 64 - pwallpos;
               if ((pwalldir == di_south && (word)yintercept < (wallpos_to_fixed(pwallposi))) ||
                   (pwalldir == di_north && (word)yintercept > (wallpos_to_fixed(pwallposi)))) {
-                if ((fixed_rounded_down(yintercept)) == pwally && xtile == pwallx) {
+                if ((fixed_to_short(yintercept)) == pwally && xtile == pwallx) {
                   if ((pwalldir == di_south && (int32_t)((word)yintercept) + ystep < (wallpos_to_fixed(pwallposi))) ||
                       (pwalldir == di_north && (int32_t)((word)yintercept) + ystep > (wallpos_to_fixed(pwallposi))))
                     goto passvert;
@@ -1123,21 +1123,21 @@ void AsmRefresh() {
                   else
                     yintercept = (yintercept & 0xffff0000) - TILEGLOBAL + (wallpos_to_fixed(pwallposi));
                   xintercept = xintercept - (sr_s32_s32_6(xstep * (64 - pwallpos)));
-                  xtile      = (short)(fixed_rounded_down(xintercept));
+                  xtile      = (short)(fixed_to_short(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 } else {
                   texdelta   = -(wallpos_to_fixed(pwallposi));
                   xintercept = short_to_fixed(xtile);
-                  ytile      = (short)(fixed_rounded_down(yintercept));
+                  ytile      = (short)(fixed_to_short(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 }
               } else {
-                if ((fixed_rounded_down(yintercept)) == pwally && xtile == pwallx) {
+                if ((fixed_to_short(yintercept)) == pwally && xtile == pwallx) {
                   texdelta   = -(wallpos_to_fixed(pwallposi));
                   xintercept = short_to_fixed(xtile);
-                  ytile      = (short)(fixed_rounded_down(yintercept));
+                  ytile      = (short)(fixed_to_short(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 } else {
@@ -1150,7 +1150,7 @@ void AsmRefresh() {
                   else
                     yintercept = (yintercept & 0xffff0000) + (wallpos_to_fixed(64 - pwallpos));
                   xintercept = xintercept - (sr_s32_s32_6(xstep * pwallpos));
-                  xtile      = (short)(fixed_rounded_down(xintercept));
+                  xtile      = (short)(fixed_to_short(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 }
@@ -1158,7 +1158,7 @@ void AsmRefresh() {
             }
           } else {
             xintercept = short_to_fixed(xtile);
-            ytile      = (short)(fixed_rounded_down(yintercept));
+            ytile      = (short)(fixed_to_short(yintercept));
             HitVertWall();
           }
         }
@@ -1168,14 +1168,14 @@ void AsmRefresh() {
       *((byte *)spotvis + xspot) = 1;
       xtile += xtilestep;
       yintercept += ystep;
-      xspot = (word)(((uint32_t)xtile << mapshift) + (fixed_rounded_down(yintercept)));
+      xspot = (word)(((uint32_t)xtile << mapshift) + (fixed_to_short(yintercept)));
     } while (1);
     continue;
 
     do {
-      if (xtilestep == -1 && (fixed_rounded_down(xintercept)) <= xtile)
+      if (xtilestep == -1 && (fixed_to_short(xintercept)) <= xtile)
         goto vertentry;
-      if (xtilestep == 1 && (fixed_rounded_down(xintercept)) >= xtile)
+      if (xtilestep == 1 && (fixed_to_short(xintercept)) >= xtile)
         goto vertentry;
     horizentry:
       if (xintercept > mapwidth * 65536 - 1 || (word)ytile >= mapheight) {
@@ -1184,7 +1184,7 @@ void AsmRefresh() {
         else if (ytile >= mapheight)
           yintercept = short_to_fixed(mapheight), ytile = mapheight - 1;
         else
-          ytile = (short)(fixed_rounded_down(yintercept));
+          ytile = (short)(fixed_to_short(yintercept));
         if (xintercept < 0)
           xintercept = 0, xtile = 0;
         else if (xintercept >= short_to_fixed(mapwidth))
@@ -1200,13 +1200,13 @@ void AsmRefresh() {
       if (tilehit) {
         if (tilehit & 0x80) {
           int32_t xintbuf = xintercept + (xstep >> 1);
-          if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
+          if ((fixed_to_short(xintbuf)) != (fixed_to_short(xintercept)))
             goto passhoriz;
           if ((word)xintbuf < doorposition[tilehit & 0x7f])
             goto passhoriz;
           xintercept = xintbuf;
           yintercept = short_to_fixed(ytile) + 0x8000;
-          xtile      = (short)(fixed_rounded_down(xintercept));
+          xtile      = (short)(fixed_to_short(xintercept));
           HitHorizDoor();
         } else {
           if (tilehit == 64) {
@@ -1221,25 +1221,25 @@ void AsmRefresh() {
                 pwallposnorm = pwallpos;
                 pwallposinv  = 64 - pwallpos;
               }
-              if ((pwalldir == di_south && ytile == pwally && (fixed_rounded_down(xintercept)) == pwallx) ||
-                  (pwalldir == di_north && !(ytile == pwally && (fixed_rounded_down(xintercept)) == pwallx))) {
+              if ((pwalldir == di_south && ytile == pwally && (fixed_to_short(xintercept)) == pwallx) ||
+                  (pwalldir == di_north && !(ytile == pwally && (fixed_to_short(xintercept)) == pwallx))) {
                 xintbuf = xintercept + (sr_s32_s32_6(xstep * pwallposnorm));
-                if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
+                if ((fixed_to_short(xintbuf)) != (fixed_to_short(xintercept)))
                   goto passhoriz;
 
                 yintercept = (short_to_fixed(ytile)) + TILEGLOBAL - wallpos_to_fixed(pwallposinv);
                 xintercept = xintbuf;
-                xtile      = (short)(fixed_rounded_down(xintercept));
+                xtile      = (short)(fixed_to_short(xintercept));
                 tilehit    = pwalltile;
                 HitHorizWall();
               } else {
                 xintbuf = xintercept + (sr_s32_s32_6(xstep * pwallposinv));
-                if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
+                if ((fixed_to_short(xintbuf)) != (fixed_to_short(xintercept)))
                   goto passhoriz;
 
                 yintercept = short_to_fixed(ytile) - wallpos_to_fixed(pwallposinv);
                 xintercept = xintbuf;
-                xtile      = (short)(fixed_rounded_down(xintercept));
+                xtile      = (short)(fixed_to_short(xintercept));
                 tilehit    = pwalltile;
                 HitHorizWall();
               }
@@ -1249,7 +1249,7 @@ void AsmRefresh() {
                 pwallposi = 64 - pwallpos;
               if ((pwalldir == di_east && (word)xintercept < (wallpos_to_fixed(pwallposi))) ||
                   (pwalldir == di_west && (word)xintercept > (wallpos_to_fixed(pwallposi)))) {
-                if ((fixed_rounded_down(xintercept)) == pwallx && ytile == pwally) {
+                if ((fixed_to_short(xintercept)) == pwallx && ytile == pwally) {
                   if ((pwalldir == di_east && (int32_t)((word)xintercept) + xstep < (wallpos_to_fixed(pwallposi))) ||
                       (pwalldir == di_west && (int32_t)((word)xintercept) + xstep > (wallpos_to_fixed(pwallposi))))
                     goto passhoriz;
@@ -1259,21 +1259,21 @@ void AsmRefresh() {
                   else
                     xintercept = (xintercept & 0xffff0000) - TILEGLOBAL + (wallpos_to_fixed(pwallposi));
                   yintercept = yintercept - (sr_s32_s32_6(ystep * (64 - pwallpos)));
-                  ytile      = (short)((int32_t)fixed_rounded_down(yintercept));
+                  ytile      = (short)((int32_t)fixed_to_short(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 } else {
                   texdelta   = -(wallpos_to_fixed(pwallposi));
                   yintercept = short_to_fixed(ytile);
-                  xtile      = (short)(fixed_rounded_down(xintercept));
+                  xtile      = (short)(fixed_to_short(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 }
               } else {
-                if ((fixed_rounded_down(xintercept)) == pwallx && ytile == pwally) {
+                if ((fixed_to_short(xintercept)) == pwallx && ytile == pwally) {
                   texdelta   = -(wallpos_to_fixed(pwallposi));
                   yintercept = short_to_fixed(ytile);
-                  xtile      = (short)(fixed_rounded_down(xintercept));
+                  xtile      = (short)(fixed_to_short(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
                 } else {
@@ -1286,7 +1286,7 @@ void AsmRefresh() {
                   else
                     xintercept = (xintercept & 0xffff0000) + (wallpos_to_fixed(64 - pwallpos));
                   yintercept = yintercept - (sr_s32_s32_6(ystep * pwallpos));
-                  ytile      = (short)(fixed_rounded_down(yintercept));
+                  ytile      = (short)(fixed_to_short(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
                 }
@@ -1294,7 +1294,7 @@ void AsmRefresh() {
             }
           } else {
             yintercept = short_to_fixed(ytile);
-            xtile      = (short)(fixed_rounded_down(xintercept));
+            xtile      = (short)(fixed_to_short(xintercept));
             HitHorizWall();
           }
         }
@@ -1304,7 +1304,7 @@ void AsmRefresh() {
       *((byte *)spotvis + yspot) = 1;
       ytile += ytilestep;
       xintercept += xstep;
-      yspot = (word)(((fixed_rounded_down(xintercept)) << mapshift) + ytile);
+      yspot = (word)(((fixed_to_short(xintercept)) << mapshift) + ytile);
     } while (1);
   }
 }
@@ -1338,11 +1338,11 @@ void CalcViewVariables() {
   viewx     = player->x - FixedMul(focallength, viewcos);
   viewy     = player->y + FixedMul(focallength, viewsin);
 
-  focaltx = (short)(fixed_rounded_down(viewx));
-  focalty = (short)(fixed_rounded_down(viewy));
+  focaltx = (short)(fixed_to_short(viewx));
+  focalty = (short)(fixed_to_short(viewy));
 
-  viewtx = (short)(fixed_rounded_down(player->x));
-  viewty = (short)(fixed_rounded_down(player->y));
+  viewtx = (short)(fixed_to_short(player->x));
+  viewty = (short)(fixed_to_short(player->y));
 }
 
 //==========================================================================
