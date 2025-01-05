@@ -997,7 +997,7 @@ void AsmRefresh() {
     // Special treatment when player is in back tile of pushwall
     if (playerInPushwallBackTile) {
       if ((pwalldir == di_east && xtilestep == 1) || (pwalldir == di_west && xtilestep == -1)) {
-        fixed yintbuf = yintercept - ((ystep * (64 - pwallpos)) >> 6);
+        fixed yintbuf = yintercept - fixed_by_wallpos_by_16(ystep * (64 - pwallpos));
         if ((fixed_rounded_down(yintbuf)) == focalty) // ray hits pushwall back?
         {
           if (pwalldir == di_east)
@@ -1012,7 +1012,7 @@ void AsmRefresh() {
           continue;
         }
       } else if ((pwalldir == di_south && ytilestep == 1) || (pwalldir == di_north && ytilestep == -1)) {
-        fixed xintbuf = xintercept - ((xstep * (64 - pwallpos)) >> 6);
+        fixed xintbuf = xintercept - fixed_by_wallpos_by_16(xstep * (64 - pwallpos));
         if (fixed_rounded_down(xintbuf) == focaltx) // ray hits pushwall back?
         {
           xintercept = xintbuf;
@@ -1081,7 +1081,13 @@ void AsmRefresh() {
                   (pwalldir == di_west && !(xtile == pwallx && (fixed_rounded_down(yintercept)) == pwally))
 
               ) {
-                yintbuf = yintercept + ((ystep * pwallposnorm) >> 6);
+                // ystep' = ystep / 64K
+                // pwallpsnorm' = pwallposnorm / 1K
+                //((ystep'*64K) * pwallpsnorm'*1k) / 64
+                //(64K*1K)/64 => 1M
+                // fixed point value there fore is: 1M/64K => 16
+                // so is this actually? yintercept + ystep' * pwallpsnorm' * 16??
+                yintbuf = yintercept + fixed_by_wallpos_by_16(ystep * pwallposnorm);
                 if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
                   goto passvert;
 
@@ -1091,7 +1097,7 @@ void AsmRefresh() {
                 tilehit    = pwalltile;
                 HitVertWall();
               } else {
-                yintbuf = yintercept + ((ystep * pwallposinv) >> 6);
+                yintbuf = yintercept + fixed_by_wallpos_by_16(ystep * pwallposinv);
                 if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
                   goto passvert;
 
