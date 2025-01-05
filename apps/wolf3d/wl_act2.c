@@ -867,10 +867,10 @@ void SpawnStand(enemy_t which, int tilex, int tiley, int dir) {
 
     if (*(map + 1) >= AREATILE)
       tile = *(map + 1);
-    if (*(map - mapwidth) >= AREATILE)
-      tile = *(map - mapwidth);
-    if (*(map + mapwidth) >= AREATILE)
-      tile = *(map + mapwidth);
+    if (*(map - MAP_WIDTH) >= AREATILE)
+      tile = *(map - MAP_WIDTH);
+    if (*(map + MAP_WIDTH) >= AREATILE)
+      tile = *(map + MAP_WIDTH);
     if (*(map - 1) >= AREATILE)
       tile = *(map - 1);
 

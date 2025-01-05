@@ -851,8 +851,8 @@ void ClipMove(objtype *ob, int32_t xmove, int32_t ymove) {
     return;
 
 #ifdef APP_DEBUG
-  if (noclip && ob->x > 2 * TILEGLOBAL && ob->y > 2 * TILEGLOBAL && ob->x < (((int32_t)(mapwidth - 1)) << TILESHIFT) &&
-      ob->y < (((int32_t)(mapheight - 1)) << TILESHIFT))
+  if (noclip && ob->x > 2 * TILEGLOBAL && ob->y > 2 * TILEGLOBAL && ob->x < (((int32_t)(MAP_WIDTH - 1)) << TILESHIFT) &&
+      ob->y < (((int32_t)(MAP_HEIGHT - 1)) << TILESHIFT))
     return; // walk through walls
 #endif
 

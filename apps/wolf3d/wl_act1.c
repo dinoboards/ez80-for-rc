@@ -351,7 +351,7 @@ void SpawnDoor(int tilex, int tiley, boolean vertical, int lock) {
     tilemap[tilex][tiley - 1] |= 0x40;
     tilemap[tilex][tiley + 1] |= 0x40;
   } else {
-    *map = *(map - mapwidth); // set area number
+    *map = *(map - MAP_WIDTH); // set area number
     tilemap[tilex - 1][tiley] |= 0x40;
     tilemap[tilex + 1][tiley] |= 0x40;
   }
@@ -518,8 +518,8 @@ void DoorOpening(int door) {
       area1 = *(map + 1);
       area2 = *(map - 1);
     } else {
-      area1 = *(map - mapwidth);
-      area2 = *(map + mapwidth);
+      area1 = *(map - MAP_WIDTH);
+      area2 = *(map + MAP_WIDTH);
     }
     area1 -= AREATILE;
     area2 -= AREATILE;
@@ -596,8 +596,8 @@ void DoorClosing(int door) {
       area1 = *(map + 1);
       area2 = *(map - 1);
     } else {
-      area1 = *(map - mapwidth);
-      area2 = *(map + mapwidth);
+      area1 = *(map - MAP_WIDTH);
+      area2 = *(map + MAP_WIDTH);
     }
     area1 -= AREATILE;
     area2 -= AREATILE;

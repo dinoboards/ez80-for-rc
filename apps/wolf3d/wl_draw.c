@@ -1034,17 +1034,17 @@ void AsmRefresh() {
       if (ytilestep == 1 && fixed_to_short(yintercept) >= ytile)
         goto horizentry;
     vertentry:
-      if ((uint32_t)yintercept > mapheight * 65536 - 1 || (word)xtile >= mapwidth) {
+      if ((uint32_t)yintercept > MAP_HEIGHT * 65536 - 1 || (word)xtile >= MAP_WIDTH) {
         if (xtile < 0)
           xintercept = 0, xtile = 0;
-        else if (xtile >= mapwidth)
-          xintercept = short_to_fixed(mapwidth), xtile = mapwidth - 1;
+        else if (xtile >= MAP_WIDTH)
+          xintercept = short_to_fixed(MAP_WIDTH), xtile = MAP_WIDTH - 1;
         else
           xtile = (short)(fixed_to_short(xintercept));
         if (yintercept < 0)
           yintercept = 0, ytile = 0;
-        else if (yintercept >= short_to_fixed(mapheight))
-          yintercept = short_to_fixed(mapheight), ytile = mapheight - 1;
+        else if (yintercept >= short_to_fixed(MAP_HEIGHT))
+          yintercept = short_to_fixed(MAP_HEIGHT), ytile = MAP_HEIGHT - 1;
         yspot   = 0xffff;
         tilehit = 0;
         HitHorizBorder();
@@ -1178,17 +1178,17 @@ void AsmRefresh() {
       if (xtilestep == 1 && (fixed_to_short(xintercept)) >= xtile)
         goto vertentry;
     horizentry:
-      if (xintercept > mapwidth * 65536 - 1 || ytile >= mapheight) {
+      if (xintercept > MAP_WIDTH * 65536 - 1 || ytile >= MAP_HEIGHT) {
         if (ytile < 0)
           yintercept = 0, ytile = 0;
-        else if (ytile >= mapheight)
-          yintercept = short_to_fixed(mapheight), ytile = mapheight - 1;
+        else if (ytile >= MAP_HEIGHT)
+          yintercept = short_to_fixed(MAP_HEIGHT), ytile = MAP_HEIGHT - 1;
         else
           ytile = (short)(fixed_to_short(yintercept));
         if (xintercept < 0)
           xintercept = 0, xtile = 0;
-        else if (xintercept >= short_to_fixed(mapwidth))
-          xintercept = short_to_fixed(mapwidth), xtile = mapwidth - 1;
+        else if (xintercept >= short_to_fixed(MAP_WIDTH))
+          xintercept = short_to_fixed(MAP_WIDTH), xtile = MAP_WIDTH - 1;
         xspot   = 0xffff;
         tilehit = 0;
         HitVertBorder();

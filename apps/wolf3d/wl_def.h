@@ -186,8 +186,11 @@ extern uint8_t signon_default_colour;
 #define MAPSIZE  (1 << mapshift)
 #define maparea  MAPSIZE *MAPSIZE
 
-#define mapheight MAPSIZE
-#define mapwidth  MAPSIZE
+// all maps are assumed to be of size 64*64
+// original code has check that aborts if map loaded is not 64x64
+
+#define MAP_HEIGHT MAPSIZE
+#define MAP_WIDTH  MAPSIZE
 
 #define TEXTURESHIFT 6
 #define TEXTURESIZE  (1 << TEXTURESHIFT)

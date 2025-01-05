@@ -569,17 +569,17 @@ boolean LoadTheGame(FILE *file, int x, int y) {
     word  tile, sprite;
     map = mapsegs[0];
     obj = mapsegs[1];
-    for (y = 0; y < mapheight; y++)
-      for (x = 0; x < mapwidth; x++) {
+    for (y = 0; y < MAP_HEIGHT; y++)
+      for (x = 0; x < MAP_WIDTH; x++) {
         tile   = *map++;
         sprite = *obj++;
         if (sprite == PUSHABLETILE && !tilemap[x][y] && (tile < AREATILE || tile >= (AREATILE + NUMMAPS))) {
           if (*map >= AREATILE)
             tile = *map;
-          if (*(map - 1 - mapwidth) >= AREATILE)
-            tile = *(map - 1 - mapwidth);
-          if (*(map - 1 + mapwidth) >= AREATILE)
-            tile = *(map - 1 + mapwidth);
+          if (*(map - 1 - MAP_WIDTH) >= AREATILE)
+            tile = *(map - 1 - MAP_WIDTH);
+          if (*(map - 1 + MAP_WIDTH) >= AREATILE)
+            tile = *(map - 1 + MAP_WIDTH);
           if (*(map - 2) >= AREATILE)
             tile = *(map - 2);
 

@@ -202,8 +202,8 @@ static void ScanInfoPlane(void) {
   word    *start;
 
   start = mapsegs[1];
-  for (y = 0; y < mapheight; y++) {
-    for (x = 0; x < mapwidth; x++) {
+  for (y = 0; y < MAP_HEIGHT; y++) {
+    for (x = 0; x < MAP_WIDTH; x++) {
       tile = *start++;
       if (!tile)
         continue;
@@ -630,8 +630,8 @@ void SetupGameLevel(void) {
   memset(tilemap, 0, sizeof(tilemap));
   memset(actorat, 0, sizeof(actorat));
   map = mapsegs[0];
-  for (y = 0; y < mapheight; y++) {
-    for (x = 0; x < mapwidth; x++) {
+  for (y = 0; y < MAP_HEIGHT; y++) {
+    for (x = 0; x < MAP_WIDTH; x++) {
       tile = *map++;
       if (tile < AREATILE) {
         // solid wall
@@ -653,8 +653,8 @@ void SetupGameLevel(void) {
   InitStaticList();
 
   map = mapsegs[0];
-  for (y = 0; y < mapheight; y++) {
-    for (x = 0; x < mapwidth; x++) {
+  for (y = 0; y < MAP_HEIGHT; y++) {
+    for (x = 0; x < MAP_WIDTH; x++) {
       tile = *map++;
       if (tile >= 90 && tile <= 101) {
         // door
@@ -689,8 +689,8 @@ void SetupGameLevel(void) {
   // take out the ambush markers
   //
   map = mapsegs[0];
-  for (y = 0; y < mapheight; y++) {
-    for (x = 0; x < mapwidth; x++) {
+  for (y = 0; y < MAP_HEIGHT; y++) {
+    for (x = 0; x < MAP_WIDTH; x++) {
       tile = *map++;
       if (tile == AMBUSHTILE) {
         tilemap[x][y] = 0;
@@ -699,10 +699,10 @@ void SetupGameLevel(void) {
 
         if (*map >= AREATILE)
           tile = *map;
-        if (*(map - 1 - mapwidth) >= AREATILE)
-          tile = *(map - 1 - mapwidth);
-        if (*(map - 1 + mapwidth) >= AREATILE)
-          tile = *(map - 1 + mapwidth);
+        if (*(map - 1 - MAP_WIDTH) >= AREATILE)
+          tile = *(map - 1 - MAP_WIDTH);
+        if (*(map - 1 + MAP_WIDTH) >= AREATILE)
+          tile = *(map - 1 + MAP_WIDTH);
         if (*(map - 2) >= AREATILE)
           tile = *(map - 2);
 
