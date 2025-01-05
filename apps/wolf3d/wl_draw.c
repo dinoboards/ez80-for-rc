@@ -194,8 +194,8 @@ boolean TransformTile(int tx, int ty, short *dispx, short *dispheight) {
   //
   // translate point to view centered coordinates
   //
-  gx = ((int32_t)tx << TILESHIFT) + 0x8000 - viewx;
-  gy = ((int32_t)ty << TILESHIFT) + 0x8000 - viewy;
+  gx = (short_to_fixed(tx)) + 0x8000 - viewx;
+  gy = (short_to_fixed(ty)) + 0x8000 - viewy;
 
   //
   // calculate newx
@@ -1001,9 +1001,9 @@ void AsmRefresh() {
         if ((fixed_rounded_down(yintbuf)) == focalty) // ray hits pushwall back?
         {
           if (pwalldir == di_east)
-            xintercept = (focaltx << TILESHIFT) + (pwallpos << 10);
+            xintercept = (short_to_fixed(focaltx)) + (pwallpos << 10);
           else
-            xintercept = (focaltx << TILESHIFT) - TILEGLOBAL + ((64 - pwallpos) << 10);
+            xintercept = (short_to_fixed(focaltx)) - TILEGLOBAL + ((64 - pwallpos) << 10);
           yintercept = yintbuf;
           ytile      = (short)(fixed_rounded_down(yintercept));
           tilehit    = pwalltile;
@@ -1017,9 +1017,9 @@ void AsmRefresh() {
         {
           xintercept = xintbuf;
           if (pwalldir == di_south)
-            yintercept = (focalty << TILESHIFT) + (pwallpos << 10);
+            yintercept = (short_to_fixed(focalty)) + (pwallpos << 10);
           else
-            yintercept = (focalty << TILESHIFT) - TILEGLOBAL + ((64 - pwallpos) << 10);
+            yintercept = (short_to_fixed(focalty)) - TILEGLOBAL + ((64 - pwallpos) << 10);
           xtile   = (short)(fixed_rounded_down(xintercept));
           tilehit = pwalltile;
           HitHorizWall();
@@ -1038,13 +1038,13 @@ void AsmRefresh() {
         if (xtile < 0)
           xintercept = 0, xtile = 0;
         else if (xtile >= mapwidth)
-          xintercept = (int32_t)mapwidth << TILESHIFT, xtile = mapwidth - 1;
+          xintercept = short_to_fixed(mapwidth), xtile = mapwidth - 1;
         else
           xtile = (short)(fixed_rounded_down(xintercept));
         if (yintercept < 0)
           yintercept = 0, ytile = 0;
-        else if (yintercept >= ((int32_t)mapheight << TILESHIFT))
-          yintercept = mapheight << TILESHIFT, ytile = mapheight - 1;
+        else if (yintercept >= short_to_fixed(mapheight))
+          yintercept = short_to_fixed(mapheight), ytile = mapheight - 1;
         yspot   = 0xffff;
         tilehit = 0;
         HitHorizBorder();
@@ -1061,7 +1061,7 @@ void AsmRefresh() {
           if ((word)yintbuf < doorposition[tilehit & 0x7f])
             goto passvert;
           yintercept = yintbuf;
-          xintercept = ((int32_t)xtile << TILESHIFT) | 0x8000;
+          xintercept = short_to_fixed(xtile) | 0x8000;
           ytile      = (short)(fixed_rounded_down(yintercept));
           HitVertDoor();
         } else {
@@ -1085,7 +1085,7 @@ void AsmRefresh() {
                 if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
                   goto passvert;
 
-                xintercept = ((int32_t)xtile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
+                xintercept = short_to_fixed(xtile) + TILEGLOBAL - (pwallposinv << 10);
                 yintercept = yintbuf;
                 ytile      = (short)(fixed_rounded_down(yintercept));
                 tilehit    = pwalltile;
@@ -1095,7 +1095,7 @@ void AsmRefresh() {
                 if ((fixed_rounded_down(yintbuf)) != (fixed_rounded_down(yintercept)))
                   goto passvert;
 
-                xintercept = ((int32_t)xtile << TILESHIFT) - (pwallposinv << 10);
+                xintercept = short_to_fixed(xtile) - (pwallposinv << 10);
                 yintercept = yintbuf;
                 ytile      = (short)(fixed_rounded_down(yintercept));
                 tilehit    = pwalltile;
@@ -1122,7 +1122,7 @@ void AsmRefresh() {
                   HitHorizWall();
                 } else {
                   texdelta   = -(pwallposi << 10);
-                  xintercept = (int32_t)xtile << TILESHIFT;
+                  xintercept = short_to_fixed(xtile);
                   ytile      = (short)(fixed_rounded_down(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
@@ -1130,7 +1130,7 @@ void AsmRefresh() {
               } else {
                 if ((fixed_rounded_down(yintercept)) == pwally && xtile == pwallx) {
                   texdelta   = -(pwallposi << 10);
-                  xintercept = (int32_t)xtile << TILESHIFT;
+                  xintercept = short_to_fixed(xtile);
                   ytile      = (short)(fixed_rounded_down(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
@@ -1151,7 +1151,7 @@ void AsmRefresh() {
               }
             }
           } else {
-            xintercept = (int32_t)xtile << TILESHIFT;
+            xintercept = short_to_fixed(xtile);
             ytile      = (short)(fixed_rounded_down(yintercept));
             HitVertWall();
           }
@@ -1176,13 +1176,13 @@ void AsmRefresh() {
         if (ytile < 0)
           yintercept = 0, ytile = 0;
         else if (ytile >= mapheight)
-          yintercept = (int32_t)mapheight << TILESHIFT, ytile = mapheight - 1;
+          yintercept = short_to_fixed(mapheight), ytile = mapheight - 1;
         else
           ytile = (short)(fixed_rounded_down(yintercept));
         if (xintercept < 0)
           xintercept = 0, xtile = 0;
-        else if (xintercept >= ((int32_t)mapwidth << TILESHIFT))
-          xintercept = (int32_t)mapwidth << TILESHIFT, xtile = mapwidth - 1;
+        else if (xintercept >= short_to_fixed(mapwidth))
+          xintercept = short_to_fixed(mapwidth), xtile = mapwidth - 1;
         xspot   = 0xffff;
         tilehit = 0;
         HitVertBorder();
@@ -1199,7 +1199,7 @@ void AsmRefresh() {
           if ((word)xintbuf < doorposition[tilehit & 0x7f])
             goto passhoriz;
           xintercept = xintbuf;
-          yintercept = ((int32_t)ytile << TILESHIFT) + 0x8000;
+          yintercept = short_to_fixed(ytile) + 0x8000;
           xtile      = (short)(fixed_rounded_down(xintercept));
           HitHorizDoor();
         } else {
@@ -1221,7 +1221,7 @@ void AsmRefresh() {
                 if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
                   goto passhoriz;
 
-                yintercept = ((int32_t)ytile << TILESHIFT) + TILEGLOBAL - (pwallposinv << 10);
+                yintercept = (short_to_fixed(ytile)) + TILEGLOBAL - (pwallposinv << 10);
                 xintercept = xintbuf;
                 xtile      = (short)(fixed_rounded_down(xintercept));
                 tilehit    = pwalltile;
@@ -1231,7 +1231,7 @@ void AsmRefresh() {
                 if ((fixed_rounded_down(xintbuf)) != (fixed_rounded_down(xintercept)))
                   goto passhoriz;
 
-                yintercept = ((int32_t)ytile << TILESHIFT) - (pwallposinv << 10);
+                yintercept = short_to_fixed(ytile) - (pwallposinv << 10);
                 xintercept = xintbuf;
                 xtile      = (short)(fixed_rounded_down(xintercept));
                 tilehit    = pwalltile;
@@ -1258,7 +1258,7 @@ void AsmRefresh() {
                   HitVertWall();
                 } else {
                   texdelta   = -(pwallposi << 10);
-                  yintercept = (int32_t)ytile << TILESHIFT;
+                  yintercept = short_to_fixed(ytile);
                   xtile      = (short)(fixed_rounded_down(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1266,7 +1266,7 @@ void AsmRefresh() {
               } else {
                 if ((fixed_rounded_down(xintercept)) == pwallx && ytile == pwally) {
                   texdelta   = -(pwallposi << 10);
-                  yintercept = (int32_t)ytile << TILESHIFT;
+                  yintercept = short_to_fixed(ytile);
                   xtile      = (short)(fixed_rounded_down(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1287,7 +1287,7 @@ void AsmRefresh() {
               }
             }
           } else {
-            yintercept = (int32_t)ytile << TILESHIFT;
+            yintercept = short_to_fixed(ytile);
             xtile      = (short)(fixed_rounded_down(xintercept));
             HitHorizWall();
           }
