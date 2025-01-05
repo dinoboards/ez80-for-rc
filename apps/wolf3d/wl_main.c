@@ -34,9 +34,8 @@
 =============================================================================
 */
 
-#define FOCALLENGTH (0x5700l) // in global coordinates
-// #define FOCALLENGTH     (0x0200l)               // in global coordinates
-#define VIEWGLOBAL 0x10000 // globals visable flush to wall
+#define FOCALLENGTH (0x5700l) /* in global coordinates as fixed (0.33984375) for 24 bit this changes to 0x570 */
+#define VIEWGLOBAL  GLOBAL1   /* globals visible flush to wall */
 
 #define VIEWWIDTH  256 // size of view window
 #define VIEWHEIGHT 144
@@ -66,7 +65,7 @@ uint24_t view_half_length;
 short    centerx;
 int      shootdelta; // pixels away from centerx a target can be
 fixed    scale;
-int32_t  heightnumerator;
+fixed    heightnumerator;
 
 void Quit(const char *error, ...);
 
@@ -691,7 +690,7 @@ void BuildTables(void) {
 ====================
 */
 
-void CalcProjection(int32_t focal) {
+void CalcProjection(fixed focal) {
   int    i;
   int    intang;
   float  angle;
@@ -713,7 +712,19 @@ void CalcProjection(int32_t focal) {
   // divide heightnumerator by a posts distance to get the posts height for
   // the heightbuffer.  The pixel height is height>>2
   //
-  heightnumerator = (TILEGLOBAL * scale) >> 6;
+  // TILEGLOBAL = TILEGLOBAL' * 64K
+  // scale = scale' * 64K
+  // ((TILEGLOBAL' * 64K) * (scale' * 64K)) / 64
+  // heightnumerator' = TILEGLOBAL' * scale' * 1K
+  // heightnumerator = heightnumerator' * 64K
+  // heightnumerator = (64K * scale' * 64K)/64
+  // heightnumerator = (1K  * scale' * 64K)
+  // heightnumerator = scale * 1K
+  // heightnumerator = scale << 10
+  heightnumerator = scale << 10; // for 24 bit this does not need to change now
+
+  printf("heightnumerator: %ld\r\n", heightnumerator);
+  printf("       alt calc: %ld\r\n", (TILEGLOBAL * scale) >> 6);
 
   //
   // calculate the angle offset from view angle of each pixel's ray

@@ -156,7 +156,7 @@ extern uint8_t signon_default_colour;
 #define PI   3.141592657
 #define M_PI PI
 
-#define GLOBAL1       (1l << 16)
+#define GLOBAL1       (1l << 16) /* change this to << 12 for 24 bit */
 #define TILEGLOBAL    GLOBAL1
 #define PIXGLOBAL     (GLOBAL1 / 64)
 #define TILESHIFT     16l
@@ -1203,7 +1203,7 @@ extern uint16_t view_height;
 extern uint24_t view_length;
 extern uint24_t view_half_length;
 extern short    centerx;
-extern int32_t  heightnumerator;
+extern fixed    heightnumerator;
 extern fixed    scale;
 
 extern int dirangle[9];

@@ -1034,7 +1034,7 @@ void AsmRefresh() {
       if (ytilestep == 1 && fixed_to_short(yintercept) >= ytile)
         goto horizentry;
     vertentry:
-      if ((uint32_t)yintercept > MAP_HEIGHT * 65536 - 1 || (word)xtile >= MAP_WIDTH) {
+      if (yintercept > short_to_fixed(MAP_HEIGHT) - 1 || (word)xtile >= MAP_WIDTH) {
         if (xtile < 0)
           xintercept = 0, xtile = 0;
         else if (xtile >= MAP_WIDTH)
@@ -1178,7 +1178,7 @@ void AsmRefresh() {
       if (xtilestep == 1 && (fixed_to_short(xintercept)) >= xtile)
         goto vertentry;
     horizentry:
-      if (xintercept > MAP_WIDTH * 65536 - 1 || ytile >= MAP_HEIGHT) {
+      if (xintercept > short_to_fixed(MAP_WIDTH) - 1 || ytile >= MAP_HEIGHT) {
         if (ytile < 0)
           yintercept = 0, ytile = 0;
         else if (ytile >= MAP_HEIGHT)

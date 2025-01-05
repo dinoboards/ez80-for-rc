@@ -301,10 +301,10 @@ void T_Projectile(objtype *ob) {
   deltax = FixedMul(speed, costable[ob->angle]);
   deltay = -FixedMul(speed, sintable[ob->angle]);
 
-  if (deltax > 0x10000l)
-    deltax = 0x10000l;
-  if (deltay > 0x10000l)
-    deltay = 0x10000l;
+  if (deltax > GLOBAL1)
+    deltax = GLOBAL1;
+  if (deltay > GLOBAL1)
+    deltay = GLOBAL1;
 
   ob->x += deltax;
   ob->y += deltay;

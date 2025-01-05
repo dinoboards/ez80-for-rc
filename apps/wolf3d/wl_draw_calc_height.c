@@ -22,6 +22,8 @@ extern int16_t min_wallheight;
 uint16_t __func_on_chip CalcHeight() {
   const fixed z = FixedMul(xintercept - viewx, viewcos) - FixedMul(yintercept - viewy, viewsin);
 
+  // TODO: for 24 bit, what do we shift z by?
+
   const int16_t height = z < MINDIST ? heightnumerator / (MINDIST >> 8) : heightnumerator / (z >> 8);
 
   if (height < min_wallheight)
