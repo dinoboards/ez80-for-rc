@@ -1638,7 +1638,8 @@ extern void EndText(void);
 
 extern fixed          FixedMul(fixed a, fixed b);
 static inline int16_t fixed_rounded_down(fixed a) { return sr_s32_s16_16(a); }
-static inline fixed   short_to_fixed(int16_t a) { return a << TILESHIFT; }
+static inline fixed   short_to_fixed(int16_t a) { return a << TILESHIFT; } // for 24 bit this changes to << 12
+static inline fixed   wallpos_to_fixed(int a) { return a << 10; }          // for 24 bit this changes to << 6
 
 #define DEMOCHOOSE_ORIG_SDL(orig, sdl) ((demorecord || demoplayback) ? (orig) : (sdl))
 #define DEMOCOND_ORIG                  (demorecord || demoplayback)
