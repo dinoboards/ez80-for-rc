@@ -1119,10 +1119,10 @@ void AsmRefresh() {
                     goto passvert;
 
                   if (pwalldir == di_south)
-                    yintercept = (yintercept & 0xffff0000) + (wallpos_to_fixed(pwallposi));
+                    yintercept = fixed_rounded_down(yintercept) + (wallpos_to_fixed(pwallposi));
                   else
-                    yintercept = (yintercept & 0xffff0000) - TILEGLOBAL + (wallpos_to_fixed(pwallposi));
-                  xintercept = xintercept - (sr_s32_s32_6(xstep * (64 - pwallpos)));
+                    yintercept = fixed_rounded_down(yintercept) - TILEGLOBAL + (wallpos_to_fixed(pwallposi));
+                  xintercept = xintercept - (fixed_by_wallpos_by_16(xstep * (64 - pwallpos)));
                   xtile      = (short)(fixed_to_short(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1146,10 +1146,10 @@ void AsmRefresh() {
                     goto passvert;
 
                   if (pwalldir == di_south)
-                    yintercept = (yintercept & 0xffff0000) - (wallpos_to_fixed(64 - pwallpos));
+                    yintercept = fixed_rounded_down(yintercept) - (wallpos_to_fixed(64 - pwallpos));
                   else
-                    yintercept = (yintercept & 0xffff0000) + (wallpos_to_fixed(64 - pwallpos));
-                  xintercept = xintercept - (sr_s32_s32_6(xstep * pwallpos));
+                    yintercept = fixed_rounded_down(yintercept) + (wallpos_to_fixed(64 - pwallpos));
+                  xintercept = xintercept - (fixed_by_wallpos_by_16(xstep * pwallpos));
                   xtile      = (short)(fixed_to_short(xintercept));
                   tilehit    = pwalltile;
                   HitHorizWall();
@@ -1178,7 +1178,7 @@ void AsmRefresh() {
       if (xtilestep == 1 && (fixed_to_short(xintercept)) >= xtile)
         goto vertentry;
     horizentry:
-      if (xintercept > mapwidth * 65536 - 1 || (word)ytile >= mapheight) {
+      if (xintercept > mapwidth * 65536 - 1 || ytile >= mapheight) {
         if (ytile < 0)
           yintercept = 0, ytile = 0;
         else if (ytile >= mapheight)
@@ -1223,7 +1223,7 @@ void AsmRefresh() {
               }
               if ((pwalldir == di_south && ytile == pwally && (fixed_to_short(xintercept)) == pwallx) ||
                   (pwalldir == di_north && !(ytile == pwally && (fixed_to_short(xintercept)) == pwallx))) {
-                xintbuf = xintercept + (sr_s32_s32_6(xstep * pwallposnorm));
+                xintbuf = xintercept + (fixed_by_wallpos_by_16(xstep * pwallposnorm));
                 if ((fixed_to_short(xintbuf)) != (fixed_to_short(xintercept)))
                   goto passhoriz;
 
@@ -1233,7 +1233,7 @@ void AsmRefresh() {
                 tilehit    = pwalltile;
                 HitHorizWall();
               } else {
-                xintbuf = xintercept + (sr_s32_s32_6(xstep * pwallposinv));
+                xintbuf = xintercept + (fixed_by_wallpos_by_16(xstep * pwallposinv));
                 if ((fixed_to_short(xintbuf)) != (fixed_to_short(xintercept)))
                   goto passhoriz;
 
@@ -1255,10 +1255,10 @@ void AsmRefresh() {
                     goto passhoriz;
 
                   if (pwalldir == di_east)
-                    xintercept = (xintercept & 0xffff0000) + (wallpos_to_fixed(pwallposi));
+                    xintercept = fixed_rounded_down(xintercept) + (wallpos_to_fixed(pwallposi));
                   else
-                    xintercept = (xintercept & 0xffff0000) - TILEGLOBAL + (wallpos_to_fixed(pwallposi));
-                  yintercept = yintercept - (sr_s32_s32_6(ystep * (64 - pwallpos)));
+                    xintercept = fixed_rounded_down(xintercept) - TILEGLOBAL + (wallpos_to_fixed(pwallposi));
+                  yintercept = yintercept - (fixed_by_wallpos_by_16(ystep * (64 - pwallpos)));
                   ytile      = (short)((int32_t)fixed_to_short(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();
@@ -1282,10 +1282,10 @@ void AsmRefresh() {
                     goto passhoriz;
 
                   if (pwalldir == di_east)
-                    xintercept = (xintercept & 0xffff0000) - (wallpos_to_fixed(64 - pwallpos));
+                    xintercept = fixed_rounded_down(xintercept) - (wallpos_to_fixed(64 - pwallpos));
                   else
-                    xintercept = (xintercept & 0xffff0000) + (wallpos_to_fixed(64 - pwallpos));
-                  yintercept = yintercept - (sr_s32_s32_6(ystep * pwallpos));
+                    xintercept = fixed_rounded_down(xintercept) + (wallpos_to_fixed(64 - pwallpos));
+                  yintercept = yintercept - (fixed_by_wallpos_by_16(ystep * pwallpos));
                   ytile      = (short)(fixed_to_short(yintercept));
                   tilehit    = pwalltile;
                   HitVertWall();

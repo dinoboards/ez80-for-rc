@@ -599,10 +599,18 @@ void SetupGameLevel(void) {
   word  tile;
 
   if (!loadedgame) {
-    gamestate.TimeCount = gamestate.secrettotal = gamestate.killtotal = gamestate.treasuretotal = gamestate.secretcount =
-        gamestate.killcount = gamestate.treasurecount = pwallstate = pwallpos = facetimes = 0;
-    LastAttacker                                                                          = NULL;
-    killerobj                                                                             = NULL;
+    gamestate.TimeCount     = 0;
+    gamestate.secrettotal   = 0;
+    gamestate.killtotal     = 0;
+    gamestate.treasuretotal = 0;
+    gamestate.secretcount   = 0;
+    gamestate.killcount     = 0;
+    gamestate.treasurecount = 0;
+    pwallstate              = 0;
+    pwallpos                = 0;
+    facetimes               = 0;
+    LastAttacker            = NULL;
+    killerobj               = NULL;
   }
 
   if (demoplayback || demorecord)
