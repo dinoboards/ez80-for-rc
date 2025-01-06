@@ -27,10 +27,6 @@ void __func_on_chip ScalePost() {
 
   scale_post_calc_ycount();
 
-  if (drawing_params.yoffs < 0)
-    drawing_params.yoffs = 0;
-  drawing_params.yoffs += drawing_params.postx;
-
   drawing_params.yendoffs = drawing_params.view_half_height + drawing_params.ywcount - 1;
   drawing_params.yw       = TEXTURESIZE - 1;
 

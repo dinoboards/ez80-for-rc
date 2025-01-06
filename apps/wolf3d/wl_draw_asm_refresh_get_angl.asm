@@ -173,7 +173,18 @@ _scale_post_calc_ycount:
 	mlt	de
 	add	hl, de
 
+	bit	7, h
+	jr	nz, yoffs_less_than_zero
+
+	ld	de, (iy+_drpm_postx)
+	add	hl, de
+
+store_yoffs:
 	ld	(iy+_drpm_yoffs), l
 	ld	(iy+_drpm_yoffs+1), h
 
 	ret
+
+yoffs_less_than_zero:
+	ld	hl, (iy+_drpm_postx)
+	jr	store_yoffs
