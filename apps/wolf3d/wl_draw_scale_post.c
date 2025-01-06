@@ -27,10 +27,9 @@ void __func_on_chip ScalePost() {
 
   scale_post_calc_ycount();
 
-  yoffs = ((view_height >> 1) - ywcount) * view_width;
   if (yoffs < 0)
     yoffs = 0;
-  yoffs += (int16_t)postx;
+  yoffs += postx;
 
   yendoffs = view_height / 2 + ywcount - 1;
   yw       = TEXTURESIZE - 1;

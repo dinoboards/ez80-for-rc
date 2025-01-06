@@ -95,12 +95,17 @@ less_than_270:
 	ret
 
 ; int scale_post_calc_ycount() {
-;   return wallheight[postx] >> 3;
+;   ???wallheight[postx] >> 3;
+
+;   yoffs = ((view_height >> 1) - ywcount) * view_width;
 ; }
 
 	.global	_scale_post_calc_ycount
 	.extern	_postx
 	.extern	_wallheight
+	.extern	_view_height
+	.extern	_view_width
+	.extern	_yoffs
 
 _scale_post_calc_ycount:
 	ld	hl, (_postx)		; retrieve 16bit value postx
@@ -139,15 +144,36 @@ _scale_post_calc_ycount:
 	inc	hl
 	ld	(hl), d
 
-	; ld	hl, (_viewheight)
+	ld	hl, (_view_height)
 
-	; srl	h		; hl = viewheight >> 1
-	; rr	l
+	srl	h			; hl = view_height >> 1
+	rr	l
 
-	; ld	de, (_ywcount)
-	; or	a
-	; sbc.sis	hl, de		; hl -= ywcount
+	ld	de, (_ywcount)
+	or	a
+	sbc.sis	hl, de			; hl -= ywcount
 
+	ld	bc, (_view_width)	; 8+
 
+;  Multiplies HL by BC and returns the 16-bit product hl.
+	ld	d, h
+	ld	e, c
+	mlt	de
+	ld	d, l
+	ld	h, b
+	mlt	hl
+	add	hl, de
+	ld	h, l
+	ld	l, 0
+	ld	e, c
+	mlt	de
+	add	hl, de
+
+	; call	mul_HL_BC_HL
+	ex	de, hl
+	ld	hl, _yoffs
+	ld	(hl), e
+	inc	hl
+	ld	(hl), d
 
 	ret
