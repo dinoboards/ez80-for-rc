@@ -1,5 +1,6 @@
 // WL_MAIN.C
 
+#include "wl_draw.h"
 #include <ez80.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -59,7 +60,6 @@ fixed    focallength;
 unsigned screenofs;
 int      viewscreenx, viewscreeny;
 uint16_t view_width;
-uint16_t view_height;
 uint24_t view_length;
 uint24_t view_half_length;
 short    centerx;
@@ -1180,18 +1180,18 @@ static void InitGame() {
 
 boolean SetViewSize(unsigned width, unsigned height) {
   printf("SetViewSize(%d,%d)\r\n", width, height);
-  view_width       = width;  //& ~15; // must be divisable by 16
-  view_height      = height; //& ~1; // must be even
-  view_length      = width * height;
-  view_half_length = view_length / 2;
-  centerx          = view_width / 2 - 1;
-  shootdelta       = view_width / 10;
+  view_width                 = width;  //& ~15; // must be divisable by 16
+  drawing_params.view_height = height; //& ~1; // must be even
+  view_length                = width * height;
+  view_half_length           = view_length / 2;
+  centerx                    = view_width / 2 - 1;
+  shootdelta                 = view_width / 10;
   printf("  centerx: %d, shootdelta: %d\r\n", centerx, shootdelta);
-  if (view_height == screenHeight)
+  if (drawing_params.view_height == screenHeight)
     viewscreenx = viewscreeny = screenofs = 0;
   else {
     viewscreenx = (screenWidth - view_width) / 2;
-    viewscreeny = (screenHeight - STATUSLINES - view_height) / 2;
+    viewscreeny = (screenHeight - STATUSLINES - drawing_params.view_height) / 2;
     screenofs   = viewscreeny * screenWidth + viewscreenx;
     printf("  viewscreenx: %d, viewscreeny: %d, screenofs: %d\r\n", viewscreenx, viewscreeny, screenofs);
   }
@@ -1208,24 +1208,24 @@ void ShowViewSize(int width) {
   int oldwidth, oldheight;
 
   oldwidth  = view_width;
-  oldheight = view_height;
+  oldheight = drawing_params.view_height;
 
   if (width == 21) {
-    view_width  = screenWidth;
-    view_height = screenHeight;
+    view_width                 = screenWidth;
+    drawing_params.view_height = screenHeight;
     VWB_Bar(0, 0, screenWidth, screenHeight, 0);
   } else if (width == 20) {
-    view_width  = screenWidth;
-    view_height = screenHeight - STATUSLINES;
+    view_width                 = screenWidth;
+    drawing_params.view_height = screenHeight - STATUSLINES;
     DrawPlayBorder();
   } else {
-    view_width  = width * 16;
-    view_height = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
+    view_width                 = width * 16;
+    drawing_params.view_height = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
     DrawPlayBorder();
   }
 
-  view_width  = oldwidth;
-  view_height = oldheight;
+  view_width                 = oldwidth;
+  drawing_params.view_height = oldheight;
 }
 
 void NewViewSize(int width) {

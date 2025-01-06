@@ -101,24 +101,21 @@ less_than_270:
 ; }
 
 	.global	_scale_post_calc_ycount
-	.extern	_postx
 	.extern	_wallheight
-	.extern	_view_height
 	.extern	_view_width
 
 	.extern	_drawing_params
+	.extern	_drpm_yd
+	.extern	_drpm_yoffs
+	.extern	_drpm_ywcount
+	.extern	_drpm_postx
+	.extern	_drpm_view_height
 
-yd	equ	0
-yendoffs
-	equ	2
-yoffs	equ	4
-yw	equ	6
-ywcount	equ	8
 
 _scale_post_calc_ycount:
 	ld	iy, _drawing_params
 
-	ld	hl, (_postx)		; retrieve 16bit value postx
+	ld	hl, (iy+_drpm_postx)		; retrieve 16 bit value postx
 	ld	de, 0
 
 	sla	l			; mlt by 2
@@ -144,18 +141,18 @@ _scale_post_calc_ycount:
 	ld	e, l
 	ld	d, h
 
-	ld	(iy+yd), e
-	ld	(iy+yd+1), d
+	ld	(iy+_drpm_yd), e
+	ld	(iy+_drpm_yd+1), d
 
-	ld	(iy+ywcount), e
-	ld	(iy+ywcount+1), d
+	ld	(iy+_drpm_ywcount), e
+	ld	(iy+_drpm_ywcount+1), d
 
-	ld	hl, (_view_height)
+	ld	hl, (iy+_drpm_view_height)
 
 	srl	h			; hl = view_height >> 1
 	rr	l
 
-	ld	de, (iy+ywcount)
+	ld	de, (iy+_drpm_ywcount)
 	or	a
 	sbc.sis	hl, de			; hl -= ywcount
 
@@ -175,7 +172,7 @@ _scale_post_calc_ycount:
 	mlt	de
 	add	hl, de
 
-	ld	(iy+yoffs), l
-	ld	(iy+yoffs+1), h
+	ld	(iy+_drpm_yoffs), l
+	ld	(iy+_drpm_yoffs+1), h
 
 	ret

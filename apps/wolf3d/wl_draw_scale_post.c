@@ -18,8 +18,7 @@
 */
 extern byte *vbuf;
 
-extern byte   *postsource;
-extern int16_t postx;
+extern byte *postsource;
 
 extern void scale_post_calc_ycount();
 
@@ -30,12 +29,12 @@ void __func_on_chip ScalePost() {
 
   if (drawing_params.yoffs < 0)
     drawing_params.yoffs = 0;
-  drawing_params.yoffs += postx;
+  drawing_params.yoffs += drawing_params.postx;
 
-  drawing_params.yendoffs = view_height / 2 + drawing_params.ywcount - 1;
+  drawing_params.yendoffs = drawing_params.view_height / 2 + drawing_params.ywcount - 1;
   drawing_params.yw       = TEXTURESIZE - 1;
 
-  while (drawing_params.yendoffs >= view_height) {
+  while (drawing_params.yendoffs >= drawing_params.view_height) {
     drawing_params.ywcount -= TEXTURESIZE / 2;
     while (drawing_params.ywcount <= 0) {
       drawing_params.ywcount += drawing_params.yd;
@@ -49,7 +48,7 @@ void __func_on_chip ScalePost() {
 
   grb = postsource[drawing_params.yw];
 
-  drawing_params.yendoffs = drawing_params.yendoffs * view_width + postx;
+  drawing_params.yendoffs = drawing_params.yendoffs * view_width + drawing_params.postx;
   while (drawing_params.yoffs <= drawing_params.yendoffs) {
     vbuf[drawing_params.yendoffs] = grb;
     drawing_params.ywcount -= TEXTURESIZE / 2;

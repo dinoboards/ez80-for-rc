@@ -257,8 +257,7 @@ extern uint16_t __func_on_chip CalcHeight();
 ===================
 */
 
-byte   *postsource;
-int16_t postx;
+byte *postsource;
 
 extern void __func_on_chip ScalePost();
 
@@ -286,27 +285,27 @@ void __func_on_chip HitVertWall(void) {
   if (lastside == 1 && lastintercept == xtile && lasttilehit == tilehit && !(lasttilehit & 0x40)) {
     if ((pixx & 3) && texture == lasttexture) {
       ScalePost();
-      postx            = pixx;
-      wallheight[pixx] = wallheight[pixx - 1];
+      drawing_params.postx = pixx;
+      wallheight[pixx]     = wallheight[pixx - 1];
       return;
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
     postsource += texture - lasttexture;
-    postx       = pixx;
-    lasttexture = texture;
+    drawing_params.postx = pixx;
+    lasttexture          = texture;
     return;
   }
 
   if (lastside != -1)
     ScalePost();
 
-  lastside         = 1;
-  lastintercept    = xtile;
-  lasttilehit      = tilehit;
-  lasttexture      = texture;
-  wallheight[pixx] = CalcHeight();
-  postx            = pixx;
+  lastside             = 1;
+  lastintercept        = xtile;
+  lasttilehit          = tilehit;
+  lasttexture          = texture;
+  wallheight[pixx]     = CalcHeight();
+  drawing_params.postx = pixx;
 
   if (tilehit & 0x40) { // check for adjacent doors
     ytile = (short)(fixed_to_short(yintercept));
@@ -344,27 +343,27 @@ void __func_on_chip HitHorizWall(void) {
   if (lastside == 0 && lastintercept == ytile && lasttilehit == tilehit && !(lasttilehit & 0x40)) {
     if ((pixx & 3) && texture == lasttexture) {
       ScalePost();
-      postx            = pixx;
-      wallheight[pixx] = wallheight[pixx - 1];
+      drawing_params.postx = pixx;
+      wallheight[pixx]     = wallheight[pixx - 1];
       return;
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
     postsource += texture - lasttexture;
-    postx       = pixx;
-    lasttexture = texture;
+    drawing_params.postx = pixx;
+    lasttexture          = texture;
     return;
   }
 
   if (lastside != -1)
     ScalePost();
 
-  lastside         = 0;
-  lastintercept    = ytile;
-  lasttilehit      = tilehit;
-  lasttexture      = texture;
-  wallheight[pixx] = CalcHeight();
-  postx            = pixx;
+  lastside             = 0;
+  lastintercept        = ytile;
+  lasttilehit          = tilehit;
+  lasttexture          = texture;
+  wallheight[pixx]     = CalcHeight();
+  drawing_params.postx = pixx;
 
   if (tilehit & 0x40) { // check for adjacent doors
     xtile = (short)(fixed_to_short(xintercept));
@@ -399,26 +398,26 @@ void __func_on_chip HitHorizDoor(void) {
   if (lasttilehit == tilehit) {
     if ((pixx & 3) && texture == lasttexture) {
       ScalePost();
-      postx            = pixx;
-      wallheight[pixx] = wallheight[pixx - 1];
+      drawing_params.postx = pixx;
+      wallheight[pixx]     = wallheight[pixx - 1];
       return;
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
     postsource += texture - lasttexture;
-    postx       = pixx;
-    lasttexture = texture;
+    drawing_params.postx = pixx;
+    lasttexture          = texture;
     return;
   }
 
   if (lastside != -1)
     ScalePost();
 
-  lastside         = 2;
-  lasttilehit      = tilehit;
-  lasttexture      = texture;
-  wallheight[pixx] = CalcHeight();
-  postx            = pixx;
+  lastside             = 2;
+  lasttilehit          = tilehit;
+  lasttexture          = texture;
+  wallheight[pixx]     = CalcHeight();
+  drawing_params.postx = pixx;
 
   switch (doorobjlist[doornum].lock) {
   case dr_normal:
@@ -459,26 +458,26 @@ void __func_on_chip HitVertDoor(void) {
   if (lasttilehit == tilehit) {
     if ((pixx & 3) && texture == lasttexture) {
       ScalePost();
-      postx            = pixx;
-      wallheight[pixx] = wallheight[pixx - 1];
+      drawing_params.postx = pixx;
+      wallheight[pixx]     = wallheight[pixx - 1];
       return;
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
     postsource += texture - lasttexture;
-    postx       = pixx;
-    lasttexture = texture;
+    drawing_params.postx = pixx;
+    lasttexture          = texture;
     return;
   }
 
   if (lastside != -1)
     ScalePost();
 
-  lastside         = 2;
-  lasttilehit      = tilehit;
-  lasttexture      = texture;
-  wallheight[pixx] = CalcHeight();
-  postx            = pixx;
+  lastside             = 2;
+  lasttilehit          = tilehit;
+  lasttexture          = texture;
+  wallheight[pixx]     = CalcHeight();
+  drawing_params.postx = pixx;
 
   switch (doorobjlist[doornum].lock) {
   case dr_normal:
@@ -610,7 +609,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
 
   pixheight = scale * SPRITESCALEFACTOR;
   actx      = xcenter - scale;
-  upperedge = view_height / 2 - scale;
+  upperedge = drawing_params.view_height / 2 - scale;
 
   cmdptr = (word *)shape->dataofs;
 
@@ -658,8 +657,8 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
                 if (scrstarty < 0)
                   scrstarty = 0;
 
-                if (screndy > view_height)
-                  screndy = view_height, j = endy;
+                if (screndy > drawing_params.view_height)
+                  screndy = drawing_params.view_height, j = endy;
 
                 while (scrstarty < screndy) {
                   *vmem = color;
@@ -695,7 +694,7 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
   scale     = height >> 1;
   pixheight = scale * SPRITESCALEFACTOR;
   actx      = xcenter - scale;
-  upperedge = view_height / 2 - scale;
+  upperedge = drawing_params.view_height / 2 - scale;
 
   cmdptr = shape->dataofs;
 
@@ -732,8 +731,8 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
               col = ((byte *)shape)[newstart + j];
               if (scrstarty < 0)
                 scrstarty = 0;
-              if (screndy > view_height)
-                screndy = view_height, j = endy;
+              if (screndy > drawing_params.view_height)
+                screndy = drawing_params.view_height, j = endy;
 
               while (scrstarty < screndy) {
                 *vmem = col;
@@ -888,7 +887,7 @@ void DrawPlayerWeapon(void) {
   if (gamestate.victoryflag) {
 #ifndef APOGEE_1_0
     if (player->state == &s_deathcam && (GetTimeCount() & 32))
-      SimpleScaleShape(view_width / 2, SPR_DEATHCAM, view_height + 1);
+      SimpleScaleShape(view_width / 2, SPR_DEATHCAM, drawing_params.view_height + 1);
 #endif
     return;
   }
@@ -896,11 +895,11 @@ void DrawPlayerWeapon(void) {
 
   if ((int)gamestate.weapon != -1) {
     shapenum = weaponscale[gamestate.weapon] + gamestate.weaponframe;
-    SimpleScaleShape(view_width / 2, shapenum, view_height + 1);
+    SimpleScaleShape(view_width / 2, shapenum, drawing_params.view_height + 1);
   }
 
   if (demorecord || demoplayback)
-    SimpleScaleShape(view_width / 2, SPR_DEMO, view_height + 1);
+    SimpleScaleShape(view_width / 2, SPR_DEMO, drawing_params.view_height + 1);
 }
 
 //==========================================================================
@@ -1321,7 +1320,7 @@ void WallRefresh(void) {
   ypartialdown = viewy & (TILEGLOBAL - 1);
   ypartialup   = TILEGLOBAL - ypartialdown;
 
-  min_wallheight = view_height;
+  min_wallheight = drawing_params.view_height;
   lastside       = -1; // the first pixel is on a new wall
   AsmRefresh();
 
