@@ -1,5 +1,5 @@
 
-	section	.text, "ax", @progbits
+	section	.text_on_chip, "ax", @progbits
 	.global	_asm_refresh_get_angl
 	.global	_asm_refresh_find_quarter
 	.extern	_pixx
@@ -112,6 +112,10 @@ less_than_270:
 	.extern	_drpm_view_height
 	.extern	_drpm_view_width
 
+TEXTURESIZE
+	equ	64
+TEXTURE_SIZE_HALF
+	equ	TEXTURESIZE/2
 
 _scale_post_calc_ycount:
 	ld	iy, _drawing_params
@@ -193,6 +197,59 @@ store_yoffs:
 
 	ld	(iy+_drpm_yw), (TEXTURESIZE-1)
 	ld	(iy+_drpm_yw+1), 0
+
+	ld	hl, (iy+_drpm_yendoffs)		; hl yendoffs
+	ld	de, (iy+_drpm_view_height)	; de view_height
+	ld	bc, (iy+_drpm_yw)		; bc yw
+
+	exx
+	ld	hl, (iy+_drpm_ywcount)		; hl' ywcount
+	ld	de, TEXTURE_SIZE_HALF		; de' TEXTURESIZE / 2
+	ld	bc, (iy+_drpm_yd)		; bc' yd
+	exx
+
+	;  while (drawing_params.yendoffs >= drawing_params.view_height)
+outer_loop:
+	or	a
+	sbc.sis	hl, de				; yendoffs -= view_height
+	jr	c, outer_loop_exit
+	add	hl, de				; yendoffs += view_height
+	dec	hl				; yendoffs--
+
+
+inner_loop:
+	exx
+	; drawing_params.ywcount -= TEXTURESIZE / 2;
+	or	a
+	sbc.sis	hl, de				; ywcount -= TEXTURESIZE / 2
+
+	; while (drawing_params.ywcount <= 0)
+	jr	c, inner_loop_continue
+	jr	z, inner_loop_continue
+
+	exx
+	jr	outer_loop
+
+	; be here if Z
+	; be here if C, de(32) > hl(YWCOUNT)
+
+inner_loop_continue:
+
+	add	hl, bc				; ywcount + yd
+	exx
+	dec	bc				; yw--
+	jr	inner_loop
+
+outer_loop_exit:
+	add	hl, de				; yendoffs += view_height
+	ld	(iy+_drpm_yendoffs), l
+	ld	(iy+_drpm_yendoffs+1), h
+	ld	(iy+_drpm_yw), c
+	ld	(iy+_drpm_yw+1), b
+
+	exx
+	ld	(iy+_drpm_ywcount), l
+	ld	(iy+_drpm_ywcount+1), h
 
 	ret
 
