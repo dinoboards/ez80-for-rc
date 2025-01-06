@@ -31,7 +31,7 @@ void __func_on_chip ScalePost() {
     drawing_params.yoffs = 0;
   drawing_params.yoffs += drawing_params.postx;
 
-  drawing_params.yendoffs = drawing_params.view_height / 2 + drawing_params.ywcount - 1;
+  drawing_params.yendoffs = drawing_params.view_half_height + drawing_params.ywcount - 1;
   drawing_params.yw       = TEXTURESIZE - 1;
 
   while (drawing_params.yendoffs >= drawing_params.view_height) {
@@ -48,7 +48,7 @@ void __func_on_chip ScalePost() {
 
   grb = postsource[drawing_params.yw];
 
-  drawing_params.yendoffs = drawing_params.yendoffs * view_width + drawing_params.postx;
+  drawing_params.yendoffs = drawing_params.yendoffs * drawing_params.view_width + drawing_params.postx;
   while (drawing_params.yoffs <= drawing_params.yendoffs) {
     vbuf[drawing_params.yendoffs] = grb;
     drawing_params.ywcount -= TEXTURESIZE / 2;
@@ -61,6 +61,6 @@ void __func_on_chip ScalePost() {
         break;
       grb = postsource[drawing_params.yw];
     }
-    drawing_params.yendoffs -= view_width;
+    drawing_params.yendoffs -= drawing_params.view_width;
   }
 }

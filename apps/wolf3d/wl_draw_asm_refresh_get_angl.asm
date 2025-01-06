@@ -110,6 +110,7 @@ less_than_270:
 	.extern	_drpm_ywcount
 	.extern	_drpm_postx
 	.extern	_drpm_view_height
+	.extern	_drpm_view_width
 
 
 _scale_post_calc_ycount:
@@ -156,7 +157,7 @@ _scale_post_calc_ycount:
 	or	a
 	sbc.sis	hl, de			; hl -= ywcount
 
-	ld	bc, (_view_width)	; 8+
+	ld	bc, (iy+_drpm_view_width)
 
 ;  Multiplies HL by BC and returns the 16-bit product hl.
 	ld	d, h

@@ -609,14 +609,14 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
 
   pixheight = scale * SPRITESCALEFACTOR;
   actx      = xcenter - scale;
-  upperedge = drawing_params.view_height / 2 - scale;
+  upperedge = drawing_params.view_half_height - scale;
 
   cmdptr = (word *)shape->dataofs;
 
   for (i = shape->leftpix, pixcnt = i * pixheight, rpix = (pixcnt >> 6) + actx; i <= shape->rightpix; i++, cmdptr++) {
     lpix = rpix;
 
-    if (lpix >= view_width)
+    if (lpix >= drawing_params.view_width)
       break;
 
     pixcnt += pixheight;
@@ -626,8 +626,8 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
       if (lpix < 0)
         lpix = 0;
 
-      if (rpix > view_width)
-        rpix = view_width, i = shape->rightpix + 1;
+      if (rpix > drawing_params.view_width)
+        rpix = drawing_params.view_width, i = shape->rightpix + 1;
 
       cline = (byte *)shape + *cmdptr;
 
@@ -645,7 +645,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
             if (screndy < 0)
               vmem = vbuf + lpix;
             else
-              vmem = vbuf + screndy * view_width + lpix;
+              vmem = vbuf + screndy * drawing_params.view_width + lpix;
 
             for (; j < endy; j++) {
               scrstarty = screndy;
@@ -662,7 +662,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
 
                 while (scrstarty < screndy) {
                   *vmem = color;
-                  vmem += view_width;
+                  vmem += drawing_params.view_width;
                   scrstarty++;
                 }
               }
@@ -694,21 +694,21 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
   scale     = height >> 1;
   pixheight = scale * SPRITESCALEFACTOR;
   actx      = xcenter - scale;
-  upperedge = drawing_params.view_height / 2 - scale;
+  upperedge = drawing_params.view_half_height - scale;
 
   cmdptr = shape->dataofs;
 
   for (i = shape->leftpix, pixcnt = i * pixheight, rpix = (pixcnt >> 6) + actx; i <= shape->rightpix; i++, cmdptr++) {
     lpix = rpix;
-    if (lpix >= view_width)
+    if (lpix >= drawing_params.view_width)
       break;
     pixcnt += pixheight;
     rpix = (pixcnt >> 6) + actx;
     if (lpix != rpix && rpix > 0) {
       if (lpix < 0)
         lpix = 0;
-      if (rpix > view_width)
-        rpix = view_width, i = shape->rightpix + 1;
+      if (rpix > drawing_params.view_width)
+        rpix = drawing_params.view_width, i = shape->rightpix + 1;
       cline = (byte *)shape + *cmdptr;
       while (lpix < rpix) {
         line = cline;
@@ -722,7 +722,7 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
           if (screndy < 0)
             vmem = vbuf + lpix;
           else
-            vmem = vbuf + screndy * view_width + lpix;
+            vmem = vbuf + screndy * drawing_params.view_width + lpix;
           for (; j < endy; j++) {
             scrstarty = screndy;
             ycnt += pixheight;
@@ -736,7 +736,7 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
 
               while (scrstarty < screndy) {
                 *vmem = col;
-                vmem += view_width;
+                vmem += drawing_params.view_width;
                 scrstarty++;
               }
             }
@@ -887,7 +887,7 @@ void DrawPlayerWeapon(void) {
   if (gamestate.victoryflag) {
 #ifndef APOGEE_1_0
     if (player->state == &s_deathcam && (GetTimeCount() & 32))
-      SimpleScaleShape(view_width / 2, SPR_DEATHCAM, drawing_params.view_height + 1);
+      SimpleScaleShape(drawing_params.view_width / 2, SPR_DEATHCAM, drawing_params.view_height + 1);
 #endif
     return;
   }
@@ -895,11 +895,11 @@ void DrawPlayerWeapon(void) {
 
   if ((int)gamestate.weapon != -1) {
     shapenum = weaponscale[gamestate.weapon] + gamestate.weaponframe;
-    SimpleScaleShape(view_width / 2, shapenum, drawing_params.view_height + 1);
+    SimpleScaleShape(drawing_params.view_width / 2, shapenum, drawing_params.view_height + 1);
   }
 
   if (demorecord || demoplayback)
-    SimpleScaleShape(view_width / 2, SPR_DEMO, drawing_params.view_height + 1);
+    SimpleScaleShape(drawing_params.view_width / 2, SPR_DEMO, drawing_params.view_height + 1);
 }
 
 //==========================================================================
@@ -951,7 +951,7 @@ uint24_t xpartial __data_on_chip, ypartial __data_on_chip;
 void AsmRefresh() {
   boolean playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
-  for (pixx = 0; pixx < view_width; pixx++) {
+  for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     angl = asm_refresh_get_angl();
 
     switch (asm_refresh_find_quarter()) {

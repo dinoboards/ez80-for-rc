@@ -1198,7 +1198,6 @@ extern int   mapon;
 extern boolean  loadedgame;
 extern fixed    focallength;
 extern int      viewscreenx, viewscreeny;
-extern uint16_t view_width;
 extern uint24_t view_length;
 extern uint24_t view_half_length;
 extern short    centerx;

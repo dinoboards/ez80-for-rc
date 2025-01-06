@@ -736,7 +736,7 @@ void DrawPlayBorderSides(void) {
 
   const int sw = screenWidth;
   const int sh = screenHeight;
-  const int vw = view_width;
+  const int vw = drawing_params.view_width;
   const int vh = drawing_params.view_height;
   const int px = scaleFactor; // size of one "pixel"
 
@@ -821,27 +821,27 @@ void DrawPlayBorder(void) {
 
   VWB_Bar(0, 0, screenWidth, screenHeight - px * STATUSLINES, bordercol);
 
-  const int xl = screenWidth / 2 - view_width / 2;
+  const int xl = screenWidth / 2 - drawing_params.view_width / 2;
   const int yl = (screenHeight - px * STATUSLINES - drawing_params.view_height) / 2;
   printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
-  VWB_Bar(xl, yl, view_width, drawing_params.view_height, 0);
+  VWB_Bar(xl, yl, drawing_params.view_width, drawing_params.view_height, 0);
   VW_UpdateScreen(); // test
 
   if (xl != 0) {
     printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
     // Paint game view border lines
-    VWB_Bar(xl - px, yl - px, view_width + px, px, 0);                                         // upper border
-    VWB_Bar(xl, yl + drawing_params.view_height, view_width + px, px, bordercol - 2);          // lower border
-    VWB_Bar(xl - px, yl - px, px, drawing_params.view_height + px, 0);                         // left border
-    VWB_Bar(xl + view_width, yl - px, px, drawing_params.view_height + 2 * px, bordercol - 2); // right border
-    VWB_Bar(xl - px, yl + drawing_params.view_height, px, px, bordercol - 3);                  // lower left highlight
+    VWB_Bar(xl - px, yl - px, drawing_params.view_width + px, px, 0);                                         // upper border
+    VWB_Bar(xl, yl + drawing_params.view_height, drawing_params.view_width + px, px, bordercol - 2);          // lower border
+    VWB_Bar(xl - px, yl - px, px, drawing_params.view_height + px, 0);                                        // left border
+    VWB_Bar(xl + drawing_params.view_width, yl - px, px, drawing_params.view_height + 2 * px, bordercol - 2); // right border
+    VWB_Bar(xl - px, yl + drawing_params.view_height, px, px, bordercol - 3); // lower left highlight
   } else {
     printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 
     // Just paint a lower border line
-    VWB_Bar(0, yl + drawing_params.view_height, view_width, px, bordercol - 2); // lower border
+    VWB_Bar(0, yl + drawing_params.view_height, drawing_params.view_width, px, bordercol - 2); // lower border
   }
 
   printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
@@ -1236,11 +1236,11 @@ void Died(void) {
     VH_UpdateScreen();
 
   printf("%s:%d\r\n", __FILE__, __LINE__);
-  VL_Bar(viewscreenx, viewscreeny, view_width, drawing_params.view_height, 4);
+  VL_Bar(viewscreenx, viewscreeny, drawing_params.view_width, drawing_params.view_height, 4);
 
   IN_ClearKeysDown();
 
-  FizzleFade(screenBuffer, viewscreenx, viewscreeny, view_width, drawing_params.view_height, 70, false);
+  FizzleFade(screenBuffer, viewscreenx, viewscreeny, drawing_params.view_width, drawing_params.view_height, 70, false);
 
   IN_UserInput(100);
   SD_WaitSoundDone();
