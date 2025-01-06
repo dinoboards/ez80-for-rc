@@ -1,4 +1,6 @@
+#include "wl_draw.h"
 #include <ez80.h>
+
 // WL_DRAW.C
 
 #include "wl_def.h"
@@ -19,48 +21,47 @@ extern byte *vbuf;
 extern byte   *postsource;
 extern int16_t postx;
 
-extern void     scale_post_calc_ycount();
-int16_t ywcount __data_on_chip, yoffs __data_on_chip, yw __data_on_chip, yd __data_on_chip, yendoffs __data_on_chip;
+extern void scale_post_calc_ycount();
 
 void __func_on_chip ScalePost() {
   uint8_t grb;
 
   scale_post_calc_ycount();
 
-  if (yoffs < 0)
-    yoffs = 0;
-  yoffs += postx;
+  if (drawing_params.yoffs < 0)
+    drawing_params.yoffs = 0;
+  drawing_params.yoffs += postx;
 
-  yendoffs = view_height / 2 + ywcount - 1;
-  yw       = TEXTURESIZE - 1;
+  drawing_params.yendoffs = view_height / 2 + drawing_params.ywcount - 1;
+  drawing_params.yw       = TEXTURESIZE - 1;
 
-  while (yendoffs >= view_height) {
-    ywcount -= TEXTURESIZE / 2;
-    while (ywcount <= 0) {
-      ywcount += yd;
-      yw--;
+  while (drawing_params.yendoffs >= view_height) {
+    drawing_params.ywcount -= TEXTURESIZE / 2;
+    while (drawing_params.ywcount <= 0) {
+      drawing_params.ywcount += drawing_params.yd;
+      drawing_params.yw--;
     }
-    yendoffs--;
+    drawing_params.yendoffs--;
   }
-  if (yw < 0) {
+  if (drawing_params.yw < 0) {
     return;
   }
 
-  grb = postsource[yw];
+  grb = postsource[drawing_params.yw];
 
-  yendoffs = yendoffs * view_width + postx;
-  while (yoffs <= yendoffs) {
-    vbuf[yendoffs] = grb;
-    ywcount -= TEXTURESIZE / 2;
-    if (ywcount <= 0) {
+  drawing_params.yendoffs = drawing_params.yendoffs * view_width + postx;
+  while (drawing_params.yoffs <= drawing_params.yendoffs) {
+    vbuf[drawing_params.yendoffs] = grb;
+    drawing_params.ywcount -= TEXTURESIZE / 2;
+    if (drawing_params.ywcount <= 0) {
       do {
-        ywcount += yd;
-        yw--;
-      } while (ywcount <= 0);
-      if (yw < 0)
+        drawing_params.ywcount += drawing_params.yd;
+        drawing_params.yw--;
+      } while (drawing_params.ywcount <= 0);
+      if (drawing_params.yw < 0)
         break;
-      grb = postsource[yw];
+      grb = postsource[drawing_params.yw];
     }
-    yendoffs -= view_width;
+    drawing_params.yendoffs -= view_width;
   }
 }

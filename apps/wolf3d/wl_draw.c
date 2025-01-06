@@ -1,3 +1,4 @@
+#include "wl_draw.h"
 #include <ez80.h>
 // WL_DRAW.C
 
@@ -54,6 +55,8 @@ fixed *costable = sintable + (ANGLES / 4);
 fixed viewx, viewy; // the focal point
 short viewangle;
 fixed viewsin, viewcos;
+
+drawing_params_t drawing_params __data_on_chip;
 
 void TransformActor(objtype *ob);
 void BuildTables(void);
