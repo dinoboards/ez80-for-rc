@@ -27,8 +27,8 @@ void __func_on_chip ScalePost() {
 
   scale_post_calc_ycount();
 
-  drawing_params.yendoffs = drawing_params.view_half_height + drawing_params.ywcount - 1;
-  drawing_params.yw       = TEXTURESIZE - 1;
+  // drawing_params.yendoffs = drawing_params.view_half_height + drawing_params.ywcount - 1;
+  // drawing_params.yw       = TEXTURESIZE - 1;
 
   while (drawing_params.yendoffs >= drawing_params.view_height) {
     drawing_params.ywcount -= TEXTURESIZE / 2;
@@ -38,6 +38,7 @@ void __func_on_chip ScalePost() {
     }
     drawing_params.yendoffs--;
   }
+
   if (drawing_params.yw < 0) {
     return;
   }

@@ -194,6 +194,9 @@ extern uint8_t signon_default_colour;
 
 #define TEXTURESHIFT 6
 #define TEXTURESIZE  (1 << TEXTURESHIFT)
+asm("TEXTURESIZE equ (1 << 6)");
+asm(".global TEXTURESIZE");
+
 // #define TEXTUREFROMFIXEDSHIFT 4
 static inline int32_t TextureFromFixedShift(fixed a) { return sr_s32_s32_4(a); }
 

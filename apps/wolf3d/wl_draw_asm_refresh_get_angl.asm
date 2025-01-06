@@ -183,6 +183,17 @@ store_yoffs:
 	ld	(iy+_drpm_yoffs), l
 	ld	(iy+_drpm_yoffs+1), h
 
+	; drawing_params.yendoffs = drawing_params.view_half_height + drawing_params.ywcount - 1;
+	ld	hl, (iy+_drpm_view_half_height)
+	ld	de, (iy+_drpm_ywcount)
+	add	hl, de
+	dec	hl
+	ld	(iy+_drpm_yendoffs), l
+	ld	(iy+_drpm_yendoffs+1), h
+
+	ld	(iy+_drpm_yw), (TEXTURESIZE-1)
+	ld	(iy+_drpm_yw+1), 0
+
 	ret
 
 yoffs_less_than_zero:
