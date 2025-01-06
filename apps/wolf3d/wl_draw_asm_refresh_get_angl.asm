@@ -157,7 +157,6 @@ _scale_post_calc_ycount:
 	srl	h			; hl = view_height >> 1
 	rr	l
 
-	ld	de, (iy+_drpm_ywcount)
 	or	a
 	sbc.sis	hl, de			; hl -= ywcount
 
@@ -211,6 +210,7 @@ store_yoffs:
 	;  while (drawing_params.yendoffs >= drawing_params.view_height)
 outer_loop:
 	or	a
+outer_loop1:
 	sbc.sis	hl, de				; yendoffs -= view_height
 	jr	c, outer_loop_exit
 	add	hl, de				; yendoffs += view_height
@@ -228,7 +228,7 @@ inner_loop:
 	jr	z, inner_loop_continue
 
 	exx
-	jr	outer_loop
+	jr	outer_loop1
 
 	; be here if Z
 	; be here if C, de(32) > hl(YWCOUNT)
@@ -250,6 +250,7 @@ outer_loop_exit:
 	exx
 	ld	(iy+_drpm_ywcount), l
 	ld	(iy+_drpm_ywcount+1), h
+
 
 	ret
 

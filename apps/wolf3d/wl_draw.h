@@ -10,12 +10,12 @@
   asm(".global _drpm_" #fff);
 
 typedef struct drawing_params {
-  int16_t yd;       /* 0-1 */
-  int16_t yendoffs; /* 2-3 */
-  int16_t yoffs;    /* 4-5 */
-  int16_t yw;       /* 6-7 */
-  int16_t ywcount;  /* 8-9 */
-  int16_t postx;    /* 10-11 */
+  int16_t yd;       /* 0-1   local to ScalePost */
+  int16_t yendoffs; /* 2-3  */
+  int16_t yoffs;    /* 4-5  local to ScalePost */
+  int16_t yw;       /* 6-7  local to ScalePost */
+  int16_t ywcount;  /* 8-9  local to ScalePost */
+  int16_t postx;    /* 10-11 local to ScalePost */
 
   // projection variables
   uint16_t view_height;      /* 12-13 */
