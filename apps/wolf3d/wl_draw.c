@@ -1067,9 +1067,9 @@ void AsmRefresh() {
         } else {
           if (tilehit == 64) {
             if (pwalldir == di_west || pwalldir == di_east) {
-              fixed yintbuf;
-              int   pwallposnorm;
-              int   pwallposinv;
+              fixed   yintbuf;
+              int16_t pwallposnorm;
+              int16_t pwallposinv;
               if (pwalldir == di_west) {
                 pwallposnorm = 64 - pwallpos;
                 pwallposinv  = pwallpos;
@@ -1081,12 +1081,7 @@ void AsmRefresh() {
                   (pwalldir == di_west && !(xtile == pwallx && (fixed_to_short(yintercept)) == pwally))
 
               ) {
-                // ystep' = ystep / 64K
-                // pwallpsnorm' = pwallposnorm / 1K
-                //((ystep'*64K) * pwallpsnorm'*1k) / 64
-                //(64K*1K)/64 => 1M
-                // fixed point value there fore is: 1M/64K => 16
-                // so is this actually? yintercept + ystep' * pwallpsnorm' * 16??
+                // yintercept' += ystep' * pwallpsnorm' * 16??
                 yintbuf = yintercept + fixed_by_wallpos_by_16(ystep * pwallposnorm);
                 if ((fixed_to_short(yintbuf)) != (fixed_to_short(yintercept)))
                   goto passvert;
@@ -1108,7 +1103,7 @@ void AsmRefresh() {
                 HitVertWall();
               }
             } else {
-              int pwallposi = pwallpos;
+              int16_t pwallposi = pwallpos;
               if (pwalldir == di_north)
                 pwallposi = 64 - pwallpos;
               if ((pwalldir == di_south && (word)yintercept < (wallpos_to_fixed(pwallposi))) ||
@@ -1211,9 +1206,9 @@ void AsmRefresh() {
         } else {
           if (tilehit == 64) {
             if (pwalldir == di_north || pwalldir == di_south) {
-              fixed xintbuf;
-              int   pwallposnorm;
-              int   pwallposinv;
+              fixed   xintbuf;
+              int16_t pwallposnorm;
+              int16_t pwallposinv;
               if (pwalldir == di_north) {
                 pwallposnorm = 64 - pwallpos;
                 pwallposinv  = pwallpos;
@@ -1244,7 +1239,7 @@ void AsmRefresh() {
                 HitHorizWall();
               }
             } else {
-              int pwallposi = pwallpos;
+              int16_t pwallposi = pwallpos;
               if (pwalldir == di_west)
                 pwallposi = 64 - pwallpos;
               if ((pwalldir == di_east && (word)xintercept < (wallpos_to_fixed(pwallposi))) ||

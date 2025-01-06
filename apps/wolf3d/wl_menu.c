@@ -2798,7 +2798,7 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
   ControlInfo ci;
 
   which = item_i->curpos;
-  x     = item_i->x /* & -8*/;
+  x     = item_i->x;
   basey = item_i->y - 2;
   y     = basey + which * 13;
 

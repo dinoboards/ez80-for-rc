@@ -93,6 +93,24 @@ void test_shift_functions() {
     abort();
   }
 
+  // test extern int32_t sl_s16_s32_16(int16_t val);
+
+  int16_t e = 0x1234;
+  int32_t f = sl_s16_s32_16(e);
+  if (f != 0x12340000L) {
+    printf("9: sl_s16_s32_16(%x) = %lx\n", e, f);
+    abort();
+  }
+
+  // test extern int32_t sl_s16_s32_10(int16_t val);
+
+  e = 0x1234;
+  f = sl_s16_s32_10(e);
+  if (f != 0x0048D000L) {
+    printf("10: sl_s16_s32_10(%x) = %lx.  Should be %lx\n", e, f, (int32_t)e << 10);
+    abort();
+  }
+
   printf("All shift functions tests passed\n");
 }
 

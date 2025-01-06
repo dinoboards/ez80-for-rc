@@ -712,19 +712,7 @@ void CalcProjection(fixed focal) {
   // divide heightnumerator by a posts distance to get the posts height for
   // the heightbuffer.  The pixel height is height>>2
   //
-  // TILEGLOBAL = TILEGLOBAL' * 64K
-  // scale = scale' * 64K
-  // ((TILEGLOBAL' * 64K) * (scale' * 64K)) / 64
-  // heightnumerator' = TILEGLOBAL' * scale' * 1K
-  // heightnumerator = heightnumerator' * 64K
-  // heightnumerator = (64K * scale' * 64K)/64
-  // heightnumerator = (1K  * scale' * 64K)
-  // heightnumerator = scale * 1K
-  // heightnumerator = scale << 10
-  heightnumerator = scale << 10; // for 24 bit this does not need to change now
-
-  printf("heightnumerator: %ld\r\n", heightnumerator);
-  printf("       alt calc: %ld\r\n", (TILEGLOBAL * scale) >> 6);
+  heightnumerator = scale << 10;
 
   //
   // calculate the angle offset from view angle of each pixel's ray
