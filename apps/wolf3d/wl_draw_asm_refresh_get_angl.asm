@@ -111,13 +111,8 @@ less_than_270:
 	ld	a, 2
 	ret
 
-; int scale_post_calc_ycount() {
-;   ???wallheight[postx] >> 3;
-
-;   yoffs = ((view_height >> 1) - ywcount) * view_width;
-; }
-
-	.global	_scale_post_calc_ycount
+; uint8_t scale_post_asm()
+	.global	_scale_post_asm
 	.extern	_wallheight
 	.extern	_view_width
 
@@ -138,7 +133,7 @@ TEXTURE_SIZE_HALF
 	ld	hl, (iy+_drpm_postx)
 	jr	store_yoffs
 
-_scale_post_calc_ycount:
+_scale_post_asm:
 	ld	iy, _drawing_params
 
 	ld	hl, (iy+_drpm_postx)		; retrieve 16 bit value postx

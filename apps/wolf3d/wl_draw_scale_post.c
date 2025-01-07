@@ -18,12 +18,12 @@
 */
 extern byte *vbuf;
 
-extern uint8_t scale_post_calc_ycount();
+extern uint8_t scale_post_asm();
 
 void __func_on_chip ScalePost() {
   uint8_t grb;
 
-  grb = scale_post_calc_ycount();
+  grb = scale_post_asm();
 
   if (drawing_params.yw < 0)
     return;
