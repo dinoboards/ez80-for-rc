@@ -510,7 +510,7 @@ void GivePoints(int24_t points) {
 void DrawWeapon(void) {
   if (viewsize == 21 && ingame)
     return;
-  StatusDrawPic(SCREEN_WIDTH_FACTOR(32 * 8), 8, KNIFEPIC + gamestate.weapon);
+  StatusDrawPic(SCREEN_WIDTH_FACTOR(30 * 8), 8, KNIFEPIC + gamestate.weapon);
 }
 
 /*

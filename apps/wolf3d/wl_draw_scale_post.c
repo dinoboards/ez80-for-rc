@@ -18,20 +18,18 @@
 */
 extern byte *vbuf;
 
-extern byte *postsource;
-
-extern void scale_post_calc_ycount();
+extern uint8_t scale_post_calc_ycount();
 
 void __func_on_chip ScalePost() {
   uint8_t grb;
 
-  scale_post_calc_ycount();
+  grb = scale_post_calc_ycount();
 
   if (drawing_params.yw < 0) {
     return;
   }
 
-  grb = postsource[drawing_params.yw];
+  grb = drawing_params.postsource[drawing_params.yw];
 
   drawing_params.yendoffs = drawing_params.yendoffs * drawing_params.view_width + drawing_params.postx;
   while (drawing_params.yoffs <= drawing_params.yendoffs) {
@@ -44,7 +42,7 @@ void __func_on_chip ScalePost() {
       } while (drawing_params.ywcount <= 0);
       if (drawing_params.yw < 0)
         break;
-      grb = postsource[drawing_params.yw];
+      grb = drawing_params.postsource[drawing_params.yw];
     }
     drawing_params.yendoffs -= drawing_params.view_width;
   }

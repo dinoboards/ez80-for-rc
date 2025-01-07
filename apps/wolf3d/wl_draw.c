@@ -257,8 +257,6 @@ extern uint16_t __func_on_chip CalcHeight();
 ===================
 */
 
-byte *postsource;
-
 extern void __func_on_chip ScalePost();
 
 /*
@@ -291,7 +289,7 @@ void __func_on_chip HitVertWall(void) {
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
-    postsource += texture - lasttexture;
+    drawing_params.postsource += texture - lasttexture;
     drawing_params.postx = pixx;
     lasttexture          = texture;
     return;
@@ -316,7 +314,7 @@ void __func_on_chip HitVertWall(void) {
   } else
     wallpic = vertwall[tilehit];
 
-  postsource = PM_GetTexture(wallpic) + texture;
+  drawing_params.postsource = PM_GetTexture(wallpic) + texture;
 }
 
 /*
@@ -349,7 +347,7 @@ void __func_on_chip HitHorizWall(void) {
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
-    postsource += texture - lasttexture;
+    drawing_params.postsource += texture - lasttexture;
     drawing_params.postx = pixx;
     lasttexture          = texture;
     return;
@@ -374,7 +372,7 @@ void __func_on_chip HitHorizWall(void) {
   } else
     wallpic = horizwall[tilehit];
 
-  postsource = PM_GetTexture(wallpic) + texture;
+  drawing_params.postsource = PM_GetTexture(wallpic) + texture;
 }
 
 //==========================================================================
@@ -404,7 +402,7 @@ void __func_on_chip HitHorizDoor(void) {
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
-    postsource += texture - lasttexture;
+    drawing_params.postsource += texture - lasttexture;
     drawing_params.postx = pixx;
     lasttexture          = texture;
     return;
@@ -434,7 +432,7 @@ void __func_on_chip HitHorizDoor(void) {
     break;
   }
 
-  postsource = PM_GetTexture(doorpage) + texture;
+  drawing_params.postsource = PM_GetTexture(doorpage) + texture;
 }
 
 //==========================================================================
@@ -464,7 +462,7 @@ void __func_on_chip HitVertDoor(void) {
     }
     ScalePost();
     wallheight[pixx] = CalcHeight();
-    postsource += texture - lasttexture;
+    drawing_params.postsource += texture - lasttexture;
     drawing_params.postx = pixx;
     lasttexture          = texture;
     return;
@@ -494,7 +492,7 @@ void __func_on_chip HitVertDoor(void) {
     break;
   }
 
-  postsource = PM_GetTexture(doorpage) + texture;
+  drawing_params.postsource = PM_GetTexture(doorpage) + texture;
 }
 
 //==========================================================================

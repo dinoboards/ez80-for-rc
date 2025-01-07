@@ -21,6 +21,10 @@ typedef struct drawing_params {
   uint16_t view_height;      /* 12-13 */
   uint16_t view_width;       /* 14-15 */
   uint16_t view_half_height; /* 16-17 */
+
+  // texture pointer
+  uint8_t *postsource; /* 18-20 */
+
 } drawing_params_t;
 
 EXPORT_OFFSET(yd, 0);                /* 0-1 */
@@ -32,6 +36,7 @@ EXPORT_OFFSET(postx, 10);            /* 10-11 */
 EXPORT_OFFSET(view_height, 12);      /* 12-13 */
 EXPORT_OFFSET(view_width, 14);       /* 14-15 */
 EXPORT_OFFSET(view_half_height, 16); /* 16-17 */
+EXPORT_OFFSET(postsource, 18);       /* 18-20 */
 
 extern drawing_params_t drawing_params __data_on_chip;
 

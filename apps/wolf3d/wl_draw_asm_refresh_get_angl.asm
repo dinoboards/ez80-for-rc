@@ -199,7 +199,10 @@ store_yoffs:
 
 	ld	hl, (iy+_drpm_yendoffs)		; hl yendoffs
 	ld	de, (iy+_drpm_view_height)	; de view_height
-	ld	bc, (iy+_drpm_yw)		; bc yw
+
+	ld	bc, 0
+	ld	c, (iy+_drpm_yw)		; bc yw
+	ld	b, (iy+_drpm_yw+1)		; ubC <= 0
 
 	exx
 	ld	hl, (iy+_drpm_ywcount)		; hl' ywcount
@@ -247,11 +250,48 @@ outer_loop_exit:
 	ld	(iy+_drpm_yw), c
 	ld	(iy+_drpm_yw+1), b
 
+	; ld	hl, (iy+_drpm_postsource)
+	; add	hl, bc
+
+
 	exx
 	ld	(iy+_drpm_ywcount), l
 	ld	(iy+_drpm_ywcount+1), h
+; 	exx
 
+; 	ld	de, (iy+_dprm_view_width)
 
+; ;  Multiplies HL by BC and returns the 16-bit product hl.
+; 	ld	d, h				; yendoffs *= view_width
+; 	ld	e, c
+; 	mlt	de
+; 	ld	d, l
+; 	ld	h, b
+; 	mlt	hl
+; 	add	hl, de
+; 	ld	h, l
+; 	ld	l, 0
+; 	ld	e, c
+; 	mlt	de
+; 	add	hl, de
+
+; 	ld	de, (iy+_drpm_postx)		; yendoffs += postx
+; 	add	hl, de
+
+; 	exx					; de < yendoffs, hl <= postx
+
+;  	;while (drawing_params.yoffs <= drawing_params.yendoffs) {
+; 	ld	hl, (iy+_drpm_yoffs)
+; 	or	a
+; 	sbc	hl, de
+
+; 	jr	z, inner_loop2_continue
+; 	jr	c, inner_loop2_continue
+; 	jr	outer_loop_2_exit
+
+; inner_loop2_continue:
+; 	; be here if C
+; 	; be here if Z
 	ret
 
 yoffs_less_than_zero:
