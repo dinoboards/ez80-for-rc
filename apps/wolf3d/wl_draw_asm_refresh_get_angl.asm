@@ -7,6 +7,23 @@
 	.extern	_midangle
 	.assume	adl=1
 
+; Multiplies HL by BC and returns the 16-bit product hl.
+; corrupts DE
+.macro	MUL_16_HL_BC
+	ld	d, h
+	ld	e, c
+	mlt	de
+	ld	d, l
+	ld	h, b
+	mlt	hl
+	add	hl, de
+	ld	h, l
+	ld	l, 0
+	ld	e, c
+	mlt	de
+	add	hl, de
+.endm
+
 FINEANGLES
 	equ	3600
 
@@ -117,6 +134,10 @@ TEXTURESIZE
 TEXTURE_SIZE_HALF
 	equ	TEXTURESIZE/2
 
+.yoffs_less_than_zero:
+	ld	hl, (iy+_drpm_postx)
+	jr	store_yoffs
+
 _scale_post_calc_ycount:
 	ld	iy, _drawing_params
 
@@ -162,22 +183,10 @@ _scale_post_calc_ycount:
 
 	ld	bc, (iy+_drpm_view_width)
 
-;  Multiplies HL by BC and returns the 16-bit product hl.
-	ld	d, h
-	ld	e, c
-	mlt	de
-	ld	d, l
-	ld	h, b
-	mlt	hl
-	add	hl, de
-	ld	h, l
-	ld	l, 0
-	ld	e, c
-	mlt	de
-	add	hl, de
+	MUL_16_HL_BC
 
 	bit	7, h
-	jr	nz, yoffs_less_than_zero
+	jr	nz, .yoffs_less_than_zero
 
 	ld	de, (iy+_drpm_postx)
 	add	hl, de
@@ -204,11 +213,11 @@ store_yoffs:
 	ld	c, (iy+_drpm_yw)		; bc yw
 	ld	b, (iy+_drpm_yw+1)		; ubC <= 0
 
-	exx
+	exx					; switch to alt regs
 	ld	hl, (iy+_drpm_ywcount)		; hl' ywcount
 	ld	de, TEXTURE_SIZE_HALF		; de' TEXTURESIZE / 2
 	ld	bc, (iy+_drpm_yd)		; bc' yd
-	exx
+	exx					; switch to main regs
 
 	;  while (drawing_params.yendoffs >= drawing_params.view_height)
 outer_loop:
@@ -219,9 +228,8 @@ outer_loop1:
 	add	hl, de				; yendoffs += view_height
 	dec	hl				; yendoffs--
 
-
 inner_loop:
-	exx
+	exx					; siwtch to alt regs
 	; drawing_params.ywcount -= TEXTURESIZE / 2;
 	or	a
 	sbc.sis	hl, de				; ywcount -= TEXTURESIZE / 2
@@ -230,16 +238,19 @@ inner_loop:
 	jr	c, inner_loop_continue
 	jr	z, inner_loop_continue
 
-	exx
+	exx					; switch to main regs
 	jr	outer_loop1
+
+
+
+
 
 	; be here if Z
 	; be here if C, de(32) > hl(YWCOUNT)
 
 inner_loop_continue:
-
 	add	hl, bc				; ywcount + yd
-	exx
+	exx					; switch to main regs
 	dec	bc				; yw--
 	jr	inner_loop
 
@@ -250,51 +261,29 @@ outer_loop_exit:
 	ld	(iy+_drpm_yw), c
 	ld	(iy+_drpm_yw+1), b
 
-	; grb = drawing_params.postsource[drawing_params.yw];
-	ld	hl, (iy+_drpm_postsource)
-	add	hl, bc
-	ld	a, (hl)
-
-	exx
+	exx					; switch to alt regs
 	ld	(iy+_drpm_ywcount), l
 	ld	(iy+_drpm_ywcount+1), h
-; 	exx
 
-; 	ld	de, (iy+_dprm_view_width)
+	; if (drawing_params.yw < 0) return
+	exx					; switch to main
+	bit	7, b
+	ret	nz
 
-; ;  Multiplies HL by BC and returns the 16-bit product hl.
-; 	ld	d, h				; yendoffs *= view_width
-; 	ld	e, c
-; 	mlt	de
-; 	ld	d, l
-; 	ld	h, b
-; 	mlt	hl
-; 	add	hl, de
-; 	ld	h, l
-; 	ld	l, 0
-; 	ld	e, c
-; 	mlt	de
-; 	add	hl, de
+	; result = drawing_params.postsource[drawing_params.yw];
+	ld	hl, (iy+_drpm_postsource)
+	add	hl, bc
+	ld	a, (hl)				; result
 
-; 	ld	de, (iy+_drpm_postx)		; yendoffs += postx
-; 	add	hl, de
+	; ;  drawing_params.yendoffs = drawing_params.yendoffs * drawing_params.view_width + drawing_params.postx;
+	ld	hl, (iy+_drpm_yendoffs)		; reload hl yendoffs
+	ld	bc, (iy+_drpm_view_width)
+	MUL_16_HL_BC
+	ld	de, (iy+_drpm_postx)
+	add.sis	hl, de
+	ld	(iy+_drpm_yendoffs), l
+	ld	(iy+_drpm_yendoffs+1), h
 
-; 	exx					; de < yendoffs, hl <= postx
-
-;  	;while (drawing_params.yoffs <= drawing_params.yendoffs) {
-; 	ld	hl, (iy+_drpm_yoffs)
-; 	or	a
-; 	sbc	hl, de
-
-; 	jr	z, inner_loop2_continue
-; 	jr	c, inner_loop2_continue
-; 	jr	outer_loop_2_exit
-
-; inner_loop2_continue:
-; 	; be here if C
-; 	; be here if Z
 	ret
 
-yoffs_less_than_zero:
-	ld	hl, (iy+_drpm_postx)
-	jr	store_yoffs
+

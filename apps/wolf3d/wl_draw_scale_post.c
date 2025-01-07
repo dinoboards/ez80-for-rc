@@ -25,13 +25,10 @@ void __func_on_chip ScalePost() {
 
   grb = scale_post_calc_ycount();
 
-  if (drawing_params.yw < 0) {
+  if (drawing_params.yw < 0)
     return;
-  }
 
-  // grb = drawing_params.postsource[drawing_params.yw];
-
-  drawing_params.yendoffs = drawing_params.yendoffs * drawing_params.view_width + drawing_params.postx;
+  // drawing_params.yendoffs = drawing_params.yendoffs * drawing_params.view_width + drawing_params.postx;
   while (drawing_params.yoffs <= drawing_params.yendoffs) {
     vbuf[drawing_params.yendoffs] = grb;
     drawing_params.ywcount -= TEXTURESIZE / 2;
