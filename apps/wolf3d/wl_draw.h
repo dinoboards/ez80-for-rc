@@ -25,6 +25,10 @@ typedef struct drawing_params {
   // texture pointer
   uint8_t *postsource; /* 18-20 */
 
+  // projection variables
+  uint16_t view_height_plus_one; /* 21-22 */
+  uint16_t view_half_width;      /* 23-24 */
+
 } drawing_params_t;
 
 EXPORT_OFFSET(yd, 0);                /* 0-1 */

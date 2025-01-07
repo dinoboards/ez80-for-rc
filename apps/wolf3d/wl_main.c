@@ -699,7 +699,7 @@ void CalcProjection(fixed focal) {
 
   focallength = focal;
   facedist    = focal + MINDIST;
-  halfview    = drawing_params.view_width / 2; // half view in pixels
+  halfview    = drawing_params.view_half_width; // half view in pixels
 
   //
   // calculate scale value for vertical height calculations
@@ -1179,13 +1179,15 @@ static void InitGame() {
 
 boolean SetViewSize(unsigned width, unsigned height) {
   printf("SetViewSize(%d,%d)\r\n", width, height);
-  drawing_params.view_width       = width;
-  drawing_params.view_height      = height;
-  drawing_params.view_half_height = height / 2;
-  view_length                     = width * height;
-  view_half_length                = view_length / 2;
-  centerx                         = drawing_params.view_width / 2 - 1;
-  shootdelta                      = drawing_params.view_width / 10;
+  drawing_params.view_width           = width;
+  drawing_params.view_half_width      = width / 2;
+  drawing_params.view_height          = height;
+  drawing_params.view_height_plus_one = height + 1;
+  drawing_params.view_half_height     = height / 2;
+  view_length                         = width * height;
+  view_half_length                    = view_length / 2;
+  centerx                             = drawing_params.view_half_width - 1;
+  shootdelta                          = drawing_params.view_width / 10;
   printf("  centerx: %d, shootdelta: %d\r\n", centerx, shootdelta);
   if (drawing_params.view_height == screenHeight)
     viewscreenx = viewscreeny = screenofs = 0;
@@ -1211,25 +1213,33 @@ void ShowViewSize(int width) {
   oldheight = drawing_params.view_height;
 
   if (width == 21) {
-    drawing_params.view_width       = screenWidth;
-    drawing_params.view_height      = screenHeight;
-    drawing_params.view_half_height = screenHeight / 2;
+    drawing_params.view_width           = screenWidth;
+    drawing_params.view_half_width      = screenWidth / 2;
+    drawing_params.view_height          = screenHeight;
+    drawing_params.view_height_plus_one = screenHeight + 1;
+    drawing_params.view_half_height     = screenHeight / 2;
     VWB_Bar(0, 0, screenWidth, screenHeight, 0);
   } else if (width == 20) {
-    drawing_params.view_width       = screenWidth;
-    drawing_params.view_height      = screenHeight - STATUSLINES;
-    drawing_params.view_half_height = (screenHeight - STATUSLINES) / 2;
+    drawing_params.view_width           = screenWidth;
+    drawing_params.view_half_width      = screenWidth / 2;
+    drawing_params.view_height          = screenHeight - STATUSLINES;
+    drawing_params.view_height_plus_one = screenHeight - STATUSLINES + 1;
+    drawing_params.view_half_height     = (screenHeight - STATUSLINES) / 2;
     DrawPlayBorder();
   } else {
-    drawing_params.view_width       = width * 16;
-    drawing_params.view_height      = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
-    drawing_params.view_half_height = drawing_params.view_half_height;
+    drawing_params.view_width           = width * 16;
+    drawing_params.view_half_width      = width * 8;
+    drawing_params.view_height          = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
+    drawing_params.view_height_plus_one = drawing_params.view_height + 1;
+    drawing_params.view_half_height     = drawing_params.view_half_height;
     DrawPlayBorder();
   }
 
-  drawing_params.view_width       = oldwidth;
-  drawing_params.view_height      = oldheight;
-  drawing_params.view_half_height = oldheight / 2;
+  drawing_params.view_width           = oldwidth;
+  drawing_params.view_half_width      = oldwidth / 2;
+  drawing_params.view_height          = oldheight;
+  drawing_params.view_height_plus_one = oldheight + 1;
+  drawing_params.view_half_height     = oldheight / 2;
 }
 
 void NewViewSize(int width) {

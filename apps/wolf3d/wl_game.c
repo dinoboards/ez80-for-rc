@@ -29,9 +29,9 @@
 =============================================================================
 */
 
-boolean  ingame, fizzlein;
-gametype gamestate;
-byte     bordercol = VIEWCOLOR; // color of the Change View/Ingame border
+boolean            ingame, fizzlein;
+gametype gamestate __data_on_chip;
+byte               bordercol = VIEWCOLOR; // color of the Change View/Ingame border
 
 #ifdef SPEAR
 int32_t  spearx, speary;
@@ -821,7 +821,7 @@ void DrawPlayBorder(void) {
 
   VWB_Bar(0, 0, screenWidth, screenHeight - px * STATUSLINES, bordercol);
 
-  const int xl = screenWidth / 2 - drawing_params.view_width / 2;
+  const int xl = screenWidth / 2 - drawing_params.view_half_width;
   const int yl = (screenHeight - px * STATUSLINES - drawing_params.view_height) / 2;
   printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
 

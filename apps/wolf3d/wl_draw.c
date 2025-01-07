@@ -885,7 +885,7 @@ void DrawPlayerWeapon(void) {
   if (gamestate.victoryflag) {
 #ifndef APOGEE_1_0
     if (player->state == &s_deathcam && (GetTimeCount() & 32))
-      SimpleScaleShape(drawing_params.view_width / 2, SPR_DEATHCAM, drawing_params.view_height + 1);
+      SimpleScaleShape(drawing_params.view_half_width, SPR_DEATHCAM, drawing_params.view_height_plus_one);
 #endif
     return;
   }
@@ -893,11 +893,11 @@ void DrawPlayerWeapon(void) {
 
   if ((int)gamestate.weapon != -1) {
     shapenum = weaponscale[gamestate.weapon] + gamestate.weaponframe;
-    SimpleScaleShape(drawing_params.view_width / 2, shapenum, drawing_params.view_height + 1);
+    SimpleScaleShape(drawing_params.view_half_width, shapenum, drawing_params.view_height_plus_one);
   }
 
   if (demorecord || demoplayback)
-    SimpleScaleShape(drawing_params.view_width / 2, SPR_DEMO, drawing_params.view_height + 1);
+    SimpleScaleShape(drawing_params.view_half_width, SPR_DEMO, drawing_params.view_height_plus_one);
 }
 
 //==========================================================================
@@ -1419,7 +1419,8 @@ void ThreeDRefresh(void) {
     uint24_t diff = x - last_system_tick;
 
     printf(" diff: %d, t: %d, s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d    \r", diff, x, stage1 * 1000 / 50,
-           stage2 * 1000 / 50, stage3 * 1000 / 50, stage4 * 1000 / 50, stage5 * 1000 / 50, stage6 * 1000 / 50);
+           (stage2 - stage1) * 1000 / 50, (stage3 - stage2) * 1000 / 50, (stage4 - stage3) * 1000 / 50,
+           (stage5 - stage4) * 1000 / 50, (stage6 - stage5) * 1000 / 50);
 
     last_system_tick = x;
 
