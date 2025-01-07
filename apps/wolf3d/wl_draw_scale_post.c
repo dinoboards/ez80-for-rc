@@ -29,7 +29,7 @@ void __func_on_chip ScalePost() {
     return;
   }
 
-  grb = drawing_params.postsource[drawing_params.yw];
+  // grb = drawing_params.postsource[drawing_params.yw];
 
   drawing_params.yendoffs = drawing_params.yendoffs * drawing_params.view_width + drawing_params.postx;
   while (drawing_params.yoffs <= drawing_params.yendoffs) {

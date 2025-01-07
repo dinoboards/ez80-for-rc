@@ -250,9 +250,10 @@ outer_loop_exit:
 	ld	(iy+_drpm_yw), c
 	ld	(iy+_drpm_yw+1), b
 
-	; ld	hl, (iy+_drpm_postsource)
-	; add	hl, bc
-
+	; grb = drawing_params.postsource[drawing_params.yw];
+	ld	hl, (iy+_drpm_postsource)
+	add	hl, bc
+	ld	a, (hl)
 
 	exx
 	ld	(iy+_drpm_ywcount), l
