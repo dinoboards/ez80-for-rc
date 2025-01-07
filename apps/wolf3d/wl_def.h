@@ -1068,7 +1068,7 @@ typedef struct statstruct {
   byte     tilex, tiley;
   short    shapenum; // if shapenum == -1 the obj has been removed
   byte    *visspot;
-  uint32_t flags;
+  uint24_t flags;
   byte     itemnumber;
 } statobj_t;
 

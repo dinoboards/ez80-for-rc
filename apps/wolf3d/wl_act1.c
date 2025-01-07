@@ -16,7 +16,7 @@ statobj_t *laststatobj;
 struct {
   short     picnum;
   wl_stat_t type;
-  uint32_t  specialFlags; // they are ORed to the statobj_t flags
+  uint24_t  specialFlags; // they are ORed to the statobj_t flags
 } statinfo[] = {
     {SPR_STAT_0, 0, 0},                 // puddle          spr1v
     {SPR_STAT_1, block, 0},             // Green Barrel    "
