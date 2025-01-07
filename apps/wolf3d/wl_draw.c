@@ -576,10 +576,10 @@ int CalcRotate(objtype *ob) {
   return angle / (ANGLES / 8);
 }
 
-void ScaleShape(int xcenter, int shapenum, uint24_t height) {
+void ScaleShape(int xcenter, int shapenum, uint16_t height) {
   t_compshape *shape;
   uint24_t     scale;
-  uint24_t     pixheight;
+  uint16_t     pixheight;
   uint16_t     starty;
   uint16_t     endy;
   uint16_t    *cmdptr;
@@ -587,7 +587,7 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
   byte        *line;
   byte        *vmem;
   int24_t      actx;
-  uint16_t     i;
+  uint16_t     i_counter;
   int24_t      upperedge;
   int16_t      newstart;
   int24_t      scrstarty;
@@ -601,7 +601,8 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
 
   shape = (t_compshape *)PM_GetSprite(shapenum);
 
-  scale = sr_u24_u24_3(height); // >> 3; // low three bits are fractional
+  // scale = sr_u24_u24_3(height); // >> 3; // low three bits are fractional
+  scale = height >> 3; // low three bits are fractional
   if (!scale)
     return; // too close or far away
 
@@ -611,7 +612,8 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
 
   cmdptr = (word *)shape->dataofs;
 
-  for (i = shape->leftpix, pixcnt = i * pixheight, rpix = (pixcnt >> 6) + actx; i <= shape->rightpix; i++, cmdptr++) {
+  for (i_counter = shape->leftpix, pixcnt = i_counter * pixheight, rpix = (pixcnt >> 6) + actx; i_counter <= shape->rightpix;
+       i_counter++, cmdptr++) {
     lpix = rpix;
 
     if (lpix >= drawing_params.view_width)
@@ -625,12 +627,12 @@ void ScaleShape(int xcenter, int shapenum, uint24_t height) {
         lpix = 0;
 
       if (rpix > drawing_params.view_width)
-        rpix = drawing_params.view_width, i = shape->rightpix + 1;
+        rpix = drawing_params.view_width, i_counter = shape->rightpix + 1;
 
       cline = (byte *)shape + *cmdptr;
 
       while (lpix < rpix) {
-        if (wallheight[lpix] <= (int16_t)height) {
+        if (wallheight[lpix] <= height) {
           line = cline;
           while ((endy = READWORD(&line)) != 0) {
             endy >>= 1;

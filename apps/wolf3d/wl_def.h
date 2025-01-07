@@ -1668,17 +1668,17 @@ static inline fixed fixed_rounded_down(fixed a) { return a & 0xffff0000; }
 
 static inline word READWORD(byte **_ptr) // byte*&
 {
-  const byte *ptr = *_ptr;
-  word        val = ptr[0] | ptr[1] << 8;
+  const uint16_t *ptr = (const uint16_t *)*_ptr;
+  word            val = *ptr;
   *_ptr += 2;
   return val;
 }
 
-static inline longword READLONGWORD(byte **_ptr) // byte*&
+static inline uint32_t READLONGWORD(byte **_ptr) // byte*&
 {
-  const byte *ptr = *_ptr;
+  const uint32_t *ptr = (const uint32_t *)*_ptr;
 
-  longword val = (longword)ptr[0] | ((longword)ptr[1]) << 8 | ((longword)ptr[2]) << 16 | ((longword)ptr[3]) << 24;
+  uint32_t val = *ptr;
   *_ptr += 4;
   return val;
 }
