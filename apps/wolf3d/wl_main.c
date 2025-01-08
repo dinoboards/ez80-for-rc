@@ -1149,7 +1149,7 @@ static void InitGame() {
   BuildTables(); // trig tables
   SetupWalls();
 
-  // viewsize = 10;
+  viewsize = 6;
   NewViewSize(viewsize);
 
   //

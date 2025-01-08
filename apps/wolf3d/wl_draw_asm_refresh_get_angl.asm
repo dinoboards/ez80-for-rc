@@ -133,6 +133,13 @@ TEXTURE_SIZE_HALF
 	ld	hl, (iy+_drpm_postx)
 	jr	store_yoffs
 
+.set_yd_to_100:
+	ld	a, 100
+	ld	(iy+_drpm_yd), a
+	xor	a
+	ld	(iy+_drpm_yd+1), a
+	jr	.assign_ywcount_to_de
+
 _scale_post_asm:
 	ld	iy, _drawing_params
 
@@ -162,16 +169,22 @@ _scale_post_asm:
 	ld	e, l
 	ld	d, h
 
+	; if de <= 0 then 100
+	ld	a, e
+	or	d
+	jr	z, .set_yd_to_100
+
+	bit	7, d
+	jr	nz, .set_yd_to_100
+
 	ld	(iy+_drpm_yd), e
 	ld	(iy+_drpm_yd+1), d
 
+.assign_ywcount_to_de:
 	ld	(iy+_drpm_ywcount), e
 	ld	(iy+_drpm_ywcount+1), d
 
-	ld	hl, (iy+_drpm_view_height)
-
-	srl	h			; hl = view_height >> 1
-	rr	l
+	ld	hl, (iy+_drpm_view_half_height)
 
 	or	a
 	sbc.sis	hl, de			; hl -= ywcount
@@ -217,31 +230,28 @@ store_yoffs:
 	;  while (drawing_params.yendoffs >= drawing_params.view_height)
 outer_loop:
 	or	a
-outer_loop1:
 	sbc.sis	hl, de				; yendoffs -= view_height
 	jr	c, outer_loop_exit
 	add	hl, de				; yendoffs += view_height
 	dec	hl				; yendoffs--
 
-inner_loop:
-	exx					; siwtch to alt regs
-	; drawing_params.ywcount -= TEXTURESIZE / 2;
+	exx					; switch to alt regs
 	or	a
 	sbc.sis	hl, de				; ywcount -= TEXTURESIZE / 2
+	exx					; switch to main
+
+inner_loop:
+	exx					; switch to alt regs
 
 	; while (drawing_params.ywcount <= 0)
-	jr	c, inner_loop_continue
+	bit	7, h
+	jr	nz, inner_loop_continue
+	ld	a, h
+	or	l
 	jr	z, inner_loop_continue
 
 	exx					; switch to main regs
-	jr	outer_loop1
-
-
-
-
-
-	; be here if Z
-	; be here if C, de(32) > hl(YWCOUNT)
+	jr	outer_loop
 
 inner_loop_continue:
 	add	hl, bc				; ywcount + yd
@@ -269,6 +279,7 @@ outer_loop_exit:
 	ld	hl, (iy+_drpm_postsource)
 	add	hl, bc
 	ld	a, (hl)				; result
+
 
 	; ;  drawing_params.yendoffs = drawing_params.yendoffs * drawing_params.view_width + drawing_params.postx;
 	ld	hl, (iy+_drpm_yendoffs)		; reload hl yendoffs

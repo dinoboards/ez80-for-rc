@@ -1010,7 +1010,6 @@ void AsmRefresh() {
           ytile      = (short)(fixed_to_short(yintercept));
           tilehit    = pwalltile;
           HitVertWall();
-
           continue;
         }
       } else if ((pwalldir == di_south && ytilestep == 1) || (pwalldir == di_north && ytilestep == -1)) {
@@ -1396,7 +1395,6 @@ void ThreeDRefresh(void) {
 
   if (Keyboard[KEY_TAB] && viewsize == 21 && (int)gamestate.weapon != -1)
     ShowActStatus();
-
   vbuf = NULL;
 
   uint24_t stage5 = ez80_timers_ticks_get() - start;
