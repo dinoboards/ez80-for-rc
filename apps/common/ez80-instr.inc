@@ -141,46 +141,6 @@
 					LD B, 6 \ \
 					EZ80_FN
 
-#define EZ80_IFL_INIT			LD A, 7 \ \
-					LD B, 0 \ \
-					EZ80_FN
-
-#define EZ80_IFL_ISADDRVALID		LD A, 7 \ \
-					LD B, 1 \ \
-					EZ80_FN
-
-#define EZ80_IFL_GETPAGE		LD A, 7 \ \
-					LD B, 2 \ \
-					EZ80_FN
-
-#define EZ80_IFL_ERASEPAGES		LD A, 7 \ \
-					LD B, 3 \ \
-					EZ80_FN
-
-#define EZ80_IFL_ERASEINFOPAGE		LD A, 7 \ \
-					LD B, 4 \ \
-					EZ80_FN
-
-#define EZ80_IFL_PROGRAM		LD A, 7 \ \
-					LD B, 5 \ \
-					EZ80_FN
-
-#define EZ80_IFL_PROGRAMINFOPAGE	LD A, 7 \ \
-					LD B, 6 \ \
-					EZ80_FN
-
-#define EZ80_IFL_READINFOPAGE		LD A, 7 \ \
-					LD B, 7 \ \
-					EZ80_FN
-
-#define EZ80_IFL_WRITEINFOBYTE		LD A, 7 \ \
-					LD B, 8 \ \
-					EZ80_FN
-
-#define EZ80_IFL_READINFOWORD24		LD A, 7 \ \
-					LD B, 9 \ \
-					EZ80_FN
-
 #define RET_L				DB	$49 \ \
 					RET
 

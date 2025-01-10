@@ -66,10 +66,6 @@ $(BIN)%.c.o: $(BIN)%.c.asm; $(assemble)
 .PRECIOUS: $(BIN)$(APPS)/%.c.asm
 $(BIN)$(APPS)/%.c.asm: %.c; $(compile)
 
-IFL_ASM_FILES := $(wildcard ../common/ifl/*.asm)
-IFL_LIB_FILES := $(patsubst ../common/ifl/%.asm,$(BIN)common/ifl/%.lib,$(IFL_ASM_FILES))
-IFL_LIB=$(IFL_LIB_FILES) ../common/ifl.h
-
 EZ80_ASM_FILES := $(wildcard ../common/ez80-instr/*.asm)
 EZ80_O_FILES := $(patsubst ../common/ez80-instr/%.asm,$(BIN)common/ez80-instr/%.o,$(EZ80_ASM_FILES))
 EZ80_LIB_FILES := $(patsubst ../common/ez80-instr/%.asm,$(BIN)common/ez80-instr/%.lib,$(EZ80_ASM_FILES))
