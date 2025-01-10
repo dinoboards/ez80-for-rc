@@ -1,6 +1,7 @@
 #include "firmware_version.h"
 #include "hex_record.h"
 #include "ifl.h"
+#include "pico/stdlib.h"
 #include "read_line.h"
 #include "utils.h"
 #include "zdi.h"
@@ -8,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 /*
 
 Commands:
@@ -49,6 +51,7 @@ reboot
 
 void process_status_command(void);
 void process_flash_command(void);
+void process_verify_command(void);
 void process_break_command(void);
 void process_continue_command(void);
 void process_reset_command(void);
@@ -79,6 +82,10 @@ void process_command(void) {
            "  default loads the firmware stored on Pi Pico\r\n"
            "  upload: expects an intel hex file to be streamed over stdin\r\n"
            "\r\n"
+           "verify [upload]\r\n"
+           "  Read the current firmware version image\r\n"
+           "  and compare to verify correctness\r\n"
+           "  upload: expects an intel hex file to be streamed over stdin\r\n"
            "break or b\r\n"
            "  break the ez80  \r\n"
            "\r\n"
@@ -91,15 +98,15 @@ void process_command(void) {
            "mode or m [ADL|Z80]\r\n"
            "  Set the CPU mode to ADL or Z80\r\n"
            "\r\n"
-           "set cpu-freq [FREQ]\r\n"
-           "  Set the CPU frequency in Mhz or Hz\r\n"
-           "\r\n"
-           "set pc [ADDR]\r\n"
-           "  Set the PC register to the specified address\r\n"
-           "\r\n"
-           "wr or write [ADDR] [DATA]\r\n"
-           "  Write a byte to the eZ80 memory\r\n"
-           "\r\n"
+           //  "set cpu-freq [FREQ]\r\n"
+           //  "  Set the CPU frequency in Mhz or Hz\r\n"
+           //  "\r\n"
+           //  "set pc [ADDR]\r\n"
+           //  "  Set the PC register to the specified address\r\n"
+           //  "\r\n"
+           //  "wr or write [ADDR] [DATA]\r\n"
+           //  "  Write a byte to the eZ80 memory\r\n"
+           //  "\r\n"
            "rd or read [ADDR]\r\n"
            "  Read a byte from the eZ80 memory\r\n"
            "\r\n"
@@ -111,6 +118,8 @@ void process_command(void) {
     process_status_command();
   } else if (strcmp(input_buffer, "flash") == 0 || strcmp(input_buffer, "f") == 0) {
     process_flash_command();
+  } else if (strcmp(input_buffer, "verify") == 0) {
+    process_verify_command();
   } else if (strcmp(input_buffer, "break") == 0 || strcmp(input_buffer, "b") == 0) {
     process_break_command();
   } else if (strcmp(input_buffer, "continue") == 0 || strcmp(input_buffer, "c") == 0) {
@@ -146,6 +155,44 @@ void process_status_command(void) {
   printf("PC: 0x%06lX\r\n", pc);
 }
 
+bool verify_success;
+
+int8_t verify_flash(const uint32_t offset, const uint8_t *data, const uint16_t len) {
+  uint8_t stored_data[64 + 16];
+
+  // Work around - need to initiate a read for the proceeding byte to get reliable read
+  // first byte always seems to be incorrect
+  // dont know why
+  zdi_read_byte(offset - 1);
+
+  for (int i = 0; i < len; i++) {
+    stored_data[i] = zdi_read_byte(offset + i);
+  }
+
+  bool is_same = true;
+  for (int i = 0; i < len; i++) {
+    if (stored_data[i] != data[i]) {
+      is_same        = false;
+      verify_success = false;
+      break;
+    }
+  }
+
+  if (!is_same) {
+    printf("\r\nVerification Failure at %lX\r\nStored:   ", offset);
+    for (int i = 0; i < len; i++) {
+      printf("%X ", stored_data[i]);
+    }
+    printf("\r\nExpected: ");
+    for (int i = 0; i < len; i++) {
+      printf("%X ", data[i]);
+    }
+    printf("\r\n");
+  }
+
+  return ZFL_ERR_SUCCESS; // return success so main loop continues...
+}
+
 int8_t emit_to_flash(const uint32_t offset, const uint8_t *data, const uint16_t len) {
   zdi_flash_write_bytes(offset, data, len);
   return ZFL_ERR_SUCCESS;
@@ -168,10 +215,30 @@ void process_flash_command(void) {
   zdi_flash_write_enable();
   zdi_erase_flash();
 
-  process_hex_records(internal, emit_to_flash);
+  process_hex_records(internal, "Writing to:", emit_to_flash);
 
   zdi_flash_write_disable();
   printf("\r\n");
+}
+
+void process_verify_command(void) {
+  bool internal  = true;
+  verify_success = true;
+  char *mode     = strtok(NULL, " ");
+  if (mode == NULL) {
+    printf("Verifying eZ80 firmware %d.%d.%d.%d (%s)\r\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, REVISION_VERSION,
+           FIRMWARE_DATE);
+  }
+
+  if (strcmp(mode, "upload") == 0) {
+    printf("Paste the intel hex file contents to be verified against..\r\n");
+    internal = false;
+  }
+
+  zdi_full_reset();
+  process_hex_records(internal, "Verifying:", verify_flash);
+  printf("\r\n");
+  printf("Verification %s\r\n", verify_success ? "Success" : "Failure");
 }
 
 void process_break_command(void) {
@@ -268,6 +335,11 @@ void process_read_command(void) {
   const uint32_t addr = strtoul(addr_str, NULL, 16);
 
   uint32_t pc = read_reg_pc();
+
+  // Work around - need to initiate a read for the proceeding byte to get reliable read
+  // first byte always seems to be incorrect
+  // dont know why
+  zdi_read_byte(addr - 1);
 
   uint8_t data[16];
   for (int i = 0; i < 16; i++) {

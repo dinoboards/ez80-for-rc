@@ -32,13 +32,13 @@ do
     value=$(echo "$value" | sed 's/[[:space:]]*$//')
 
     # Check if the line contains DATE
-    if [[ "$name" == "DATE" ]]; then
-        # Format the DATE line with double quotes
-        formatted_line="#define FIRMWARE_DATE \"$value\""
-    else
+    # if [[ "$name" == "DATE" ]]; then
+    #     # Format the DATE line with double quotes
+    #     formatted_line="#define FIRMWARE_DATE $value"
+    # else
         # Format the line correctly
         formatted_line="#define $name $value"
-    fi
+    # fi
 
     echo "$formatted_line" >> $output_file
 done < "$input_file"

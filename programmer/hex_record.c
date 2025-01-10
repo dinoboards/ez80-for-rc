@@ -26,6 +26,8 @@ static uint8_t getCh(void) {
     return 26;
 
   if (internal) {
+    printf("\r\nException: getCh called when using internal firmware image\r\n");
+    return 0;
   }
 
   uint8_t ch = getchar();
@@ -176,7 +178,7 @@ int8_t extract_buffer(uint8_t *pBuffer, uint16_t length) {
   return ZFL_ERR_SUCCESS;
 }
 
-int8_t process_hex_record_data(emit_func_t emit) {
+int8_t process_hex_record_data(const char *prefix, emit_func_t emit) {
   static int8_t   status = ZFL_ERR_SUCCESS;
   static uint8_t  buffer[64 + 10];
   static uint32_t offset;
@@ -205,7 +207,7 @@ int8_t process_hex_record_data(emit_func_t emit) {
     return status;
   }
 
-  printf("\rWriting to: %06lX...%06lX", offset, offset + length);
+  printf("\r%s %06lX...%06lX", prefix, offset, offset + length);
 
   status = emit(offset, buffer, length);
   if (status != ZFL_ERR_SUCCESS) {
@@ -222,7 +224,7 @@ int8_t process_hex_record_data(emit_func_t emit) {
  * @param internal - true to flash the embedded firmware, false expect a intel hex file to be streamed over stdin
  * @param emit - function to write data to the flash
  */
-int8_t process_hex_records(const bool _internal, const emit_func_t emit) {
+int8_t process_hex_records(const bool _internal, const char *prefix, const emit_func_t emit) {
   static int8_t  status = ZFL_ERR_SUCCESS;
   static uint8_t record_type;
 
@@ -240,7 +242,7 @@ int8_t process_hex_records(const bool _internal, const emit_func_t emit) {
 
     switch (record_type) {
     case (REC_TYPE_DATA): {
-      status = process_hex_record_data(emit);
+      status = process_hex_record_data(prefix, emit);
       if (status)
         return status;
 

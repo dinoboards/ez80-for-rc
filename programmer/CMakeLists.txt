@@ -47,9 +47,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 set(HEX_FILE_PATH "../ez80-rc-firmware-release.hex")
 set(GENERATED_C_FILE "./ez80_rc_firmware_release.c")
 
-# Define the path to the .hex file and the generated .c file
-set(INC_FILE_PATH "../firmware-version.inc")
-set(GENERATED_H_FILE "../firmware_version.h")
 
 # Add a custom command to generate the .c file from the .hex file
 add_custom_command(
@@ -59,15 +56,21 @@ add_custom_command(
     DEPENDS ${HEX_FILE_PATH}
 )
 
-# Add a custom command to generate the .c file from the .hex file
+# Define the path to the .inc file and the generated .h file
+set(INC_FILE_PATH "../firmware-version.inc")
+set(GENERATED_H_FILE "../firmware_version.h")
+
+# Add a custom command to generate the .inc file from the .h file
 add_custom_command(
+    COMMAND echo "-----------------"
     OUTPUT ${GENERATED_H_FILE}
     COMMAND ${CMAKE_COMMAND} -E echo "Converting ${INC_FILE_PATH} to ${GENERATED_H_FILE}"
-    COMMAND bash -c "ls;pwd"
-    COMMAND echo bash -c "../convert_hex_to_c.sh ${INC_FILE_PATH} ${GENERATED_H_FILE}"
     COMMAND bash -c "../convert_inc_to_c.sh ${INC_FILE_PATH} ${GENERATED_H_FILE}"
     DEPENDS ${INC_FILE_PATH}
+    COMMAND echo "Version Embedded: "
+    COMMAND cat ${INC_FILE_PATH}
 )
+
 set_source_files_properties(
   main.c
   read_line.c

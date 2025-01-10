@@ -11,7 +11,7 @@ Precompiled images are available at:
 
 ## Building the code
 
-Under linux, you can use a docker image created, that contains the required Raspberry Pi Pico tools and SDK:
+Under linux, you can use a pre-built docker image that contains the required Raspberry Pi Pico tools and SDK:
 
 Within the `programmer` directory, run this:
 
