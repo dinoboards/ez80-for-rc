@@ -12,9 +12,9 @@
 	XREF	__init
 	XREF	__low_rom
 	XDEF	_reset
-	XREF	check_alt_firmware_rst_08
-	XREF	check_alt_firmware_rst_10
-	XREF	check_alt_firmware_rst_18
+	XREF	firmware_rst_08_hook
+	XREF	firmware_rst_10_hook
+	XREF	firmware_rst_18_hook
 	XREF	_default_mi_handler_hook
 	XREF	_marshall_isr_hook
 
@@ -25,19 +25,17 @@ _rst0:
 	stmix
 	jp.lil	__init
 
-IFNDEF RC2014_ALT_FIRMWARE
-
 	ORG	ROM_BASE+%08
 _rst8:
-	jp.lil	check_alt_firmware_rst_08
+	jp.lil	firmware_rst_08_hook
 
 	org	ROM_BASE+%10
 _rst10:
-	jp.lil	check_alt_firmware_rst_10
+	jp.lil	firmware_rst_10_hook
 
 	org	ROM_BASE+%18
 _rst18:
-	jp.lil	check_alt_firmware_rst_18
+	jp.lil	firmware_rst_18_hook
 
 	org	ROM_BASE+%20
 _rst20:
@@ -60,15 +58,12 @@ _rst38:
 _nmi:
 	jp.lil	__default_nmi_handler
 
-ENDIF
 
 ;*****************************************************************************
 ; Startup code
 	DEFINE .STARTUP, SPACE = ROM
 	SEGMENT .STARTUP
 	.ASSUME ADL=1
-
-IFNDEF RC2014_ALT_FIRMWARE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Default Non-Maskable Interrupt handler
@@ -137,8 +132,6 @@ _uart0_receive_isr_rom_hook:
 _marshall_isr_rom_hook:
 	JP	_marshall_isr_hook
 
-ENDIF
-
 
 ;*****************************************************************************
 ; Interrupt Vector Table
@@ -147,8 +140,6 @@ ENDIF
 ;  - each 2-byte entry is a 2-byte vector address
 	DEFINE .IVECTS, SPACE = ROM, ALIGN = 100h
 	SEGMENT .IVECTS
-
-IFNDEF RC2014_ALT_FIRMWARE
 
 	PUBLIC	__vector_table
 	EXTERN	_system_timer_isr_hook
@@ -205,5 +196,4 @@ __vector_table:
 	dw	_default_mi_2E_handler		; 5CH - Port D6
 	dw	_default_mi_2F_handler		; 5EH - Port D7
 
-ENDIF
 	END

@@ -9,8 +9,6 @@
 	XREF	_rx_buffer_init
 	XREF	_init_clocks
 	XREF	__c_startup
-	XREF	_attempt_alt_firmware
-	XREF	_IFL_Init
 	XREF	_configure_onchip_mem
 
 	XREF	_io_bus_mode_and_timing
@@ -23,10 +21,6 @@ _main:
 	CALL	_rx_buffer_init
 	CALL	_uart0_init
 
-IFNDEF RC2014_ALT_FIRMWARE
-	CALL	_IFL_Init
-	CALL	_attempt_alt_firmware			; may not return if alt-bios present and ok to boot with
-ENDIF
 
 	LD	A, IO_BUS_CYCLES | %80
 	LD	(_io_bus_mode_and_timing), A

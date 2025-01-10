@@ -56,7 +56,7 @@ void assign_cpu_frequency(const unsigned de) {
 //
 // calculate the reload value for a div/4 timer
 // such that it triggers/loops after approx 5us
-// see EZ80_DELAY (check_alt_firmware_rst_18)
+// see EZ80_DELAY (firmware_rst_18_hook)
 //
 #define OVERHEAD_OFFSET 13
 uint8_t calculate_tmr0_rr() {

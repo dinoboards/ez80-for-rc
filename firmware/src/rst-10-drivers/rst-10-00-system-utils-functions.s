@@ -103,7 +103,7 @@ not_supported:
 ;
 ; Outputs:
 ;  A	= 0 -> Success, otherwise errored
-;  C	= eZ80 Chip Id (0->EZ80F92AZ020EG), Bit 7 is set if running on alt-firmware
+;  C	= eZ80 Chip Id (0->EZ80F92AZ020EG)
 ;  D	= eZ80 Firmware Major Version Number
 ;  E	= eZ80 Firmware Minor Version Number
 ;  H	= eZ80 Firmware Patch Version Number
@@ -114,9 +114,6 @@ not_supported:
 
 
 ez80_version_exchange:
-IFDEF RC2014_ALT_FIRMWARE
-	CALL	_ez80_exchange_version_verified
-ENDIF
 	CALL	_util_get_day_of_month
 	LD	C, A
 	PUSH	BC
@@ -132,12 +129,7 @@ ENDIF
 	LD	E, MINOR_VERSION
 	LD	H, PATCH_VERSION
 	LD	L, REVISION_VERSION
-
-IFDEF RC2014_ALT_FIRMWARE
-	LD	C, %80
-ELSE
 	LD	C, 0
-ENDIF
 
 	XOR	A
 	RET.L

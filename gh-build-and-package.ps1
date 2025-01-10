@@ -41,7 +41,7 @@ function Run-BatchFile {
 Run-BatchFile "hardware\make-jed.bat"
 
 # Run the batch commands in the firmware directory
-$firmwareCommands = @("make-debug.bat", "make-alt-debug.bat", "make-release.bat", "make-alt-release.bat")
+$firmwareCommands = @("make-debug.bat", "make-release.bat")
 foreach ($cmd in $firmwareCommands) {
   Run-BatchFile "firmware\$cmd"
 }

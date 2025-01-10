@@ -5,7 +5,6 @@
 	XREF	_system_timer_dispatch
 	XREF	_uart_dispatch
 	XREF	_i2c_dispatch
-	XREF	_rom_flash_dispatch
 
 	SECTION INTERNAL_RAM_ROM
 
@@ -40,7 +39,7 @@ _rst_10_functions:
 	DEC	A
 	JR	Z, _reserved_dispatch			; A = 6, RESERVED functions
 	DEC	A
-	JR	Z, _rom_flash_dispatch			; A = 7, ROM-FLASHING functions
+	JR	Z, _reserved_dispatch			; A = 7, ROM-FLASHING functions retired
 
 _spi_dispatch:
 _reserved_dispatch:

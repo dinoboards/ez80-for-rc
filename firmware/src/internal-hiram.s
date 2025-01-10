@@ -16,13 +16,13 @@ FIRMWARE_RAM_RESERVED:
 _firmware_ram_reseved:
 
 	XREF	_rst_08_functions
-	PUBLIC	check_alt_firmware_rst_08
-check_alt_firmware_rst_08:
+	PUBLIC	firmware_rst_08_hook
+firmware_rst_08_hook:
 	JP	_rst_08_functions
 
 	XREF	_rst_10_functions
-	PUBLIC	check_alt_firmware_rst_10
-check_alt_firmware_rst_10:
+	PUBLIC	firmware_rst_10_hook
+firmware_rst_10_hook:
 	JP	_rst_10_functions
 
 	XREF	_system_timer_isr
@@ -41,9 +41,9 @@ _uart0_receive_isr_hook:
 	JP	_uart0_receive_isr
 
 	PUBLIC	_default_mi_handler_hook
-_default_mi_handler_hook:				; if alt-firmware wants to handle a default interrupt
-	POP	AF					; it can change this to be a 'jump' to its own handler
-	EI						; a will indicate the index of the interrupt
+_default_mi_handler_hook:				; hook for default interrupt handler
+	POP	AF					; original A is persisted on the stack
+	EI						; and current A indicates the index of the interrupt
 	RETI.L
 
 	DB	0, 0, 0, 0
@@ -58,8 +58,8 @@ _default_mi_handler_hook:				; if alt-firmware wants to handle a default interru
 ; Output
 ;  None
 ;
-	PUBLIC	check_alt_firmware_rst_18
-check_alt_firmware_rst_18:
+	PUBLIC	firmware_rst_18_hook
+firmware_rst_18_hook:
 	; //timer 0 has reload value that will equate to about 5-6us
 ; 	; so set it off, and wait.
 
