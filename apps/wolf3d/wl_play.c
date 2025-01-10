@@ -329,12 +329,12 @@ void PollControls(void) {
     // wait up to DEMOTICS Wolf tics
     uint32_t curtime = SDL_GetTicks();
     lasttimecount += DEMOTICS;
-    int32_t timediff = (lasttimecount * 100) / 7 - curtime;
+    int32_t timediff = lasttimecount - curtime;
     if (timediff > 0)
       SDL_Delay(timediff);
 
-    if (timediff < -2 * DEMOTICS)          // more than 2-times DEMOTICS behind?
-      lasttimecount = (curtime * 7) / 100; // yes, set to current timecount
+    if (timediff < -2 * DEMOTICS) // more than 2-times DEMOTICS behind?
+      lasttimecount = curtime;    // yes, set to current timecount
 
     tics = DEMOTICS;
   } else

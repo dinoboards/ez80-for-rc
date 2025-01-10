@@ -856,10 +856,9 @@ typedef union SDL_Event {
 
 #define SDL_GetTicks ez80_timers_ticks_get
 
-extern void SDL_Delay(uint32_t ms);
-extern int  SDL_LockSurface(SDL_Surface *surface);
-extern int  SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
-// extern uint32_t            SDL_GetTicks(void);
+extern void                SDL_Delay(uint24_t ms);
+extern int                 SDL_LockSurface(SDL_Surface *surface);
+extern int                 SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
 extern int                 SDL_Init(int32_t flags);
 extern const char         *SDL_GetError(void);
 extern void                SDL_Quit(void);

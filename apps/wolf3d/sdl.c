@@ -34,17 +34,11 @@ const uint8_t scale_points[320] = {
     220, 220, 221, 222, 223, 224, 224, 225, 226, 227, 228, 228, 229, 230, 231, 232, 232, 233, 234, 235, 236, 236, 237, 238, 239,
     240, 240, 241, 242, 243, 244, 244, 245, 246, 247, 248, 248, 249, 250, 251, 252, 252, 253, 254, 255};
 
-void SDL_Delay(uint32_t ms IG) {}
+void SDL_Delay(uint24_t ms) { printf("\r\nTODO: implement or remove need for delay (%d)\r\n", ms); }
 
 int SDL_LockSurface(SDL_Surface *surface IG) { return 0; }
 
 int SDL_FillRect(SDL_Surface *dst IG, const SDL_Rect *rect IG, uint32_t color IG) { return 0; }
-
-// uint32_t SDL_GetTicks(void) {
-//   return = ez80_timers_ticks_get();
-
-//   return milliseconds;
-// }
 
 int SDL_Init(int32_t flags IG) { return 0; }
 

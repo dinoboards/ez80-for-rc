@@ -377,7 +377,7 @@ void BJ_Breathe(void) {
 
   SDL_Delay(5);
 
-  if ((int32_t)GetTimeCount() - lastBreathTime > max) {
+  if ((int24_t)GetTimeCount() - lastBreathTime > max) {
     which ^= 1;
     VWB_DrawPic(0, 16, pics[which]);
     VW_UpdateScreen();
