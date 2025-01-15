@@ -7,4 +7,5 @@ all: LINE.COM
 
 .PHONY: LINE.COM
 LINE.COM:
+	@mkdir -p ../bin
 	@ez80-cc --optimise speed --output-dir ../bin LINE.COM line.c ../common/config_request.c random.asm
