@@ -2,5 +2,5 @@ APPS :=
 include ../common.mk
 
 .PHONY: all
-all: $(IFL_LIB) $(EZ80_LIB) $(HBIOS_LIB) $(I2C_LIB) $(EZ80_FIRMWARE_LIB)
+all: $(EZ80_LIB) $(HBIOS_LIB) $(I2C_LIB) $(EZ80_FIRMWARE_LIB)
 	@echo > /dev/null
