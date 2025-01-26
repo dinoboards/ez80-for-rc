@@ -179,6 +179,7 @@ jobs:
           name: apps
           path: |
             apps/bin/*.COM
+            apps/bin/*.EXE
 
   release-notes:
     runs-on: ubuntu-latest
