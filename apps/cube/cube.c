@@ -5,7 +5,7 @@
 #include <v99x8.h>
 
 #define LEFT   0
-#define RIGHT  255
+#define RIGHT  256
 #define TOP    0
 #define BOTTOM (192)
 #define WIDTH  (RIGHT - LEFT)
@@ -139,7 +139,10 @@ void write_vdp_memory(uint24_t address, uint8_t value) {
 
 int main(/*const int argc, const char *argv[]*/) {
 
-  vdp_set_mode(7, 192, NTSC);
+  vdp_set_lines(192);
+  vdp_set_refresh(NTSC);
+  vdp_set_graphic_7();
+
   vdp_erase_bank0(0);
   vdp_erase_bank1(0);
   erase_page_0();

@@ -13,13 +13,17 @@ RGB palette[16] = {
 
 int main(void) {
 
-  const uint8_t mode  = getVideoMode();
-  const uint8_t lines = getLineCount();
+  const uint8_t refresh_rate = getVideoMode();
+  const uint8_t lines        = getLineCount();
 
   srand(get_random_seed());
-  vdp_set_mode(6, lines, mode);
+  vdp_set_lines(lines);
+  vdp_set_refresh(refresh_rate);
+  vdp_set_graphic_6();
   vdp_set_palette(palette);
-  vdp_erase_bank0(4);
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 4, 0, 0);
+
   unsigned int i = 0;
 
   printf("Press any key to abort\r\n");
@@ -33,7 +37,7 @@ int main(void) {
 
     if (i >= 1024) {
       i = 0;
-      vdp_clear_all_memory();
+      vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
     }
   }
 

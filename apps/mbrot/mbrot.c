@@ -49,9 +49,12 @@ int main(void) {
   const uint8_t refresh_rate = getVideoMode();
   const uint8_t lines        = getLineCount();
 
-  vdp_set_mode(6, lines, refresh_rate);
+  vdp_set_lines(lines);
+  vdp_set_refresh(refresh_rate);
+  vdp_set_graphic_6();
   vdp_set_palette(palette);
-  vdp_erase_bank0(0);
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
 
   printf("Press any key to abort\r\n");
 
@@ -81,7 +84,8 @@ int main(void) {
       if (((iX & 15) == 0) && cpm_c_rawio() != 0)
         return 0;
 
-      pointSet(iX, iY, iteration, CMD_LOGIC_IMP);
+      vdp_cmd_wait_completion();
+      vdp_cmd_pset(iX, iY, iteration, CMD_LOGIC_IMP);
     }
   }
 
