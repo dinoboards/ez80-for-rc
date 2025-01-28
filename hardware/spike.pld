@@ -1,0 +1,59 @@
+Name     Spike ;
+PartNo   ATF1504 ;
+Date     01/28/24 ;
+Revision 01 ;
+Designer Dean ;
+Company  Dinoboards ;
+Assembly None ;
+Location Here ;
+Device   F1502ISPPLCC44 ;
+
+/*
+
+| Device Name Package      | Type    | JTAG Enabled    | JTAG Disabled |
+| --------------------     | -----   | ----            | ----          |
+| ATF1502AS/ASL/ASV        | PLCC44  | F1502ISPPLCC44  | F1502PLCC44   |
+| ATF1502AS/ASL/ASV        | TQFP44  | F1502ISPTQFP44  | F1502TQFP44   |
+| ATF1504AS/ASL/ASV/ASVL   | PLCC44  | F1504ISPPLCC44  | F1504PLCC44   |
+| ATF1504AS/ASL/ASV/ASVL   | TQFP44  | F1504ISPTQFP44  | F1504TQFP44   |
+| ATF1504AS/ASL/ASV/ASVL   | PLCC84  | F1504ISPPLCC84  | F1504PLCC84   |
+| ATF1504AS/ASL/ASV/ASVL   | TQFP100 | F1504ISPTQFP100 | F1504TQFP100  |
+| ATF1508AS/ASL/ASV/ASVL   | PLCC84  | F1508ISPPLCC84  | F1508PLCC84   |
+| ATF1508AS/ASL/ASV/ASVL   | TQFP100 | F1508ISPTQFP100 | F1508TQFP100  |
+| ATF1508AS/ASL/ASV/ASVL   | PQFP100 | F1508ISPQFP100  | F1508QFP100   |
+
+*/
+
+/* property   atmel {cascade_logic  on   };
+property   atmel {fast_inlatch   on   };
+property   atmel {foldback_logic on   };
+property   atmel {logic_doubling on   };
+property   atmel {optimize       on   };
+property   atmel {output_fast    off   };
+property   atmel {pin_keep       off   };
+property   atmel {preassign      keep   };
+property   atmel {security       off   };
+property   atmel {xor_synthesis  off   }; */
+
+/* NODE CLK_IN;
+NODE A;
+NODE B;
+NODE C; */
+/* sudo chmod a+rw /dev/ttyACM0 */
+
+/* *************** INPUT PINS *********************/
+PIN  6  =  CLKIN          ;
+/*PIN  43 =  CLK        ; /*                                 */
+
+/* *************** OUTPUT PINS *********************/
+PIN  9  =  CLKOUT          ; /*                                 */
+/*PIN  11   =   Emulate                      ;*/
+
+/*                                 */
+ /*                                 */
+
+/* A = !CLKI;
+B = !A;
+C = !B; */
+CLKOUT = !CLKIN;
+
