@@ -28,8 +28,8 @@ jobs:
 
       - name: build hardware jed file
         run: |
-          docker run -v ./hardware/:/ez80-for-rc/hardware/ --privileged=true -t dinoboards/wincupl:0.0.3 ./make-jed.sh
-          docker run -v ./hardware/:/ez80-for-rc/hardware/ --privileged=true -t dinoboards/wincupl:0.0.3 ./make-jed.sh spike
+          docker run -v ./hardware/:/ez80-for-rc/hardware/ -u $(USER_ID):$(GROUP_ID) --privileged=true -t dinoboards/wincupl:0.0.3 ./make-jed.sh
+          docker run -v ./hardware/:/ez80-for-rc/hardware/ -u $(USER_ID):$(GROUP_ID) --privileged=true -t dinoboards/wincupl:0.0.3 ./make-jed.sh spike
 
       - name: Archive hardware
         uses: actions/upload-artifact@v4
