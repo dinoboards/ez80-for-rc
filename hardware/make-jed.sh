@@ -7,11 +7,9 @@ NAME="${ARG1%.pld}"
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-WINCUPLPATH=/Wincupl/Shared/
-
 mkdir -p ./bin
 
-wine ${WINCUPLPATH}cupl.exe -a -l -m4 -e -x -f - -ju ${WINCUPLPATH}\cupl.dl $NAME 2>>./bin/wincuplerror.log
+wine cupl.exe -a -l -m4 -e -x -f - -ju ${WINCUPLPATH}\cupl.dl $NAME 2>>./bin/wincuplerror.log
 
 # Removed the location entry - the TL866II Plus programmer seems to have loading file issue
 sed -i '/Location/d' ./${NAME}.jed
@@ -28,4 +26,4 @@ mv ${NAME}.mx bin/${NAME}.mx
 [ -f "${NAME}.sim" ] && mv ${NAME}.sim bin/${NAME}.sim
 [ -f "${NAME}.tt2" ] && mv ${NAME}.tt2 bin/${NAME}.tt2
 [ -f "${NAME}.tt3" ] && mv ${NAME}.tt3 bin/${NAME}.tt3
-
+[ -f "${NAME}.lst" ] && mv ${NAME}.lst bin/${NAME}.lst
