@@ -1,5 +1,5 @@
 Name     Spike ;
-PartNo   ATF1504 ;
+PartNo   ATF1502 ;
 Date     01/28/24 ;
 Revision 01 ;
 Designer Dean ;
@@ -35,25 +35,44 @@ property   atmel {preassign      keep   };
 property   atmel {security       off   };
 property   atmel {xor_synthesis  off   }; */
 
-/* NODE CLK_IN;
-NODE A;
-NODE B;
-NODE C; */
-/* sudo chmod a+rw /dev/ttyACM0 */
+/** inputs **/
+PIN 43 = clk ; /* clock signal for registers */
+//PIN 40 = load ;/* load signal */
+/* PIN 39 = ! ClrFlag ; */
+// PIN 37 = LoadPin0;
+// PIN 36 = LoadPin1;
+// PIN 34 = LoadPin2;
+// PIN 33 = LoadPin3;
 
-/* *************** INPUT PINS *********************/
-PIN  6  =  CLKIN          ;
-/*PIN  43 =  CLK        ; /*                                 */
+/** outputs **/
+PIN 28 = C0;
+PIN 27 = C1;
+PIN 26 = C2;
+//PIN 24 = C3;
 
-/* *************** OUTPUT PINS *********************/
-PIN  9  =  CLKOUT          ; /*                                 */
-/*PIN  11   =   Emulate                      ;*/
 
-/*                                 */
- /*                                 */
+field STATE_BITS = [C0..2];
 
-/* A = !CLKI;
-B = !A;
-C = !B; */
-CLKOUT = !CLKIN;
+C0.ck = clk;
+C1.ck = clk;
+C2.ck = clk;
+/* C2.D = clk; */
+/** state machine definition **/
+
+/* CountPin0 = !LoadPin0; */
+SEQUENCED STATE_BITS {
+  $REPEAT A = [0..6]
+  PRESENT {A}
+    NEXT {A+1};
+  $REPEND
+/*
+  PRESENT 1
+    NEXT 2;
+
+  PRESENT 2
+    NEXT 3; */
+
+  PRESENT 7
+    NEXT 0;
+}
 

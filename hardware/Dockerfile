@@ -58,3 +58,5 @@ ENV WINEPREFIX=/home/builder/.wine
 RUN wine wineboot
 
 RUN wine wineboot
+
+COPY ez80-for-rc/hardware/5vcomp .

@@ -9,12 +9,24 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 mkdir -p ./bin
 
-wine cupl.exe -a -l -m4 -e -x -f - -ju ${WINCUPLPATH}\cupl.dl $NAME 2>>./bin/wincuplerror.log
+wine cupl.exe -a -l -m4 -e -x -f -ju ${WINCUPLPATH}\cupl.dl  $NAME 2>>./bin/wincuplerror.log
 
+# Define ANSI color codes
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+if [ -f "${NAME}.jed" ]; then
 # Removed the location entry - the TL866II Plus programmer seems to have loading file issue
-sed -i '/Location/d' ./${NAME}.jed
+  sed -i '/Location/d' ./${NAME}.jed
+  mv ${NAME}.jed ./bin
+else
+  # Print text in red
+  echo -e "${RED}"
+  wine find1502 ${NAME}.tt2
+  echo -e "${NC}"
+  exit 1
+fi
 
-mv ${NAME}.jed ./bin
 mv ${NAME}.doc bin/${NAME}.txt
 mv ${NAME}.mx bin/${NAME}.mx
 
