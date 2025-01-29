@@ -7,7 +7,8 @@
 #
 # from within the ez80-for-rc/hardware directory
 # docker run -v ${PWD}:/ez80-for-rc/hardware --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/wincupl:0.0.2 ./make-jed.sh
-
+#
+# docker push dinoboards/wincupl:0.0.2
 FROM ubuntu:jammy-20240911.1
 LABEL Maintainer="Dean Netherton" \
       Description="Tool chain to compile JED files from PLD using Wincupl"

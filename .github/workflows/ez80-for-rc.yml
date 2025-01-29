@@ -24,7 +24,7 @@ jobs:
 
       - name: pull docker tool chain
         run: |
-          docker pull dinoboards/wincupl:0.0.1
+          docker pull dinoboards/wincupl:0.0.2
 
       - name: build hardware jed file
         run: |

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set +x
+set -x
 
 ARG1=${1:-ez80-cpu-v1.7}
 NAME="${ARG1%.pld}"
