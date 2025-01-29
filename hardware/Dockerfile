@@ -3,12 +3,12 @@
 #
 # run this command in the parent directory of ez80-for-rc
 # with Wincupl files prepared - with the fitters updated
-# docker build -f ez80-for-rc/hardware/Dockerfile --progress plain -t dinoboards/wincupl:0.0.2 .
+# docker build -f ez80-for-rc/hardware/Dockerfile --progress plain -t dinoboards/wincupl:0.0.3 .
 #
 # from within the ez80-for-rc/hardware directory
-# docker run -v ${PWD}:/ez80-for-rc/hardware --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/wincupl:0.0.2 ./make-jed.sh
+# docker run -v ${PWD}:/ez80-for-rc/hardware --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/wincupl:0.0.3 ./make-jed.sh
 #
-# docker push dinoboards/wincupl:0.0.2
+# docker push dinoboards/wincupl:0.0.3
 FROM ubuntu:jammy-20240911.1
 LABEL Maintainer="Dean Netherton" \
       Description="Tool chain to compile JED files from PLD using Wincupl"
@@ -36,8 +36,6 @@ RUN wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/d
 RUN apt update
 RUN apt install -y --install-recommends winehq-stable
 
-RUN WINEARCH=win32 WINEPREFIX=~/.wine wine wineboot
-
 COPY --link Wincupl /Wincupl
 
 WORKDIR /ez80-for-rc/hardware/
@@ -47,8 +45,16 @@ RUN git config --global --add safe.directory /src && git config --global --add s
 RUN adduser --disabled-password --gecos "" builder
 RUN chown -R builder:builder /Wincupl
 
+USER builder
+ENV XDG_RUNTIME_DIR="/home/builder"
 
-ENV WINEPATH="z:\\Wincupl\\WINCUPL\\EXE;z:\\Wincupl\\Shared;z:\\WinCupl\\WINCUPL\\FITTERS"
+ENV WINEPATH="z:\\Wincupl\\WINCUPL\\EXE\\;z:\\Wincupl\\Shared\\;z:\\WinCupl\\WINCUPL\\FITTERS\\"
 ENV FITTERDIR="z:\\WinCupl\\WINCUPL\\FITTERS"
-ENV WINEDEBUG="fixme-hid,fixme-ntdll,fixme-imm"
-ENV WINCUPLPATH="z:\\Wincupl\\Shared"
+ENV WINEDEBUG="-all"
+ENV WINCUPLPATH="z:\\Wincupl\\Shared\\"
+
+ENV WINEARCH=win32
+ENV WINEPREFIX=/home/builder/.wine
+RUN wine wineboot
+
+RUN wine wineboot

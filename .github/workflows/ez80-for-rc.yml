@@ -24,12 +24,12 @@ jobs:
 
       - name: pull docker tool chain
         run: |
-          docker pull dinoboards/wincupl:0.0.2
+          docker pull dinoboards/wincupl:0.0.3
 
       - name: build hardware jed file
         run: |
-          docker run -v ./hardware/:/ez80-for-rc/hardware/ --privileged=true -t dinoboards/wincupl:0.0.2 ./make-jed.sh
-          docker run -v ./hardware/:/ez80-for-rc/hardware/ --privileged=true -t dinoboards/wincupl:0.0.2 ./make-jed.sh spike
+          docker run -v ./hardware/:/ez80-for-rc/hardware/ --privileged=true -t dinoboards/wincupl:0.0.3 ./make-jed.sh
+          docker run -v ./hardware/:/ez80-for-rc/hardware/ --privileged=true -t dinoboards/wincupl:0.0.3 ./make-jed.sh spike
 
       - name: Archive hardware
         uses: actions/upload-artifact@v4
