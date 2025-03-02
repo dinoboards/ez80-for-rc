@@ -20,6 +20,3 @@ _start_cpm_bdos_adl:
 	RET
 _end_cpm_bdos_adl:
 _end_marshalling:
-
-	.global	_main_func
-	_main_func	= 0x200400

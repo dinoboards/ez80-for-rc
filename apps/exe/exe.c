@@ -3,14 +3,33 @@
 #include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-extern int main_func(int argc, const char **argv);
+/*
+Loaded binaries are by default targetted to start at: 0x200400
+And their CP/M vectors are at 0x200000 to 0x2003FF
+
+so for a relocated binary we need to 0x400000:
+
+  copy marshal code to 0x400000
+
+  Any address in the range of 0x200000...0x2003FF to 0x400000...0x4003FF
+  And address in the main exe also relocated up
+
+  relocation table at end of binary file
+  length: 24 bit count of address to be modified
+  uint24_t[] address - each item points to main body.  read the address there and add 0x200000
+
+
+*/
+
+typedef int (*main_func_ptr)(int argc, const char **argv);
+
+// extern int main_func(int argc, const char **argv);
 
 extern const uint8_t start_marshalling[];
 extern const uint8_t end_marshalling[];
-
-uint8_t *const marshalling_vectors = (uint8_t *)(0x200000);
 
 static CPM_FCB fcb __attribute__((section(".bss_z80")));
 uint8_t        buffer[SECSIZE] __attribute__((section(".bss_z80")));
@@ -56,16 +75,47 @@ int extract_filename_parts(const char *input, CPM_FCB *fcb) {
   return 0; // Success
 }
 
-int main(const int argc, const char *argv[]) {
-  // size_t n;
+uint24_t base_address      = 0x200000;
+uint8_t  relocation_offset = 0x00;
 
-  if (argc < 2) {
-    printf("Usage: %s <filename> <...arguments>\r\n", argv[0]);
+const char *filename = NULL;
+
+uint8_t process_args(const int argc, const char *argv[]) {
+  if (argc >= 4 && strcmp(argv[1], "-T") == 0) {
+    // assume: exe -t <base> <filename> <args>
+
+    base_address = strtoul(argv[2], NULL, 16);
+    if (base_address < 0x20 || base_address > 0x58) {
+      printf("Error: target base address must be between 0x20 and 0x58\r\n");
+      exit(1);
+    }
+    relocation_offset = base_address - 0x20;
+    base_address <<= 16;
+    filename = argv[3];
+    return 3;
+  }
+
+  if (argc >= 2) {
+    // assume exe <filename> <args>
+
+    filename = argv[1];
+    if (filename[0] == '-') {
+      printf("Usage: %s [-t <base-address>] <filename> <...arguments>\r\n", argv[0]);
+      exit(1);
+    }
+
     return 1;
   }
 
-  const char *filename = argv[1];
-  uint8_t    *ptr      = (uint8_t *)0x200400;
+  printf("Usage: %s [-t <base-address>] <filename> <...arguments>\r\n", argv[0]);
+  exit(1);
+}
+
+int load_and_execute(const int argc, const char *argv[]) {
+  uint24_t       start_address       = base_address + 0x400;
+  uint8_t *const marshalling_vectors = (uint8_t *)base_address;
+  main_func_ptr  main_func           = (main_func_ptr)start_address;
+  uint8_t       *ptr                 = (uint8_t *)start_address;
 
   extract_filename_parts(filename, &fcb);
 
@@ -95,7 +145,25 @@ int main(const int argc, const char *argv[]) {
 
   cpm_f_close(AS_NEAR_PTR(&fcb));
 
+  if (relocation_offset != 0x00) {
+    ptr -= 3;
+    uint24_t relocation_table_offset = *((uint24_t *)ptr);
+    ptr -= 3;
+    uint24_t  relocation_table_count = *((uint24_t *)ptr);
+    uint24_t *relocation_table       = (uint24_t *)(start_address + relocation_table_offset);
+    for (uint24_t i = 0; i < relocation_table_count; i++) {
+      uint8_t *r = ((uint8_t *)relocation_table[i] + start_address);
+      *r += relocation_offset;
+    }
+  }
+
   memcpy(marshalling_vectors, start_marshalling, end_marshalling - start_marshalling);
 
-  return main_func(argc - 1, &argv[1]);
+  return main_func(argc, argv);
+}
+
+int main(const int argc, const char *argv[]) {
+  uint8_t arg_start = process_args(argc, argv);
+
+  return load_and_execute(argc - arg_start, &argv[arg_start]);
 }
