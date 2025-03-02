@@ -121,10 +121,10 @@ __init:
 	LD	A, CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS3_CTL), A
 
-	; CS0 is enabled for memory @ $200000 -> $3FFFFF
+	; CS0 is enabled for memory @ $200000 -> $FFFFFF
 	LD	A, %20
 	OUT0	(CS0_LBR), A
-	LD	A, %3F
+	LD	A, %FF
 	OUT0	(CS0_UBR), A
 	LD	A, MEM_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPARATE
 	OUT0	(CS0_BMC), A
