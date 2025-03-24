@@ -18,3 +18,5 @@ EZ80.COM:
 	validate-mem-set-value.c \
 	config-flash.c \
 	config_set_tick_rate.c
+
+#todo: fix issue where only whitespace is after command- causing output to scramble - as it assumes its a valid arg
