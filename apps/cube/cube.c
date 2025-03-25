@@ -85,7 +85,6 @@ void page_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t 
 
 #endif
 
-
 void swap_page() {
   if (current_page == 0) {
     current_page = 1;

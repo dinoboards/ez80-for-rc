@@ -11,10 +11,12 @@ see http://en.wikipedia.org/wiki/Portable_pixmap
 to see the file use external application ( graphic viewer)
  */
 #include "../common/config_request.h"
+#include "large_palette.h"
+#include "wait_for_key.h"
 #include <cpm.h>
 #include <math.h>
 #include <stdio.h>
-#include <v99x8.h>
+#include <v99x8-super.h>
 
 RGB palette[16] = {
     {0, 0, 0}, {1, 0, 0}, {2, 0, 0},  {3, 0, 0},  {4, 0, 0},  {5, 0, 0},  {6, 0, 0},  {7, 0, 0},
@@ -26,9 +28,7 @@ RGB palette[16] = {
 #define CX_MAX        1.5
 #define CY_MIN        -2.0
 #define CY_MAX        2.0
-#define IX_MAX        512
-
-#define PIXEL_WIDTH ((CX_MAX - CX_MIN) / IX_MAX)
+#define IX_MAX        (vdp_get_screen_width())
 
 #define ESCAPE_RADIUS 2
 /* bail-out value , radius of circle ;  */
@@ -46,6 +46,12 @@ uint24_t iX, iY;
 uint8_t  iteration;
 
 int main(void) {
+#ifdef VDP_SUPER_HDMI
+  vdp_set_super_graphic_8();
+  vdp_set_extended_palette(large_palette);
+  const uint24_t lines = vdp_get_screen_height();
+
+#else
   const uint8_t refresh_rate = getVideoMode();
   const uint8_t lines        = getLineCount();
 
@@ -53,21 +59,25 @@ int main(void) {
   vdp_set_refresh(refresh_rate);
   vdp_set_graphic_6();
   vdp_set_palette(palette);
+#endif
+
+  const float pixel_width = ((CX_MAX - CX_MIN) / IX_MAX);
+
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), lines, 0, 0, 0);
 
   printf("Press any key to abort\r\n");
 
-  const float pixelHeight = ((CY_MAX - CY_MIN) / lines);
+  const float pixel_height = ((CY_MAX - CY_MIN) / lines);
 
   for (iY = 0; iY < lines; iY++) {
-    Cy = CY_MIN + iY * pixelHeight;
+    Cy = CY_MIN + iY * pixel_height;
 
-    if (fabs(Cy) < pixelHeight / 2)
+    if (fabs(Cy) < pixel_height / 2)
       Cy = 0.0;
 
     for (iX = 0; iX < IX_MAX; iX++) {
-      Cx = CX_MIN + iX * PIXEL_WIDTH;
+      Cx = CX_MIN + iX * pixel_width;
 
       Zx  = 0.0;
       Zy  = 0.0;
@@ -88,6 +98,9 @@ int main(void) {
       vdp_cmd_pset(iX, iY, iteration, CMD_LOGIC_IMP);
     }
   }
+
+  printf("Press any key to exit\r\n");
+  wait_for_key();
 
   return 0;
 }
