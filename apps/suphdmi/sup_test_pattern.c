@@ -56,4 +56,3 @@ void super_graphics_mode_double_buffering(uint8_t gm) {
   printf("Press key to continue\r\n");
   wait_for_key();
 }
-

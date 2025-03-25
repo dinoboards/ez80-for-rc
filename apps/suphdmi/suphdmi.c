@@ -63,7 +63,6 @@ extern void graphics_mode_7_double_buffering();
 void main_double_buffering_test(void) {
   graphics_mode_6_double_buffering();
 
-
   // vdp_set_super_graphic_2();
   // super_graphics_mode_double_buffering(2);
 

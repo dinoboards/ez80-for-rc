@@ -78,7 +78,7 @@ void graphics_mode_6_double_buffering() {
 
   printf("Press key to flip back to 1st page\r\n");
   wait_for_key();
-  vdp_cmd_logical_move_vdp_to_vram(0, 0, box_width, box_height, 4, 0, 0); //box in top left corner
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, box_width, box_height, 4, 0, 0); // box in top left corner
   vdp_cmd_wait_completion();
 
   vdp_set_page(0);

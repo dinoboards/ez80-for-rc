@@ -2,20 +2,60 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <v99x8.h>
+#include <v99x8-super.h>
 
 #define LEFT   0
-#define RIGHT  256
+#define RIGHT  ((int24_t)vdp_get_screen_width())
 #define TOP    0
-#define BOTTOM (192)
+#define BOTTOM ((int24_t)vdp_get_screen_height())
 #define WIDTH  (RIGHT - LEFT)
 #define HEIGHT (BOTTOM - TOP)
 
-void erase_page_0() { vdp_cmd_vdp_to_vram(LEFT, TOP, WIDTH, HEIGHT, 0, 0); }
+#ifdef VDP_SUPER_HDMI
+#define PAGE_HEIGHT ((int24_t)vdp_get_screen_height())
+#else
+#define PAGE_HEIGHT 256
+#endif
 
-void erase_page_1() { vdp_cmd_vdp_to_vram(LEFT, TOP + 256, WIDTH, HEIGHT, 0, 0); }
+#define cx   (WIDTH / 2)
+#define cy   (HEIGHT / 2)
+#define cz   (0)
+#define size (HEIGHT / 4)
+
+// width: 256-0 = 256
+// cx: width/2 = 128
+// height: 192-0 = 192
+// size = height / 4 = 192/4 = 48
+// cx + size = 128-48
+
+void wait_for_key() {
+  uint8_t k = 0;
+  while (k == 0) {
+    k = cpm_c_rawio();
+    if (k == 27)
+      exit(0);
+  }
+}
 
 uint8_t current_page = 0;
+
+#ifdef VDP_SUPER_HDMI
+void erase_current_page() {
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
+}
+
+#else
+
+void erase_page_0() {
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
+}
+
+void erase_page_1() {
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(0, PAGE_HEIGHT, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
+}
 
 void erase_current_page() {
   if (current_page == 0) {
@@ -24,22 +64,44 @@ void erase_current_page() {
     erase_page_1();
   }
 }
+#endif
 
+#ifdef VDP_SUPER_HDMI
+void page_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t color) {
+  vdp_cmd_wait_completion();
+  vdp_draw_line(x1, y1, (x2), y2, color, CMD_LOGIC_IMP);
+}
+
+#else
 void page_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t color) {
   if (current_page == 0) {
-    vdp_draw_line(x1 + LEFT, y1 + TOP, (x2), y2, color, CMD_LOGIC_IMP);
+    vdp_cmd_wait_completion();
+    vdp_draw_line(x1, y1, (x2), y2, color, CMD_LOGIC_IMP);
   } else {
-    vdp_draw_line(x1 + LEFT, y1 + TOP + 256, x2, y2 + 256, color, CMD_LOGIC_IMP);
+    vdp_cmd_wait_completion();
+    vdp_draw_line(x1, y1 + PAGE_HEIGHT, x2, y2 + PAGE_HEIGHT, color, CMD_LOGIC_IMP);
   }
 }
+
+#endif
+
 
 void swap_page() {
   if (current_page == 0) {
     current_page = 1;
+    vdp_cmd_wait_completion();
     vdp_set_page(0);
+#ifdef VDP_SUPER_HDMI
+    vdp_set_command_page(1);
+#endif
+
   } else {
     current_page = 0;
+    vdp_cmd_wait_completion();
     vdp_set_page(1);
+#ifdef VDP_SUPER_HDMI
+    vdp_set_command_page(0);
+#endif
   }
 }
 
@@ -53,16 +115,8 @@ const float SPEED_X = 0.05; // rps
 const float SPEED_Y = 0.15; // rps
 const float SPEED_Z = 0.10; // rps
 
-#define cx   (WIDTH / 2)
-#define cy   (HEIGHT / 2)
-#define cz   (0)
-#define size (HEIGHT / 4)
-
 #define VERTICES 8
-POINT3D vertices[VERTICES] = {{cx - size, cy - size, cz - size}, {cx + size, cy - size, cz - size},
-                              {cx + size, cy + size, cz - size}, {cx - size, cy + size, cz - size},
-                              {cx - size, cy - size, cz + size}, {cx + size, cy - size, cz + size},
-                              {cx + size, cy + size, cz + size}, {cx - size, cy + size, cz + size}};
+POINT3D vertices[VERTICES];
 
 #define EDGES 12
 uint8_t edges[EDGES][2] = {
@@ -126,26 +180,54 @@ void draw_cube(int24_t timeNow) {
   swap_page();
 }
 
-void write_vdp_memory(uint24_t address, uint8_t value) {
-  const uint8_t A16_A14 = (address >> 14) & 0x07;
-  const uint8_t A13_A8  = (address >> 8) & 0x3F;
-  const uint8_t A7_A0   = address & 0xFF;
-
-  vdp_reg_write(14, A16_A14);
-  vdp_out_cmd(A7_A0);
-  vdp_out_cmd(A13_A8 | 0x40); // enable write
-  vdp_out_dat(value);
+void init() {
+  vertices[0] = (POINT3D){cx - size, cy - size, cz - size};
+  vertices[1] = (POINT3D){cx + size, cy - size, cz - size};
+  vertices[2] = (POINT3D){cx + size, cy + size, cz - size};
+  vertices[3] = (POINT3D){cx - size, cy + size, cz - size};
+  vertices[4] = (POINT3D){cx - size, cy - size, cz + size};
+  vertices[5] = (POINT3D){cx + size, cy - size, cz + size};
+  vertices[6] = (POINT3D){cx + size, cy + size, cz + size};
+  vertices[7] = (POINT3D){cx - size, cy + size, cz + size};
 }
 
+#ifdef VDP_SUPER_HDMI
 int main(/*const int argc, const char *argv[]*/) {
 
-  vdp_set_lines(192);
-  vdp_set_refresh(NTSC);
+  vdp_set_super_graphic_1();
+
+  init();
+
+  vdp_set_command_page(1);
+  erase_current_page();
+  vdp_cmd_wait_completion();
+  vdp_set_page(1);
+
+  vdp_set_command_page(0);
+  erase_current_page();
+  vdp_cmd_wait_completion();
+  vdp_set_page(0);
+
+  uint24_t time = 0;
+  while (true) {
+    if (cpm_c_rawio() != 0)
+      return 0;
+    draw_cube(time);
+    time += 10;
+  }
+}
+
+#else
+int main(/*const int argc, const char *argv[]*/) {
+
+  vdp_set_lines(212);
+  vdp_set_refresh(PAL);
   vdp_set_graphic_7();
 
-  vdp_erase_bank0(0);
-  vdp_erase_bank1(0);
+  init();
+
   erase_page_0();
+  vdp_cmd_wait_completion();
   erase_page_1();
 
   vdp_set_page(0);
@@ -158,3 +240,4 @@ int main(/*const int argc, const char *argv[]*/) {
     time += 10;
   }
 }
+#endif
