@@ -54,8 +54,14 @@ void test_pattern(uint8_t col_row_count, uint8_t white_colour_index) {
   //     vdp_cmd_logical_move_vram_to_vram(col, row, col+box_width*3+12, row, 1, 1, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
   //   }
   vdp_cmd_wait_completion();
-  vdp_cmd_move_vram_to_vram(0, 8, 0, 0, get_screen_width(), get_screen_height(), DIX_RIGHT | DIY_DOWN);
+  vdp_cmd_move_vram_to_vram(0, 8, 0, 0, get_screen_width(), get_screen_height() - 8, DIX_RIGHT | DIY_DOWN);
   vdp_cmd_wait_completion();
+
+  wait_for_key();
+  // do scroll again with vram_y
+  vdp_cmd_move_vram_to_vram_y(0, 8, 0, get_screen_height() - 8, DIX_RIGHT | DIY_DOWN);
+  vdp_cmd_wait_completion();
+  wait_for_key();
 
   test_for_escape();
   // wait_for_key();

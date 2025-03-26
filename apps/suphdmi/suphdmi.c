@@ -1,4 +1,5 @@
 #include "../common/config_request.h"
+#include "large_palette.h"
 #include "wait_for_key.h"
 #include <cpm.h>
 #include <math.h>
@@ -93,12 +94,17 @@ void main_patterns(void) {
   graphics_mode_6_test_pattern(50);
   vdp_set_super_graphic_2();
   super_graphics_mode_test_pattern(2);
+
   vdp_set_super_graphic_4();
   super_graphics_mode_test_pattern(4);
   vdp_set_super_graphic_6();
   super_graphics_mode_test_pattern(6);
   vdp_set_super_graphic_8();
   super_graphics_mode_test_pattern(8);
+  vdp_set_super_graphic_10();
+  super_graphics_mode_test_pattern(10);
+  vdp_set_super_graphic_12();
+  super_graphics_mode_test_pattern(12);
 
   graphics_mode_5_test_pattern(60);
   graphics_mode_6_test_pattern(60);
@@ -110,85 +116,128 @@ void main_patterns(void) {
   super_graphics_mode_test_pattern(5);
   vdp_set_super_graphic_7();
   super_graphics_mode_test_pattern(7);
+  vdp_set_super_graphic_9();
+  super_graphics_mode_test_pattern(9);
+  vdp_set_super_graphic_11();
+  super_graphics_mode_test_pattern(11);
 
-  // // printf("Rotate through full set of green colours\r\n");
-  // // wait_for_key();
-  // // RGB green = {0, 0, 0};
-  // // for (int i = 0; i < 256; i++) {
-  // //   green.green = i;
-  // //   vdp_set_extended_palette_entry(i, green);
-  // // }
+  printf("Rotate through full set of green colours\r\n");
+  wait_for_key();
+  RGB green = {0, 0, 0};
+  for (int i = 0; i < 256; i++) {
+    green.green = i;
+    vdp_set_extended_palette_entry(i, green);
+  }
 
   printf("press key to exit\r\n");
   wait_for_key();
 }
 
 void main_test_vdp_cmd_logical_move_vram_to_vram() {
-  //draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
+  // draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
   vdp_set_super_graphic_1();
 
-  //erase the screen
+  // erase the screen
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 15, 0, 0); //white
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 15, 0, 0); // white
 
-  uint24_t box_width = get_screen_width()/5;
-  uint24_t box_height = get_screen_height()/5;
+  uint24_t box_width  = get_screen_width() / 5;
+  uint24_t box_height = get_screen_height() / 5;
 
-  //draw box in the top/left
+  // draw box in the top/left
   vdp_cmd_wait_completion();
   vdp_cmd_logical_move_vdp_to_vram(10, 10, box_width, box_height, 2, 0, 0);
 
-  //copy it to the right
+  // copy it to the right
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vram_to_vram(10, 10, get_screen_width()/2+10, 10, box_width, box_height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
+  vdp_cmd_logical_move_vram_to_vram(10, 10, get_screen_width() / 2 + 10, 10, box_width, box_height, DIX_RIGHT | DIY_DOWN,
+                                    CMD_LOGIC_IMP);
 
-  //copy it to the right/bottom
+  // copy it to the right/bottom
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vram_to_vram(10, 10, get_screen_width()/2+10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
+  vdp_cmd_logical_move_vram_to_vram(10, 10, get_screen_width() / 2 + 10, get_screen_height() / 2 + 10, box_width, box_height,
+                                    DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
 
-  //copy it to the left/bottom
+  // copy it to the left/bottom
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vram_to_vram(10, 10, 10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
+  vdp_cmd_logical_move_vram_to_vram(10, 10, 10, get_screen_height() / 2 + 10, box_width, box_height, DIX_RIGHT | DIY_DOWN,
+                                    CMD_LOGIC_IMP);
 
   wait_for_key();
 }
 
 void main_test_vdp_cmd_move_vram_to_vram() {
-  //draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
+  // draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
   vdp_set_super_graphic_1();
 
-  //erase the screen
+  // erase the screen
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 15, 0, 0); //white
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 15, 0, 0); // white
 
-  uint24_t box_width = get_screen_width()/5;
-  uint24_t box_height = get_screen_height()/5;
+  uint24_t box_width  = get_screen_width() / 5;
+  uint24_t box_height = get_screen_height() / 5;
 
-  //draw box in the top/left
+  // draw box in the top/left
   vdp_cmd_wait_completion();
   vdp_cmd_logical_move_vdp_to_vram(10, 10, box_width, box_height, 2, 0, 0);
 
-  //copy it to the right
+  // copy it to the right
   vdp_cmd_wait_completion();
-  vdp_cmd_move_vram_to_vram(10, 10, get_screen_width()/2+10, 10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
+  vdp_cmd_move_vram_to_vram(10, 10, get_screen_width() / 2 + 10, 10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
 
-  //copy it to the right/bottom
+  // copy it to the right/bottom
   vdp_cmd_wait_completion();
-  vdp_cmd_move_vram_to_vram(10, 10, get_screen_width()/2+10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
+  vdp_cmd_move_vram_to_vram(10, 10, get_screen_width() / 2 + 10, get_screen_height() / 2 + 10, box_width, box_height,
+                            DIX_RIGHT | DIY_DOWN);
 
-  //copy it to the left/bottom
+  // copy it to the left/bottom
   vdp_cmd_wait_completion();
-  vdp_cmd_move_vram_to_vram(10, 10, 10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
+  vdp_cmd_move_vram_to_vram(10, 10, 10, get_screen_height() / 2 + 10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
 
   wait_for_key();
 }
-int main() {
-  main_test_vdp_cmd_move_vram_to_vram();
 
-  main_test_vdp_cmd_logical_move_vram_to_vram();
+void main_vram_test() {
+  // try to erase video memory
+
+  vdp_set_super_graphic_10();
+
+  vdp_set_extended_palette(large_palette);
+
+  vdp_reg_write(7, 4);
+
+  uint8_t data = 1;
+  printf("Press key to 'erase''\r\n");
+  wait_for_key();
+
+  for (uint24_t i = 0; i < get_screen_width() * 10; i++) {
+    vdp_cpu_to_vram(&data, i, 1);
+    test_for_escape();
+    vdp_cpu_to_vram(&data, i, 1);
+  }
+  printf("erased?\r\n");
+  wait_for_key();
+
+  data = 2;
+  for (uint24_t i = 0; i < get_screen_width() * 10; i++) {
+    vdp_cpu_to_vram(&data, i, 1);
+    printf("Byte: %d\r\n", i);
+  }
+
+  printf("confirm\r\n");
+  wait_for_key();
+}
+
+int main() {
+  // main_vram_test();
+
+  // main_test_vdp_cmd_move_vram_to_vram();
+
+  // main_test_vdp_cmd_logical_move_vram_to_vram();
 
   // main_double_buffering_test();
 
   main_patterns();
+
   return 0;
 }
