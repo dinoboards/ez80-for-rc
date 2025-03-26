@@ -63,29 +63,29 @@ extern void graphics_mode_7_double_buffering();
 void main_double_buffering_test(void) {
   graphics_mode_6_double_buffering();
 
-  // vdp_set_super_graphic_2();
-  // super_graphics_mode_double_buffering(2);
+  vdp_set_super_graphic_2();
+  super_graphics_mode_double_buffering(2);
 
-  // vdp_set_super_graphic_4();
-  // super_graphics_mode_double_buffering(4);
+  vdp_set_super_graphic_4();
+  super_graphics_mode_double_buffering(4);
 
-  // vdp_set_super_graphic_6();
-  // super_graphics_mode_double_buffering(6);
+  vdp_set_super_graphic_6();
+  super_graphics_mode_double_buffering(6);
 
-  // vdp_set_super_graphic_8();
-  // super_graphics_mode_double_buffering(8);
+  vdp_set_super_graphic_8();
+  super_graphics_mode_double_buffering(8);
 
-  // vdp_set_super_graphic_1();
-  // super_graphics_mode_double_buffering(1);
+  vdp_set_super_graphic_1();
+  super_graphics_mode_double_buffering(1);
 
-  // vdp_set_super_graphic_3();
-  // super_graphics_mode_double_buffering(3);
+  vdp_set_super_graphic_3();
+  super_graphics_mode_double_buffering(3);
 
-  // vdp_set_super_graphic_5();
-  // super_graphics_mode_double_buffering(5);
+  vdp_set_super_graphic_5();
+  super_graphics_mode_double_buffering(5);
 
-  // vdp_set_super_graphic_7();
-  // super_graphics_mode_double_buffering(7);
+  vdp_set_super_graphic_7();
+  super_graphics_mode_double_buffering(7);
 }
 
 void main_patterns(void) {
@@ -123,9 +123,72 @@ void main_patterns(void) {
   wait_for_key();
 }
 
-int main() {
-  main_double_buffering_test();
+void main_test_vdp_cmd_logical_move_vram_to_vram() {
+  //draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
+  vdp_set_super_graphic_1();
 
-  // main_patterns();
+  //erase the screen
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 15, 0, 0); //white
+
+  uint24_t box_width = get_screen_width()/5;
+  uint24_t box_height = get_screen_height()/5;
+
+  //draw box in the top/left
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(10, 10, box_width, box_height, 2, 0, 0);
+
+  //copy it to the right
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vram_to_vram(10, 10, get_screen_width()/2+10, 10, box_width, box_height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
+
+  //copy it to the right/bottom
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vram_to_vram(10, 10, get_screen_width()/2+10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
+
+  //copy it to the left/bottom
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vram_to_vram(10, 10, 10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
+
+  wait_for_key();
+}
+
+void main_test_vdp_cmd_move_vram_to_vram() {
+  //draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
+  vdp_set_super_graphic_1();
+
+  //erase the screen
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 15, 0, 0); //white
+
+  uint24_t box_width = get_screen_width()/5;
+  uint24_t box_height = get_screen_height()/5;
+
+  //draw box in the top/left
+  vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(10, 10, box_width, box_height, 2, 0, 0);
+
+  //copy it to the right
+  vdp_cmd_wait_completion();
+  vdp_cmd_move_vram_to_vram(10, 10, get_screen_width()/2+10, 10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
+
+  //copy it to the right/bottom
+  vdp_cmd_wait_completion();
+  vdp_cmd_move_vram_to_vram(10, 10, get_screen_width()/2+10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
+
+  //copy it to the left/bottom
+  vdp_cmd_wait_completion();
+  vdp_cmd_move_vram_to_vram(10, 10, 10, get_screen_height()/2+10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
+
+  wait_for_key();
+}
+int main() {
+  main_test_vdp_cmd_move_vram_to_vram();
+
+  main_test_vdp_cmd_logical_move_vram_to_vram();
+
+  // main_double_buffering_test();
+
+  main_patterns();
   return 0;
 }
