@@ -228,7 +228,30 @@ void main_vram_test() {
   wait_for_key();
 }
 
+#define VDP_TMS   1
+#define VDP_V9938 2
+#define VDP_V9958 3
+#define VDP_SUPER 4
+
 int main() {
+  uint8_t r = vdp_init();
+  switch (r) {
+  case VDP_TMS:
+    printf("VDP Detected: TMS\r\n");
+    break;
+
+  case VDP_V9938:
+    printf("VDP Detected: V9938\r\n");
+    break;
+
+  case VDP_V9958:
+    printf("VDP Detected: V9958\r\n");
+    break;
+
+  case VDP_SUPER:
+    printf("VDP Detected: SUPER HDMI\r\n");
+    break;
+  }
   // main_vram_test();
 
   // main_test_vdp_cmd_move_vram_to_vram();
