@@ -1,3 +1,4 @@
+#include "large_palette.h"
 #include <cpm.h>
 #include <math.h>
 #include <stdint.h>
@@ -126,6 +127,8 @@ uint8_t edges[EDGES][2] = {
 
 int24_t timeDelta, timeLast = 0;
 
+uint8_t colour = 0;
+
 void draw_cube(int24_t timeNow) {
 
   // calculate the time difference
@@ -173,8 +176,9 @@ void draw_cube(int24_t timeNow) {
   // draw each edge
   for (int i = 0; i < EDGES; i++) {
     uint8_t *edge = edges[i];
-    page_draw_line(vertices[edge[0]].x, vertices[edge[0]].y, vertices[edge[1]].x, vertices[edge[1]].y, 255);
+    page_draw_line(vertices[edge[0]].x, vertices[edge[0]].y, vertices[edge[1]].x, vertices[edge[1]].y, colour);
   }
+  colour++;
 
   swap_page();
 }
@@ -194,6 +198,9 @@ void init() {
 int main(/*const int argc, const char *argv[]*/) {
 
   vdp_set_super_graphic_1();
+  vdp_set_extended_palette(large_palette);
+
+  printf("Super Graphics Mode 1 (%d x %d), 256 Colours\r\n", vdp_get_screen_width(), vdp_get_screen_height());
 
   init();
 
