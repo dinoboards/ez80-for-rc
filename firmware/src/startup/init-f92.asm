@@ -121,15 +121,25 @@ __init:
 	LD	A, CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS3_CTL), A
 
-	; CS0 is enabled for memory @ $200000 -> $FFFFFF
+	; CS0 is enabled for memory @ $200000 -> $3FFFFF
 	LD	A, %20
 	OUT0	(CS0_LBR), A
-	LD	A, %FF
+	LD	A, %3F
 	OUT0	(CS0_UBR), A
 	LD	A, MEM_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPARATE
 	OUT0	(CS0_BMC), A
 	LD	A, CSX_TYPE_MEM | CSX_ENABLED
 	OUT0	(CS0_CTL), A
+
+	; CS1 is enabled for memory @ $400000 -> $5FFFFF
+	LD	A, %40
+	OUT0	(CS1_LBR), A
+	LD	A, %5F
+	OUT0	(CS1_UBR), A
+	LD	A, MEM_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPARATE
+	OUT0	(CS1_BMC), A
+	LD	A, CSX_TYPE_MEM | CSX_ENABLED
+	OUT0	(CS1_CTL), A
 
 	; enable internal memory
 	LD	A, __FLASH_ADDR_U_INIT_PARAM

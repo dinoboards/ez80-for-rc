@@ -442,6 +442,9 @@ ez80_io_bus_timing_get:
 ;   A  = 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
 ;
 ez80_mem_bus_timing_freq_set:
+	LD	A,%80
+	OR	E 	; must be B/C
+	LD	E, A
 	PUSH	DE
 	PUSH	HL
 	CALL	_calculate_wait_state
@@ -463,6 +466,9 @@ ez80_mem_bus_timing_freq_set:
 ;   A  = 0 -> SUCCESS, NZ -> VALUE OUT OF RANGE
 ;
 ez80_io_bus_timing_freq_set:
+	LD	A,%80
+	OR	E 	; must be B/C
+	LD	E, A
 	PUSH	DE
 	PUSH	HL
 	CALL	_calculate_wait_state

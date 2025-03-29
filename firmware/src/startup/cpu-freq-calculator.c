@@ -68,15 +68,18 @@ uint8_t calculate_tmr0_rr() {
   return (uint8_t)result;
 }
 
-uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_wait_states /* only 8 bit value accepted */) {
+// Min state
+// minimum_states - top most bit, if set, must return as Bus Cycle
+uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_states /* only 8 bit value accepted */) {
   uint8_t  bc;
   uint24_t ws;
   uint24_t duration_kns;
 
+  uint8_t must_be_BC = minimum_states & 0x80;
   uint24_t cpu_freq_khz     = cpu_freq_calculated / 1000;
   uint24_t ns_per_cycle     = 1000000 / cpu_freq_khz;
   uint24_t min_duration_kns = (min_nanoseconds * 1000);
-  minimum_wait_states       = (minimum_wait_states & 0xFF) * 1000;
+  minimum_states       = (minimum_states & 0x7F) * 1000;
 
   for (ws = 500; ws < 44500; ws += 1000) {
     duration_kns = (ns_per_cycle * ws);
@@ -85,8 +88,11 @@ uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_wa
       break;
   }
 
-  if (ws <= minimum_wait_states)
-    ws = (minimum_wait_states);
+  if (ws <= minimum_states)
+    ws = (minimum_states);
+
+  if (!must_be_BC && ws <= 7000)
+    return ws/1000;
 
   // Must use Z80 BUS CYCLES to get sufficient wait states
   bc = (ws / 2000) + 1;

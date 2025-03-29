@@ -14,6 +14,7 @@
 	XREF	_io_bus_mode_and_timing
 	XREF	_mem_bus_mode_and_timing
 	XREF	_mem0_bus_mode_and_timing
+	XREF	_mem1_bus_mode_and_timing
 
 _main:
 	CALL	__c_startup
@@ -21,7 +22,7 @@ _main:
 	CALL	_rx_buffer_init
 	CALL	_uart0_init
 
-
+	; Align stored timings to actual configured startup timings.
 	LD	A, IO_BUS_CYCLES | %80
 	LD	(_io_bus_mode_and_timing), A
 
@@ -30,6 +31,23 @@ _main:
 
 	LD	A, MEM_BUS_CYCLES | %80
 	LD	(_mem0_bus_mode_and_timing), A
+
+	LD	A, MEM_BUS_CYCLES | %80
+	LD	(_mem1_bus_mode_and_timing), A
+
+	; Auto configure CS0's timing
+	LD	A, 0
+	LD	B, 17
+	ld	hl, 70 ; 80ns
+	ld	e, 1
+	RST.L	%10
+
+	; Auto configure CS1's timing
+	LD	A, 0
+	LD	B, 18
+	ld	hl, 30 ; 80ns
+	ld	e, 1
+	RST.L	%10
 
 	;XREF	_spike
 	;call	_spike
