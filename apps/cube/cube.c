@@ -40,14 +40,6 @@ void wait_for_key() {
 
 uint8_t current_page = 0;
 
-#ifdef VDP_SUPER_HDMI
-void erase_current_page() {
-  vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
-}
-
-#else
-
 void erase_page_0() {
   vdp_cmd_wait_completion();
   vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 0, 0, 0);
@@ -65,15 +57,7 @@ void erase_current_page() {
     erase_page_1();
   }
 }
-#endif
 
-#ifdef VDP_SUPER_HDMI
-void page_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t color) {
-  vdp_cmd_wait_completion();
-  vdp_draw_line(x1, y1, (x2), y2, color, CMD_LOGIC_IMP);
-}
-
-#else
 void page_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t color) {
   if (current_page == 0) {
     vdp_cmd_wait_completion();
@@ -84,24 +68,15 @@ void page_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t 
   }
 }
 
-#endif
-
 void swap_page() {
   if (current_page == 0) {
     current_page = 1;
     vdp_cmd_wait_completion();
     vdp_set_page(0);
-#ifdef VDP_SUPER_HDMI
-    vdp_set_command_page(1);
-#endif
-
   } else {
     current_page = 0;
     vdp_cmd_wait_completion();
     vdp_set_page(1);
-#ifdef VDP_SUPER_HDMI
-    vdp_set_command_page(0);
-#endif
   }
 }
 
@@ -205,12 +180,10 @@ int main(/*const int argc, const char *argv[]*/) {
 
   init();
 
-  vdp_set_command_page(1);
   erase_current_page();
   vdp_cmd_wait_completion();
   vdp_set_page(1);
 
-  vdp_set_command_page(0);
   erase_current_page();
   vdp_cmd_wait_completion();
   vdp_set_page(0);
