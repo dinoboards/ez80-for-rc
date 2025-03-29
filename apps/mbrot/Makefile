@@ -3,13 +3,12 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-all: MBROT.EXE
-# MBROT.COM
+all: MBROT.EXE MBROT.COM
 
 .PHONY: MBROT.COM
 MBROT.COM:
 	@mkdir -p ../bin
-	@ez80-cc --optimise speed --output-dir ../bin MBROT.COM mbrot.c ../common/config_request.c
+	@ez80-cc --optimise speed --output-dir ../bin MBROT.COM mbrot.c ../common/config_request.c wait_for_key.c
 
 .PHONY: MBROT.EXE
 MBROT.EXE:

@@ -197,6 +197,7 @@ void init() {
 #ifdef VDP_SUPER_HDMI
 int main(/*const int argc, const char *argv[]*/) {
 
+  vdp_init();
   vdp_set_super_graphic_1();
   vdp_set_extended_palette(large_palette);
 
@@ -226,6 +227,7 @@ int main(/*const int argc, const char *argv[]*/) {
 #else
 int main(/*const int argc, const char *argv[]*/) {
 
+  vdp_init();
   vdp_set_lines(212);
   vdp_set_refresh(PAL);
   vdp_set_graphic_7();

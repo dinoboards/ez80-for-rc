@@ -46,6 +46,8 @@ uint24_t iX, iY;
 uint8_t  iteration;
 
 int main(void) {
+  vdp_init();
+
 #ifdef VDP_SUPER_HDMI
   vdp_set_super_graphic_8();
   vdp_set_extended_palette(large_palette);
