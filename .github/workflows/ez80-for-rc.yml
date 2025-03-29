@@ -161,9 +161,9 @@ jobs:
 
       - name: install ez80-clang
         run: |
-          wget --progress=dot:giga https://github.com/dinoboards/ez80-clang/releases/download/v0.0.13-rc.91/ez80-clang-v0.0.13-rc.91.tar.gz
-          tar -xzvf ez80-clang-v0.0.13-rc.91.tar.gz
-          cd ez80-clang-v0.0.13-rc.91
+          wget --progress=dot:giga https://github.com/dinoboards/ez80-clang/releases/download/v0.0.13-rc.94/ez80-clang-v0.0.13-rc.94.tar.gz
+          tar -xzvf ez80-clang-v0.0.13-rc.94.tar.gz
+          cd ez80-clang-v0.0.13-rc.94
           sudo ./install.sh
 
       - name: build apps
