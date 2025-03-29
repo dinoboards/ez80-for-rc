@@ -12,6 +12,7 @@ EZ80.COM:
 	config-io.c \
 	config-mem.c \
 	config-mem0.c \
+	config-mem1.c \
 	ez80.c \
 	find-extended-memory.c \
 	report-memory-timing.c \

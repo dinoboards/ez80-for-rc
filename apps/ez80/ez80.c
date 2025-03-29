@@ -12,6 +12,7 @@ void show_help() {
   printf("  -F=<number>W      Set On-chip Flash Wait States\r\n");
   printf("  -M=<number>[W|B]  Set Main Memory Wait States or Bus Cycles (CS3)\r\n");
   printf("  -M0=<number>[W|B] Set Extended Memory Wait States or Bus Cycles (CS0)\r\n");
+  printf("  -M1=<number>[W|B] Set Extended Memory Wait States or Bus Cycles (CS1)\r\n");
   printf("                    Wait States: 0-7, Bus Cycles: 1-15\r\n");
   printf("  -I=<number>[W|B]  Set I/O Wait States or Bus Cycles (CS2)\r\n");
   printf("  -S0               Scan extended memory\r\n");
@@ -24,15 +25,17 @@ void show_help() {
 #define CMD_M      2
 #define CMD_I      4
 #define CMD_M0     8
-#define CMD_S0     16
-#define CMD_F      32
-#define CMD_T_SET  64
-#define CMD_T_SHOW 128
+#define CMD_M1     16
+#define CMD_S0     32
+#define CMD_F      64
+#define CMD_T_SET  128
+#define CMD_T_SHOW 256
 
 static mem_config_t flash_config;
 static mem_config_t mem_config;
 static mem_config_t io_config;
 static mem_config_t mem0_config;
+static mem_config_t mem1_config;
 static uint8_t      tick_value;
 static uint24_t     cmd = 0;
 
@@ -118,6 +121,22 @@ bool argument_M0(const char *arg) {
   return true;
 }
 
+bool argument_M1(const char *arg) {
+  if (strncmp(arg, "-M1=", 4) != 0 && strncmp(arg, "/M1=", 4) != 0)
+    return false;
+
+  if (cmd & CMD_S0) {
+    printf("Error: Conflicting options.\r\n");
+    show_help();
+    abort();
+  }
+
+  cmd |= CMD_M1;
+  validate_mem_set_value(arg + 4, &mem1_config);
+
+  return true;
+}
+
 bool argument_S0(const char *arg) {
   if (strcmp(arg, "-S0") != 0 && strcmp(arg, "/S0") != 0)
     return false;
@@ -157,6 +176,9 @@ int main(const int argc, const char *argv[]) {
     if (argument_M0(argv[i]))
       continue;
 
+    if (argument_M1(argv[i]))
+      continue;
+
     if (argument_S0(argv[i]))
       continue;
 
@@ -190,6 +212,9 @@ int main(const int argc, const char *argv[]) {
 
   if (cmd & CMD_M0)
     config_mem0(mem0_config);
+
+  if (cmd & CMD_M1)
+    config_mem1(mem1_config);
 
   if (cmd & CMD_T_SET)
     config_set_tick_rate(tick_value);
