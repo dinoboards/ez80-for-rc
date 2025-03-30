@@ -27,9 +27,15 @@ so for a relocated binary we need to 0x400000:
 #define CMD_M       2
 #define CMD_F       4
 
+extern void     find_install_extended_memory();
+extern uint8_t *find_extended_memory_end(uint8_t *start);
+
 typedef int (*main_func_ptr)(int argc, const char **argv);
 
 // extern int main_func(int argc, const char **argv);
+
+extern uint8_t *extended_memory_start;
+extern uint8_t *extended_memory_end;
 
 extern const uint8_t start_marshalling[];
 extern const uint8_t end_marshalling[];
@@ -131,12 +137,12 @@ int load_and_execute(const int argc, const char *argv[]) {
     }
   }
 
+  extended_memory_start = (uint8_t *)base_address;
+  extended_memory_end   = find_extended_memory_end(extended_memory_start);
   memcpy(marshalling_vectors, start_marshalling, end_marshalling - start_marshalling);
 
   return main_func(argc, argv);
 }
-
-void find_install_ram();
 
 void show_help() {
   printf("Usage: EXE [options] FILENAME [arguments]\r\n");
@@ -201,7 +207,7 @@ void argument_help(const char *arg) {
 
 int main(const int argc, const char *argv[]) {
 
-  find_install_ram();
+  find_install_extended_memory();
 
   if (largest_continuous == NULL) {
     printf("No extended memory detected.  Unable to load executable\r\n");

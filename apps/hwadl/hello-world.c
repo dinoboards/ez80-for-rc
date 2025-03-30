@@ -29,6 +29,9 @@ int main(const int argc, const char *argv[]) {
     printf("argv[%d]: %s\r\n", i, argv[i]);
   }
 
+  printf("extended_memory_start: %p\r\n", get_memory_start());
+  printf("extended_memory_end: %p\r\n", get_memory_end());
+
   printf("Foo stored at %p\r\n", &foo);
   printf("bar stored at %p\r\n", &bar);
   printf("Spike function at %p\r\n", &spike);

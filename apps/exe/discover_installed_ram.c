@@ -25,12 +25,55 @@ bool test_at(volatile uint8_t *ptr) {
   return true;
 }
 
+/*
+installed bank are 1 if 512K is installed at the bank address, otherwise its 0
+bank 0 -> 0x200000
+bank 1 -> 0x280000
+bank 2 -> 0x300000
+bank 3 -> 0x380000
+bank 4 -> 0x400000
+bank 5 -> 0x480000
+bank 6 -> 0x500000
+bank 7 -> 0x580000
+*/
 uint8_t installed_bank[8];
 
 uint8_t *largest_continuous = NULL;
 uint8_t *fastest_continuous = NULL;
 
-void find_install_ram() {
+/**
+ * @brief Find the byte address of the bank end (+1)
+ *
+ * @param start any address within the range of 0x200000 to 0x5F0000
+ *
+ * @return uint8_t* the first byte address after the last installed bank
+ */
+uint8_t *find_extended_memory_end(uint8_t *start) {
+
+  if ((uint24_t)start < 0x200000 || (uint24_t)start > 0x5F0000)
+    return NULL;
+
+  // Find which bank we're starting in
+  uint8_t bank = ((uint24_t)start - 0x200000) / 0x80000;
+
+  // Find last installed bank
+  uint8_t last_bank = 255;
+  for (uint8_t i = bank; i < 8; i++) {
+    if (!installed_bank[i])
+      break;
+
+    last_bank = i;
+  }
+
+  // If no banks found, return NULL
+  if (last_bank == 255)
+    return NULL;
+
+  // Calculate end address (start of next bank after last installed)
+  return (uint8_t *)(0x200000 + ((last_bank + 1) * 0x80000));
+}
+
+void find_install_extended_memory() {
 
   // Test for upto 4 slow banks
   installed_bank[0] = test_at((uint8_t *)0x200000);
