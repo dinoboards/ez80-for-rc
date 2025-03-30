@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <v99x8-super.h>
 
-uint8_t source[100 * 100];
-
 RGB default_palette[16] = {
     {0, 0, 0}, // Black
     {7, 0, 0}, // Bright Red
@@ -233,6 +231,55 @@ void main_vram_test() {
 #define VDP_V9958 3
 #define VDP_SUPER 4
 
+uint8_t source[128*128];
+
+
+// static RGB palette[16] = {
+//   {0, 0, 0},       // Black
+//   {255, 0, 0},     // Bright Red
+//   {0, 255, 0},     // Bright Green
+//   {0, 0, 255},     // Bright Blue
+//   {255, 255, 255}, // White
+//   {146, 0, 0},     // Medium Red
+//   {0, 146, 0},     // Medium Green
+//   {0, 0, 146},     // Medium Blue
+//   {109, 109, 109}, // Gray
+//   {255, 255, 0},   // Yellow
+//   {255, 0, 255},   // Magenta
+//   {0, 255, 255},   // Cyan
+//   {182, 73, 0},    // Brown
+//   {73, 182, 73},   // Light Green
+//   {73, 73, 182},   // Light Blue
+//   {182, 182, 182}  // Light Gray
+// };
+void main_test_transfers() {
+
+  vdp_set_super_graphic_2();
+  vdp_set_extended_palette(large_palette);
+  // vdp_set_refresh(50);
+  // vdp_set_lines(212);
+  // vdp_set_graphic_6();
+  // vdp_set_palette(palette);
+
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 0, 0, 0);
+  vdp_cmd_wait_completion();
+
+  for(int i = 0; i< 128*128; i++)
+    source[i] = i & 7;
+
+  vdp_cmd_move_cpu_to_vram(source, 0, 0, 128, 128, DIX_RIGHT | DIY_DOWN, 128*128);
+  //   vdp_cmd_move_data_to_vram(source[0], 0, 0, 128, 128, DIX_RIGHT | DIY_DOWN, 128*128);
+
+  // for(int i = 1; i< 128*128; i++) {
+  //   vdp_cmd_send_byte(source[i]);
+  //   uint8_t r = vdp_get_status(2) & 0x80;
+  //   if (!r)
+  //     printf("i=%d\r\n", i);
+  // }
+
+  wait_for_key();
+
+}
 int main() {
   uint8_t r = vdp_init();
   switch (r) {
@@ -260,7 +307,9 @@ int main() {
 
   // main_double_buffering_test();
 
-  main_patterns();
+  // main_patterns();
+
+  main_test_transfers();
 
   return 0;
 }
