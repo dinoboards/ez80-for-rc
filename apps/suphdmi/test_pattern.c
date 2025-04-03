@@ -1,6 +1,7 @@
 #include "test_pattern.h"
 #include "wait_for_key.h"
 #include <ez80-firmware.h>
+#include <stdio.h>
 #include <v99x8.h>
 
 void test_pattern(uint8_t col_row_count, uint8_t white_colour_index) {
@@ -59,9 +60,10 @@ void test_pattern(uint8_t col_row_count, uint8_t white_colour_index) {
 
   // wait_for_key();
   // do scroll again with vram_y
+  // printf("do scroll again with vram_y\r\n");
   vdp_cmd_move_vram_to_vram_y(0, 8, 0, get_screen_height() - 8, DIX_RIGHT | DIY_DOWN);
   vdp_cmd_wait_completion();
-  // wait_for_key();
+  wait_for_key();
 
   test_for_escape();
   // wait_for_key();

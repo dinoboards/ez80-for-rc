@@ -99,10 +99,6 @@ void main_patterns(void) {
   super_graphics_mode_test_pattern(6);
   vdp_set_super_graphic_8();
   super_graphics_mode_test_pattern(8);
-  vdp_set_super_graphic_10();
-  super_graphics_mode_test_pattern(10);
-  vdp_set_super_graphic_12();
-  super_graphics_mode_test_pattern(12);
 
   graphics_mode_5_test_pattern(60);
   graphics_mode_6_test_pattern(60);
@@ -116,8 +112,6 @@ void main_patterns(void) {
   super_graphics_mode_test_pattern(7);
   vdp_set_super_graphic_9();
   super_graphics_mode_test_pattern(9);
-  vdp_set_super_graphic_11();
-  super_graphics_mode_test_pattern(11);
 
   printf("Rotate through full set of green colours\r\n");
   wait_for_key();
@@ -196,34 +190,45 @@ void main_test_vdp_cmd_move_vram_to_vram() {
 }
 
 void main_vram_test() {
-  // try to erase video memory
-
-  vdp_set_super_graphic_10();
-
   vdp_set_extended_palette(large_palette);
 
   vdp_reg_write(7, 4);
 
   uint8_t data = 1;
-  printf("Press key to 'erase''\r\n");
-  wait_for_key();
 
-  for (uint24_t i = 0; i < get_screen_width() * 10; i++) {
-    vdp_cpu_to_vram(&data, i, 1);
-    test_for_escape();
-    vdp_cpu_to_vram(&data, i, 1);
-  }
-  printf("erased?\r\n");
-  wait_for_key();
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 0, 0, 0);
+  vdp_cmd_wait_completion();
 
   data = 2;
-  for (uint24_t i = 0; i < get_screen_width() * 10; i++) {
+  for (uint24_t i = 0; i < 12; i++) {
+    printf("Byte: %d\r\n", i);
+    wait_for_key();
+    vdp_cpu_to_vram(&data, i, 1);
+  }
+
+  for (uint24_t i = get_screen_width() - 8; i < get_screen_width() + 8; i++) {
     vdp_cpu_to_vram(&data, i, 1);
     printf("Byte: %d\r\n", i);
+    wait_for_key();
+  }
+
+  for (uint24_t i = get_screen_width() * 2 - 8; i < get_screen_width() * 2 + 8; i++) {
+    vdp_cpu_to_vram(&data, i, 1);
+    printf("Byte: %d\r\n", i);
+    wait_for_key();
   }
 
   printf("confirm\r\n");
   wait_for_key();
+}
+
+void main_vram_tests() {
+  // for(int i = 1; i <= 8; i++) {
+  // vdp_set_super_graphic(9);
+  vdp_set_super_graphic_9();
+  printf("Super Graphics Mode %d (%d x %d), 256 Colours\r\n", 9, get_screen_width(), get_screen_height());
+  main_vram_test();
+  // }
 }
 
 #define VDP_TMS   1
@@ -231,55 +236,37 @@ void main_vram_test() {
 #define VDP_V9958 3
 #define VDP_SUPER 4
 
-uint8_t source[128*128];
+uint8_t source[128 * 128];
 
-
-// static RGB palette[16] = {
-//   {0, 0, 0},       // Black
-//   {255, 0, 0},     // Bright Red
-//   {0, 255, 0},     // Bright Green
-//   {0, 0, 255},     // Bright Blue
-//   {255, 255, 255}, // White
-//   {146, 0, 0},     // Medium Red
-//   {0, 146, 0},     // Medium Green
-//   {0, 0, 146},     // Medium Blue
-//   {109, 109, 109}, // Gray
-//   {255, 255, 0},   // Yellow
-//   {255, 0, 255},   // Magenta
-//   {0, 255, 255},   // Cyan
-//   {182, 73, 0},    // Brown
-//   {73, 182, 73},   // Light Green
-//   {73, 73, 182},   // Light Blue
-//   {182, 182, 182}  // Light Gray
-// };
 void main_test_transfers() {
 
   vdp_set_super_graphic_2();
   vdp_set_extended_palette(large_palette);
-  // vdp_set_refresh(50);
-  // vdp_set_lines(212);
-  // vdp_set_graphic_6();
-  // vdp_set_palette(palette);
+  vdp_reg_write(7, 4);
 
   vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 0, 0, 0);
   vdp_cmd_wait_completion();
 
-  for(int i = 0; i< 128*128; i++)
-    source[i] = i & 7;
+  for (int i = 0; i < 128 * 128; i++)
+    source[i] = 3;
 
-  vdp_cmd_move_cpu_to_vram(source, 0, 0, 128, 128, DIX_RIGHT | DIY_DOWN, 128*128);
-  //   vdp_cmd_move_data_to_vram(source[0], 0, 0, 128, 128, DIX_RIGHT | DIY_DOWN, 128*128);
+  printf("Press key to render square\r\n");
+  wait_for_key();
 
-  // for(int i = 1; i< 128*128; i++) {
+  vdp_cmd_move_cpu_to_vram(source, 50, 50, 128, 128, DIX_RIGHT | DIY_DOWN, 128 * 128);
+  // vdp_cmd_move_data_to_vram(source[0], 0, 0, 4, 5, DIX_RIGHT | DIY_DOWN, 4*5);
+
+  // for(int i = 1; i< 4*5; i++) {
   //   vdp_cmd_send_byte(source[i]);
   //   uint8_t r = vdp_get_status(2) & 0x80;
   //   if (!r)
-  //     printf("i=%d\r\n", i);
+  //     printf("i=%d, r=%d\r\n", i, r);
   // }
 
+  printf("Press key to exit\r\n");
   wait_for_key();
-
 }
+
 int main() {
   uint8_t r = vdp_init();
   switch (r) {
@@ -299,7 +286,7 @@ int main() {
     printf("VDP Detected: SUPER HDMI\r\n");
     break;
   }
-  // main_vram_test();
+  // main_vram_tests();
 
   // main_test_vdp_cmd_move_vram_to_vram();
 
@@ -307,9 +294,13 @@ int main() {
 
   // main_double_buffering_test();
 
-  // main_patterns();
+  main_patterns();
 
-  main_test_transfers();
+  // while(true) {
+  //   vdp_set_super_graphic_3();
+  //   super_graphics_mode_test_pattern(3);
+  // }
+  // main_test_transfers();
 
   return 0;
 }
