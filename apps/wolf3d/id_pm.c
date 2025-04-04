@@ -50,6 +50,8 @@ void PM_Startup() {
 
   pageOffsets[ChunksInFile] = fileSize;
 
+  printf("chunks: %d, size: %d\r\n", (uint24_t)ChunksInFile, (uint24_t)fileSize);
+
   uint32_t dataStart = pageOffsets[0];
   int      i;
 
@@ -113,6 +115,8 @@ void PM_Startup() {
 
   // last page points after page buffer
   PMPages[ChunksInFile] = ptr;
+
+  printf("File read\r\n");
 
   MM_FreePtr((memptr *)&pageLengths);
   MM_FreePtr((memptr *)&pageOffsets);

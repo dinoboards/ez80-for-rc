@@ -136,7 +136,11 @@ bool argument_K(const char *arg) {
 
 int main(const int argc, const char *argv[]) {
 
-  const int heap_size = 0x400000 - (int)_heap;
+  vdp_init();
+
+  const int heap_size = (uint24_t)get_memory_end() - (int)_heap;
+  printf("heap: %x\r\n", (uint24_t)_heap);
+  printf("end: %x\r\n", (uint24_t)get_memory_end());
   printf("Heap size: %d\r\n", heap_size);
   malloc_init(heap_size);
 

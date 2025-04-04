@@ -5,6 +5,8 @@
 #ifndef ID_VL_H
 #define ID_VL_H
 
+#include <v99x8-super.h>
+
 #include "wl_def.h"
 
 void Quit(const char *error, ...);
@@ -31,7 +33,7 @@ extern unsigned screenBits, screenPitch;
 extern boolean  screenfaded;
 extern unsigned bordercolor;
 
-extern SDL_Color gamepal[256];
+extern RGB gamepal[256];
 
 //===========================================================================
 
@@ -45,14 +47,14 @@ void VL_SetVGAPlaneMode(void);
 void VL_SetTextMode(void);
 void VL_Shutdown(void);
 
-void VL_ConvertPalette(byte *srcpal, SDL_Color *destpal, int numColors);
+void VL_ConvertPalette(byte *srcpal, RGB *destpal, int numColors);
 void VL_FillPalette(int red, int green, int blue);
 void VL_SetColor(int color, int red, int green, int blue);
 void VL_GetColor(int color, int *red, int *green, int *blue);
-void VL_SetPalette(SDL_Color *palette, bool forceupdate);
-void VL_GetPalette(SDL_Color *palette);
+void VL_SetPalette(RGB *palette, bool forceupdate);
+void VL_GetPalette(RGB *palette);
 void VL_FadeOut(int start, int end, int red, int green, int blue, int steps);
-void VL_FadeIn(int start, int end, SDL_Color *palette, int steps);
+void VL_FadeIn(int start, int end, RGB *palette, int steps);
 
 void VL_Plot(int x, int y, int color);
 void VL_Hlin(unsigned x, unsigned y, unsigned width, int color);

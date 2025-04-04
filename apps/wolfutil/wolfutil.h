@@ -2,6 +2,7 @@
 #define __WOLFUTIL_H__
 
 #include <stdint.h>
+#include <v99x8.h>
 
 extern void test_rendering_tiles();
 extern void display_img_file();
@@ -33,7 +34,7 @@ typedef uint8_t SDL_Color;
 // #define RGB(r, g, b)                                                                                                               \
 //   { (r), (g), (b), 0 }
 
-extern SDL_Color gamepal[];
+extern RGB gamepal[256];
 
 extern void erase_page_0();
 

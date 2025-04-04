@@ -240,7 +240,7 @@ uint8_t source[128 * 128];
 
 void main_test_transfers() {
 
-  vdp_set_super_graphic_2();
+  vdp_set_super_graphic_1();
   vdp_set_extended_palette(large_palette);
   vdp_reg_write(7, 4);
 
@@ -294,13 +294,13 @@ int main() {
 
   // main_double_buffering_test();
 
-  main_patterns();
+  // main_patterns();
 
   // while(true) {
   //   vdp_set_super_graphic_3();
   //   super_graphics_mode_test_pattern(3);
   // }
-  // main_test_transfers();
+  main_test_transfers();
 
   return 0;
 }

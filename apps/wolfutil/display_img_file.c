@@ -2,24 +2,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <v99x8.h>
+#include <v99x8-super.h>
+#include "wait_for_key.h"
 
-static void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
+// static void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
 
-  uint8_t *c = surface;
+//   uint8_t *c = surface;
 
-  for (uint8_t y = 0; y < height; y++) {
-    for (uint16_t x = 0; x < width; x++) {
-      *c = gamepal[*c];
-      c++;
-    }
-  }
-}
+//   for (uint8_t y = 0; y < height; y++) {
+//     for (uint16_t x = 0; x < width; x++) {
+//       *c = gamepal[*c];
+//       c++;
+//     }
+//   }
+// }
 
 void display_img_file() {
   // enable graphics mode and erase
-  vdp_set_mode(7, 212, PAL);
-  vdp_cmd_vdp_to_vram(0, 0, 256, 212, 0, 0);
+  vdp_set_super_graphic_1();
+  vdp_set_extended_palette(gamepal);
+  vdp_cmd_vdp_to_vram(0, 0, 320, 200, 0, 0);
+  vdp_cmd_wait_completion();
+  printf("Erased\r\n");
+  wait_for_key();
+  printf("Loading file.  Please wait...\r\n");
 
   uint8_t *buffer = malloc(256 * 200);
   if (buffer == NULL) {
@@ -41,12 +47,12 @@ void display_img_file() {
   }
   fclose(f);
 
-  vdp_set_mode(7, 212, PAL);
-  erase_page_0();
-
-  apply_palette(buffer, 256, 200);
-
-  vdp_cpu_to_vram0(buffer, 256 * 200);
+  printf("Press key to display image\r\n");
+  wait_for_key();
+  vdp_cmd_move_cpu_to_vram(buffer, 0, 0, 256, 200, DIX_RIGHT | DIY_DOWN, 256*200);
+  vdp_cmd_wait_completion();
 
   free(buffer);
+
+  wait_for_key();
 }
