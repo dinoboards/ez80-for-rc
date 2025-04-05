@@ -1,9 +1,9 @@
+#include "wait_for_key.h"
 #include "wolfutil.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <v99x8-super.h>
-#include "wait_for_key.h"
 
 // static void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
 
@@ -49,7 +49,7 @@ void display_img_file() {
 
   printf("Press key to display image\r\n");
   wait_for_key();
-  vdp_cmd_move_cpu_to_vram(buffer, 0, 0, 256, 200, DIX_RIGHT | DIY_DOWN, 256*200);
+  vdp_cmd_move_cpu_to_vram(buffer, 0, 0, 256, 200, DIX_RIGHT | DIY_DOWN, 256 * 200);
   vdp_cmd_wait_completion();
 
   free(buffer);

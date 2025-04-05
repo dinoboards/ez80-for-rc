@@ -48,7 +48,8 @@ unsigned bordercolor;
 // #define RGB(r, g, b)                                                                                                               \
 //   { (r) * 255 / 63, (g)*255 / 63, (b)*255 / 63, 0 }
 
-#define _RGB(r, g, b) (RGB){((r << 2) + 3), ((g << 2) + 3), ((b << 2) + 3)}
+#define _RGB(r, g, b)                                                                                                              \
+  (RGB) { ((r << 2) + 3), ((g << 2) + 3), ((b << 2) + 3) }
 
 RGB gamepal[] = {
 #ifdef SPEAR
@@ -301,10 +302,10 @@ void VL_FadeOut(int start __attribute__((unused)),
 =================
 */
 
-void VL_FadeIn(int        start __attribute__((unused)),
-               int        end __attribute__((unused)),
+void VL_FadeIn(int  start __attribute__((unused)),
+               int  end __attribute__((unused)),
                RGB *palette __attribute__((unused)),
-               int        steps __attribute__((unused))) {
+               int  steps __attribute__((unused))) {
   // int i, j, delta;
 
   // VL_WaitVBL(1);
@@ -550,7 +551,7 @@ void VL_SurfaceToScreen(SDL_Surface *source, int scxdest, int scydest) {
   assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= SCREEN_HEIGHT &&
          "VL_SurfaceToScreen: Destination rectangle out of bounds!");
 
-         vdp_cmd_move_cpu_to_vram(src, scxdest, scydest, width, height, DIX_RIGHT | DIY_DOWN, width * height);
+  vdp_cmd_move_cpu_to_vram(src, scxdest, scydest, width, height, DIX_RIGHT | DIY_DOWN, width * height);
 }
 
 void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
@@ -575,7 +576,7 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
         continue;
       }
 
-      byte    color = src[(ysrc + j) * srcPitch + xsrc + i];
+      byte color = src[(ysrc + j) * srcPitch + xsrc + i];
       vdp_cmd_send_byte(color);
     }
   }

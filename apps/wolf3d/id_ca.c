@@ -380,21 +380,21 @@ void CAL_SetupGrFile(void) {
   if (handle == -1)
     CA_CannotOpen(fname);
 
-  long headersize = lseek(handle, 0, SEEK_END);
-  lseek(handle, 0, SEEK_SET);
+  //   long headersize = lseek(handle, 0, SEEK_END);
+  //   lseek(handle, 0, SEEK_SET);
 
-#ifndef APOGEE_1_0
-  int expectedsize = lengthof(grstarts) - numEpisodesMissing;
-#else
-  int expectedsize = lengthof(grstarts);
-#endif
+  // #ifndef APOGEE_1_0
+  //   int expectedsize = lengthof(grstarts) - numEpisodesMissing;
+  // #else
+  //   int expectedsize = lengthof(grstarts);
+  // #endif
 
-  if (!param_ignorenumchunks && headersize / 3 != expectedsize)
-    Quit("Wolf3D was not compiled for these data files:\r\n"
-         "%s contains a wrong number of offsets (%d instead of %d)!\r\n\n"
-         "Please check whether you are using the right executable!\r\n"
-         "(For mod developers: perhaps you forgot to update NUMCHUNKS?)",
-         fname, (int)headersize / 3, (int)expectedsize);
+  //   if (!param_ignorenumchunks && headersize / 3 != expectedsize)
+  //     Quit("Wolf3D was not compiled for these data files:\r\n"
+  //          "%s contains a wrong number of offsets (%d instead of %d)!\r\n\n"
+  //          "Please check whether you are using the right executable!\r\n"
+  //          "(For mod developers: perhaps you forgot to update NUMCHUNKS?)",
+  //          fname, (int)headersize / 3, (int)expectedsize);
 
   byte data[lengthof(grstarts) * 3];
   read(handle, data, sizeof(data));

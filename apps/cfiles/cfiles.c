@@ -54,7 +54,7 @@ void test_c_file_read(void) {
   do {
     n = fread(buffer, 1, sizeof(buffer), f);
     printf("fread: %d, (errno: %d) OK\n", n, errno);
-    for(size_t i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
       printf("%x ", buffer[i]);
     }
   } while (n > 0);
@@ -77,7 +77,7 @@ void test_c_file_text_read(void) {
   do {
     n = fread(buffer, 1, sizeof(buffer), f);
     printf("fread: %d, (errno: %d) OK\n", n, errno);
-    for(size_t i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
       printf("%x ", buffer[i]);
     }
   } while (n > 0);
@@ -137,9 +137,9 @@ void test_c_file_size_compliance(void) {
 
 int main(void /*int argc, char *argv[]*/) {
 
-  #ifdef __EZ80__
-    // _setmode(fileno( stdin ), _IOBINARY ); //default is _IOTEXT_TRANSLATION
-  #endif
+#ifdef __EZ80__
+  // _setmode(fileno( stdin ), _IOBINARY ); //default is _IOTEXT_TRANSLATION
+#endif
 
   test_c_create_write_file();
 
