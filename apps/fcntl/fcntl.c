@@ -23,6 +23,8 @@ void test_file_create_write() {
   const char *text     = "Hello, this is a sample text.\r\n";
   int         fd;
 
+  remove(filename);
+
   // Open the file for writing (create if it doesn't exist, truncate if it does)
   fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
   if (fd == -1) {
