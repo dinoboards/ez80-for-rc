@@ -292,4 +292,92 @@ outer_loop_exit:
 
 	ret
 
+;
+; extern void start_quarter_0_90();
+;
+; extern short xtilestep, ytilestep;
+	extern	_xtilestep
+	extern	_ytilestep
+	global _start_quarter_0_90
 
+;       xtilestep = 1;
+;       ytilestep = -1;
+;       xstep     = finetangent[900 - 1 - angl];
+;       ystep     = -finetangent[angl];
+;       xpartial  = xpartialup;
+;       ypartial  = ypartialdown;
+
+_start_quarter_0_90:
+	ld	iy, _draw_state			; xtilestep = 1;
+	ld	(iy+X_TILE_STEP), 1
+	ld	(iy+X_TILE_STEP+1), 0
+
+	ld	(iy+Y_TILE_STEP), 255		; ytilestep = -1;
+	ld	(iy+Y_TILE_STEP+1), 255
+
+	ld	hl, (iy+X_PARTIAL_UP)		; xpartial  = xpartialup;
+	ld	(iy+X_PARTIAL), hl
+
+	ld	hl, (iy+Y_PARTIAL_DOWN)		; ypartial  = ypartialdown;
+	ld	(iy+Y_PARTIAL), hl
+
+	; ;       ystep     = -finetangent[angl];
+	; ; extern fixed finetangent[];
+	; ; angl * 4 + finetangent
+	; ld	hl, 0
+	; ld	iy, _angl
+	; ld	l, (iy)
+	; ld	h, (iy+1)
+
+
+	ret
+
+	section	.data_on_chip,"aw",@progbits
+
+; extern short xtilestep, ytilestep;
+	.global	_xtilestep
+_draw_state:
+X_TILE_STEP	EQU	0
+_xtilestep:
+	ds	2
+
+	.global	_ytilestep
+_ytilestep:
+Y_TILE_STEP	EQU	(_ytilestep-_draw_state)
+	ds	2
+
+; extern uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
+	.global	_xpartialup
+X_PARTIAL_UP	EQU	(_xpartialup-_draw_state)
+_xpartialup:
+	ds	3
+
+	.global	_xpartialdown
+_xpartialdown:
+	ds	3
+
+	.global	_ypartialup
+_ypartialup:
+	ds	3
+
+	.global	_ypartialdown
+Y_PARTIAL_DOWN	EQU	(_ypartialdown-_draw_state)
+_ypartialdown:
+	ds	3
+
+; extern uint24_t xpartial, ypartial;
+
+	.global	_xpartial
+X_PARTIAL	EQU	(_xpartial-_draw_state)
+_xpartial:
+	ds	3
+
+	.global	_ypartial
+Y_PARTIAL	EQU	(_ypartial-_draw_state)
+_ypartial:
+	ds	3
+
+;extern short angl;
+	.global	_angl
+_angl:
+	ds	2

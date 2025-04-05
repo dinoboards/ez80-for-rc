@@ -77,19 +77,19 @@ int   lasttexture;
 //
 // ray tracing variables
 //
-short    focaltx, focalty, viewtx, viewty;
-uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
+short           focaltx, focalty, viewtx, viewty;
+extern uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 
 short midangle, angle;
 
 word          tilehit;
 uint16_t pixx __data_on_chip;
 
-short xtile, ytile;
-short xtilestep, ytilestep;
-fixed xintercept, yintercept;
-word  xspot, yspot;
-int   texdelta;
+short        xtile, ytile;
+extern short xtilestep, ytilestep;
+fixed        xintercept, yintercept;
+word         xspot, yspot;
+int          texdelta;
 
 word horizwall[MAXWALLTILES], vertwall[MAXWALLTILES];
 
@@ -944,9 +944,11 @@ void CalcTics(void) {
 
 extern short   asm_refresh_get_angl();
 extern uint8_t asm_refresh_find_quarter();
-short angl     __data_on_chip;
+extern void    start_quarter_0_90();
+
+extern short angl;
 fixed xstep __data_on_chip, ystep __data_on_chip;
-uint24_t xpartial __data_on_chip, ypartial __data_on_chip;
+extern uint24_t xpartial, ypartial;
 
 void AsmRefresh() {
   boolean playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
@@ -956,12 +958,9 @@ void AsmRefresh() {
 
     switch (asm_refresh_find_quarter()) {
     case 0: // 0-90
-      xtilestep = 1;
-      ytilestep = -1;
-      xstep     = finetangent[900 - 1 - angl];
-      ystep     = -finetangent[angl];
-      xpartial  = xpartialup;
-      ypartial  = ypartialdown;
+      start_quarter_0_90();
+      xstep = finetangent[900 - 1 - angl];
+      ystep = -finetangent[angl];
       break;
     case 1: // 90-180
       xtilestep = -1;
