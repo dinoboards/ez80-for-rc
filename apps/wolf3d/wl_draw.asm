@@ -32,63 +32,6 @@
 
 FINEANGLES	equ	3600
 
-; short asm_refresh_get_angl() {
-;   short angl = midangle + pixelangle[pixx];
-;
-;   if (angl < 0)
-;     angl += FINEANGLES;
-;
-;   if (angl >= 3600)
-;     angl -= FINEANGLES;
-;
-;   return angl;
-; }
-
-_asm_refresh_get_angl:
-	ld	hl, (_pixx)		; retrieve 16bit value pixx
-	ld	de, 0
-
-	sla	l			; mlt by 2
-	rl	h
-	ld	e, l
-	ld	d, h			; de = (short) pixx*2
-
-	ld	hl, _pixelangle
-	add	hl, de			; add it to _pixelangle array
-
-	ld	hl, (hl)		; hl = pixelangle[pixx]
-
-	ld	de, (_midangle)		; retrieve 16bit value _midangle
-
-	add	hl, de			; hl += midangle
-
-	; make sure angl >=0 and < 3600 (FINEANGLES)
-
-	bit	7, h			; is angle neg?
-	jr	z, is_not_neg
-
-	ld	bc, FINEANGLES
-	add	hl, bc
-	ld	(_angl), hl
-	ret
-
-is_not_neg:
-	ld	de, FINEANGLES+1	; Load 3601 into DE
-	or	a			; Clear the carry flag
-	sbc.sis	hl, de
-	jr	c, hl_was_less_than_fine_angles  ; Jump if HL was < 3600
-
-	; HL was > 3600
-	inc	hl			; remove the off by one test
-	ld	(_angl), hl
-	ret
-
-hl_was_less_than_fine_angles:
-	ld	de, FINEANGLES+1	; restore HL's original value
-	add	hl, de
-	ld	(_angl), hl
-	ret
-
 ; uint8_t scale_post_asm()
 	global	_scale_post_asm
 	.extern	_wallheight
@@ -270,7 +213,65 @@ outer_loop_exit:
 
 	global	_asm_init_quarter
 _asm_init_quarter:
-	ld	hl, (_angl)
+
+
+; short asm_refresh_get_angl() {
+;   short angl = midangle + pixelangle[pixx];
+;
+;   if (angl < 0)
+;     angl += FINEANGLES;
+;
+;   if (angl >= 3600)
+;     angl -= FINEANGLES;
+;
+;   return angl;
+; }
+
+_asm_refresh_get_angl:
+	ld	hl, (_pixx)		; retrieve 16bit value pixx
+	ld	de, 0
+
+	sla	l			; mlt by 2
+	rl	h
+	ld	e, l
+	ld	d, h			; de = (short) pixx*2
+
+	ld	hl, _pixelangle
+	add	hl, de			; add it to _pixelangle array
+
+	ld	hl, (hl)		; hl = pixelangle[pixx]
+
+	ld	de, (_midangle)		; retrieve 16bit value _midangle
+
+	add	hl, de			; hl += midangle
+
+	; make sure angl >=0 and < 3600 (FINEANGLES)
+
+	bit	7, h			; is angle neg?
+	jr	z, is_not_neg
+
+	ld	bc, FINEANGLES
+	add	hl, bc
+	jr	.init_loop_params
+
+is_not_neg:
+	ld	de, FINEANGLES+1	; Load 3601 into DE
+	or	a			; Clear the carry flag
+	sbc.sis	hl, de
+	jr	c, hl_was_less_than_fine_angles  ; Jump if HL was < 3600
+
+	; HL was > 3600
+	inc	hl			; remove the off by one test
+	jr	.init_loop_params
+
+hl_was_less_than_fine_angles:
+	ld	de, FINEANGLES+1	; restore HL's original value
+	add	hl, de
+
+.init_loop_params:
+	ld	iy, _draw_state			; xtilestep = 1;
+	ld	(iy+ANGL), l
+	ld	(iy+ANGL+1), h
 
 	or	a
 	ld	de, 900
@@ -299,8 +300,7 @@ _asm_init_quarter:
 ;       ypartial  = ypartialdown;
 
 _start_quarter_0_90:
-	ld	iy, _draw_state			; xtilestep = 1;
-	ld	(iy+X_TILE_STEP), 1
+	ld	(iy+X_TILE_STEP), 1		; xtilestep = 1;
 
 	ld	(iy+Y_TILE_STEP), 255		; ytilestep = -1;
 
@@ -355,8 +355,7 @@ _start_quarter_0_90:
 
 	; global	_start_quarter_90_180
 _start_quarter_90_180:
-	ld	iy, _draw_state			; xtilestep = -1;
-	ld	(iy+X_TILE_STEP), 255
+	ld	(iy+X_TILE_STEP), 255		; xtilestep = -1;
 
 	ld	(iy+Y_TILE_STEP), 255		; ytilestep = -1;
 
@@ -415,8 +414,7 @@ _start_quarter_90_180:
 
 	; global	_start_quarter_180_270
 _start_quarter_180_270:
-	ld	iy, _draw_state			; xtilestep = -1;
-	ld	(iy+X_TILE_STEP), 255
+	ld	(iy+X_TILE_STEP), 255		; xtilestep = -1;
 
 	ld	(iy+Y_TILE_STEP), 1		; ytilestep = 1;
 
@@ -474,8 +472,7 @@ _start_quarter_180_270:
 
 	; global	_start_quarter_270_360
 _start_quarter_270_360:
-	ld	iy, _draw_state			; xtilestep = 1;
-	ld	(iy+X_TILE_STEP), 1
+	ld	(iy+X_TILE_STEP), 1		; xtilestep = 1;
 
 	ld	(iy+Y_TILE_STEP), 1		; ytilestep = 1;
 

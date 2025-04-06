@@ -942,7 +942,6 @@ void CalcTics(void) {
 
 //==========================================================================
 
-extern void asm_refresh_get_angl();
 extern void asm_init_quarter();
 
 extern short    angl;
@@ -953,8 +952,6 @@ void AsmRefresh() {
   boolean playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
-    asm_refresh_get_angl();
-
     asm_init_quarter();
 
     yintercept = FixedMul(ystep, xpartial) + viewy;
