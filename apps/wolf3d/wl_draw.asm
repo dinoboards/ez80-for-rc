@@ -551,7 +551,7 @@ _start_quarter_270_360:
 	ld	(iy+Y_INTERCEPT), hl
 	ld	(iy+Y_INTERCEPT+3), e
 
-	ld	a, (iy+ X_TILE_STEP)		;  xtile = focaltx + xtilestep;
+	ld	a, (iy+X_TILE_STEP)		;  xtile = focaltx + xtilestep;
 	ld	e, a
 	rlc	a
 	sbc	a, a
@@ -573,6 +573,27 @@ _start_quarter_270_360:
 	add	hl, de
 	ld	(iy+X_SPOT), l
 	ld	(iy+X_SPOT+1), h
+
+	xor	a				; xintercept = FixedMul(xstep, ypartial) + viewx;
+	sbc	hl, hl
+	ld	e, l
+	ld 	l, (iy+Y_PARTIAL+1)	; >> 8
+	ld 	h, (iy+Y_PARTIAL+2)
+
+	ld	bc, (iy+X_STEP+1)	; >> 8
+	ld	a, (iy+X_STEP+3)	; extend sign bit
+	rlc	a
+	sbc	a, a
+
+	push	iy
+	call	_mul_euhl_aubc
+	pop	iy
+
+	ld	bc, (iy+VIEW_X)
+	ld	a, (iy+VIEW_X+3)
+	LADD_EUHL_AUBC
+	ld	(iy+X_INTERCEPT), hl
+	ld	(iy+X_INTERCEPT+3), e
 
 	ret
 

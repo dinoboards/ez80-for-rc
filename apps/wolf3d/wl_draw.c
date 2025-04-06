@@ -954,7 +954,6 @@ void AsmRefresh() {
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     asm_init_quarter();
 
-    xintercept = FixedMul(xstep, ypartial) + viewx;
     ytile      = focalty + ytilestep;
     yspot      = (word)(((fixed_to_short(xintercept)) << mapshift) + ytile);
     texdelta   = 0;
