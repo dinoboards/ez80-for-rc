@@ -220,6 +220,34 @@ outer_loop_exit:
 
 	ret
 
+	global	_set_player_in_pushwall_back_tile
+_set_player_in_pushwall_back_tile:
+	ld	iy, _draw_state
+	xor	a						; player_in_pushwall_back_tile = tilemap[focaltx][focalty] == 64;
+	ld	(iy+PLAYER_IN_PUSHWALL_BACK_TILE), a
+	sbc	hl, hl
+	push	hl
+	ld	l, (iy+FOCAL_TX)
+	ld	h, (iy+FOCAL_TX+1)
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	pop	de		; zero ude
+	ld	e, (iy+FOCAL_TY)
+	ld	d, (iy+FOCAL_TY+1)
+	add	hl, de
+	ld	de, _tilemap
+	add	hl, de
+	ld	a,(hl)
+	cp	64
+	ret	nz
+	ld	a, 1
+	ld	(iy+PLAYER_IN_PUSHWALL_BACK_TILE), a
+	ret
+
 	global	_asm_init_quarter
 _asm_init_quarter:
 
@@ -278,7 +306,7 @@ hl_was_less_than_fine_angles:
 	add	hl, de
 
 .init_loop_params:
-	ld	iy, _draw_state			; xtilestep = 1;
+	ld	iy, _draw_state
 	ld	(iy+ANGL), l
 	ld	(iy+ANGL+1), h
 
@@ -701,8 +729,8 @@ _yintercept_as_short:	; readonly
 	ds	2
 
 ; extern fixed viewx, viewy; // the focal point
-	.global	_viewx
-	.global	_focaltx
+	global	_viewx
+	global	_focaltx
 VIEW_X		equ	(_viewx-_draw_state)
 FOCAL_TX	equ	(_focaltx-_draw_state)
 _viewx:
@@ -710,8 +738,8 @@ _viewx:
 _focaltx:
 	ds	2					; type short: focaltx = viewx >> 16 readonly
 
-	.global	_viewy
-	.global	_focalty
+	global	_viewy
+	global	_focalty
 VIEW_Y		equ	(_viewy-_draw_state)
 FOCAL_TY	equ	(_focalty-_draw_state)
 _viewy:							; type fixed
@@ -720,29 +748,35 @@ _focalty:						; type: short focalty = viewy >> 16 readonly
 	ds	2
 
 ; extern short xtile, ytile;
-	.global	_xtile
+	global	_xtile
 X_TILE	equ	(_xtile-_draw_state)
 _xtile:
 	ds	2
 
-	.global	_ytile
+	global	_ytile
 Y_TILE	equ	(_ytile-_draw_state)
 _ytile:
 	ds	2
 
 ; extern uint16_t  xspot, yspot;
-	.global	_xspot
+	global	_xspot
 X_SPOT	equ	(_xspot-_draw_state)
 _xspot:
 	ds	2
 
-	.global	_yspot
+	global	_yspot
 Y_SPOT	equ	(_yspot-_draw_state)
 _yspot:
 	ds	2
 
 ; extern int24_t  texdelta;
-	.global	_texdelta
+	global	_texdelta
 TEX_DELTA	equ	(_texdelta-_draw_state)
 _texdelta:
 	ds	3
+
+	global	_player_in_pushwall_back_tile
+PLAYER_IN_PUSHWALL_BACK_TILE	equ	(_player_in_pushwall_back_tile-_draw_state)
+_player_in_pushwall_back_tile:
+	ds	1
+

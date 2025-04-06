@@ -945,19 +945,21 @@ void CalcTics(void) {
 //==========================================================================
 
 extern void asm_init_quarter();
+extern void set_player_in_pushwall_back_tile();
 
 extern short    angl;
 extern fixed    xstep, ystep;
 extern uint24_t xpartial, ypartial;
+extern uint8_t  player_in_pushwall_back_tile;
 
 void AsmRefresh() {
-  boolean playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
+  set_player_in_pushwall_back_tile();
 
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     asm_init_quarter();
 
     // Special treatment when player is in back tile of pushwall
-    if (playerInPushwallBackTile) {
+    if (player_in_pushwall_back_tile) {
       if ((pwalldir == di_east && xtilestep == 1) || (pwalldir == di_west && xtilestep == -1)) {
         fixed yintbuf = yintercept - fixed_by_wallpos_by_16(ystep * (64 - pwallpos));
         if ((fixed_to_short(yintbuf)) == focalty) // ray hits pushwall back?
