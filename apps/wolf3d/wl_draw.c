@@ -946,6 +946,7 @@ extern short   asm_refresh_get_angl();
 extern uint8_t asm_refresh_find_quarter();
 extern void    start_quarter_0_90();
 extern void    start_quarter_90_180();
+extern void    start_quarter_180_270();
 
 extern short    angl;
 extern fixed    xstep, ystep;
@@ -965,12 +966,7 @@ void AsmRefresh() {
       start_quarter_90_180();
       break;
     case 2: // 180-270
-      xtilestep = -1;
-      ytilestep = 1;
-      xstep     = -finetangent[2700 - 1 - angl];
-      ystep     = finetangent[angl - 1800];
-      xpartial  = xpartialdown;
-      ypartial  = ypartialup;
+      start_quarter_180_270();
       break;
     default: // 270-360
       xtilestep = 1;

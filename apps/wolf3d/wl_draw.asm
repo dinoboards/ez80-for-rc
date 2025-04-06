@@ -421,6 +421,67 @@ _start_quarter_90_180:
 
 	ret
 
+;       xtilestep = -1;
+;       ytilestep = 1;
+;       xstep     = -finetangent[2700 - 1 - angl];
+;       ystep     = finetangent[angl - 1800];
+;       xpartial  = xpartialdown;
+;       ypartial  = ypartialup;
+
+	global	_start_quarter_180_270
+_start_quarter_180_270:
+	ld	iy, _draw_state			; xtilestep = -1;
+	ld	(iy+X_TILE_STEP), 255
+	ld	(iy+X_TILE_STEP+1), 255
+
+	ld	(iy+Y_TILE_STEP), 1		; ytilestep = 1;
+	ld	(iy+Y_TILE_STEP+1), 0
+
+	ld	hl, (iy+X_PARTIAL_DOWN)		; xpartial = xpartialdown;
+	ld	(iy+X_PARTIAL), hl
+
+	ld	hl, (iy+Y_PARTIAL_UP)		; ypartial = ypartialup;
+	ld	(iy+Y_PARTIAL), hl
+
+	xor	a				; ystep = finetangent[angl - 1800];
+	sbc	hl, hl
+	ld	l, (iy+ANGL)
+	ld	h, (iy+ANGL+1)
+	push	hl				; save angl
+	ld	de, 1800
+	xor	a
+	sbc	hl, de
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)				; eubc = finetangent[angl - 1800]
+	ld	(iy+Y_STEP), bc
+	ld	(iy+Y_STEP+3), e
+
+	pop	de				; xstep = -finetangent[2700 - 1 - angl];
+	ld	hl, 2700-1
+	xor	a
+	sbc	hl, de
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)
+	NEG_EUBC_AUHL				; auhl = -eubc
+	ld	(iy+X_STEP), hl
+	ld	(iy+X_STEP+3), a
+
+	ret
+
 	section	.data_on_chip, "aw", @progbits
 
 ; extern short xtilestep, ytilestep;
@@ -447,6 +508,7 @@ _xpartialdown:
 	ds	3
 
 	.global	_ypartialup
+Y_PARTIAL_UP	equ	(_ypartialup-_draw_state)
 _ypartialup:
 	ds	3
 
