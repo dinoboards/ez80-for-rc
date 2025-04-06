@@ -559,7 +559,7 @@ _start_quarter_270_360:
 	ld	(iy+X_TILE), l
 	ld	(iy+X_TILE+1), h
 
-	add	hl, hl				; xspot  = (word)((xtile << mapshift) + fixed_to_short(yintercept));
+	add	hl, hl				; xspot  = (word)((xtile << mapshift) + yintercept_as_short);
 	add	hl, hl
 	add	hl, hl
 	add	hl, hl
@@ -599,6 +599,24 @@ _start_quarter_270_360:
 	add	hl, de
 	ld	(iy+Y_TILE), l
 	ld	(iy+Y_TILE+1), h
+
+	ld	l, (iy+X_INTERCEPT+2)		; yspot = (word)((xintercept_as_short << mapshift) + ytile);
+	ld	h, (iy+X_INTERCEPT+3)
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	ld	e, (iy+Y_TILE)
+	ld	d, (iy+Y_TILE+1)
+	add	hl, de
+	ld	(iy+Y_SPOT), l
+	ld	(iy+Y_SPOT+1), h
+
+	or	a, a				; texdelta = 0;
+	sbc	hl, hl
+	ld	(iy+TEX_DELTA), hl
 
 	ret
 
@@ -722,3 +740,9 @@ _xspot:
 Y_SPOT	equ	(_yspot-_draw_state)
 _yspot:
 	ds	2
+
+; extern int24_t  texdelta;
+	.global	_texdelta
+TEX_DELTA	equ	(_texdelta-_draw_state)
+_texdelta:
+	ds	3

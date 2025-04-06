@@ -91,7 +91,7 @@ extern fixed    xintercept, yintercept;
 extern short    xintercept_as_short;
 extern short    yintercept_as_short;
 extern uint16_t xspot, yspot;
-int             texdelta;
+extern int24_t  texdelta;
 
 word horizwall[MAXWALLTILES], vertwall[MAXWALLTILES];
 
@@ -955,9 +955,6 @@ void AsmRefresh() {
 
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     asm_init_quarter();
-
-    yspot    = (word)((xintercept_as_short << mapshift) + ytile);
-    texdelta = 0;
 
     // Special treatment when player is in back tile of pushwall
     if (playerInPushwallBackTile) {
