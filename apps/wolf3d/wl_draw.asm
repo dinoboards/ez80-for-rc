@@ -667,9 +667,12 @@ _ystep:
 
 ; extern fixed  xintercept, yintercept;
 	global	_xintercept
+	global	_xintercept_as_short
 X_INTERCEPT	equ	(_xintercept-_draw_state)
 _xintercept:
-	ds	4
+	ds	2
+_xintercept_as_short:	; readonly
+	ds	2
 
 	global	_yintercept
 Y_INTERCEPT	equ	(_yintercept-_draw_state)
