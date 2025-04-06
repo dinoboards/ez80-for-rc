@@ -299,7 +299,6 @@ outer_loop_exit:
 ;
 ; extern void start_quarter_0_90();
 ;
-; extern short xtilestep, ytilestep;
 	global	_start_quarter_0_90
 
 ;       xtilestep = 1;
@@ -312,10 +311,8 @@ outer_loop_exit:
 _start_quarter_0_90:
 	ld	iy, _draw_state			; xtilestep = 1;
 	ld	(iy+X_TILE_STEP), 1
-	ld	(iy+X_TILE_STEP+1), 0
 
 	ld	(iy+Y_TILE_STEP), 255		; ytilestep = -1;
-	ld	(iy+Y_TILE_STEP+1), 255
 
 	ld	hl, (iy+X_PARTIAL_UP)		; xpartial = xpartialup;
 	ld	(iy+X_PARTIAL), hl
@@ -370,10 +367,8 @@ _start_quarter_0_90:
 _start_quarter_90_180:
 	ld	iy, _draw_state			; xtilestep = -1;
 	ld	(iy+X_TILE_STEP), 255
-	ld	(iy+X_TILE_STEP+1), 255
 
 	ld	(iy+Y_TILE_STEP), 255		; ytilestep = -1;
-	ld	(iy+Y_TILE_STEP+1), 255
 
 	ld	hl, (iy+X_PARTIAL_DOWN)		; xpartial = xpartialdown;
 	ld	(iy+X_PARTIAL), hl
@@ -432,10 +427,8 @@ _start_quarter_90_180:
 _start_quarter_180_270:
 	ld	iy, _draw_state			; xtilestep = -1;
 	ld	(iy+X_TILE_STEP), 255
-	ld	(iy+X_TILE_STEP+1), 255
 
 	ld	(iy+Y_TILE_STEP), 1		; ytilestep = 1;
-	ld	(iy+Y_TILE_STEP+1), 0
 
 	ld	hl, (iy+X_PARTIAL_DOWN)		; xpartial = xpartialdown;
 	ld	(iy+X_PARTIAL), hl
@@ -493,10 +486,8 @@ _start_quarter_180_270:
 _start_quarter_270_360:
 	ld	iy, _draw_state			; xtilestep = 1;
 	ld	(iy+X_TILE_STEP), 1
-	ld	(iy+X_TILE_STEP+1), 0
 
 	ld	(iy+Y_TILE_STEP), 1		; ytilestep = 1;
-	ld	(iy+Y_TILE_STEP+1), 0
 
 	ld	hl, (iy+X_PARTIAL_UP)		; xpartial = xpartialup;
 	ld	(iy+X_PARTIAL), hl
@@ -544,17 +535,17 @@ _start_quarter_270_360:
 
 	section	.data_on_chip, "aw", @progbits
 
-; extern short xtilestep, ytilestep;
+; extern int8_t xtilestep, ytilestep;
 	global	_xtilestep
 _draw_state:
 X_TILE_STEP	equ	0
 _xtilestep:
-	ds	2
+	ds	1
 
 	global	_ytilestep
 Y_TILE_STEP	equ	(_ytilestep-_draw_state)
 _ytilestep:
-	ds	2
+	ds	1
 
 ; extern uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 	global	_xpartialup

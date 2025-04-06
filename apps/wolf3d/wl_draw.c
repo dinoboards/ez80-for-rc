@@ -85,11 +85,11 @@ short midangle, angle;
 word          tilehit;
 uint16_t pixx __data_on_chip;
 
-short        xtile, ytile;
-extern short xtilestep, ytilestep;
-fixed        xintercept, yintercept;
-word         xspot, yspot;
-int          texdelta;
+short         xtile, ytile;
+extern int8_t xtilestep, ytilestep;
+fixed         xintercept, yintercept;
+word          xspot, yspot;
+int           texdelta;
 
 word horizwall[MAXWALLTILES], vertwall[MAXWALLTILES];
 
