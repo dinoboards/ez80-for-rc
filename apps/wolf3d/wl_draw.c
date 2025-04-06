@@ -942,12 +942,12 @@ void CalcTics(void) {
 
 //==========================================================================
 
-extern short   asm_refresh_get_angl();
-extern uint8_t asm_refresh_find_quarter();
-extern void    start_quarter_0_90();
-extern void    start_quarter_90_180();
-extern void    start_quarter_180_270();
-extern void    start_quarter_270_360();
+extern short asm_refresh_get_angl();
+extern void  asm_init_quarter();
+// extern void    start_quarter_0_90();
+// extern void    start_quarter_90_180();
+// extern void    start_quarter_180_270();
+// extern void    start_quarter_270_360();
 
 extern short    angl;
 extern fixed    xstep, ystep;
@@ -959,19 +959,7 @@ void AsmRefresh() {
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     angl = asm_refresh_get_angl();
 
-    switch (asm_refresh_find_quarter()) {
-    case 0: // 0-90
-      start_quarter_0_90();
-      break;
-    case 1: // 90-180
-      start_quarter_90_180();
-      break;
-    case 2: // 180-270
-      start_quarter_180_270();
-      break;
-    default: // 270-360
-      start_quarter_270_360();
-    }
+    asm_init_quarter();
 
     yintercept = FixedMul(ystep, xpartial) + viewy;
     xtile      = focaltx + xtilestep;

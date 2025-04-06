@@ -1,7 +1,6 @@
 
 	section	.text, "ax", @progbits
 	global	_asm_refresh_get_angl
-	global	_asm_refresh_find_quarter
 	.extern	_pixx
 	.extern	_pixelangle
 	.extern	_midangle
@@ -85,36 +84,6 @@ is_not_neg:
 hl_was_less_than_fine_angles:
 	ld	de, FINEANGLES+1	; restore HL's original value
 	add	hl, de
-	ret
-
-_asm_refresh_find_quarter:
-	ld	hl, (_angl)
-
-	or	a
-	ld	de, 900
-	sbc.sis	hl, de
-
-	jr	c, less_than_90
-
-	sbc.sis	hl, de
-	jr	c, less_than_180
-
-	sbc.sis	hl, de
-	jr	c, less_than_270
-
-	ld	a, 3
-	ret
-
-less_than_90:
-	xor	a
-	ret
-
-less_than_180:
-	ld	a, 1
-	ret
-
-less_than_270:
-	ld	a, 2
 	ret
 
 ; uint8_t scale_post_asm()
@@ -296,10 +265,28 @@ outer_loop_exit:
 
 	ret
 
+	global	_asm_init_quarter
+_asm_init_quarter:
+	ld	hl, (_angl)
+
+	or	a
+	ld	de, 900
+	sbc.sis	hl, de
+
+	jr	c, _start_quarter_0_90
+
+	sbc.sis	hl, de
+	jr	c, _start_quarter_90_180
+
+	sbc.sis	hl, de
+	jp	c, _start_quarter_180_270
+
+	jp	_start_quarter_270_360
+
 ;
 ; extern void start_quarter_0_90();
 ;
-	global	_start_quarter_0_90
+	; global	_start_quarter_0_90
 
 ;       xtilestep = 1;
 ;       ytilestep = -1;
@@ -363,7 +350,7 @@ _start_quarter_0_90:
 ;       xpartial  = xpartialdown;
 ;       ypartial  = ypartialdown;
 
-	global	_start_quarter_90_180
+	; global	_start_quarter_90_180
 _start_quarter_90_180:
 	ld	iy, _draw_state			; xtilestep = -1;
 	ld	(iy+X_TILE_STEP), 255
@@ -423,7 +410,7 @@ _start_quarter_90_180:
 ;       xpartial  = xpartialdown;
 ;       ypartial  = ypartialup;
 
-	global	_start_quarter_180_270
+	; global	_start_quarter_180_270
 _start_quarter_180_270:
 	ld	iy, _draw_state			; xtilestep = -1;
 	ld	(iy+X_TILE_STEP), 255
@@ -482,7 +469,7 @@ _start_quarter_180_270:
 ;       xpartial  = xpartialup;
 ;       ypartial  = ypartialup;
 
-	global	_start_quarter_270_360
+	; global	_start_quarter_270_360
 _start_quarter_270_360:
 	ld	iy, _draw_state			; xtilestep = 1;
 	ld	(iy+X_TILE_STEP), 1
