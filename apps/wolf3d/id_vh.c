@@ -104,12 +104,12 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 =============================================================================
 */
 
-void VH_UpdateScreen() { vdp_cmd_move_cpu_to_vram(screenBuffer->xpixels, 0, 0, 256, 200, DIX_RIGHT | DIY_DOWN, 256 * 200); }
+void VH_UpdateScreen() { vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal); }
 
 extern uint8_t view_port_buffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 void           update_view_port() {
-  vdp_cmd_move_cpu_to_vram(view_port_buffer, viewscreenx, viewscreeny, drawing_params.view_width, drawing_params.view_height,
-                                     DIX_RIGHT | DIY_DOWN, view_length);
+  vdp_cmd_move_cpu_to_vram_with_palette(view_port_buffer, viewscreenx, viewscreeny, drawing_params.view_width,
+                                                  drawing_params.view_height, 0, view_length, gamepal);
 }
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }

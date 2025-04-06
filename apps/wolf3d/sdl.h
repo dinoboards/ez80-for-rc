@@ -5,7 +5,6 @@
 #include <ez80-firmware.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <v99x8-super.h>
 
 typedef struct SDL_Texture SDL_Texture;
 
@@ -893,7 +892,7 @@ extern void                SDL_GameControllerClose(SDL_GameController *gamecontr
 #define SDL_BUTTON_X1MASK SDL_BUTTON(SDL_BUTTON_X1)
 #define SDL_BUTTON_X2MASK SDL_BUTTON(SDL_BUTTON_X2)
 
-typedef RGB SDL_Color;
+typedef uint8_t SDL_Color;
 
 #define RED_FRM_GRB(grb)   ((grb & 0x1C) >> 2)
 #define GREEN_FRM_GRB(grb) ((grb & 0xE0) >> 5)

@@ -48,10 +48,9 @@ unsigned bordercolor;
 // #define RGB(r, g, b)                                                                                                               \
 //   { (r) * 255 / 63, (g)*255 / 63, (b)*255 / 63, 0 }
 
-#define _RGB(r, g, b)                                                                                                              \
-  (RGB) { ((r << 2) + 3), ((g << 2) + 3), ((b << 2) + 3) }
+#define RGB(r, g, b) (g >> 3) << 5 | (r >> 3) << 2 | (b >> 4)
 
-RGB gamepal[] = {
+SDL_Color gamepal[] __data_on_chip = {
 #ifdef SPEAR
 #include "sodpal.inc"
 #else
@@ -90,8 +89,7 @@ void VL_Shutdown(void) {
 */
 
 void VL_SetVGAPlaneMode(void) {
-  vdp_set_super_graphic_1();
-  vdp_set_extended_palette(gamepal);
+  vdp_set_mode(7, 192, PAL);
   vdp_cmd_wait_completion();
   vdp_cmd_vdp_to_vram(0, 0, 256, 192, 0, 0);
   vdp_cmd_wait_completion();
@@ -117,12 +115,12 @@ void VL_SetVGAPlaneMode(void) {
 =================
 */
 
-void VL_ConvertPalette(byte *srcpal, RGB *destpal, int numColors) {
+void VL_ConvertPalette(byte *srcpal, SDL_Color *destpal, int numColors) {
   for (int i = 0; i < numColors; i++) {
     const uint8_t r = *srcpal++;
     const uint8_t g = *srcpal++;
     const uint8_t b = *srcpal++;
-    destpal[i]      = (RGB){r, g, b};
+    destpal[i]      = GRB(g, r, b);
   }
 }
 
@@ -202,7 +200,7 @@ void VL_SetColor(int color __attribute__((unused)),
 =================
 */
 
-void VL_SetPalette(RGB *palette __attribute__((unused)), bool forceupdate __attribute__((unused))) {
+void VL_SetPalette(SDL_Color *palette __attribute__((unused)), bool forceupdate __attribute__((unused))) {
   // memcpy(curpal, palette, sizeof(SDL_Color) * 256);
 
   // if (screenBits == 8)
@@ -302,10 +300,10 @@ void VL_FadeOut(int start __attribute__((unused)),
 =================
 */
 
-void VL_FadeIn(int  start __attribute__((unused)),
-               int  end __attribute__((unused)),
-               RGB *palette __attribute__((unused)),
-               int  steps __attribute__((unused))) {
+void VL_FadeIn(int        start __attribute__((unused)),
+               int        end __attribute__((unused)),
+               SDL_Color *palette __attribute__((unused)),
+               int        steps __attribute__((unused))) {
   // int i, j, delta;
 
   // VL_WaitVBL(1);
@@ -551,7 +549,7 @@ void VL_SurfaceToScreen(SDL_Surface *source, int scxdest, int scydest) {
   assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= SCREEN_HEIGHT &&
          "VL_SurfaceToScreen: Destination rectangle out of bounds!");
 
-  vdp_cmd_move_cpu_to_vram(src, scxdest, scydest, width, height, DIX_RIGHT | DIY_DOWN, width * height);
+  vdp_cmd_move_cpu_to_vram_with_palette(src, scxdest, scydest, width, height, 0, width * height, gamepal);
 }
 
 void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
@@ -568,7 +566,7 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
 
   uint8_t first_byte = src[(ysrc)*srcPitch + xsrc];
 
-  vdp_cmd_move_data_to_vram(first_byte, scxdest, scydest, width, height, 0, width * height);
+  vdp_cmd_move_data_to_vram(gamepal[first_byte], scxdest, scydest, width, height, 0, width * height);
 
   for (int j = 0; j < height; j++) {
     for (int i = 0; i < width; i++) {
@@ -576,8 +574,10 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
         continue;
       }
 
-      byte color = src[(ysrc + j) * srcPitch + xsrc + i];
-      vdp_cmd_send_byte(color);
+      byte    color = src[(ysrc + j) * srcPitch + xsrc + i];
+      uint8_t grb   = gamepal[color];
+
+      vdp_cmd_send_byte(grb);
     }
   }
 }

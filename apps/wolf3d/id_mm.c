@@ -120,8 +120,7 @@ void MM_Startup(void) {
     mmblocks[i].next = &mmblocks[i + 1];
   mmblocks[i].next = NULL;
 
-  // TODO: get stack for RAM top
-  length = 0x600000 - (uint24_t)_heap;
+  length = 0x400000 - (uint24_t)_heap;
   start  = _heap;
   printf("Heap size: %d\r\n", length);
 

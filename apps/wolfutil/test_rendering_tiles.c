@@ -11,17 +11,17 @@ extern uint8_t tiles[];
 extern uint8_t kifePic[];
 extern uint8_t gunpick[];
 
-// static void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
+static void apply_palette(uint8_t *surface, uint16_t width, uint16_t height) {
 
-//   uint8_t *c = surface;
+  uint8_t *c = surface;
 
-//   for (uint8_t y = 0; y < height; y++) {
-//     for (uint16_t x = 0; x < width; x++) {
-//       *c = gamepal[*c];
-//       c++;
-//     }
-//   }
-// }
+  for (uint8_t y = 0; y < height; y++) {
+    for (uint16_t x = 0; x < width; x++) {
+      *c = gamepal[*c];
+      c++;
+    }
+  }
+}
 
 uint8_t buffer[48 * 24];
 
@@ -59,7 +59,7 @@ void test_rendering_tiles() {
   for (int i = 0; i < 70; i++) {
     uint8_t *c = tiles;
 
-    // apply_palette(c, 8, 8);
+    apply_palette(c, 8, 8);
 
     transform(c, 8, 8, buffer, 0, 0);
 
