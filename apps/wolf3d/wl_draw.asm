@@ -6,6 +6,8 @@
 	.extern	_midangle
 	.assume	adl=1
 
+mapshift 	equ	6
+
 ; Multiplies HL by BC and returns the 16-bit product hl.
 ; corrupts DE
 .macro	MUL_16_HL_BC
@@ -526,12 +528,9 @@ _start_quarter_270_360:
 	ld	(iy+Y_STEP+3), e
 
 .init_loop_params2:
-
-	; yintercept = FixedMul(ystep, xpartial) + viewy;
-
 	; xpartial is a uint24_t
 	; convert to int32 and shift right by 8
-	xor	a
+	xor	a				; yintercept = FixedMul(ystep, xpartial) + viewy;
 	sbc	hl, hl
 	ld	e, l
 	ld 	l, (iy+X_PARTIAL+1)	; >> 8
@@ -552,8 +551,7 @@ _start_quarter_270_360:
 	ld	(iy+Y_INTERCEPT), hl
 	ld	(iy+Y_INTERCEPT+3), e
 
-	;  xtile = focaltx + xtilestep;
-	ld	a, (iy+ X_TILE_STEP)
+	ld	a, (iy+ X_TILE_STEP)		;  xtile = focaltx + xtilestep;
 	ld	e, a
 	rlc	a
 	sbc	a, a
@@ -563,6 +561,18 @@ _start_quarter_270_360:
 	add	hl, de
 	ld	(iy+X_TILE), l
 	ld	(iy+X_TILE+1), h
+
+	add	hl, hl				; xspot  = (word)((xtile << mapshift) + fixed_to_short(yintercept));
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	ld	e, (iy+Y_INTERCEPT+2)
+	ld	d, (iy+Y_INTERCEPT+3)
+	add	hl, de
+	ld	(iy+X_SPOT), l
+	ld	(iy+X_SPOT+1), h
 
 	ret
 
@@ -674,12 +684,23 @@ _viewty:
 	ds	2
 
 ; extern short xtile, ytile;
-X_TILE	equ	(_xtile-_draw_state)
 	.global	_xtile
+X_TILE	equ	(_xtile-_draw_state)
 _xtile:
 	ds	2
 
-Y_TILE	equ	(_ytile-_draw_state)
 	.global	_ytile
+Y_TILE	equ	(_ytile-_draw_state)
 _ytile:
+	ds	2
+
+; extern uint16_t  xspot, yspot;
+	.global	_xspot
+X_SPOT	equ	(_xspot-_draw_state)
+_xspot:
+	ds	2
+
+	.global	_yspot
+Y_SPOT	equ	(_yspot-_draw_state)
+_yspot:
 	ds	2

@@ -85,11 +85,11 @@ short midangle, angle;
 word          tilehit;
 uint16_t pixx __data_on_chip;
 
-extern short  xtile, ytile;
-extern int8_t xtilestep, ytilestep;
-extern fixed  xintercept, yintercept;
-word          xspot, yspot;
-int           texdelta;
+extern short    xtile, ytile;
+extern int8_t   xtilestep, ytilestep;
+extern fixed    xintercept, yintercept;
+extern uint16_t xspot, yspot;
+int             texdelta;
 
 word horizwall[MAXWALLTILES], vertwall[MAXWALLTILES];
 
@@ -954,7 +954,6 @@ void AsmRefresh() {
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     asm_init_quarter();
 
-    xspot      = (word)((xtile << mapshift) + fixed_to_short(yintercept));
     xintercept = FixedMul(xstep, ypartial) + viewx;
     ytile      = focalty + ytilestep;
     yspot      = (word)(((fixed_to_short(xintercept)) << mapshift) + ytile);
