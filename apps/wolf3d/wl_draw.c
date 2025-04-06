@@ -942,12 +942,8 @@ void CalcTics(void) {
 
 //==========================================================================
 
-extern short asm_refresh_get_angl();
-extern void  asm_init_quarter();
-// extern void    start_quarter_0_90();
-// extern void    start_quarter_90_180();
-// extern void    start_quarter_180_270();
-// extern void    start_quarter_270_360();
+extern void asm_refresh_get_angl();
+extern void asm_init_quarter();
 
 extern short    angl;
 extern fixed    xstep, ystep;
@@ -957,7 +953,7 @@ void AsmRefresh() {
   boolean playerInPushwallBackTile = tilemap[focaltx][focalty] == 64;
 
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
-    angl = asm_refresh_get_angl();
+    asm_refresh_get_angl();
 
     asm_init_quarter();
 

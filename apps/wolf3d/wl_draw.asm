@@ -69,6 +69,7 @@ _asm_refresh_get_angl:
 
 	ld	bc, FINEANGLES
 	add	hl, bc
+	ld	(_angl), hl
 	ret
 
 is_not_neg:
@@ -79,11 +80,13 @@ is_not_neg:
 
 	; HL was > 3600
 	inc	hl			; remove the off by one test
+	ld	(_angl), hl
 	ret
 
 hl_was_less_than_fine_angles:
 	ld	de, FINEANGLES+1	; restore HL's original value
 	add	hl, de
+	ld	(_angl), hl
 	ret
 
 ; uint8_t scale_post_asm()
