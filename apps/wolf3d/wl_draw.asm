@@ -675,9 +675,12 @@ _xintercept_as_short:	; readonly
 	ds	2
 
 	global	_yintercept
+	global	_yintercept_as_short
 Y_INTERCEPT	equ	(_yintercept-_draw_state)
 _yintercept:
-	ds	4
+	ds	2
+_yintercept_as_short:	; readonly
+	ds	2
 
 ; extern fixed viewx, viewy; // the focal point
 	.global	_viewx
