@@ -52,9 +52,9 @@ fixed *costable = sintable + (ANGLES / 4);
 //
 // refresh variables
 //
-fixed viewx, viewy; // the focal point
-short viewangle;
-fixed viewsin, viewcos;
+extern fixed viewx, viewy; // the focal point
+short        viewangle;
+fixed        viewsin, viewcos;
 
 drawing_params_t drawing_params __data_on_chip;
 
@@ -87,7 +87,7 @@ uint16_t pixx __data_on_chip;
 
 short         xtile, ytile;
 extern int8_t xtilestep, ytilestep;
-fixed         xintercept, yintercept;
+extern fixed  xintercept, yintercept;
 word          xspot, yspot;
 int           texdelta;
 
@@ -954,7 +954,6 @@ void AsmRefresh() {
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     asm_init_quarter();
 
-    yintercept = FixedMul(ystep, xpartial) + viewy;
     xtile      = focaltx + xtilestep;
     xspot      = (word)((xtile << mapshift) + fixed_to_short(yintercept));
     xintercept = FixedMul(xstep, ypartial) + viewx;

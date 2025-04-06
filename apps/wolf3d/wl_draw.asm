@@ -23,11 +23,18 @@
 	add	hl, de
 .endm
 
-.macro	NEG_EUBC_AUHL
+.macro	LNEG_EUBC_AUHL
 	xor	a, a	; A=0
 	sbc	hl, hl	; UHL=0
 	sbc	hl, bc	; UHL=-UBC
 	sbc	a, e	; AUHL=-EUBC
+.endm
+
+; E/AUHL = EUHL + AUBC
+.macro LADD_EUHL_AUBC
+	add	hl, bc
+	adc	a, e
+	ld	e, a
 .endm
 
 FINEANGLES	equ	3600
@@ -324,7 +331,7 @@ _start_quarter_0_90:
 	inc	hl
 	inc	hl
 	ld	e, (hl)				; eubc = finetangent[angl]
-	NEG_EUBC_AUHL				; auhl = -eubc
+	LNEG_EUBC_AUHL				; auhl = -eubc
 	ld	(iy+Y_STEP), hl
 	ld	(iy+Y_STEP+3), a
 
@@ -344,7 +351,7 @@ _start_quarter_0_90:
 	ld	(iy+X_STEP), bc
 	ld	(iy+X_STEP+3), a
 
-	ret
+	jp	.init_loop_params2
 
 ;       xtilestep = -1;
 ;       ytilestep = -1;
@@ -382,7 +389,7 @@ _start_quarter_90_180:
 	inc	hl
 	inc	hl
 	ld	e, (hl)				; eubc = finetangent[angl - 900]
-	NEG_EUBC_AUHL				; auhl = -eubc
+	LNEG_EUBC_AUHL				; auhl = -eubc
 	ld	(iy+X_STEP), hl
 	ld	(iy+X_STEP+3), a
 
@@ -399,11 +406,11 @@ _start_quarter_90_180:
 	inc	hl
 	inc	hl
 	ld	e, (hl)
-	NEG_EUBC_AUHL				; auhl = -eubc
+	LNEG_EUBC_AUHL				; auhl = -eubc
 	ld	(iy+Y_STEP), hl
 	ld	(iy+Y_STEP+3), a
 
-	ret
+	jp	.init_loop_params2
 
 ;       xtilestep = -1;
 ;       ytilestep = 1;
@@ -457,11 +464,11 @@ _start_quarter_180_270:
 	inc	hl
 	inc	hl
 	ld	e, (hl)
-	NEG_EUBC_AUHL				; auhl = -eubc
+	LNEG_EUBC_AUHL				; auhl = -eubc
 	ld	(iy+X_STEP), hl
 	ld	(iy+X_STEP+3), a
 
-	ret
+	jr	.init_loop_params2
 
 ;       xtilestep = 1;
 ;       ytilestep = 1;
@@ -517,6 +524,39 @@ _start_quarter_270_360:
 	ld	e, (hl)
 	ld	(iy+Y_STEP), bc
 	ld	(iy+Y_STEP+3), e
+
+.init_loop_params2:
+
+	; yintercept = FixedMul(ystep, xpartial) + viewy;
+
+	; xpartial is a uint24_t
+	; convert to int32 and shift right by 8
+	xor	a
+	sbc	hl, hl
+	ld	e, l
+	ld 	l, (iy+X_PARTIAL+1)	; >> 8
+	ld 	h, (iy+X_PARTIAL+2)
+
+	ld	bc, (iy+Y_STEP+1)	; >> 8
+	ld	a, (iy+Y_STEP+3)	; extend sign bit
+	sra	a
+	sra	a
+	sra	a
+	sra	a
+	sra	a
+	sra	a
+	sra	a
+	sra	a
+
+	push	iy
+	call	_mul_euhl_aubc
+	pop	iy
+
+	ld	bc, (iy+VIEW_Y)
+	ld	a, (iy+VIEW_Y+3)
+	LADD_EUHL_AUBC
+	ld	(iy+Y_INTERCEPT), hl
+	ld	(iy+Y_INTERCEPT+3), e
 
 	ret
 
@@ -581,4 +621,26 @@ _xstep:
 	global	_ystep
 Y_STEP	equ	(_ystep-_draw_state)
 _ystep:
+	ds	4
+
+; extern fixed  xintercept, yintercept;
+	global	_xintercept
+X_INTERCEPT	equ	(_xintercept-_draw_state)
+_xintercept:
+	ds	4
+
+	global	_yintercept
+Y_INTERCEPT	equ	(_yintercept-_draw_state)
+_yintercept:
+	ds	4
+
+; extern fixed viewx, viewy; // the focal point
+	.global	_viewx
+VIEW_X	equ	(_viewx-_draw_state)
+_viewx:
+	ds	4
+
+	.global	_viewy
+VIEW_Y	equ	(_viewy-_draw_state)
+_viewy:
 	ds	4

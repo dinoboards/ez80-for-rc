@@ -1,7 +1,8 @@
 	section	.text_on_chip, "ax", @progbits
 	.assume	adl=1
-	.global	_FixedMul
-	.extern	__lmulu
+	global	_FixedMul
+	global	_mul_euhl_aubc
+	extern	__lmulu
 
 ; typedef int32_t fixed;
 ;
@@ -39,6 +40,7 @@ _FixedMul:
 	sra	a
 	sra	a
 
+_mul_euhl_aubc:
 
 ; Multiplies EUHL by AUBC and returns the 32-bit product euhl.
 ;    I: AUBC=multiplier, EUHL=multiplicand, ADL=1
