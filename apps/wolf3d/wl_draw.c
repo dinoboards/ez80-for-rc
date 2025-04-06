@@ -954,9 +954,9 @@ void AsmRefresh() {
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     asm_init_quarter();
 
-    ytile      = focalty + ytilestep;
-    yspot      = (word)(((fixed_to_short(xintercept)) << mapshift) + ytile);
-    texdelta   = 0;
+    ytile    = focalty + ytilestep;
+    yspot    = (word)(((fixed_to_short(xintercept)) << mapshift) + ytile);
+    texdelta = 0;
 
     // Special treatment when player is in back tile of pushwall
     if (playerInPushwallBackTile) {
@@ -1295,9 +1295,6 @@ void CalcViewVariables() {
   viewcos   = costable[viewangle];
   viewx     = player->x - FixedMul(focallength, viewcos);
   viewy     = player->y + FixedMul(focallength, viewsin);
-
-  focaltx = (short)(fixed_to_short(viewx));
-  focalty = (short)(fixed_to_short(viewy));
 }
 
 //==========================================================================

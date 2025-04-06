@@ -673,25 +673,21 @@ _yintercept:
 
 ; extern fixed viewx, viewy; // the focal point
 	.global	_viewx
-VIEW_X	equ	(_viewx-_draw_state)
+	.global	_focaltx
+VIEW_X		equ	(_viewx-_draw_state)
+FOCAL_TX	equ	(_focaltx-_draw_state)
 _viewx:
-	ds	4
+	ds	2					; type fixed
+_focaltx:
+	ds	2					; type short: focaltx = viewx >> 16 readonly
 
 	.global	_viewy
-VIEW_Y	equ	(_viewy-_draw_state)
-_viewy:
-	ds	4
-
-; extern short focaltx, focalty;
-
-	.global	_focaltx
-FOCAL_TX	equ	(_focaltx-_draw_state)
-_focaltx:
-	ds	2
-
 	.global	_focalty
+VIEW_Y		equ	(_viewy-_draw_state)
 FOCAL_TY	equ	(_focalty-_draw_state)
-_focalty:
+_viewy:							; type fixed
+	ds	2
+_focalty:						; type: short focalty = viewy >> 16 readonly
 	ds	2
 
 ; extern short xtile, ytile;
