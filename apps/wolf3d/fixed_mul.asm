@@ -20,25 +20,14 @@ _FixedMul:
 	ld	bc, (iy+10)     ; b >> 8
 
 	; shift sign of e and a
-	ld	e, (iy+6)
-	sra	e
-	sra	e
-	sra	e
-	sra	e
-	sra	e
-	sra	e
-	sra	e
-	sra	e
+	ld	a, (iy+6)
+	rlc	a
+	sbc	a, a
+	ld	e, a
 
 	ld	a, (iy+12)
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
+	rlc	a
+	sbc	a, a
 
 _mul_euhl_aubc:
 

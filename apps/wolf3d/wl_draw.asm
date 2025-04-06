@@ -539,14 +539,8 @@ _start_quarter_270_360:
 
 	ld	bc, (iy+Y_STEP+1)	; >> 8
 	ld	a, (iy+Y_STEP+3)	; extend sign bit
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
-	sra	a
+	rlc	a
+	sbc	a, a
 
 	push	iy
 	call	_mul_euhl_aubc
@@ -557,6 +551,18 @@ _start_quarter_270_360:
 	LADD_EUHL_AUBC
 	ld	(iy+Y_INTERCEPT), hl
 	ld	(iy+Y_INTERCEPT+3), e
+
+	;  xtile = focaltx + xtilestep;
+	ld	a, (iy+ X_TILE_STEP)
+	ld	e, a
+	rlc	a
+	sbc	a, a
+	ld	d, a
+	ld	l, (iy+FOCAL_TX)
+	ld	h, (iy+FOCAL_TX+1)
+	add	hl, de
+	ld	(iy+X_TILE), l
+	ld	(iy+X_TILE+1), h
 
 	ret
 
@@ -644,3 +650,36 @@ _viewx:
 VIEW_Y	equ	(_viewy-_draw_state)
 _viewy:
 	ds	4
+
+; extern short focaltx, focalty, viewtx, viewty;
+
+	.global	_focaltx
+FOCAL_TX	equ	(_focaltx-_draw_state)
+_focaltx:
+	ds	2
+
+	.global	_focalty
+FOCAL_TY	equ	(_focalty-_draw_state)
+_focalty:
+	ds	2
+
+	.global	_viewtx
+VIEW_TX	equ	(_viewtx-_draw_state)
+_viewtx:
+	ds	2
+
+	.global	_viewty
+VIEW_TY	equ	(_viewty-_draw_state)
+_viewty:
+	ds	2
+
+; extern short xtile, ytile;
+X_TILE	equ	(_xtile-_draw_state)
+	.global	_xtile
+_xtile:
+	ds	2
+
+Y_TILE	equ	(_ytile-_draw_state)
+	.global	_ytile
+_ytile:
+	ds	2

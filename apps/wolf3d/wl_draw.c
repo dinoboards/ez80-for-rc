@@ -77,7 +77,7 @@ int   lasttexture;
 //
 // ray tracing variables
 //
-short           focaltx, focalty, viewtx, viewty;
+extern short    focaltx, focalty, viewtx, viewty;
 extern uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 
 short midangle, angle;
@@ -85,7 +85,7 @@ short midangle, angle;
 word          tilehit;
 uint16_t pixx __data_on_chip;
 
-short         xtile, ytile;
+extern short  xtile, ytile;
 extern int8_t xtilestep, ytilestep;
 extern fixed  xintercept, yintercept;
 word          xspot, yspot;
@@ -954,7 +954,6 @@ void AsmRefresh() {
   for (pixx = 0; pixx < drawing_params.view_width; pixx++) {
     asm_init_quarter();
 
-    xtile      = focaltx + xtilestep;
     xspot      = (word)((xtile << mapshift) + fixed_to_short(yintercept));
     xintercept = FixedMul(xstep, ypartial) + viewx;
     ytile      = focalty + ytilestep;
