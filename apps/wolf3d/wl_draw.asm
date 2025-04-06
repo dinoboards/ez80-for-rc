@@ -24,6 +24,13 @@
 	add	hl, de
 .endm
 
+.macro NEG_EUBC_AUHL
+	xor	a, a	; A=0
+	sbc	hl, hl	; UHL=0
+	sbc	hl, bc	; UHL=-UBC
+	sbc	a, e	; AUHL=-EUBC
+.endm
+
 FINEANGLES
 	equ	3600
 
@@ -315,20 +322,28 @@ _start_quarter_0_90:
 	ld	(iy+Y_TILE_STEP), 255		; ytilestep = -1;
 	ld	(iy+Y_TILE_STEP+1), 255
 
-	ld	hl, (iy+X_PARTIAL_UP)		; xpartial  = xpartialup;
+	ld	hl, (iy+X_PARTIAL_UP)		; xpartial = xpartialup;
 	ld	(iy+X_PARTIAL), hl
 
-	ld	hl, (iy+Y_PARTIAL_DOWN)		; ypartial  = ypartialdown;
+	ld	hl, (iy+Y_PARTIAL_DOWN)		; ypartial = ypartialdown;
 	ld	(iy+Y_PARTIAL), hl
 
-	; ;       ystep     = -finetangent[angl];
-	; ; extern fixed finetangent[];
-	; ; angl * 4 + finetangent
-	; ld	hl, 0
-	; ld	iy, _angl
-	; ld	l, (iy)
-	; ld	h, (iy+1)
-
+	xor	a				; ystep = -finetangent[angl];
+	sbc	hl, hl
+	ld	l, (iy+ANGL)
+	ld	h, (iy+ANGL+1)
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)				; eubc = finetangent[angl]
+	NEG_EUBC_AUHL				; auhl = -eubc
+	ld	(iy+Y_STEP), hl
+	ld	(iy+Y_STEP+3), a
 
 	ret
 
@@ -366,7 +381,6 @@ _ypartialdown:
 	ds	3
 
 ; extern uint24_t xpartial, ypartial;
-
 	.global	_xpartial
 X_PARTIAL	EQU	(_xpartial-_draw_state)
 _xpartial:
@@ -379,5 +393,17 @@ _ypartial:
 
 ;extern short angl;
 	.global	_angl
+ANGL	EQU	(_angl-_draw_state)
 _angl:
 	ds	2
+
+; extern fixed xstep, ystep;
+	.global	_xstep
+_xstep:
+X_STEP	EQU	(_xstep-_draw_state)
+	ds	4
+
+	.global	_ystep
+_ystep:
+Y_STEP	EQU	(_ystep-_draw_state)
+	ds	4

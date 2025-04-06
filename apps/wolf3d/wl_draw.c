@@ -946,8 +946,8 @@ extern short   asm_refresh_get_angl();
 extern uint8_t asm_refresh_find_quarter();
 extern void    start_quarter_0_90();
 
-extern short angl;
-fixed xstep __data_on_chip, ystep __data_on_chip;
+extern short    angl;
+extern fixed    xstep, ystep;
 extern uint24_t xpartial, ypartial;
 
 void AsmRefresh() {
@@ -960,7 +960,6 @@ void AsmRefresh() {
     case 0: // 0-90
       start_quarter_0_90();
       xstep = finetangent[900 - 1 - angl];
-      ystep = -finetangent[angl];
       break;
     case 1: // 90-180
       xtilestep = -1;
