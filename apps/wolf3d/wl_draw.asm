@@ -535,16 +535,13 @@ _start_quarter_270_360:
 	ld	e, l
 	ld 	l, (iy+X_PARTIAL+1)	; >> 8
 	ld 	h, (iy+X_PARTIAL+2)
-
 	ld	bc, (iy+Y_STEP+1)	; >> 8
 	ld	a, (iy+Y_STEP+3)	; extend sign bit
 	rlc	a
 	sbc	a, a
-
 	push	iy
 	call	_mul_euhl_aubc
 	pop	iy
-
 	ld	bc, (iy+VIEW_Y)
 	ld	a, (iy+VIEW_Y+3)
 	LADD_EUHL_AUBC
@@ -579,21 +576,29 @@ _start_quarter_270_360:
 	ld	e, l
 	ld 	l, (iy+Y_PARTIAL+1)	; >> 8
 	ld 	h, (iy+Y_PARTIAL+2)
-
 	ld	bc, (iy+X_STEP+1)	; >> 8
 	ld	a, (iy+X_STEP+3)	; extend sign bit
 	rlc	a
 	sbc	a, a
-
 	push	iy
 	call	_mul_euhl_aubc
 	pop	iy
-
 	ld	bc, (iy+VIEW_X)
 	ld	a, (iy+VIEW_X+3)
 	LADD_EUHL_AUBC
 	ld	(iy+X_INTERCEPT), hl
 	ld	(iy+X_INTERCEPT+3), e
+
+	ld	a, (iy+Y_TILE_STEP)		; ytile = focalty + ytilestep;
+	ld	e, a
+	rlc	a
+	sbc	a, a
+	ld	d, a
+	ld	l, (iy+FOCAL_TY)
+	ld	h, (iy+FOCAL_TY+1)
+	add	hl, de
+	ld	(iy+Y_TILE), l
+	ld	(iy+Y_TILE+1), h
 
 	ret
 
