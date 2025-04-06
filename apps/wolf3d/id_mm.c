@@ -120,7 +120,10 @@ void MM_Startup(void) {
     mmblocks[i].next = &mmblocks[i + 1];
   mmblocks[i].next = NULL;
 
-  length = 0x400000 - (uint24_t)_heap;
+  printf("extended_memory_start: %p\r\n", get_memory_start());
+  printf("extended_memory_end: %p\r\n", get_memory_end());
+
+  length = (uint24_t)get_memory_end() - (uint24_t)_heap;
   start  = _heap;
   printf("Heap size: %d\r\n", length);
 
