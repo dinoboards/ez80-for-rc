@@ -682,7 +682,7 @@ VIEW_Y	equ	(_viewy-_draw_state)
 _viewy:
 	ds	4
 
-; extern short focaltx, focalty, viewtx, viewty;
+; extern short focaltx, focalty;
 
 	.global	_focaltx
 FOCAL_TX	equ	(_focaltx-_draw_state)
@@ -692,16 +692,6 @@ _focaltx:
 	.global	_focalty
 FOCAL_TY	equ	(_focalty-_draw_state)
 _focalty:
-	ds	2
-
-	.global	_viewtx
-VIEW_TX	equ	(_viewtx-_draw_state)
-_viewtx:
-	ds	2
-
-	.global	_viewty
-VIEW_TY	equ	(_viewty-_draw_state)
-_viewty:
 	ds	2
 
 ; extern short xtile, ytile;

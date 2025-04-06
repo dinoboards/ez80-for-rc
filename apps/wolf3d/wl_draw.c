@@ -77,7 +77,7 @@ int   lasttexture;
 //
 // ray tracing variables
 //
-extern short    focaltx, focalty, viewtx, viewty;
+extern short    focaltx, focalty;
 extern uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 
 short midangle, angle;
@@ -1298,9 +1298,6 @@ void CalcViewVariables() {
 
   focaltx = (short)(fixed_to_short(viewx));
   focalty = (short)(fixed_to_short(viewy));
-
-  viewtx = (short)(fixed_to_short(player->x));
-  viewty = (short)(fixed_to_short(player->y));
 }
 
 //==========================================================================
