@@ -1,5 +1,5 @@
 
-	section	.text_on_chip, "ax", @progbits
+	section	.text, "ax", @progbits
 	.global	_asm_refresh_get_angl
 	.global	_asm_refresh_find_quarter
 	.extern	_pixx
@@ -24,15 +24,14 @@
 	add	hl, de
 .endm
 
-.macro NEG_EUBC_AUHL
+.macro	NEG_EUBC_AUHL
 	xor	a, a	; A=0
 	sbc	hl, hl	; UHL=0
 	sbc	hl, bc	; UHL=-UBC
 	sbc	a, e	; AUHL=-EUBC
 .endm
 
-FINEANGLES
-	equ	3600
+FINEANGLES	equ	3600
 
 ; short asm_refresh_get_angl() {
 ;   short angl = midangle + pixelangle[pixx];
@@ -131,10 +130,8 @@ less_than_270:
 	.extern	_drpm_view_height
 	.extern	_drpm_view_width
 
-TEXTURESIZE
-	equ	64
-TEXTURE_SIZE_HALF
-	equ	TEXTURESIZE/2
+TEXTURESIZE		equ	64
+TEXTURE_SIZE_HALF	equ	TEXTURESIZE/2
 
 .yoffs_less_than_zero:
 	ld	hl, (iy+_drpm_postx)
@@ -303,9 +300,7 @@ outer_loop_exit:
 ; extern void start_quarter_0_90();
 ;
 ; extern short xtilestep, ytilestep;
-	extern	_xtilestep
-	extern	_ytilestep
-	global _start_quarter_0_90
+	global	_start_quarter_0_90
 
 ;       xtilestep = 1;
 ;       ytilestep = -1;
@@ -346,8 +341,7 @@ _start_quarter_0_90:
 	ld	(iy+Y_STEP), hl
 	ld	(iy+Y_STEP+3), a
 
-	; xstep = finetangent[900 - 1 - angl];
-	pop	de
+	pop	de				; xstep = finetangent[900 - 1 - angl];
 	ld	hl, 900-1
 	xor	a
 	sbc	hl, de
@@ -365,27 +359,90 @@ _start_quarter_0_90:
 
 	ret
 
-	section	.data_on_chip,"aw",@progbits
+;       xtilestep = -1;
+;       ytilestep = -1;
+;       xstep     = -finetangent[angl - 900];
+;       ystep     = -finetangent[1800 - 1 - angl];
+;       xpartial  = xpartialdown;
+;       ypartial  = ypartialdown;
+
+	global	_start_quarter_90_180
+_start_quarter_90_180:
+	ld	iy, _draw_state			; xtilestep = -1;
+	ld	(iy+X_TILE_STEP), 255
+	ld	(iy+X_TILE_STEP+1), 255
+
+	ld	(iy+Y_TILE_STEP), 255		; ytilestep = -1;
+	ld	(iy+Y_TILE_STEP+1), 255
+
+	ld	hl, (iy+X_PARTIAL_DOWN)		; xpartial = xpartialdown;
+	ld	(iy+X_PARTIAL), hl
+
+	ld	hl, (iy+Y_PARTIAL_DOWN)		; ypartial = ypartialdown;
+	ld	(iy+Y_PARTIAL), hl
+
+	xor	a				; xstep = -finetangent[angl - 900];
+	sbc	hl, hl
+	ld	l, (iy+ANGL)
+	ld	h, (iy+ANGL+1)
+	push	hl				; save angl
+	ld	de, 900
+	xor	a
+	sbc	hl, de
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)				; eubc = finetangent[angl - 900]
+	NEG_EUBC_AUHL				; auhl = -eubc
+	ld	(iy+X_STEP), hl
+	ld	(iy+X_STEP+3), a
+
+	pop	de				; ystep = -finetangent[1800 - 1 - angl];
+	ld	hl, 1800-1
+	xor	a
+	sbc	hl, de
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)
+	NEG_EUBC_AUHL				; auhl = -eubc
+	ld	(iy+Y_STEP), hl
+	ld	(iy+Y_STEP+3), a
+
+	ret
+
+	section	.data_on_chip, "aw", @progbits
 
 ; extern short xtilestep, ytilestep;
 	.global	_xtilestep
 _draw_state:
-X_TILE_STEP	EQU	0
+X_TILE_STEP	equ	0
 _xtilestep:
 	ds	2
 
 	.global	_ytilestep
+Y_TILE_STEP	equ	(_ytilestep-_draw_state)
 _ytilestep:
-Y_TILE_STEP	EQU	(_ytilestep-_draw_state)
 	ds	2
 
 ; extern uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
 	.global	_xpartialup
-X_PARTIAL_UP	EQU	(_xpartialup-_draw_state)
+X_PARTIAL_UP	equ	(_xpartialup-_draw_state)
 _xpartialup:
 	ds	3
 
 	.global	_xpartialdown
+X_PARTIAL_DOWN	equ	(_xpartialdown-_draw_state)
 _xpartialdown:
 	ds	3
 
@@ -394,34 +451,34 @@ _ypartialup:
 	ds	3
 
 	.global	_ypartialdown
-Y_PARTIAL_DOWN	EQU	(_ypartialdown-_draw_state)
+Y_PARTIAL_DOWN	equ	(_ypartialdown-_draw_state)
 _ypartialdown:
 	ds	3
 
 ; extern uint24_t xpartial, ypartial;
 	.global	_xpartial
-X_PARTIAL	EQU	(_xpartial-_draw_state)
+X_PARTIAL	equ	(_xpartial-_draw_state)
 _xpartial:
 	ds	3
 
 	.global	_ypartial
-Y_PARTIAL	EQU	(_ypartial-_draw_state)
+Y_PARTIAL	equ	(_ypartial-_draw_state)
 _ypartial:
 	ds	3
 
 ;extern short angl;
 	.global	_angl
-ANGL	EQU	(_angl-_draw_state)
+ANGL	equ	(_angl-_draw_state)
 _angl:
 	ds	2
 
 ; extern fixed xstep, ystep;
 	.global	_xstep
+X_STEP	equ	(_xstep-_draw_state)
 _xstep:
-X_STEP	EQU	(_xstep-_draw_state)
 	ds	4
 
 	.global	_ystep
+Y_STEP	equ	(_ystep-_draw_state)
 _ystep:
-Y_STEP	EQU	(_ystep-_draw_state)
 	ds	4

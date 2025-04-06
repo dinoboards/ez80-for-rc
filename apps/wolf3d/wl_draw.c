@@ -945,6 +945,7 @@ void CalcTics(void) {
 extern short   asm_refresh_get_angl();
 extern uint8_t asm_refresh_find_quarter();
 extern void    start_quarter_0_90();
+extern void    start_quarter_90_180();
 
 extern short    angl;
 extern fixed    xstep, ystep;
@@ -961,12 +962,7 @@ void AsmRefresh() {
       start_quarter_0_90();
       break;
     case 1: // 90-180
-      xtilestep = -1;
-      ytilestep = -1;
-      xstep     = -finetangent[angl - 900];
-      ystep     = -finetangent[1800 - 1 - angl];
-      xpartial  = xpartialdown;
-      ypartial  = ypartialdown;
+      start_quarter_90_180();
       break;
     case 2: // 180-270
       xtilestep = -1;
