@@ -1,7 +1,7 @@
 
 	section	.text, "ax", @progbits
-	.global	_asm_refresh_get_angl
-	.global	_asm_refresh_find_quarter
+	global	_asm_refresh_get_angl
+	global	_asm_refresh_find_quarter
 	.extern	_pixx
 	.extern	_pixelangle
 	.extern	_midangle
@@ -118,7 +118,7 @@ less_than_270:
 	ret
 
 ; uint8_t scale_post_asm()
-	.global	_scale_post_asm
+	global	_scale_post_asm
 	.extern	_wallheight
 	.extern	_view_width
 
@@ -482,65 +482,125 @@ _start_quarter_180_270:
 
 	ret
 
+;       xtilestep = 1;
+;       ytilestep = 1;
+;       xstep     = finetangent[angl - 2700];
+;       ystep     = finetangent[3600 - 1 - angl];
+;       xpartial  = xpartialup;
+;       ypartial  = ypartialup;
+
+	global	_start_quarter_270_360
+_start_quarter_270_360:
+	ld	iy, _draw_state			; xtilestep = 1;
+	ld	(iy+X_TILE_STEP), 1
+	ld	(iy+X_TILE_STEP+1), 0
+
+	ld	(iy+Y_TILE_STEP), 1		; ytilestep = 1;
+	ld	(iy+Y_TILE_STEP+1), 0
+
+	ld	hl, (iy+X_PARTIAL_UP)		; xpartial = xpartialup;
+	ld	(iy+X_PARTIAL), hl
+
+	ld	hl, (iy+Y_PARTIAL_UP)		; ypartial = ypartialup;
+	ld	(iy+Y_PARTIAL), hl
+
+	xor	a				; xstep = finetangent[angl - 2700];
+	sbc	hl, hl
+	ld	l, (iy+ANGL)
+	ld	h, (iy+ANGL+1)
+	push	hl				; save angl
+	ld	de, 2700
+	xor	a
+	sbc	hl, de
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)				; eubc = finetangent[angl - 2700]
+	ld	(iy+X_STEP), bc
+	ld	(iy+X_STEP+3), e
+
+	pop	de				; ystep = finetangent[3600 - 1 - angl];
+	ld	hl, 3600-1
+	xor	a
+	sbc	hl, de
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)
+	ld	(iy+Y_STEP), bc
+	ld	(iy+Y_STEP+3), e
+
+	ret
+
 	section	.data_on_chip, "aw", @progbits
 
 ; extern short xtilestep, ytilestep;
-	.global	_xtilestep
+	global	_xtilestep
 _draw_state:
 X_TILE_STEP	equ	0
 _xtilestep:
 	ds	2
 
-	.global	_ytilestep
+	global	_ytilestep
 Y_TILE_STEP	equ	(_ytilestep-_draw_state)
 _ytilestep:
 	ds	2
 
 ; extern uint24_t xpartialup, xpartialdown, ypartialup, ypartialdown;
-	.global	_xpartialup
+	global	_xpartialup
 X_PARTIAL_UP	equ	(_xpartialup-_draw_state)
 _xpartialup:
 	ds	3
 
-	.global	_xpartialdown
+	global	_xpartialdown
 X_PARTIAL_DOWN	equ	(_xpartialdown-_draw_state)
 _xpartialdown:
 	ds	3
 
-	.global	_ypartialup
+	global	_ypartialup
 Y_PARTIAL_UP	equ	(_ypartialup-_draw_state)
 _ypartialup:
 	ds	3
 
-	.global	_ypartialdown
+	global	_ypartialdown
 Y_PARTIAL_DOWN	equ	(_ypartialdown-_draw_state)
 _ypartialdown:
 	ds	3
 
 ; extern uint24_t xpartial, ypartial;
-	.global	_xpartial
+	global	_xpartial
 X_PARTIAL	equ	(_xpartial-_draw_state)
 _xpartial:
 	ds	3
 
-	.global	_ypartial
+	global	_ypartial
 Y_PARTIAL	equ	(_ypartial-_draw_state)
 _ypartial:
 	ds	3
 
 ;extern short angl;
-	.global	_angl
+	global	_angl
 ANGL	equ	(_angl-_draw_state)
 _angl:
 	ds	2
 
 ; extern fixed xstep, ystep;
-	.global	_xstep
+	global	_xstep
 X_STEP	equ	(_xstep-_draw_state)
 _xstep:
 	ds	4
 
-	.global	_ystep
+	global	_ystep
 Y_STEP	equ	(_ystep-_draw_state)
 _ystep:
 	ds	4

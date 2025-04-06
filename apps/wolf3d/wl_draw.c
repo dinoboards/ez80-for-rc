@@ -947,6 +947,7 @@ extern uint8_t asm_refresh_find_quarter();
 extern void    start_quarter_0_90();
 extern void    start_quarter_90_180();
 extern void    start_quarter_180_270();
+extern void    start_quarter_270_360();
 
 extern short    angl;
 extern fixed    xstep, ystep;
@@ -969,12 +970,7 @@ void AsmRefresh() {
       start_quarter_180_270();
       break;
     default: // 270-360
-      xtilestep = 1;
-      ytilestep = 1;
-      xstep     = finetangent[angl - 2700];
-      ystep     = finetangent[3600 - 1 - angl];
-      xpartial  = xpartialup;
-      ypartial  = ypartialup;
+      start_quarter_270_360();
     }
 
     yintercept = FixedMul(ystep, xpartial) + viewy;
