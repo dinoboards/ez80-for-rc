@@ -959,7 +959,6 @@ void AsmRefresh() {
     switch (asm_refresh_find_quarter()) {
     case 0: // 0-90
       start_quarter_0_90();
-      xstep = finetangent[900 - 1 - angl];
       break;
     case 1: // 90-180
       xtilestep = -1;

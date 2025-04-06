@@ -332,6 +332,7 @@ _start_quarter_0_90:
 	sbc	hl, hl
 	ld	l, (iy+ANGL)
 	ld	h, (iy+ANGL+1)
+	push	hl				; save angl
 	add	hl, hl
 	add	hl, hl
 	ld	de, _finetangent
@@ -344,6 +345,23 @@ _start_quarter_0_90:
 	NEG_EUBC_AUHL				; auhl = -eubc
 	ld	(iy+Y_STEP), hl
 	ld	(iy+Y_STEP+3), a
+
+	; xstep = finetangent[900 - 1 - angl];
+	pop	de
+	ld	hl, 900-1
+	xor	a
+	sbc	hl, de
+	add	hl, hl
+	add	hl, hl
+	ld	de, _finetangent
+	add	hl, de
+	ld	bc, (hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	a, (hl)
+	ld	(iy+X_STEP), bc
+	ld	(iy+X_STEP+3), a
 
 	ret
 
