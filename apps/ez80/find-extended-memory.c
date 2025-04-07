@@ -3,28 +3,24 @@
 #include <stdint.h>
 #include <stdio.h>
 
-static const uint8_t test_values[16] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
-                                        0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
+const uint8_t test_values[44] = {
+    0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x3F,
+    0xB2, 0x97, 0x4E, 0xD1, 0x8C, 0x5A, 0xF3, 0x26, 0xE8, 0x7D, 0x91, 0x4C, 0xA5, 0x0B, 0x6F, 0x55, 0xAA, // Alternating bits
+    0xFF, 0x00,                                                                                           // All ones/zeros
+    0x01, 0x02, 0x04, 0x08,                                                                               // Walking ones
+    0xFE, 0xFD, 0xFB, 0xF7                                                                                // Walking zeros
+};
 
 /*
   Installed memory will be banks of 512K addressed from 0x200000 and up
   Scan and report each continuous block discovered
+
+  Assume config of:
+    CS0 is enabled for memory @ $200000 -> $3FFFFF
+    CS1 is enabled for memory @ $400000 -> $5FFFFF
 */
 
-bool test_at(volatile uint8_t *ptr) {
-  const uint8_t *values = test_values;
-  for (int i = 0; i < 16; i++)
-    *ptr++ = *values++;
-
-  ptr--;
-  values--;
-
-  for (int i = 0; i < 16; i++)
-    if (*ptr-- != *values--)
-      return false;
-
-  return true;
-}
+bool test_at(volatile uint8_t *ptr);
 
 const char progress_chars[] = "|/-\\";
 
@@ -35,15 +31,18 @@ bool test_512k_block(volatile uint8_t *start) {
 
   printf(" ");
 
-  for (ptr = start; ptr < start + block_size; ptr += 16) {
+  uint16_t progress_period = 32000 / sizeof(test_values);
+
+  for (ptr = start; ptr < start + block_size - 44; ptr += sizeof(test_values)) {
     if (!test_at(ptr)) {
       printf("\b");
       return false;
     }
 
-    if (((uint24_t)ptr) % (16 * 1024) == 0) {
+    if (progress_period-- == 0) {
       printf("\b%c", progress_chars[progress_index]);
-      progress_index = (progress_index + 1) % 4;
+      progress_index  = (progress_index + 1) % 4;
+      progress_period = 32000 / sizeof(test_values);
     }
   }
 
@@ -67,12 +66,7 @@ void find_extended_memory(void) {
 
   printf("Searching for memory installed from 0x200000 to 0x5F0000\r\n");
 
-  const char *ram_speed = "~100ns";
-
   for (ptr = start; ptr < end; ptr += block_size) {
-    if (ptr == (uint8_t *)0x400000)
-      ram_speed = "~20ns";
-
     printf("512K bank at %p: ", ptr);
 
     if (test_512k_block(ptr)) {
@@ -80,7 +74,7 @@ void find_extended_memory(void) {
         block_start = ptr;
         in_block    = true;
       }
-      printf("OK     (%s)\r\n", ram_speed);
+      printf("OK\r\n");
     } else {
       printf("None\r\n");
       if (in_block) {

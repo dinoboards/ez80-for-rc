@@ -15,7 +15,7 @@ void show_help() {
   printf("  -M1=<number>[W|B] Set Extended Memory Wait States or Bus Cycles (CS1)\r\n");
   printf("                    Wait States: 0-7, Bus Cycles: 1-15\r\n");
   printf("  -I=<number>[W|B]  Set I/O Wait States or Bus Cycles (CS2)\r\n");
-  printf("  -S0               Scan extended memory\r\n");
+  printf("  -S                Scan extended memory\r\n");
   printf("  -T=<number>       Set tick frequency rate (50 or 60)\r\n");
   printf("  -? /?             Show this help message\r\n");
 }
@@ -26,7 +26,7 @@ void show_help() {
 #define CMD_I      4
 #define CMD_M0     8
 #define CMD_M1     16
-#define CMD_S0     32
+#define CMD_S      32
 #define CMD_F      64
 #define CMD_T_SET  128
 #define CMD_T_SHOW 256
@@ -61,7 +61,7 @@ bool argument_F(const char *arg) {
   if (strncmp(arg, "-F=", 3) != 0 && strncmp(arg, "/F=", 3) != 0)
     return false;
 
-  if (cmd & CMD_S0) {
+  if (cmd & CMD_S) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
@@ -77,7 +77,7 @@ bool argument_M(const char *arg) {
   if (strncmp(arg, "-M=", 3) != 0 && strncmp(arg, "/M=", 3) != 0)
     return false;
 
-  if (cmd & CMD_S0) {
+  if (cmd & CMD_S) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
@@ -93,7 +93,7 @@ bool argument_I(const char *arg) {
   if (strncmp(arg, "-I=", 3) != 0 && strncmp(arg, "/I=", 3) != 0)
     return false;
 
-  if (cmd & CMD_S0) {
+  if (cmd & CMD_S) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
@@ -109,7 +109,7 @@ bool argument_M0(const char *arg) {
   if (strncmp(arg, "-M0=", 4) != 0 && strncmp(arg, "/M0=", 4) != 0)
     return false;
 
-  if (cmd & CMD_S0) {
+  if (cmd & CMD_S) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
@@ -125,7 +125,7 @@ bool argument_M1(const char *arg) {
   if (strncmp(arg, "-M1=", 4) != 0 && strncmp(arg, "/M1=", 4) != 0)
     return false;
 
-  if (cmd & CMD_S0) {
+  if (cmd & CMD_S) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
@@ -138,16 +138,16 @@ bool argument_M1(const char *arg) {
 }
 
 bool argument_S0(const char *arg) {
-  if (strcmp(arg, "-S0") != 0 && strcmp(arg, "/S0") != 0)
+  if (strcmp(arg, "-S") != 0 && strcmp(arg, "/S") != 0)
     return false;
 
-  if (cmd & ~CMD_S0) {
+  if (cmd & ~CMD_S) {
     printf("Error: Conflicting options.\r\n");
     show_help();
     abort();
   }
 
-  cmd = CMD_S0;
+  cmd = CMD_S;
   return true;
 }
 
@@ -161,6 +161,8 @@ bool argument_help(const char *arg) {
 }
 
 int main(const int argc, const char *argv[]) {
+  find_ns_timing_for_memory();
+
   if (argc == 1) {
     report_memory_timing();
     return 0;
@@ -196,7 +198,7 @@ int main(const int argc, const char *argv[]) {
     return 1;
   }
 
-  if (cmd == CMD_S0) {
+  if (cmd == CMD_S) {
     find_extended_memory();
     return 0;
   }

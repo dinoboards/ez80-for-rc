@@ -18,6 +18,7 @@ EZ80.COM:
 	report-memory-timing.c \
 	validate-mem-set-value.c \
 	config-flash.c \
-	config_set_tick_rate.c
+	config_set_tick_rate.c \
+	test-at.asm
 
 #todo: fix issue where only whitespace is after command- causing output to scramble - as it assumes its a valid arg
