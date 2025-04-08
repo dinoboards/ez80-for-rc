@@ -55,6 +55,9 @@ struct {
   uint8_t *end;
 } continuous_blocks[64];
 
+uint8_t *cs0_block;
+uint8_t *cs1_block;
+
 void find_extended_memory(void) {
   uint8_t             *ptr;
   uint8_t *const       start                  = (uint8_t *)0x200000;
@@ -64,6 +67,8 @@ void find_extended_memory(void) {
   bool                 in_block               = false;
   int                  continuous_block_count = 0;
 
+  cs0_block = NULL;
+  cs1_block = NULL;
   printf("Searching for memory installed from 0x200000 to 0x5F0000\r\n");
 
   for (ptr = start; ptr < end; ptr += block_size) {
@@ -75,6 +80,12 @@ void find_extended_memory(void) {
         in_block    = true;
       }
       printf("OK\r\n");
+
+      if (cs0_block == NULL && (uint24_t)ptr < 0x400000)
+        cs0_block = ptr;
+      else if (cs1_block == NULL && (uint24_t)ptr >= 0x400000)
+        cs1_block = ptr;
+
     } else {
       printf("None\r\n");
       if (in_block) {
@@ -98,4 +109,13 @@ void find_extended_memory(void) {
     uint24_t length = continuous_blocks[i].end - continuous_blocks[i].start;
     printf("%ukb available at %p\r\n", length / 1024, continuous_blocks[i].start);
   }
+
+  if (cs0_block || cs1_block)
+    printf("\r\n");
+
+  if (cs0_block)
+    report_extended_performance(cs0_block);
+
+  if (cs1_block)
+    report_extended_performance(cs1_block);
 }

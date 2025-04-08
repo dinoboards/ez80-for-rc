@@ -8,7 +8,7 @@ all: EZ80.COM
 .PHONY: EZ80.COM
 EZ80.COM:
 	@mkdir -p ../bin
-	@ez80-cc --optimise speed --output-dir ../bin --iquote ../common EZ80.COM \
+	@ez80-cc --optimise size --output-dir ../bin --iquote ../common EZ80.COM \
 	config-io.c \
 	config-mem.c \
 	config-mem0.c \
@@ -19,6 +19,10 @@ EZ80.COM:
 	validate-mem-set-value.c \
 	config-flash.c \
 	config_set_tick_rate.c \
-	test-at.asm
+	test-at.asm \
+	report-main-memory-performance.c \
+	measure-main-memory-performance.asm \
+	nanoprintf.c
+
 
 #todo: fix issue where only whitespace is after command- causing output to scramble - as it assumes its a valid arg

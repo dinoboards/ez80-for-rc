@@ -24,10 +24,12 @@ extern void config_io(mem_config_t mem_config);
 extern void config_set_tick_rate(uint8_t rate);
 
 extern void find_ns_timing_for_memory();
+extern void report_main_memory_performance();
+extern void report_extended_performance(uint8_t *ptr);
 
-extern uint8_t main_ns;
-extern uint8_t cs0_ns;
-extern uint8_t cs1_ns;
-extern uint8_t io_ns;
+extern uint24_t main_ns;
+extern uint24_t cs0_ns;
+extern uint24_t cs1_ns;
+extern uint24_t io_ns;
 
 #endif

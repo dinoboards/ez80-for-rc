@@ -16,6 +16,7 @@ void show_help() {
   printf("                    Wait States: 0-7, Bus Cycles: 1-15\r\n");
   printf("  -I=<number>[W|B]  Set I/O Wait States or Bus Cycles (CS2)\r\n");
   printf("  -S                Scan extended memory\r\n");
+  printf("  -P                Measure Main Memory Performance\r\n");
   printf("  -T=<number>       Set tick frequency rate (50 or 60)\r\n");
   printf("  -? /?             Show this help message\r\n");
 }
@@ -27,9 +28,10 @@ void show_help() {
 #define CMD_M0     8
 #define CMD_M1     16
 #define CMD_S      32
-#define CMD_F      64
-#define CMD_T_SET  128
-#define CMD_T_SHOW 256
+#define CMD_P      64
+#define CMD_F      128
+#define CMD_T_SET  256
+#define CMD_T_SHOW 512
 
 static mem_config_t flash_config;
 static mem_config_t mem_config;
@@ -137,7 +139,21 @@ bool argument_M1(const char *arg) {
   return true;
 }
 
-bool argument_S0(const char *arg) {
+bool argument_P(const char *arg) {
+  if (strcmp(arg, "-P") != 0 && strcmp(arg, "/P") != 0)
+    return false;
+
+  if (cmd & ~CMD_P) {
+    printf("Error: Conflicting options.\r\n");
+    show_help();
+    abort();
+  }
+
+  cmd = CMD_P;
+  return true;
+}
+
+bool argument_S(const char *arg) {
   if (strcmp(arg, "-S") != 0 && strcmp(arg, "/S") != 0)
     return false;
 
@@ -181,7 +197,10 @@ int main(const int argc, const char *argv[]) {
     if (argument_M1(argv[i]))
       continue;
 
-    if (argument_S0(argv[i]))
+    if (argument_S(argv[i]))
+      continue;
+
+    if (argument_P(argv[i]))
       continue;
 
     if (argument_F(argv[i]))
@@ -196,6 +215,11 @@ int main(const int argc, const char *argv[]) {
     printf("Unknown argument: %s\r\n", argv[i]);
     show_help();
     return 1;
+  }
+
+  if (cmd == CMD_P) {
+    report_main_memory_performance();
+    return 0;
   }
 
   if (cmd == CMD_S) {
