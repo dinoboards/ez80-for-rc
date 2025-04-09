@@ -13,7 +13,7 @@ void validate_mem_set_value(const char *value, mem_config_t *mem_config) {
       return;
     }
 
-    printf("Invalid wait state value: %s\r\n\n", value);
+    printf("Invalid wait state value: %s\n\n", value);
     show_help();
     exit(1);
   }
@@ -24,12 +24,12 @@ void validate_mem_set_value(const char *value, mem_config_t *mem_config) {
       return;
     }
 
-    printf("Invalid bus cycle value: %s\r\n\n", value);
+    printf("Invalid bus cycle value: %s\n\n", value);
     show_help();
     exit(1);
   }
 
-  printf("Invalid value: %s\r\n\n", value);
+  printf("Invalid value: %s\n\n", value);
   show_help();
   exit(1);
 }
@@ -44,12 +44,12 @@ void validate_wait_only_set_value(const char *value, mem_config_t *mem_config) {
       return;
     }
 
-    printf("Invalid wait state value: %s\r\n\n", value);
+    printf("Invalid wait state value: %s\n\n", value);
     show_help();
     exit(1);
   }
 
-  printf("Invalid value: %s\r\n\n", value);
+  printf("Invalid value: %s\n\n", value);
   show_help();
   exit(1);
 }

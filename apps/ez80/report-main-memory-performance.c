@@ -11,7 +11,7 @@ int24_t measure_memory_performance(uint8_t *ptr);
 #define BYTES_COPIED (4096 * 1024)
 
 void report_main_memory_performance() {
-  printf("Conducting performance test.  Please wait.\r\n");
+  printf("Conducting performance test.  Please wait.\n");
   int ticks = measure_memory_performance(main_memory_buffer);
 
   const float kb_per_second = 4096.0f / ((float)ticks / (float)ez80_timers_freq_tick_get());
@@ -25,5 +25,5 @@ void report_extended_performance(uint8_t *ptr) {
 
   const float kb_per_second = 4096.0f / ((float)ticks / (float)ez80_timers_freq_tick_get());
 
-  printf("Memory @ %p: %.2f KB/s                              \r\n", ptr, kb_per_second);
+  printf("Memory @ %p: %.2f KB/s                              \n", ptr, kb_per_second);
 }

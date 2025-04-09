@@ -3,6 +3,6 @@
 #include <stdio.h>
 
 void config_set_tick_rate(uint8_t rate) {
-  printf("Setting TMR1 Tick rate to %d\r\n", rate);
+  printf("Setting TMR1 Tick rate to %d\n", rate);
   ez80_timers_freq_tick_set(rate);
 }

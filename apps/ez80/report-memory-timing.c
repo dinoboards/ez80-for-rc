@@ -70,33 +70,33 @@ void find_ns_timing_for_memory() {
 void report_memory_timing(void) {
   find_ns_timing_for_memory();
 
-  printf("              CPU frequency: %ld Hz\r\n", (cpu_frequency));
+  printf("              CPU frequency: %ld Hz\n", (cpu_frequency));
 
-  printf("      On-chip Flash W/S: %u  (%dns)\r\n", flash_wait_cycles, flash_ns);
+  printf("      On-chip Flash W/S: %u  (%dns)\n", flash_wait_cycles, flash_ns);
 
   if (mem_bus_mode) {
-    printf("        Main Memory B/C: %u  (%dns)\r\n", main_mem_bus_cycles, main_ns);
+    printf("        Main Memory B/C: %u  (%dns)\n", main_mem_bus_cycles, main_ns);
   } else {
-    printf("        Main Memory W/S: %u  (%dns)\r\n", main_mem_bus_cycles, main_ns);
+    printf("        Main Memory W/S: %u  (%dns)\n", main_mem_bus_cycles, main_ns);
   }
 
   if (ext_mem0_bus_mode) {
-    printf("Extended Memory CS0 B/C: %u  (%dns)\r\n", extended_mem0_bus_cycles, cs0_ns);
+    printf("Extended Memory CS0 B/C: %u  (%dns)\n", extended_mem0_bus_cycles, cs0_ns);
   } else {
-    printf("Extended Memory CS0 W/S: %u  (%dns)\r\n", extended_mem0_bus_cycles, cs0_ns);
+    printf("Extended Memory CS0 W/S: %u  (%dns)\n", extended_mem0_bus_cycles, cs0_ns);
   }
 
   if (ext_mem1_bus_mode) {
-    printf("Extended Memory CS1 B/C: %u  (%dns)\r\n", extended_mem1_bus_cycles, cs1_ns);
+    printf("Extended Memory CS1 B/C: %u  (%dns)\n", extended_mem1_bus_cycles, cs1_ns);
   } else {
-    printf("Extended Memory CS1 W/S: %u  (%dns)\r\n", extended_mem1_bus_cycles, cs1_ns);
+    printf("Extended Memory CS1 W/S: %u  (%dns)\n", extended_mem1_bus_cycles, cs1_ns);
   }
 
   if (io_bus_mode) {
-    printf("                I/O B/C: %u  (%dns)\r\n", io_bus_cycles, io_ns);
+    printf("                I/O B/C: %u  (%dns)\n", io_bus_cycles, io_ns);
   } else {
-    printf("                I/O W/S: %u  (%dns)\r\n", io_bus_cycles, io_ns);
+    printf("                I/O W/S: %u  (%dns)\n", io_bus_cycles, io_ns);
   }
 
-  printf("           TMR1 Tick rate: %d (Counter: %u)\r\n", ez80_timers_freq_tick_get(), ez80_timers_ticks_get());
+  printf("           TMR1 Tick rate: %d (Counter: %u)\n", ez80_timers_freq_tick_get(), ez80_timers_ticks_get());
 }

@@ -69,7 +69,7 @@ void find_extended_memory(void) {
 
   cs0_block = NULL;
   cs1_block = NULL;
-  printf("Searching for memory installed from 0x200000 to 0x5F0000\r\n");
+  printf("Searching for memory installed from 0x200000 to 0x5F0000\n");
 
   for (ptr = start; ptr < end; ptr += block_size) {
     printf("512K bank at %p: ", ptr);
@@ -79,7 +79,7 @@ void find_extended_memory(void) {
         block_start = ptr;
         in_block    = true;
       }
-      printf("OK\r\n");
+      printf("OK\n");
 
       if (cs0_block == NULL && (uint24_t)ptr < 0x400000)
         cs0_block = ptr;
@@ -87,7 +87,7 @@ void find_extended_memory(void) {
         cs1_block = ptr;
 
     } else {
-      printf("None\r\n");
+      printf("None\n");
       if (in_block) {
         continuous_blocks[continuous_block_count].start = block_start;
         continuous_blocks[continuous_block_count].end   = ptr;
@@ -103,15 +103,15 @@ void find_extended_memory(void) {
     continuous_block_count++;
   }
 
-  printf("\r\n");
+  printf("\n");
 
   for (int i = 0; i < continuous_block_count; i++) {
     uint24_t length = continuous_blocks[i].end - continuous_blocks[i].start;
-    printf("%ukb available at %p\r\n", length / 1024, continuous_blocks[i].start);
+    printf("%ukb available at %p\n", length / 1024, continuous_blocks[i].start);
   }
 
   if (cs0_block || cs1_block)
-    printf("\r\n");
+    printf("\n");
 
   if (cs0_block)
     report_extended_performance(cs0_block);
