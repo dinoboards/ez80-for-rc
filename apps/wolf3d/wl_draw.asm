@@ -656,7 +656,7 @@ _start_quarter_270_360:
 	or	a, a
 	sbc	hl, de
 
-	jp	pe, .overflow_set
+	jp	pe, 1f
 
 	ld	a, h
 	rra
@@ -664,37 +664,48 @@ _start_quarter_270_360:
 	scf
 	adc	a, a
 
-.overflow_set:
+1:
 	; jp p, de_larger_than_hl
 	; otherwise, de <= hl
 .endm
 	global	_is_horiz_entry
 ; extern uint8_t is_horiz_entry()
 _is_horiz_entry:
-	; ytilestep == -1 && yintercept_as_short <= ytile
-	ld	iy, _draw_state
+	ld	iy, _draw_state			; ytilestep == -1 && yintercept_as_short <= ytile
 
 	ld	a, (iy+Y_TILE_STEP)
 	cp	255
-	jr	nz, .ret_false
+	jr	nz, .y_tile_step_not_neg
 
 	ld	e, (iy+Y_INTERCEPT+2)
 	ld	d, (iy+Y_INTERCEPT+3)
 	ld	l, (iy+Y_TILE)
 	ld	h, (iy+Y_TILE+1)
+
 	; de <= hl => true
 	; de > hl => false
 	compare_16bit_signed				; hl = ytile - yintercept_as_short
-	jp 	p, .ret_false
+	jp 	p, .y_tile_step_not_neg			; Jump if yintercept_as_short > ytile
 
 .ret_true:
-	ld	a, 1
+	ld	a, 1	; return TRUE
 	ret
+
+.y_tile_step_not_neg:
+	ld	a, (iy+Y_TILE_STEP)
+	cp	1
+	jr	nz, .ret_false
+
+	ld	l, (iy+Y_INTERCEPT+2)		; (ytilestep == 1 && ytile <= yintercept_as_short )
+	ld	h, (iy+Y_INTERCEPT+3)
+	ld	e, (iy+Y_TILE)
+	ld	d, (iy+Y_TILE+1)
+	compare_16bit_signed			; hl = yintercept_as_short - ytile
+	jp	M, .ret_true			; Jump if ytile(de) <= yintercept_as_short(hl)
 
 .ret_false:
 	xor	a	; return FALSE
 	ret
-
 
 	section	.data_on_chip, "aw", @progbits
 
