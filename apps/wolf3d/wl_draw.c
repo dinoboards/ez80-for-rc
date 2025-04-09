@@ -946,6 +946,7 @@ void CalcTics(void) {
 
 extern void asm_init_quarter();
 extern void set_player_in_pushwall_back_tile();
+extern uint8_t is_horiz_entry();
 
 extern short    angl;
 extern fixed    xstep, ystep;
@@ -992,7 +993,7 @@ void AsmRefresh() {
     }
 
     do {
-      if (ytilestep == -1 && yintercept_as_short <= ytile)
+      if(is_horiz_entry())
         goto horizentry;
       if (ytilestep == 1 && yintercept_as_short >= ytile)
         goto horizentry;

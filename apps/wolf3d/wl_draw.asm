@@ -648,6 +648,54 @@ _start_quarter_270_360:
 
 	ret
 
+; Compare HL, DE
+; destroys A and HL
+; JP P, de_larger_than_hl
+; JP M, de_equal_or_less_than_hl
+.macro compare_16bit_signed
+	or	a, a
+	sbc	hl, de
+
+	jp	pe, .overflow_set
+
+	ld	a, h
+	rra
+	xor	$40
+	scf
+	adc	a, a
+
+.overflow_set:
+	; jp p, de_larger_than_hl
+	; otherwise, de <= hl
+.endm
+	global	_is_horiz_entry
+; extern uint8_t is_horiz_entry()
+_is_horiz_entry:
+	; ytilestep == -1 && yintercept_as_short <= ytile
+	ld	iy, _draw_state
+
+	ld	a, (iy+Y_TILE_STEP)
+	cp	255
+	jr	nz, .ret_false
+
+	ld	e, (iy+Y_INTERCEPT+2)
+	ld	d, (iy+Y_INTERCEPT+3)
+	ld	l, (iy+Y_TILE)
+	ld	h, (iy+Y_TILE+1)
+	; de <= hl => true
+	; de > hl => false
+	compare_16bit_signed				; hl = ytile - yintercept_as_short
+	jp 	p, .ret_false
+
+.ret_true:
+	ld	a, 1
+	ret
+
+.ret_false:
+	xor	a	; return FALSE
+	ret
+
+
 	section	.data_on_chip, "aw", @progbits
 
 ; extern int8_t xtilestep, ytilestep;
