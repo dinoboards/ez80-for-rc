@@ -335,12 +335,53 @@ void test_vsprintf(void) {
 
 void report_exit(void) { printf("Exiting...\r\n"); }
 
+int32_t a32 = 12;
+int32_t b32 = 3;
+int32_t c32;
+
+void test_int32_division(void) {
+
+  c32 = a32/b32;
+
+  if (c32 != 4)
+    printf("int32 div: FAIL %ld\n", c32);
+  else
+    printf("int32 div: OK\n");
+
+  a32 = -12;
+  c32 = a32/b32;
+
+  if (c32 != -4)
+    printf("int32 div: FAIL %ld\n", c32);
+  else
+    printf("int32 div: OK\n");
+
+}
+
+uint32_t ua32 = 100;
+uint32_t ub32 = 10;
+uint32_t uc32;
+
+void test_uint32_division(void) {
+
+  uc32 = ua32/ub32;
+
+  if (uc32 != 10)
+    printf("uint32 div: FAIL %ld\n", uc32);
+  else
+    printf("uint32 div: OK\n");
+}
+
 int main(int argc, char *argv[]) {
   printf("argc: %d\r\n", argc);
   for (int i = 0; i < argc; i++) {
     printf("argv[%d]: %s\r\n", i, argv[i]);
   }
   atexit(report_exit);
+
+  test_int32_division();
+  test_uint32_division();
+  // test_int32_multiplication();
 
 #ifdef __clang__
 #ifdef EXE
