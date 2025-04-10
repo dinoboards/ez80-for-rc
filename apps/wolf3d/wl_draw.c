@@ -162,6 +162,8 @@ void TransformActor(objtype *ob) {
     return;
   }
 
+  //nx must be positive (>=MINDIST)
+
   ob->viewx = (word)(centerx + ny * scale / nx);
 
   //
