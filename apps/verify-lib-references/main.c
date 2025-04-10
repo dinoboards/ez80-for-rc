@@ -341,7 +341,7 @@ int32_t c32;
 
 void test_int32_division(void) {
 
-  c32 = a32/b32;
+  c32 = a32 / b32;
 
   if (c32 != 4)
     printf("int32 div: FAIL %ld\n", c32);
@@ -349,13 +349,12 @@ void test_int32_division(void) {
     printf("int32 div: OK\n");
 
   a32 = -12;
-  c32 = a32/b32;
+  c32 = a32 / b32;
 
   if (c32 != -4)
     printf("int32 div: FAIL %ld\n", c32);
   else
     printf("int32 div: OK\n");
-
 }
 
 uint32_t ua32 = 100;
@@ -364,7 +363,7 @@ uint32_t uc32;
 
 void test_uint32_division(void) {
 
-  uc32 = ua32/ub32;
+  uc32 = ua32 / ub32;
 
   if (uc32 != 10)
     printf("uint32 div: FAIL %ld\n", uc32);

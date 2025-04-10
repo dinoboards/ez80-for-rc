@@ -162,7 +162,7 @@ void TransformActor(objtype *ob) {
     return;
   }
 
-  //nx must be positive (>=MINDIST)
+  // nx must be positive (>=MINDIST)
 
   ob->viewx = (word)(centerx + ny * scale / nx);
 
@@ -580,100 +580,100 @@ int CalcRotate(objtype *ob) {
   return angle / (ANGLES / 8);
 }
 
+extern t_compshape *ss_shape;
+extern uint24_t     ss_scale;
+extern uint16_t     ss_pixheight;
+extern uint16_t     ss_starty;
+extern uint16_t     ss_endy;
+extern uint16_t    *ss_cmdptr;
+extern byte        *ss_cline;
+extern byte        *ss_line;
+extern byte        *ss_vmem;
+extern int24_t      ss_actx;
+extern uint16_t     ss_i_counter;
+extern int24_t      ss_upperedge;
+extern int16_t      ss_newstart;
+extern int24_t      ss_scrstarty;
+extern int24_t      ss_screndy;
+extern int24_t      ss_lpix;
+extern int24_t      ss_rpix;
+extern int24_t      ss_pixcnt;
+extern int24_t      ss_ycnt;
+extern uint16_t     ss_j;
+extern uint8_t      ss_color;
+
 void ScaleShape(int xcenter, int shapenum, uint16_t height) {
-  t_compshape *shape;
-  uint24_t     scale;
-  uint16_t     pixheight;
-  uint16_t     starty;
-  uint16_t     endy;
-  uint16_t    *cmdptr;
-  byte        *cline;
-  byte        *line;
-  byte        *vmem;
-  int24_t      actx;
-  uint16_t     i_counter;
-  int24_t      upperedge;
-  int16_t      newstart;
-  int24_t      scrstarty;
-  int24_t      screndy;
-  int24_t      lpix;
-  int24_t      rpix;
-  int24_t      pixcnt;
-  int24_t      ycnt;
-  uint16_t     j;
-  uint8_t      color;
+  ss_shape = (t_compshape *)PM_GetSprite(shapenum);
 
-  shape = (t_compshape *)PM_GetSprite(shapenum);
-
-  // scale = sr_u24_u24_3(height); // >> 3; // low three bits are fractional
-  scale = height >> 3; // low three bits are fractional
-  if (!scale)
+  // ss_scale = sr_u24_u24_3(height); // >> 3; // low three bits are fractional
+  ss_scale = height >> 3; // low three bits are fractional
+  if (!ss_scale)
     return; // too close or far away
 
-  pixheight = scale * SPRITESCALEFACTOR;
-  actx      = xcenter - scale;
-  upperedge = drawing_params.view_half_height - scale;
+  ss_pixheight = ss_scale * SPRITESCALEFACTOR;
+  ss_actx      = xcenter - ss_scale;
+  ss_upperedge = drawing_params.view_half_height - ss_scale;
 
-  cmdptr = (word *)shape->dataofs;
+  ss_cmdptr = (word *)ss_shape->dataofs;
 
-  for (i_counter = shape->leftpix, pixcnt = i_counter * pixheight, rpix = (pixcnt >> 6) + actx; i_counter <= shape->rightpix;
-       i_counter++, cmdptr++) {
-    lpix = rpix;
+  for (ss_i_counter = ss_shape->leftpix, ss_pixcnt = ss_i_counter * ss_pixheight, ss_rpix = (ss_pixcnt >> 6) + ss_actx;
+       ss_i_counter <= ss_shape->rightpix; ss_i_counter++, ss_cmdptr++) {
+    ss_lpix = ss_rpix;
 
-    if (lpix >= drawing_params.view_width)
+    if (ss_lpix >= drawing_params.view_width)
       break;
 
-    pixcnt += pixheight;
-    rpix = (pixcnt >> 6) + actx;
+    ss_pixcnt += ss_pixheight;
+    ss_rpix = (ss_pixcnt >> 6) + ss_actx;
 
-    if (lpix != rpix && rpix > 0) {
-      if (lpix < 0)
-        lpix = 0;
+    if (ss_lpix != ss_rpix && ss_rpix > 0) {
+      if (ss_lpix < 0)
+        ss_lpix = 0;
 
-      if (rpix > drawing_params.view_width)
-        rpix = drawing_params.view_width, i_counter = shape->rightpix + 1;
+      if (ss_rpix > drawing_params.view_width)
+        ss_rpix = drawing_params.view_width, ss_i_counter = ss_shape->rightpix + 1;
 
-      cline = (byte *)shape + *cmdptr;
+      ss_cline = (byte *)ss_shape + *ss_cmdptr;
 
-      while (lpix < rpix) {
-        if (wallheight[lpix] <= height) {
-          line = cline;
-          while ((endy = READWORD(&line)) != 0) {
-            endy >>= 1;
-            newstart = READWORD(&line);
-            starty   = READWORD(&line) >> 1;
-            j        = starty;
-            ycnt     = j * pixheight;
-            screndy  = (ycnt >> 6) + upperedge;
+      while (ss_lpix < ss_rpix) {
+        if (wallheight[ss_lpix] <= height) {
+          ss_line = ss_cline;
+          while ((ss_endy = READWORD(&ss_line)) != 0) {
+            ss_endy >>= 1;
+            ss_newstart = READWORD(&ss_line);
+            ss_starty   = READWORD(&ss_line) >> 1;
+            ss_j        = ss_starty;
+            ss_ycnt     = ss_j * ss_pixheight;
+            ss_screndy  = (ss_ycnt >> 6) + ss_upperedge;
 
-            if (screndy < 0)
-              vmem = vbuf + lpix;
+            if (ss_screndy < 0)
+              ss_vmem = vbuf + ss_lpix;
             else
-              vmem = vbuf + screndy * drawing_params.view_width + lpix;
+              ss_vmem = vbuf + ss_screndy * drawing_params.view_width + ss_lpix;
 
-            for (; j < endy; j++) {
-              scrstarty = screndy;
-              ycnt += pixheight;
-              screndy = (ycnt >> 6) + upperedge;
-              if (scrstarty != screndy && screndy > 0) {
-                color = ((byte *)shape)[newstart + j];
+            for (; ss_j < ss_endy; ss_j++) {
+              ss_scrstarty = ss_screndy;
+              ss_ycnt += ss_pixheight;
+              ss_screndy = (ss_ycnt >> 6) + ss_upperedge;
+              if (ss_scrstarty != ss_screndy && ss_screndy > 0) {
+                ss_color = ((byte *)ss_shape)[ss_newstart + ss_j];
 
-                if (scrstarty < 0)
-                  scrstarty = 0;
+                if (ss_scrstarty < 0)
+                  ss_scrstarty = 0;
 
-                if (screndy > drawing_params.view_height)
-                  screndy = drawing_params.view_height, j = endy;
+                if (ss_screndy > drawing_params.view_height)
+                  ss_screndy = drawing_params.view_height, ss_j = ss_endy;
 
-                while (scrstarty < screndy) {
-                  *vmem = color;
-                  vmem += drawing_params.view_width;
-                  scrstarty++;
+                while (ss_scrstarty < ss_screndy) {
+                  *ss_vmem = ss_color;
+                  ss_vmem += drawing_params.view_width;
+                  ss_scrstarty++;
                 }
               }
             }
           }
         }
-        lpix++;
+        ss_lpix++;
       }
     }
   }
