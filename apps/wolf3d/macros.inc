@@ -33,8 +33,8 @@
 
 ; Compare HL, DE, by subtracting DE from HL
 ; destroys A and HL
-; JP P, de_larger_than_hl
-; JP M, de_equal_or_less_than_hl
+; JP P, de > HL aka hl < de
+; JP M, de <= hl aka hl >= de
 .macro compare_16bit_signed
 	or	a, a
 	sbc	hl, de

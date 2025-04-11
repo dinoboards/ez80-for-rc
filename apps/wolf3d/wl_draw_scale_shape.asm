@@ -6,14 +6,69 @@
 ;drawing_params_t drawing_params __data_on_chip;
 	extern _drawing_params
 
+	global	_scale_shape_line
+_scale_shape_line:
+	ld	iy, ss_scale_shape
+
+	; ss_color = ((byte *)ss_shape)[ss_newstart + ss_j];
+
+
+
+	xor	a
+	sbc	hl, hl
+	ld	l, (iy+SS_NEWSTART)
+	ld	h, (iy+SS_NEWSTART+1)
+	ex	de, hl
+	ld	hl, (iy+SS_SHAPE)
+	add	hl, de
+
+	ld	e, (iy+SS_J)
+	ld	d, (iy+SS_J+1)
+	add	hl, de
+
+	ld	a, (hl)
+	ld	(iy+SS_COLOR), a
+
+	; if (ss_scrstarty < 0)
+	; 	ss_scrstarty = 0;
+
+	ld	hl, (iy+SS_SCRSTARTY)
+	ld	de, 0
+	compare_16bit_signed
+	jp	m, .not_neg
+
+	ld	(iy+SS_SCRSTARTY), de
+
+.not_neg:
+	; if (ss_screndy > drawing_params.view_height)
+	; 	ss_screndy = drawing_params.view_height, ss_j = ss_endy;
+
+	ld	de, (iy+SS_SCRENDY)
+	xor	a
+	sbc	hl, hl
+	ld	a, (_drawing_params+14) 	; de' drawing_params.view_width
+	ld	l, a
+	ld	a, (_drawing_params+15) 	; de' drawing_params.view_width
+	ld	h, a
+	push	hl
+	pop	bc
+	compare_16bit_signed
+	jp	m, .within_height
+
+	ld	(iy+SS_SCRENDY), bc		; ss_screndy = drawing_params.view_height
+
+	ld	a, (iy+SS_ENDY)			; ss_j = ss_endy
+	ld	(iy+SS_J), a
+	ld	a, (iy+SS_ENDY+1)
+	ld	(iy+SS_J+1), a
+
+.within_height:
+
 	; while (ss_scrstarty < ss_screndy) {
 	; 	*ss_vmem = ss_color;
 	; 	ss_vmem += drawing_params.view_width;
 	; 	ss_scrstarty++;
 	; }
-	global	_scale_shape_line
-_scale_shape_line:
-	ld	iy, ss_scale_shape
 
 	exx
 	ld	hl, (iy+SS_VMEM)		; hl' ss_vmem

@@ -658,14 +658,6 @@ void ScaleShape(int xcenter, int shapenum, uint16_t height) {
               ss_ycnt += ss_pixheight;
               ss_screndy = (ss_ycnt >> 6) + ss_upperedge;
               if (ss_scrstarty != ss_screndy && ss_screndy > 0) {
-                ss_color = ((byte *)ss_shape)[ss_newstart + ss_j];
-
-                if (ss_scrstarty < 0)
-                  ss_scrstarty = 0;
-
-                if (ss_screndy > drawing_params.view_height)
-                  ss_screndy = drawing_params.view_height, ss_j = ss_endy;
-
                 scale_shape_line();
               }
             }
