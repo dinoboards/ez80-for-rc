@@ -10,6 +10,36 @@
 _scale_shape_line:
 	ld	iy, ss_scale_shape
 
+        ;ss_screndy = (ss_ycnt >> 6) + ss_upperedge;
+	ld	hl, (iy+SS_YCNT)
+	ld	a, (iy+SS_YCNT+2)		; u of hl
+	sra	a				; ss_ycnt >> 1
+	rr	h
+	rr	l
+	sra	a				; ss_ycnt >> 1
+	rr	h
+	rr	l
+	sra	a				; ss_ycnt >> 1
+	rr	h
+	rr	l
+	sra	a				; ss_ycnt >> 1
+	rr	h
+	rr	l
+	sra	a				; ss_ycnt >> 1
+	rr	h
+	rr	l
+	sra	a				; ss_ycnt >> 1
+	rr	h
+	rr	l
+	ld	(iy+SS_TMP1), hl
+	ld	(iy+SS_TMP1+2), a
+	ld	hl, (iy+SS_TMP1)
+
+	ld	de, (iy+SS_UPPEREDGE)
+	add	hl, de
+	ld	(iy+SS_SCRENDY), hl
+
+
 	;if (ss_scrstarty == ss_screndy || ss_screndy <= 0)
 	;  return
 	ld	hl, (iy+SS_SCRSTARTY)
@@ -247,3 +277,7 @@ _ss_j:
 SS_COLOR	equ	(_ss_color-ss_scale_shape)
 _ss_color:
 	ds	1
+; uint24_t	ss_tmp1
+SS_TMP1		equ	(_ss_tmp1-ss_scale_shape)
+_ss_tmp1:
+	ds	4
