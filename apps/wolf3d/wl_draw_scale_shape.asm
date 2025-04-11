@@ -10,8 +10,17 @@
 _scale_shape_line:
 	ld	iy, ss_scale_shape
 
+	; ss_ycnt += ss_pixheight;
+	ld	de, (iy+SS_YCNT)
+	xor	a
+	sbc	hl, hl
+	ld	l, (iy+SS_PIXHEIGHT)
+	ld	h, (iy+SS_PIXHEIGHT+1)
+	add	hl, de
+	ld	(iy+SS_YCNT), hl
+
         ;ss_screndy = (ss_ycnt >> 6) + ss_upperedge;
-	ld	hl, (iy+SS_YCNT)
+	; ld	hl, (iy+SS_YCNT)
 	ld	a, (iy+SS_YCNT+2)		; u of hl
 	sra	a				; ss_ycnt >> 1
 	rr	h
