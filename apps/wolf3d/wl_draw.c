@@ -657,9 +657,7 @@ void ScaleShape(int xcenter, int shapenum, uint16_t height) {
               ss_scrstarty = ss_screndy;
               ss_ycnt += ss_pixheight;
               ss_screndy = (ss_ycnt >> 6) + ss_upperedge;
-              if (ss_scrstarty != ss_screndy && ss_screndy > 0) {
-                scale_shape_line();
-              }
+              scale_shape_line();
             }
           }
         }

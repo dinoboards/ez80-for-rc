@@ -10,10 +10,23 @@
 _scale_shape_line:
 	ld	iy, ss_scale_shape
 
+	;if (ss_scrstarty == ss_screndy || ss_screndy <= 0)
+	;  return
+	ld	hl, (iy+SS_SCRSTARTY)
+	ld	de, (iy+SS_SCRENDY)
+	or	a
+	sbc	hl, de
+	ret	z
+
+	xor	a
+	sbc	hl, hl
+	ex	de, hl
+	compare_16bit_signed
+	ret	z
+	ret	p
+
+
 	; ss_color = ((byte *)ss_shape)[ss_newstart + ss_j];
-
-
-
 	xor	a
 	sbc	hl, hl
 	ld	l, (iy+SS_NEWSTART)
@@ -31,7 +44,6 @@ _scale_shape_line:
 
 	; if (ss_scrstarty < 0)
 	; 	ss_scrstarty = 0;
-
 	ld	hl, (iy+SS_SCRSTARTY)
 	ld	de, 0
 	compare_16bit_signed
@@ -42,7 +54,6 @@ _scale_shape_line:
 .not_neg:
 	; if (ss_screndy > drawing_params.view_height)
 	; 	ss_screndy = drawing_params.view_height, ss_j = ss_endy;
-
 	ld	de, (iy+SS_SCRENDY)
 	xor	a
 	sbc	hl, hl
