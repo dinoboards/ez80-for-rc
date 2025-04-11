@@ -602,6 +602,8 @@ extern int24_t      ss_ycnt;
 extern uint16_t     ss_j;
 extern uint8_t      ss_color;
 
+extern void scale_shape_line();
+
 void ScaleShape(int xcenter, int shapenum, uint16_t height) {
   ss_shape = (t_compshape *)PM_GetSprite(shapenum);
 
@@ -664,11 +666,7 @@ void ScaleShape(int xcenter, int shapenum, uint16_t height) {
                 if (ss_screndy > drawing_params.view_height)
                   ss_screndy = drawing_params.view_height, ss_j = ss_endy;
 
-                while (ss_scrstarty < ss_screndy) {
-                  *ss_vmem = ss_color;
-                  ss_vmem += drawing_params.view_width;
-                  ss_scrstarty++;
-                }
+                scale_shape_line();
               }
             }
           }
