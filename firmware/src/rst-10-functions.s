@@ -39,7 +39,7 @@ _rst_10_functions:
 	DEC	A
 	JR	Z, _reserved_dispatch			; A = 6, RESERVED functions
 	DEC	A
-	JR	Z, _reserved_dispatch			; A = 7, ROM-FLASHING functions retired
+	JR	Z, _reserved_dispatch			; A = 7, RESERVED functions
 
 _spi_dispatch:
 _reserved_dispatch:

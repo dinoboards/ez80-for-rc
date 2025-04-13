@@ -1083,6 +1083,7 @@ static void InitGame() {
   SignonScreen();
 
   VH_Startup();
+
   IN_Startup();
 
   PM_Startup();
