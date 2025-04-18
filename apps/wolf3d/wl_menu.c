@@ -6,13 +6,12 @@
 ////////////////////////////////////////////////////////////////////
 
 #include "wl_def.h"
+#include <hbios.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include "id_mm.h"
-
-#include "keyboard.h"
 
 extern int lastgamemusicoffset;
 extern int numEpisodesMissing;
@@ -293,7 +292,7 @@ void US_ControlPanel(ScanCode scancode) {
   // F-KEYS FROM WITHIN GAME
   //
   switch (scancode) {
-  case KEY_F1:
+  case USB_KEY_F1:
 #ifdef SPEAR
     BossKey();
 #else
@@ -305,23 +304,23 @@ void US_ControlPanel(ScanCode scancode) {
 #endif
     goto finishup;
 
-  case KEY_F2:
+  case USB_KEY_F2:
     CP_SaveGame(0);
     goto finishup;
 
-  case KEY_F3:
+  case USB_KEY_F3:
     CP_LoadGame(0);
     goto finishup;
 
-  case KEY_F4:
+  case USB_KEY_F4:
     CP_Sound(0);
     goto finishup;
 
-  case KEY_F5:
+  case USB_KEY_F5:
     CP_ChangeView(0);
     goto finishup;
 
-  case KEY_F6:
+  case USB_KEY_F6:
     CP_Control(0);
     goto finishup;
 
@@ -552,7 +551,7 @@ void BossKey(void) {
 		mov eax, 3 int 0x10}
   puts("C>");
   SetTextCursor(2, 0);
-  //      while (!Keyboard[KEY_ESC])
+  //      while (!Keyboard[USB_KEY_ESCAPE])
   IN_Ack();
   IN_ClearKeysDown();
 
@@ -579,7 +578,7 @@ void BossKey(void) {
 		mov eax, 3 int 0x10}
   puts("C>");
   SetTextCursor(2, 0);
-  //      while (!Keyboard[KEY_ESC])
+  //      while (!Keyboard[USB_KEY_ESCAPE])
   IN_Ack();
   IN_ClearKeysDown();
 
@@ -606,7 +605,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // END GAME
     //
-  case KEY_F7:
+  case USB_KEY_F7:
     CA_CacheGrChunk(STARTFONT + 1);
 
     WindowH = 160;
@@ -629,7 +628,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // QUICKSAVE
     //
-  case KEY_F8:
+  case USB_KEY_F8:
     if (SaveGamesAvail[LSItems.curpos] && pickquick) {
       CA_CacheGrChunk(STARTFONT + 1);
       fontnumber = 1;
@@ -686,7 +685,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // QUICKLOAD
     //
-  case KEY_F9:
+  case USB_KEY_F9:
     if (SaveGamesAvail[LSItems.curpos] && pickquick) {
       char string[100] = STR_LGC;
 
@@ -751,7 +750,7 @@ int CP_CheckQuick(ScanCode scancode) {
     //
     // QUIT
     //
-  case KEY_F10:
+  case USB_KEY_F10:
     CA_CacheGrChunk(STARTFONT + 1);
 
     WindowX = WindowY = 0;
@@ -1712,9 +1711,9 @@ int MouseSensitivity(int _ __attribute__((unused))) {
       break;
     }
 
-    if (ci.button0 || Keyboard[KEY_SPACE] || Keyboard[KEY_ENTER])
+    if (ci.button0 || Keyboard[USB_KEY_SPACE] || Keyboard[USB_KEY_ENTER])
       exit = 1;
-    else if (ci.button1 || Keyboard[KEY_ESC])
+    else if (ci.button1 || Keyboard[USB_KEY_ESCAPE])
       exit = 2;
   } while (!exit);
 
@@ -1911,7 +1910,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
     ReadAnyControl(&ci);
 
     if (type == MOUSE || type == JOYSTICK)
-      if (IN_KeyDown(KEY_ENTER) /*|| IN_KeyDown(KEY_LEFTCTRL) || IN_KeyDown(KEY_LEFTALT)*/) {
+      if (IN_KeyDown(USB_KEY_ENTER) || IN_KeyDown(USB_KEY_LCTRL) || IN_KeyDown(USB_KEY_LALT)) {
         IN_ClearKeysDown();
         ci.button0 = ci.button1 = false;
       }
@@ -1920,7 +1919,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
     // CHANGE BUTTON VALUE?
     //
     if (((type != KEYBOARDBTNS && type != KEYBOARDMOVE) && (ci.button0 | ci.button1 | ci.button2 | ci.button3)) ||
-        ((type == KEYBOARDBTNS || type == KEYBOARDMOVE) && LastScan == KEY_ENTER)) {
+        ((type == KEYBOARDBTNS || type == KEYBOARDMOVE) && LastScan == USB_KEY_ENTER)) {
       lastFlashTime = GetTimeCount();
       tick = picked = 0;
       SETFONTCOLOR(0, TEXTCOLOR);
@@ -2006,7 +2005,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
           break;
 
         case KEYBOARDBTNS:
-          if (LastScan && LastScan != KEY_ESC) {
+          if (LastScan && LastScan != USB_KEY_ESCAPE) {
             buttonscan[order[which]] = LastScan;
             picked                   = 1;
             ShootSnd();
@@ -2015,7 +2014,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
           break;
 
         case KEYBOARDMOVE:
-          if (LastScan && LastScan != KEY_ESC) {
+          if (LastScan && LastScan != USB_KEY_ESCAPE) {
             dirscan[moveorder[which]] = LastScan;
             picked                    = 1;
             ShootSnd();
@@ -2027,7 +2026,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
         //
         // EXIT INPUT?
         //
-        if (IN_KeyDown(KEY_ESC) || (type != JOYSTICK && ci.button1)) {
+        if (IN_KeyDown(USB_KEY_ESCAPE) || (type != JOYSTICK && ci.button1)) {
           picked = 1;
           SD_PlaySound(ESCPRESSEDSND);
         }
@@ -2044,7 +2043,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
       continue;
     }
 
-    if (ci.button1 || IN_KeyDown(KEY_ESC))
+    if (ci.button1 || IN_KeyDown(USB_KEY_ESCAPE))
       exit = 1;
 
     //
@@ -2486,9 +2485,9 @@ int CP_ChangeView(int _ __attribute__((unused))) {
       break;
     }
 
-    if (ci.button0 || Keyboard[KEY_ENTER])
+    if (ci.button0 || Keyboard[USB_KEY_ENTER])
       exit = 1;
-    else if (ci.button1 || Keyboard[KEY_ESC]) {
+    else if (ci.button1 || Keyboard[USB_KEY_ESCAPE]) {
       SD_PlaySound(ESCPRESSEDSND);
       MenuFadeOut();
       if (screenHeight % 200 != 0)
@@ -2951,10 +2950,10 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
       break;
     }
 
-    if (ci.button0 || Keyboard[KEY_SPACE] || Keyboard[KEY_ENTER])
+    if (ci.button0 || Keyboard[USB_KEY_SPACE] || Keyboard[USB_KEY_ENTER])
       exit = 1;
 
-    // if (ci.button1 && (/*!Keyboard[(uint8_t)KEY_LEFTALT] ||*/ !false || Keyboard[KEY_ESC]))
+    // if (ci.button1 && (/*!Keyboard[(uint8_t)KEY_LEFTALT] ||*/ !false || Keyboard[USB_KEY_ESCAPE]))
     // exit = 2;
   } while (!exit);
 
@@ -3108,8 +3107,8 @@ void SetTextColor(CP_itemtype *items, int hlight) {
 ////////////////////////////////////////////////////////////////////
 void WaitKeyUp(void) {
   ControlInfo ci;
-  while (ReadAnyControl(&ci),
-         ci.button0 | ci.button1 | ci.button2 | ci.button3 | Keyboard[KEY_SPACE] | Keyboard[KEY_ENTER] | Keyboard[KEY_ESC]) {
+  while (ReadAnyControl(&ci), ci.button0 | ci.button1 | ci.button2 | ci.button3 | Keyboard[USB_KEY_SPACE] |
+                                  Keyboard[USB_KEY_ENTER] | Keyboard[USB_KEY_ESCAPE]) {
     IN_WaitAndProcessEvents();
   }
 }
@@ -3234,9 +3233,9 @@ int Confirm(const char *string) {
       SDL_Delay(5);
 
 #ifdef SPANISH
-  } while (!Keyboard[sc_S] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC]);
+  } while (!Keyboard[sc_S] && !Keyboard[USB_KEY_N] && !Keyboard[USB_KEY_ESCAPE]);
 #else
-  } while (!Keyboard[KEY_Y] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC] && !ci.button0 && !ci.button1);
+  } while (!Keyboard[USB_KEY_Y] && !Keyboard[USB_KEY_N] && !Keyboard[USB_KEY_ESCAPE] && !ci.button0 && !ci.button1);
 #endif
 
 #ifdef SPANISH
@@ -3245,7 +3244,7 @@ int Confirm(const char *string) {
     ShootSnd();
   }
 #else
-  if (Keyboard[KEY_Y] || ci.button0) {
+  if (Keyboard[USB_KEY_Y] || ci.button0) {
     xit = 1;
     ShootSnd();
   }
@@ -3282,9 +3281,9 @@ int GetYorN(int x, int y, int pic) {
 #endif
 
 #ifdef SPANISH
-  } while (!Keyboard[sc_S] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC]);
+  } while (!Keyboard[sc_S] && !Keyboard[USB_KEY_N] && !Keyboard[USB_KEY_ESCAPE]);
 #else
-  } while (!Keyboard[KEY_Y] && !Keyboard[KEY_N] && !Keyboard[KEY_ESC]);
+  } while (!Keyboard[USB_KEY_Y] && !Keyboard[USB_KEY_N] && !Keyboard[USB_KEY_ESCAPE]);
 #endif
 
 #ifdef SPANISH
@@ -3293,17 +3292,17 @@ int GetYorN(int x, int y, int pic) {
     ShootSnd();
   }
 
-  while (Keyboard[sc_S] || Keyboard[KEY_N] || Keyboard[KEY_ESC])
+  while (Keyboard[sc_S] || Keyboard[USB_KEY_N] || Keyboard[USB_KEY_ESCAPE])
     IN_WaitAndProcessEvents();
 
 #else
 
-  if (Keyboard[KEY_Y]) {
+  if (Keyboard[USB_KEY_Y]) {
     xit = 1;
     ShootSnd();
   }
 
-  while (Keyboard[KEY_Y] || Keyboard[KEY_N] || Keyboard[KEY_ESC])
+  while (Keyboard[USB_KEY_Y] || Keyboard[USB_KEY_N] || Keyboard[USB_KEY_ESCAPE])
     IN_WaitAndProcessEvents();
 #endif
 

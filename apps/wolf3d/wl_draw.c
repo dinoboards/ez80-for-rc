@@ -1,12 +1,11 @@
 #include "wl_draw.h"
 #include <ez80.h>
+#include <hbios.h>
 // WL_DRAW.C
 
 #include "wl_def.h"
 
 #include "id_vh.h"
-
-#include "keyboard.h"
 
 /*
 =============================================================================
@@ -1336,7 +1335,7 @@ void ThreeDRefresh(void) {
 
   DrawPlayerWeapon(); // draw player's hands
 
-  if (Keyboard[KEY_TAB] && viewsize == 21 && (int)gamestate.weapon != -1)
+  if (Keyboard[USB_KEY_TAB] && viewsize == 21 && (int)gamestate.weapon != -1)
     ShowActStatus();
   vbuf = NULL;
 

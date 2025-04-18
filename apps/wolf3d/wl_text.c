@@ -1,10 +1,9 @@
 // WL_TEXT.C
 
 #include "wl_def.h"
+#include <hbios.h>
 
 #include "id_mm.h"
-
-#include "keyboard.h"
 
 /*
 =============================================================================
@@ -623,16 +622,16 @@ void ShowArticle(char *article)
       if (ci.button0)
         dir = dir_South;
       switch (LastScan) {
-      case KEY_UP:
-      case KEY_PAGEUP:
-      case KEY_LEFT:
+      case USB_KEY_UP:
+      case USB_KEY_PAGEUP:
+      case USB_KEY_LEFT:
         dir = dir_North;
         break;
 
-      case KEY_ENTER:
-      case KEY_DOWN:
-      case KEY_PAGEDOWN:
-      case KEY_RIGHT:
+      case USB_KEY_ENTER:
+      case USB_KEY_DOWN:
+      case USB_KEY_PAGEDOWN:
+      case USB_KEY_RIGHT:
         dir = dir_South;
         break;
       }
@@ -668,7 +667,7 @@ void ShowArticle(char *article)
     default:
       break;
     }
-  } while (LastScan != KEY_ESC && !ci.button1);
+  } while (LastScan != USB_KEY_ESCAPE && !ci.button1);
 
   IN_ClearKeysDown();
   fontnumber = oldfontnumber;

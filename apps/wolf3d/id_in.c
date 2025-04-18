@@ -16,6 +16,7 @@
 //      LastASCII - The ASCII value of the last key pressed
 //  DEBUG - there are more globals
 //
+#include <hbios.h>
 #include <stdint.h>
 
 #include "id_vl.h"
@@ -24,7 +25,6 @@
 
 #include "id_sd.h"
 
-#include "keyboard.h"
 /*
 =============================================================================
 
@@ -247,36 +247,39 @@ int IN_JoyAxes(void) {
   return res;
 }
 
-static void processEvent() {
-  KeyEventInfo key_event;
+/**
+ * @brief return true if a key event was received and loaded
+ *
+ * updates the Keyboard array for the key event
+ *
+ * @return uint8_t true if a key event was received
+ */
+static uint8_t processEvent() {
+  usb_keyboard_key_t usb_key;
 
-  if (!poll_for_key_event(&key_event))
-    return;
+  uint16_t result = usb_kyb_get_scan_code(&usb_key);
 
-  switch (key_event.event) {
-  case EVENT_KEY_DOWN: {
-    LastScan           = key_event.scan_code;
+  if (result == 0)
+    return false;
+
+  if (usb_key.key_down) {
+    LastScan           = usb_key.key_code;
     Keyboard[LastScan] = 1;
     printf("Key down: %x\r\n", LastScan);
-    break;
+    return true;
   }
 
-  case EVENT_KEY_UP: {
-    Keyboard[key_event.scan_code] = 0;
-    printf("Key up: %x\r\n", key_event.scan_code);
-    break;
-  }
-  }
+  Keyboard[usb_key.key_code] = 0;
+  printf("Key up: %x\r\n", usb_key.key_code);
+  return true;
 }
 
 // block waiting for a key event
 // key events are key down, followed eventually by keyup
 
 void IN_WaitAndProcessEvents() {
-  while (!key_event_pending())
+  while (!processEvent())
     ;
-
-  processEvent();
 }
 
 void IN_ProcessEvents() { processEvent(); }
@@ -370,14 +373,14 @@ void IN_ReadControl(int player __attribute__((unused)), ControlInfo *info) {
   // else if (Keyboard[KbdDefs.downright])
   //   mx = motion_Right, my = motion_Down;
 
-  if (Keyboard[KEY_UP])
+  if (Keyboard[USB_KEY_UP])
     my = motion_Up;
-  else if (Keyboard[KEY_DOWN])
+  else if (Keyboard[USB_KEY_DOWN])
     my = motion_Down;
 
-  if (Keyboard[KEY_LEFT])
+  if (Keyboard[USB_KEY_LEFT])
     mx = motion_Left;
-  else if (Keyboard[KEY_RIGHT])
+  else if (Keyboard[USB_KEY_RIGHT])
     mx = motion_Right;
 
   // if (Keyboard[KbdDefs.button0])

@@ -21,8 +21,7 @@
 //
 
 #include "wl_def.h"
-
-#include "keyboard.h"
+#include <hbios.h>
 
 //  Global variables
 word PrintX, PrintY;
@@ -548,36 +547,36 @@ boolean US_LineInput(int x, int y, char *buf, const char *def, boolean escok, in
 
     if (checkkey) {
       switch (sc) {
-      case KEY_LEFT:
+      case USB_KEY_LEFT:
         if (cursor)
           cursor--;
         c           = key_None;
         cursormoved = true;
         break;
-      case KEY_RIGHT:
+      case USB_KEY_RIGHT:
         if (s[cursor])
           cursor++;
         c           = key_None;
         cursormoved = true;
         break;
-      case KEY_HOME:
+      case USB_KEY_HOME:
         cursor      = 0;
         c           = key_None;
         cursormoved = true;
         break;
-      case KEY_END:
+      case USB_KEY_END:
         cursor      = (int)strlen(s);
         c           = key_None;
         cursormoved = true;
         break;
 
-      case KEY_ENTER:
+      case USB_KEY_ENTER:
         strcpy(buf, s);
         done   = true;
         result = true;
         c      = key_None;
         break;
-      case KEY_ESC:
+      case USB_KEY_ESCAPE:
         if (escok) {
           done   = true;
           result = false;
@@ -585,7 +584,7 @@ boolean US_LineInput(int x, int y, char *buf, const char *def, boolean escok, in
         c = key_None;
         break;
 
-      case KEY_BACKSPACE:
+      case USB_KEY_BACKSPACE:
         if (cursor) {
           strcpy(s + cursor - 1, s + cursor);
           cursor--;
@@ -594,7 +593,7 @@ boolean US_LineInput(int x, int y, char *buf, const char *def, boolean escok, in
         c           = key_None;
         cursormoved = true;
         break;
-      case KEY_DELETE:
+      case USB_KEY_DELETE:
         if (s[cursor]) {
           strcpy(s + cursor, s + cursor + 1);
           redraw = true;
@@ -604,11 +603,11 @@ boolean US_LineInput(int x, int y, char *buf, const char *def, boolean escok, in
         break;
 
       // case SDLK_KP_5: // 0x4c:  // Keypad 5 // TODO: hmmm...
-      case KEY_UP:
-      case KEY_DOWN:
-      case KEY_PAGEUP:
-      case KEY_PAGEDOWN:
-      case KEY_INSERT:
+      case USB_KEY_UP:
+      case USB_KEY_DOWN:
+      case USB_KEY_PAGEUP:
+      case USB_KEY_PAGEDOWN:
+      case USB_KEY_INSERT:
         c = key_None;
         break;
       }

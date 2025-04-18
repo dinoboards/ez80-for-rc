@@ -3,6 +3,7 @@
 #include "wl_draw.h"
 #include <ez80.h>
 #include <fcntl.h>
+#include <hbios.h>
 #include <unistd.h>
 #include <v99x8.h>
 
@@ -10,8 +11,6 @@
 #include "wl_def.h"
 
 #include "id_mm.h"
-
-#include "keyboard.h"
 
 /*
 =============================================================================
@@ -1128,7 +1127,7 @@ static void InitGame() {
   // HOLDING DOWN 'M' KEY?
   //
 #ifndef SPEARDEMO
-  if (Keyboard[KEY_M]) {
+  if (Keyboard[USB_KEY_M]) {
     DoJukebox();
     didjukebox = true;
   } else

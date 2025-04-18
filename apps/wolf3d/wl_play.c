@@ -1,12 +1,11 @@
 // WL_PLAY.C
 
 #include "wl_def.h"
+#include <hbios.h>
 
 #include "sdl.h"
 
 #include "id_mm.h"
-
-#include "keyboard.h"
 
 /*
 =============================================================================
@@ -51,8 +50,9 @@ unsigned tics;
 // control info
 //
 boolean mouseenabled, joystickenabled;
-int     dirscan[4]             = {KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT};
-int     buttonscan[NUMBUTTONS] = {KEY_ENTER, KEY_RIGHTCTRL, KEY_LEFTSHIFT, KEY_SPACE, KEY_1, KEY_2, KEY_3, KEY_4};
+int     dirscan[4]             = {USB_KEY_UP, USB_KEY_RIGHT, USB_KEY_DOWN, USB_KEY_LEFT};
+int     buttonscan[NUMBUTTONS] = {USB_KEY_ENTER, USB_KEY_RCTRL, USB_KEY_LSHIFT, USB_KEY_SPACE,
+                                  USB_KEY_1,     USB_KEY_2,     USB_KEY_3,      USB_KEY_4};
 int     buttonmouse[4]         = {bt_attack, bt_strafe, bt_use, bt_nobutton};
 int     buttonjoy[32]          = {
     bt_attack,     bt_strafe,     bt_use,      bt_run,      bt_strafeleft, bt_straferight, bt_esc,      bt_pause,
@@ -489,7 +489,7 @@ void CheckKeys(void) {
   //
   // SECRET CHEAT CODE: 'MLI'
   //
-  if (Keyboard[KEY_M] && Keyboard[KEY_L] && Keyboard[KEY_I]) {
+  if (Keyboard[USB_KEY_M] && Keyboard[USB_KEY_L] && Keyboard[USB_KEY_I]) {
     gamestate.health = 100;
     gamestate.ammo   = 99;
     gamestate.keys   = 3;
@@ -519,7 +519,7 @@ void CheckKeys(void) {
   //
   // TRYING THE KEEN CHEAT CODE!
   //
-  if (Keyboard[KEY_B] && Keyboard[KEY_A] && Keyboard[KEY_T]) {
+  if (Keyboard[USB_KEY_B] && Keyboard[USB_KEY_A] && Keyboard[USB_KEY_T]) {
     ClearMemory();
     CA_CacheGrChunk(STARTFONT + 1);
     ClearSplitVWB();
@@ -558,9 +558,9 @@ void CheckKeys(void) {
   //
   if (
 #ifndef DEBCHECK
-      scan == KEY_F10 ||
+      scan == USB_KEY_F10 ||
 #endif
-      scan == KEY_F9 || scan == KEY_F7 || scan == KEY_F8) // pop up quit dialog
+      scan == USB_KEY_F9 || scan == USB_KEY_F7 || scan == USB_KEY_F8) // pop up quit dialog
   {
     ClearMemory();
     ClearSplitVWB();
@@ -573,12 +573,12 @@ void CheckKeys(void) {
     return;
   }
 
-  if ((scan >= KEY_F1 && scan <= KEY_F9) || scan == KEY_ESC || buttonstate[bt_esc]) {
+  if ((scan >= USB_KEY_F1 && scan <= USB_KEY_F9) || scan == USB_KEY_ESCAPE || buttonstate[bt_esc]) {
     int lastoffs = StopMusic();
     ClearMemory();
     VW_FadeOut();
 
-    US_ControlPanel(buttonstate[bt_esc] ? KEY_ESC : scan);
+    US_ControlPanel(buttonstate[bt_esc] ? USB_KEY_ESCAPE : scan);
 
     SETFONTCOLOR(0, 15);
     IN_ClearKeysDown();
