@@ -1,6 +1,6 @@
-#include <hbios.h>
 #include <cpm.h>
 #include <ez80.h>
+#include <hbios.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +11,7 @@ vda_keyrd_info_t      vda_keyrd_info;
 usb_keyboard_report_t usb_keyboard_report = {0};
 
 int main(/*const int argc, const char *argv[]*/) {
-  int8_t result;
+  int8_t   result;
   uint16_t r;
 
   // write to default char
@@ -24,7 +24,6 @@ int main(/*const int argc, const char *argv[]*/) {
   printf("\r\nhbios_vda_qry result: %d. (Mode: %d, Rows: %d, Cols: %d, FontMap: %p)\r\n", result, vda_info.video_mode,
          vda_info.rows, vda_info.columns, vda_info.font_map);
 
-
   r = hbios_vda_kstu(0, &usb_keyboard_report);
 
   printf("USB Report: (Press A key on its own to abort)\r\n");
@@ -34,9 +33,9 @@ int main(/*const int argc, const char *argv[]*/) {
 
     if ((r >> 8) != 0) {
       printf("\r\nUSB Key State: %X: Modifiers: %X, Scan Codes: (%X, %X, %X, %X, %X, %X)", r, usb_keyboard_report.bModifierKeys,
-            usb_keyboard_report.keyCode[0], usb_keyboard_report.keyCode[1], usb_keyboard_report.keyCode[2],
-            usb_keyboard_report.keyCode[3], usb_keyboard_report.keyCode[4], usb_keyboard_report.keyCode[5]);
-      }
+             usb_keyboard_report.keyCode[0], usb_keyboard_report.keyCode[1], usb_keyboard_report.keyCode[2],
+             usb_keyboard_report.keyCode[3], usb_keyboard_report.keyCode[4], usb_keyboard_report.keyCode[5]);
+    }
   }
 
   printf("\r\nClearing Que\r\n");
@@ -47,4 +46,15 @@ int main(/*const int argc, const char *argv[]*/) {
 
     result = hbios_vda_kst(0x0);
   }
+
+  printf("Testing single code queue\r\n");
+  usb_keyboard_key_t usb_key;
+
+  do {
+    result = usb_kyb_get_scan_code(&usb_key);
+
+    if (result)
+      printf(": %d, %x, %x\r\n", result, usb_key.key_code, usb_key.key_down);
+
+  } while (!(result && usb_key.key_code == 4));
 }
