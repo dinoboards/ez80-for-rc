@@ -102,17 +102,16 @@ not_supported:
 ;  L	= Revision Version Number
 ;
 ; Outputs:
-;  A	= 0 -> Success, otherwise errored
-;  C	= eZ80 Chip Id (0->EZ80F92AZ020EG)
-;  D	= eZ80 Firmware Major Version Number
-;  E	= eZ80 Firmware Minor Version Number
-;  H	= eZ80 Firmware Patch Version Number
-;  L	= eZ80 Firmware Revision Version Number
-;  C'	= firmware's build day of month
-;  D'	= firmware's build month
-;  E'	= firmware's build year (20xx)
-
-
+;  A	 = 0 -> Success, otherwise errored
+;  C	 = eZ80 Chip Id (0->EZ80F92AZ020EG)
+;  D	 = eZ80 Firmware Major Version Number
+;  E	 = eZ80 Firmware Minor Version Number
+;  u(HL) = eZ80 Firmware Patch Version Number
+;  HL	 = eZ80 Firmware Revision Version Number
+;  C'	 = firmware's build day of month
+;  D'	 = firmware's build month
+;  E'	 = firmware's build year (20xx)
+;
 ez80_version_exchange:
 	CALL	_util_get_day_of_month
 	LD	C, A
@@ -127,8 +126,7 @@ ez80_version_exchange:
 	EXX
 	LD	D, MAJOR_VERSION
 	LD	E, MINOR_VERSION
-	LD	H, PATCH_VERSION
-	LD	L, REVISION_VERSION
+	LD	HL, PATCH_VERSION << 16 | REVISION_VERSION
 	LD	C, 0
 
 	XOR	A
