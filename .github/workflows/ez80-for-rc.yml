@@ -17,6 +17,7 @@ jobs:
         with:
           submodules: true
 
+      #todo REVISION VERSION WILL OVERFLOW WHEN WE GET TO 65535
       - name: Apply REVISION_VERSION
         run: |
           VERSION_FILE="./firmware/src/version.inc"

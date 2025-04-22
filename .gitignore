@@ -9,7 +9,7 @@
 Thumbs.db
 **/*.o
 **/*.map
-**/*.s
+apps/**/*.s
 
 hardware/bin
 *.mx

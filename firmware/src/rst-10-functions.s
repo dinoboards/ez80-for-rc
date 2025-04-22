@@ -5,6 +5,7 @@
 	XREF	_system_timer_dispatch
 	XREF	_uart_dispatch
 	XREF	_i2c_dispatch
+	XREF	_usb_dispatch
 
 	SECTION INTERNAL_RAM_ROM
 
@@ -37,7 +38,7 @@ _rst_10_functions:
 	DEC	A
 	JR	Z, _spi_dispatch			; A = 5, SPI_xxx functions
 	DEC	A
-	JR	Z, _reserved_dispatch			; A = 6, RESERVED functions
+	JR	Z, _usb_dispatch			; A = 6, RESERVED functions
 	DEC	A
 	JR	Z, _reserved_dispatch			; A = 7, RESERVED functions
 

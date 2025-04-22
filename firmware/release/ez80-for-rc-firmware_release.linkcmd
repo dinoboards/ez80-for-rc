@@ -88,23 +88,34 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00B8)
-LOCATE DATA at (BASE OF BSS - $0008)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00B5)
+LOCATE DATA at (BASE OF BSS - $00B7)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0480
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
 
 "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-release"= \
+ ".\base-drv.obj", \
  ".\build-date.obj", \
+ ".\ch376.obj", \
+ ".\class_hub.obj", \
+ ".\class_scsi.obj", \
  ".\clib.obj", \
  ".\cpu-freq-calculator.obj", \
+ ".\critical-section.obj", \
  ".\cstartup.obj", \
+ ".\delay.obj", \
+ ".\dev_transfers.obj", \
+ ".\enumerate.obj", \
+ ".\enumerate_hub.obj", \
+ ".\enumerate_storage.obj", \
  ".\gpio-b4-isr-marshaller.obj", \
  ".\i2c-calculate.obj", \
  ".\init-clocks.obj", \
  ".\init-f92.obj", \
  ".\internal-hiram.obj", \
  ".\main.obj", \
+ ".\protocol.obj", \
  ".\rom-flashing-calculator.obj", \
  ".\rst-08-io.obj", \
  ".\rst-10-00-system-utils-functions.obj", \
@@ -112,9 +123,12 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-02-system-timer-functions.obj", \
  ".\rst-10-03-uart-functions.obj", \
  ".\rst-10-04-i2c-functions.obj", \
+ ".\rst-10-06-usb-functions.obj", \
  ".\rst-10-functions.obj", \
+ ".\scsi_driver.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
+ ".\transfers.obj", \
  ".\uart-calculate.obj", \
  ".\uart-rx-buffer-add-to.obj", \
  ".\uart-rx-buffer-empty.obj", \
@@ -123,7 +137,10 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\uart-rx-buffer-get.obj", \
  ".\uart-rx-buffer-init.obj", \
  ".\uart-rx-variables.obj", \
+ ".\usb-base-drv.obj", \
+ ".\usb_state.obj", \
  ".\vectors16.obj", \
+ ".\work-area.obj", \
  "Z:\ZDS\lib\std\chelp.lib", \
  "Z:\ZDS\lib\std\crt.lib", \
  "Z:\ZDS\lib\std\crtS.lib", \
