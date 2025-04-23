@@ -18,15 +18,14 @@
 #include <stdlib.h>
 
 typedef struct {
-
   uint8_t  number;
   uint16_t max_packet_sizex;
 } endpoint;
 
 // 3 bytes
 #define COMMON_DEVICE_CONFIG                                                                                                       \
-  usb_device_type type : 4;                                                                                                        \
-  uint8_t         address : 4;                                                                                                     \
+  usb_device_type type;                                                                                                            \
+  uint8_t         address;                                                                                                         \
   uint8_t         max_packet_size;                                                                                                 \
   uint8_t         interface_number
 
@@ -36,9 +35,9 @@ typedef struct {
 } device_config;
 
 typedef struct {
-  COMMON_DEVICE_CONFIG;        // bytes: 0-2
-  endpoint_param endpoints[3]; // bytes: 3-5, 6-8, 9-11  bulk in/out and interrupt
-  uint32_t       current_lba;  // bytes 12-15
+  COMMON_DEVICE_CONFIG;        // bytes: 0-3
+  endpoint_param endpoints[3]; // bytes: 4-6, 7-9, 10-12  bulk in/out and interrupt
+  uint32_t       current_lba;  // bytes 13-16
 } device_config_storage;
 
 typedef struct {

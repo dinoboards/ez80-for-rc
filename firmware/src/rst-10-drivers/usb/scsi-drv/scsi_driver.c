@@ -51,13 +51,11 @@ usb_error usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_re
 //   return do_scsi_cmd(dev, &cbw_scsi.cbw, inq_result, false);
 // }
 
-static cbw_scsi_read_write cbw = {{{0}}};
-
 usb_error usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer) {
   uint8_t                      result;
+  cbw_scsi_read_write          cbw = {{{0}}};
   device_config_storage *const dev = (device_config_storage *)get_usb_device_config(dev_index);
 
-  memset(&cbw, 0, sizeof(cbw_scsi_read_write));
   cbw.cbw = scsi_command_block_wrapper;
 
   cbw.cbw.bCBWLUN                = 0;
@@ -81,9 +79,9 @@ usb_error usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer) {
 
 usb_error usb_scsi_write(const uint16_t dev_index, uint8_t *const buffer) {
   uint8_t                      result;
+  cbw_scsi_read_write          cbw = {{{0}}};
   device_config_storage *const dev = (device_config_storage *)get_usb_device_config(dev_index);
 
-  memset(&cbw, 0, sizeof(cbw_scsi_read_write));
   cbw.cbw = scsi_command_block_wrapper;
 
   cbw.cbw.bCBWLUN                = 0;

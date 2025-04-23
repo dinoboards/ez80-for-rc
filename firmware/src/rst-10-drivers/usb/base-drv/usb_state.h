@@ -9,8 +9,7 @@
 #define DEVICE_CONFIG_STRUCT_SIZE sizeof(device_config_storage) /* Assumes is largest struct */
 
 typedef struct __usb_state {
-  uint8_t active : 1; /* if true, a usb operation/interrupt handler is active, prevent re-entrant */
-  uint8_t reserved : 7;
+  uint8_t active; /* if true, a usb operation/interrupt handler is active, prevent re-entrant */
   uint8_t count_of_detected_usb_devices;
   uint8_t device_configs[DEVICE_CONFIG_STRUCT_SIZE * MAX_NUMBER_OF_DEVICES];
 

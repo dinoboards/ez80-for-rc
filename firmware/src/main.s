@@ -55,8 +55,3 @@ _main:
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
 	LD	MB, A
 	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
-
-	SEGMENT BSS
-
-_tmp:
-	DS	3
