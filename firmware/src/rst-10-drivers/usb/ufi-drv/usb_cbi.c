@@ -14,9 +14,10 @@ usb_error usb_execute_cbi(device_config *const storage_device,
                           uint8_t *const       buffer,
                           uint8_t *const       sense_codes) {
 
+  uint8_t       result;
+  setup_packet  adsc;
   const uint8_t interface_number = storage_device->interface_number;
 
-  setup_packet adsc;
   adsc           = cbi2_adsc;
   adsc.bIndex[0] = interface_number;
 
@@ -32,34 +33,17 @@ usb_error usb_execute_cbi(device_config *const storage_device,
     goto done;
   }
 
-  if (result != USB_ERR_OK) {
-    TRACE_USB_ERROR(result);
-    goto done;
-  }
+  CHECK(result);
 
   if (send) {
-    result = usbdev_blk_out_trnsfer(storage_device, buffer, buffer_size);
+    CHECK(usbdev_blk_out_trnsfer(storage_device, buffer, buffer_size));
 
-    if (result != USB_ERR_OK) {
-      TRACE_USB_ERROR(result);
-      goto done;
-    }
   } else {
-    result = usbdev_dat_in_trnsfer(storage_device, buffer, buffer_size, ENDPOINT_BULK_IN);
-
-    if (result != USB_ERR_OK) {
-      TRACE_USB_ERROR(result);
-      goto done;
-    }
+    CHECK(usbdev_dat_in_trnsfer(storage_device, buffer, buffer_size, ENDPOINT_BULK_IN));
   }
 
   if (sense_codes != NULL) {
-    result = usbdev_dat_in_trnsfer(storage_device, sense_codes, 2, ENDPOINT_INTERRUPT_IN);
-
-    if (result != USB_ERR_OK) {
-      TRACE_USB_ERROR(result);
-      // goto done;
-    }
+    CHECK(usbdev_dat_in_trnsfer(storage_device, sense_codes, 2, ENDPOINT_INTERRUPT_IN));
   }
 
 done:

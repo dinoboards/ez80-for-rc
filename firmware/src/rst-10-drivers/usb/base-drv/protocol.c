@@ -27,19 +27,16 @@ const setup_packet cmd_get_device_descriptor = {0x80, 6, {0, 1}, {0, 0}, 8};
  * @return usb_error USB_ERR_OK if all good, otherwise specific error code
  */
 usb_error usbtrn_get_descriptor(device_descriptor *const buffer) {
+  uint8_t      result;
   setup_packet cmd;
   cmd         = cmd_get_device_descriptor;
   cmd.wLength = 8;
 
-  result = usb_control_transfer(&cmd, (uint8_t *)buffer, 0, 8);
-
-  CHECK(result);
+  CHECK(usb_control_transfer(&cmd, (uint8_t *)buffer, 0, 8));
 
   cmd         = cmd_get_device_descriptor;
   cmd.wLength = 18;
-  result      = usb_control_transfer(&cmd, (uint8_t *)buffer, 0, buffer->bMaxPacketSize0);
-
-  RETURN_CHECK(result);
+  return usb_control_transfer(&cmd, (uint8_t *)buffer, 0, buffer->bMaxPacketSize0);
 
 done:
   return result;
@@ -52,17 +49,18 @@ done:
  * @return usb_error USB_ERR_OK if all good, otherwise specific error code
  */
 usb_error usbtrn_get_descriptor2(device_descriptor *const buffer, const uint8_t device_address) {
+  uint8_t      result;
   setup_packet cmd;
   cmd         = cmd_get_device_descriptor;
   cmd.wLength = 8;
 
-  result = usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, 8);
-
-  CHECK(result);
+  CHECK(usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, 8));
 
   cmd         = cmd_get_device_descriptor;
   cmd.wLength = 18;
-  RETURN_CHECK(usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, buffer->bMaxPacketSize0));
+
+  return usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, buffer->bMaxPacketSize0);
+
 done:
   return result;
 }
@@ -129,6 +127,7 @@ usb_error usbtrn_gfull_cfg_desc(const uint8_t  config_index,
                                 const uint8_t  max_packet_size,
                                 const uint8_t  max_buffer_size,
                                 uint8_t *const buffer) {
+  uint8_t result;
   uint8_t max_length;
 
   CHECK(usbtrn_get_config_descriptor((config_descriptor *)buffer, config_index, sizeof(config_descriptor), device_address,
@@ -138,9 +137,8 @@ usb_error usbtrn_gfull_cfg_desc(const uint8_t  config_index,
   if (max_length > max_buffer_size)
     max_length = max_buffer_size;
 
-  CHECK(usbtrn_get_config_descriptor((config_descriptor *)buffer, config_index, max_length, device_address, max_packet_size));
+  return usbtrn_get_config_descriptor((config_descriptor *)buffer, config_index, max_length, device_address, max_packet_size);
 
-  return USB_ERR_OK;
 done:
   return result;
 }

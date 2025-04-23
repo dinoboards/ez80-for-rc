@@ -32,6 +32,7 @@ usb_error usbdev_control_transfer(device_config *const device, const setup_packe
 }
 
 usb_error usbdev_blk_out_trnsfer(device_config *const dev, const uint8_t *const buffer, const uint16_t buffer_size) {
+  usb_error result;
 
   endpoint_param *const endpoint = &dev->endpoints[ENDPOINT_BULK_OUT];
 
@@ -43,13 +44,12 @@ usb_error usbdev_blk_out_trnsfer(device_config *const dev, const uint8_t *const 
     return USB_ERR_STALL;
   }
 
-  RETURN_CHECK(result);
-
-done:
   return result;
 }
 
 usb_error usbdev_bulk_in_transfer(device_config *const dev, uint8_t *const buffer, uint8_t *const buffer_size) {
+  usb_error result;
+
   endpoint_param *const endpoint = &dev->endpoints[ENDPOINT_BULK_IN];
 
   result = usb_data_in_transfer_n(buffer, buffer_size, dev->address, endpoint);
@@ -60,8 +60,6 @@ usb_error usbdev_bulk_in_transfer(device_config *const dev, uint8_t *const buffe
     return USB_ERR_STALL;
   }
 
-  RETURN_CHECK(result);
-done:
   return result;
 }
 
@@ -69,6 +67,7 @@ usb_error usbdev_dat_in_trnsfer(device_config *const    device,
                                 uint8_t *const          buffer,
                                 const uint16_t          buffer_size,
                                 const usb_endpoint_type endpoint_type) {
+  usb_error result;
 
   endpoint_param *const endpoint = &device->endpoints[endpoint_type];
 
@@ -80,12 +79,11 @@ usb_error usbdev_dat_in_trnsfer(device_config *const    device,
     return USB_ERR_STALL;
   }
 
-  RETURN_CHECK(result);
-done:
   return result;
 }
 
 usb_error usbdev_dat_in_trnsfer_0(device_config *const device, uint8_t *const buffer, const uint8_t buffer_size) {
+  usb_error             result;
   endpoint_param *const endpoint = &device->endpoints[0];
 
   result = usb_data_in_transfer(buffer, buffer_size, device->address, endpoint);

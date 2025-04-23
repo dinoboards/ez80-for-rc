@@ -68,10 +68,7 @@ usb_error ufi_read_frmt_caps(device_config *const storage_device, ufi_format_cap
   ufi_read_format_capacities_command cmd;
 
   ufi_cmd_read_format_capacities = _ufi_cmd_read_format_capacities;
-  result = usb_execute_cbi(storage_device, (uint8_t *)&ufi_cmd_read_format_capacities, false, 12, (uint8_t *)response, NULL);
-
-  TRACE_USB_ERROR(result);
-  CHECK(result);
+  CHECK(usb_execute_cbi(storage_device, (uint8_t *)&ufi_cmd_read_format_capacities, false, 12, (uint8_t *)response, NULL));
 
   available_length = response->capacity_list_length;
 
@@ -81,10 +78,8 @@ usb_error ufi_read_frmt_caps(device_config *const storage_device, ufi_format_cap
   memcpy(&cmd, &ufi_cmd_read_format_capacities, sizeof(cmd));
   cmd.allocation_length[1] = max_length;
 
-  result = usb_execute_cbi(storage_device, (uint8_t *)&cmd, false, max_length, (uint8_t *)response, NULL);
+  return usb_execute_cbi(storage_device, (uint8_t *)&cmd, false, max_length, (uint8_t *)response, NULL);
 
-  TRACE_USB_ERROR(result);
-  RETURN_CHECK(result);
 done:
   return result;
 }

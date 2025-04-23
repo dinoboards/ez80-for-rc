@@ -122,6 +122,8 @@ usb_dat_in_trnsfer_ext(uint8_t *buffer, const uint16_t buffer_size, const uint8_
  */
 usb_error
 usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint) {
+  uint8_t result;
+
   critical_begin();
 
   ch_set_usb_address(device_address);
@@ -144,6 +146,8 @@ usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t 
  */
 usb_error
 usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_t device_address, endpoint_param *const endpoint) {
+  uint8_t result;
+
   critical_begin();
 
   ch_set_usb_address(device_address);
@@ -166,6 +170,8 @@ usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_
  */
 usb_error
 usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint) {
+  uint8_t result;
+
   critical_begin();
 
   ch_set_usb_address(device_address);

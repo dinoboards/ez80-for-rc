@@ -6,10 +6,10 @@
 #include <string.h>
 
 usb_error usb_scsi_init(const uint16_t dev_index) {
-  device_config_storage *const dev = (device_config_storage *)get_usb_device_config(dev_index);
-
-  scsi_sense_result response;
-  uint8_t           counter = 3;
+  uint8_t                      result;
+  scsi_sense_result            response;
+  device_config_storage *const dev     = (device_config_storage *)get_usb_device_config(dev_index);
+  uint8_t                      counter = 3;
 
   critical_begin();
   while ((result = scsi_test(dev)) && --counter > 0)
@@ -54,6 +54,7 @@ usb_error usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_re
 static cbw_scsi_read_write cbw = {{{0}}};
 
 usb_error usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer) {
+  uint8_t                      result;
   device_config_storage *const dev = (device_config_storage *)get_usb_device_config(dev_index);
 
   memset(&cbw, 0, sizeof(cbw_scsi_read_write));
@@ -74,10 +75,12 @@ usb_error usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer) {
 
   if (result == USB_ERR_OK)
     dev->current_lba++;
+
   return result;
 }
 
 usb_error usb_scsi_write(const uint16_t dev_index, uint8_t *const buffer) {
+  uint8_t                      result;
   device_config_storage *const dev = (device_config_storage *)get_usb_device_config(dev_index);
 
   memset(&cbw, 0, sizeof(cbw_scsi_read_write));
@@ -98,6 +101,7 @@ usb_error usb_scsi_write(const uint16_t dev_index, uint8_t *const buffer) {
 
   if (result == USB_ERR_OK)
     dev->current_lba++;
+
   return result;
 }
 

@@ -11,6 +11,7 @@ usb_error do_scsi_cmd(device_config_storage *const       dev,
                       _scsi_command_block_wrapper *const cbw,
                       void *const                        send_receive_buffer,
                       const bool                         send) {
+  usb_error result;
 
   _scsi_command_status_wrapper csw = {{{0}}};
 

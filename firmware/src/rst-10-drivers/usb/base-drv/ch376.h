@@ -58,46 +58,6 @@ enum {
 typedef uint8_t usb_endpoint_type;
 enum { ENDPOINT_BULK_OUT = 0, ENDPOINT_BULK_IN = 1, ENDPOINT_INTERRUPT_IN = 2 };
 
-extern int printf(const char *msg, ...);
-
-#if STACK_TRACE_ENABLED
-
-#define trace_printf printf
-
-#define CHECK(fn)                                                                                                                  \
-  {                                                                                                                                \
-    result = fn;                                                                                                                   \
-    if (result != USB_ERR_OK && result != USB_ERR_STALL) {                                                                         \
-      if (result != USB_TOKEN_OUT_OF_SYNC)                                                                                         \
-        printf("Error: %s:%d %d\r\n", __FILE__, __LINE__, result);                                                                 \
-      return result;                                                                                                               \
-    }                                                                                                                              \
-  }
-
-#define RETURN_CHECK(fn)                                                                                                           \
-  {                                                                                                                                \
-    result = fn;                                                                                                                   \
-    if (result != USB_ERR_OK && result != USB_ERR_STALL) {                                                                         \
-      if (result != USB_TOKEN_OUT_OF_SYNC)                                                                                         \
-        printf("Error: %s:%d %d\r\n", __FILE__, __LINE__, result);                                                                 \
-      return result;                                                                                                               \
-    }                                                                                                                              \
-    return result;                                                                                                                 \
-  }
-
-#define TRACE_USB_ERROR(result)                                                                                                    \
-  {                                                                                                                                \
-    if (result != USB_ERR_OK) {                                                                                                    \
-      printf("USB: %s:%d %d\r\n", __FILE__, __LINE__, result);                                                                     \
-    }                                                                                                                              \
-  }
-
-#else
-
-extern usb_error result;
-
-#define trace_printf
-
 #define CHECK(fn)                                                                                                                  \
   {                                                                                                                                \
     result = fn;                                                                                                                   \
@@ -110,10 +70,6 @@ extern usb_error result;
     result = fn;                                                                                                                   \
     goto done;                                                                                                                     \
   }
-
-#define TRACE_USB_ERROR(result)
-
-#endif
 
 #define calc_max_packet_sizex(packet_size) (packet_size & 0x3FF)
 #define calc_max_packet_size(packet_sizex) packet_sizex

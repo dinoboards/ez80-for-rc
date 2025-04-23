@@ -4,8 +4,6 @@
 #include "ez80-helpers.h"
 #include "print.h"
 
-usb_error result = 0;
-
 void ch_command(const uint8_t command) {
   uint8_t counter = 255;
   while ((CH376_COMMAND_PORT & PARA_STATE_BUSY) && --counter != 0)
@@ -147,6 +145,7 @@ void ch_issue_token_setup(void) { ch_issue_token(0, 0, CH_PID_SETUP); }
 
 usb_error ch_data_in_transfer(uint8_t *buffer, int16_t buffer_size, endpoint_param *const endpoint) {
   uint8_t count;
+  uint8_t result;
 
   if (buffer_size == 0)
     return USB_ERR_OK;

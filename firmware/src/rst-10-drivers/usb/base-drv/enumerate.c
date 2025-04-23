@@ -145,6 +145,8 @@ usb_error op_id_class_drv(_working *const working) {
 }
 
 usb_error op_get_cfg_desc(_working *const working) {
+  usb_error result;
+
   const uint8_t max_packet_size = working->desc.bMaxPacketSize0;
 
   memset(working->config.buffer, 0, MAX_CONFIG_SIZE);
@@ -156,6 +158,7 @@ usb_error op_get_cfg_desc(_working *const working) {
   working->interface_count = working->config.desc.bNumInterfaces;
 
   return op_id_class_drv(working);
+
 done:
   return result;
 }
@@ -182,6 +185,7 @@ usb_error read_all_configs(enumeration_state *const state) {
   }
 
   return USB_ERR_OK;
+
 done:
   return result;
 }
