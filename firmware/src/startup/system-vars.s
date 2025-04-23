@@ -35,8 +35,6 @@
 	PUBLIC	_i2_clk_divider
 	PUBLIC	_i2c_bus_freq
 
-	PUBLIC	_flash_ram_content
-
 _rtc_enabled:
 	DB	0
 
@@ -103,8 +101,6 @@ _mem1_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles o
 _io_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
 	DS	1
 
-_flash_ram_content:
-	DS	1
 
 	SECTION	DATA
 

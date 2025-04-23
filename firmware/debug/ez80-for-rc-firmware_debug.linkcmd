@@ -88,7 +88,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00B5)
-LOCATE DATA at (BASE OF BSS - $00B7)
+LOCATE DATA at (BASE OF BSS - $00A8)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0480
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
@@ -99,6 +99,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\ch376.obj", \
  ".\class_hub.obj", \
  ".\class_scsi.obj", \
+ ".\class_ufi.obj", \
  ".\clib.obj", \
  ".\cpu-freq-calculator.obj", \
  ".\critical-section.obj", \
@@ -136,7 +137,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\uart-rx-buffer-get.obj", \
  ".\uart-rx-buffer-init.obj", \
  ".\uart-rx-variables.obj", \
+ ".\ufi_driver.obj", \
  ".\usb-base-drv.obj", \
+ ".\usb_cbi.obj", \
  ".\usb_state.obj", \
  ".\vectors16.obj", \
  ".\work-area.obj", \

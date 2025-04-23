@@ -1,4 +1,4 @@
-<project type="Executable" project-type="Standard" configuration="release" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
+<project type="Executable" project-type="Standard" configuration="debug" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
 <cpu>eZ80F92</cpu>
 
 <!-- file information -->
@@ -8,6 +8,7 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\class_hub.c</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\class_scsi.c</file>
+<file filter-key="">src\rst-10-drivers\usb\ufi-drv\class_ufi.c</file>
 <file filter-key="">src\clib.c</file>
 <file filter-key="">src\startup\cpu-freq-calculator.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\critical-section.c</file>
@@ -45,7 +46,9 @@
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s</file>
+<file filter-key="">src\rst-10-drivers\usb\ufi-drv\ufi_driver.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb-base-drv.c</file>
+<file filter-key="">src\rst-10-drivers\usb\ufi-drv\usb_cbi.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
 <file filter-key="">src\startup\vectors16.asm</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>
@@ -145,7 +148,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00B5)
-LOCATE DATA at (BASE OF BSS - $00B7)
+LOCATE DATA at (BASE OF BSS - $00A8)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0480
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -281,7 +284,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00B5)
-LOCATE DATA at (BASE OF BSS - $00B7)
+LOCATE DATA at (BASE OF BSS - $00A8)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0480
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -335,10 +338,22 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <watch-element expression="cmd" />
 <watch-element expression="dev" />
 <watch-element expression="cap_result" />
+<watch-element expression="ufi_cmd_request_test_unit_ready" />
+<watch-element expression="ufi_cmd_request_sense" />
+<watch-element expression="device" />
+<watch-element expression="adsc" />
+<watch-element expression="storage_device" />
 </watch-elements>
 
 <!-- breakpoint information -->
 <breakpoints>
+<breakpoint temporary="false" enabled="true" >
+<line-number>168</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\rst-10-06-usb-functions.s</pathname>
+<address>11791</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
 </breakpoints>
 
 </project>

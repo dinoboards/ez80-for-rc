@@ -28,25 +28,25 @@ typedef struct {
   usb_device_type type : 4;                                                                                                        \
   uint8_t         address : 4;                                                                                                     \
   uint8_t         max_packet_size;                                                                                                 \
-  uint8_t         interface_number;
+  uint8_t         interface_number
 
 typedef struct {
-  COMMON_DEVICE_CONFIG
+  COMMON_DEVICE_CONFIG;
   endpoint_param endpoints[3]; // bulk in/out and interrupt
 } device_config;
 
 typedef struct {
-  COMMON_DEVICE_CONFIG             // bytes: 0-2
-      endpoint_param endpoints[3]; // bytes: 3-5, 6-8, 9-11  bulk in/out and interrupt
-  uint32_t           current_lba;  // bytes 12-15
+  COMMON_DEVICE_CONFIG;        // bytes: 0-2
+  endpoint_param endpoints[3]; // bytes: 3-5, 6-8, 9-11  bulk in/out and interrupt
+  uint32_t       current_lba;  // bytes 12-15
 } device_config_storage;
 
 typedef struct {
-  COMMON_DEVICE_CONFIG
+  COMMON_DEVICE_CONFIG;
 } device_config_hub;
 
 typedef struct {
-  COMMON_DEVICE_CONFIG
+  COMMON_DEVICE_CONFIG;
   endpoint_param endpoints[1]; // Isochronous
 } device_config_keyboard;
 

@@ -14,6 +14,12 @@
 	XREF	_usb_scsi_read_capacity
 	XREF	_usb_scsi_read
 	XREF	_usb_scsi_write
+	XREF	_usb_ufi_get_cap
+	XREF	_usb_ufi_write
+	XREF	_usb_ufi_read
+
+; extern uint32_t  usb_ufi_get_cap(const uint16_t dev_index);
+; extern usb_error usb_ufi_write(const uint16_t dev_index, uint8_t *const buffer);
 
 _usb_dispatch:
 	LD	A, B					; SUB FUNCTION CODE
@@ -23,6 +29,16 @@ _usb_dispatch:
 	JR	Z, usb_scsi_write			; B = 1
 	DEC	A
 	JR	Z, usb_scsi_read_capacity		; B = 2
+	SUB	13
+	JR	Z, usb_scsi_init			; B = 15
+
+	DEC	A
+	JR	Z, usb_ufi_read				; B = 16
+	DEC	A
+	JR	Z, usb_ufi_write			; B = 17
+	DEC	A
+	JR	Z, usb_ufi_get_cap			; B = 18
+
 
 	LD	A, B
 	INC	A
@@ -30,9 +46,7 @@ _usb_dispatch:
 	INC	A
 	JR	Z, usb_storage_seek			; B = 254
 	INC	A
-	JR	Z, usb_scsi_init			; B = 253
-	INC	A
-	JR	Z, usb_get_device_type			; B = 252
+	JR	Z, usb_get_device_type			; B = 253
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -102,6 +116,68 @@ usb_scsi_write:
 	POP	BC
 	POP	DE
 	RET.L
+
+; ----------------------------------------------
+; UFI INTERFACE
+; ----------------------------------------------
+
+
+; Function B = ?? usb_ufi_read
+;
+; Inputs
+;  C -> device index
+;  uDE -> pointer to a buffer to receive 512 bytes for the current LBA
+;
+; marshalls to usb_error usb_ufi_read(const uint16_t dev_index, uint8_t *const buffer);
+;
+usb_ufi_read:
+	PUSH	DE
+	PUSH	BC
+	CALL	_usb_ufi_read
+	POP	BC
+	POP	DE
+	RET.L
+;
+; Function B = ?? usb_ufi_write
+;
+; Inputs
+;  C -> device index
+;  uDE -> pointer to a buffer of 512 bytes to be written at the current LBA
+;
+; marshalls to usb_error usb_ufi_write(const uint16_t dev_index, uint8_t *const buffer);
+;
+usb_ufi_write:
+	PUSH	DE
+	PUSH	BC
+	CALL	_usb_ufi_write
+	POP	BC
+	POP	DE
+	RET.L
+;
+; Function B = ?? -- usb_ufi_get_cap
+;
+; Inputs
+;  C -> Device Index
+;
+; Outputs
+;  A -> usb_error
+;  E:uHL -> count of sectors (assuming 512 size)
+;
+;marshalls to uint32_t usb_ufi_get_cap(const uint16_t dev_index);
+usb_ufi_get_cap:
+	PUSH	BC
+	CALL	_usb_ufi_get_cap
+	POP	BC
+	RET.L
+
+
+
+
+
+
+
+
+
 
 
 

@@ -3,7 +3,7 @@
 #include "../base-drv/usb_state.h"
 #include <string.h>
 
-_scsi_command_block_wrapper scsi_command_block_wrapper = {{0x55, 0x53, 0x42, 0x43}, {0, 0}, 0, 0, 0, 0};
+const _scsi_command_block_wrapper scsi_command_block_wrapper = {{0x55, 0x53, 0x42, 0x43}, {0, 0}, 0, 0, 0, 0};
 
 uint16_t next_tag = 0;
 
