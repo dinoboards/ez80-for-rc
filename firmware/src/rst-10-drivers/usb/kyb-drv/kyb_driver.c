@@ -19,24 +19,11 @@ static uint8_t read_index                   = 0;
 // static keyboard_report_t reports[KEYBOARD_BUFFER_SIZE] = {{0}};
 
 // static keyboard_report_t *queued_report = NULL;
-static keyboard_report_t report   = {0};
-static keyboard_report_t previous = {0};
+keyboard_report_t report   = {0};
+keyboard_report_t previous = {0};
 
 #define DI asm("DI")
 #define EI asm("EI")
-
-static uint8_t report_diff() {
-  uint8_t *a = (uint8_t *)&report;
-  uint8_t *b = (uint8_t *)&previous;
-
-  uint8_t i = sizeof(report);
-  do {
-    if (*a++ != *b++)
-      return true;
-  } while (--i != 0);
-
-  return false;
-}
 
 // static void report_put() {
 //   uint8_t next_write_index = (alt_write_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;

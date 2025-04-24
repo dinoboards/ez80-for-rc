@@ -43,6 +43,31 @@ timer_isr_hook_next:
 	JP	_system_timer_isr
 
 	SECTION CODE
+
+	GLOBAL	_report_diff
+	XREF	_report
+	XREF	_previous
+
+; uint8_t report_diff();
+_report_diff:
+	LD	DE, _report
+	LD	HL, _previous
+	LD	B, 8 				; //sizeof(keyboard_report_t)
+
+.rptdf_loop:
+	LD	A, (DE)
+	INC	DE
+	CP	(HL)
+	INC	HL
+	JR	NZ, .rptdf_diff
+	DJNZ	.rptdf_loop
+
+	XOR	A
+	RET
+
+.rptdf_diff:
+	LD	A, 1
+	RET
 ;
 ; Inputs:
 ;   None
