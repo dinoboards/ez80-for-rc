@@ -15,9 +15,6 @@
 #include "delay.h"
 #include <stdlib.h>
 
-#include "ez80-helpers.h"
-#include "print.h"
-
 const setup_packet cmd_get_device_descriptor = {0x80, 6, {0, 1}, {0, 0}, 8};
 
 /**

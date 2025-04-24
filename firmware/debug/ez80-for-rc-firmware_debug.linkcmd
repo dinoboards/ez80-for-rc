@@ -97,6 +97,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\base-drv.obj", \
  ".\build-date.obj", \
  ".\ch376.obj", \
+ ".\ch376asm.obj", \
  ".\class_hid.obj", \
  ".\class_hid_keyboard.obj", \
  ".\class_hub.obj", \

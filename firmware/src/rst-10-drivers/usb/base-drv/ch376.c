@@ -1,24 +1,21 @@
 #include "ch376.h"
 #include <stdbool.h>
 
-#include "ez80-helpers.h"
-#include "print.h"
+// void ch_command(const uint8_t command) {
+//   uint8_t counter = 255;
+//   while ((CH376_COMMAND_PORT & PARA_STATE_BUSY) && --counter != 0)
+//     ;
 
-void ch_command(const uint8_t command) {
-  uint8_t counter = 255;
-  while ((CH376_COMMAND_PORT & PARA_STATE_BUSY) && --counter != 0)
-    ;
+//   // if (counter == 0) {
+//   // It appears that the Ch376 has become blocked
+//   // command will fail and timeout will eventually be returned by the ch_xxx_wait_int_and_get_status
+//   // todo consider a return value to allow callers to respond appropriately
+//   // Experimentation would indicate that USB_RESET_ALL will still work to reset chip
+//   // return;
+//   // }
 
-  // if (counter == 0) {
-  // It appears that the Ch376 has become blocked
-  // command will fail and timeout will eventually be returned by the ch_xxx_wait_int_and_get_status
-  // todo consider a return value to allow callers to respond appropriately
-  // Experimentation would indicate that USB_RESET_ALL will still work to reset chip
-  // return;
-  // }
-
-  CH376_COMMAND_PORT = command;
-}
+//   CH376_COMMAND_PORT = command;
+// }
 
 extern usb_error ch_wait_int_and_get_status(const int16_t timeout);
 

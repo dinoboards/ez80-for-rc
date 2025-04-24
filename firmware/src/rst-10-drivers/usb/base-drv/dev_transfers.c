@@ -14,7 +14,6 @@
 #include "ch376.h"
 #include "critical-section.h"
 #include "delay.h"
-#include "ez80-helpers.h"
 #include "protocol.h"
 #include <stdlib.h>
 

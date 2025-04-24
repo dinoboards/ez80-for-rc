@@ -46,20 +46,20 @@ WEBTOC = @"$(BIN)\mkwebpage"
 
 CFLAGS =  \
 -define:NDEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
--define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
+-define:RC2014_FIRMWARE -genprintf -NOkeepasm -NOkeeplst -NOlist  \
 -NOlistinc -NOmodsect -optsize -promote -NOreduceopt  \
 -stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -NOdebug  \
 -cpu:eZ80F92  \
 -asmsw:"   \
 	-define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE  \
-	-include:\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\" -list  \
+	-include:\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\" -NOlist  \
 	-NOlistmac -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn -NOdebug  \
 	-NOigcase -cpu:eZ80F92"
 
 ASFLAGS =  \
 -define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE  \
--include:"\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\"" -list  \
+-include:"\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\"" -NOlist  \
 -NOlistmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn  \
 -NOdebug -NOigcase -cpu:eZ80F92
 
@@ -107,6 +107,12 @@ clean:
             $(RM) "$(WORKDIR)\ch376.lst"
 	@if exist "$(WORKDIR)\ch376.src"  \
             $(RM) "$(WORKDIR)\ch376.src"
+	@if exist "$(WORKDIR)\ch376asm.obj"  \
+            $(RM) "$(WORKDIR)\ch376asm.obj"
+	@if exist "$(WORKDIR)\ch376asm.lis"  \
+            $(RM) "$(WORKDIR)\ch376asm.lis"
+	@if exist "$(WORKDIR)\ch376asm.lst"  \
+            $(RM) "$(WORKDIR)\ch376asm.lst"
 	@if exist "$(WORKDIR)\class_hid.obj"  \
             $(RM) "$(WORKDIR)\class_hid.obj"
 	@if exist "$(WORKDIR)\class_hid.lis"  \
@@ -465,6 +471,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
+            $(WORKDIR_ESCSPACE)\ch376asm.obj  \
             $(WORKDIR_ESCSPACE)\class_hid.obj  \
             $(WORKDIR_ESCSPACE)\class_hid_keyboard.obj  \
             $(WORKDIR_ESCSPACE)\class_hub.obj  \
@@ -524,6 +531,7 @@ $(WORKDIR_ESCSPACE)\base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv.s"
 
@@ -542,10 +550,17 @@ $(WORKDIR_ESCSPACE)\ch376.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ez80-helpers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\print.h
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376.c"
+
+$(WORKDIR_ESCSPACE)\ch376asm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376asm.s"
 
 $(WORKDIR_ESCSPACE)\class_hid.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid.c  \
@@ -672,7 +687,6 @@ $(WORKDIR_ESCSPACE)\dev_transfers.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ez80-helpers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\dev_transfers.c"
@@ -691,7 +705,6 @@ $(WORKDIR_ESCSPACE)\enumerate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\print.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
@@ -796,6 +809,7 @@ $(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s"
 
@@ -817,8 +831,6 @@ $(WORKDIR_ESCSPACE)\protocol.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ez80-helpers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\print.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\protocol.c"
@@ -939,8 +951,6 @@ $(WORKDIR_ESCSPACE)\transfers.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ez80-helpers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\print.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\transfers.c"
 

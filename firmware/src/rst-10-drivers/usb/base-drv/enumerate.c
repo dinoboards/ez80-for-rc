@@ -5,8 +5,6 @@
 #include "work-area.h"
 #include <string.h>
 
-#include "print.h"
-
 usb_error op_id_class_drv(_working *const working);
 usb_error op_parse_endpoint(_working *const working);
 

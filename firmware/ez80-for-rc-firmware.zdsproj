@@ -1,4 +1,4 @@
-<project type="Executable" project-type="Standard" configuration="debug" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
+<project type="Executable" project-type="Standard" configuration="release" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
 <cpu>eZ80F92</cpu>
 
 <!-- file information -->
@@ -6,6 +6,7 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv.s</file>
 <file filter-key="">src\rst-10-drivers\build-date.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\ch376asm.s</file>
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid.c</file>
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\class_hub.c</file>

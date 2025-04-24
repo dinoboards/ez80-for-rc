@@ -14,8 +14,6 @@
 #include "ch376.h"
 #include "critical-section.h"
 #include "delay.h"
-#include "ez80-helpers.h"
-#include "print.h"
 #include <stdlib.h>
 
 #define LOWER_SAFE_RAM_ADDRESS 0x8000
