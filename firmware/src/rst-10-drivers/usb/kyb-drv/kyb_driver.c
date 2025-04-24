@@ -7,8 +7,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-static bool                    caps_lock_engaged = true;
-static device_config_keyboard *keyboard_config   = 0;
+static bool             caps_lock_engaged = true;
+device_config_keyboard *keyboard_config   = 0;
 
 static uint8_t buffer[KEYBOARD_BUFFER_SIZE] = {0};
 static uint8_t write_index                  = 0;
@@ -34,7 +34,7 @@ keyboard_report_t previous = {0};
 //   }
 // }
 
-static void keyboard_buf_put(const uint8_t indx) {
+void keyboard_buf_put(const uint8_t indx) {
   unsigned char c;
   uint8_t       next_write_index;
   uint8_t       i        = 6;
@@ -136,27 +136,6 @@ uint8_t usb_kyb_flush() {
 
   EI;
   return 0;
-}
-
-void usb_kyb_tick(void) {
-  uint8_t   i = 6;
-  usb_error result;
-
-  if (is_in_critical_section())
-    return;
-
-  ch_configure_nak_retry_disable();
-  result = usbdev_dat_in_trnsfer_0((device_config *)keyboard_config, (uint8_t *)&report, 8);
-  ch_configure_nak_retry_3s();
-  if (result == 0) {
-    if (report_diff()) {
-      // report_put();
-      do {
-        keyboard_buf_put(i - 1);
-      } while (--i != 0);
-      previous = report;
-    }
-  }
 }
 
 usb_error usb_kyb_init(const uint8_t dev_index) {
