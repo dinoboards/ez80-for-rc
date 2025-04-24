@@ -17,9 +17,10 @@
 	XREF	_usb_ufi_get_cap
 	XREF	_usb_ufi_write
 	XREF	_usb_ufi_read
-
-; extern uint32_t  usb_ufi_get_cap(const uint16_t dev_index);
-; extern usb_error usb_ufi_write(const uint16_t dev_index, uint8_t *const buffer);
+	XREF	_usb_kyb_init
+	XREF	_usb_kyb_status
+	XREF	_usb_kyb_read
+	XREF	_usb_kyb_flush
 
 _usb_dispatch:
 	LD	A, B					; SUB FUNCTION CODE
@@ -39,6 +40,14 @@ _usb_dispatch:
 	DEC	A
 	JR	Z, usb_ufi_get_cap			; B = 18
 
+	SUB	14
+	JR	Z, usb_kyb_status			; B = 32
+	DEC	A
+	JR	Z, usb_kyb_read				; B = 33
+	DEC	A
+	JR	Z, usb_kyb_flush			; B = 34
+	SUB	13
+	JR	Z, usb_kyb_init				; B = 47
 
 	LD	A, B
 	INC	A
@@ -50,9 +59,11 @@ _usb_dispatch:
 
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
-;
-;
-; extern
+
+; ----------------------------------------------
+; SCSI INTERFACE
+; ----------------------------------------------
+
 ;
 ; Function B = ?? -- (USB_SCSI_INIT)
 ;
@@ -117,6 +128,7 @@ usb_scsi_write:
 	POP	DE
 	RET.L
 
+
 ; ----------------------------------------------
 ; UFI INTERFACE
 ; ----------------------------------------------
@@ -171,11 +183,84 @@ usb_ufi_get_cap:
 	RET.L
 
 
+; ----------------------------------------------
+; KYB INTERFACE
+; ----------------------------------------------
 
 
-
-
-
+;
+; Function B = ?? -- usb_kyb_init
+;
+; Inputs
+;  C -> Device index of usb keyboard
+;
+; Outputs
+;  A -> usb_error
+;
+; marshalls to void usb_kyb_init(const uint8_t dev_index);
+usb_kyb_init:
+	PUSH	BC
+	CALL	_usb_kyb_init
+	POP	BC
+	RET.L
+;
+; Function B = ?? -- usb_kyb_status
+;
+; Inputs
+;  None
+;
+; Outputs
+;  A -> error or pending count
+;
+; Return a count of the number of key Codes Pending (A) in the keyboard buffer.
+; If it is not possible to determine the actual number in the buffer, it is
+; acceptable to return 1 to indicate there are key codes available to read and
+; 0 if there are none available.
+; The value returned in register A is used as both a Status (A) code and the
+; return value. Negative values (bit 7 set) indicate an (error) code.
+; Otherwise, the return value represents the number of key codes pending.
+;
+; marshalls to uint8_t usb_kyb_status();
+usb_kyb_status:
+	CALL	_usb_kyb_status
+	RET.L
+;
+; Function B = ?? -- usb_kyb_read
+;
+; Inputs
+;  None
+;
+; Outputs
+;   A -> Status
+;   H -> Keycode
+;
+; Read the next key data from the keyboard. If a buffer is used, return the next key code in the buffer.
+; If no key data is available, this function will wait indefinitely for a key press. The Status (A) is a
+; standard usb_error result code.
+;
+; The ascii Keycode (H) is generally returned as appropriate ASCII values, if possible. Special keys, like
+; function keys and arrows, are returned as reserved codes.
+;
+; marshalls to uint16_t usb_kyb_read()
+usb_kyb_read:
+	CALL	_usb_kyb_read
+	LD	A, H
+	RET.L
+;
+; Function B = ?? -- usb_kyb_flush
+;
+; Inputs
+;  None
+;
+; Outputs
+;   A: Status
+;
+; Purged all buffered/queued content.
+;
+; marshalls to uint32_t usb_kyb_flush()
+usb_kyb_flush:
+	CALL	_usb_kyb_flush
+	RET.L
 
 
 

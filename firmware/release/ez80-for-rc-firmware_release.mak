@@ -46,7 +46,7 @@ WEBTOC = @"$(BIN)\mkwebpage"
 
 CFLAGS =  \
 -define:NDEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
--define:RC2014_FIRMWARE -genprintf -NOkeepasm -keeplst -NOlist  \
+-define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
 -NOlistinc -NOmodsect -optsize -promote -NOreduceopt  \
 -stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -NOdebug  \
@@ -107,6 +107,22 @@ clean:
             $(RM) "$(WORKDIR)\ch376.lst"
 	@if exist "$(WORKDIR)\ch376.src"  \
             $(RM) "$(WORKDIR)\ch376.src"
+	@if exist "$(WORKDIR)\class_hid.obj"  \
+            $(RM) "$(WORKDIR)\class_hid.obj"
+	@if exist "$(WORKDIR)\class_hid.lis"  \
+            $(RM) "$(WORKDIR)\class_hid.lis"
+	@if exist "$(WORKDIR)\class_hid.lst"  \
+            $(RM) "$(WORKDIR)\class_hid.lst"
+	@if exist "$(WORKDIR)\class_hid.src"  \
+            $(RM) "$(WORKDIR)\class_hid.src"
+	@if exist "$(WORKDIR)\class_hid_keyboard.obj"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.obj"
+	@if exist "$(WORKDIR)\class_hid_keyboard.lis"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.lis"
+	@if exist "$(WORKDIR)\class_hid_keyboard.lst"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.lst"
+	@if exist "$(WORKDIR)\class_hid_keyboard.src"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.src"
 	@if exist "$(WORKDIR)\class_hub.obj"  \
             $(RM) "$(WORKDIR)\class_hub.obj"
 	@if exist "$(WORKDIR)\class_hub.lis"  \
@@ -231,6 +247,20 @@ clean:
             $(RM) "$(WORKDIR)\internal-hiram.lis"
 	@if exist "$(WORKDIR)\internal-hiram.lst"  \
             $(RM) "$(WORKDIR)\internal-hiram.lst"
+	@if exist "$(WORKDIR)\kyb_driver.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driver.obj"
+	@if exist "$(WORKDIR)\kyb_driver.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driver.lis"
+	@if exist "$(WORKDIR)\kyb_driver.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driver.lst"
+	@if exist "$(WORKDIR)\kyb_driver.src"  \
+            $(RM) "$(WORKDIR)\kyb_driver.src"
+	@if exist "$(WORKDIR)\kyb_driverasm.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driverasm.obj"
+	@if exist "$(WORKDIR)\kyb_driverasm.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driverasm.lis"
+	@if exist "$(WORKDIR)\kyb_driverasm.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driverasm.lst"
 	@if exist "$(WORKDIR)\main.obj"  \
             $(RM) "$(WORKDIR)\main.obj"
 	@if exist "$(WORKDIR)\main.lis"  \
@@ -435,6 +465,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
+            $(WORKDIR_ESCSPACE)\class_hid.obj  \
+            $(WORKDIR_ESCSPACE)\class_hid_keyboard.obj  \
             $(WORKDIR_ESCSPACE)\class_hub.obj  \
             $(WORKDIR_ESCSPACE)\class_scsi.obj  \
             $(WORKDIR_ESCSPACE)\class_ufi.obj  \
@@ -452,6 +484,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\init-clocks.obj  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
             $(WORKDIR_ESCSPACE)\internal-hiram.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driver.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\protocol.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
@@ -512,6 +546,28 @@ $(WORKDIR_ESCSPACE)\ch376.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ez80-helpers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\print.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376.c"
+
+$(WORKDIR_ESCSPACE)\class_hid.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\class_hid.c"
+
+$(WORKDIR_ESCSPACE)\class_hid_keyboard.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c"
 
 $(WORKDIR_ESCSPACE)\class_hub.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hub.c  \
@@ -714,6 +770,34 @@ $(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\internal-hiram.s"
+
+$(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c"
+
+$(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s"
 
 $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\main.s  \

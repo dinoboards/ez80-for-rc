@@ -6,6 +6,8 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv.s</file>
 <file filter-key="">src\rst-10-drivers\build-date.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid.c</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\class_hub.c</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\class_scsi.c</file>
 <file filter-key="">src\rst-10-drivers\usb\ufi-drv\class_ufi.c</file>
@@ -23,6 +25,8 @@
 <file filter-key="">src\startup\init-clocks.s</file>
 <file filter-key="">src\startup\init-f92.asm</file>
 <file filter-key="">src\internal-hiram.s</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver.c</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
 <file filter-key="">src\main.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
@@ -62,7 +66,7 @@
 <options>
 <option name="define" type="string" change-action="assemble">_EZ80ACCLAIM!=1,RC2014_FIRMWARE</option>
 <option name="include" type="string" change-action="assemble"></option>
-<option name="list" type="boolean" change-action="none">true</option>
+<option name="list" type="boolean" change-action="none">false</option>
 <option name="listmac" type="boolean" change-action="none">false</option>
 <option name="name" type="boolean" change-action="none">true</option>
 <option name="pagelen" type="integer" change-action="none">0</option>
@@ -77,7 +81,7 @@
 <option name="define" type="string" change-action="compile">NDEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE</option>
 <option name="genprintf" type="boolean" change-action="compile">true</option>
 <option name="keepasm" type="boolean" change-action="none">false</option>
-<option name="keeplst" type="boolean" change-action="none">true</option>
+<option name="keeplst" type="boolean" change-action="none">false</option>
 <option name="list" type="boolean" change-action="none">false</option>
 <option name="listinc" type="boolean" change-action="none">false</option>
 <option name="modsect" type="boolean" change-action="compile">false</option>
@@ -148,7 +152,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00A1)
-LOCATE DATA at (BASE OF BSS - $0084)
+LOCATE DATA at (BASE OF BSS - $00A6)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0480
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -284,7 +288,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00A1)
-LOCATE DATA at (BASE OF BSS - $0084)
+LOCATE DATA at (BASE OF BSS - $00A6)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0480
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -343,6 +347,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <watch-element expression="device" />
 <watch-element expression="adsc" />
 <watch-element expression="storage_device" />
+<watch-element expression="keyboard_config" />
+<watch-element expression="response" />
 </watch-elements>
 
 <!-- breakpoint information -->
