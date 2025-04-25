@@ -2,11 +2,17 @@
 #define __KYB_DRIVER__
 
 #include "../base-drv/ch376.h"
+#include "../base-drv/dev_transfers.h"
 #include "class_hid_keyboard.h"
 #include <stdint.h>
 
-#define KEYBOARD_BUFFER_SIZE      8
-#define KEYBOARD_BUFFER_SIZE_MASK 7
+#define KEYBOARD_BUFFER_SIZE      4
+#define KEYBOARD_BUFFER_SIZE_MASK 3
+
+#define RPT_KEYBOARD_BUFFER_SIZE      4
+#define RPT_KEYBOARD_BUFFER_SIZE_MASK 3
+
+extern device_config_keyboard *keyboard_config;
 
 extern void    usb_kyb_install_timer_tick(void);
 extern uint8_t report_diff();

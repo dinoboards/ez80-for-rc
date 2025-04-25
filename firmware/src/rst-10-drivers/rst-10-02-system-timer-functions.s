@@ -39,12 +39,15 @@
 
 	PUBLIC	_system_timer_isr
 	PUBLIC	_system_timer_dispatch
+	XREF	_usb_kyb_tick_sr
 ;
 ; SYSTEM TIMER ISR
 ;
 ; This ISR is called at the tick frequency rate, and increments the 24 bit tick counter.
 ;
 _system_timer_isr:
+	CALL	_usb_kyb_tick_sr
+
 	PUSH	AF
 	PUSH	HL
 

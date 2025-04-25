@@ -6,17 +6,18 @@
 #include "class_hid_keyboard.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 static bool             caps_lock_engaged = true;
-device_config_keyboard *keyboard_config   = 0;
+device_config_keyboard *keyboard_config   = NULL;
 
 static uint8_t buffer[KEYBOARD_BUFFER_SIZE] = {0};
 static uint8_t write_index                  = 0;
 static uint8_t read_index                   = 0;
 
-uint8_t           alt_write_index               = 0;
-uint8_t           alt_read_index                = 0;
-keyboard_report_t reports[KEYBOARD_BUFFER_SIZE] = {{0}};
+uint8_t           rpt_write_index                   = 0;
+uint8_t           rpt_read_index                    = 0;
+keyboard_report_t reports[RPT_KEYBOARD_BUFFER_SIZE] = {{0}};
 
 keyboard_report_t report   = {0};
 keyboard_report_t previous = {0};
@@ -25,11 +26,11 @@ keyboard_report_t previous = {0};
 #define EI asm("EI")
 
 void keyboard_report_put() {
-  uint8_t next_write_index = (alt_write_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;
+  uint8_t next_write_index = (rpt_write_index + 1) & RPT_KEYBOARD_BUFFER_SIZE_MASK;
 
-  if (next_write_index != alt_read_index) { // Check if buffer is not full
-    reports[alt_write_index] = report;
-    alt_write_index          = next_write_index;
+  if (next_write_index != rpt_read_index) { // Check if buffer is not full
+    reports[rpt_write_index] = report;
+    rpt_write_index          = next_write_index;
   }
 }
 
@@ -99,7 +100,7 @@ uint8_t usb_kyb_flush() {
   uint8_t *b;
 
   DI;
-  write_index = read_index = alt_write_index = alt_read_index = 0;
+  write_index = read_index = rpt_write_index = rpt_read_index = 0;
 
   i = sizeof(previous);
   a = (uint8_t *)&previous;
@@ -115,16 +116,26 @@ uint8_t usb_kyb_flush() {
 }
 
 usb_error usb_kyb_init(const uint8_t dev_index) {
-  usb_error result;
-  keyboard_config = (device_config_keyboard *)get_usb_device_config(dev_index);
+  usb_error               result;
+  device_config_keyboard *config;
 
-  if (keyboard_config == NULL)
+  caps_lock_engaged = true;
+  keyboard_config   = NULL;
+  memset(buffer, 0, sizeof(buffer));
+  write_index = read_index = rpt_write_index = rpt_read_index = 0;
+  memset(&reports, 0, sizeof(reports));
+  memset(&report, 0, sizeof(report));
+  memset(&previous, 0, sizeof(previous));
+
+  config = (device_config_keyboard *)get_usb_device_config(dev_index);
+
+  if (config == NULL)
     return USB_ERR_OTHER;
 
-  CHECK(hid_set_protocol(keyboard_config, 1));
-  CHECK(hid_set_idle(keyboard_config, 0x80));
+  CHECK(hid_set_protocol(config, 1));
+  CHECK(hid_set_idle(config, 0x80));
 
-  usb_kyb_install_timer_tick();
+  keyboard_config = config;
 
 done:
   return result;
@@ -134,13 +145,13 @@ uint8_t usb_kyb_rpt_que_size() {
   uint8_t alt_size = 0;
   DI;
 
-  if (alt_write_index >= alt_read_index)
-    alt_size = alt_write_index - alt_read_index;
+  if (rpt_write_index >= rpt_read_index)
+    alt_size = rpt_write_index - rpt_read_index;
   else
-    alt_size = KEYBOARD_BUFFER_SIZE - alt_read_index + alt_write_index;
+    alt_size = RPT_KEYBOARD_BUFFER_SIZE - rpt_read_index + rpt_write_index;
 
   if (alt_size != 0)
-    alt_read_index = (alt_read_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;
+    rpt_read_index = (rpt_read_index + 1) & RPT_KEYBOARD_BUFFER_SIZE_MASK;
 
   EI;
   return alt_size;

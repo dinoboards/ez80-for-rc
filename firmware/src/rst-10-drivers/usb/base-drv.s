@@ -26,6 +26,7 @@ _ch_wait_int_and_get_status:
 	ld	l, (iy+3)
 	ld	h, (iy+4)
 
+try_again:
 	ld	bc, DELAY_FACTOR
 
 keep_waiting:
@@ -42,7 +43,7 @@ keep_waiting:
 	dec	hl
 	ld	a, h
 	or	l
-	jr	nz, _ch_wait_int_and_get_status
+	jr	nz, try_again
 
 	call	_delay
 	ld	a, %FF

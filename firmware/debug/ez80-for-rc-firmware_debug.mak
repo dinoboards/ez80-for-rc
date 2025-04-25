@@ -786,6 +786,7 @@ $(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
 $(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -1040,6 +1041,7 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
@@ -1050,7 +1052,9 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-base-drv.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c"
 
 $(WORKDIR_ESCSPACE)\usb_cbi.obj :  \

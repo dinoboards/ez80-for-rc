@@ -6,22 +6,17 @@
 
 	.assume adl=1
 
-	XREF	_alt_read_index
+	XREF	_rpt_read_index
 	XREF	_reports
 
-	GLOBAL	_usb_kyb_install_timer_tick
+	GLOBAL	_usb_kyb_tick_sr
 	XREF	_system_timer_isr
 	XREF	_system_timer_isr_hook
 	XREF	_usb_kyb_tick
 
-_usb_kyb_install_timer_tick:
-	LD	HL, (_system_timer_isr_hook+1)
-	LD	(timer_isr_hook_next+1), HL
-	LD	HL, timer_isr_hook
-	LD	(_system_timer_isr_hook+1), HL
-	RET
+	SEGMENT	INTERNAL_RAM_ROM
 
-timer_isr_hook:
+_usb_kyb_tick_sr:
 	PUSH	IX
 	PUSH	IY
 	PUSH	HL
@@ -35,14 +30,7 @@ timer_isr_hook:
 	POP	HL
 	POP	IY
 	POP	IX
-	JP	timer_isr_hook_next
-
-	SECTION DATA
-
-timer_isr_hook_next:
-	JP	_system_timer_isr
-
-	SECTION CODE
+	RET
 
 	GLOBAL	_report_diff
 	XREF	_report
@@ -81,6 +69,14 @@ _usb_kyb_tick:
 	LD	A, (_in_critical_usb_section)
 	OR	A
 	RET	NZ
+
+	; return if keyboard_config == NULL
+	LD	HL, (_keyboard_config)
+
+	ADD	HL, DE
+	OR	A, A
+	SBC	HL, DE
+	RET	Z				; return if keyboard_config == NULL
 
 	; ch_configure_nak_retry_disable();
 	LD	L, CH_CMD_WRITE_VAR8
@@ -143,3 +139,40 @@ _usb_kyb_tick:
 	LDIR
 
 	RET
+
+	SECTION CODE
+
+; uint8_t usb_kyb_report(keyboard_report_t*)
+
+	XREF	_rpt_read_index
+	XREF	_reports
+	XREF	_usb_kyb_rpt_que_size
+	GLOBAL	_usb_kyb_report
+
+_usb_kyb_report:
+	push	hl			; keyboard_report_t*
+
+	xor	a
+	sbc	hl, hl
+	ld	a, (_rpt_read_index)
+	ld	l, a
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	ld	bc, _reports
+	add	hl, bc
+	push	hl			 ; address of potential que'd next usb report
+
+	call	_usb_kyb_rpt_que_size
+	or	a
+	pop	hl			 ; retrieve the next que'd usb_report address
+	jr	z, .no_queued_reports
+
+	ld	bc, 8
+	pop	de			; keyboard_report_t*
+	ldir
+	ret.l
+
+.no_queued_reports:
+	pop	hl
+	ret.l

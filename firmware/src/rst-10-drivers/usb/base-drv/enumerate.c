@@ -189,17 +189,11 @@ done:
 }
 
 usb_error enumerate_all_devices(void) {
-  usb_error         result;
   enumeration_state state;
   _usb_state *const work_area = get_usb_work_area();
   memset(&state, 0, sizeof(enumeration_state));
 
-  result = read_all_configs(&state);
-
-  work_area->count_of_detected_usb_devices = state.next_device_address;
-
-done:
-  return result;
+  return read_all_configs(&state);
 }
 
 /*

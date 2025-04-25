@@ -1,4 +1,5 @@
 #include "usb-base-drv.h"
+#include "../kyb-drv/kyb_driver.h"
 #include "ch376.h"
 #include "enumerate.h"
 #include "work-area.h"
@@ -25,6 +26,8 @@ uint16_t usb_init(uint8_t state) {
   USB_MODULE_LEDS = 0x03;
 
   if (state == 0) {
+    keyboard_config = NULL;
+    memset(get_usb_work_area(), 0, sizeof(_usb_state));
     ch_cmd_reset_all();
     delay_medium();
 
@@ -56,6 +59,7 @@ uint16_t usb_init(uint8_t state) {
     return 3;
   }
 
+  keyboard_config = NULL;
   memset(get_usb_work_area(), 0, sizeof(_usb_state));
   if (state != 2) {
     usb_host_bus_reset();
