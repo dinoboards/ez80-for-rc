@@ -12,14 +12,14 @@
 #define RPT_KEYBOARD_BUFFER_SIZE      4
 #define RPT_KEYBOARD_BUFFER_SIZE_MASK 3
 
-extern device_config_keyboard *keyboard_config;
+extern device_config_keyboard_t *keyboard_config;
 
 extern void    usb_kyb_install_timer_tick(void);
 extern uint8_t report_diff();
 
-extern usb_error usb_kyb_init(const uint8_t dev_index);
-extern uint8_t   usb_kyb_flush(void);
-extern uint8_t   usb_kyb_status(void);
-extern uint24_t  usb_kyb_read();
+extern usb_error_t usb_kyb_init(const uint8_t dev_index);
+extern uint8_t     usb_kyb_flush(void);
+extern uint8_t     usb_kyb_status(void);
+extern uint24_t    usb_kyb_read();
 
 #endif

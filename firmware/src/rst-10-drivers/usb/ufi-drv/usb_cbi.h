@@ -6,11 +6,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-usb_error usb_execute_cbi(device_config *const storage_device,
-                          const uint8_t *const cmd,
-                          const bool           send,
-                          const uint16_t       buffer_size,
-                          uint8_t *const       buffer,
-                          uint8_t *const       asc);
+usb_error_t usb_execute_cbi(device_config_t *const storage_device,
+                            const uint8_t *const   cmd,
+                            const bool             send,
+                            const uint16_t         buffer_size,
+                            uint8_t *const         buffer,
+                            uint8_t *const         asc);
 
 #endif

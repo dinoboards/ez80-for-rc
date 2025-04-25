@@ -17,15 +17,15 @@
 //   CH376_COMMAND_PORT = command;
 // }
 
-extern usb_error ch_wait_int_and_get_status(const int16_t timeout);
+extern usb_error_t ch_wait_int_and_get_status(const int16_t timeout);
 
-usb_error ch_long_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(5000); }
+usb_error_t ch_long_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(5000); }
 
-usb_error ch_short_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(100); }
+usb_error_t ch_short_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(100); }
 
-usb_error ch_very_short_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(10); }
+usb_error_t ch_very_short_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(10); }
 
-usb_error ch_get_status(void) {
+usb_error_t ch_get_status(void) {
   uint8_t ch_status;
   ch_command(CH_CMD_GET_STATUS);
   ch_status = CH376_DATA_PORT;
@@ -98,7 +98,7 @@ uint8_t ch_probe(void) {
   return false;
 }
 
-usb_error ch_cmd_set_usb_mode(const uint8_t mode) {
+usb_error_t ch_cmd_set_usb_mode(const uint8_t mode) {
   uint8_t result = 0;
   uint8_t count  = 127;
 
@@ -120,17 +120,17 @@ uint8_t ch_cmd_get_ic_version(void) {
   return CH376_DATA_PORT & 0x1f;
 }
 
-void ch_issue_token(const uint8_t toggle_bit, const uint8_t endpoint, const ch376_pid pid) {
+void ch_issue_token(const uint8_t toggle_bit, const uint8_t endpoint, const ch376_pid_t pid) {
   ch_command(CH_CMD_ISSUE_TKN_X);
   CH376_DATA_PORT = toggle_bit;
   CH376_DATA_PORT = endpoint << 4 | pid;
 }
 
-void ch_issue_token_in(const endpoint_param *const endpoint) {
+void ch_issue_token_in(const endpoint_param_t *const endpoint) {
   ch_issue_token(endpoint->toggle ? 0x80 : 0x00, endpoint->number, CH_PID_IN);
 }
 
-void ch_issue_token_out(const endpoint_param *const endpoint) {
+void ch_issue_token_out(const endpoint_param_t *const endpoint) {
   ch_issue_token(endpoint->toggle ? 0x40 : 0x00, endpoint->number, CH_PID_OUT);
 }
 
@@ -140,7 +140,7 @@ void ch_issue_token_in_ep0(void) { ch_issue_token(0x80, 0, CH_PID_IN); }
 
 void ch_issue_token_setup(void) { ch_issue_token(0, 0, CH_PID_SETUP); }
 
-usb_error ch_data_in_transfer(uint8_t *buffer, int16_t buffer_size, endpoint_param *const endpoint) {
+usb_error_t ch_data_in_transfer(uint8_t *buffer, int16_t buffer_size, endpoint_param_t *const endpoint) {
   uint8_t count;
   uint8_t result;
 
@@ -175,9 +175,9 @@ done:
   return result;
 }
 
-usb_error ch_data_in_transfer_n(uint8_t *const buffer, uint8_t *const buffer_size, endpoint_param *const endpoint) {
-  uint8_t   count;
-  usb_error result;
+usb_error_t ch_data_in_transfer_n(uint8_t *const buffer, uint8_t *const buffer_size, endpoint_param_t *const endpoint) {
+  uint8_t     count;
+  usb_error_t result;
 
   USB_MODULE_LEDS = 0x01;
 
@@ -199,8 +199,8 @@ done:
   return result;
 }
 
-usb_error ch_data_out_transfer(const uint8_t *buffer, int16_t buffer_length, endpoint_param *const endpoint) {
-  usb_error     result;
+usb_error_t ch_data_out_transfer(const uint8_t *buffer, int16_t buffer_length, endpoint_param_t *const endpoint) {
+  usb_error_t   result;
   const uint8_t number          = endpoint->number;
   const uint8_t max_packet_size = calc_max_packet_size(endpoint->max_packet_sizex);
 
@@ -230,7 +230,7 @@ void ch_set_usb_address(const uint8_t device_address) {
   CH376_DATA_PORT = device_address;
 }
 
-void ch_configure_nak_retry(const ch_nak_retry_type retry, const uint8_t number_of_retries) {
+void ch_configure_nak_retry(const ch_nak_retry_t retry, const uint8_t number_of_retries) {
   ch_command(CH_CMD_WRITE_VAR8);
   CH376_DATA_PORT = CH_VAR_RETRY_TIMES;
   CH376_DATA_PORT = retry << 6 | (number_of_retries & 0x1F);

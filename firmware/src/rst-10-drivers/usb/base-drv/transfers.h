@@ -65,7 +65,7 @@ typedef struct _setup_packet {
   uint8_t  bValue[2];
   uint8_t  bIndex[2];
   uint16_t wLength;
-} setup_packet;
+} setup_packet_t;
 
 enum libusb_request_type {
   LIBUSB_REQUEST_TYPE_STANDARD = (0x00 << 5),
@@ -86,18 +86,18 @@ enum libusb_endpoint_direction {
   LIBUSB_ENDPOINT_OUT = 0x00,
 };
 
-extern usb_error usb_control_transfer(const setup_packet *const cmd_packet,
-                                      void *const               buffer,
-                                      const uint8_t             device_address,
-                                      const uint8_t             max_packet_size);
+extern usb_error_t usb_control_transfer(const setup_packet_t *const cmd_packet,
+                                        void *const                 buffer,
+                                        const uint8_t               device_address,
+                                        const uint8_t               max_packet_size);
 
-extern usb_error
-usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint);
+extern usb_error_t
+usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
 
-extern usb_error
-usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_t device_address, endpoint_param *const endpoint);
+extern usb_error_t
+usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
 
-extern usb_error
-usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint);
+extern usb_error_t
+usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
 
 #endif

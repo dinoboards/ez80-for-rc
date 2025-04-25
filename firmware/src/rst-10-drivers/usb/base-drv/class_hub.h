@@ -33,7 +33,7 @@ typedef struct {
   uint8_t  bPwrOn2PwrGood;      /* Time (*2 ms) from port power on to power good */
   uint8_t  bHubContrCurrent;    /* Maximum current used by hub controller (mA).*/
   uint8_t  DeviceRemovable[1];  /* bits indicating deviceRemovable and portPwrCtrlMask */
-} hub_descriptor;
+} hub_descriptor_t;
 
 typedef struct {
   uint16_t wPortStatus;
@@ -57,6 +57,6 @@ typedef struct {
 #define PORT_STAT_C_OVERCURRENT 0x0008
 #define PORT_STAT_C_RESET       0x0010
 
-usb_error hub_get_descriptor(const device_config_hub *const hub_config, hub_descriptor *const hub_description);
+usb_error_t hub_get_descriptor(const device_config_hub_t *const hub_config, hub_descriptor_t *const hub_description);
 
 #endif

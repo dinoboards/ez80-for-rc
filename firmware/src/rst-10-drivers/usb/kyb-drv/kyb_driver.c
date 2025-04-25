@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <string.h>
 
-static bool             caps_lock_engaged = true;
-device_config_keyboard *keyboard_config   = NULL;
+static bool               caps_lock_engaged = true;
+device_config_keyboard_t *keyboard_config   = NULL;
 
 static uint8_t buffer[KEYBOARD_BUFFER_SIZE] = {0};
 static uint8_t write_index                  = 0;
@@ -115,9 +115,9 @@ uint8_t usb_kyb_flush() {
   return 0;
 }
 
-usb_error usb_kyb_init(const uint8_t dev_index) {
-  usb_error               result;
-  device_config_keyboard *config;
+usb_error_t usb_kyb_init(const uint8_t dev_index) {
+  usb_error_t               result;
+  device_config_keyboard_t *config;
 
   caps_lock_engaged = true;
   keyboard_config   = NULL;
@@ -127,7 +127,7 @@ usb_error usb_kyb_init(const uint8_t dev_index) {
   memset(&report, 0, sizeof(report));
   memset(&previous, 0, sizeof(previous));
 
-  config = (device_config_keyboard *)get_usb_device_config(dev_index);
+  config = (device_config_keyboard_t *)get_usb_device_config(dev_index);
 
   if (config == NULL)
     return USB_ERR_OTHER;

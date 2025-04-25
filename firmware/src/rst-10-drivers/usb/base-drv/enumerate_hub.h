@@ -5,6 +5,6 @@
 #include "protocol.h"
 #include "usb_state.h"
 
-extern usb_error configure_usb_hub(_working *const working);
+extern usb_error_t configure_usb_hub(_working_t *const working);
 
 #endif

@@ -2,24 +2,24 @@
 #include "ch376.h"
 #include "work-area.h"
 
-extern device_config *first_device_config(const _usb_state *const p);
-extern device_config *next_device_config(const _usb_state *const usb_state, const device_config *const p);
+extern device_config_t *first_device_config(const usb_state_t *const p);
+extern device_config_t *next_device_config(const usb_state_t *const usb_state, const device_config_t *const p);
 
 const uint8_t device_config_sizes[_USB_LAST_DEVICE_TYPE] = {
-    0,                              /* USB_NOT_SUPPORTED   = 0 */
-    sizeof(device_config_storage),  /* USB_IS_FLOPPY       = 1 */
-    sizeof(device_config_storage),  /* USB_IS_MASS_STORAGE = 2 */
-    sizeof(device_config),          /* USB_IS_CDC          = 3 */
-    sizeof(device_config_keyboard), /* USB_IS_KEYBOARD     = 4 */
+    0,                                /* USB_NOT_SUPPORTED   = 0 */
+    sizeof(device_config_storage_t),  /* USB_IS_FLOPPY       = 1 */
+    sizeof(device_config_storage_t),  /* USB_IS_MASS_STORAGE = 2 */
+    sizeof(device_config_t),          /* USB_IS_CDC          = 3 */
+    sizeof(device_config_keyboard_t), /* USB_IS_KEYBOARD     = 4 */
 };
 
 // always usb work area
 uint8_t count_of_devices(void) {
-  _usb_state *const p = get_usb_work_area();
+  usb_state_t *const p = get_usb_work_area();
 
   uint8_t count = 0;
 
-  const device_config *p_config = first_device_config(p);
+  const device_config_t *p_config = first_device_config(p);
   while (p_config) {
     const uint8_t type = p_config->type;
 
@@ -34,11 +34,11 @@ uint8_t count_of_devices(void) {
 }
 
 // always search in boot
-device_config *find_first_free(void) {
-  _usb_state *const boot_state = get_usb_work_area();
+device_config_t *find_first_free(void) {
+  usb_state_t *const boot_state = get_usb_work_area();
 
-  uint8_t        c = 0;
-  device_config *p = first_device_config(boot_state);
+  uint8_t          c = 0;
+  device_config_t *p = first_device_config(boot_state);
   while (p) {
     if (p->type == 0)
       return p;
@@ -49,12 +49,12 @@ device_config *find_first_free(void) {
   return NULL;
 }
 
-device_config *first_device_config(const _usb_state *const p) { return (device_config *)&p->device_configs[0]; }
+device_config_t *first_device_config(const usb_state_t *const p) { return (device_config_t *)&p->device_configs[0]; }
 
-device_config *next_device_config(const _usb_state *const usb_state, const device_config *const p) {
-  uint8_t        size;
-  device_config *result;
-  const uint8_t *_p = (uint8_t *)p;
+device_config_t *next_device_config(const usb_state_t *const usb_state, const device_config_t *const p) {
+  uint8_t          size;
+  device_config_t *result;
+  const uint8_t   *_p = (uint8_t *)p;
 
   if (p->type == 0)
     return NULL;
@@ -66,18 +66,18 @@ device_config *next_device_config(const _usb_state *const usb_state, const devic
   //  if (size == 0)
   //    return NULL;
 
-  result = (device_config *)(_p + size);
+  result = (device_config_t *)(_p + size);
 
-  if (result >= (device_config *)&usb_state->device_configs_end)
+  if (result >= (device_config_t *)&usb_state->device_configs_end)
     return NULL;
 
   return result;
 }
 
-device_config *get_usb_device_config(const uint8_t device_index) {
-  device_config          *p;
-  const _usb_state *const usb_state = get_usb_work_area();
-  uint8_t                 counter   = 1;
+device_config_t *get_usb_device_config(const uint8_t device_index) {
+  device_config_t         *p;
+  const usb_state_t *const usb_state = get_usb_work_area();
+  uint8_t                  counter   = 1;
 
   for (p = first_device_config(usb_state); p; p = next_device_config(usb_state, p)) {
     if (p->type != USB_NOT_SUPPORTED) {
@@ -90,8 +90,8 @@ device_config *get_usb_device_config(const uint8_t device_index) {
   return NULL; // is not a usb device
 }
 
-usb_device_type usb_get_device_type(const uint16_t dev_index) {
-  const device_config *dev = get_usb_device_config(dev_index);
+usb_device_t usb_get_device_type(const uint16_t dev_index) {
+  const device_config_t *dev = get_usb_device_config(dev_index);
 
   if (dev == NULL)
     return -1;

@@ -22,8 +22,8 @@
 #define BIT_PRES_USB4  5 /* BIT POSTION FOR USB4 STORAGE PRESENT */
 #define BIT_PRES_CH376 7 /* BIT POSTION FOR CH376 PRESENT */
 
-typedef uint8_t device_map;
-enum {
+typedef uint8_t device_map_t;
+enum device_map_e {
   DEV_MAP_NONE = 0,
   DEV_MAP_ROM  = 1,
   DEV_MAP_CF   = 2,
@@ -36,7 +36,7 @@ enum {
 
 extern uint8_t get_number_of_usb_drives(void);
 
-extern _usb_state x;
+extern usb_state_t x;
 
 #define get_usb_work_area() (&x)
 

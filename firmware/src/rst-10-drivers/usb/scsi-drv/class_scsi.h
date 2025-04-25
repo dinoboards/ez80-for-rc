@@ -11,7 +11,7 @@ typedef struct {
   uint8_t  bmCBWFlags;
   uint8_t  bCBWLUN;
   uint8_t  bCBWCBLength;
-} _scsi_command_block_wrapper;
+} scsi_command_block_wrapper_t;
 
 typedef struct {
   uint8_t operation_code;
@@ -21,12 +21,12 @@ typedef struct {
   uint8_t allocation_length;
   uint8_t reserved3;
   uint8_t pad[6];
-} _scsi_packet_request_sense;
+} scsi_packet_request_sense_t;
 
 typedef struct {
-  _scsi_command_block_wrapper cbw;
-  _scsi_packet_request_sense  request_sense;
-} cbw_scsi_request_sense;
+  scsi_command_block_wrapper_t cbw;
+  scsi_packet_request_sense_t  request_sense;
+} cbw_scsi_request_sense_t;
 
 typedef struct {
   uint8_t operation_code;
@@ -46,12 +46,12 @@ typedef struct {
   uint8_t power_condition : 4;
 
   uint8_t control;
-} _scsi_packet_eject;
+} scsi_packet_eject_t;
 
 typedef struct {
-  _scsi_command_block_wrapper cbw;
-  _scsi_packet_eject          eject;
-} cbw_scsi_eject;
+  scsi_command_block_wrapper_t cbw;
+  scsi_packet_eject_t          eject;
+} cbw_scsi_eject_t;
 
 typedef struct {
   uint8_t operation_code;
@@ -61,24 +61,24 @@ typedef struct {
   uint8_t reserved3;
   uint8_t reserved4;
   uint8_t pad[6];
-} _scsi_packet_test;
+} scsi_packet_test_t;
 
 typedef struct {
-  _scsi_command_block_wrapper cbw;
-  _scsi_packet_test           test;
-} cbw_scsi_test;
+  scsi_command_block_wrapper_t cbw;
+  scsi_packet_test_t           test;
+} cbw_scsi_test_t;
 
 typedef struct {
   uint8_t operation_code;
   uint8_t lun;
   uint8_t reserved[8];
   uint8_t pad[2];
-} _scsi_read_capacity;
+} scsi_read_capacity_t;
 
 typedef struct {
-  _scsi_command_block_wrapper cbw;
-  _scsi_read_capacity         read_capacity;
-} cbw_scsi_read_capacity;
+  scsi_command_block_wrapper_t cbw;
+  scsi_read_capacity_t         read_capacity;
+} cbw_scsi_read_capacity_t;
 
 typedef struct __scsi_packet_inquiry { // contains information about a specific device
   uint8_t operation_code;
@@ -88,26 +88,19 @@ typedef struct __scsi_packet_inquiry { // contains information about a specific 
   uint8_t allocation_length;
   uint8_t reserved3;
   uint8_t pad[6];
-} _scsi_packet_inquiry;
+} scsi_packet_inquiry_t;
 
 typedef struct {
-  _scsi_command_block_wrapper cbw;
-  _scsi_packet_inquiry        inquiry;
-} cbw_scsi_inquiry;
+  scsi_command_block_wrapper_t cbw;
+  scsi_packet_inquiry_t        inquiry;
+} cbw_scsi_inquiry_t;
 
 typedef struct {
   uint8_t device_type : 5;
   uint8_t device_type_qualifier : 3;
   uint8_t device_type_modifier : 7;
   uint8_t removable_media : 1;
-  // union {
   uint8_t versions;
-  // struct {
-  //   uint8_t ansi_version : 3;
-  //   uint8_t ecma_version : 3;
-  //   uint8_t iso_version : 2;
-  // };
-  // };
   uint8_t response_data_format : 4;
   uint8_t hi_support : 1;
   uint8_t norm_aca : 1;
@@ -136,19 +129,19 @@ typedef struct {
   uint8_t product_revision[4];
   uint8_t vendor_specific[20];
   uint8_t reserved3[40];
-} scsi_inquiry_result;
+} scsi_inquiry_result_t;
 
 typedef struct __scsi_command_status_wrapper {
   uint8_t  dCSWSignature[4];
   uint16_t dCSWTag[2];
   uint8_t  dCSWDataResidue[4];
   uint8_t  bCSWStatus;
-} _scsi_command_status_wrapper;
+} scsi_command_status_wrapper_t;
 
 typedef struct {
   uint8_t number_of_blocks[4];
   uint8_t block_size[4];
-} scsi_read_capacity_result;
+} scsi_read_capacity_result_t;
 
 typedef struct {
   uint8_t error_code : 7;
@@ -166,7 +159,7 @@ typedef struct {
   uint8_t additional_sense_code_qualifier;
   uint8_t field_replaceable_unit_code;
   uint8_t sense_key_specific[3];
-} scsi_sense_result;
+} scsi_sense_result_t;
 
 typedef struct {
   uint8_t operation_code;
@@ -176,22 +169,22 @@ typedef struct {
   uint8_t transfer_len[2]; // high-endian in blocks of block_len (see scsi_capacity)
   uint8_t reserved2;
   uint8_t pad[2];
-} _scsi_packet_read_write;
+} scsi_packet_read_write_t;
 
 typedef struct {
-  _scsi_command_block_wrapper cbw;
-  _scsi_packet_read_write     scsi_cmd;
-} cbw_scsi_read_write;
+  scsi_command_block_wrapper_t cbw;
+  scsi_packet_read_write_t     scsi_cmd;
+} cbw_scsi_read_write_t;
 
-extern _scsi_command_block_wrapper scsi_command_block_wrapper;
+extern scsi_command_block_wrapper_t scsi_command_block_wrapper;
 
-extern usb_error do_scsi_cmd(device_config_storage *const       dev,
-                             _scsi_command_block_wrapper *const cbw,
-                             void *const                        send_receive_buffer,
-                             const bool                         send);
+extern usb_error_t do_scsi_cmd(device_config_storage_t *const      dev,
+                               scsi_command_block_wrapper_t *const cbw,
+                               void *const                         send_receive_buffer,
+                               const bool                          send);
 
-extern usb_error scsi_test(device_config_storage *const dev);
+extern usb_error_t scsi_test(device_config_storage_t *const dev);
 
-extern usb_error scsi_request_sense(device_config_storage *const dev, scsi_sense_result *const sens_result);
+extern usb_error_t scsi_request_sense(device_config_storage_t *const dev, scsi_sense_result_t *const sens_result);
 
 #endif

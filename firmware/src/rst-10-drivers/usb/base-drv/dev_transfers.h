@@ -20,46 +20,46 @@
 typedef struct {
   uint8_t  number;
   uint16_t max_packet_sizex;
-} endpoint;
+} endpoint_t;
 
 // 3 bytes
 #define COMMON_DEVICE_CONFIG                                                                                                       \
-  usb_device_type type;                                                                                                            \
-  uint8_t         address;                                                                                                         \
-  uint8_t         max_packet_size;                                                                                                 \
-  uint8_t         interface_number
+  usb_device_t type;                                                                                                               \
+  uint8_t      address;                                                                                                            \
+  uint8_t      max_packet_size;                                                                                                    \
+  uint8_t      interface_number
 
 typedef struct {
   COMMON_DEVICE_CONFIG;
-  endpoint_param endpoints[3]; // bulk in/out and interrupt
-} device_config;
+  endpoint_param_t endpoints[3]; // bulk in/out and interrupt
+} device_config_t;
 
 typedef struct {
-  COMMON_DEVICE_CONFIG;        // bytes: 0-3
-  endpoint_param endpoints[3]; // bytes: 4-6, 7-9, 10-12  bulk in/out and interrupt
-  uint32_t       current_lba;  // bytes 13-16
-} device_config_storage;
-
-typedef struct {
-  COMMON_DEVICE_CONFIG;
-} device_config_hub;
+  COMMON_DEVICE_CONFIG;          // bytes: 0-3
+  endpoint_param_t endpoints[3]; // bytes: 4-6, 7-9, 10-12  bulk in/out and interrupt
+  uint32_t         current_lba;  // bytes 13-16
+} device_config_storage_t;
 
 typedef struct {
   COMMON_DEVICE_CONFIG;
-  endpoint_param endpoints[1]; // Isochronous
-} device_config_keyboard;
+} device_config_hub_t;
 
-extern usb_error usbdev_control_transfer(device_config *const device, const setup_packet *const cmd, uint8_t *const buffer);
+typedef struct {
+  COMMON_DEVICE_CONFIG;
+  endpoint_param_t endpoints[1]; // Isochronous
+} device_config_keyboard_t;
 
-extern usb_error usbdev_blk_out_trnsfer(device_config *const device, const uint8_t *const buffer, const uint16_t buffer_size);
+extern usb_error_t usbdev_control_transfer(device_config_t *const device, const setup_packet_t *const cmd, uint8_t *const buffer);
 
-extern usb_error usbdev_bulk_in_transfer(device_config *const dev, uint8_t *const buffer, uint8_t *const buffer_size);
+extern usb_error_t usbdev_blk_out_trnsfer(device_config_t *const device, const uint8_t *const buffer, const uint16_t buffer_size);
 
-extern usb_error usbdev_dat_in_trnsfer(device_config *const    device,
-                                       uint8_t *const          buffer,
-                                       const uint16_t          buffer_size,
-                                       const usb_endpoint_type endpoint_type);
+extern usb_error_t usbdev_bulk_in_transfer(device_config_t *const dev, uint8_t *const buffer, uint8_t *const buffer_size);
 
-extern usb_error usbdev_dat_in_trnsfer_0(device_config *const device, uint8_t *const buffer, const uint8_t buffer_size);
+extern usb_error_t usbdev_dat_in_trnsfer(device_config_t *const device,
+                                         uint8_t *const         buffer,
+                                         const uint16_t         buffer_size,
+                                         const usb_endpoint_t   endpoint_type);
+
+extern usb_error_t usbdev_dat_in_trnsfer_0(device_config_t *const device, uint8_t *const buffer, const uint8_t buffer_size);
 
 #endif

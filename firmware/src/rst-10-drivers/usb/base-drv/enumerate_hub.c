@@ -5,13 +5,13 @@
 #include "work-area.h"
 #include <string.h>
 
-const setup_packet cmd_set_feature     = {RT_HOST_TO_DEVICE | RT_CLASS | RT_OTHER, SET_FEATURE, {FEAT_PORT_POWER, 0}, {1, 0}, 0};
-const setup_packet cmd_clear_feature   = {RT_HOST_TO_DEVICE | RT_CLASS | RT_OTHER, CLEAR_FEATURE, {FEAT_PORT_POWER, 0}, {1, 0}, 0};
-const setup_packet cmd_get_status_port = {
+const setup_packet_t cmd_set_feature   = {RT_HOST_TO_DEVICE | RT_CLASS | RT_OTHER, SET_FEATURE, {FEAT_PORT_POWER, 0}, {1, 0}, 0};
+const setup_packet_t cmd_clear_feature = {RT_HOST_TO_DEVICE | RT_CLASS | RT_OTHER, CLEAR_FEATURE, {FEAT_PORT_POWER, 0}, {1, 0}, 0};
+const setup_packet_t cmd_get_status_port = {
     RT_DEVICE_TO_HOST | RT_CLASS | RT_OTHER, GET_STATUS, {0, 0}, {1, 0}, sizeof(hub_port_status)};
 
-usb_error hub_set_feature(const device_config_hub *const hub_config, const uint8_t feature, const uint8_t index) {
-  setup_packet set_feature;
+usb_error_t hub_set_feature(const device_config_hub_t *const hub_config, const uint8_t feature, const uint8_t index) {
+  setup_packet_t set_feature;
   set_feature = cmd_set_feature;
 
   set_feature.bValue[0] = feature;
@@ -19,8 +19,8 @@ usb_error hub_set_feature(const device_config_hub *const hub_config, const uint8
   return usb_control_transfer(&set_feature, 0, hub_config->address, hub_config->max_packet_size);
 }
 
-usb_error hub_clear_feature(const device_config_hub *const hub_config, const uint8_t feature, const uint8_t index) {
-  setup_packet clear_feature;
+usb_error_t hub_clear_feature(const device_config_hub_t *const hub_config, const uint8_t feature, const uint8_t index) {
+  setup_packet_t clear_feature;
   clear_feature = cmd_clear_feature;
 
   clear_feature.bValue[0] = feature;
@@ -28,22 +28,23 @@ usb_error hub_clear_feature(const device_config_hub *const hub_config, const uin
   return usb_control_transfer(&clear_feature, 0, hub_config->address, hub_config->max_packet_size);
 }
 
-usb_error hub_get_status_port(const device_config_hub *const hub_config, const uint8_t index, hub_port_status *const port_status) {
-  setup_packet get_status_port;
+usb_error_t
+hub_get_status_port(const device_config_hub_t *const hub_config, const uint8_t index, hub_port_status *const port_status) {
+  setup_packet_t get_status_port;
   get_status_port = cmd_get_status_port;
 
   get_status_port.bIndex[0] = index;
   return usb_control_transfer(&get_status_port, port_status, hub_config->address, hub_config->max_packet_size);
 }
 
-usb_error configure_usb_hub(_working *const working) {
-  uint8_t           i;
-  _usb_state *const work_area = get_usb_work_area();
+usb_error_t configure_usb_hub(_working_t *const working) {
+  uint8_t            i;
+  usb_state_t *const work_area = get_usb_work_area();
 
-  usb_error                      result;
-  hub_descriptor                 hub_description;
-  hub_port_status                port_status;
-  const device_config_hub *const hub_config = working->hub_config;
+  usb_error_t                      result;
+  hub_descriptor_t                 hub_description;
+  hub_port_status                  port_status;
+  const device_config_hub_t *const hub_config = working->hub_config;
 
   CHECK(hub_get_descriptor(hub_config, &hub_description));
 

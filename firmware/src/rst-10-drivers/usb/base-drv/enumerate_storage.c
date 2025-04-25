@@ -2,10 +2,10 @@
 #include "protocol.h"
 #include <string.h>
 
-void parse_endpoints(device_config_storage *const storage_dev, const endpoint_descriptor *pEndpoint) {
-  uint8_t               x;
-  endpoint_param       *ep;
-  endpoint_param *const eps = storage_dev->endpoints;
+void parse_endpoints(device_config_storage_t *const storage_dev, const endpoint_descriptor_t *pEndpoint) {
+  uint8_t                 x;
+  endpoint_param_t       *ep;
+  endpoint_param_t *const eps = storage_dev->endpoints;
 
   if (!(pEndpoint->bmAttributes & 0x02))
     return;

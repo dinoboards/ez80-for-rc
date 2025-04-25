@@ -75,9 +75,9 @@ _usb_dispatch:
 ;  C -> Device index of scsi usb device
 ;
 ; Outputs
-;  A -> usb_error
+;  A -> usb_error_t
 ;
-; marshalls to usb_error usb_scsi_init(const uint16_t dev_index);
+; marshalls to usb_error_t usb_scsi_init(const uint16_t dev_index);
 usb_scsi_init:
 	PUSH	BC
 	CALL	_usb_scsi_init
@@ -88,12 +88,12 @@ usb_scsi_init:
 ;
 ; Inputs
 ;  C -> Device Index
-;  uDE -> pointer to a scsi_read_capacity_result to receive result
+;  uDE -> pointer to a scsi_read_capacity_result_t to receive result
 ;
 ; Outputs
-;  A -> usb_error
+;  A -> usb_error_t
 ;
-;marshalls to usb_error usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_result *result);
+;marshalls to usb_error_t usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_result_t *result);
 usb_scsi_read_capacity:
 	PUSH	DE
 	PUSH	BC
@@ -108,7 +108,7 @@ usb_scsi_read_capacity:
 ;  C -> device index
 ;  uDE -> pointer to a buffer to receive 512 bytes for the current LBA
 ;
-; marshalls to usb_error usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer);
+; marshalls to usb_error_t usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer);
 usb_scsi_read:
 	PUSH	DE
 	PUSH	BC
@@ -123,7 +123,7 @@ usb_scsi_read:
 ;  C -> device index
 ;  uDE -> pointer to a buffer of 512 bytes to be written at the current LBA
 ;
-; marshalls to usb_error usb_scsi_write(const uint16_t dev_index, uint8_t *const buffer);
+; marshalls to usb_error_t usb_scsi_write(const uint16_t dev_index, uint8_t *const buffer);
 usb_scsi_write:
 	PUSH	DE
 	PUSH	BC
@@ -144,7 +144,7 @@ usb_scsi_write:
 ;  C -> device index
 ;  uDE -> pointer to a buffer to receive 512 bytes for the current LBA
 ;
-; marshalls to usb_error usb_ufi_read(const uint16_t dev_index, uint8_t *const buffer);
+; marshalls to usb_error_t usb_ufi_read(const uint16_t dev_index, uint8_t *const buffer);
 ;
 usb_ufi_read:
 	PUSH	DE
@@ -160,7 +160,7 @@ usb_ufi_read:
 ;  C -> device index
 ;  uDE -> pointer to a buffer of 512 bytes to be written at the current LBA
 ;
-; marshalls to usb_error usb_ufi_write(const uint16_t dev_index, uint8_t *const buffer);
+; marshalls to usb_error_t usb_ufi_write(const uint16_t dev_index, uint8_t *const buffer);
 ;
 usb_ufi_write:
 	PUSH	DE
@@ -176,7 +176,7 @@ usb_ufi_write:
 ;  C -> Device Index
 ;
 ; Outputs
-;  A -> usb_error
+;  A -> usb_error_t
 ;  E:uHL -> count of sectors (assuming 512 size)
 ;
 ;marshalls to uint32_t usb_ufi_get_cap(const uint16_t dev_index);
@@ -199,7 +199,7 @@ usb_ufi_get_cap:
 ;  C -> Device index of usb keyboard
 ;
 ; Outputs
-;  A -> usb_error
+;  A -> usb_error_t
 ;
 ; marshalls to void usb_kyb_init(const uint8_t dev_index);
 usb_kyb_init:
@@ -240,7 +240,7 @@ usb_kyb_status:
 ;
 ; Read the next key data from the keyboard. If a buffer is used, return the next key code in the buffer.
 ; If no key data is available, this function will wait indefinitely for a key press. The Status (A) is a
-; standard usb_error result code.
+; standard usb_error_t result code.
 ;
 ; The ascii Keycode (H) is generally returned as appropriate ASCII values, if possible. Special keys, like
 ; function keys and arrows, are returned as reserved codes.
@@ -296,9 +296,9 @@ usb_kyb_flush:
 ;   E -> max_packet_size
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshall to usb_error usb_control_transfer(const setup_packet *const cmd_packet, void *const buffer, const uint8_t device_address, const uint8_t max_packet_size);
+; marshall to usb_error_t usb_control_transfer(const setup_packet_t *const cmd_packet, void *const buffer, const uint8_t device_address, const uint8_t max_packet_size);
 
 ;
 ; Function B = ?? usb_data_in_transfer
@@ -310,9 +310,9 @@ usb_kyb_flush:
 ;   IY -> endpoint
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint);
+; marshalls to usb_error_t usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
 
 
 ;
@@ -325,9 +325,9 @@ usb_kyb_flush:
 ;   IY -> endpoint
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_t device_address, endpoint_param *const endpoint);
+; marshalls to usb_error_t usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
 
 ;
 ; Function B = ?? usb_data_out_transfer
@@ -339,9 +339,9 @@ usb_kyb_flush:
 ;   IY -> endpoint
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint);
+; marshalls to usb_error_t usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
 
 
 
@@ -353,9 +353,9 @@ usb_kyb_flush:
 ;   IX -> buffer
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usbtrn_get_descriptor(device_descriptor *const buffer);
+; marshalls to usb_error_t usbtrn_get_descriptor(device_descriptor_t *const buffer);
 
 
 ;
@@ -366,9 +366,9 @@ usb_kyb_flush:
 ;   D -> device address
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usbtrn_get_descriptor2(device_descriptor *const buffer, const uint8_t device_address);
+; marshalls to usb_error_t usbtrn_get_descriptor2(device_descriptor_t *const buffer, const uint8_t device_address);
 
 
 ;
@@ -382,9 +382,9 @@ usb_kyb_flush:
 ;   E -> max_packet_size
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usbtrn_get_config_descriptor(config_descriptor *const buffer, const uint8_t config_index, const uint8_t buffer_size, const uint8_t device_address, const uint8_t max_packet_size);
+; marshalls to usb_error_t usbtrn_get_config_descriptor(config_descriptor_t *const buffer, const uint8_t config_index, const uint8_t buffer_size, const uint8_t device_address, const uint8_t max_packet_size);
 
 ;
 ; Function B = ?? usbtrn_gfull_cfg_desc
@@ -397,9 +397,9 @@ usb_kyb_flush:
 ;   HL -> buffer size
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usbtrn_gfull_cfg_desc(const uint8_t config_index, const uint8_t device_address, const uint8_t max_packet_size, const uint8_t max_buffer_size, uint8_t *const buffer);
+; marshalls to usb_error_t usbtrn_gfull_cfg_desc(const uint8_t config_index, const uint8_t device_address, const uint8_t max_packet_size, const uint8_t max_buffer_size, uint8_t *const buffer);
 
 
 ;
@@ -411,9 +411,9 @@ usb_kyb_flush:
 ;   C -> configuration
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usbtrn_set_configuration(const uint8_t device_address, const uint8_t max_packet_size, const uint8_t configuration);
+; marshalls to usb_error_t usbtrn_set_configuration(const uint8_t device_address, const uint8_t max_packet_size, const uint8_t configuration);
 
 ;
 ; Function B = ?? usbtrn_set_address
@@ -422,9 +422,9 @@ usb_kyb_flush:
 ;   D -> device address
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usbtrn_set_address(const uint8_t device_address);
+; marshalls to usb_error_t usbtrn_set_address(const uint8_t device_address);
 
 ;
 ; Function B = ?? usbtrn_clear_endpoint_halt
@@ -435,9 +435,9 @@ usb_kyb_flush:
 ;   C -> endpoint number
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usbtrn_clear_endpoint_halt(const uint8_t endpoint_number, const uint8_t device_address, const uint8_t max_packet_size);
+; marshalls to usb_error_t usbtrn_clear_endpoint_halt(const uint8_t endpoint_number, const uint8_t device_address, const uint8_t max_packet_size);
 
 
 
@@ -476,9 +476,9 @@ usb_init:
 ;  L:uDE -> 32 bit LBA number
 ;
 ; Outputs
-;   A -> usb_error
+;   A -> usb_error_t
 ;
-; marshalls to usb_error usb_scsi_seek(const uint16_t dev_index, const uint32_t lba) {
+; marshalls to usb_error_t usb_scsi_seek(const uint16_t dev_index, const uint32_t lba) {
 usb_storage_seek:
 	PUSH	HL
 	PUSH	DE
@@ -497,7 +497,7 @@ usb_storage_seek:
 ; Outputs
 ;   A -> device_type (-1 is no device at dev_index)
 ;
-;marshalls to usb_device_type usb_get_device_type(const uint16_t dev_index)
+;marshalls to usb_device_t usb_get_device_type(const uint16_t dev_index)
 usb_get_device_type:
 	PUSH	BC
 	CALL	_usb_get_device_type

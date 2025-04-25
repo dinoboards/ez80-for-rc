@@ -18,10 +18,10 @@
 
 #define LOWER_SAFE_RAM_ADDRESS 0x8000
 
-usb_error usb_ctrl_trnsfer_ext(const setup_packet *const cmd_packet,
-                               void *const               buffer,
-                               const uint8_t             device_address,
-                               const uint8_t             max_packet_size) {
+usb_error_t usb_ctrl_trnsfer_ext(const setup_packet_t *const cmd_packet,
+                                 void *const                 buffer,
+                                 const uint8_t               device_address,
+                                 const uint8_t               max_packet_size) {
   if ((uint16_t)cmd_packet < LOWER_SAFE_RAM_ADDRESS)
     return USB_BAD_ADDRESS;
 
@@ -39,16 +39,16 @@ usb_error usb_ctrl_trnsfer_ext(const setup_packet *const cmd_packet,
  * @param buffer Pointer of data to send or receive into
  * @param device_address usb device address
  * @param max_packet_size Maximum packet size for endpoint
- * @return usb_error USB_ERR_OK if all good, otherwise specific error code
+ * @return usb_error_t USB_ERR_OK if all good, otherwise specific error code
  */
-usb_error usb_control_transfer(const setup_packet *const cmd_packet,
-                               void *const               buffer,
-                               const uint8_t             device_address,
-                               const uint8_t             max_packet_size) {
-  usb_error      result;
-  endpoint_param endpoint;
-  uint16_t       length;
-  const uint8_t  transferIn = (cmd_packet->bmRequestType & 0x80);
+usb_error_t usb_control_transfer(const setup_packet_t *const cmd_packet,
+                                 void *const                 buffer,
+                                 const uint8_t               device_address,
+                                 const uint8_t               max_packet_size) {
+  usb_error_t      result;
+  endpoint_param_t endpoint;
+  uint16_t         length;
+  const uint8_t    transferIn = (cmd_packet->bmRequestType & 0x80);
 
   endpoint.toggle           = 1;
   endpoint.number           = 0;
@@ -61,7 +61,7 @@ usb_error usb_control_transfer(const setup_packet *const cmd_packet,
 
   ch_set_usb_address(device_address);
 
-  ch_write_data((const uint8_t *)cmd_packet, sizeof(setup_packet));
+  ch_write_data((const uint8_t *)cmd_packet, sizeof(setup_packet_t));
   ch_issue_token_setup();
   result = ch_short_wait_int_and_get_status();
   CHECK(result);
@@ -98,8 +98,10 @@ done:
   return result;
 }
 
-usb_error
-usb_dat_in_trnsfer_ext(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint) {
+usb_error_t usb_dat_in_trnsfer_ext(uint8_t                *buffer,
+                                   const uint16_t          buffer_size,
+                                   const uint8_t           device_address,
+                                   endpoint_param_t *const endpoint) {
   if (buffer != 0 && (uint16_t)buffer < LOWER_SAFE_RAM_ADDRESS)
     return USB_BAD_ADDRESS;
 
@@ -116,10 +118,10 @@ usb_dat_in_trnsfer_ext(uint8_t *buffer, const uint16_t buffer_size, const uint8_
  * @param buffer_size the maximum size of data to be received
  * @param device_address the usb address of the device
  * @param endpoint the usb endpoint to receive from (toggle of endpoint is updated)
- * @return usb_error USB_ERR_OK if all good, otherwise specific error code
+ * @return usb_error_t USB_ERR_OK if all good, otherwise specific error code
  */
-usb_error
-usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint) {
+usb_error_t
+usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint) {
   uint8_t result;
 
   critical_begin();
@@ -140,10 +142,12 @@ usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t 
  * @param buffer_size  on exit the actual size of data received
  * @param device_address the usb address of the device
  * @param endpoint the usb endpoint to receive from (toggle of endpoint is updated)
- * @return usb_error USB_ERR_OK if all good, otherwise specific error code
+ * @return usb_error_t USB_ERR_OK if all good, otherwise specific error code
  */
-usb_error
-usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_t device_address, endpoint_param *const endpoint) {
+usb_error_t usb_data_in_transfer_n(uint8_t                *buffer,
+                                   uint8_t *const          buffer_size,
+                                   const uint8_t           device_address,
+                                   endpoint_param_t *const endpoint) {
   uint8_t result;
 
   critical_begin();
@@ -164,10 +168,10 @@ usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_
  * @param buffer_size the maximum size of data to be sent
  * @param device_address the usb address of the device
  * @param endpoint the usb endpoint to send to (toggle of endpoint is updated)
- * @return usb_error USB_ERR_OK if all good, otherwise specific error code
+ * @return usb_error_t USB_ERR_OK if all good, otherwise specific error code
  */
-usb_error
-usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param *const endpoint) {
+usb_error_t
+usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint) {
   uint8_t result;
 
   critical_begin();

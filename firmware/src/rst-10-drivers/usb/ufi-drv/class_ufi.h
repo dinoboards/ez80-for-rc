@@ -9,7 +9,7 @@
 typedef struct {
   uint8_t bASC;
   uint8_t bASCQ;
-} ufi_interrupt_status;
+} ufi_interrupt_status_t;
 
 typedef struct {
   uint8_t operation_code;
@@ -17,9 +17,10 @@ typedef struct {
   uint8_t reserved1[5];
   uint8_t allocation_length[2];
   uint8_t reserved[3];
-} ufi_read_format_capacities_command;
+} ufi_read_format_capacities_command_t;
 
-typedef enum { UNFORMATTED_MEDIA = 1, FORMATTED_MEDIA = 2, NO_MEDIA = 3 } UFI_DESCRIPTOR_CODE;
+typedef uint8_t ufi_descriptor_code_t;
+enum ufi_descriptor_code_e { UNFORMATTED_MEDIA = 1, FORMATTED_MEDIA = 2, NO_MEDIA = 3 };
 
 #define UFI_DESCRIPTOR_CODE_UNFORMATTED_MEDIA 1
 #define UFI_DESCRIPTOR_CODE_FORMATTED_MEDIA   2
@@ -27,21 +28,21 @@ typedef enum { UNFORMATTED_MEDIA = 1, FORMATTED_MEDIA = 2, NO_MEDIA = 3 } UFI_DE
 
 typedef struct {
   uint8_t number_of_blocks[4];
-  uint8_t descriptor_codex; // UFI_DESCRIPTOR_CODE
+  uint8_t descriptor_codex; // ufi_descriptor_code_t
   uint8_t block_size[3];
-} ufi_format_capacity_descriptor;
+} ufi_format_capacity_descriptor_t;
 
 typedef struct {
-  uint8_t                        reserved1[3];
-  uint8_t                        capacity_list_length;
-  ufi_format_capacity_descriptor descriptors[4]; // support upto
-} ufi_format_capacities_response;
+  uint8_t                          reserved1[3];
+  uint8_t                          capacity_list_length;
+  ufi_format_capacity_descriptor_t descriptors[4]; // support upto
+} ufi_format_capacities_response_t;
 
 typedef struct {
   uint8_t operation_code;
   uint8_t lun;
   uint8_t reserved[10];
-} ufi_test_unit_ready_command;
+} ufi_test_unit_ready_command_t;
 
 typedef struct {
   uint8_t operation_code;
@@ -50,7 +51,7 @@ typedef struct {
   uint8_t reserved3;
   uint8_t allocation_length;
   uint8_t reserved4[7];
-} ufi_inquiry_command;
+} ufi_inquiry_command_t;
 
 typedef struct {
   uint8_t operation_code;
@@ -59,7 +60,7 @@ typedef struct {
   uint8_t reserved3;
   uint8_t allocation_length;
   uint8_t reserved4[7];
-} ufi_request_sense_command;
+} ufi_request_sense_command_T;
 
 typedef struct {
   uint8_t error_code;
@@ -105,7 +106,7 @@ typedef struct {
 
   // The Product Revision Level field contains 4 bytes of ASCII data as defined by the vendor.
   char product_revision[4];
-} ufi_inquiry_response;
+} ufi_inquiry_response_t;
 
 typedef struct {
   uint8_t operation_code; /*0*/
@@ -115,7 +116,7 @@ typedef struct {
   uint8_t reserved2;          /*6*/
   uint8_t transfer_length[2]; /*7, 8*/
   uint8_t reserved3[3];       /*9, 10, 11*/
-} ufi_read_write_command;
+} ufi_read_write_command_t;
 
 typedef struct {
   struct {
@@ -126,8 +127,8 @@ typedef struct {
     uint8_t defect_list_length_lsb;
   } defect_list_header;
 
-  ufi_format_capacity_descriptor format_descriptor;
-} ufi_format_parameter_list;
+  ufi_format_capacity_descriptor_t format_descriptor;
+} ufi_format_parameter_list_t;
 
 #define FMT_DEFECT_STATUS_FOV          0x80
 #define FMT_DEFECT_STATUS_EXTEND       0x40
@@ -154,32 +155,32 @@ typedef struct {
   uint8_t reserved[10];
 } ufi_send_diagnostic_command;
 
-extern usb_error ufi_request_sense(device_config *const storage_device, ufi_request_sense_response const *response);
+extern usb_error_t ufi_request_sense(device_config_t *const storage_device, ufi_request_sense_response const *response);
 
-extern usb_error ufi_read_frmt_caps(device_config *const storage_device, ufi_format_capacities_response const *response);
+extern usb_error_t ufi_read_frmt_caps(device_config_t *const storage_device, ufi_format_capacities_response_t const *response);
 
-extern usb_error ufi_test_unit_ready(device_config *const storage_device, ufi_request_sense_response const *response);
+extern usb_error_t ufi_test_unit_ready(device_config_t *const storage_device, ufi_request_sense_response const *response);
 
-extern usb_error ufi_inquiry(device_config *const storage_device, ufi_inquiry_response const *response);
+extern usb_error_t ufi_inquiry(device_config_t *const storage_device, ufi_inquiry_response_t const *response);
 
-extern usb_error ufi_read_write_sector(device_config *const storage_device,
-                                       const bool           send,
-                                       const uint16_t       sector_number,
-                                       const uint8_t        sector_count,
-                                       const uint8_t *const buffer,
-                                       uint8_t *const       sense_codes);
+extern usb_error_t ufi_read_write_sector(device_config_t *const storage_device,
+                                         const bool             send,
+                                         const uint16_t         sector_number,
+                                         const uint8_t          sector_count,
+                                         const uint8_t *const   buffer,
+                                         uint8_t *const         sense_codes);
 
-uint8_t wait_for_device_ready(device_config *const storage_device, uint8_t timeout_counter);
+uint8_t wait_for_device_ready(device_config_t *const storage_device, uint8_t timeout_counter);
 
-usb_error ufi_format(device_config *const                        storage_device,
-                     const uint8_t                               side,
-                     const uint8_t                               track_number,
-                     const ufi_format_capacity_descriptor *const format);
+usb_error_t ufi_format(device_config_t *const                        storage_device,
+                       const uint8_t                                 side,
+                       const uint8_t                                 track_number,
+                       const ufi_format_capacity_descriptor_t *const format);
 
-usb_error ufi_send_diagnostics(device_config *const storage_device);
+usb_error_t ufi_send_diagnostics(device_config_t *const storage_device);
 
 uint32_t convert_from_msb_first(const uint8_t *const buffer);
 
-extern usb_error ufi_seek(const uint16_t dev_index, const uint32_t lba);
+extern usb_error_t ufi_seek(const uint16_t dev_index, const uint32_t lba);
 
 #endif

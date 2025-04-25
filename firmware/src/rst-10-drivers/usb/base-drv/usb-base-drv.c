@@ -5,7 +5,7 @@
 #include "work-area.h"
 #include <string.h>
 
-static usb_error usb_host_bus_reset(void) {
+static usb_error_t usb_host_bus_reset(void) {
   ch_cmd_set_usb_mode(CH_MODE_HOST);
   delay_20ms();
 
@@ -27,7 +27,7 @@ uint16_t usb_init(uint8_t state) {
 
   if (state == 0) {
     keyboard_config = NULL;
-    memset(get_usb_work_area(), 0, sizeof(_usb_state));
+    memset(get_usb_work_area(), 0, sizeof(usb_state_t));
     ch_cmd_reset_all();
     delay_medium();
 
@@ -60,7 +60,7 @@ uint16_t usb_init(uint8_t state) {
   }
 
   keyboard_config = NULL;
-  memset(get_usb_work_area(), 0, sizeof(_usb_state));
+  memset(get_usb_work_area(), 0, sizeof(usb_state_t));
   if (state != 2) {
     usb_host_bus_reset();
     delay_medium();
@@ -70,8 +70,8 @@ uint16_t usb_init(uint8_t state) {
   return (uint16_t)count_of_devices() << 8 | 4;
 }
 
-usb_error usb_scsi_seek(const uint16_t dev_index, const uint32_t lba) {
-  device_config_storage *const dev = (device_config_storage *)get_usb_device_config(dev_index);
+usb_error_t usb_scsi_seek(const uint16_t dev_index, const uint32_t lba) {
+  device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
 
   dev->current_lba = lba;
   return USB_ERR_OK;

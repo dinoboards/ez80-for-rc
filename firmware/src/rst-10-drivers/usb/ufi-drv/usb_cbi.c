@@ -4,19 +4,19 @@
 #include "../base-drv/dev_transfers.h"
 #include "../base-drv/protocol.h"
 
-const setup_packet cbi2_adsc = {0x21, 0, {0, 0}, {255, 0}, 12}; // ;4th byte is interface number
+const setup_packet_t cbi2_adsc = {0x21, 0, {0, 0}, {255, 0}, 12}; // ;4th byte is interface number
 
 // was no clear
-usb_error usb_execute_cbi(device_config *const storage_device,
-                          const uint8_t *const cmd,
-                          const bool           send,
-                          const uint16_t       buffer_size,
-                          uint8_t *const       buffer,
-                          uint8_t *const       sense_codes) {
+usb_error_t usb_execute_cbi(device_config_t *const storage_device,
+                            const uint8_t *const   cmd,
+                            const bool             send,
+                            const uint16_t         buffer_size,
+                            uint8_t *const         buffer,
+                            uint8_t *const         sense_codes) {
 
-  uint8_t       result;
-  setup_packet  adsc;
-  const uint8_t interface_number = storage_device->interface_number;
+  uint8_t        result;
+  setup_packet_t adsc;
+  const uint8_t  interface_number = storage_device->interface_number;
 
   adsc           = cbi2_adsc;
   adsc.bIndex[0] = interface_number;

@@ -5,18 +5,18 @@
 #include "work-area.h"
 #include <string.h>
 
-usb_error op_id_class_drv(_working *const working);
-usb_error op_parse_endpoint(_working *const working);
+usb_error_t op_id_class_drv(_working_t *const working);
+usb_error_t op_parse_endpoint(_working_t *const working);
 
-void parse_endpoint_keyboard(device_config_keyboard *const keyboard_config, const endpoint_descriptor *pEndpoint) {
-  endpoint_param *const ep = &keyboard_config->endpoints[0];
-  ep->number               = pEndpoint->bEndpointAddress;
-  ep->toggle               = 0;
-  ep->max_packet_sizex     = calc_max_packet_sizex(pEndpoint->wMaxPacketSize);
+void parse_endpoint_keyboard(device_config_keyboard_t *const keyboard_config, const endpoint_descriptor_t *pEndpoint) {
+  endpoint_param_t *const ep = &keyboard_config->endpoints[0];
+  ep->number                 = pEndpoint->bEndpointAddress;
+  ep->toggle                 = 0;
+  ep->max_packet_sizex       = calc_max_packet_sizex(pEndpoint->wMaxPacketSize);
 }
 
-usb_device_type identify_class_driver(_working *const working) {
-  const interface_descriptor *const p = (const interface_descriptor *)working->ptr;
+usb_device_t identify_class_driver(_working_t *const working) {
+  const interface_descriptor_t *const p = (const interface_descriptor_t *)working->ptr;
   if (p->bInterfaceClass == 2)
     return USB_IS_CDC;
 
@@ -35,35 +35,35 @@ usb_device_type identify_class_driver(_working *const working) {
   return USB_IS_UNKNOWN;
 }
 
-usb_error op_interface_next(_working *const working) {
+usb_error_t op_interface_next(_working_t *const working) {
   if (--working->interface_count == 0)
     return USB_ERR_OK;
 
   return op_id_class_drv(working);
 }
 
-usb_error op_endpoint_next(_working *const working) {
+usb_error_t op_endpoint_next(_working_t *const working) {
   if (working->endpoint_count != 0 && --working->endpoint_count > 0) {
-    working->ptr += ((endpoint_descriptor *)working->ptr)->bLength;
+    working->ptr += ((endpoint_descriptor_t *)working->ptr)->bLength;
     return op_parse_endpoint(working);
   }
 
   return op_interface_next(working);
 }
 
-usb_error op_parse_endpoint(_working *const working) {
-  const endpoint_descriptor *endpoint = (endpoint_descriptor *)working->ptr;
-  device_config *const       device   = working->p_current_device;
+usb_error_t op_parse_endpoint(_working_t *const working) {
+  const endpoint_descriptor_t *endpoint = (endpoint_descriptor_t *)working->ptr;
+  device_config_t *const       device   = working->p_current_device;
 
   switch (working->usb_device) {
   case USB_IS_FLOPPY:
   case USB_IS_MASS_STORAGE: {
-    parse_endpoints((device_config_storage *)device, endpoint);
+    parse_endpoints((device_config_storage_t *)device, endpoint);
     break;
   }
 
   case USB_IS_KEYBOARD: {
-    parse_endpoint_keyboard((device_config_keyboard *)device, endpoint);
+    parse_endpoint_keyboard((device_config_keyboard_t *)device, endpoint);
     break;
   }
   }
@@ -71,8 +71,8 @@ usb_error op_parse_endpoint(_working *const working) {
   return op_endpoint_next(working);
 }
 
-usb_error
-configure_device(const _working *const working, const interface_descriptor *const interface, device_config *const dev_cfg) {
+usb_error_t
+configure_device(const _working_t *const working, const interface_descriptor_t *const interface, device_config_t *const dev_cfg) {
   dev_cfg->interface_number = interface->bInterfaceNumber;
   dev_cfg->max_packet_size  = working->desc.bMaxPacketSize0;
   dev_cfg->address          = working->current_device_address;
@@ -81,24 +81,24 @@ configure_device(const _working *const working, const interface_descriptor *cons
   return usbtrn_set_configuration(dev_cfg->address, dev_cfg->max_packet_size, working->config.desc.bConfigurationvalue);
 }
 
-usb_error op_capture_hub_driver_interface(_working *const working) {
-  const interface_descriptor *const interface = (interface_descriptor *)working->ptr;
+usb_error_t op_capture_hub_driver_interface(_working_t *const working) {
+  const interface_descriptor_t *const interface = (interface_descriptor_t *)working->ptr;
 
-  usb_error         result;
-  device_config_hub hub_config;
+  usb_error_t         result;
+  device_config_hub_t hub_config;
   working->hub_config = &hub_config;
 
   hub_config.type = USB_IS_HUB;
-  CHECK(configure_device(working, interface, (device_config *const)&hub_config));
+  CHECK(configure_device(working, interface, (device_config_t *const)&hub_config));
   RETURN_CHECK(configure_usb_hub(working));
 done:
   return result;
 }
 
-usb_error op_cap_drv_intf(_working *const working) {
-  usb_error                         result;
-  _usb_state *const                 work_area = get_usb_work_area();
-  const interface_descriptor *const interface = (interface_descriptor *)working->ptr;
+usb_error_t op_cap_drv_intf(_working_t *const working) {
+  usb_error_t                         result;
+  usb_state_t *const                  work_area = get_usb_work_area();
+  const interface_descriptor_t *const interface = (interface_descriptor_t *)working->ptr;
 
   working->ptr += interface->bLength;
   working->endpoint_count   = interface->bNumEndpoints;
@@ -111,15 +111,15 @@ usb_error op_cap_drv_intf(_working *const working) {
   }
 
   case USB_IS_UNKNOWN: {
-    device_config unkown_dev_cfg;
-    memset(&unkown_dev_cfg, 0, sizeof(device_config));
+    device_config_t unkown_dev_cfg;
+    memset(&unkown_dev_cfg, 0, sizeof(device_config_t));
     working->p_current_device = &unkown_dev_cfg;
     CHECK(configure_device(working, interface, &unkown_dev_cfg));
     break;
   }
 
   default: {
-    device_config *dev_cfg = find_first_free();
+    device_config_t *dev_cfg = find_first_free();
     if (dev_cfg == NULL)
       return USB_ERR_OUT_OF_MEMORY;
     working->p_current_device = dev_cfg;
@@ -134,16 +134,16 @@ done:
   return result;
 }
 
-usb_error op_id_class_drv(_working *const working) {
-  const interface_descriptor *const ptr = (const interface_descriptor *)working->ptr;
+usb_error_t op_id_class_drv(_working_t *const working) {
+  const interface_descriptor_t *const ptr = (const interface_descriptor_t *)working->ptr;
 
   working->usb_device = ptr->bLength > 5 ? identify_class_driver(working) : 0;
 
   return op_cap_drv_intf(working);
 }
 
-usb_error op_get_cfg_desc(_working *const working) {
-  usb_error result;
+usb_error_t op_get_cfg_desc(_working_t *const working) {
+  usb_error_t result;
 
   const uint8_t max_packet_size = working->desc.bMaxPacketSize0;
 
@@ -152,7 +152,7 @@ usb_error op_get_cfg_desc(_working *const working) {
   CHECK(usbtrn_gfull_cfg_desc(working->config_index, working->current_device_address, max_packet_size, MAX_CONFIG_SIZE,
                               working->config.buffer));
 
-  working->ptr             = (working->config.buffer + sizeof(config_descriptor));
+  working->ptr             = (working->config.buffer + sizeof(config_descriptor_t));
   working->interface_count = working->config.desc.bNumInterfaces;
 
   return op_id_class_drv(working);
@@ -161,13 +161,13 @@ done:
   return result;
 }
 
-usb_error read_all_configs(enumeration_state *const state) {
-  uint8_t           result;
-  uint8_t           config_index;
-  _working          working;
-  _usb_state *const work_area = get_usb_work_area();
+usb_error_t read_all_configs(enumeration_state_t *const state) {
+  uint8_t            result;
+  uint8_t            config_index;
+  _working_t         working;
+  usb_state_t *const work_area = get_usb_work_area();
 
-  memset(&working, 0, sizeof(_working));
+  memset(&working, 0, sizeof(_working_t));
   working.state = state;
 
   CHECK(usbtrn_get_descriptor(&working.desc));
@@ -188,10 +188,10 @@ done:
   return result;
 }
 
-usb_error enumerate_all_devices(void) {
-  enumeration_state state;
-  _usb_state *const work_area = get_usb_work_area();
-  memset(&state, 0, sizeof(enumeration_state));
+usb_error_t enumerate_all_devices(void) {
+  enumeration_state_t state;
+  usb_state_t *const  work_area = get_usb_work_area();
+  memset(&state, 0, sizeof(enumeration_state_t));
 
   return read_all_configs(&state);
 }
