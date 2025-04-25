@@ -53,6 +53,31 @@ _usb_dispatch:
 	SUB	12
 	JR	Z, usb_kyb_init				; B = 47
 
+
+	LD	A, B
+	SUB	128
+	JR	Z,usb_control_transfer			; B = 128
+	DEC	A
+	JR	Z,usb_data_in_transfer			; B = 129
+	DEC	A
+	JR	Z,usb_data_in_transfer_n		; B = 130
+	DEC	A
+	JR	Z,usb_data_out_transfer			; B = 131
+	DEC	A
+	JR	Z,usbtrn_get_descriptor			; B = 132
+	DEC	A
+	JR	Z,usbtrn_get_descriptor2		; B = 133
+	DEC	A
+	JR	Z,usbtrn_get_config_descriptor		; B = 134
+	DEC	A
+	JR	Z,usbtrn_gfull_cfg_desc			; B = 135
+	DEC	A
+	JR	Z,usbtrn_set_configuration		; B = 136
+	DEC	A
+	JR	Z,usbtrn_set_address			; B = 137
+	DEC	A
+	JR	Z,usbtrn_clear_endpoint_halt		; B = 138
+
 	LD	A, B
 	INC	A
 	JR	Z, usb_init				; B = 255
@@ -285,34 +310,7 @@ usb_kyb_flush:
 ; See USB HID Usage Tables specification for key codes
 ; usb_kyb_report:
 
-;
-;
-; Function B = ?? usb_control_transfer
-;
-; Inputs
-;   IY -> cmd_packet
-;   IX -> buffer
-;   D -> device address
-;   E -> max_packet_size
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshall to usb_error_t usb_control_transfer(const setup_packet_t *const cmd_packet, void *const buffer, const uint8_t device_address, const uint8_t max_packet_size);
 
-;
-; Function B = ?? usb_data_in_transfer
-;
-; Inputs
-;   IX -> buffer
-;   HL -> buffer size
-;   D -> device address
-;   IY -> endpoint
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
 
 
 ;
@@ -358,17 +356,6 @@ usb_kyb_flush:
 ; marshalls to usb_error_t usbtrn_get_descriptor(device_descriptor_t *const buffer);
 
 
-;
-; Function B = ?? usbtrn_get_descriptor2
-;
-; Inputs
-;   IX -> buffer
-;   D -> device address
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usbtrn_get_descriptor2(device_descriptor_t *const buffer, const uint8_t device_address);
 
 
 ;
@@ -502,4 +489,113 @@ usb_get_device_type:
 	PUSH	BC
 	CALL	_usb_get_device_type
 	POP	BC
+	RET.L
+
+
+;------------------------------------
+; LOW LEVEL USB INTERFACE
+; ---------------------------
+;
+	XREF	_usb_control_transfer
+	XREF	_usb_data_in_transfer
+
+	XREF	_usbtrn_get_descriptor2
+
+; Function B = ?? usb_control_transfer
+;
+; Inputs
+;   IY -> cmd_packet
+;   IX -> buffer
+;   D -> device_address
+;   E -> max_packet_size
+;
+; Outputs
+;   A -> usb_error_t
+;
+; marshall to usb_error_t usb_control_transfer(setup_packet_t *const cmd_packet, void *const buffer, uint8_t device_address, uint8_t max_packet_size);
+usb_control_transfer:
+	PUSH	DE
+	LD	E, D
+	PUSH	DE
+	PUSH	IX
+	PUSH	IY
+	CALL	_usb_control_transfer
+	POP	IY
+	POP	IX
+	POP	DE
+	POP	DE
+	RET.L
+;
+; Function B = ?? usb_data_in_transfer
+;
+; Inputs
+;   IX -> buffer
+;   HL -> buffer size
+;   D -> device address
+;   IY -> endpoint
+;
+; Outputs
+;   A -> usb_error_t
+;
+; marshalls to usb_error_t usb_data_in_transfer(uint8_t *buffer, uint16_t buffer_size, uint8_t device_address, endpoint_param_t *const endpoint);
+usb_data_in_transfer:
+	PUSH	IY
+	LD	E, D
+	PUSH	DE
+	PUSH	HL
+	PUSH	IX
+	CALL	_usb_data_in_transfer
+	POP	IX
+	POP	HL
+	POP	DE
+	POP	IY
+	RET.L
+
+
+; usb_error_t usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, uint8_t device_address, endpoint_param_t *const endpoint);
+usb_data_in_transfer_n:
+
+; usb_error_t usb_data_out_transfer(uint8_t *buffer, uint16_t buffer_size, uint8_t device_address, endpoint_param_t *const endpoint);
+usb_data_out_transfer:
+
+; usb_error_t usbtrn_get_descriptor(device_descriptor_t *const buffer);
+usbtrn_get_descriptor:
+
+;
+; Function B = ?? usbtrn_get_descriptor2
+;
+; Inputs
+;   IX -> buffer
+;   D -> device address
+;
+; Outputs
+;   A -> usb_error_t
+;
+; marshalls to usb_error_t usbtrn_get_descriptor2(device_descriptor_t *const buffer, uint8_t device_address);
+usbtrn_get_descriptor2:
+	LD	E, D
+	PUSH	DE
+	PUSH	IX
+	CALL	_usbtrn_get_descriptor2
+	POP	IX
+	POP	DE
+	RET.L
+
+; usb_error_t usbtrn_get_config_descriptor(config_descriptor_t *const buffer, uint8_t config_index, uint8_t buffer_size, uint8_t device_address, uint8_t max_packet_size);
+usbtrn_get_config_descriptor:
+
+; usb_error_t usbtrn_gfull_cfg_desc(uint8_t config_index, uint8_t device_address, uint8_t max_packet_size, uint8_t max_buffer_size, uint8_t *const buffer);
+usbtrn_gfull_cfg_desc:
+
+; usb_error_t usbtrn_set_configuration(uint8_t device_address, uint8_t max_packet_size, uint8_t configuration);
+usbtrn_set_configuration:
+
+; usb_error_t usbtrn_set_address(uint8_t device_address);
+usbtrn_set_address:
+
+; usb_error_t usbtrn_clear_endpoint_halt(uint8_t endpoint_number, uint8_t device_address, uint8_t max_packet_size);
+usbtrn_clear_endpoint_halt:
+
+
+	LD	A, -1
 	RET.L

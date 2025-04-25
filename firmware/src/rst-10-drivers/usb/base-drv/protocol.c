@@ -81,7 +81,7 @@ usb_error_t usbtrn_set_address(const uint8_t device_address) {
 const setup_packet_t cmd_set_configuration = {0x00, 9, {0, 0}, {0, 0}, 0};
 
 /**
- * @brief configure device at address 0 to be assigned a new configuration
+ * @brief configure device_address to be assigned a new configuration
  *
  * @param config the device to be configured
  * @return usb_error_t USB_ERR_OK if all good, otherwise specific error code

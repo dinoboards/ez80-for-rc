@@ -337,19 +337,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="endpoint" />
-<watch-element expression="working" />
-<watch-element expression="cmd_packet" />
-<watch-element expression="cmd" />
-<watch-element expression="dev" />
-<watch-element expression="cap_result" />
-<watch-element expression="ufi_cmd_request_test_unit_ready" />
-<watch-element expression="ufi_cmd_request_sense" />
-<watch-element expression="device" />
-<watch-element expression="adsc" />
-<watch-element expression="storage_device" />
-<watch-element expression="keyboard_config" />
-<watch-element expression="response" />
+<watch-element expression="buffer" />
 </watch-elements>
 
 <!-- breakpoint information -->
