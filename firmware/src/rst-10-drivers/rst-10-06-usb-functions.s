@@ -1,6 +1,6 @@
 
 
-        INCLUDE "..\config.inc"
+	 INCLUDE "..\config.inc"
 
 	SECTION CODE
 
@@ -21,6 +21,7 @@
 	XREF	_usb_kyb_status
 	XREF	_usb_kyb_read
 	XREF	_usb_kyb_flush
+	XREF	_usb_kyb_report
 
 _usb_dispatch:
 	LD	A, B					; SUB FUNCTION CODE
@@ -46,7 +47,9 @@ _usb_dispatch:
 	JR	Z, usb_kyb_read				; B = 33
 	DEC	A
 	JR	Z, usb_kyb_flush			; B = 34
-	SUB	13
+	DEC	A
+	JR	Z, usb_kyb_report			; B = 35
+	SUB	12
 	JR	Z, usb_kyb_init				; B = 47
 
 	LD	A, B
@@ -262,8 +265,57 @@ usb_kyb_flush:
 	CALL	_usb_kyb_flush
 	RET.L
 
+;
+; Function B = ?? -- usb_kyb_report
+;
+; Inputs
+;  HL: Address of a keyboard_report_t (8 bytes) to receive report
+;
+; Outputs
+;   A: Status
+;
+; Retrieve the next USB HID keyboard report data.
+;
+; USB Keyboard Extension:
+; Register A contains the number of buffered reports available:
+;   A = 0: No reports available
+;   A > 0: At least one report available (will be consumed after reading)
+; When a report is available (A > 0), the 8 bytes at HL are filled
+; See USB HID Usage Tables specification for key codes
 
+; uint8_t usb_kyb_report(keyboard_report_t*)
 
+	XREF	_alt_read_index
+	XREF	_reports
+	XREF	_usb_kyb_rpt_que_size
+
+usb_kyb_report:
+	push	hl			; keyboard_report_t*
+
+	xor	a
+	sbc	hl, hl
+	ld	a, (_alt_read_index)
+	ld	l, a
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	ld	bc, _reports
+	add	hl, bc
+	push	hl			 ; address of potential que'd next usb report
+
+	call	_usb_kyb_rpt_que_size
+	or	a
+	pop	hl			 ; retrieve the next que'd usb_report address
+	jr	z, .no_queued_reports
+
+	ld	bc, 8
+	pop	de			; keyboard_report_t*
+	ldir
+	ret.l
+
+.no_queued_reports:
+	pop	hl
+	ret.l
 
 
 ;
@@ -437,10 +489,10 @@ usb_kyb_flush:
 ; Outputs
 ;  A -> 0 if success, otherwise indicates a failure
 ;  L -> State (0...n)
-;    0: CH376 module failed to respond.  Retry with state 0
-;    1: CH376 module responded. H contains CH376 module version
-;    2: H contains count of detected devices..
-;    3: H contains count of detected devices..
+;	0: CH376 module failed to respond.  Retry with state 0
+;	1: CH376 module responded. H contains CH376 module version
+;	2: H contains count of detected devices..
+;	3: H contains count of detected devices..
 ;
 ; marshalls to uint16_t usb_init(uint8_t state)
 usb_init:

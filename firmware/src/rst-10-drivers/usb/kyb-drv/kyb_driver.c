@@ -14,25 +14,24 @@ static uint8_t buffer[KEYBOARD_BUFFER_SIZE] = {0};
 static uint8_t write_index                  = 0;
 static uint8_t read_index                   = 0;
 
-// static uint8_t           alt_write_index               = 0;
-// static uint8_t           alt_read_index                = 0;
-// static keyboard_report_t reports[KEYBOARD_BUFFER_SIZE] = {{0}};
+uint8_t           alt_write_index               = 0;
+uint8_t           alt_read_index                = 0;
+keyboard_report_t reports[KEYBOARD_BUFFER_SIZE] = {{0}};
 
-// static keyboard_report_t *queued_report = NULL;
 keyboard_report_t report   = {0};
 keyboard_report_t previous = {0};
 
 #define DI asm("DI")
 #define EI asm("EI")
 
-// static void report_put() {
-//   uint8_t next_write_index = (alt_write_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;
+void keyboard_report_put() {
+  uint8_t next_write_index = (alt_write_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;
 
-//   if (next_write_index != alt_read_index) { // Check if buffer is not full
-//     reports[alt_write_index] = report;
-//     alt_write_index          = next_write_index;
-//   }
-// }
+  if (next_write_index != alt_read_index) { // Check if buffer is not full
+    reports[alt_write_index] = report;
+    alt_write_index          = next_write_index;
+  }
+}
 
 void keyboard_buf_put(const uint8_t indx) {
   unsigned char c;
@@ -64,29 +63,6 @@ void keyboard_buf_put(const uint8_t indx) {
     write_index         = next_write_index;
   }
 }
-
-// uint16_t usb_kyb_buf_size() {
-//   uint8_t size;
-//   uint8_t alt_size;
-
-//   DI;
-
-//   if (alt_write_index >= alt_read_index)
-//     alt_size = alt_write_index - alt_read_index;
-//   else
-//     alt_size = KEYBOARD_BUFFER_SIZE - alt_read_index + alt_write_index;
-
-//   if (alt_size != 0)
-//     alt_read_index = (alt_read_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;
-
-//   if (write_index >= read_index)
-//     size = write_index - read_index;
-//   else
-//     size = KEYBOARD_BUFFER_SIZE - read_index + write_index;
-
-//   EI;
-//   return (uint16_t)alt_size << 8 | (uint16_t)size;
-// }
 
 uint8_t usb_kyb_status() {
   uint8_t size;
@@ -123,7 +99,7 @@ uint8_t usb_kyb_flush() {
   uint8_t *b;
 
   DI;
-  write_index = read_index /*= alt_write_index = alt_read_index*/ = 0;
+  write_index = read_index = alt_write_index = alt_read_index = 0;
 
   i = sizeof(previous);
   a = (uint8_t *)&previous;
@@ -152,4 +128,20 @@ usb_error usb_kyb_init(const uint8_t dev_index) {
 
 done:
   return result;
+}
+
+uint8_t usb_kyb_rpt_que_size() {
+  uint8_t alt_size = 0;
+  DI;
+
+  if (alt_write_index >= alt_read_index)
+    alt_size = alt_write_index - alt_read_index;
+  else
+    alt_size = KEYBOARD_BUFFER_SIZE - alt_read_index + alt_write_index;
+
+  if (alt_size != 0)
+    alt_read_index = (alt_read_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;
+
+  EI;
+  return alt_size;
 }
