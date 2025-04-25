@@ -255,9 +255,9 @@ int IN_JoyAxes(void) {
  * @return uint8_t true if a key event was received
  */
 static uint8_t processEvent() {
-  usb_keyboard_key_t usb_key;
+  ez80_usb_kyb_event_t usb_key;
 
-  uint16_t result = usb_kyb_get_scan_code(&usb_key);
+  uint8_t result = ez80_usb_kyb_event(&usb_key);
 
   if (result == 0)
     return false;
