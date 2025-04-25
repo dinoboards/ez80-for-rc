@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+usb_keyboard_report_t usb_keyboard_report = {0};
+
 int main(/*const int argc, const char *argv[]*/) {
   int8_t result;
 
@@ -17,4 +19,17 @@ int main(/*const int argc, const char *argv[]*/) {
   result = ez80_uart_in();
 
   printf("Received %c (%X)\r\n", result, result);
+
+  result = ez80_usb_kyb_report(&usb_keyboard_report);
+  printf("USB Report: (Press A key on its own to abort)\r\n");
+  while (usb_keyboard_report.keyCode[0] != 4) { // A
+
+    if (result != 0) {
+      printf("\r\nUSB Key State: %X: Modifiers: %X, Scan Codes: (%X, %X, %X, %X, %X, %X)", result, usb_keyboard_report.bModifierKeys,
+             usb_keyboard_report.keyCode[0], usb_keyboard_report.keyCode[1], usb_keyboard_report.keyCode[2],
+             usb_keyboard_report.keyCode[3], usb_keyboard_report.keyCode[4], usb_keyboard_report.keyCode[5]);
+    }
+
+    result = ez80_usb_kyb_report(&usb_keyboard_report);
+  }
 }
