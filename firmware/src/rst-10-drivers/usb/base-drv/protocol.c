@@ -119,11 +119,11 @@ usb_error_t usbtrn_get_config_descriptor(config_descriptor_t *const buffer,
   return usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, max_packet_size);
 }
 
-usb_error_t usbtrn_gfull_cfg_desc(const uint8_t  config_index,
-                                  const uint8_t  device_address,
-                                  const uint8_t  max_packet_size,
-                                  const uint8_t  max_buffer_size,
-                                  uint8_t *const buffer) {
+usb_error_t usbtrn_get_full_config_descriptor(const uint8_t  config_index,
+                                              const uint8_t  device_address,
+                                              const uint8_t  max_packet_size,
+                                              const uint8_t  max_buffer_size,
+                                              uint8_t *const buffer) {
   uint8_t result;
   uint8_t max_length;
 

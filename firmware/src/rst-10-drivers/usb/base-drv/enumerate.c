@@ -149,8 +149,8 @@ usb_error_t op_get_cfg_desc(_working_t *const working) {
 
   memset(working->config.buffer, 0, MAX_CONFIG_SIZE);
 
-  CHECK(usbtrn_gfull_cfg_desc(working->config_index, working->current_device_address, max_packet_size, MAX_CONFIG_SIZE,
-                              working->config.buffer));
+  CHECK(usbtrn_get_full_config_descriptor(working->config_index, working->current_device_address, max_packet_size, MAX_CONFIG_SIZE,
+                                          working->config.buffer));
 
   working->ptr             = (working->config.buffer + sizeof(config_descriptor_t));
   working->interface_count = working->config.desc.bNumInterfaces;

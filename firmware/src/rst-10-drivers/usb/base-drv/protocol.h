@@ -64,11 +64,11 @@ extern usb_error_t usbtrn_get_config_descriptor(config_descriptor_t *const buffe
                                                 const uint8_t              device_address,
                                                 const uint8_t              max_packet_size);
 
-extern usb_error_t usbtrn_gfull_cfg_desc(const uint8_t  config_index,
-                                         const uint8_t  device_address,
-                                         const uint8_t  max_packet_size,
-                                         const uint8_t  max_buffer_size,
-                                         uint8_t *const buffer);
+extern usb_error_t usbtrn_get_full_config_descriptor(const uint8_t  config_index,
+                                                     const uint8_t  device_address,
+                                                     const uint8_t  max_packet_size,
+                                                     const uint8_t  max_buffer_size,
+                                                     uint8_t *const buffer);
 
 extern usb_error_t
 usbtrn_set_configuration(const uint8_t device_address, const uint8_t max_packet_size, const uint8_t configuration);

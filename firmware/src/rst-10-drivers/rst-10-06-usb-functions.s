@@ -70,7 +70,7 @@ _usb_dispatch:
 	DEC	A
 	JR	Z,usbtrn_get_config_descriptor		; B = 134
 	DEC	A
-	JR	Z,usbtrn_gfull_cfg_desc			; B = 135
+	JR	Z,usbtrn_get_full_config_descriptor	; B = 135
 	DEC	A
 	JR	Z,usbtrn_set_configuration		; B = 136
 	DEC	A
@@ -373,21 +373,6 @@ usb_kyb_flush:
 ;
 ; marshalls to usb_error_t usbtrn_get_config_descriptor(config_descriptor_t *const buffer, const uint8_t config_index, const uint8_t buffer_size, const uint8_t device_address, const uint8_t max_packet_size);
 
-;
-; Function B = ?? usbtrn_gfull_cfg_desc
-;
-; Inputs
-;   IX -> buffer
-;   C -> config_index
-;   D -> device address
-;   E -> max packet size
-;   HL -> buffer size
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usbtrn_gfull_cfg_desc(const uint8_t config_index, const uint8_t device_address, const uint8_t max_packet_size, const uint8_t max_buffer_size, uint8_t *const buffer);
-
 
 ;
 ; Function B = ?? usbtrn_set_configuration
@@ -498,8 +483,8 @@ usb_get_device_type:
 ;
 	XREF	_usb_control_transfer
 	XREF	_usb_data_in_transfer
-
 	XREF	_usbtrn_get_descriptor2
+	XREF	_usbtrn_get_full_config_descriptor
 
 ; Function B = ?? usb_control_transfer
 ;
@@ -584,8 +569,34 @@ usbtrn_get_descriptor2:
 ; usb_error_t usbtrn_get_config_descriptor(config_descriptor_t *const buffer, uint8_t config_index, uint8_t buffer_size, uint8_t device_address, uint8_t max_packet_size);
 usbtrn_get_config_descriptor:
 
-; usb_error_t usbtrn_gfull_cfg_desc(uint8_t config_index, uint8_t device_address, uint8_t max_packet_size, uint8_t max_buffer_size, uint8_t *const buffer);
-usbtrn_gfull_cfg_desc:
+;
+; Function B = ?? usbtrn_get_full_config_descriptor
+;
+; Inputs
+;   IX -> buffer
+;   C -> config_index
+;   D -> device address
+;   E -> max packet size
+;   HL -> max buffer size
+;
+; Outputs
+;   A -> usb_error_t
+;
+; marshalls to usb_error_t usbtrn_get_full_config_descriptor(uint8_t config_index, uint8_t device_address, uint8_t max_packet_size, uint8_t max_buffer_size, uint8_t *const buffer);
+usbtrn_get_full_config_descriptor:
+	PUSH	IX
+	PUSH	HL
+	PUSH	DE
+	LD	E, D
+	PUSH	DE
+	PUSH	BC
+	CALL	_usbtrn_get_full_config_descriptor
+	POP	BC
+	POP	DE
+	POP	DE
+	POP	HL
+	POP	IX
+	RET.L
 
 ; usb_error_t usbtrn_set_configuration(uint8_t device_address, uint8_t max_packet_size, uint8_t configuration);
 usbtrn_set_configuration:
