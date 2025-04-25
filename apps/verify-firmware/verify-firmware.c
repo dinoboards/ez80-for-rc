@@ -25,11 +25,23 @@ int main(/*const int argc, const char *argv[]*/) {
   while (usb_keyboard_report.keyCode[0] != 4) { // A
 
     if (result != 0) {
-      printf("\r\nUSB Key State: %X: Modifiers: %X, Scan Codes: (%X, %X, %X, %X, %X, %X)", result, usb_keyboard_report.bModifierKeys,
-             usb_keyboard_report.keyCode[0], usb_keyboard_report.keyCode[1], usb_keyboard_report.keyCode[2],
-             usb_keyboard_report.keyCode[3], usb_keyboard_report.keyCode[4], usb_keyboard_report.keyCode[5]);
+      printf("\r\nUSB Key State: %X: Modifiers: %X, Scan Codes: (%X, %X, %X, %X, %X, %X)", result,
+             usb_keyboard_report.bModifierKeys, usb_keyboard_report.keyCode[0], usb_keyboard_report.keyCode[1],
+             usb_keyboard_report.keyCode[2], usb_keyboard_report.keyCode[3], usb_keyboard_report.keyCode[4],
+             usb_keyboard_report.keyCode[5]);
     }
 
     result = ez80_usb_kyb_report(&usb_keyboard_report);
   }
+
+  printf("Testing usb keyboard event que\r\n");
+  ez80_usb_kyb_event_t usb_key;
+
+  do {
+    result = ez80_usb_kyb_event(&usb_key);
+
+    if (result)
+      printf(": %d, %x, %x\r\n", result, usb_key.key_code, usb_key.key_down);
+
+  } while (!(result && usb_key.key_code == 4));
 }
