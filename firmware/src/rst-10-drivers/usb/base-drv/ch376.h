@@ -75,9 +75,9 @@ enum usb_endpoint_e { ENDPOINT_BULK_OUT = 0, ENDPOINT_BULK_IN = 1, ENDPOINT_INTE
 #define calc_max_packet_size(packet_size) (packet_size) > 64 ? 64 : (packet_size)
 
 typedef struct {
-  uint8_t  toggle;
-  uint8_t  number;
-  uint16_t max_packet_size;
+  uint8_t toggle;
+  uint8_t number;
+  uint8_t max_packet_size;
 } endpoint_param_t;
 
 #define CH_SPEED_FULL     0 /* 12Mbps full speed FullSpeed ​​(default value) */
