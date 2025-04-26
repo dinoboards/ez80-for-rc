@@ -202,7 +202,7 @@ done:
 usb_error_t ch_data_out_transfer(const uint8_t *buffer, int16_t buffer_length, endpoint_param_t *const endpoint) {
   usb_error_t   result;
   const uint8_t number          = endpoint->number;
-  const uint8_t max_packet_size = calc_max_packet_size(endpoint->max_packet_sizex);
+  const uint8_t max_packet_size = calc_max_packet_size(endpoint->max_packet_size);
 
   USB_MODULE_LEDS = 0x02;
 

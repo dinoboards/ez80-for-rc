@@ -12,7 +12,7 @@ void parse_endpoint_keyboard(device_config_keyboard_t *const keyboard_config, co
   endpoint_param_t *const ep = &keyboard_config->endpoints[0];
   ep->number                 = pEndpoint->bEndpointAddress;
   ep->toggle                 = 0;
-  ep->max_packet_sizex       = calc_max_packet_sizex(pEndpoint->wMaxPacketSize);
+  ep->max_packet_size        = calc_max_packet_size(pEndpoint->wMaxPacketSize);
 }
 
 usb_device_t identify_class_driver(_working_t *const working) {
@@ -29,8 +29,11 @@ usb_device_t identify_class_driver(_working_t *const working) {
   if (p->bInterfaceClass == 9 && p->bInterfaceSubClass == 0 && p->bInterfaceProtocol == 0)
     return USB_IS_HUB;
 
-  if (p->bInterfaceClass == 3)
+  if (p->bInterfaceClass == 3 && p->bInterfaceSubClass == 1 && p->bInterfaceProtocol == 1) // Keyboard boot protocol
     return USB_IS_KEYBOARD;
+
+  if (p->bInterfaceClass == 3 && p->bInterfaceSubClass == 1 && p->bInterfaceProtocol == 2) // Mouse boot protocol
+    return USB_IS_MOUSE;
 
   return USB_IS_UNKNOWN;
 }
@@ -63,6 +66,11 @@ usb_error_t op_parse_endpoint(_working_t *const working) {
   }
 
   case USB_IS_KEYBOARD: {
+    parse_endpoint_keyboard((device_config_keyboard_t *)device, endpoint);
+    break;
+  }
+
+  case USB_IS_MOUSE: {
     parse_endpoint_keyboard((device_config_keyboard_t *)device, endpoint);
     break;
   }

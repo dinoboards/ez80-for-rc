@@ -50,6 +50,7 @@ enum usb_device_e {
   USB_IS_MASS_STORAGE = 2,
   USB_IS_CDC          = 3,
   USB_IS_KEYBOARD     = 4,
+  USB_IS_MOUSE        = 5,
   USB_IS_UNKNOWN      = 6,
   _USB_LAST_DEVICE_TYPE,
   USB_IS_HUB = 15
@@ -71,13 +72,12 @@ enum usb_endpoint_e { ENDPOINT_BULK_OUT = 0, ENDPOINT_BULK_IN = 1, ENDPOINT_INTE
     goto done;                                                                                                                     \
   }
 
-#define calc_max_packet_sizex(packet_size) (packet_size & 0x3FF)
-#define calc_max_packet_size(packet_sizex) packet_sizex
+#define calc_max_packet_size(packet_size) (packet_size) > 64 ? 64 : (packet_size)
 
 typedef struct {
   uint8_t  toggle;
   uint8_t  number;
-  uint16_t max_packet_sizex;
+  uint16_t max_packet_size;
 } endpoint_param_t;
 
 #define CH_SPEED_FULL     0 /* 12Mbps full speed FullSpeed ​​(default value) */

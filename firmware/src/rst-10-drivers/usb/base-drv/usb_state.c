@@ -11,6 +11,7 @@ const uint8_t device_config_sizes[_USB_LAST_DEVICE_TYPE] = {
     sizeof(device_config_storage_t),  /* USB_IS_MASS_STORAGE = 2 */
     sizeof(device_config_t),          /* USB_IS_CDC          = 3 */
     sizeof(device_config_keyboard_t), /* USB_IS_KEYBOARD     = 4 */
+    sizeof(device_config_mouse_t),    /* USB_IS_MOUSE        = 5 */
 };
 
 // always usb work area

@@ -17,11 +17,6 @@
 #include "transfers.h"
 #include <stdlib.h>
 
-typedef struct {
-  uint8_t  number;
-  uint16_t max_packet_sizex;
-} endpoint_t;
-
 // 3 bytes
 #define COMMON_DEVICE_CONFIG                                                                                                       \
   usb_device_t type;                                                                                                               \
@@ -48,6 +43,11 @@ typedef struct {
   COMMON_DEVICE_CONFIG;
   endpoint_param_t endpoints[1]; // Isochronous
 } device_config_keyboard_t;
+
+typedef struct {
+  COMMON_DEVICE_CONFIG;
+  endpoint_param_t endpoints[1]; // Isochronous
+} device_config_mouse_t;
 
 extern usb_error_t usbdev_control_transfer(device_config_t *const device, const setup_packet_t *const cmd, uint8_t *const buffer);
 

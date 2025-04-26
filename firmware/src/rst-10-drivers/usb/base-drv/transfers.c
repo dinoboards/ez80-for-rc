@@ -35,9 +35,9 @@ usb_error_t usb_control_transfer(const setup_packet_t *const cmd_packet,
   uint16_t         length;
   const uint8_t    transferIn = (cmd_packet->bmRequestType & 0x80);
 
-  endpoint.toggle           = 1;
-  endpoint.number           = 0;
-  endpoint.max_packet_sizex = max_packet_size;
+  endpoint.toggle          = 1;
+  endpoint.number          = 0;
+  endpoint.max_packet_size = max_packet_size;
 
   if (transferIn && buffer == 0)
     return USB_ERR_OTHER;
