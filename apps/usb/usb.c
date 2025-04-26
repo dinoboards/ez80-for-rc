@@ -6,6 +6,82 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define HID_GET_REPORT   0x01
+#define HID_GET_IDLE     0x02
+#define HID_GET_PROTOCOL 0x03
+#define HID_SET_REPORT   0x09
+#define HID_SET_IDLE     0x0A
+#define HID_SET_PROTOCOL 0x0B
+
+#define HID_BOOT_PROTOCOL   0x00
+#define HID_REPORT_PROTOCOL 0x01
+
+typedef uint8_t usb_device_t;
+enum usb_device_e {
+  USB_NOT_SUPPORTED   = 0,
+  USB_IS_FLOPPY       = 1,
+  USB_IS_MASS_STORAGE = 2,
+  USB_IS_CDC          = 3,
+  USB_IS_KEYBOARD     = 4,
+  USB_IS_MOUSE        = 5,
+  USB_IS_UNKNOWN      = 6,
+  _USB_LAST_DEVICE_TYPE,
+  USB_IS_HUB = 15
+}; // 4 bits only
+
+typedef struct {
+  uint8_t toggle;
+  uint8_t number;
+  uint8_t max_packet_size; // TODO: change this to uint8_t and also in RomWBW & MSX version
+} endpoint_param_t;
+
+typedef struct {
+  uint8_t          address;
+  uint8_t          max_packet_size;
+  uint8_t          interface_number;
+  endpoint_param_t endpoints[1]; // Isochronous
+} device_config_mouse_t;
+
+device_config_mouse_t device_config_mouse = {0};
+
+const setup_packet_t cmd_hid_set = {0x21, HID_SET_PROTOCOL, {0, 0}, {0, 0}, 0};
+
+usb_error_t hid_set_protocol(const device_config_mouse_t *const dev, const uint8_t protocol) {
+  setup_packet_t cmd;
+  cmd = cmd_hid_set;
+
+  cmd.bRequest  = HID_SET_PROTOCOL;
+  cmd.bValue[0] = protocol;
+
+  return usb_control_transfer(&cmd, NULL, dev->address, dev->max_packet_size);
+}
+
+usb_error_t hid_set_idle(const device_config_mouse_t *const dev, const uint8_t duration) {
+  setup_packet_t cmd;
+  cmd = cmd_hid_set;
+
+  cmd.bRequest  = HID_SET_IDLE;
+  cmd.bValue[0] = duration;
+
+  return usb_control_transfer(&cmd, NULL, dev->address, dev->max_packet_size);
+}
+
+usb_error_t usbdev_dat_in_trnsfer_0(device_config_mouse_t *const device, uint8_t *const buffer, const uint8_t buffer_size) {
+  usb_error_t             result;
+  endpoint_param_t *const endpoint = &device->endpoints[0];
+
+  result =
+      usb_data_in_transfer(buffer, buffer_size, device->address, endpoint->number, endpoint->max_packet_size, &endpoint->toggle);
+
+  // if (result == USB_ERR_STALL) {
+  //   usbtrn_clear_endpoint_halt(endpoint->number, device->address, device->max_packet_size);
+  //   endpoint->toggle = 0;
+  //   return USB_ERR_STALL;
+  // }
+
+  return result;
+}
+
 void report_device_descriptor(const device_descriptor_t *const p) {
   printf("  length:             %d\n", p->bLength);
   printf("  bDescriptorType:    %d\n", p->bDescriptorType);
@@ -22,9 +98,9 @@ void report_device_descriptor(const device_descriptor_t *const p) {
     printf("  Description:        Floppy Disk\n");
   else if (p->bDeviceClass == 9 && p->bDeviceSubClass == 0 && p->bDeviceProtocol == 0)
     printf("  Description:        Hub\n");
-  else if (p->bDeviceClass == 3 && p->bDeviceSubClass == 1 && p->bDeviceProtocol == 1) //Keyboard boot protocol
+  else if (p->bDeviceClass == 3 && p->bDeviceSubClass == 1 && p->bDeviceProtocol == 1) // Keyboard boot protocol
     printf("  Description:        HID Keyboard (boot mode)\n");
-  else if (p->bDeviceClass == 3 && p->bDeviceSubClass == 1 && p->bDeviceProtocol == 2) //Mouse boot protocol
+  else if (p->bDeviceClass == 3 && p->bDeviceSubClass == 1 && p->bDeviceProtocol == 2) // Mouse boot protocol
     printf("  Description:        HID Mouse (boot mode)\n");
   else if (p->bDeviceClass == 7)
     printf("  Description:        Printer\n");
@@ -53,7 +129,9 @@ void report_device_configuration(const config_descriptor_t *const config) {
   printf("    bMaxPower:           %d\n", config->bMaxPower);
 }
 
-void report_device_interface(const interface_descriptor_t *const interface) {
+usb_device_t report_device_interface(const interface_descriptor_t *const interface) {
+  usb_device_t result = USB_IS_UNKNOWN;
+
   printf("    Interface:\n");
   printf("      bLength:            %d\n", interface->bLength);
   printf("      bDescriptorType:    %d\n", interface->bDescriptorType);
@@ -74,14 +152,19 @@ void report_device_interface(const interface_descriptor_t *const interface) {
     printf("      Description:        Floppy Disk\n");
   else if (interface->bInterfaceClass == 9 && interface->bInterfaceSubClass == 0 && interface->bInterfaceProtocol == 0)
     printf("      Description:        Hub\n");
-  else if (interface->bInterfaceClass == 3 && interface->bInterfaceSubClass == 1 && interface->bInterfaceProtocol == 1) //Keyboard boot protocol
+  else if (interface->bInterfaceClass == 3 && interface->bInterfaceSubClass == 1 &&
+           interface->bInterfaceProtocol == 1) // Keyboard boot protocol
     printf("      Description:        HID Keyboard (boot mode)\n");
-  else if (interface->bInterfaceClass == 3 && interface->bInterfaceSubClass == 1 && interface->bInterfaceProtocol == 2) //Mouse boot protocol
+  else if (interface->bInterfaceClass == 3 && interface->bInterfaceSubClass == 1 &&
+           interface->bInterfaceProtocol == 2) { // Mouse boot protocol
     printf("      Description:        HID Mouse (boot mode)\n");
-  else if (interface->bInterfaceClass == 7)
+    result = USB_IS_MOUSE;
+  } else if (interface->bInterfaceClass == 7)
     printf("      Description:        Printer\n");
   else if (interface->bInterfaceClass != 0)
     printf("      Description:        Other\n");
+
+  return result;
 }
 
 void report_device_endpoint(const endpoint_descriptor_t *const endpoint) {
@@ -95,6 +178,14 @@ void report_device_endpoint(const endpoint_descriptor_t *const endpoint) {
 }
 
 uint8_t buffer[512];
+
+typedef struct {
+  uint8_t buttons;
+  int8_t  x;
+  int8_t  y;
+} mouse_report_t;
+
+mouse_report_t mouse_report = {0};
 
 int main(/*const int argc, const char *argv[]*/) {
   usb_error_t         result;
@@ -128,10 +219,21 @@ int main(/*const int argc, const char *argv[]*/) {
       for (uint8_t interface_index = 0; interface_index < config->bNumInterfaces; interface_index++) {
         const interface_descriptor_t *const interface =
             (interface_descriptor_t *)(buffer + sizeof(config_descriptor_t) + interface_index * sizeof(interface_descriptor_t));
-        report_device_interface(interface);
+
+        usb_device_t usb_device = report_device_interface(interface);
+        if (usb_device == USB_IS_MOUSE) {
+          const endpoint_descriptor_t *const endpoint =
+              (endpoint_descriptor_t *)&interface[1]; //???? should this be interface_index+1
+          device_config_mouse.address                      = device_address;
+          device_config_mouse.interface_number             = interface_index;
+          device_config_mouse.max_packet_size              = endpoint->wMaxPacketSize > 64 ? 64 : endpoint->wMaxPacketSize;
+          device_config_mouse.endpoints[0].number          = endpoint->bEndpointAddress;
+          device_config_mouse.endpoints[0].max_packet_size = device_config_mouse.max_packet_size;
+          device_config_mouse.endpoints[0].toggle          = device_config_mouse.max_packet_size;
+        }
 
         for (uint8_t endpoint_index = 0; endpoint_index < interface->bNumEndpoints; endpoint_index++) {
-          const endpoint_descriptor_t *const endpoint = (endpoint_descriptor_t *)&interface[1];
+          const endpoint_descriptor_t *const endpoint = (endpoint_descriptor_t *)&interface[1]; //????
           report_device_endpoint(&endpoint[endpoint_index]);
         }
       }
@@ -140,5 +242,22 @@ int main(/*const int argc, const char *argv[]*/) {
     device_address++;
   } while (true);
 
+  printf("Captured Mouse??\n");
+  printf("  address: %d\n", device_config_mouse.address);
+  printf("  intf: %d\n", device_config_mouse.interface_number);
+  printf("  maxps: %d\n", device_config_mouse.max_packet_size);
+
+  usb_error_t r = hid_set_protocol(&device_config_mouse, 0);
+  printf("hid_set_protocol: %d\n", r);
+
+  r = hid_set_idle(&device_config_mouse, 0);
+  printf("hid_set_idle: %d\n", r);
+
+  while (mouse_report.buttons != 1) {
+    r = usbdev_dat_in_trnsfer_0(&device_config_mouse, (uint8_t *)&mouse_report, sizeof(mouse_report));
+    if (r == 0) {
+      printf("usbdev_dat_in_trnsfer_0: %d (%x, (%d, %d))\n", r, mouse_report.buttons, mouse_report.x, mouse_report.y);
+    }
+  }
   return 0;
 }
