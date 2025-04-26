@@ -107,6 +107,22 @@ usb_data_in_transfer(uint8_t *buffer, const uint16_t buffer_size, const uint8_t 
   return result;
 }
 
+usb_error_t usb_data_in_transferx(uint8_t       *buffer,
+                                  const uint16_t buffer_size,
+                                  const uint8_t  device_address,
+                                  uint8_t        number,
+                                  uint8_t        max_packet_size,
+                                  uint8_t       *toggle) {
+  usb_error_t      result;
+  endpoint_param_t ep;
+  ep.max_packet_size = max_packet_size;
+  ep.number          = number;
+  ep.toggle          = *toggle;
+  result             = usb_data_in_transfer(buffer, buffer_size, device_address, &ep);
+  *toggle            = ep.toggle;
+  return result;
+}
+
 /**
  * @brief Perform a USB data in on the specififed endpoint
  *

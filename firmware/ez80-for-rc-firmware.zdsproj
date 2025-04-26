@@ -337,11 +337,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="p" />
-<watch-element expression="i" />
-<watch-element expression="port_status" />
-<watch-element expression="cmd" />
-<watch-element expression="endpoint" />
 </watch-elements>
 
 <!-- breakpoint information -->

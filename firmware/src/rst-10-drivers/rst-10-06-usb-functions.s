@@ -482,7 +482,7 @@ usb_get_device_type:
 ; ---------------------------
 ;
 	XREF	_usb_control_transfer
-	XREF	_usb_data_in_transfer
+	XREF	_usb_data_in_transferx
 	XREF	_usbtrn_get_descriptor2
 	XREF	_usbtrn_get_full_config_descriptor
 
@@ -517,21 +517,27 @@ usb_control_transfer:
 ;   IX -> buffer
 ;   HL -> buffer size
 ;   D -> device address
-;   IY -> endpoint
+;   C -> endpoint number
+;   E -> max_packet_size
+;   IY -> toggle
 ;
 ; Outputs
 ;   A -> usb_error_t
 ;
-; marshalls to usb_error_t usb_data_in_transfer(uint8_t *buffer, uint16_t buffer_size, uint8_t device_address, endpoint_param_t *const endpoint);
+; marshalls to usb_error_t usb_data_in_transferx(uint8_t *buffer, const uint16_t buffer_size, const uint8_t device_address, uint8_t number, uint8_t max_packet_size, uint8_t* toggle)
 usb_data_in_transfer:
 	PUSH	IY
+	PUSH	DE
+	PUSH	BC
 	LD	E, D
 	PUSH	DE
 	PUSH	HL
 	PUSH	IX
-	CALL	_usb_data_in_transfer
+	CALL	_usb_data_in_transferx
 	POP	IX
 	POP	HL
+	POP	DE
+	POP	BC
 	POP	DE
 	POP	IY
 	RET.L
