@@ -8,6 +8,30 @@
 usb_error_t op_id_class_drv(_working_t *const working);
 usb_error_t op_parse_endpoint(_working_t *const working);
 
+static usb_error_t advance_to_next_descriptor(_working_t *const working, const uint8_t descriptor_type) {
+  usb_descriptor_t *d;
+  const uint8_t    *buffer_end = working->config.buffer + MAX_CONFIG_SIZE;
+
+  if (working->ptr >= buffer_end)
+    return USB_ERR_BUFF_TO_LARGE;
+
+  d = (usb_descriptor_t *)working->ptr;
+
+  do {
+    working->ptr += d->bLength;
+
+    if (working->ptr >= buffer_end)
+      return USB_ERR_BUFF_TO_LARGE;
+
+    d = (usb_descriptor_t *)working->ptr;
+  } while (d->bDescriptorType != descriptor_type);
+
+  if (working->ptr + d->bLength >= buffer_end)
+    return USB_ERR_BUFF_TO_LARGE;
+
+  return USB_ERR_OK;
+}
+
 void parse_endpoint_keyboard(device_config_keyboard_t *const keyboard_config, const endpoint_descriptor_t *pEndpoint) {
   endpoint_param_t *const ep = &keyboard_config->endpoints[0];
   ep->number                 = pEndpoint->bEndpointAddress;
@@ -39,19 +63,30 @@ usb_device_t identify_class_driver(_working_t *const working) {
 }
 
 usb_error_t op_interface_next(_working_t *const working) {
+  uint8_t result;
+
   if (--working->interface_count == 0)
     return USB_ERR_OK;
 
+  CHECK(advance_to_next_descriptor(working, USB_DESCR_INTERFACE));
   return op_id_class_drv(working);
+
+done:
+  return result;
 }
 
 usb_error_t op_endpoint_next(_working_t *const working) {
+  usb_error_t result;
+
   if (working->endpoint_count != 0 && --working->endpoint_count > 0) {
-    working->ptr += ((endpoint_descriptor_t *)working->ptr)->bLength;
+    CHECK(advance_to_next_descriptor(working, USB_DESCR_ENDPOINT));
     return op_parse_endpoint(working);
   }
 
   return op_interface_next(working);
+
+done:
+  return result;
 }
 
 usb_error_t op_parse_endpoint(_working_t *const working) {
@@ -108,8 +143,9 @@ usb_error_t op_cap_drv_intf(_working_t *const working) {
   usb_state_t *const                  work_area = get_usb_work_area();
   const interface_descriptor_t *const interface = (interface_descriptor_t *)working->ptr;
 
-  working->ptr += interface->bLength;
-  working->endpoint_count   = interface->bNumEndpoints;
+  working->endpoint_count = interface->bNumEndpoints;
+  if (working->endpoint_count > 0)
+    CHECK(advance_to_next_descriptor(working, USB_DESCR_ENDPOINT));
   working->p_current_device = NULL;
 
   switch (working->usb_device) {
@@ -136,7 +172,7 @@ usb_error_t op_cap_drv_intf(_working_t *const working) {
   }
   }
 
-  result = op_parse_endpoint(working);
+  return op_parse_endpoint(working);
 
 done:
   return result;
@@ -145,7 +181,10 @@ done:
 usb_error_t op_id_class_drv(_working_t *const working) {
   const interface_descriptor_t *const ptr = (const interface_descriptor_t *)working->ptr;
 
-  working->usb_device = ptr->bLength > 5 ? identify_class_driver(working) : 0;
+  if (ptr->bDescriptorType != USB_DESCR_INTERFACE)
+    return USB_ERR_FAIL;
+
+  working->usb_device = identify_class_driver(working);
 
   return op_cap_drv_intf(working);
 }
@@ -156,11 +195,12 @@ usb_error_t op_get_cfg_desc(_working_t *const working) {
   const uint8_t max_packet_size = working->desc.bMaxPacketSize0;
 
   memset(working->config.buffer, 0, MAX_CONFIG_SIZE);
+  working->ptr = working->config.buffer;
 
   CHECK(usbtrn_get_full_config_descriptor(working->config_index, working->current_device_address, max_packet_size, MAX_CONFIG_SIZE,
                                           working->config.buffer));
 
-  working->ptr             = (working->config.buffer + sizeof(config_descriptor_t));
+  CHECK(advance_to_next_descriptor(working, USB_DESCR_INTERFACE));
   working->interface_count = working->config.desc.bNumInterfaces;
 
   return op_id_class_drv(working);
