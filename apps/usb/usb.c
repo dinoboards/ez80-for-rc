@@ -61,9 +61,74 @@ usb_error_t hid_set_idle(const device_config_mouse_t *const dev, const uint8_t d
   cmd = cmd_hid_set;
 
   cmd.bRequest  = HID_SET_IDLE;
-  cmd.bValue[0] = duration;
+  cmd.bValue[1] = duration;
 
   return usb_control_transfer(&cmd, NULL, dev->address, dev->max_packet_size);
+}
+
+const setup_packet_t cmd_get_device_descriptor = {0x80, 6, {0, 0}, {0, 0}, 8};
+
+#define CHECK(fn)                                                                                                                  \
+  {                                                                                                                                \
+    result = fn;                                                                                                                   \
+    if (result != USB_ERR_OK)                                                                                                      \
+      goto done;                                                                                                                   \
+  }
+
+usb_error_t
+usbtrn_get_string(uint8_t *const buffer, const uint8_t buf_length, const uint8_t device_address, const uint8_t str_index) {
+  usb_error_t    result;
+  setup_packet_t cmd;
+  cmd = cmd_get_device_descriptor;
+
+  // 1 get first langid
+  cmd.wLength   = 4;
+  cmd.bValue[1] = 3;
+  CHECK(usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, 8));
+
+  const uint16_t lang_id = (uint16_t)buffer[2] + ((uint16_t)buffer[3] << 8);
+
+  // 2 get length of string for langid
+  cmd.wLength   = 2;
+  cmd.bValue[0] = str_index;
+  cmd.bIndex[0] = lang_id & 255;
+  cmd.bIndex[1] = lang_id >> 8;
+  CHECK(usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, 8));
+
+  uint8_t str_length = buffer[0];
+  if (str_length > buf_length)
+    str_length = buf_length;
+
+  // 3 get string
+  cmd.wLength = str_length;
+  CHECK(usb_control_transfer(&cmd, (uint8_t *)buffer, device_address, 8));
+
+  // 4 convert to ascii
+  uint8_t dest = 0;
+  uint8_t src  = 2;
+  for (uint8_t i = 0; i < str_length - 2; i++) {
+    buffer[dest++] = buffer[src++];
+    src++;
+  }
+
+  buffer[dest] = 0;
+
+done:
+  return result;
+}
+
+static char str_buffer[32];
+
+const char *get_string(const uint8_t device_index, const uint8_t str_index) {
+  if (str_index == 0)
+    return "";
+
+  const usb_error_t r = usbtrn_get_string((uint8_t *)str_buffer, 32, device_index, str_index);
+
+  if (r == USB_ERR_OK)
+    return str_buffer;
+
+  return "?";
 }
 
 usb_error_t usbdev_dat_in_trnsfer_0(device_config_mouse_t *const device, uint8_t *const buffer, const uint8_t buffer_size) {
@@ -82,7 +147,7 @@ usb_error_t usbdev_dat_in_trnsfer_0(device_config_mouse_t *const device, uint8_t
   return result;
 }
 
-void report_device_descriptor(const device_descriptor_t *const p) {
+void report_device_descriptor(const device_descriptor_t *const p, const uint8_t device_address) {
   printf("  length:             %d\n", p->bLength);
   printf("  bDescriptorType:    %d\n", p->bDescriptorType);
   printf("  bcdUSB:             0x%02X\n", p->bcdUSB);
@@ -111,14 +176,14 @@ void report_device_descriptor(const device_descriptor_t *const p) {
   printf("  idVendor:           0x%04X\n", p->idVendor);
   printf("  idProduct:          0x%04X\n", p->idProduct);
   printf("  bcdDevice:          0x%04X\n", p->bcdDevice);
-  printf("  iManufacturer:      %d\n", p->iManufacturer);
-  printf("  iProduct:           %d\n", p->iProduct);
-  printf("  iSerialNumber:      %d\n", p->iSerialNumber);
+  printf("  Manufacturer:       %s\n", get_string(device_address, p->iManufacturer));
+  printf("  Product:            %s\n", get_string(device_address, p->iProduct));
+  printf("  iSerialNumber:      %s\n", get_string(device_address, p->iSerialNumber));
   printf("  bNumConfigurations: %d\n", p->bNumConfigurations);
 }
 
 void report_device_configuration(const config_descriptor_t *const config) {
-  printf("  Configuration:\n");
+  printf("  Configuration: (%p)\n", config);
   printf("    length:              %d\n", config->bLength);
   printf("    bDescriptorType:     %d\n", config->bDescriptorType);
   printf("    wTotalLength:        %d\n", config->wTotalLength);
@@ -132,7 +197,7 @@ void report_device_configuration(const config_descriptor_t *const config) {
 usb_device_t report_device_interface(const interface_descriptor_t *const interface) {
   usb_device_t result = USB_IS_UNKNOWN;
 
-  printf("    Interface:\n");
+  printf("    Interface: (%p)\n", interface);
   printf("      bLength:            %d\n", interface->bLength);
   printf("      bDescriptorType:    %d\n", interface->bDescriptorType);
   printf("      bInterfaceNumber:   %d\n", interface->bInterfaceNumber);
@@ -168,13 +233,34 @@ usb_device_t report_device_interface(const interface_descriptor_t *const interfa
 }
 
 void report_device_endpoint(const endpoint_descriptor_t *const endpoint) {
-  printf("      Endpoint:\n");
+  printf("      Endpoint: (%p)\n", endpoint);
   printf("        bLength:          %d\n", endpoint->bLength);
   printf("        bDescriptorType:  %d\n", endpoint->bDescriptorType);
   printf("        bEndpointAddress: 0x%02X\n", endpoint->bEndpointAddress);
   printf("        bmAttributes:     0x%02X\n", endpoint->bmAttributes);
   printf("        wMaxPacketSize:   %d\n", endpoint->wMaxPacketSize);
   printf("        bInterval:        %d\n", endpoint->bInterval);
+}
+
+typedef struct {
+  uint8_t  bLength;
+  uint8_t  bDescriptorType;
+  uint16_t bcdHID;
+  uint8_t  bCountry;
+  uint8_t  bNumDescriptors;
+  uint8_t  bReportDescriptorType;
+  uint16_t wReportDescriptorLength;
+} hid_descriptor_t;
+
+void report_hid_descriptor(const hid_descriptor_t *const hid) {
+  printf("      HID Descriptor: (%p)\n", hid);
+  printf("        bLength:                %d\n", hid->bLength);
+  printf("        bDescriptorType:        %d\n", hid->bDescriptorType);
+  printf("        bcdHID:                 0x%04X\n", hid->bcdHID);
+  printf("        bCountry:               %d\n", hid->bCountry);
+  printf("        bNumDescriptors:        %d\n", hid->bNumDescriptors);
+  printf("        bReportDescriptorType:  %d\n", hid->bReportDescriptorType);
+  printf("        wReportDescriptorLength:%d\n", hid->wReportDescriptorLength);
 }
 
 uint8_t buffer[512];
@@ -186,6 +272,11 @@ typedef struct {
 } mouse_report_t;
 
 mouse_report_t mouse_report = {0};
+
+typedef struct {
+  uint8_t bLength;
+  uint8_t bDescriptorType;
+} usb_descriptor_t;
 
 int main(/*const int argc, const char *argv[]*/) {
   usb_error_t         result;
@@ -203,37 +294,46 @@ int main(/*const int argc, const char *argv[]*/) {
       break;
     }
 
-    report_device_descriptor(&my_device_descriptor);
+    report_device_descriptor(&my_device_descriptor, device_address);
 
     for (uint8_t config_index = 0; config_index < my_device_descriptor.bNumConfigurations; config_index++) {
       memset(buffer, 0, sizeof(buffer));
-      result = usbtrn_get_full_config_descriptor(config_index, device_address, my_device_descriptor.bMaxPacketSize0, 150, buffer);
+      result = usbtrn_get_full_config_descriptor(config_index, device_address, my_device_descriptor.bMaxPacketSize0, 255, buffer);
       if (result) {
         printf("usbtrn_get_full_config_descriptor failed %d\n", result);
         continue;
       }
 
-      const config_descriptor_t *const config = (config_descriptor_t *)buffer;
+      uint8_t                         *p      = buffer;
+      const config_descriptor_t *const config = (config_descriptor_t *)p;
       report_device_configuration(config);
+      p += config->bLength;
 
       for (uint8_t interface_index = 0; interface_index < config->bNumInterfaces; interface_index++) {
-        const interface_descriptor_t *const interface =
-            (interface_descriptor_t *)(buffer + sizeof(config_descriptor_t) + interface_index * sizeof(interface_descriptor_t));
+        const interface_descriptor_t *const interface = (interface_descriptor_t *)p;
+        p += interface->bLength;
 
         usb_device_t usb_device = report_device_interface(interface);
-        if (usb_device == USB_IS_MOUSE) {
-          const endpoint_descriptor_t *const endpoint =
-              (endpoint_descriptor_t *)&interface[1]; //???? should this be interface_index+1
-          device_config_mouse.address                      = device_address;
-          device_config_mouse.interface_number             = interface_index;
-          device_config_mouse.max_packet_size              = endpoint->wMaxPacketSize > 64 ? 64 : endpoint->wMaxPacketSize;
-          device_config_mouse.endpoints[0].number          = endpoint->bEndpointAddress;
-          device_config_mouse.endpoints[0].max_packet_size = device_config_mouse.max_packet_size;
-          device_config_mouse.endpoints[0].toggle          = device_config_mouse.max_packet_size;
+
+        hid_descriptor_t *xx = (hid_descriptor_t *)p;
+        if (xx->bDescriptorType == 33) { // hid descriptor
+          p += xx->bLength;
+          report_hid_descriptor((hid_descriptor_t *)xx);
         }
 
         for (uint8_t endpoint_index = 0; endpoint_index < interface->bNumEndpoints; endpoint_index++) {
-          const endpoint_descriptor_t *const endpoint = (endpoint_descriptor_t *)&interface[1]; //????
+          const endpoint_descriptor_t *const endpoint = (endpoint_descriptor_t *)p;
+          p += endpoint->bLength;
+
+          if (usb_device == USB_IS_MOUSE && endpoint_index == 0) {
+            device_config_mouse.address                      = device_address;
+            device_config_mouse.interface_number             = interface_index;
+            device_config_mouse.max_packet_size              = endpoint->wMaxPacketSize > 64 ? 64 : endpoint->wMaxPacketSize;
+            device_config_mouse.endpoints[0].number          = endpoint->bEndpointAddress;
+            device_config_mouse.endpoints[0].max_packet_size = device_config_mouse.max_packet_size;
+            device_config_mouse.endpoints[0].toggle          = device_config_mouse.max_packet_size;
+          }
+
           report_device_endpoint(&endpoint[endpoint_index]);
         }
       }
@@ -246,18 +346,21 @@ int main(/*const int argc, const char *argv[]*/) {
   printf("  address: %d\n", device_config_mouse.address);
   printf("  intf: %d\n", device_config_mouse.interface_number);
   printf("  maxps: %d\n", device_config_mouse.max_packet_size);
+  printf("  ep: %d\n", device_config_mouse.endpoints[0].number);
 
   usb_error_t r = hid_set_protocol(&device_config_mouse, 0);
   printf("hid_set_protocol: %d\n", r);
 
-  r = hid_set_idle(&device_config_mouse, 0);
+  r = hid_set_idle(&device_config_mouse, 1);
   printf("hid_set_idle: %d\n", r);
 
-  while (mouse_report.buttons != 1) {
-    r = usbdev_dat_in_trnsfer_0(&device_config_mouse, (uint8_t *)&mouse_report, sizeof(mouse_report));
-    if (r == 0) {
-      printf("usbdev_dat_in_trnsfer_0: %d (%x, (%d, %d))\n", r, mouse_report.buttons, mouse_report.x, mouse_report.y);
-    }
-  }
+  memset(buffer, 0, sizeof(buffer));
+
+  // while (mouse_report.buttons != 1) {
+  // r = usbdev_dat_in_trnsfer_0(&device_config_mouse, (uint8_t *)&mouse_report, sizeof(mouse_report));
+  // // if (r == 0) {
+  //   printf("usbdev_dat_in_trnsfer_0: %d (%x, (%d, %d))\n", r, mouse_report.buttons, mouse_report.x, mouse_report.y);
+  //   // }
+  // }
   return 0;
 }
