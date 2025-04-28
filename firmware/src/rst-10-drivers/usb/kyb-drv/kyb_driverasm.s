@@ -6,8 +6,8 @@
 
 	.assume adl=1
 
-	XREF	_rpt_read_index
-	XREF	_reports
+	XREF	_kyb_rpt_read_index
+	XREF	_kyb_reports
 
 	GLOBAL	_usb_kyb_tick_sr
 	XREF	_system_timer_isr
@@ -33,13 +33,13 @@ _usb_kyb_tick_sr:
 	RET
 
 	GLOBAL	_report_diff
-	XREF	_report
-	XREF	_previous
+	XREF	_kyb_report
+	XREF	_kyb_previous
 
 ; uint8_t report_diff();
 _report_diff:
-	LD	DE, _report
-	LD	HL, _previous
+	LD	DE, _kyb_report
+	LD	HL, _kyb_previous
 	LD	B, 8 				; //sizeof(keyboard_report_t)
 
 .rptdf_loop:
@@ -92,7 +92,7 @@ _usb_kyb_tick:
 
 	LD	C, 8
 	PUSH	BC
-	LD	BC, _report
+	LD	BC, _kyb_report
 	LD	HL, (_keyboard_config)
 	PUSH	BC
 	PUSH	HL
@@ -133,8 +133,8 @@ _usb_kyb_tick:
 	POP	BC
 	DJNZ	.tickloop
 
-	LD	HL, _report
-	LD	DE, _previous
+	LD	HL, _kyb_report
+	LD	DE, _kyb_previous
 	LD	BC, 8
 	LDIR
 
@@ -144,8 +144,8 @@ _usb_kyb_tick:
 
 ; uint8_t usb_kyb_report(keyboard_report_t*)
 
-	XREF	_rpt_read_index
-	XREF	_reports
+	XREF	_kyb_rpt_read_index
+	XREF	_kyb_reports
 	XREF	_usb_kyb_rpt_que_size
 	GLOBAL	_usb_kyb_report
 
@@ -154,12 +154,12 @@ _usb_kyb_report:
 
 	xor	a
 	sbc	hl, hl
-	ld	a, (_rpt_read_index)
+	ld	a, (_kyb_rpt_read_index)
 	ld	l, a
 	add	hl, hl
 	add	hl, hl
 	add	hl, hl
-	ld	bc, _reports
+	ld	bc, _kyb_reports
 	add	hl, bc
 	push	hl			 ; address of potential que'd next usb report
 
