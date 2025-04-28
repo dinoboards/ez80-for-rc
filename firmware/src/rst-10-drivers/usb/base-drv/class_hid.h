@@ -14,8 +14,8 @@
 #define HID_BOOT_PROTOCOL   0x00
 #define HID_REPORT_PROTOCOL 0x01
 
-extern usb_error_t hid_set_protocol(const device_config_keyboard_t *const dev, const uint8_t protocol);
-extern usb_error_t hid_set_idle(const device_config_keyboard_t *const dev, const uint8_t duration);
-extern usb_error_t hid_get_input_report(const device_config_keyboard_t *const dev, uint8_t const *report);
+extern usb_error_t hid_set_protocol(const device_config_boot_hid_t *const dev, const uint8_t protocol);
+extern usb_error_t hid_set_idle(const device_config_boot_hid_t *const dev, const uint8_t duration);
+extern usb_error_t hid_get_input_report(const device_config_boot_hid_t *const dev, uint8_t const *report);
 
 #endif

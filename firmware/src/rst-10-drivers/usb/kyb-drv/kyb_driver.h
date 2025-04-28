@@ -12,7 +12,7 @@
 #define RPT_KEYBOARD_BUFFER_SIZE      4
 #define RPT_KEYBOARD_BUFFER_SIZE_MASK 3
 
-extern device_config_keyboard_t *keyboard_config;
+extern device_config_boot_hid_t *keyboard_config;
 
 extern void    usb_kyb_install_timer_tick(void);
 extern uint8_t report_diff();

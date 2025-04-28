@@ -42,12 +42,7 @@ typedef struct {
 typedef struct {
   COMMON_DEVICE_CONFIG;
   endpoint_param_t endpoints[1]; // Isochronous
-} device_config_keyboard_t;
-
-typedef struct {
-  COMMON_DEVICE_CONFIG;
-  endpoint_param_t endpoints[1]; // Isochronous
-} device_config_mouse_t;
+} device_config_boot_hid_t;
 
 extern usb_error_t usbdev_control_transfer(device_config_t *const device, const setup_packet_t *const cmd, uint8_t *const buffer);
 

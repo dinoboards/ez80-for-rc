@@ -7,7 +7,7 @@
 <file filter-key="">src\rst-10-drivers\build-date.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376asm.s</file>
-<file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\class_hid.c</file>
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\class_hub.c</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\class_scsi.c</file>
@@ -29,6 +29,7 @@
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver.c</file>
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
 <file filter-key="">src\main.s</file>
+<file filter-key="">src\rst-10-drivers\usb\mse-drv\mse_driver.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
 <file filter-key="">src\rst-08-io.s</file>
@@ -153,7 +154,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00A1)
-LOCATE DATA at (BASE OF BSS - $00AC)
+LOCATE DATA at (BASE OF BSS - $00AF)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $052B
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -289,7 +290,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00A1)
-LOCATE DATA at (BASE OF BSS - $00AC)
+LOCATE DATA at (BASE OF BSS - $00AF)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $052B
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -337,10 +338,18 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
+<watch-element expression="config" />
 </watch-elements>
 
 <!-- breakpoint information -->
 <breakpoints>
+<breakpoint temporary="false" enabled="true" >
+<line-number>13</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\usb\mse-drv\mse_driver.c</pathname>
+<address>0</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
 </breakpoints>
 
 </project>

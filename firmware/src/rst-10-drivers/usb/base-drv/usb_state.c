@@ -10,8 +10,8 @@ const uint8_t device_config_sizes[_USB_LAST_DEVICE_TYPE] = {
     sizeof(device_config_storage_t),  /* USB_IS_FLOPPY       = 1 */
     sizeof(device_config_storage_t),  /* USB_IS_MASS_STORAGE = 2 */
     sizeof(device_config_t),          /* USB_IS_CDC          = 3 */
-    sizeof(device_config_keyboard_t), /* USB_IS_KEYBOARD     = 4 */
-    sizeof(device_config_mouse_t),    /* USB_IS_MOUSE        = 5 */
+    sizeof(device_config_boot_hid_t), /* USB_IS_KEYBOARD     = 4 */
+    sizeof(device_config_boot_hid_t), /* USB_IS_MOUSE        = 5 */
 };
 
 // always usb work area
@@ -98,4 +98,25 @@ usb_device_t usb_get_device_type(const uint16_t dev_index) {
     return -1;
 
   return dev->type;
+}
+
+/**
+ * @brief find the first device config with the specified dev_index
+ *
+ * @param dev
+ * @return device_config_t
+ *
+ */
+device_config_t *find_by_device_type(const usb_device_t dev_type) {
+  device_config_t         *p;
+  const usb_state_t *const usb_state = get_usb_work_area();
+
+  for (p = first_device_config(usb_state); p; p = next_device_config(usb_state, p)) {
+    if (p->type != USB_NOT_SUPPORTED) {
+      if (p->type == dev_type)
+        return p;
+    }
+  }
+
+  return NULL; // not found
 }

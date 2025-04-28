@@ -22,7 +22,7 @@
 	XREF	_usb_kyb_read
 	XREF	_usb_kyb_flush
 	XREF	_usb_kyb_report
-	XREF	_usb_kyb_report
+	XREF	_usb_mse_init
 
 _usb_dispatch:
 	LD	A, B					; SUB FUNCTION CODE
@@ -53,6 +53,8 @@ _usb_dispatch:
 	SUB	12
 	JR	Z, usb_kyb_init				; B = 47
 
+	DEC	A					; B = 48
+	JR	Z, usb_mse_init
 
 	LD	A, B
 	SUB	128
@@ -102,7 +104,7 @@ _usb_dispatch:
 ; Outputs
 ;  A -> usb_error_t
 ;
-; marshalls to usb_error_t usb_scsi_init(const uint16_t dev_index);
+; marshalls to usb_error_t usb_scsi_init(uint8_t dev_index);
 usb_scsi_init:
 	PUSH	BC
 	CALL	_usb_scsi_init
@@ -215,8 +217,6 @@ usb_ufi_get_cap:
 ; ----------------------------------------------
 ; KYB INTERFACE
 ; ----------------------------------------------
-
-
 ;
 ; Function B = ?? -- usb_kyb_init
 ;
@@ -290,7 +290,6 @@ usb_kyb_read:
 usb_kyb_flush:
 	CALL	_usb_kyb_flush
 	RET.L
-
 ;
 ; Function B = ?? -- usb_kyb_report
 ;
@@ -302,119 +301,40 @@ usb_kyb_flush:
 ;
 ; Retrieve the next USB HID keyboard report data.
 ;
-; USB Keyboard Extension:
 ; Register A contains the number of buffered reports available:
 ;   A = 0: No reports available
 ;   A > 0: At least one report available (will be consumed after reading)
 ; When a report is available (A > 0), the 8 bytes at HL are filled
 ; See USB HID Usage Tables specification for key codes
 ; usb_kyb_report:
-
-
-
-
 ;
-; Function B = ?? usb_data_in_transfer_n
+
+; ----------------------------------------------
+; MSE INTERFACE
+; ----------------------------------------------
+;
+; Function B = ?? -- usb_mse_init
 ;
 ; Inputs
-;   IX -> buffer
-;   HL -> buffer size
-;   D -> device address
-;   IY -> endpoint
+;  C -> Device index of usb mouse
 ;
 ; Outputs
-;   A -> usb_error_t
+;   A: Status
 ;
-; marshalls to usb_error_t usb_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
-
+; If C = 0, then the first found mouse will be initialised
 ;
-; Function B = ?? usb_data_out_transfer
+; marshalls to uint32_t usb_mse_init(uint8_t dev_index)
+usb_mse_init:
+	PUSH	BC
+	CALL	_usb_mse_init
+	POP	BC
+	RET.L
 ;
-; Inputs
-;   IX -> buffer
-;   HL -> buffer size
-;   D -> device address
-;   IY -> endpoint
 ;
-; Outputs
-;   A -> usb_error_t
+;-------------------------------------------------
+; Main/Common USB functions
+;-------------------------------------------------
 ;
-; marshalls to usb_error_t usb_data_out_transfer(const uint8_t *buffer, uint16_t buffer_size, const uint8_t device_address, endpoint_param_t *const endpoint);
-
-
-
-
-;
-; Function B = ?? usbtrn_get_descriptor
-;
-; Inputs
-;   IX -> buffer
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usbtrn_get_descriptor(device_descriptor_t *const buffer);
-
-
-
-
-;
-; Function B = ?? usbtrn_get_config_descriptor
-;
-; Inputs
-;   IX -> buffer
-;   C -> config_index
-;   HL -> buffer_size
-;   D -> device_address
-;   E -> max_packet_size
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usbtrn_get_config_descriptor(config_descriptor_t *const buffer, const uint8_t config_index, const uint8_t buffer_size, const uint8_t device_address, const uint8_t max_packet_size);
-
-
-;
-; Function B = ?? usbtrn_set_configuration
-;
-; Inputs
-;   D -> device address
-;   E -> max packet size
-;   C -> configuration
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usbtrn_set_configuration(const uint8_t device_address, const uint8_t max_packet_size, const uint8_t configuration);
-
-;
-; Function B = ?? usbtrn_set_address
-;
-; Inputs
-;   D -> device address
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usbtrn_set_address(const uint8_t device_address);
-
-;
-; Function B = ?? usbtrn_clear_endpoint_halt
-;
-; Inputs
-;   D -> device address
-;   E -> max packet size
-;   C -> endpoint number
-;
-; Outputs
-;   A -> usb_error_t
-;
-; marshalls to usb_error_t usbtrn_clear_endpoint_halt(const uint8_t endpoint_number, const uint8_t device_address, const uint8_t max_packet_size);
-
-
-
-
-
 ;
 ; Function B = ?? usb_init
 ;
@@ -612,7 +532,5 @@ usbtrn_set_address:
 
 ; usb_error_t usbtrn_clear_endpoint_halt(uint8_t endpoint_number, uint8_t device_address, uint8_t max_packet_size);
 usbtrn_clear_endpoint_halt:
-
-
 	LD	A, -1
 	RET.L

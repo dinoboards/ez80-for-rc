@@ -1,15 +1,15 @@
 #include "kyb_driver.h"
+#include "../base-drv/class_hid.h"
 #include "../base-drv/critical-section.h"
 #include "../base-drv/dev_transfers.h"
 #include "../base-drv/usb_state.h"
-#include "class_hid.h"
 #include "class_hid_keyboard.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
 static bool               caps_lock_engaged = true;
-device_config_keyboard_t *keyboard_config   = NULL;
+device_config_boot_hid_t *keyboard_config   = NULL;
 
 static uint8_t buffer[KEYBOARD_BUFFER_SIZE] = {0};
 static uint8_t write_index                  = 0;
@@ -117,7 +117,7 @@ uint8_t usb_kyb_flush() {
 
 usb_error_t usb_kyb_init(const uint8_t dev_index) {
   usb_error_t               result;
-  device_config_keyboard_t *config;
+  device_config_boot_hid_t *config;
 
   caps_lock_engaged = true;
   keyboard_config   = NULL;
@@ -127,10 +127,13 @@ usb_error_t usb_kyb_init(const uint8_t dev_index) {
   memset(&report, 0, sizeof(report));
   memset(&previous, 0, sizeof(previous));
 
-  config = (device_config_keyboard_t *)get_usb_device_config(dev_index);
+  config = (device_config_boot_hid_t *)get_usb_device_config(dev_index);
 
   if (config == NULL)
-    return USB_ERR_OTHER;
+    return USB_ERROR_DEVICE_NOT_FOUND;
+
+  if (config->type != USB_IS_KEYBOARD)
+    return USB_ERROR_DEVICE_NOT_FOUND;
 
   CHECK(hid_set_protocol(config, 1));
   CHECK(hid_set_idle(config, 0x80));

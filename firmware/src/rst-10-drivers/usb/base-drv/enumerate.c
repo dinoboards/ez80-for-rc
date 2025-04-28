@@ -32,7 +32,7 @@ static usb_error_t advance_to_next_descriptor(_working_t *const working, const u
   return USB_ERR_OK;
 }
 
-void parse_endpoint_keyboard(device_config_keyboard_t *const keyboard_config, const endpoint_descriptor_t *pEndpoint) {
+void parse_endpoint_keyboard(device_config_boot_hid_t *const keyboard_config, const endpoint_descriptor_t *pEndpoint) {
   endpoint_param_t *const ep = &keyboard_config->endpoints[0];
   ep->number                 = pEndpoint->bEndpointAddress;
   ep->toggle                 = 0;
@@ -101,12 +101,12 @@ usb_error_t op_parse_endpoint(_working_t *const working) {
   }
 
   case USB_IS_KEYBOARD: {
-    parse_endpoint_keyboard((device_config_keyboard_t *)device, endpoint);
+    parse_endpoint_keyboard((device_config_boot_hid_t *)device, endpoint);
     break;
   }
 
   case USB_IS_MOUSE: {
-    parse_endpoint_keyboard((device_config_keyboard_t *)device, endpoint);
+    parse_endpoint_keyboard((device_config_boot_hid_t *)device, endpoint);
     break;
   }
   }

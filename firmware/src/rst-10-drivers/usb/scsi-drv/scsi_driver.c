@@ -1,15 +1,22 @@
 #include "scsi_driver.h"
 #include "../base-drv/ch376.h"
 #include "../base-drv/critical-section.h"
+#include "../base-drv/dev_transfers.h"
 #include "../base-drv/usb_state.h"
 #include "class_scsi.h"
 #include <string.h>
 
-usb_error_t usb_scsi_init(const uint16_t dev_index) {
+usb_error_t usb_scsi_init(const uint8_t dev_index) {
   uint8_t                        result;
   scsi_sense_result_t            response;
   device_config_storage_t *const dev     = (device_config_storage_t *)get_usb_device_config(dev_index);
   uint8_t                        counter = 3;
+
+  if (dev == NULL)
+    return USB_ERROR_DEVICE_NOT_FOUND;
+
+  if (dev->type != USB_IS_MASS_STORAGE)
+    return USB_ERROR_DEVICE_NOT_FOUND;
 
   critical_begin();
   while ((result = scsi_test(dev)) && --counter > 0)
@@ -21,7 +28,7 @@ usb_error_t usb_scsi_init(const uint16_t dev_index) {
 
 const static scsi_read_capacity_t scsi_packet_read_capacity = {0x25, 0, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0}};
 
-usb_error_t usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_result_t *cap_result) {
+usb_error_t usb_scsi_read_capacity(const uint8_t dev_index, scsi_read_capacity_result_t *cap_result) {
   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
 
   cbw_scsi_read_capacity_t cbw_scsi;
@@ -37,7 +44,7 @@ usb_error_t usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_
 
 // scsi_packet_inquiry_t scsi_packet_inquiry = {0x12, 0, 0, 0, 0x24, 0, {0, 0, 0, 0, 0, 0}};
 
-// usb_error_t usb_scsi_inquiry(const uint16_t dev_index, scsi_inquiry_result_t *inq_result) {
+// usb_error_t usb_scsi_inquiry(const uint8_t dev_index, scsi_inquiry_result_t *inq_result) {
 //   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
 
 //   cbw_scsi_inquiry_t cbw_scsi;
@@ -51,7 +58,7 @@ usb_error_t usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_
 //   return do_scsi_cmd(dev, &cbw_scsi.cbw, inq_result, false);
 // }
 
-usb_error_t usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer) {
+usb_error_t usb_scsi_read(const uint8_t dev_index, uint8_t *const buffer) {
   uint8_t                        result;
   cbw_scsi_read_write_t          cbw = {{{0}}};
   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
@@ -77,7 +84,7 @@ usb_error_t usb_scsi_read(const uint16_t dev_index, uint8_t *const buffer) {
   return result;
 }
 
-usb_error_t usb_scsi_write(const uint16_t dev_index, uint8_t *const buffer) {
+usb_error_t usb_scsi_write(const uint8_t dev_index, uint8_t *const buffer) {
   uint8_t                        result;
   cbw_scsi_read_write_t          cbw = {{{0}}};
   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
