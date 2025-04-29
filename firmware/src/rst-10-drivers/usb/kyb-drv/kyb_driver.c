@@ -140,6 +140,16 @@ usb_error_t usb_kyb_init(const uint8_t dev_index) {
 
   keyboard_config = config;
 
+  asm(" XREF _system_timer_isr");
+  asm(" XREF _usb_tick_sr");
+  asm("LD	HL, _system_timer_isr");
+  asm("LD	DE, _usb_tick_sr");
+  asm("DI");
+  asm("LD   (HL), %CD");
+  asm("INC  HL");
+  asm("LD	  (HL), DE");
+  asm("EI");
+
 done:
   return result;
 }

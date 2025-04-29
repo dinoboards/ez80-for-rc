@@ -46,7 +46,10 @@
 ; This ISR is called at the tick frequency rate, and increments the 24 bit tick counter.
 ;
 _system_timer_isr:
-	CALL	_usb_tick_sr
+	NOP						; The NOPs are replaced
+	NOP						; CALL	_usb_tick_sr
+	NOP						; when keyboard driver is initalised/installed
+	NOP
 
 	PUSH	AF
 	PUSH	HL

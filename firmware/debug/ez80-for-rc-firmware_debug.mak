@@ -1090,7 +1090,13 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c"
 
 $(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb-interrupt.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s"
 
 $(WORKDIR_ESCSPACE)\usb_cbi.obj :  \
