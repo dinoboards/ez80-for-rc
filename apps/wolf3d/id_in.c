@@ -16,6 +16,7 @@
 //      LastASCII - The ASCII value of the last key pressed
 //  DEBUG - there are more globals
 //
+#include <ez80-firmware-usb.h>
 #include <hbios.h>
 #include <stdint.h>
 

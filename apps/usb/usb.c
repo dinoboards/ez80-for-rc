@@ -16,19 +16,6 @@
 #define HID_BOOT_PROTOCOL   0x00
 #define HID_REPORT_PROTOCOL 0x01
 
-typedef uint8_t usb_device_t;
-enum usb_device_e {
-  USB_NOT_SUPPORTED   = 0,
-  USB_IS_FLOPPY       = 1,
-  USB_IS_MASS_STORAGE = 2,
-  USB_IS_CDC          = 3,
-  USB_IS_KEYBOARD     = 4,
-  USB_IS_MOUSE        = 5,
-  USB_IS_UNKNOWN      = 6,
-  _USB_LAST_DEVICE_TYPE,
-  USB_IS_HUB = 15
-}; // 4 bits only
-
 typedef struct {
   uint8_t toggle;
   uint8_t number;
@@ -362,5 +349,6 @@ int main(/*const int argc, const char *argv[]*/) {
   //   printf("usbdev_dat_in_trnsfer_0: %d (%x, (%d, %d))\n", r, mouse_report.buttons, mouse_report.x, mouse_report.y);
   //   // }
   // }
+
   return 0;
 }
