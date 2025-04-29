@@ -121,6 +121,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\kyb_driver.obj", \
  ".\kyb_driverasm.obj", \
  ".\main.obj", \
+ ".\mse_driver.obj", \
  ".\protocol.obj", \
  ".\rom-flashing-calculator.obj", \
  ".\rst-08-io.obj", \
@@ -145,6 +146,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\uart-rx-variables.obj", \
  ".\ufi_driver.obj", \
  ".\usb-base-drv.obj", \
+ ".\usb-tick-sr.obj", \
  ".\usb_cbi.obj", \
  ".\usb_state.obj", \
  ".\vectors16.obj", \

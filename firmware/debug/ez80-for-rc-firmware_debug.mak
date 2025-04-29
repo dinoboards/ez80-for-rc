@@ -438,6 +438,12 @@ clean:
             $(RM) "$(WORKDIR)\usb-base-drv.lst"
 	@if exist "$(WORKDIR)\usb-base-drv.src"  \
             $(RM) "$(WORKDIR)\usb-base-drv.src"
+	@if exist "$(WORKDIR)\usb-tick-sr.obj"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.obj"
+	@if exist "$(WORKDIR)\usb-tick-sr.lis"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.lis"
+	@if exist "$(WORKDIR)\usb-tick-sr.lst"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.lst"
 	@if exist "$(WORKDIR)\usb_cbi.obj"  \
             $(RM) "$(WORKDIR)\usb_cbi.obj"
 	@if exist "$(WORKDIR)\usb_cbi.lis"  \
@@ -526,6 +532,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\uart-rx-variables.obj  \
             $(WORKDIR_ESCSPACE)\ufi_driver.obj  \
             $(WORKDIR_ESCSPACE)\usb-base-drv.obj  \
+            $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
@@ -1081,6 +1088,10 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c"
+
+$(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s"
 
 $(WORKDIR_ESCSPACE)\usb_cbi.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.c  \

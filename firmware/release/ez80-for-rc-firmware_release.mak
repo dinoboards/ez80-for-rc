@@ -273,6 +273,14 @@ clean:
             $(RM) "$(WORKDIR)\main.lis"
 	@if exist "$(WORKDIR)\main.lst"  \
             $(RM) "$(WORKDIR)\main.lst"
+	@if exist "$(WORKDIR)\mse_driver.obj"  \
+            $(RM) "$(WORKDIR)\mse_driver.obj"
+	@if exist "$(WORKDIR)\mse_driver.lis"  \
+            $(RM) "$(WORKDIR)\mse_driver.lis"
+	@if exist "$(WORKDIR)\mse_driver.lst"  \
+            $(RM) "$(WORKDIR)\mse_driver.lst"
+	@if exist "$(WORKDIR)\mse_driver.src"  \
+            $(RM) "$(WORKDIR)\mse_driver.src"
 	@if exist "$(WORKDIR)\protocol.obj"  \
             $(RM) "$(WORKDIR)\protocol.obj"
 	@if exist "$(WORKDIR)\protocol.lis"  \
@@ -431,6 +439,12 @@ clean:
             $(RM) "$(WORKDIR)\usb-base-drv.lst"
 	@if exist "$(WORKDIR)\usb-base-drv.src"  \
             $(RM) "$(WORKDIR)\usb-base-drv.src"
+	@if exist "$(WORKDIR)\usb-tick-sr.obj"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.obj"
+	@if exist "$(WORKDIR)\usb-tick-sr.lis"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.lis"
+	@if exist "$(WORKDIR)\usb-tick-sr.lst"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.lst"
 	@if exist "$(WORKDIR)\usb_cbi.obj"  \
             $(RM) "$(WORKDIR)\usb_cbi.obj"
 	@if exist "$(WORKDIR)\usb_cbi.lis"  \
@@ -494,6 +508,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\kyb_driver.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
+            $(WORKDIR_ESCSPACE)\mse_driver.obj  \
             $(WORKDIR_ESCSPACE)\protocol.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
@@ -518,6 +533,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\uart-rx-variables.obj  \
             $(WORKDIR_ESCSPACE)\ufi_driver.obj  \
             $(WORKDIR_ESCSPACE)\usb-base-drv.obj  \
+            $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
@@ -563,19 +579,19 @@ $(WORKDIR_ESCSPACE)\ch376asm.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376asm.s"
 
 $(WORKDIR_ESCSPACE)\class_hid.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid.c  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\class_hid.c"
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\class_hid.c"
 
 $(WORKDIR_ESCSPACE)\class_hid_keyboard.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c  \
@@ -787,19 +803,20 @@ $(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
 $(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c"
@@ -820,6 +837,22 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
+
+$(WORKDIR_ESCSPACE)\mse_driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\mse-drv\mse_driver.c"
 
 $(WORKDIR_ESCSPACE)\protocol.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.c  \
@@ -1041,6 +1074,7 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
@@ -1051,8 +1085,14 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-base-drv.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c"
+
+$(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s"
 
 $(WORKDIR_ESCSPACE)\usb_cbi.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.c  \
@@ -1104,6 +1144,9 @@ $(WORKDIR_ESCSPACE)\work-area.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\work-area.c"
 
