@@ -842,6 +842,7 @@ $(WORKDIR_ESCSPACE)\mse_driver.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
@@ -850,7 +851,8 @@ $(WORKDIR_ESCSPACE)\mse_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\mse-drv\mse_driver.c"
 
 $(WORKDIR_ESCSPACE)\protocol.obj :  \
@@ -1086,7 +1088,8 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c"
 
 $(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
@@ -1095,6 +1098,7 @@ $(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb-interrupt.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse-interrupt.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s"

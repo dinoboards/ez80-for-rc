@@ -33,11 +33,11 @@ $$skip2:
 
 KYB_DRIVER_INT_INJECT:	MACRO
 	OR	A
-	RET	NZ				; _usbdev_dat_in_trnsfer_0 returned NZ, so no usb report available
+	JR	NZ, $$skip1				; _usbdev_dat_in_trnsfer_0 returned NZ, so no usb report available
 
 	CALL	_report_diff
 	OR	A
-	RET	Z				; return if no difference
+	JR	Z, $$skip1				; return if no difference
 
 	CALL	_keyboard_report_put
 
@@ -55,4 +55,5 @@ KYB_DRIVER_INT_INJECT:	MACRO
 	LD	BC, 8
 	LDIR
 
+$$skip1:
 	ENDM

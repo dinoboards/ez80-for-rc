@@ -23,6 +23,8 @@
 	XREF	_usb_kyb_flush
 	XREF	_usb_kyb_report
 	XREF	_usb_mse_init
+	XREF	_usb_mse_read
+	XREF	_msb_mse_report
 
 _usb_dispatch:
 	LD	A, B					; SUB FUNCTION CODE
@@ -55,6 +57,8 @@ _usb_dispatch:
 
 	DEC	A					; B = 48
 	JR	Z, usb_mse_init
+	DEC	A					; B = 49
+	JR	Z, usb_mse_read
 
 	LD	A, B
 	SUB	128
@@ -329,6 +333,27 @@ usb_mse_init:
 	CALL	_usb_mse_init
 	POP	BC
 	RET.L
+;
+; Function B = ?? -- usb_mse_read
+;
+; Inputs
+;  HL -> address of usb_mouse_report_t
+;
+; Outputs
+;   B: Buttons (NIY)
+;   HL: int24_t for x (NIY)
+;   DE: int24_t for y (NIY)
+;   A: 0 no report availabe, 1 - report was written to HL
+;
+; If C = 0, then the first found mouse will be initialised
+;
+; marshalls to uint8_t usb_mse_read(usb_mouse_report_t* rpt)
+usb_mse_read:
+	PUSH	HL
+	CALL	_usb_mse_read
+	POP	HL
+	RET.L
+
 ;
 ;
 ;-------------------------------------------------

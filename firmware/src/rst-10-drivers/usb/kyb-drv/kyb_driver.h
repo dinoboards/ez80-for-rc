@@ -14,8 +14,7 @@
 
 extern device_config_boot_hid_t *keyboard_config;
 
-extern void    usb_kyb_install_timer_tick(void);
-extern uint8_t report_diff();
+extern void usb_kyb_install_timer_tick(void);
 
 extern usb_error_t usb_kyb_init(const uint8_t dev_index);
 extern uint8_t     usb_kyb_flush(void);

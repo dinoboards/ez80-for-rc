@@ -17,7 +17,6 @@
 	XREF	_kyb_report
 	XREF	_kyb_previous
 
-; uint8_t report_diff();
 _report_diff:
 	LD	DE, _kyb_report
 	LD	HL, _kyb_previous

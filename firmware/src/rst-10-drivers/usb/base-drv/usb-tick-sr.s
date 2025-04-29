@@ -1,6 +1,7 @@
         INCLUDE "..\..\..\config.inc"
 	INCLUDE "..\usb-constants.inc"
 	INCLUDE "..\kyb-drv\kyb-interrupt.inc"
+	INCLUDE "..\mse-drv\mse-interrupt.inc"
 
 	SECTION CODE
 
@@ -48,6 +49,9 @@ _usb_tick:
 	KYB_DRIVER_INT_RETRIEVE
 	PUSH	AF				; save result of KYB_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
 
+	MSE_DRIVER_INT_RETRIEVE
+	PUSH	AF				; save result of MSE_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
+
 	; ch_configure_nak_retry_disable
 	LD	E, CH_CMD_WRITE_VAR8
 	PUSH	DE
@@ -59,6 +63,9 @@ _usb_tick:
 	LD	A, CH_NAK_RETRY_3S << 6 | %1F
 	LD	BC, _CH376_DATA_PORT
 	OUT	(BC), A
+
+	POP	AF				; restore result of MSE_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
+	MSE_DRIVER_INT_INJECT
 
 	POP	AF				; restore result of KYB_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
 	KYB_DRIVER_INT_INJECT
