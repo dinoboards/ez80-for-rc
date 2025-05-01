@@ -343,6 +343,7 @@ usb_mse_init:
 ; Function B = ?? -- usb_mse_read
 ;
 ; Inputs
+;  C -> 0 to get buffered(qued) report, 1 to get current
 ;  HL -> address of usb_mouse_report_t
 ;
 ; Outputs
@@ -351,13 +352,13 @@ usb_mse_init:
 ;   DE: int24_t for y (NIY)
 ;   A: 0 no report available, 1 - report was returned to HL
 ;
-; If C = 0, then the first found mouse will be initialised
-;
-; marshalls to uint8_t usb_mse_read(usb_mouse_report_ex_t* rpt)
+; marshalls to uint8_t usb_mse_read(usb_mouse_report_ex_t* rpt, uint8_t report type)
 usb_mse_read:
+	PUSH	BC
 	PUSH	HL
 	CALL	_usb_mse_read
 	POP	HL
+	POP	BC
 	RET.L
 
 ;

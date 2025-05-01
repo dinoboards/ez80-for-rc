@@ -91,7 +91,14 @@ static bool mouse_report_diff() {
 }
 
 // needs to return bool, buttons, x, and y
-uint8_t usb_mse_read(usb_mouse_report_ex_t *rpt) {
+uint8_t usb_mse_read(usb_mouse_report_ex_t *rpt, uint8_t request_type) {
+  if (request_type == 1) {
+    rpt->buttons = mse_report.report.buttons;
+    rpt->x       = 0;
+    rpt->y       = 0;
+    return 0;
+  }
+
   if (write_index == read_index) // Check if buffer is empty
     return 255;                  // empty
 
