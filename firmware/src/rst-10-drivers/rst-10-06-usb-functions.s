@@ -25,6 +25,12 @@
 	XREF	_usb_mse_init
 	XREF	_usb_mse_read
 	XREF	_msb_mse_report
+	XREF	_usb_control_transfer
+	XREF	_usb_data_in_transferx
+	XREF	_usbtrn_get_descriptor2
+	XREF	_usbtrn_get_full_config_descriptor
+	XREF	_usbtrn_get_string
+	XREF	_find_index_by_device_type
 
 _usb_dispatch:
 	LD	A, B					; SUB FUNCTION CODE
@@ -412,13 +418,20 @@ usb_storage_seek:
 ;  C -> Device Index
 ;
 ; Outputs
-;   A -> device_type (-1 is no device at dev_index)
+;   A -> device_type (-1 if no device at dev_index)
+;   D -> device_address (-1 if no device at dev_index)
+;   E -> max packet size (-1 if no device at dev_index)
 ;
-;marshalls to usb_device_t usb_get_device_type(const uint16_t dev_index)
+;marshalls to device_config_t* usb_get_device_type(const uint8_t dev_index)
 usb_get_device_type:
 	PUSH	BC
-	CALL	_usb_get_device_type
-	POP	BC
+	CALL	_usb_get_device_type		; device_config_t returned in HL
+	LD	A, (HL)				; dev->type
+	INC	HL
+	LD	D, (HL)				; dev->address
+	INC	HL
+	LD	E, (HL)				; dev->max_packet_size
+	POP	HL
 	RET.L
 
 
@@ -426,11 +439,6 @@ usb_get_device_type:
 ; LOW LEVEL USB INTERFACE
 ; ---------------------------
 ;
-	XREF	_usb_control_transfer
-	XREF	_usb_data_in_transferx
-	XREF	_usbtrn_get_descriptor2
-	XREF	_usbtrn_get_full_config_descriptor
-
 ; Function B = ?? usb_control_transfer
 ;
 ; Inputs

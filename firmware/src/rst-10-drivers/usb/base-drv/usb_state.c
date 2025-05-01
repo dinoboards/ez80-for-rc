@@ -91,17 +91,18 @@ device_config_t *get_usb_device_config(const uint8_t device_index) {
   return NULL; // is not a usb device
 }
 
-usb_device_t usb_get_device_type(const uint16_t dev_index) {
+const device_config_t no_device = {-1, -1, -1, -1};
+device_config_t      *usb_get_device_type(const uint8_t dev_index) {
   const device_config_t *dev = get_usb_device_config(dev_index);
 
   if (dev == NULL)
-    return -1;
+    return &no_device;
 
-  return dev->type;
+  return dev;
 }
 
 /**
- * @brief find the first device config with the specified dev_index
+ * @brief find the first device config with the specified dev_type
  *
  * @param dev
  * @return device_config_t

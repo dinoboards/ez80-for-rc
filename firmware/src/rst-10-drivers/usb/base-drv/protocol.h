@@ -94,6 +94,4 @@ extern usb_error_t usbtrn_set_address(const uint8_t device_address);
 extern usb_error_t
 usbtrn_clear_endpoint_halt(const uint8_t endpoint_number, const uint8_t device_address, const uint8_t max_packet_size);
 
-// extern usb_error_t usb_clear_endpoint_halt(device_config_t *const storage_device, const usb_endpoint_t endpoint_type);
-
 #endif
