@@ -17,6 +17,12 @@ typedef struct {
 } usb_mouse_report_t;
 
 typedef struct {
+  uint8_t buttons;
+  int24_t x;
+  int24_t y;
+} usb_mouse_report_ex_t;
+
+typedef struct {
   usb_mouse_report_t report;
   uint8_t            reserved[5];
 } usb_mouse_incoming_report_t;

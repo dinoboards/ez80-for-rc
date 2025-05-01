@@ -349,11 +349,11 @@ usb_mse_init:
 ;   B: Buttons (NIY)
 ;   HL: int24_t for x (NIY)
 ;   DE: int24_t for y (NIY)
-;   A: 0 no report availabe, 1 - report was written to HL
+;   A: 0 no report available, 1 - report was returned to HL
 ;
 ; If C = 0, then the first found mouse will be initialised
 ;
-; marshalls to uint8_t usb_mse_read(usb_mouse_report_t* rpt)
+; marshalls to uint8_t usb_mse_read(usb_mouse_report_ex_t* rpt)
 usb_mse_read:
 	PUSH	HL
 	CALL	_usb_mse_read

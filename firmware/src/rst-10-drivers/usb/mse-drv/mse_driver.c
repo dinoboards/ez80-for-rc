@@ -11,9 +11,9 @@
 
 device_config_boot_hid_t *mouse_config = NULL;
 
-static usb_mouse_report_t buffer[MOUSE_BUFFER_SIZE] = {0};
-static uint8_t            write_index               = 0;
-static uint8_t            read_index                = 0;
+static usb_mouse_report_ex_t buffer[MOUSE_BUFFER_SIZE] = {0};
+static uint8_t               write_index               = 0;
+static uint8_t               read_index                = 0;
 
 // uint8_t           mse_rpt_write_index                   = 0;
 // uint8_t           mse_rpt_read_index                    = 0;
@@ -58,9 +58,22 @@ done:
 void mouse_report_put() {
   uint8_t next_write_index = (write_index + 1) & MOUSE_BUFFER_SIZE_MASK;
 
+  /* if not empty, and buttons are same, just updated the previously */
+  /* written buffered report                                         */
+  if (read_index != write_index) {
+    uint8_t previous_index = (write_index - 1) & MOUSE_BUFFER_SIZE_MASK;
+    if (buffer[previous_index].buttons == mse_report.report.buttons) {
+      buffer[previous_index].x += mse_report.report.x;
+      buffer[previous_index].y += mse_report.report.y;
+      return;
+    }
+  }
+
   if (next_write_index != read_index) { // Check if buffer is not full
-    buffer[write_index] = mse_report.report;
-    write_index         = next_write_index;
+    buffer[write_index].buttons = mse_report.report.buttons;
+    buffer[write_index].x       = mse_report.report.x;
+    buffer[write_index].y       = mse_report.report.y;
+    write_index                 = next_write_index;
   }
 }
 
@@ -78,7 +91,7 @@ static bool mouse_report_diff() {
 }
 
 // needs to return bool, buttons, x, and y
-uint8_t usb_mse_read(usb_mouse_report_t *rpt) {
+uint8_t usb_mse_read(usb_mouse_report_ex_t *rpt) {
   if (write_index == read_index) // Check if buffer is empty
     return 255;                  // empty
 
