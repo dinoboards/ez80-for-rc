@@ -5,6 +5,7 @@
 //
 ////////////////////////////////////////////////////////////////////
 
+#include "ez80.h"
 #include "wl_def.h"
 #include <hbios.h>
 #include <sys/stat.h>
@@ -3125,20 +3126,12 @@ void       ReadAnyControl(ControlInfo *ci) {
   IN_ReadControl(0, ci);
 
   if (mouseenabled) {
-    int mousex, mousey;
-
     // READ MOUSE MOTION COUNTERS
     // RETURN DIRECTION
     // HOME MOUSE
     // CHECK MOUSE BUTTONS
 
-    ez80_usb_mse_report_ex_t usb_mouse_report = {0};
-    ez80_usb_mse_read(&usb_mouse_report);
-    mousex = usb_mouse_report.x;
-    mousey = usb_mouse_report.y;
-
-    totalMousex += mousex;
-    totalMousey += mousey;
+    io_mouse_move(&totalMousex, &totalMousey);
 
     if (totalMousey < -SENSITIVE) {
       ci->dir     = dir_North;

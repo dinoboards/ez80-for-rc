@@ -15,6 +15,15 @@ static inline uint8_t io_mouse_buttons() {
   return usb_mouse_report.buttons;
 }
 
+static inline void io_mouse_move(int24_t *const total_mouse_x, int24_t *const total_mouse_y) {
+  ez80_usb_mse_read(&usb_mouse_report);
+
+  *total_mouse_x += usb_mouse_report.x;
+  *total_mouse_y += usb_mouse_report.y;
+}
+
+static inline void io_mouse_poll() { ez80_usb_mse_read(&usb_mouse_report); }
+
 static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_scanned_code) {
   uint8_t result = ez80_usb_kyb_event(&usb_key);
 

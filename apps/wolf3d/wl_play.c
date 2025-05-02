@@ -1,5 +1,6 @@
 // WL_PLAY.C
 
+#include "ez80.h"
 #include "wl_def.h"
 #include <hbios.h>
 
@@ -267,8 +268,7 @@ void PollKeyboardMove(void) {
 */
 
 void PollMouseMove(void) {
-  ez80_usb_mse_report_ex_t usb_mouse_report = {0};
-  ez80_usb_mse_read(&usb_mouse_report);
+  io_mouse_poll();
 
   controlx += usb_mouse_report.x * 10 / (13 - mouseadjustment);
   controly += usb_mouse_report.y * 20 / (13 - mouseadjustment);
@@ -1073,11 +1073,7 @@ void PlayLoop(void) {
     IN_StartAck();
 
   do {
-    // int24_t start = ez80_timers_ticks_get();
-
     PollControls();
-
-    // uint24_t stage1 = ez80_timers_ticks_get() - start;
 
     //
     // actor thinking
@@ -1086,24 +1082,15 @@ void PlayLoop(void) {
 
     MoveDoors();
 
-    // uint24_t stage2 = ez80_timers_ticks_get() - start;
-
     MovePWalls();
-
-    // uint24_t stage3 = ez80_timers_ticks_get() - start;
 
     for (obj = player; obj; obj = obj->next)
       DoActor(obj);
 
-    // uint24_t stage4 = ez80_timers_ticks_get() - start;
-
     UpdatePaletteShifts();
-
-    // uint24_t stage5 = ez80_timers_ticks_get() - start;
 
     ThreeDRefresh();
 
-    // uint24_t stage6 = ez80_timers_ticks_get() - start;
     //
     // MAKE FUNNY FACE IF BJ DOESN'T MOVE FOR AWHILE
     //
@@ -1141,10 +1128,6 @@ void PlayLoop(void) {
         playstate = ex_abort;
       }
     }
-
-    // int24_t stage7 = ez80_timers_ticks_get() - start;
-
-    // printf("s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d, s7: %d\r", stage1, stage2, stage3, stage4, stage5, stage6, stage7);
 
   } while (!playstate && !startgame);
 
