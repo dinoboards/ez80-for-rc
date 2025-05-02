@@ -2953,8 +2953,8 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
     if (ci.button0 || Keyboard[USB_KEY_SPACE] || Keyboard[USB_KEY_ENTER])
       exit = 1;
 
-    // if (ci.button1 && (/*!Keyboard[(uint8_t)KEY_LEFTALT] ||*/ !false || Keyboard[USB_KEY_ESCAPE]))
-    // exit = 2;
+    if (ci.button1 || Keyboard[USB_KEY_ESCAPE])
+      exit = 2;
   } while (!exit);
 
   IN_ClearKeysDown();
@@ -3124,16 +3124,18 @@ void       ReadAnyControl(ControlInfo *ci) {
 
   IN_ReadControl(0, ci);
 
-  if (mouseenabled && IN_IsInputGrabbed()) {
-    int mousex, mousey, buttons;
-    buttons           = SDL_GetRelativeMouseState(&mousex, &mousey);
-    int middlePressed = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
-    int rightPressed  = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
-    buttons &= ~(SDL_BUTTON(SDL_BUTTON_MIDDLE) | SDL_BUTTON(SDL_BUTTON_RIGHT));
-    if (middlePressed)
-      buttons |= 1 << 2;
-    if (rightPressed)
-      buttons |= 1 << 1;
+  if (mouseenabled) {
+    int mousex, mousey;
+
+    // READ MOUSE MOTION COUNTERS
+    // RETURN DIRECTION
+    // HOME MOUSE
+    // CHECK MOUSE BUTTONS
+
+    ez80_usb_mse_report_ex_t usb_mouse_report = {0};
+    ez80_usb_mse_read(&usb_mouse_report);
+    mousex = usb_mouse_report.x;
+    mousey = usb_mouse_report.y;
 
     totalMousex += mousex;
     totalMousey += mousey;
@@ -3159,10 +3161,10 @@ void       ReadAnyControl(ControlInfo *ci) {
       totalMousey = 0;
     }
 
-    if (buttons) {
-      ci->button0 = buttons & 1;
-      ci->button1 = buttons & 2;
-      ci->button2 = buttons & 4;
+    if (usb_mouse_report.buttons) {
+      ci->button0 = usb_mouse_report.buttons & 1;
+      ci->button1 = usb_mouse_report.buttons & 2;
+      ci->button2 = usb_mouse_report.buttons & 4;
       ci->button3 = false;
       mouseactive = 1;
     }

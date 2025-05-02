@@ -19,6 +19,7 @@
 #include <ez80-firmware-usb.h>
 #include <hbios.h>
 #include <stdint.h>
+#include "ez80.h"
 
 #include "id_vl.h"
 
@@ -73,7 +74,6 @@ int                  JoyNumButtons;
 int                  JoyNumAxes;
 static int           JoyNumHats;
 
-static bool GrabInput = false;
 /*
 =============================================================================
 
@@ -123,23 +123,17 @@ static boolean IN_Started;
 static Direction DirTable[] = // Quick lookup for total direction
     {dir_NorthWest, dir_North, dir_NorthEast, dir_West, dir_None, dir_East, dir_SouthWest, dir_South, dir_SouthEast};
 
+
+
 ///////////////////////////////////////////////////////////////////////////
 //
 //  INL_GetMouseButtons() - Gets the status of the mouse buttons from the
 //      mouse driver
 //
 ///////////////////////////////////////////////////////////////////////////
-static int INL_GetMouseButtons(void) {
-  int buttons       = SDL_GetMouseState(NULL, NULL);
-  int middlePressed = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
-  int rightPressed  = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
-  buttons &= ~(SDL_BUTTON(SDL_BUTTON_MIDDLE) | SDL_BUTTON(SDL_BUTTON_RIGHT));
-  if (middlePressed)
-    buttons |= 1 << 2;
-  if (rightPressed)
-    buttons |= 1 << 1;
 
-  return buttons;
+static inline uint8_t INL_GetMouseButtons(void) {
+  return io_mouse_buttons();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -266,12 +260,10 @@ static uint8_t processEvent() {
   if (usb_key.key_down) {
     LastScan           = usb_key.key_code;
     Keyboard[LastScan] = 1;
-    printf("Key down: %x\r\n", LastScan);
     return true;
   }
 
   Keyboard[usb_key.key_code] = 0;
-  printf("Key up: %x\r\n", usb_key.key_code);
   return true;
 }
 
@@ -309,13 +301,9 @@ void IN_Startup(void) {
 
   SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
 
-  if (fullscreen || forcegrabmouse) {
-    GrabInput = true;
-    SDL_SetRelativeMouseMode(true);
-  }
+  MousePresent = io_mouse_init();
 
-  // I didn't find a way to ask libSDL whether a mouse is present, yet...
-  MousePresent = false;
+  printf("MousePresent=%d\r\n", MousePresent);
 
   IN_Started = true;
 }
@@ -508,5 +496,3 @@ int IN_MouseButtons(void) {
   else
     return 0;
 }
-
-bool IN_IsInputGrabbed() { return GrabInput; }

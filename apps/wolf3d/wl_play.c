@@ -267,12 +267,11 @@ void PollKeyboardMove(void) {
 */
 
 void PollMouseMove(void) {
-  int mousexmove, mouseymove;
+  ez80_usb_mse_report_ex_t usb_mouse_report = {0};
+  ez80_usb_mse_read(&usb_mouse_report);
 
-  SDL_GetRelativeMouseState(&mousexmove, &mouseymove);
-
-  controlx += mousexmove * 10 / (13 - mouseadjustment);
-  controly += mouseymove * 20 / (13 - mouseadjustment);
+  controlx += usb_mouse_report.x * 10 / (13 - mouseadjustment);
+  controly += usb_mouse_report.y * 20 / (13 - mouseadjustment);
 }
 
 /*
@@ -372,7 +371,7 @@ void PollControls(void) {
   //
   PollKeyboardButtons();
 
-  if (mouseenabled && IN_IsInputGrabbed())
+  if (mouseenabled)
     PollMouseButtons();
 
   if (joystickenabled)
@@ -383,7 +382,7 @@ void PollControls(void) {
   //
   PollKeyboardMove();
 
-  if (mouseenabled && IN_IsInputGrabbed())
+  if (mouseenabled)
     PollMouseMove();
 
   if (joystickenabled)

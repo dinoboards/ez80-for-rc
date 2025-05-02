@@ -2,6 +2,7 @@
 #define SDL_H
 
 #include <cdefs.h>
+#include <ez80-firmware-usb.h>
 #include <ez80-firmware.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -856,15 +857,13 @@ typedef union SDL_Event {
 
 #define SDL_GetTicks ez80_timers_ticks_get
 
-extern void                SDL_Delay(uint24_t ms);
-extern int                 SDL_LockSurface(SDL_Surface *surface);
-extern int                 SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
-extern int                 SDL_Init(int32_t flags);
-extern const char         *SDL_GetError(void);
-extern void                SDL_Quit(void);
-extern int                 SDL_NumJoysticks(void);
-extern uint32_t            SDL_GetRelativeMouseState(int *x, int *y);
-extern uint32_t            SDL_GetMouseState(int *x, int *y);
+extern void        SDL_Delay(uint24_t ms);
+extern int         SDL_LockSurface(SDL_Surface *surface);
+extern int         SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
+extern int         SDL_Init(int32_t flags);
+extern const char *SDL_GetError(void);
+extern void        SDL_Quit(void);
+extern int         SDL_NumJoysticks(void);
 extern void                SDL_GameControllerUpdate(void);
 extern int16_t             SDL_GameControllerGetAxis(SDL_GameController *gamecontroller, SDL_GameControllerAxis axis);
 extern uint8_t             SDL_GameControllerGetButton(SDL_GameController *gamecontroller, SDL_GameControllerButton button);
@@ -877,7 +876,6 @@ extern SDL_GameController *SDL_GameControllerOpen(int joystick_index);
 extern const char         *SDL_GameControllerName(SDL_GameController *gamecontroller);
 extern int                 SDL_GameControllerEventState(int state);
 extern uint8_t             SDL_EventState(uint32_t type, int state);
-extern int                 SDL_SetRelativeMouseMode(bool enabled);
 extern void                SDL_GameControllerClose(SDL_GameController *gamecontroller);
 
 #define SDL_BUTTON(X)     (1 << ((X)-1))
@@ -1171,6 +1169,5 @@ extern const uint8_t *SDL_GetKeyboardState(int *numkeys);
 #define SDL_BlitScaled(...)
 #define SDL_SaveBMP(...)
 
-extern const uint8_t scale_points[320];
 
 #endif

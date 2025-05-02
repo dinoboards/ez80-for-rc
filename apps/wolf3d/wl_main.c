@@ -167,11 +167,13 @@ void ReadConfig(void) {
 
     if (mouseenabled)
       mouseenabled = true;
+
     if (joystickenabled)
       joystickenabled = true;
 
     if (!MousePresent)
       mouseenabled = false;
+
     if (!IN_JoyPresent())
       joystickenabled = false;
 

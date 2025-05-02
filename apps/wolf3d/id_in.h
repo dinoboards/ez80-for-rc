@@ -103,7 +103,6 @@ void    IN_GetJoyFineDelta(int *dx, int *dy);
 
 void    IN_StartAck(void);
 boolean IN_CheckAck(void);
-boolean IN_IsInputGrabbed();
 
 int IN_GetJoyAxis(int axis);
 int IN_JoyAxes(void);
