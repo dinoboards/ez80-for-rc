@@ -20,6 +20,7 @@
 //          window
 //
 
+#include "ez80.h"
 #include "wl_def.h"
 #include <hbios.h>
 
@@ -682,7 +683,7 @@ boolean US_LineInput(int x, int y, char *buf, const char *def, boolean escok, in
 ///////////////////////////////////////////////////////////////////////////
 void US_InitRndT(int randomize) {
   if (randomize)
-    rndindex = (SDL_GetTicks() >> 4) & 0xff;
+    rndindex = (GetTimeCount() >> 4) & 0xff;
   else
     rndindex = 0;
 }

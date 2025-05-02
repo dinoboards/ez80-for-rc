@@ -1,5 +1,6 @@
 // WL_INTER.C
 
+#include "ez80.h"
 #include "wl_def.h"
 
 #include "id_mm.h"

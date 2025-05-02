@@ -1655,8 +1655,6 @@ static inline fixed fixed_rounded_down(fixed a) { return a & 0xffff0000; }
 
 #define DEMOCOND_SDL (!DEMOCOND_ORIG)
 
-#define GetTicks() (SDL_GetTicks())
-
 #define ISPOINTER(x) ((((uintptr_t)(x)) & ~0xffff) != 0)
 
 #define CHECKMALLOCRESULT(x)                                                                                                       \

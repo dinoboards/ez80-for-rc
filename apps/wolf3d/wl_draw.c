@@ -908,7 +908,7 @@ void CalcTics(void) {
   // calculate tics since last refresh for adaptive timing
   //
   if (lasttimecount > tm_tick_get())
-    TimeCount = lasttimecount; // if the game was paused a LONG time
+    SetTimeCount(lasttimecount); // if the game was paused a LONG time
 
   do {
     newtime = tm_tick_get();
@@ -918,7 +918,7 @@ void CalcTics(void) {
   lasttimecount = newtime;
 
   if (tics > MAXTICS) {
-    TimeCount -= (tics - MAXTICS);
+    SubTimeCount(tics - MAXTICS);
     tics = MAXTICS;
   }
 }

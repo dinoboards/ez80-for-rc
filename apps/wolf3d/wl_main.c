@@ -1,7 +1,7 @@
 // WL_MAIN.C
 
+#include "ez80.h"
 #include "wl_draw.h"
-#include <ez80.h>
 #include <fcntl.h>
 #include <hbios.h>
 #include <unistd.h>
@@ -985,7 +985,7 @@ void DoJukebox(void) {
 
 #ifndef SPEAR
 #ifndef UPLOAD
-  start = SDL_GetTicks();
+  start = GetTimeCount();
 #else
   start = 0;
 #endif
@@ -1082,6 +1082,8 @@ static void InitGame() {
 #endif
 
   SignonScreen();
+
+  ez80_startup();
 
   VH_Startup();
 
@@ -1517,9 +1519,5 @@ int main(/*int argc, char* argv[]*/) {
 
   DemoLoop();
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
-
-  printf("ENDED!!!!!!\r\n");
-  Quit("Demo loop exited???");
   return 1;
 }

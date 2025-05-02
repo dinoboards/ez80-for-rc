@@ -450,13 +450,14 @@ void IN_Ack(void) {
 //
 ///////////////////////////////////////////////////////////////////////////
 boolean IN_UserInput(uint24_t delay) {
-  const uint24_t lasttime = GetTimeCount();
+  longword lasttime;
+
+  lasttime = GetTimeCount();
   IN_StartAck();
   do {
     IN_ProcessEvents();
     if (IN_CheckAck())
       return true;
-    SDL_Delay(5);
   } while (GetTimeCount() - lasttime < delay);
   return (false);
 }
