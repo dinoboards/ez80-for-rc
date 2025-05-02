@@ -2790,7 +2790,6 @@ void CleanupControlPanel(void) {
 //
 ////////////////////////////////////////////////////////////////////
 int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) {
-  printf("HandleMenu\r\n");
   char        key;
   static int  redrawitem = 1, lastitem = -1;
   int         i, x, y, basey, exit, which, shape;
@@ -3603,7 +3602,6 @@ void ShootSnd(void) { SD_PlaySound(SHOOTSND); }
 //
 ///////////////////////////////////////////////////////////////////////////
 void CheckForEpisodes(void) {
-  printf("CheckForEpisodes\r\n");
   struct stat statbuf;
 
   //

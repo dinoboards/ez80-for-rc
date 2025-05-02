@@ -576,7 +576,6 @@ void SD_PrepareSound(int which) {
   int destsamples = (int)((float)size * (float)param_samplerate / (float)ORIGSAMPLERATE);
 
   byte *wavebuffer;
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   MM_GetPtr((memptr *)&wavebuffer, sizeof(headchunk) + sizeof(wavechunk) + destsamples * 2); // dest are 16-bit samples
 
   headchunk head     = {{'R', 'I', 'F', 'F'},
@@ -671,7 +670,6 @@ void SDL_SetupDigi(void) {
   word *soundInfoPage = (word *)(void *)PM_GetPage(ChunksInFile - 1);
   NumDigi             = (word)PM_GetPageSize(ChunksInFile - 1) / 4;
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   MM_GetPtr((memptr *)&DigiList, NumDigi * sizeof(digiinfo));
   int i;
   for (i = 0; i < NumDigi; i++) {

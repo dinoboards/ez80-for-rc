@@ -1858,7 +1858,6 @@ static FM_OPL *OPLCreate(int type, int clock, int rate) {
 #endif
 
   /* allocate memory block */
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   MM_GetPtr((memptr*)&ptr, state_size);
   Quit("update to support *ptr being updated if memory is compacted");
 

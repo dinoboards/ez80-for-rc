@@ -283,8 +283,6 @@ void IN_Startup(void) {
 
   MousePresent = io_mouse_init();
 
-  printf("MousePresent=%d\r\n", MousePresent);
-
   IN_Started = true;
 }
 
@@ -313,8 +311,6 @@ void IN_ClearKeysDown(void) {
   LastASCII = 0;
 
   memset(Keyboard, 0, sizeof(Keyboard));
-
-  printf("Clear keys down\r\n");
 }
 
 ///////////////////////////////////////////////////////////////////////////

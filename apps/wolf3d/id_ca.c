@@ -629,7 +629,6 @@ int32_t CA_CacheAudioChunk(int chunk) {
   if (audiosegs[chunk])
     return size; // already in memory
 
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   MM_GetPtr((memptr *)&audiosegs[chunk], size);
 
   lseek(audiohandle, pos, SEEK_SET);
@@ -649,7 +648,6 @@ void CA_CacheAdlibSoundChunk(int chunk) {
   read(audiohandle, bufferseg, ORIG_ADLIBSOUND_SIZE - 1); // without data[1]
 
   AdLibSound *sound;
-  printf("%s:%d\r\n", __FILE__, __LINE__);
   MM_GetPtr((memptr *)&sound, size + sizeof(AdLibSound) - ORIG_ADLIBSOUND_SIZE);
 
   byte *ptr              = (byte *)bufferseg;
