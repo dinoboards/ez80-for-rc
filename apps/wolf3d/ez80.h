@@ -4,6 +4,7 @@
 #include <ez80-firmware-usb.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 extern ez80_usb_mse_report_ex_t usb_mouse_report;
 extern ez80_usb_kyb_event_t     usb_key;
@@ -38,6 +39,10 @@ static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_
 
   if (result == 0)
     return false;
+
+  /* Quick Exit option */
+  if (usb_key.key_code == USB_KEY_DELETE)
+    exit(1);
 
   if (usb_key.key_down) {
     *last_scanned_code                  = usb_key.key_code;

@@ -313,6 +313,7 @@ void IN_ClearKeysDown(void) {
   LastASCII = 0;
 
   memset(Keyboard, 0, sizeof(Keyboard));
+
   printf("Clear keys down\r\n");
 }
 

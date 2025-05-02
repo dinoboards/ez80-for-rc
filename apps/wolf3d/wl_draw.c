@@ -1351,12 +1351,12 @@ void ThreeDRefresh(void) {
 
     uint24_t stage6 = ez80_timers_ticks_get() - start;
 
-    int24_t  x    = ez80_timers_ticks_get() * 1000 / 50;
+    int24_t  x    = ez80_timers_ticks_get() * (1000 / 70);
     uint24_t diff = x - last_system_tick;
 
-    printf(" diff: %d, t: %d, s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d    \r", diff, x, stage1 * 1000 / 50,
-           (stage2 - stage1) * 1000 / 50, (stage3 - stage2) * 1000 / 50, (stage4 - stage3) * 1000 / 50,
-           (stage5 - stage4) * 1000 / 50, (stage6 - stage5) * 1000 / 50);
+    printf(" diff: %d, t: %d, s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d    \r", diff, x, stage1 * (1000 / 70),
+           (stage2 - stage1) * (1000 / 70), (stage3 - stage2) * (1000 / 70), (stage4 - stage3) * (1000 / 70),
+           (stage5 - stage4) * (1000 / 70), (stage6 - stage5) * (1000 / 70));
 
     last_system_tick = x;
 
