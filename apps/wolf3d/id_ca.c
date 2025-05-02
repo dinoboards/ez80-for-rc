@@ -862,9 +862,7 @@ void CA_CacheScreen(int chunk) {
   lseek(grhandle, pos, SEEK_SET);
 
   MM_GetPtr(&bigbufferseg, compressed);
-  printf("%d: Reading from vgagraph.xxx (%d)\r\n", ez80_timers_ticks_get(), (int)pos);
   read(grhandle, bigbufferseg, compressed);
-  printf("%d: Read %d bytes\r\n", ez80_timers_ticks_get(), (int)compressed);
   source = (int32_t *)bigbufferseg;
 
   expanded = *source++;
@@ -875,9 +873,7 @@ void CA_CacheScreen(int chunk) {
   //
   byte *pic;
   MM_GetPtr((memptr *)&pic, 64000);
-  printf("%d: Expanding %d bytes\r\n", ez80_timers_ticks_get(), (int)expanded);
   CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
-  printf("%d: Expanded\r\n", ez80_timers_ticks_get());
 
 #define CLIP_LEFT 8
 #define CLIP_SKIP 5
@@ -896,7 +892,6 @@ void CA_CacheScreen(int chunk) {
         cx++;
     }
   }
-  printf("%d: written to surface\r\n", ez80_timers_ticks_get());
   MM_FreePtr((memptr *)&pic);
   MM_FreePtr((memptr *)&bigbufferseg);
 }
