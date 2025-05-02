@@ -7,8 +7,10 @@
 
 extern ez80_usb_mse_report_ex_t usb_mouse_report;
 extern ez80_usb_kyb_event_t     usb_key;
+extern uint24_t                 TimeCount;
 
-extern bool io_mouse_init();
+extern bool     io_mouse_init();
+extern uint24_t tm_tick_get();
 
 static inline uint8_t io_mouse_buttons() {
   ez80_usb_mse_state(&usb_mouse_report);

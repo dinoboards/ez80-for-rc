@@ -1,6 +1,7 @@
 #include "wl_draw.h"
-#include <ez80.h>
+#include "ez80.h"
 #include <hbios.h>
+
 // WL_DRAW.C
 
 #include "wl_def.h"
@@ -901,32 +902,25 @@ void DrawPlayerWeapon(void) {
 =====================
 */
 
-uint24_t offset = 0;
-uint24_t calibrated_timer_get() {
-  uint24_t t = ez80_timers_ticks_get();
-
-  // convert to ms?
-  t = t * 1000 / 50;
-
-  return offset - t;
-}
-
 void CalcTics(void) {
+  long newtime;
   //
   // calculate tics since last refresh for adaptive timing
   //
-  if (lasttimecount > calibrated_timer_get())
-    lasttimecount = calibrated_timer_get(); // if the game was paused a LONG time
+  if (lasttimecount > tm_tick_get())
+    TimeCount = lasttimecount; // if the game was paused a LONG time
 
-  uint24_t newtime = calibrated_timer_get();
-  tics             = newtime - lasttimecount;
+  do {
+    newtime = tm_tick_get();
+    tics    = newtime - lasttimecount;
+  } while (!tics); // make sure at least one tic passes
+
+  lasttimecount = newtime;
 
   if (tics > MAXTICS) {
-    offset = (tics - MAXTICS);
-
+    TimeCount -= (tics - MAXTICS);
     tics = MAXTICS;
-  } else
-    offset = 0;
+  }
 }
 
 //==========================================================================
