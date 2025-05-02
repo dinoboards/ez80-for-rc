@@ -16,10 +16,10 @@
 //      LastASCII - The ASCII value of the last key pressed
 //  DEBUG - there are more globals
 //
+#include "ez80.h"
 #include <ez80-firmware-usb.h>
 #include <hbios.h>
 #include <stdint.h>
-#include "ez80.h"
 
 #include "id_vl.h"
 
@@ -44,9 +44,9 @@ boolean forcegrabmouse;
 //  Global variables
 boolean Keyboard[NumCodes];
 
-volatile boolean  Paused;
-volatile char     LastASCII;
-volatile ScanCode LastScan;
+boolean  Paused;
+char     LastASCII;
+ScanCode LastScan;
 
 // KeyboardDef   KbdDefs = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
 // static KeyboardDef KbdDefs = {
@@ -123,8 +123,6 @@ static boolean IN_Started;
 static Direction DirTable[] = // Quick lookup for total direction
     {dir_NorthWest, dir_North, dir_NorthEast, dir_West, dir_None, dir_East, dir_SouthWest, dir_South, dir_SouthEast};
 
-
-
 ///////////////////////////////////////////////////////////////////////////
 //
 //  INL_GetMouseButtons() - Gets the status of the mouse buttons from the
@@ -132,9 +130,7 @@ static Direction DirTable[] = // Quick lookup for total direction
 //
 ///////////////////////////////////////////////////////////////////////////
 
-static inline uint8_t INL_GetMouseButtons(void) {
-  return io_mouse_buttons();
-}
+static inline uint8_t INL_GetMouseButtons(void) { return io_mouse_buttons(); }
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -249,23 +245,7 @@ int IN_JoyAxes(void) {
  *
  * @return uint8_t true if a key event was received
  */
-static uint8_t processEvent() {
-  ez80_usb_kyb_event_t usb_key;
-
-  uint8_t result = ez80_usb_kyb_event(&usb_key);
-
-  if (result == 0)
-    return false;
-
-  if (usb_key.key_down) {
-    LastScan           = usb_key.key_code;
-    Keyboard[LastScan] = 1;
-    return true;
-  }
-
-  Keyboard[usb_key.key_code] = 0;
-  return true;
-}
+static inline uint8_t processEvent() { return io_keyboard_event(Keyboard, &LastScan); }
 
 // block waiting for a key event
 // key events are key down, followed eventually by keyup

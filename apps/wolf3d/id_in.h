@@ -12,7 +12,7 @@
 #define __DEBUG_InputMgr__
 #endif
 
-typedef int ScanCode;
+typedef uint8_t ScanCode;
 #define sc_None  0
 #define key_None 0
 
@@ -57,12 +57,12 @@ typedef struct {
 extern boolean Keyboard[NumCodes];
 
 // I do not see multiple threads reading this
-extern boolean           MousePresent;
-extern volatile boolean  Paused;
-extern volatile char     LastASCII;
-extern volatile ScanCode LastScan;
-extern int               JoyNumButtons;
-extern boolean           forcegrabmouse;
+extern boolean  MousePresent;
+extern boolean  Paused;
+extern char     LastASCII;
+extern ScanCode LastScan;
+extern int      JoyNumButtons;
+extern boolean  forcegrabmouse;
 
 struct JoystickSens {
   int sensitivity;

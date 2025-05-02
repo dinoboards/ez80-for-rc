@@ -3378,207 +3378,173 @@ void FreeMusic(void) { UNCACHEAUDIOCHUNK(STARTMUSIC + lastmusic); }
 ///////////////////////////////////////////////////////////////////////////
 const char *IN_GetScanName(ScanCode scan) {
   switch (scan) {
-  case (SDLK_BACKSPACE):
+  case (USB_KEY_BACKSPACE):
     return "BkSp";
-  case (SDLK_TAB):
+  case (USB_KEY_TAB):
     return "Tab";
-  case (SDLK_RETURN):
+  case (USB_KEY_ENTER):
     return "Enter";
-  case (SDLK_PAUSE):
+  case (USB_KEY_PAUSE):
     return "Pause";
-  case (SDLK_ESCAPE):
+  case (USB_KEY_ESCAPE):
     return "Esc";
-  case (SDLK_SPACE):
+  case (USB_KEY_SPACE):
     return "Space";
-  case (SDLK_EXCLAIM):
-    return "!";
-  case (SDLK_QUOTEDBL):
-    return "\"";
-  case (SDLK_HASH):
-    return "#";
-  case (SDLK_DOLLAR):
-    return "$";
-  case (SDLK_AMPERSAND):
-    return "&";
-  case (SDLK_QUOTE):
+  case (USB_KEY_QUOTE):
     return "'";
-  case (SDLK_LEFTPAREN):
-    return "(";
-  case (SDLK_RIGHTPAREN):
-    return ")";
-  case (SDLK_ASTERISK):
-    return "*";
-  case (SDLK_PLUS):
-    return "+";
-  case (SDLK_COMMA):
+  case (USB_KEY_COMMA):
     return ",";
-  case (SDLK_MINUS):
+  case (USB_KEY_MINUS):
     return "-";
-  case (SDLK_PERIOD):
+  case (USB_KEY_PERIOD):
     return ".";
-  case (SDLK_SLASH):
+  case (USB_KEY_SLASH):
     return "/";
-  case (SDLK_0):
+  case (USB_KEY_0):
     return "0";
-  case (SDLK_1):
+  case (USB_KEY_1):
     return "1";
-  case (SDLK_2):
+  case (USB_KEY_2):
     return "2";
-  case (SDLK_3):
+  case (USB_KEY_3):
     return "3";
-  case (SDLK_4):
+  case (USB_KEY_4):
     return "4";
-  case (SDLK_5):
+  case (USB_KEY_5):
     return "5";
-  case (SDLK_6):
+  case (USB_KEY_6):
     return "6";
-  case (SDLK_7):
+  case (USB_KEY_7):
     return "7";
-  case (SDLK_8):
+  case (USB_KEY_8):
     return "8";
-  case (SDLK_9):
+  case (USB_KEY_9):
     return "9";
-  case (SDLK_COLON):
-    return ":";
-  case (SDLK_SEMICOLON):
+  case (USB_KEY_SEMICOLON):
     return ";";
-  case (SDLK_LESS):
-    return "<";
-  case (SDLK_EQUALS):
-    return "=";
-  case (SDLK_GREATER):
-    return ">";
-  case (SDLK_QUESTION):
-    return "?";
-  case (SDLK_AT):
-    return "@";
-  case (SDLK_a):
+  case (USB_KEY_A):
     return "A";
-  case (SDLK_b):
+  case (USB_KEY_B):
     return "B";
-  case (SDLK_c):
+  case (USB_KEY_C):
     return "C";
-  case (SDLK_d):
+  case (USB_KEY_D):
     return "D";
-  case (SDLK_e):
+  case (USB_KEY_E):
     return "E";
-  case (SDLK_f):
+  case (USB_KEY_F):
     return "F";
-  case (SDLK_g):
+  case (USB_KEY_G):
     return "G";
-  case (SDLK_h):
+  case (USB_KEY_H):
     return "H";
-  case (SDLK_i):
+  case (USB_KEY_I):
     return "I";
-  case (SDLK_j):
+  case (USB_KEY_J):
     return "J";
-  case (SDLK_k):
+  case (USB_KEY_K):
     return "K";
-  case (SDLK_l):
+  case (USB_KEY_L):
     return "L";
-  case (SDLK_m):
+  case (USB_KEY_M):
     return "M";
-  case (SDLK_n):
+  case (USB_KEY_N):
     return "N";
-  case (SDLK_o):
+  case (USB_KEY_O):
     return "O";
-  case (SDLK_p):
+  case (USB_KEY_P):
     return "P";
-  case (SDLK_q):
+  case (USB_KEY_Q):
     return "Q";
-  case (SDLK_r):
+  case (USB_KEY_R):
     return "R";
-  case (SDLK_s):
+  case (USB_KEY_S):
     return "S";
-  case (SDLK_t):
+  case (USB_KEY_T):
     return "T";
-  case (SDLK_u):
+  case (USB_KEY_U):
     return "U";
-  case (SDLK_v):
+  case (USB_KEY_V):
     return "V";
-  case (SDLK_w):
+  case (USB_KEY_W):
     return "W";
-  case (SDLK_x):
+  case (USB_KEY_X):
     return "X";
-  case (SDLK_y):
+  case (USB_KEY_Y):
     return "Y";
-  case (SDLK_z):
+  case (USB_KEY_Z):
     return "Z";
-  case (SDLK_LEFTBRACKET):
+  case (USB_KEY_LBRACKET):
     return "[";
-  case (SDLK_BACKSLASH):
+  case (USB_KEY_BACKSLASH):
     return "\\";
-  case (SDLK_RIGHTBRACKET):
+  case (USB_KEY_RBRACKET):
     return "]";
-  case (SDLK_CARET):
-    return "^";
-  case (SDLK_UNDERSCORE):
-    return "_";
-  case (SDLK_BACKQUOTE):
+  case (USB_KEY_GRAVE):
     return "`";
-  case (SDLK_UP):
+  case (USB_KEY_UP):
     return "Up";
-  case (SDLK_DOWN):
+  case (USB_KEY_DOWN):
     return "Down";
-  case (SDLK_RIGHT):
+  case (USB_KEY_RIGHT):
     return "Right";
-  case (SDLK_LEFT):
+  case (USB_KEY_LEFT):
     return "Left";
-  case (SDLK_INSERT):
+  case (USB_KEY_INSERT):
     return "Ins";
-  case (SDLK_HOME):
+  case (USB_KEY_HOME):
     return "Home";
-  case (SDLK_END):
+  case (USB_KEY_END):
     return "End";
-  case (SDLK_PAGEUP):
+  case (USB_KEY_PAGEUP):
     return "PgUp";
-  case (SDLK_PAGEDOWN):
+  case (USB_KEY_PAGEDOWN):
     return "PgDn";
-  case (SDLK_DELETE):
+  case (USB_KEY_DELETE):
     return "Del";
-  case (SDLK_F1):
+  case (USB_KEY_F1):
     return "F1";
-  case (SDLK_F2):
+  case (USB_KEY_F2):
     return "F2";
-  case (SDLK_F3):
+  case (USB_KEY_F3):
     return "F3";
-  case (SDLK_F4):
+  case (USB_KEY_F4):
     return "F4";
-  case (SDLK_F5):
+  case (USB_KEY_F5):
     return "F5";
-  case (SDLK_F6):
+  case (USB_KEY_F6):
     return "F6";
-  case (SDLK_F7):
+  case (USB_KEY_F7):
     return "F7";
-  case (SDLK_F8):
+  case (USB_KEY_F8):
     return "F8";
-  case (SDLK_F9):
+  case (USB_KEY_F9):
     return "F9";
-  case (SDLK_F10):
+  case (USB_KEY_F10):
     return "F10";
-  case (SDLK_F11):
+  case (USB_KEY_F11):
     return "F11";
-  case (SDLK_F12):
+  case (USB_KEY_F12):
     return "F12";
-  case (SDLK_NUMLOCKCLEAR):
+  case (USB_KEY_NUMLOCK):
     return "NumLk";
-  case (SDLK_CAPSLOCK):
+  case (USB_KEY_CAPSLOCK):
     return "CapsLk";
-  case (SDLK_SCROLLLOCK):
+  case (USB_KEY_SCROLLLOCK):
     return "ScrlLk";
-  case (SDLK_RSHIFT):
+  case (USB_KEY_RSHIFT):
     return "RShft";
-  case (SDLK_LSHIFT):
+  case (USB_KEY_LSHIFT):
     return "Shift";
-  case (SDLK_RCTRL):
+  case (USB_KEY_RCTRL):
     return "RCtrl";
-  case (SDLK_LCTRL):
+  case (USB_KEY_LCTRL):
     return "Ctrl";
-  case (SDLK_RALT):
+  case (USB_KEY_RALT):
     return "RAlt";
-  case (SDLK_LALT):
+  case (USB_KEY_LALT):
     return "Alt";
-  case (SDLK_PRINTSCREEN):
+  case (USB_KEY_PRINTSCREEN):
     return "PrtSc";
   default:
     return "?";

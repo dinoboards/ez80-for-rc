@@ -1,9 +1,10 @@
 #include "ez80.h"
-#include <ez80-firmware.h>
 #include <ez80-firmware-usb.h>
+#include <ez80-firmware.h>
 #include <stdio.h>
 
 ez80_usb_mse_report_ex_t usb_mouse_report = {0};
+ez80_usb_kyb_event_t     usb_key          = {0};
 
 bool io_mouse_init() {
   const uint8_t mouse_index = ez80_usb_find_device_index(USB_IS_MOUSE);

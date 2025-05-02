@@ -33,7 +33,6 @@ const char *SDL_GetError(void) { return NULL; }
 int SDL_NumJoysticks(void) { return 0; }
 #endif
 
-
 void SDL_GameControllerUpdate(void) {}
 
 int16_t SDL_GameControllerGetAxis(SDL_GameController *gamecontroller IG, SDL_GameControllerAxis axis IG) { return 0; }

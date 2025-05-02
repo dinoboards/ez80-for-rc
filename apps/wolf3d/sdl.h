@@ -857,13 +857,13 @@ typedef union SDL_Event {
 
 #define SDL_GetTicks ez80_timers_ticks_get
 
-extern void        SDL_Delay(uint24_t ms);
-extern int         SDL_LockSurface(SDL_Surface *surface);
-extern int         SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
-extern int         SDL_Init(int32_t flags);
-extern const char *SDL_GetError(void);
-extern void        SDL_Quit(void);
-extern int         SDL_NumJoysticks(void);
+extern void                SDL_Delay(uint24_t ms);
+extern int                 SDL_LockSurface(SDL_Surface *surface);
+extern int                 SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
+extern int                 SDL_Init(int32_t flags);
+extern const char         *SDL_GetError(void);
+extern void                SDL_Quit(void);
+extern int                 SDL_NumJoysticks(void);
 extern void                SDL_GameControllerUpdate(void);
 extern int16_t             SDL_GameControllerGetAxis(SDL_GameController *gamecontroller, SDL_GameControllerAxis axis);
 extern uint8_t             SDL_GameControllerGetButton(SDL_GameController *gamecontroller, SDL_GameControllerButton button);
@@ -1168,6 +1168,5 @@ extern const uint8_t *SDL_GetKeyboardState(int *numkeys);
 
 #define SDL_BlitScaled(...)
 #define SDL_SaveBMP(...)
-
 
 #endif
