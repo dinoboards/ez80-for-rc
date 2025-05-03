@@ -160,7 +160,7 @@ CP_itemtype NewEmenu[] = {
     {0, "", 0},
     {3,
      "Episode 5\n"
-     "Trail of the Madman",
+     "Trail of the Mad",
      0},
     {0, "", 0},
     {3,
@@ -180,22 +180,19 @@ CP_itemtype NewMenu[] = {
 #endif
 };
 
-CP_itemtype LSMenu[] = {{1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0},
-                        {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}};
+CP_itemtype LSMenu[] = {{1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}, {1, "", 0}};
 
 CP_itemtype CusMenu[] = {{1, "", 0}, {0, "", 0}, {0, "", 0}, {1, "", 0}, {0, "", 0},
                          {0, "", 0}, {1, "", 0}, {0, "", 0}, {1, "", 0}};
 
 // CP_iteminfo struct format: short x, y, amount, curpos, indent;
-CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, SCREEN_WIDTH_FACTOR(24)},
-            SndItems  = {SM_X, SM_Y1, lengthof(SndMenu), 0, SCREEN_WIDTH_FACTOR(52)},
-            LSItems   = {LSM_X, LSM_Y, lengthof(LSMenu), 0, SCREEN_WIDTH_FACTOR(24)},
-            CtlItems  = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, SCREEN_WIDTH_FACTOR(56)},
-            CusItems  = {SCREEN_WIDTH_FACTOR(8), CST_Y + 13 * 2, lengthof(CusMenu), -1, 0},
+CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, 38}, SndItems = {SM_X, SM_Y1, lengthof(SndMenu), 0, 64},
+            LSItems = {LSM_X, LSM_Y, lengthof(LSMenu), 0, 24}, CtlItems = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, 56},
+            CusItems = {8, CST_Y + 13 * 2, lengthof(CusMenu), -1, 0},
 #ifndef SPEAR
-            NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, SCREEN_WIDTH_FACTOR(88)},
+            NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, 84},
 #endif
-            NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, 24};
+            NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, 30};
 
 int color_hlite[] = {DEACTIVE, HIGHLIGHT, READHCOLOR, 0x67};
 
@@ -203,74 +200,14 @@ int color_norml[] = {DEACTIVE, TEXTCOLOR, READCOLOR, 0x6b};
 
 int EpisodeSelect[6] = {1};
 
+#define MAX_SAVE_GAMES 9
+
 static int  SaveGamesAvail[10];
 static int  StartGame;
 static int  SoundStatus = 1;
 static int  pickquick;
 static char SaveGameNames[10][32];
 static char SaveName[13] = "savegam?.";
-
-////////////////////////////////////////////////////////////////////
-//
-// INPUT MANAGER SCANCODE TABLES
-//
-////////////////////////////////////////////////////////////////////
-
-#if 0
-static const char* ScanNames[] =      // Scan code names with single chars
-{
-	"?", "?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+", "?", "?",
-	"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "|", "?", "A", "S",
-	"D", "F", "G", "H", "J", "K", "L", ";", "\"", "?", "?", "?", "Z", "X", "C", "V",
-	"B", "N", "M", ",", ".", "/", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",
-	"?", "?", "?", "?", "?", "?", "?", "?", "\xf", "?", "-", "\x15", "5", "\x11", "+", "?",
-	"\x13", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",
-	"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",
-	"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?"
-};                              // DEBUG - consolidate these
-static ScanCode ExtScanCodes[] =        // Scan codes with >1 char names
-{
-	1, 0xe, 0xf, 0x1d, 0x2a, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e,
-	0x3f, 0x40, 0x41, 0x42, 0x43, 0x44, 0x57, 0x59, 0x46, 0x1c, 0x36,
-	0x37, 0x38, 0x47, 0x49, 0x4f, 0x51, 0x52, 0x53, 0x45, 0x48,
-	0x50, 0x4b, 0x4d, 0x00
-};
-static const char* ExtScanNames[] =   // Names corresponding to ExtScanCodes
-{
-	"Esc", "BkSp", "Tab", "Ctrl", "LShft", "Space", "CapsLk", "F1", "F2", "F3", "F4",
-	"F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "ScrlLk", "Enter", "RShft",
-	"PrtSc", "Alt", "Home", "PgUp", "End", "PgDn", "Ins", "Del", "NumLk", "Up",
-	"Down", "Left", "Right", ""
-};
-
-/*#pragma warning 737 9
-static byte
-										*ScanNames[] =          // Scan code names with single chars
-										{
-		"?","?","1","2","3","4","5","6","7","8","9","0","-","+","?","?",
-		"Q","W","E","R","T","Y","U","I","O","P","[","]","|","?","A","S",
-		"D","F","G","H","J","K","L",";","\"","?","?","?","Z","X","C","V",
-		"B","N","M",",",".","/","?","?","?","?","?","?","?","?","?","?",
-		"?","?","?","?","?","?","?","?","\xf","?","-","\x15","5","\x11","+","?",
-		"\x13","?","?","?","?","?","?","?","?","?","?","?","?","?","?","?",
-		"?","?","?","?","?","?","?","?","?","?","?","?","?","?","?","?",
-		"?","?","?","?","?","?","?","?","?","?","?","?","?","?","?","?"
-										};      // DEBUG - consolidate these
-static byte ExtScanCodes[] =    // Scan codes with >1 char names
-										{
-		1,0xe,0xf,0x1d,0x2a,0x39,0x3a,0x3b,0x3c,0x3d,0x3e,
-		0x3f,0x40,0x41,0x42,0x43,0x44,0x57,0x59,0x46,0x1c,0x36,
-		0x37,0x38,0x47,0x49,0x4f,0x51,0x52,0x53,0x45,0x48,
-		0x50,0x4b,0x4d,0x00
-										};
-static byte *ExtScanNames[] =   // Names corresponding to ExtScanCodes
-										{
-		"Esc","BkSp","Tab","Ctrl","LShft","Space","CapsLk","F1","F2","F3","F4",
-		"F5","F6","F7","F8","F9","F10","F11","F12","ScrlLk","Enter","RShft",
-		"PrtSc","Alt","Home","PgUp","End","PgDn","Ins","Del","NumLk","Up",
-		"Down","Left","Right",""
-										};*/
-#endif
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -346,7 +283,6 @@ void US_ControlPanel(ScanCode scancode) {
   //
   do {
     which = HandleMenu(&MainItems, &MainMenu[0], NULL);
-    printf("which = %d\r\n", which);
     // NewGame(1, 0);
 
 #ifdef SPEAR
@@ -465,14 +401,14 @@ void DrawMainMenu(void) {
 #else
   ClearMScreen();
 
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
   DrawStripes(10);
-  VWB_DrawPic(84, 0, C_OPTIONSPIC);
+  VWB_DrawPic(52, 0, C_OPTIONSPIC); // 152, 48
 
 #ifdef SPANISH
-  DrawWindow(MENU_X - 8, MENU_Y - 3, MENU_W + 8, MENU_H, BKGDCOLOR);
+  DrawWindow(MENU_X, MENU_Y, MENU_W, MENU_H, BKGDCOLOR);
 #else
-  DrawWindow(MENU_X - 8, MENU_Y - 3, MENU_W, MENU_H, BKGDCOLOR);
+  DrawWindow(MENU_X, MENU_Y, MENU_W, MENU_H, BKGDCOLOR);
 #endif
 #endif
 
@@ -516,6 +452,7 @@ void DrawMainMenu(void) {
   }
 
   DrawMenu(&MainItems, &MainMenu[0]);
+
   VW_UpdateScreen();
 }
 
@@ -755,7 +692,7 @@ int CP_CheckQuick(ScanCode scancode) {
     CA_CacheGrChunk(STARTFONT + 1);
 
     WindowX = WindowY = 0;
-    WindowW           = SCREEN_WIDTH_FACTOR(320);
+    WindowW           = 256;
     WindowH           = 160;
 #ifdef JAPAN
     if (GetYorN(7, 8, C_QUITMSGPIC))
@@ -972,9 +909,9 @@ void DrawNewEpisode(void) {
   CA_CacheScreen(S_EPISODEPIC);
 #else
   ClearMScreen();
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
 
-  DrawWindow(NE_X - 4, NE_Y - 4, NE_W + 8, NE_H + 8, BKGDCOLOR);
+  DrawWindow(NE_X, NE_Y, NE_W, NE_H, BKGDCOLOR);
   SETFONTCOLOR(READHCOLOR, BKGDCOLOR);
   PrintY  = 2;
   WindowX = 0;
@@ -989,7 +926,7 @@ void DrawNewEpisode(void) {
   DrawMenu(&NewEitems, &NewEmenu[0]);
 
   for (i = 0; i < 6; i++)
-    VWB_DrawPic(NE_X + 32, NE_Y + i * 26, C_EPISODE1PIC + i);
+    VWB_DrawPic(NE_X + 31, NE_Y + 1 + i * 26, C_EPISODE1PIC + i);
 
   VW_UpdateScreen();
   MenuFadeIn();
@@ -1006,11 +943,11 @@ void DrawNewGame(void) {
   CA_CacheScreen(S_SKILLPIC);
 #else
   ClearMScreen();
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
 
   SETFONTCOLOR(READHCOLOR, BKGDCOLOR);
-  PrintX = NM_X; //+ 20;
-  PrintY = NM_Y - 32;
+  PrintX = NM_X + 16;
+  PrintY = NM_Y - 30;
 
 #ifndef SPEAR
 #ifdef SPANISH
@@ -1021,8 +958,7 @@ void DrawNewGame(void) {
 #else
   VWB_DrawPic(PrintX, PrintY, C_HOWTOUGHPIC);
 #endif
-
-  DrawWindow(NM_X - 5, NM_Y - 10, NM_W, NM_H, BKGDCOLOR);
+  DrawWindow(NM_X, NM_Y, NM_W, NM_H, BKGDCOLOR);
 #endif
 
   DrawMenu(&NewItems, &NewMenu[0]);
@@ -1159,11 +1095,11 @@ void DrawSoundMenu(void) {
   // DRAW SOUND MENU
   //
   ClearMScreen();
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
 
-  DrawWindow(SM_X - 8, SM_Y1 - 3, SM_W, SM_H1, BKGDCOLOR);
-  DrawWindow(SM_X - 8, SM_Y2 - 3, SM_W, SM_H2, BKGDCOLOR);
-  DrawWindow(SM_X - 8, SM_Y3 - 3, SM_W, SM_H3, BKGDCOLOR);
+  DrawWindow(SM_X, SM_Y1, SM_W, SM_H1, BKGDCOLOR);
+  DrawWindow(SM_X, SM_Y2, SM_W, SM_H2, BKGDCOLOR);
+  DrawWindow(SM_X, SM_Y3, SM_W, SM_H3, BKGDCOLOR);
 #endif
 
   //
@@ -1181,9 +1117,9 @@ void DrawSoundMenu(void) {
 
   DrawMenu(&SndItems, &SndMenu[0]);
 #ifndef JAPAN
-  VWB_DrawPic(100, SM_Y1 - 20, C_FXTITLEPIC);
-  VWB_DrawPic(100, SM_Y2 - 20, C_DIGITITLEPIC);
-  VWB_DrawPic(100, SM_Y3 - 20, C_MUSICTITLEPIC);
+  VWB_DrawPic(60, SM_Y1 - 15, C_FXTITLEPIC);
+  VWB_DrawPic(60, SM_Y2 - 15, C_DIGITITLEPIC);
+  VWB_DrawPic(60, SM_Y3 - 15, C_MUSICTITLEPIC);
 #endif
 
   for (i = 0; i < SndItems.amount; i++)
@@ -1244,9 +1180,9 @@ void DrawSoundMenu(void) {
       }
 
       if (on)
-        VWB_DrawPic(SM_X + 24, SM_Y1 + i * 13 + 2, C_SELECTEDPIC);
+        VWB_DrawPic(SM_X + 38, SM_Y1 + 2 + i * 13 + 2, C_SELECTEDPIC);
       else
-        VWB_DrawPic(SM_X + 24, SM_Y1 + i * 13 + 2, C_NOTSELECTEDPIC);
+        VWB_DrawPic(SM_X + 38, SM_Y1 + 2 + i * 13 + 2, C_NOTSELECTEDPIC);
     }
 
   DrawMenuGun(&SndItems);
@@ -1307,6 +1243,8 @@ int CP_LoadGame(int quick) {
         strcpy(loadpath, name);
 
       file = fopen(loadpath, "rb");
+      printf("Reading file %s\r\n", loadpath);
+
       fseek(file, 32, SEEK_SET);
       loadedgame = true;
       LoadTheGame(file, 0, 0);
@@ -1345,6 +1283,8 @@ int CP_LoadGame(int quick) {
         strcpy(loadpath, name);
 
       file = fopen(loadpath, "rb");
+      printf("Reading file %s\r\n", loadpath);
+
       fseek(file, 32, SEEK_SET);
 
       DrawLSAction(0);
@@ -1405,16 +1345,16 @@ void DrawLoadSaveScreen(int loadsave) {
 
   ClearMScreen();
   fontnumber = 1;
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
-  DrawWindow(LSM_X - 10, LSM_Y - 5, LSM_W, LSM_H, BKGDCOLOR);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
+  DrawWindow(LSM_X, LSM_Y, LSM_W, LSM_H, BKGDCOLOR);
   DrawStripes(10);
 
   if (!loadsave)
-    VWB_DrawPic(60, 0, C_LOADGAMEPIC);
+    VWB_DrawPic(20, 0, C_LOADGAMEPIC); // 216, 48
   else
-    VWB_DrawPic(60, 0, C_SAVEGAMEPIC);
+    VWB_DrawPic(20, 0, C_SAVEGAMEPIC);
 
-  for (i = 0; i < 10; i++)
+  for (i = 0; i < MAX_SAVE_GAMES; i++)
     PrintLSEntry(i, TEXTCOLOR);
 
   DrawMenu(&LSItems, &LSMenu[0]);
@@ -1429,9 +1369,9 @@ void DrawLoadSaveScreen(int loadsave) {
 //
 void PrintLSEntry(int w, int color) {
   SETFONTCOLOR(color, BKGDCOLOR);
-  DrawOutline(LSM_X + LSItems.indent, LSM_Y + w * 13, LSM_W - LSItems.indent - 15, 11, color, color);
+  DrawOutline(LSM_X + LSItems.indent, LSM_Y + w * 13 + 4, LSM_W - LSItems.indent - 15, 11, color, color);
   PrintX     = LSM_X + LSItems.indent + 2;
-  PrintY     = LSM_Y + w * 13 + 1;
+  PrintY     = LSM_Y + w * 13 + 5;
   fontnumber = 0;
 
   if (SaveGamesAvail[w])
@@ -1472,6 +1412,7 @@ int CP_SaveGame(int quick) {
 
       unlink(savepath);
       file = fopen(savepath, "wb");
+      printf("Saving file %s\r\n", savepath);
 
       strcpy(input, &SaveGameNames[which][0]);
 
@@ -1534,6 +1475,8 @@ int CP_SaveGame(int quick) {
 
         unlink(savepath);
         file = fopen(savepath, "wb");
+        printf("Saving file %s\r\n", savepath);
+
         fwrite(input, 32, 1, file);
         fseek(file, 32, SEEK_SET);
 
@@ -1628,7 +1571,7 @@ void DrawMouseSens(void) {
   CA_CacheScreen(S_MOUSESENSPIC);
 #else
   ClearMScreen();
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
 #ifdef SPANISH
   DrawWindow(10, 80, 256 - 16, 43, BKGDCOLOR);
 #else
@@ -1742,9 +1685,9 @@ void DrawCtlScreen(void) {
 #else
   ClearMScreen();
   DrawStripes(10);
-  VWB_DrawPic(80, 0, C_CONTROLPIC);
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
-  DrawWindow(CTL_X - 8, CTL_Y - 5, CTL_W, CTL_H, BKGDCOLOR);
+  VWB_DrawPic(56, 0, C_CONTROLPIC);                     // 144
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
+  DrawWindow(CTL_X, CTL_Y, CTL_W, CTL_H, BKGDCOLOR);
 #endif
   WindowX = 0;
   WindowW = 256;
@@ -1761,8 +1704,8 @@ void DrawCtlScreen(void) {
 
   DrawMenu(&CtlItems, CtlMenu);
 
-  x = CTL_X + CtlItems.indent - 24;
-  y = CTL_Y + 3;
+  x = CTL_X + CtlItems.indent - 26;
+  y = CTL_Y + 4;
   if (mouseenabled)
     VWB_DrawPic(x, y, C_SELECTEDPIC);
   else
@@ -2183,7 +2126,7 @@ void DrawCustomScreen(void) {
   ClearMScreen();
   WindowX = 0;
   WindowW = 256;
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
   DrawStripes(10);
   VWB_DrawPic(80, 0, C_CUSTOMIZEPIC);
 
@@ -2604,7 +2547,7 @@ void IntroScreen(void) {
   memory = (1023l + mminfo.nearheap + mminfo.farheap) / 1024l;
   for (i = 0; i < 10; i++)
     if (memory >= main[i])
-      VWB_Bar(SCREEN_WIDTH_FACTOR(49), 163 - 8 * i, SCREEN_WIDTH_FACTOR(6), 5, MAINCOLOR - i);
+      VWB_Bar(49, 163 - 8 * i, 6, 5, MAINCOLOR - i);
 
   //
   // DRAW EMS MEMORY
@@ -2613,7 +2556,7 @@ void IntroScreen(void) {
     emshere = 4l * EMSPagesAvail;
     for (i = 0; i < 10; i++)
       if (emshere >= ems[i])
-        VWB_Bar(SCREEN_WIDTH_FACTOR(89), 163 - 8 * i, SCREEN_WIDTH_FACTOR(6), 5, EMSCOLOR - i);
+        VWB_Bar(89, 163 - 8 * i, 6, 5, EMSCOLOR - i);
   }
 
   //
@@ -2623,34 +2566,34 @@ void IntroScreen(void) {
     xmshere = 4l * XMSPagesAvail;
     for (i = 0; i < 10; i++)
       if (xmshere >= xms[i])
-        VWB_Bar(SCREEN_WIDTH_FACTOR(129), 163 - 8 * i, SCREEN_WIDTH_FACTOR(6), 5, XMSCOLOR - i);
+        VWB_Bar(129, 163 - 8 * i, 6, 5, XMSCOLOR - i);
   }
 #else
   for (i = 0; i < 10; i++)
-    VWB_Bar(SCREEN_WIDTH_FACTOR(39), 163 - 8 * i, SCREEN_WIDTH_FACTOR(5), 5, MAINCOLOR - i);
+    VWB_Bar(42, 163 - 16 * i, 5, 5, MAINCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(SCREEN_WIDTH_FACTOR(71), 163 - 8 * i, SCREEN_WIDTH_FACTOR(5), 5, EMSCOLOR - i);
+    VWB_Bar(71, 163 - 16 * i, 5, 5, EMSCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(SCREEN_WIDTH_FACTOR(103), 163 - 8 * i, SCREEN_WIDTH_FACTOR(5), 5, XMSCOLOR - i);
+    VWB_Bar(100, 163 - 16 * i, 5, 5, XMSCOLOR - i);
 #endif
 
   //
   // FILL BOXES
   //
   if (MousePresent)
-    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 82, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
+    VWB_Bar(131, 82, 10, 2, FILLCOLOR);
 
   if (IN_JoyPresent())
-    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 105, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
+    VWB_Bar(131, 105, 10, 2, FILLCOLOR);
 
   if (AdLibPresent && !SoundBlasterPresent)
-    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 128, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
+    VWB_Bar(131, 128, 10, 2, FILLCOLOR);
 
   if (SoundBlasterPresent)
-    VWB_Bar(SCREEN_WIDTH_FACTOR(131), 151, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
+    VWB_Bar(131, 151, 10, 2, FILLCOLOR);
 
   //    if (SoundSourcePresent)
-  //        VWB_Bar (SCREEN_WIDTH_FACTOR(131), 174, SCREEN_WIDTH_FACTOR(10), 2, FILLCOLOR);
+  //        VWB_Bar (131, 174, 10, 2, FILLCOLOR);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -2700,7 +2643,7 @@ void UnCacheLump(int lumpstart, int lumpend) {
 //
 ////////////////////////////////////////////////////////////////////
 void DrawWindow(int x, int y, int w, int h, int wcolor) {
-  VWB_Bar(SCREEN_WIDTH_FACTOR(x), y, SCREEN_WIDTH_FACTOR(w), h, wcolor);
+  VWB_Bar(x, y, w, h, wcolor);
   DrawOutline(x, y, w, h, BORD2COLOR, DEACTIVE);
 }
 
@@ -2749,7 +2692,7 @@ void SetupSaveGames() {
   char savepath[300];
 
   strcpy(name, SaveName);
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < MAX_SAVE_GAMES; i++) {
     name[7] = '0' + i;
 
     if (configdir[0])
@@ -2758,6 +2701,8 @@ void SetupSaveGames() {
       strcpy(savepath, name);
 
     const int handle = open(savepath, O_RDONLY | O_BINARY);
+    printf("Load file %s\r\n", savepath);
+
     if (handle >= 0) {
       char temp[32];
 
@@ -2793,19 +2738,19 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
   char        key;
   static int  redrawitem = 1, lastitem = -1;
   int         i, x, y, basey, exit, which, shape;
-  int32_t     lastBlinkTime, timer;
+  uint24_t    timer;
   ControlInfo ci;
 
   which = item_i->curpos;
-  x     = item_i->x;
-  basey = item_i->y - 2;
+  x     = item_i->x + 4;
+  basey = item_i->y + 2;
   y     = basey + which * 13;
 
   VWB_DrawPic(x, y, C_CURSOR1PIC);
   SetTextColor(items + which, 1);
   if (redrawitem) {
     PrintX = item_i->x + item_i->indent;
-    PrintY = item_i->y + which * 13;
+    PrintY = item_i->y + 2 + which * 13;
     US_Print((items + which)->string);
   }
   //
@@ -2815,18 +2760,20 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
     routine(which);
   VW_UpdateScreen();
 
-  shape         = C_CURSOR1PIC;
-  timer         = 8;
-  exit          = 0;
-  lastBlinkTime = GetTimeCount();
+  shape = C_CURSOR1PIC;
+  timer = 8;
+  exit  = 0;
   IN_ClearKeysDown();
 
   do {
     //
     // CHANGE GUN SHAPE
     //
-    if ((int32_t)GetTimeCount() - lastBlinkTime > timer) {
-      lastBlinkTime = GetTimeCount();
+    //
+    // CHANGE GUN SHAPE
+    //
+    if (GetTimeCount() > timer) {
+      SetTimeCount(0);
       if (shape == C_CURSOR1PIC) {
         shape = C_CURSOR2PIC;
         timer = 8;
@@ -2838,8 +2785,7 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
       if (routine)
         routine(which);
       VW_UpdateScreen();
-    } else
-      SDL_Delay(5);
+    }
 
     CheckPause();
 
@@ -2963,9 +2909,9 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
   // ERASE EVERYTHING
   //
   if (lastitem != which) {
-    VWB_Bar(SCREEN_WIDTH_FACTOR(x - 1), y, 25, SCREEN_WIDTH_FACTOR(16), BKGDCOLOR);
+    VWB_Bar(x - 1, y, 25, 16, BKGDCOLOR);
     PrintX = item_i->x + item_i->indent;
-    PrintY = item_i->y + which * 13;
+    PrintY = item_i->y + 2 + which * 13;
     US_Print((items + which)->string);
     redrawitem = 1;
   } else
@@ -3002,11 +2948,11 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
 // ERASE GUN & DE-HIGHLIGHT STRING
 //
 void EraseGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int y, int which) {
-  VWB_Bar(x - 1, y, 25 /*SCREEN_WIDTH_FACTOR(25)*/, 16, BKGDCOLOR);
+  VWB_Bar(x - 1, y, 25, 16, BKGDCOLOR);
   SetTextColor(items + which, 0);
 
   PrintX = item_i->x + item_i->indent;
-  PrintY = item_i->y + which * 13;
+  PrintY = item_i->y + 2 + which * 13;
   US_Print((items + which)->string);
   VW_UpdateScreen();
 }
@@ -3025,13 +2971,13 @@ void DrawHalfStep(int x, int y) {
 // DRAW GUN AT NEW POSITION
 //
 void DrawGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int *y, int which, int basey, void (*routine)(int w)) {
-  VWB_Bar(x - 1, *y, 25 /*SCREEN_WIDTH_FACTOR(25)*/, 16, BKGDCOLOR);
+  VWB_Bar(x - 1, *y, 25, 16, BKGDCOLOR);
   *y = basey + which * 13;
   VWB_DrawPic(x, *y, C_CURSOR1PIC);
   SetTextColor(items + which, 1);
 
   PrintX = item_i->x + item_i->indent;
-  PrintY = item_i->y + which * 13;
+  PrintY = item_i->y + 2 + which * 13;
   US_Print((items + which)->string);
 
   //
@@ -3068,13 +3014,13 @@ void DrawMenu(CP_iteminfo *item_i, CP_itemtype *items) {
 
   WindowX = PrintX = item_i->x + item_i->indent;
   WindowY = PrintY = item_i->y;
-  WindowW          = SCREEN_WIDTH_FACTOR(320);
-  WindowH          = 200;
+  WindowW          = 256;
+  WindowH          = 192;
 
   for (i = 0; i < item_i->amount; i++) {
     SetTextColor(items + i, which == i);
 
-    PrintY = item_i->y + i * 13;
+    PrintY = item_i->y + 2 + i * 13;
     if ((items + i)->active)
       US_Print((items + i)->string);
     else {
@@ -3213,7 +3159,7 @@ int Confirm(const char *string) {
     if (GetTimeCount() - lastBlinkTime >= 10) {
       switch (tick) {
       case 0:
-        VWB_Bar(SCREEN_WIDTH_FACTOR(x), y, SCREEN_WIDTH_FACTOR(8), 13, TEXTCOLOR);
+        VWB_Bar(x, y, 8, 13, TEXTCOLOR);
         break;
       case 1:
         PrintX = x;
@@ -3312,6 +3258,7 @@ int GetYorN(int x, int y, int pic) {
 //
 ////////////////////////////////////////////////////////////////////
 void Message(const char *string) {
+  printf("Message: %s\r\n", string);
   int         h = 0, w = 0, mw = 0, i, len = (int)strlen(string);
   fontstruct *font;
 
@@ -3332,8 +3279,11 @@ void Message(const char *string) {
   if (w + 10 > mw)
     mw = w + 10;
 
-  PrintY = (WindowH / 2) - h / 2;
-  PrintX = WindowX = 160 - mw / 2;
+  printf("w: %d, mw: %d\r\n", w, mw);
+
+  PrintY = (SCREEN_HEIGHT / 2) - h / 2;
+  PrintX = WindowX = (SCREEN_WIDTH / 2) - mw / 2;
+  printf("3: Window: %d, %d, %d, %d\r\n", WindowX, WindowY, WindowW, WindowH);
 
   DrawWindow(WindowX - 5, PrintY - 5, mw + 10, h + 10, TEXTCOLOR);
   DrawOutline(WindowX - 5, PrintY - 5, mw + 10, h + 10, 0, HIGHLIGHT);
@@ -3574,8 +3524,8 @@ void CheckPause(void) {
 void DrawMenuGun(CP_iteminfo *iteminfo) {
   int x, y;
 
-  x = iteminfo->x;
-  y = iteminfo->y + iteminfo->curpos * 13 - 2;
+  x = iteminfo->x + 4;
+  y = iteminfo->y + 2 + iteminfo->curpos * 13 - 2;
   VWB_DrawPic(x, y, C_CURSOR1PIC);
 }
 
@@ -3586,7 +3536,7 @@ void DrawMenuGun(CP_iteminfo *iteminfo) {
 ///////////////////////////////////////////////////////////////////////////
 void DrawStripes(int y) {
 #ifndef SPEAR
-  VWB_Bar(SCREEN_WIDTH_FACTOR(0), y, SCREEN_WIDTH_FACTOR(320), 24, 0);
+  VWB_Bar(0, y, 256, 24, 0);
   VWB_Hlin(0, 255, y + 22, STRIPE);
 #else
   VWB_Bar(SCREEN_WIDTH_FACTOR(0), y, SCREEN_WIDTH_FACTOR(320), 22, 0);
@@ -3635,23 +3585,17 @@ void CheckForEpisodes(void) {
     Quit("NO WOLFENSTEIN 3-D DATA FILES to be found!");
 #else
 #ifndef SPEAR
-  printf("checking for vswap.wl6\r\n");
   if (!stat("vswap.wl6", &statbuf)) {
-    printf("found vswap.wl6\r\n");
     strcpy(extension, "wl6");
     NewEmenu[2].active = NewEmenu[4].active = NewEmenu[6].active = NewEmenu[8].active = NewEmenu[10].active = EpisodeSelect[1] =
         EpisodeSelect[2] = EpisodeSelect[3] = EpisodeSelect[4] = EpisodeSelect[5] = 1;
   } else {
-    printf("checking for vswap.wl3\r\n");
     if (!stat("vswap.wl3", &statbuf)) {
-      printf("found vswap.wl3\r\n");
       strcpy(extension, "wl3");
       numEpisodesMissing = 3;
       NewEmenu[2].active = NewEmenu[4].active = EpisodeSelect[1] = EpisodeSelect[2] = 1;
     } else {
-      printf("checking for vswap.wl1\r\n");
       if (!stat("vswap.wl1", &statbuf)) {
-        printf("found vswap.wl1\r\n");
         strcpy(extension, "wl1");
         numEpisodesMissing = 5;
       } else {

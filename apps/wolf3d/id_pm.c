@@ -48,6 +48,10 @@ void PM_Startup() {
   if (pageDataSize > (size_t)-1)
     Quit("The page file \"%s\" is too large!", fname);
 
+  printf("ChunksInFile: %d\r\n", ChunksInFile);
+  printf("PMSpriteStart: %d\r\n", PMSpriteStart);
+  printf("PMSoundStart: %d\r\n", PMSoundStart);
+
   pageOffsets[ChunksInFile] = fileSize;
 
   uint32_t dataStart = pageOffsets[0];
@@ -79,8 +83,12 @@ void PM_Startup() {
 
   MM_GetPtr((memptr *)&PMPages, (ChunksInFile + 1) * sizeof(uint8_t *));
 
+  VWB_Bar(0, SCREEN_HEIGHT - 10, 256, 10, 0);
+  VW_UpdateScreen();
+
   // Load pages and initialize PMPages pointers
-  uint8_t *ptr = (uint8_t *)PMPageData;
+  uint8_t *ptr      = (uint8_t *)PMPageData;
+  uint8_t  progress = 0;
   for (i = 0; i < ChunksInFile; i++) {
     if (i >= PMSpriteStart && (i < PMSoundStart || i == ChunksInFile - 1)) {
       size_t offs = ptr - (uint8_t *)PMPageData;
@@ -105,6 +113,13 @@ void PM_Startup() {
       size = pageLengths[i];
     else
       size = pageOffsets[i + 1] - pageOffsets[i];
+
+    const uint8_t new_p = (i * 240) / ChunksInFile;
+    if (new_p != progress) {
+      progress = new_p;
+      VWB_Bar(0, SCREEN_HEIGHT - 8, progress, 8, 4);
+      VW_UpdateScreen();
+    }
 
     fseek(file, pageOffsets[i], SEEK_SET);
     fread(ptr, 1, size, file);

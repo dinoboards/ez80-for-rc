@@ -146,6 +146,8 @@ void CAL_GetGrChunkLength(int chunk) {
 
 boolean CA_WriteFile(const char *filename, void *ptr, int32_t length) {
   const int handle = open(filename, O_CREAT | O_WRONLY | O_BINARY, 0644);
+  printf("Save file %s\r\n", filename);
+
   if (handle == -1)
     return false;
 
@@ -170,7 +172,7 @@ boolean CA_WriteFile(const char *filename, void *ptr, int32_t length) {
 boolean CA_LoadFile(const char *filename, memptr *ptr) {
   int32_t size;
 
-  printf("Load Fille: %s\r\n", filename);
+  printf("Load File: %s\r\n", filename);
   const int handle = open(filename, O_RDONLY | O_BINARY);
   if (handle == -1)
     return false;
@@ -366,6 +368,8 @@ void CAL_SetupGrFile(void) {
   strcat(fname, graphext);
 
   handle = open(fname, O_RDONLY | O_BINARY);
+  printf("Open file %s\r\n", fname);
+
   if (handle == -1)
     CA_CannotOpen(fname);
 
@@ -377,6 +381,8 @@ void CAL_SetupGrFile(void) {
   strcat(fname, graphext);
 
   handle = open(fname, O_RDONLY | O_BINARY);
+  printf("Open file %s\r\n", fname);
+
   if (handle == -1)
     CA_CannotOpen(fname);
 
@@ -415,6 +421,8 @@ void CAL_SetupGrFile(void) {
   strcat(fname, graphext);
 
   grhandle = open(fname, O_RDONLY | O_BINARY);
+  printf("Open file %s\r\n", fname);
+
   if (grhandle == -1)
     CA_CannotOpen(fname);
 
@@ -453,6 +461,8 @@ void CAL_SetupMapFile(void) {
   strcat(fname, extension);
 
   handle = open(fname, O_RDONLY | O_BINARY);
+  printf("Open file %s\r\n", fname);
+
   if (handle == -1)
     CA_CannotOpen(fname);
 
@@ -480,6 +490,8 @@ void CAL_SetupMapFile(void) {
   strcat(fname, extension);
 
   maphandle = open(fname, O_RDONLY | O_BINARY);
+  printf("Open file %s\r\n", fname);
+
   if (maphandle == -1)
     CA_CannotOpen(fname);
 #endif
@@ -540,6 +552,8 @@ void CAL_SetupAudioFile(void) {
   strcat(fname, audioext);
 
   audiohandle = open(fname, O_RDONLY | O_BINARY);
+  printf("Open file %s\r\n", fname);
+
   if (audiohandle == -1)
     CA_CannotOpen(fname);
 }
@@ -561,6 +575,8 @@ void CA_Startup(void) {
 #ifdef PROFILE
   unlink("PROFILE.TXT");
   profilehandle = open("PROFILE.TXT", O_CREAT | O_WRONLY | O_TEXT);
+  printf("Open file PROFILE.TXT\r\n");
+
 #endif
 
   CAL_SetupMapFile();

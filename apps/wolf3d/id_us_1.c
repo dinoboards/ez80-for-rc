@@ -33,9 +33,6 @@ word WindowX, WindowY, WindowW, WindowH;
 
 static boolean US_Started;
 
-void (*USL_MeasureString)(const char *, word *, word *) = VW_MeasurePropString;
-void (*USL_DrawString)(const char *)                    = VWB_DrawPropString;
-
 SaveGame  Games[MaxSaveGames];
 HighScore Scores[MaxScores] = {
     {"id software-'92", 10000, 1, 0}, {"Adrian Carmack", 10000, 1, 0}, {"John Carmack", 10000, 1, 0}, {"Kevin Cloud", 10000, 1, 0},
@@ -88,18 +85,6 @@ void US_Shutdown(void) {
 }
 
 //  Window/Printing routines
-
-///////////////////////////////////////////////////////////////////////////
-//
-//  US_SetPrintRoutines() - Sets the routines used to measure and print
-//      from within the User Mgr. Primarily provided to allow switching
-//      between masked and non-masked fonts
-//
-///////////////////////////////////////////////////////////////////////////
-void US_SetPrintRoutines(void (*measure)(const char *, word *, word *), void (*print)(const char *)) {
-  USL_MeasureString = measure;
-  USL_DrawString    = print;
-}
 
 char buffer[128];
 ///////////////////////////////////////////////////////////////////////////
@@ -204,6 +189,8 @@ void US_CPrintLine(const char *s) {
   word w, h;
 
   USL_MeasureString(s, &w, &h);
+
+  printf("w: %d, h: %d, WindowW: %d\r\n", w, h, WindowW);
 
   if (w > WindowW)
     Quit("US_CPrintLine() - String exceeds width");
@@ -350,6 +337,7 @@ void US_RestoreWindow(WindowRec *win) {
   WindowY = win->y;
   WindowW = win->w;
   WindowH = win->h;
+  printf("2: Window: %d, %d, %d, %d\r\n", WindowX, WindowY, WindowW, WindowH);
 
   PrintX = win->px;
   PrintY = win->py;

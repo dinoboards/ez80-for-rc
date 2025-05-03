@@ -30,6 +30,11 @@ static inline uint8_t *PM_GetPage(int page) {
     Quit("PM_GetPage: Tried to access illegal page: %i", page);
 #endif
 
+  if (PMPages[page] == NULL) {
+    printf("Page %d Missing!!\r\n", page);
+    return NULL;
+  }
+
   return PMPages[page];
 }
 

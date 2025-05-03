@@ -55,9 +55,9 @@ void VL_FadeOut(int start, int end, int red, int green, int blue, int steps);
 void VL_FadeIn(int start, int end, SDL_Color *palette, int steps);
 
 void VL_Plot(int x, int y, int color);
-void VL_Hlin(unsigned x, unsigned y, unsigned width, int color);
+void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color);
 void VL_Vlin(int x, int y, int height, int color);
-void VL_Bar(int scx, int scy, int scwidth, int scheight, int color);
+void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color);
 static void inline VL_ClearScreen(int color) { SDL_FillRect(screenBuffer, NULL, color); }
 
 void VL_MungePic(byte *source, unsigned width, unsigned height);

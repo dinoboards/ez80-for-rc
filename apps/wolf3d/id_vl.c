@@ -27,8 +27,6 @@ boolean usedoublebuffering = true;
 
 // ATSB: Global resolution for correct display of various things in the game like intermissions.
 // ATSB: This goes along with the scaling to ensure it all looks nice.
-// const uint24_t screenWidth  = 256;
-// const uint24_t screenHeight = 192;
 
 unsigned screenBits = -1; // use "best" color depth according to libSDL
 
@@ -45,8 +43,6 @@ boolean  screenfaded;
 unsigned bordercolor;
 
 #define CASSERT(x) extern int ASSERT_COMPILE[((x) != 0) * 2 - 1];
-// #define RGB(r, g, b)                                                                                                               \
-//   { (r) * 255 / 63, (g)*255 / 63, (b)*255 / 63, 0 }
 
 #define RGB(r, g, b) (g >> 3) << 5 | (r >> 3) << 2 | (b >> 4)
 
@@ -356,18 +352,16 @@ void VL_Plot(int x, int y, int color) {
 =
 =================
 */
+void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color) {
+  printf("VL_Hlin(%d, %d, %d)\r\n", x, y, width);
 
-void VL_Hlin(unsigned x __attribute__((unused)),
-             unsigned y __attribute__((unused)),
-             unsigned width __attribute__((unused)),
-             int      color __attribute__((unused))) {
-  // assert(x >= 0 && x + width <= screenWidth
-  // 	&& y >= 0 && y < screenHeight
-  // 	&& "VL_Hlin: Destination rectangle out of bounds!");
+  assert(x >= 0 && "VL_Hlin: x < 0");
+  assert(x + width <= SCREEN_WIDTH && "VL_Hlin: x + width > SCREEN_WIDTH!");
+  assert(y >= 0 && "VL_Hlin: y < 0!");
+  assert(y < SCREEN_HEIGHT && "VL_Hlin: y >= SCREEN_HEIGHT!");
 
-  printf("TODO!!! VL_Hlin\r\n");
-  // uint8_t* dest = ((byte*)screenBuffer->pixels) + y * SCREEN_WIDTH + x;
-  // memset(dest, color, width);
+  uint8_t *dest = ((byte *)screenBuffer->xpixels) + y * SCREEN_WIDTH + x;
+  memset(dest, color, width);
 }
 
 /*
@@ -378,20 +372,20 @@ void VL_Hlin(unsigned x __attribute__((unused)),
 =================
 */
 
-void VL_Vlin(int x __attribute__((unused)),
-             int y __attribute__((unused)),
-             int height __attribute__((unused)),
-             int color __attribute__((unused))) {
-  // assert(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y + height <= screenHeight &&
-  //        "VL_Vlin: Destination rectangle out of bounds!");
+void VL_Vlin(int x, int y, int height, int color) {
+  // printf("VL_Vlin(%d, %d, %d)\r\n", x, y, height);
 
-  printf("TODO!!! VL_Vlin\r\n");
-  // uint8_t *dest = ((byte *)screenBuffer->pixels) + y * SCREEN_WIDTH + x;
+  assert(x >= 0 && "VL_Vlin: x < 0");
+  assert((unsigned)x < SCREEN_WIDTH && "VL_Vlin: x >= SCREEN_WIDTH");
+  assert(y >= 0 && "VL_Vlin: y < 0");
+  assert((unsigned)y + height <= SCREEN_HEIGHT && "VL_Vlin: Destination rectangle out of bounds!");
 
-  // while (height--) {
-  //   *dest = color;
-  //   dest += SCREEN_WIDTH;
-  // }
+  uint8_t *dest = ((byte *)screenBuffer->xpixels) + y * SCREEN_WIDTH + x;
+
+  while (height--) {
+    *dest = color;
+    dest += SCREEN_WIDTH;
+  }
 }
 
 /*
@@ -402,10 +396,12 @@ void VL_Vlin(int x __attribute__((unused)),
 =================
 */
 
-void VL_Bar(int scx, int scy, int scwidth, int scheight, int color) {
+void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color) {
   // printf("VL_Bar(%d, %d, %d, %d, %d)\r\n", scx, scy, scwidth, scheight, color);
-  assert(scx >= 0 && (unsigned)scx + scwidth <= SCREEN_WIDTH && scy >= 0 && (unsigned)scy + scheight <= SCREEN_HEIGHT &&
-         "VL_Bar: Destination rectangle out of bounds!");
+  assert(scx >= 0 && "VL_Bar: scx < 0!");
+  assert((unsigned)scx + scwidth <= SCREEN_WIDTH && "VL_Bar: scx+width > SCREEN_WIDTH!");
+  assert(scy >= 0 && "VL_Bar: scy < 0!");
+  assert((unsigned)scy + scheight <= SCREEN_HEIGHT && "VL_Bar: scy+height > SCREEN_HEIGHT!");
 
   uint8_t *dest = ((byte *)screenBuffer->xpixels) + scy * SCREEN_WIDTH + scx;
 

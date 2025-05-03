@@ -124,10 +124,17 @@ void VWB_DrawPic(int x, int y, int chunknum) {
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
 
+  switch (chunknum) {
+  case 11:
+  case 12:
+    break;
+
+  default:
+    printf("VMB_DrawPic(%d, %d, %d) {%d, %d}\r\n", x, y, chunknum, width, height);
+  }
+
   VL_MemToScreen(grsegs[chunknum], width, height, x, y);
 }
-
-void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
 
 // void VWB_Plot(int x, int y, int color) {
 //   VW_Plot(x, y, color);

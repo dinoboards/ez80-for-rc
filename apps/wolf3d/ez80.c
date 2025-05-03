@@ -36,6 +36,8 @@ uint24_t tm_tick_get() {
 
   uint24_t diff = t - previous_t;
 
+  previous_t = t;
+
   _time_count += diff;
 
   return _time_count;

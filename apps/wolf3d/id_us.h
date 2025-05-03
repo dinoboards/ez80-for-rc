@@ -48,9 +48,6 @@ extern word PrintX, PrintY;   // Current printing location in the window
 extern word WindowX, WindowY, // Current location of window
     WindowW, WindowH;         // Current size of window
 
-extern void (*USL_MeasureString)(const char *, word *, word *);
-extern void (*USL_DrawString)(const char *);
-
 extern boolean (*USL_SaveGame)(int), (*USL_LoadGame)(int);
 extern void (*USL_ResetGame)(void);
 extern SaveGame  Games[MaxSaveGames];
@@ -87,5 +84,8 @@ char *USL_GiveSaveName(word game);
 
 void US_InitRndT(int randomize);
 int  US_RndT();
+
+#define USL_MeasureString VW_MeasurePropString
+#define USL_DrawString    VWB_DrawPropString
 
 #endif

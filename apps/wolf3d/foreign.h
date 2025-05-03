@@ -42,10 +42,10 @@
 #define STR_ESCEXIT  "ESC to exit"
 
 #define STR_NONE   "None"
-#define STR_PC     "PC Speaker"
-#define STR_ALSB   "AdLib/Sound Blaster"
-#define STR_DISNEY "Disney Sound Source"
-#define STR_SB     "Sound Blaster"
+#define STR_PC     "Speaker"
+#define STR_ALSB   "AdLib/Snd Blaster"
+#define STR_DISNEY "Disney Snd"
+#define STR_SB     "Snd Blaster"
 
 #define STR_MOUSEEN "Mouse Enabled"
 #define STR_JOYEN   "Joystick Enabled"
@@ -127,9 +127,9 @@
 #define ENDSTR2 "Chickening out...\nalready?"
 #define ENDSTR3 "Press " NOBUTTONNAME " for more carnage.\nPress " YESBUTTONNAME " to be a weenie."
 #define ENDSTR4 "So, you think you can\nquit this easily, huh?"
-#define ENDSTR5 "Press " NOBUTTONNAME " to save the world.\nPress " YESBUTTONNAME " to abandon it in\nits hour of need."
-#define ENDSTR6 "Press " NOBUTTONNAME " if you are brave.\nPress " YESBUTTONNAME " to cower in shame."
+#define ENDSTR5 NOBUTTONNAME " to save the world.\n" YESBUTTONNAME " to abandon it in\nits hour of need."
+#define ENDSTR6 NOBUTTONNAME " if you are brave.\n" YESBUTTONNAME " to cower in shame."
 #define ENDSTR7 "Heroes, press " NOBUTTONNAME ".\nWimps, press " YESBUTTONNAME "."
-#define ENDSTR8 "You are at an intersection.\nA sign says, 'Press " YESBUTTONNAME " to quit.'\n>"
-#define ENDSTR9 "For guns and glory, press " NOBUTTONNAME ".\nFor work and worry, press " YESBUTTONNAME "."
+#define ENDSTR8 "You are at an\nintersection. A sign says,\n'Press " YESBUTTONNAME " to quit.'\n>"
+#define ENDSTR9 "For guns and glory, " NOBUTTONNAME ".\nFor work and worry, " YESBUTTONNAME "."
 #endif

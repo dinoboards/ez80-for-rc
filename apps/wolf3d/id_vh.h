@@ -2,7 +2,9 @@
 #define __ID_VH_H__
 // ID_VH.H
 
-#define WHITE         15 // graphics mode independant colors
+#include "id_vl.h"
+
+#define WHITE         15 // graphics mode independent colors
 #define BLACK         0
 #define FIRSTCOLOR    1
 #define SECONDCOLOR   12
@@ -52,13 +54,10 @@ void VWB_DrawTile16(int x, int y, int tile);
 void VWB_DrawTile16M(int x, int y, int tile);
 void VWB_DrawPic(int x, int y, int chunknum);
 void VWB_DrawMPic(int x, int y, int chunknum);
-void VWB_Bar(int x, int y, int width, int height, int color);
 void VWB_Plot(int x, int y, int color);
 #define VWB_PlotScaledCoord VW_Plot
 void VWB_Hlin(int x1, int x2, int y, int color);
 void VWB_Vlin(int y1, int y2, int x, int color);
-#define VWB_HlinScaledCoord VW_Hlin
-#define VWB_VlinScaledCoord VW_Vlin
 
 void        VH_UpdateScreen();
 extern void update_view_port();
@@ -92,5 +91,9 @@ void VH_Startup();
 
 #define NUMLATCHPICS 100
 extern SDL_Surface *latchpics[NUMLATCHPICS];
+
+extern void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color);
+
+static inline void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
 
 #endif

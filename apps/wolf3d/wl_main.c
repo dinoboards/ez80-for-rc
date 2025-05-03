@@ -78,9 +78,9 @@ char configname[13] = "config.";
 // Command line parameter variables
 //
 boolean param_debugmode     = false;
-boolean param_nowait        = false;
-int     param_difficulty    = 1;  // default is "normal"
-int     param_tedlevel      = -1; // default is not to start a level
+boolean param_nowait        = true; // false;
+int     param_difficulty    = 1;    // default is "normal"
+int     param_tedlevel      = -1;   // default is not to start a level
 int     param_joystickindex = 0;
 
 int param_joystickhat = -1;
@@ -120,6 +120,8 @@ void ReadConfig(void) {
     strcpy(configpath, configname);
 
   const int file = open(configpath, O_RDONLY | O_BINARY);
+  printf("Open file %s\r\n", configpath);
+
   if (file != -1) {
     //
     // valid config file
@@ -239,6 +241,7 @@ void WriteConfig(void) {
     strcpy(configpath, configname);
 
   const int file = open(configpath, O_CREAT | O_WRONLY | O_BINARY, 0644);
+  printf("Save file %s\r\n", configpath);
   if (file != -1) {
     word tmp = 0xfefa;
     write(file, &tmp, sizeof(tmp));
@@ -775,6 +778,8 @@ void SignonScreen(void) {
   printf("Reading file SIGNON.IMG\r\n");
   byte *vbuf = screenBuffer->xpixels;
 
+  fseek(f, SCREEN_WIDTH * 8, SEEK_SET); // skip first 8 lines?
+
   int r = fread(vbuf, 1, SCREEN_WIDTH * screenHeight, f);
   if (r != SCREEN_WIDTH * screenHeight) {
     printf("Error: Unable to read file SIGNON.IMG\r\n");
@@ -821,7 +826,7 @@ void FinishSignon(void) {
 #ifndef JAPAN
   VW_Bar(SCREEN_WIDTH_FACTOR(0), SCREEN_HEIGHT - 11, SCREEN_WIDTH_FACTOR(300), 11, signon_default_colour);
 
-  PrintY = 190 - 8;
+  PrintY = SCREEN_HEIGHT - 10;
   SETFONTCOLOR(10, 4);
 
 #ifdef SPANISH
@@ -1003,7 +1008,7 @@ void DoJukebox(void) {
 
   fontnumber = 1;
   ClearMScreen();
-  VWB_DrawPic(112, 184, C_MOUSELBACKPIC);
+  VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
   DrawStripes(10);
   SETFONTCOLOR(TEXTCOLOR, BKGDCOLOR);
 
@@ -1408,7 +1413,6 @@ static void DemoLoop() {
   while (1) {
 
     while (!param_nowait) {
-      printf(".");
       //
       // title page
       //

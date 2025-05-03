@@ -935,6 +935,7 @@ void PreloadGraphics(void) {
   WindowY = (screenHeight - (STATUSLINES + 48)) / 2;
   WindowW = 28 * 8;
   WindowH = 48;
+  printf("Window: %d, %d, %d, %d\r\n", WindowX, WindowY, WindowW, WindowH);
 
   VW_UpdateScreen();
   VW_FadeIn();
@@ -1202,7 +1203,8 @@ void NonShareware(void) {
 
   SETFONTCOLOR(HIGHLIGHT, BKGDCOLOR);
   WindowX = PrintX = 40;
-  PrintY           = 60;
+  printf("WindowX = 40\r\n");
+  PrintY = 60;
 #ifdef SPANISH
   US_Print("Este juego NO es gratis y\n");
   US_Print("NO es Shareware; favor de\n");
