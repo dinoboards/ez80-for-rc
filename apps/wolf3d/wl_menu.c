@@ -2766,6 +2766,7 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w)) 
   IN_ClearKeysDown();
 
   do {
+    PM_Preload(NULL, true);
     //
     // CHANGE GUN SHAPE
     //

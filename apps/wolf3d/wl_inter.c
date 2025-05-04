@@ -905,23 +905,16 @@ void LevelCompleted(void) {
 =================
 */
 
-boolean PreloadUpdate(unsigned current, unsigned total) {
-  unsigned w = WindowW - scaleFactor * 10;
+void PreloadUpdate(uint8_t current) {
+  unsigned w = WindowW - 10;
 
-  VWB_Bar(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w, scaleFactor * 2, BLACK);
-  w = ((int32_t)w * current) / total;
+  VWB_Bar(WindowX + 5, WindowY + WindowH - 3, w, 2, BLACK);
+  w = ((int32_t)w * current) / 100;
   if (w) {
-    VWB_Bar(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w, scaleFactor * 2, 0x37); // SECONDCOLOR);
-    VWB_Bar(WindowX + scaleFactor * 5, WindowY + WindowH - scaleFactor * 3, w - scaleFactor * 1, scaleFactor * 1, 0x32);
+    VWB_Bar(WindowX + 5, WindowY + WindowH - 3, w, 2, 0x37); // SECONDCOLOR);
+    VWB_Bar(WindowX + 5, WindowY + WindowH - 3, w - 1, 1, 0x32);
   }
   VW_UpdateScreen();
-  //      if (LastScan == sc_Escape)
-  //      {
-  //              IN_ClearKeysDown();
-  //              return(true);
-  //      }
-  //      else
-  return (false);
 }
 
 void PreloadGraphics(void) {
@@ -929,19 +922,17 @@ void PreloadGraphics(void) {
   ClearSplitVWB(); // set up for double buffering in split screen
 
   VWB_Bar(0, 0, screenWidth, screenHeight - (STATUSLINES - 1), bordercol);
-  LatchDrawPic(((screenWidth - 224) / 16) * 8, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
+  DrawLatchToSurface(((screenWidth - 224) / 16) * 8, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
 
   WindowX = (screenWidth - 224) / 2;
   WindowY = (screenHeight - (STATUSLINES + 48)) / 2;
   WindowW = 28 * 8;
   WindowH = 48;
-  printf("Window: %d, %d, %d, %d\r\n", WindowX, WindowY, WindowW, WindowH);
 
   VW_UpdateScreen();
   VW_FadeIn();
 
-  //      PM_Preload (PreloadUpdate);
-  PreloadUpdate(10, 10);
+  PM_Preload(PreloadUpdate, false);
   IN_UserInput(70);
   VW_FadeOut();
 

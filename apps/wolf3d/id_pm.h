@@ -15,8 +15,10 @@ extern bool PMSoundInfoPagePadded;
 // The last pointer points one byte after the last page.
 extern uint8_t **PMPages;
 
-void PM_Startup();
-void PM_Shutdown();
+extern void PM_Startup();
+extern void PM_Shutdown();
+typedef void (*chunk_load_progress_t)(uint8_t current);
+extern void PM_Preload(chunk_load_progress_t update_fn, bool partial);
 
 static inline uint32_t PM_GetPageSize(int page) {
   if (page < 0 || page >= ChunksInFile)

@@ -1,8 +1,5 @@
-#include <ez80.h>
-
-#include "wl_def.h"
-
 #include "id_mm.h"
+#include <ez80.h>
 
 int ChunksInFile;
 int PMSpriteStart;
@@ -18,12 +15,19 @@ size_t    PMPageDataSize;
 // The last pointer points one byte after the last page.
 uint8_t **PMPages __data_on_chip;
 
+static uint32_t *pageOffsets;
+static word     *pageLengths;
+static FILE     *file;
+static int       preloaded_upto = 0;
+static uint8_t  *ptr            = NULL;
+static uint8_t   progress       = 0;
+
 void PM_Startup() {
   char fname[13] = "vswap.";
   strcat(fname, extension);
 
   printf("Reading file %s\r\n", fname);
-  FILE *file = fopen(fname, "rb");
+  file = fopen(fname, "rb");
   if (!file)
     CA_CannotOpen(fname);
 
@@ -34,11 +38,9 @@ void PM_Startup() {
   PMSoundStart = 0;
   fread(&PMSoundStart, sizeof(word), 1, file);
 
-  uint32_t *pageOffsets;
   MM_GetPtr((memptr *)&pageOffsets, (ChunksInFile + 1) * sizeof(int32_t));
   fread(pageOffsets, sizeof(uint32_t), ChunksInFile, file);
 
-  word *pageLengths;
   MM_GetPtr((memptr *)&pageLengths, ChunksInFile * sizeof(word));
   fread(pageLengths, sizeof(word), ChunksInFile, file);
 
@@ -83,58 +85,66 @@ void PM_Startup() {
 
   MM_GetPtr((memptr *)&PMPages, (ChunksInFile + 1) * sizeof(uint8_t *));
 
-  VWB_Bar(0, SCREEN_HEIGHT - 10, 256, 10, 0);
-  VW_UpdateScreen();
+  PM_Preload(NULL, true);
+}
+/* if partial, just load for a short period of time */
+/* otherwise load everything */
 
+void PM_Preload(chunk_load_progress_t update_fn, bool partial) {
   // Load pages and initialize PMPages pointers
-  uint8_t *ptr      = (uint8_t *)PMPageData;
-  uint8_t  progress = 0;
-  for (i = 0; i < ChunksInFile; i++) {
-    if (i >= PMSpriteStart && (i < PMSoundStart || i == ChunksInFile - 1)) {
+  if (ptr == NULL)
+    ptr = (uint8_t *)PMPageData;
+
+  while (preloaded_upto < ChunksInFile) {
+    if (preloaded_upto >= PMSpriteStart && (preloaded_upto < PMSoundStart || preloaded_upto == ChunksInFile - 1)) {
       size_t offs = ptr - (uint8_t *)PMPageData;
 
       // pad with zeros to make it 2-byte aligned
       if (offs & 1) {
         *ptr++ = 0;
-        if (i == ChunksInFile - 1)
+        if (preloaded_upto == ChunksInFile - 1)
           PMSoundInfoPagePadded = true;
       }
     }
 
-    PMPages[i] = ptr;
+    PMPages[preloaded_upto] = ptr;
 
-    if (!pageOffsets[i])
+    if (!pageOffsets[preloaded_upto])
       continue; // sparse page
 
     // Use specified page length, when next page is sparse page.
     // Otherwise, calculate size from the offset difference between this and the next page.
     uint32_t size;
-    if (!pageOffsets[i + 1])
-      size = pageLengths[i];
+    if (!pageOffsets[preloaded_upto + 1])
+      size = pageLengths[preloaded_upto];
     else
-      size = pageOffsets[i + 1] - pageOffsets[i];
+      size = pageOffsets[preloaded_upto + 1] - pageOffsets[preloaded_upto];
 
-    const uint8_t new_p = (i * 240) / ChunksInFile;
-    if (new_p != progress) {
-      progress = new_p;
-      VWB_Bar(0, SCREEN_HEIGHT - 8, progress, 8, 4);
-      VW_UpdateScreen();
-    }
+    if (update_fn) {
+      const uint8_t new_p = (preloaded_upto * 100) / ChunksInFile;
+      if (new_p != progress) {
+        update_fn(new_p);
+        progress = new_p;
+      }
+    } else
+      printf("CH: %d\r\n", preloaded_upto);
 
-    fseek(file, pageOffsets[i], SEEK_SET);
+    fseek(file, pageOffsets[preloaded_upto], SEEK_SET);
     fread(ptr, 1, size, file);
     ptr += size;
+    preloaded_upto++;
+    if (partial)
+      break;
   }
 
   // last page points after page buffer
   PMPages[ChunksInFile] = ptr;
-
-  MM_FreePtr((memptr *)&pageLengths);
-  MM_FreePtr((memptr *)&pageOffsets);
-  fclose(file);
 }
 
 void PM_Shutdown() {
+  MM_FreePtr((memptr *)&pageLengths);
+  MM_FreePtr((memptr *)&pageOffsets);
   MM_FreePtr((memptr *)&PMPages);
   MM_FreePtr((memptr *)&PMPageData);
+  fclose(file);
 }

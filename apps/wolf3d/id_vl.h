@@ -1,6 +1,6 @@
 // ID_VL.H
 
-// wolf compatability
+// wolf compatibility
 
 #ifndef ID_VL_H
 #define ID_VL_H
@@ -60,8 +60,6 @@ void VL_Vlin(int x, int y, int height, int color);
 void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color);
 static void inline VL_ClearScreen(int color) { SDL_FillRect(screenBuffer, NULL, color); }
 
-void VL_MungePic(byte *source, unsigned width, unsigned height);
-void VL_DrawPicBare(int x, int y, byte *pic, int width, int height);
 void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface, int x, int y);
 void VL_ScreenToScreen(SDL_Surface *source, SDL_Surface *dest);
 void VL_MemToScreen(byte *source, int width, int height, int scx, int scy);
@@ -73,4 +71,10 @@ void VL_MaskedToScreen(byte *source, int width, int height, int x, int y);
 void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest);
 void VL_SurfaceToScreen(SDL_Surface *source, int scxdest, int scydest);
 
+/*
+ Functions to draw a surface directly to the VDP
+ Functions to blitter to a surface
+ Functions to ????
+
+*/
 #endif

@@ -83,6 +83,7 @@ void VW_MeasurePropString(const char *string, word *width, word *height);
 #define LatchDrawChar(x, y, p) VL_LatchToScreen(latchpics[0], ((p)&7) * 8, ((p) >> 3) * 8 * 64, 8, 8, x, y)
 
 void LatchDrawPic(unsigned x, unsigned y, unsigned picnum);
+void DrawLatchToSurface(unsigned x, unsigned y, unsigned picnum);
 void LoadLatchMem(void);
 
 void VH_Startup();

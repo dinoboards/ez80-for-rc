@@ -3,6 +3,8 @@
 #ifndef __ID_MM__
 #define __ID_MM__
 
+#include "wl_def.h"
+
 #define BUFFERSIZE 0x1000 // miscellaneous, always available buffer
 
 #define MAXBLOCKS 700
