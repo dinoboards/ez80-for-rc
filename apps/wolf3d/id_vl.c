@@ -482,6 +482,8 @@ void VL_MemToScreen(byte *source, int width, int height, int destx, int desty) {
     }
   }
 
+  vdp_scn_vga_picture(source, destx, desty, clipped_width, clipped_height);
+
   byte *vbuf = (byte *)screenBuffer->xpixels;
   for (int j = 0; j < clipped_height; j++) {
     for (int i = 0; i < clipped_width; i++) {

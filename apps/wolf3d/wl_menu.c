@@ -453,7 +453,7 @@ void DrawMainMenu(void) {
 
   DrawMenu(&MainItems, &MainMenu[0]);
 
-  VW_UpdateScreen();
+  // VW_UpdateScreen();
 }
 
 #ifndef GOODTIMES

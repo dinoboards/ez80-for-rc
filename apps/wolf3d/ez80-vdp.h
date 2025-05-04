@@ -46,4 +46,36 @@ static inline void vdp_scn_font(const uint8_t *const font_data,
     vdp_cmd_send_byte(font_data[i] ? color : 0);
 }
 
+static inline void vdp_scn_vga_picture(
+    const uint8_t *const pix_data, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height) {
+
+  const uint8_t first = gamepal[pix_data[0]];
+
+  const uint8_t *p1 = &pix_data[0];
+  const uint8_t *p2 = &pix_data[height * (width / 4)];
+  const uint8_t *p3 = &pix_data[height * (width / 4) * 2];
+  const uint8_t *p4 = &pix_data[height * (width / 4) * 3];
+
+  vdp_cmd_move_data_to_vram(first, x, y, width, height, DIX_RIGHT | DIY_DOWN, width * height);
+
+  bool skip_first = true;
+  for (int ysrc = 0; ysrc < height; ysrc++) {
+    for (int xsrc = 0; xsrc < width; xsrc += 4) {
+      if (skip_first) {
+        skip_first = false;
+        p1++;
+        vdp_cmd_send_byte(gamepal[*p2++]);
+        vdp_cmd_send_byte(gamepal[*p3++]);
+        vdp_cmd_send_byte(gamepal[*p4++]);
+        continue;
+      }
+
+      vdp_cmd_send_byte(gamepal[*p1++]);
+      vdp_cmd_send_byte(gamepal[*p2++]);
+      vdp_cmd_send_byte(gamepal[*p3++]);
+      vdp_cmd_send_byte(gamepal[*p4++]);
+    }
+  }
+}
+
 #endif

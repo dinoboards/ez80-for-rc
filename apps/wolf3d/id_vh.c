@@ -83,9 +83,6 @@ void           update_view_port() {
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
 
-// Does this need to have a scale applied?? Probably!
-void VWB_DrawTile8M(int x, int y, int tile) { VL_MemToScreen(((byte *)grsegs[STARTTILE8M]) + tile * 64, 8, 8, x, y); }
-
 void VWB_DrawPic(int x, int y, int chunknum) {
   int      picnum = chunknum - STARTPICS;
   unsigned width, height;
