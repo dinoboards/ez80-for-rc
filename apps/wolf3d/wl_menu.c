@@ -2278,7 +2278,6 @@ void DrawCustomScreen(void) {
         break;
       }
 
-  VW_UpdateScreen();
   MenuFadeIn();
 }
 

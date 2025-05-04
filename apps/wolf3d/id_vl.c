@@ -1,6 +1,7 @@
 // ID_VL.C
 
 #include "crt.h"
+#include "ez80-vdp.h"
 #include "v99x8-hdmi/v99x8-wolf3d.h"
 #include "wl_def.h"
 #include <string.h>
@@ -402,6 +403,8 @@ void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color) {
   assert((unsigned)scx + scwidth <= SCREEN_WIDTH && "VL_Bar: scx+width > SCREEN_WIDTH!");
   assert(scy >= 0 && "VL_Bar: scy < 0!");
   assert((unsigned)scy + scheight <= SCREEN_HEIGHT && "VL_Bar: scy+height > SCREEN_HEIGHT!");
+
+  vdp_scn_bar(scx, scy, scwidth, scheight, color);
 
   uint8_t *dest = ((byte *)screenBuffer->xpixels) + scy * SCREEN_WIDTH + scx;
 

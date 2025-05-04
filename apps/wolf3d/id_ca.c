@@ -857,58 +857,58 @@ void CA_CacheGrChunk(int chunk) {
 = Decompresses a chunk from disk straight onto the screen
 =
 ======================
-*/
+// */
 
-void CA_CacheScreen(int chunk) {
-  int32_t  pos, compressed, expanded;
-  memptr   bigbufferseg;
-  int32_t *source;
-  int      next;
+// void CA_CacheScreen(int chunk) {
+//   int32_t  pos, compressed, expanded;
+//   memptr   bigbufferseg;
+//   int32_t *source;
+//   int      next;
 
-  //
-  // load the chunk into a buffer
-  //
-  pos  = GRFILEPOS(chunk);
-  next = chunk + 1;
-  while (GRFILEPOS(next) == -1) // skip past any sparse tiles
-    next++;
-  compressed = GRFILEPOS(next) - pos;
-  lseek(grhandle, pos, SEEK_SET);
+//   //
+//   // load the chunk into a buffer
+//   //
+//   pos  = GRFILEPOS(chunk);
+//   next = chunk + 1;
+//   while (GRFILEPOS(next) == -1) // skip past any sparse tiles
+//     next++;
+//   compressed = GRFILEPOS(next) - pos;
+//   lseek(grhandle, pos, SEEK_SET);
 
-  MM_GetPtr(&bigbufferseg, compressed);
-  read(grhandle, bigbufferseg, compressed);
-  source = (int32_t *)bigbufferseg;
+//   MM_GetPtr(&bigbufferseg, compressed);
+//   read(grhandle, bigbufferseg, compressed);
+//   source = (int32_t *)bigbufferseg;
 
-  expanded = *source++;
+//   expanded = *source++;
 
-  //
-  // allocate final space, decompress it, and free bigbuffer
-  // Sprites need to have shifts made and various other junk
-  //
-  byte *pic;
-  MM_GetPtr((memptr *)&pic, 64000);
-  CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
+//   //
+//   // allocate final space, decompress it, and free bigbuffer
+//   // Sprites need to have shifts made and various other junk
+//   //
+//   byte *pic;
+//   MM_GetPtr((memptr *)&pic, 64000);
+//   CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
 
-#define CLIP_LEFT 8
-#define CLIP_SKIP 5
+// #define CLIP_LEFT 8
+// #define CLIP_SKIP 5
 
-  byte *vbuf = screenBuffer->xpixels;
-  for (int y = 0; y < 200; y++) {
-    int cx = CLIP_LEFT;
+//   byte *vbuf = screenBuffer->xpixels;
+//   for (int y = 0; y < 200; y++) {
+//     int cx = CLIP_LEFT;
 
-    for (int x = 0; x < 256; x++) {
-      const byte col = pic[(y * 80 + (cx >> 2)) + (cx & 3) * 80 * 200];
+//     for (int x = 0; x < 256; x++) {
+//       const byte col = pic[(y * 80 + (cx >> 2)) + (cx & 3) * 80 * 200];
 
-      vbuf[y * SCREEN_WIDTH + x] = col;
+//       vbuf[y * SCREEN_WIDTH + x] = col;
 
-      cx++;
-      if (x % CLIP_SKIP == 0)
-        cx++;
-    }
-  }
-  MM_FreePtr((memptr *)&pic);
-  MM_FreePtr((memptr *)&bigbufferseg);
-}
+//       cx++;
+//       if (x % CLIP_SKIP == 0)
+//         cx++;
+//     }
+//   }
+//   MM_FreePtr((memptr *)&pic);
+//   MM_FreePtr((memptr *)&bigbufferseg);
+// }
 
 //==========================================================================
 

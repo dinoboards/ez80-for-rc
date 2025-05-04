@@ -4,6 +4,7 @@
 
 #include "id_mm.h"
 
+#include "ez80-vdp.h"
 #include "v99x8-hdmi/v99x8-wolf3d.h"
 
 pictabletype *pictable; // TODO this can be pre-allocated based on NUMPICS
@@ -28,9 +29,18 @@ void VWB_DrawPropString(const char *string) {
   height = font->height;
   dest   = vbuf + (py * SCREEN_WIDTH + px);
 
+  uint16_t x = px;
+
   while ((ch = (byte)*string++) != 0) {
     width = step = font->width[ch];
     source       = ((byte *)font) + font->location[ch];
+
+    vdp_scn_font(source, x, py, width, height, fontcolor);
+    x += width;
+
+    // byte ptr source, width&height
+    // iterate width, then height, if byte set, the assign a pixel on
+    // increment
     while (width--) {
       for (int i = 0; i < height; i++) {
         if (source[i * step]) {

@@ -126,8 +126,7 @@ void PM_Preload(chunk_load_progress_t update_fn, bool partial) {
         update_fn(new_p);
         progress = new_p;
       }
-    } else
-      printf("CH: %d\r\n", preloaded_upto);
+    }
 
     fseek(file, pageOffsets[preloaded_upto], SEEK_SET);
     fread(ptr, 1, size, file);

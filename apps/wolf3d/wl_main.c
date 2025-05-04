@@ -818,7 +818,7 @@ void FinishSignon(void) {
 
 #endif
 
-  VH_UpdateScreen();
+  // VH_UpdateScreen();
 
   if (!param_nowait)
     IN_Ack();
@@ -835,7 +835,6 @@ void FinishSignon(void) {
   US_CPrint("Working...");
 #endif
 
-  VH_UpdateScreen();
 #endif
 
   SETFONTCOLOR(0, 15);

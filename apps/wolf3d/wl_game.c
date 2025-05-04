@@ -845,8 +845,6 @@ void DrawPlayBorder(void) {
   }
 
   printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
-
-  VW_UpdateScreen(); // test
 }
 
 /*
@@ -865,35 +863,25 @@ void waitForKey(void) {
 void DrawPlayScreen(void) {
   VW_UpdateScreen(); // test
 
-  VWB_DrawPic(0, screenHeight - STATUSLINES, STATUSBARPIC);
-  VW_UpdateScreen(); // test
+  // VWB_DrawPic(0, screenHeight - STATUSLINES, STATUSBARPIC);
 
   DrawPlayBorder();
-  VW_UpdateScreen(); // test
 
   DrawFace();
-  VW_UpdateScreen(); // test
 
   DrawHealth();
-  VW_UpdateScreen(); // test
 
   DrawLives();
-  VW_UpdateScreen(); // test
 
   DrawLevel();
-  VW_UpdateScreen(); // test
 
   DrawAmmo();
-  VW_UpdateScreen(); // test
 
   DrawKeys();
-  VW_UpdateScreen(); // test
 
   DrawWeapon();
-  VW_UpdateScreen(); // test
 
   DrawScore();
-  VW_UpdateScreen(); // test
 }
 
 void ShowActStatus() {
