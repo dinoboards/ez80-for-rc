@@ -87,8 +87,8 @@
 
 #define CST_X     20
 #define CST_Y     48
-#define CST_START 60
-#define CST_SPC   60
+#define CST_START 40
+#define CST_SPC   48
 
 //
 // TYPEDEFS

@@ -353,7 +353,7 @@ void VL_Plot(int x, int y, int color) {
 =================
 */
 void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color) {
-  printf("VL_Hlin(%d, %d, %d)\r\n", x, y, width);
+  // printf("VL_Hlin(%d, %d, %d)\r\n", x, y, width);
 
   assert(x >= 0 && "VL_Hlin: x < 0");
   assert(x + width <= SCREEN_WIDTH && "VL_Hlin: x + width > SCREEN_WIDTH!");

@@ -66,12 +66,12 @@
 #define STR_CRUN    "Run"
 #define STR_COPEN   "Open"
 #define STR_CFIRE   "Fire"
-#define STR_CSTRAFE "Strafe"
+#define STR_CSTRAFE "Strf"
 
 #define STR_LEFT  "Left"
-#define STR_RIGHT "Right"
+#define STR_RIGHT "Rght"
 #define STR_FRWD  "Frwd"
-#define STR_BKWD  "Bkwrd"
+#define STR_BKWD  "Bkwd"
 #define STR_THINK "Thinking"
 
 #define STR_SIZE1 "Use arrows to size"

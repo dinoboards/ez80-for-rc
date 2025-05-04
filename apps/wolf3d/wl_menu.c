@@ -188,7 +188,7 @@ CP_itemtype CusMenu[] = {{1, "", 0}, {0, "", 0}, {0, "", 0}, {1, "", 0}, {0, "",
 // CP_iteminfo struct format: short x, y, amount, curpos, indent;
 CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, 38}, SndItems = {SM_X, SM_Y1, lengthof(SndMenu), 0, 64},
             LSItems = {LSM_X, LSM_Y, lengthof(LSMenu), 0, 24}, CtlItems = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, 56},
-            CusItems = {8, CST_Y + 13 * 2, lengthof(CusMenu), -1, 0},
+            CusItems = {1, CST_Y + 13 * 2 - 4, lengthof(CusMenu), -1, 0},
 #ifndef SPEAR
             NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, 84},
 #endif
@@ -1836,7 +1836,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
   do {
     if (redraw) {
       x = CST_START + CST_SPC * which;
-      DrawWindow(5, PrintY - 1, 310, 13, BKGDCOLOR);
+      DrawWindow(1, PrintY - 1, 253, 13, BKGDCOLOR);
 
       DrawRtn(1);
       DrawWindow(x - 2, PrintY, CST_SPC, 11, TEXTCOLOR);
@@ -2030,7 +2030,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
 
   SD_PlaySound(ESCPRESSEDSND);
   WaitKeyUp();
-  DrawWindow(5, PrintY - 1, 310, 13, BKGDCOLOR);
+  DrawWindow(1, PrintY - 1, 253, 13, BKGDCOLOR);
 }
 
 ////////////////////////
@@ -2041,14 +2041,14 @@ void FixupCustom(int w) {
   static int lastwhich = -1;
   int        y         = CST_Y + 26 + w * 13;
 
-  VWB_Hlin(7, 32, y - 1, DEACTIVE);
-  VWB_Hlin(7, 32, y + 12, BORD2COLOR);
+  VWB_Hlin(4, 32, y - 1, DEACTIVE);
+  VWB_Hlin(4, 32, y + 12, BORD2COLOR);
 #ifndef SPEAR
-  VWB_Hlin(7, 32, y - 2, BORDCOLOR);
-  VWB_Hlin(7, 32, y + 13, BORDCOLOR);
+  VWB_Hlin(4, 32, y - 2, BORDCOLOR);
+  VWB_Hlin(4, 32, y + 13, BORDCOLOR);
 #else
-  VWB_Hlin(7, 32, y - 2, BORD2COLOR);
-  VWB_Hlin(7, 32, y + 13, BORD2COLOR);
+  VWB_Hlin(4, 32, y - 2, BORD2COLOR);
+  VWB_Hlin(4, 32, y + 13, BORD2COLOR);
 #endif
 
   switch (w) {
@@ -2067,14 +2067,14 @@ void FixupCustom(int w) {
 
   if (lastwhich >= 0) {
     y = CST_Y + 26 + lastwhich * 13;
-    VWB_Hlin(7, 32, y - 1, DEACTIVE);
-    VWB_Hlin(7, 32, y + 12, BORD2COLOR);
+    VWB_Hlin(4, 32, y - 1, DEACTIVE);
+    VWB_Hlin(4, 32, y + 12, BORD2COLOR);
 #ifndef SPEAR
-    VWB_Hlin(7, 32, y - 2, BORDCOLOR);
-    VWB_Hlin(7, 32, y + 13, BORDCOLOR);
+    VWB_Hlin(4, 32, y - 2, BORDCOLOR);
+    VWB_Hlin(4, 32, y + 13, BORDCOLOR);
 #else
-    VWB_Hlin(7, 32, y - 2, BORD2COLOR);
-    VWB_Hlin(7, 32, y + 13, BORD2COLOR);
+    VWB_Hlin(4, 32, y - 2, BORD2COLOR);
+    VWB_Hlin(4, 32, y + 13, BORD2COLOR);
 #endif
 
     if (lastwhich != w)
@@ -2128,7 +2128,7 @@ void DrawCustomScreen(void) {
   WindowW = 256;
   VWB_DrawPic(76, SCREEN_HEIGHT - 16, C_MOUSELBACKPIC); // 104, 16
   DrawStripes(10);
-  VWB_DrawPic(80, 0, C_CUSTOMIZEPIC);
+  VWB_DrawPic(52, 0, C_CUSTOMIZEPIC); // 152 x 48
 
   //
   // MOUSE
@@ -2166,7 +2166,7 @@ void DrawCustomScreen(void) {
   US_Print(STR_CSTRAFE "\n");
 #endif
 
-  DrawWindow(5, PrintY - 1, 310, 13, BKGDCOLOR);
+  DrawWindow(1, PrintY - 1, 253, 13, BKGDCOLOR);
   DrawCustMouse(0);
   US_Print("\n");
 
@@ -2205,7 +2205,7 @@ void DrawCustomScreen(void) {
   PrintX = CST_START + CST_SPC * 3;
   US_Print(STR_CSTRAFE "\n");
 #endif
-  DrawWindow(5, PrintY - 1, 310, 13, BKGDCOLOR);
+  DrawWindow(1, PrintY - 1, 253, 13, BKGDCOLOR);
   DrawCustJoy(0);
   US_Print("\n");
 
@@ -2238,7 +2238,7 @@ void DrawCustomScreen(void) {
   PrintX = CST_START + CST_SPC * 3;
   US_Print(STR_CSTRAFE "\n");
 #endif
-  DrawWindow(5, PrintY - 1, 310, 13, BKGDCOLOR);
+  DrawWindow(1, PrintY - 1, 253, 13, BKGDCOLOR);
   DrawCustKeybd(0);
   US_Print("\n");
 
@@ -2265,7 +2265,7 @@ void DrawCustomScreen(void) {
   PrintX = CST_START + CST_SPC * 3;
   US_Print(STR_BKWD "\n");
 #endif
-  DrawWindow(5, PrintY - 1, 310, 13, BKGDCOLOR);
+  DrawWindow(1, PrintY - 1, 253, 13, BKGDCOLOR);
   DrawCustKeys(0);
 #endif
   //
@@ -2387,8 +2387,8 @@ int CP_ChangeView(int _ __attribute__((unused))) {
   ControlInfo ci;
 
   WindowX = WindowY = 0;
-  WindowW           = SCREEN_WIDTH_FACTOR(320);
-  WindowH           = 200;
+  WindowW           = SCREEN_WIDTH;
+  WindowH           = SCREEN_HEIGHT;
   newview = oldview = viewsize;
   DrawChangeView(oldview);
   MenuFadeIn();
@@ -2434,8 +2434,8 @@ int CP_ChangeView(int _ __attribute__((unused))) {
     else if (ci.button1 || Keyboard[USB_KEY_ESCAPE]) {
       SD_PlaySound(ESCPRESSEDSND);
       MenuFadeOut();
-      if (screenHeight % 200 != 0)
-        VL_ClearScreen(0);
+      // if (screenHeight % SCREEN_HEIGHT != 0)
+      //   VL_ClearScreen(0);
       return 0;
     }
   } while (!exit);
@@ -2449,8 +2449,8 @@ int CP_ChangeView(int _ __attribute__((unused))) {
 
   ShootSnd();
   MenuFadeOut();
-  if (screenHeight % 200 != 0)
-    VL_ClearScreen(0);
+  // if (screenHeight % SCREEN_HEIGHT != 0)
+  //   VL_ClearScreen(0);
 
   return 0;
 }
@@ -3322,17 +3322,17 @@ void FreeMusic(void) { UNCACHEAUDIOCHUNK(STARTMUSIC + lastmusic); }
 const char *IN_GetScanName(ScanCode scan) {
   switch (scan) {
   case (USB_KEY_BACKSPACE):
-    return "BkSp";
+    return "BaSp";
   case (USB_KEY_TAB):
     return "Tab";
   case (USB_KEY_ENTER):
-    return "Enter";
+    return "Ent";
   case (USB_KEY_PAUSE):
-    return "Pause";
+    return "Pas";
   case (USB_KEY_ESCAPE):
     return "Esc";
   case (USB_KEY_SPACE):
-    return "Space";
+    return "Spc";
   case (USB_KEY_QUOTE):
     return "'";
   case (USB_KEY_COMMA):
@@ -3428,9 +3428,9 @@ const char *IN_GetScanName(ScanCode scan) {
   case (USB_KEY_UP):
     return "Up";
   case (USB_KEY_DOWN):
-    return "Down";
+    return "Dwn";
   case (USB_KEY_RIGHT):
-    return "Right";
+    return "Rght";
   case (USB_KEY_LEFT):
     return "Left";
   case (USB_KEY_INSERT):
@@ -3470,17 +3470,17 @@ const char *IN_GetScanName(ScanCode scan) {
   case (USB_KEY_F12):
     return "F12";
   case (USB_KEY_NUMLOCK):
-    return "NumLk";
+    return "NmLk";
   case (USB_KEY_CAPSLOCK):
-    return "CapsLk";
+    return "CpsL";
   case (USB_KEY_SCROLLLOCK):
-    return "ScrlLk";
+    return "Scrl";
   case (USB_KEY_RSHIFT):
     return "RShft";
   case (USB_KEY_LSHIFT):
-    return "Shift";
+    return "Shft";
   case (USB_KEY_RCTRL):
-    return "RCtrl";
+    return "RCtl";
   case (USB_KEY_LCTRL):
     return "Ctrl";
   case (USB_KEY_RALT):
