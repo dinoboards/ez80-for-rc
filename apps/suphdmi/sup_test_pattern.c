@@ -9,6 +9,8 @@
 * populate the palette of 256, with a VGA like standard colour palette
 
 */
+
+#ifdef SUPHDMI
 void super_graphics_mode_test_pattern(uint8_t gm) {
   vdp_set_extended_palette(large_palette);
 
@@ -56,3 +58,4 @@ void super_graphics_mode_double_buffering(uint8_t gm) {
   printf("Press key to continue\r\n");
   wait_for_key();
 }
+#endif

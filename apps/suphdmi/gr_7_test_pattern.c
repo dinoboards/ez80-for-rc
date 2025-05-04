@@ -45,3 +45,44 @@ void graphics_mode_7_double_buffering() {
   printf("Press key to continue\r\n");
   wait_for_key();
 }
+
+uint8_t buffer[50 * 50];
+
+void graphics_mode_7_logical_transforms() {
+  vdp_set_refresh(50);
+  vdp_set_lines(212);
+  vdp_set_graphic_7();
+  // vdp_set_palette(palette);
+
+  printf("Graphics Mode 7 (%d x %d), 256 Colours, Logical Transform\r\n", get_screen_width(), get_screen_height());
+
+  // erase screen with cpu to vram operation
+  vdp_cmd_move_data_to_vram(255, 0, 0, 256, 212, DIX_RIGHT | DIY_DOWN, 256 * 212);
+  for (int i = 1; i < 256 * 212; i++) {
+    vdp_cmd_send_byte(i);
+    // test_for_escape();
+  }
+
+  printf("Press key to apply logical transform operation\r\n");
+  wait_for_key();
+
+  for (int i = 0; i < 50 * 50; i++) {
+    if (i % 4 == 0)
+      buffer[i] = 65;
+    else
+      buffer[i] = 0;
+  }
+
+  vdp_cmd_logical_move_cpu_to_vram(buffer, 100, 100, 50, 50, DIX_RIGHT | DIY_DOWN, 50 * 50, CMD_LOGIC_TIMP);
+
+  vdp_cmd_logical_move_data_to_vram(0, 180, 100, 50, 50, DIX_RIGHT | DIY_DOWN, 50 * 50, CMD_LOGIC_TIMP);
+  for (int i = 1; i < 50 * 50; i++) {
+    if (i % 4 != 0)
+      vdp_cmd_send_byte(255);
+    else
+      vdp_cmd_send_byte(0);
+  }
+
+  printf("Press any key to continue\r\n");
+  wait_for_key();
+}
