@@ -106,19 +106,9 @@ void VWB_DrawPic(int x, int y, int chunknum) {
 //   VW_Plot(x, y, color);
 // }
 
-void VWB_Hlin(int x1, int x2, int y, int color) {
-  // if (scaleFactor == 1)
-  VW_Hlin(x1, x2, y, color);
-  // else
-  //   VW_Bar(x1, y, x2 - x1 + 1, 1, color);
-}
+void VWB_Hlin(int x1, int x2, int y, int color) { VW_Hlin(x1, x2, y, color); }
 
-void VWB_Vlin(int y1, int y2, int x, int color) {
-  // if (scaleFactor == 1)
-  VW_Vlin(y1, y2, x, color);
-  // else
-  //   VW_Bar(x, y1, 1, y2 - y1 + 1, color);
-}
+void VWB_Vlin(int y1, int y2, int x, int color) { VW_Vlin(y1, y2, x, color); }
 
 /*
 =============================================================================

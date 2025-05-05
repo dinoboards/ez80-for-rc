@@ -2954,7 +2954,7 @@ void EraseGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int y, int which) 
   PrintX = item_i->x + item_i->indent;
   PrintY = item_i->y + 2 + which * 13;
   US_Print((items + which)->string);
-  VW_UpdateScreen();
+  // VW_UpdateScreen();
 }
 
 //
@@ -2962,7 +2962,7 @@ void EraseGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int y, int which) 
 //
 void DrawHalfStep(int x, int y) {
   VWB_DrawPic(x, y, C_CURSOR1PIC);
-  VW_UpdateScreen();
+  // VW_UpdateScreen();
   SD_PlaySound(MOVEGUN1SND);
   SDL_Delay(8);
 }
@@ -2985,7 +2985,7 @@ void DrawGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int *y, int which, 
   //
   if (routine)
     routine(which);
-  VW_UpdateScreen();
+  // VW_UpdateScreen();
   SD_PlaySound(MOVEGUN2SND);
 }
 

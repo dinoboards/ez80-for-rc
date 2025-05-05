@@ -31,6 +31,14 @@ vdp_scn_bar(const uint16_t x, const uint16_t y, const uint16_t width, const uint
   vdp_cmd_vdp_to_vram(x, y, width, height, gamepal[color], DIX_RIGHT | DIY_DOWN);
 }
 
+static inline void vdp_scn_h_line(const uint16_t x, const uint16_t y, const uint16_t width, const uint8_t color) {
+  vdp_cmd_vdp_to_vram(x, y, width, 1, gamepal[color], DIX_RIGHT | DIY_DOWN);
+}
+
+static inline void vdp_scn_v_line(const uint16_t x, const uint16_t y, const uint16_t height, const uint8_t color) {
+  vdp_cmd_vdp_to_vram(x, y, 1, height, gamepal[color], DIX_RIGHT | DIY_DOWN);
+}
+
 static inline void vdp_scn_font(const uint8_t *const font_data,
                                 const uint16_t       x,
                                 const uint16_t       y,

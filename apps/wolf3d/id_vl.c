@@ -361,6 +361,8 @@ void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color) {
   assert(y >= 0 && "VL_Hlin: y < 0!");
   assert(y < SCREEN_HEIGHT && "VL_Hlin: y >= SCREEN_HEIGHT!");
 
+  vdp_scn_h_line(x, y, width, color);
+
   uint8_t *dest = ((byte *)screenBuffer->xpixels) + y * SCREEN_WIDTH + x;
   memset(dest, color, width);
 }
@@ -380,6 +382,8 @@ void VL_Vlin(int x, int y, int height, int color) {
   assert((unsigned)x < SCREEN_WIDTH && "VL_Vlin: x >= SCREEN_WIDTH");
   assert(y >= 0 && "VL_Vlin: y < 0");
   assert((unsigned)y + height <= SCREEN_HEIGHT && "VL_Vlin: Destination rectangle out of bounds!");
+
+  vdp_scn_v_line(x, y, height, color);
 
   uint8_t *dest = ((byte *)screenBuffer->xpixels) + y * SCREEN_WIDTH + x;
 
