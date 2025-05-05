@@ -42,15 +42,15 @@ int main(/*const int argc, const char *argv[]*/) {
     }
 
     printf("Testing usb keyboard event que\r\n");
-    ez80_usb_kyb_event_t usb_key;
+    kyb_event_t key_event;
 
     do {
-      result = ez80_usb_kyb_event(&usb_key);
+      result = kyb_event(&key_event);
 
       if (result)
-        printf(": %d, %x, %x\r\n", result, usb_key.key_code, usb_key.key_down);
+        printf(": %d, %x, %x\r\n", result, key_event.key_code, key_event.key_down);
 
-    } while (!(result && usb_key.key_code == 4));
+    } while (!(result && key_event.key_code == 4));
   } else
     printf("Keyboard not found\r\n");
 

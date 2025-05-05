@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 ez80_usb_mse_report_ex_t usb_mouse_report = {0};
-ez80_usb_kyb_event_t     usb_key          = {0};
+kyb_event_t              usb_key          = {0};
 uint24_t                 _time_count      = 0;
 static uint24_t          previous_t       = 0;
 
