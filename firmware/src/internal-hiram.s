@@ -64,14 +64,14 @@ firmware_rst_18_hook:
 	; //timer 0 has reload value that will equate to about 5-6us
 ; 	; so set it off, and wait.
 
-	CRITICAL_BEGIN
+	DI_AND_SAVE
 	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
 	OUT0	(TMR0_CTL), A
 
 wait:
 	IN0	A, (TMR0_DR_L)
 	JR	NZ, wait
-	CRITICAL_END
+	RESTORE_EI
 	RET.L
 
 
