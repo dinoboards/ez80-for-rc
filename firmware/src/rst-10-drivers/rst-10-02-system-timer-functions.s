@@ -39,6 +39,9 @@
 
 	PUBLIC	_system_timer_isr
 	PUBLIC	_system_timer_dispatch
+	PUBLIC	send_int_to_z80
+	PUBLIC	tmr_irq
+
 	XREF	_usb_tick_sr
 ;
 ; SYSTEM TIMER ISR

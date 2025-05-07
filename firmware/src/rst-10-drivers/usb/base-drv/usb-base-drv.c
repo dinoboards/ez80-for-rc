@@ -76,6 +76,9 @@ uint16_t usb_init(uint8_t state) {
 usb_error_t usb_scsi_seek(const uint16_t dev_index, const uint32_t lba) {
   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
 
+  if (dev == NULL)
+    return USB_ERR_NO_DEVICE;
+
   dev->current_lba = lba;
   return USB_ERR_OK;
 }

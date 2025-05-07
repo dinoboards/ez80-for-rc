@@ -96,34 +96,35 @@ typedef struct {
 } cbw_scsi_inquiry_t;
 
 typedef struct {
-  uint8_t device_type : 5;
-  uint8_t device_type_qualifier : 3;
-  uint8_t device_type_modifier : 7;
-  uint8_t removable_media : 1;
-  uint8_t versions;
-  uint8_t response_data_format : 4;
-  uint8_t hi_support : 1;
-  uint8_t norm_aca : 1;
-  uint8_t terminate_task : 1;
-  uint8_t aerc : 1;
+  uint8_t device_type_and_qualifier;
+  uint8_t removable_media; /* MSB only */
+  uint8_t version;
+  uint8_t byte_3;
+  // uint8_t response_data_format : 4;
+  // uint8_t hi_support : 1;
+  // uint8_t norm_aca : 1;
+  // uint8_t terminate_task : 1;
+  // uint8_t aerc : 1;
   uint8_t additional_length;
   uint8_t reserved;
-  uint8_t addr16 : 1;
-  uint8_t addr32 : 1;
-  uint8_t ack_req_q : 1;
-  uint8_t medium_changer : 1;
-  uint8_t multi_port : 1;
-  uint8_t reserved_bit2 : 1;
-  uint8_t enclosure_services : 1;
-  uint8_t reserved_bit3 : 1;
-  uint8_t soft_reset : 1;
-  uint8_t command_queue : 1;
-  uint8_t transfer_disable : 1;
-  uint8_t linked_commands : 1;
-  uint8_t synchronous : 1;
-  uint8_t wide16_bit : 1;
-  uint8_t wide32_bit : 1;
-  uint8_t relative_addressing : 1;
+  uint8_t byte_6;
+  // uint8_t addr16 : 1;
+  // uint8_t addr32 : 1;
+  // uint8_t ack_req_q : 1;
+  // uint8_t medium_changer : 1;
+  // uint8_t multi_port : 1;
+  // uint8_t reserved_bit2 : 1;
+  // uint8_t enclosure_services : 1;
+  // uint8_t reserved_bit3 : 1;
+  uint8_t byte_7;
+  // uint8_t soft_reset : 1;
+  // uint8_t command_queue : 1;
+  // uint8_t transfer_disable : 1;
+  // uint8_t linked_commands : 1;
+  // uint8_t synchronous : 1;
+  // uint8_t wide16_bit : 1;
+  // uint8_t wide32_bit : 1;
+  // uint8_t relative_addressing : 1;
   uint8_t vendor_information[8];
   uint8_t product_id[16];
   uint8_t product_revision[4];
@@ -144,14 +145,9 @@ typedef struct {
 } scsi_read_capacity_result_t;
 
 typedef struct {
-  uint8_t error_code : 7;
-  uint8_t valid : 1;
+  uint8_t error_code;
   uint8_t segment_number;
-  uint8_t sense_key : 4;
-  uint8_t reserved : 1;
-  uint8_t incorrect_length : 1;
-  uint8_t end_of_media : 1;
-  uint8_t file_mark : 1;
+  uint8_t sense_key;
   uint8_t information[4];
   uint8_t additional_sense_length;
   uint8_t command_specific_information[4];
@@ -162,13 +158,13 @@ typedef struct {
 } scsi_sense_result_t;
 
 typedef struct {
-  uint8_t operation_code;
-  uint8_t lun;
-  uint8_t lba[4]; // high-endian block number
-  uint8_t reserved1;
-  uint8_t transfer_len[2]; // high-endian in blocks of block_len (see scsi_capacity)
-  uint8_t reserved2;
-  uint8_t pad[2];
+  uint8_t operation_code;  /* 0 */
+  uint8_t lun;             /* 1 */
+  uint8_t lba[4];          /* 2-5  high-endian block number */
+  uint8_t reserved1;       /* 6 */
+  uint8_t transfer_len[2]; /* 7-8 high-endian in blocks of block_len (see scsi_capacity) */
+  uint8_t reserved2;       /* 9 */
+  uint8_t pad[2];          /* 10-11 */
 } scsi_packet_read_write_t;
 
 typedef struct {

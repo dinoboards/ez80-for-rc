@@ -9,10 +9,6 @@
 	XREF	_kyb_rpt_read_index
 	XREF	_kyb_reports
 
-	XREF	_system_timer_isr
-	XREF	_system_timer_isr_hook
-	XREF	_usb_tick
-
 	GLOBAL	_report_diff
 	XREF	_kyb_report
 	XREF	_kyb_previous
@@ -36,13 +32,6 @@ _report_diff:
 .rptdf_diff:
 	LD	A, 1
 	RET
-
-	XREF	_in_critical_usb_section
-	XREF	_ch_command
-	XREF	_keyboard_config
-	XREF	_usbdev_dat_in_trnsfer_0
-	XREF	_keyboard_buf_put
-	XREF	_keyboard_report_put
 
 	SECTION CODE
 

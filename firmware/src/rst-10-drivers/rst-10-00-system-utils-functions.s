@@ -19,6 +19,9 @@
 	XREF	_SYS_CLK_FREQ
 	XREF	_system_ticks
 	XREF	_calculate_wait_state
+	XREF	remove_usb_tick_hook
+	XREF	send_int_to_z80
+	XREF	tmr_irq
 
 	XREF	_util_get_day_of_month
 	XREF	_util_get_month
@@ -113,6 +116,17 @@ not_supported:
 ;  E'	 = firmware's build year (20xx)
 ;
 ez80_version_exchange:
+
+	; RomWBW has re-initialised - so remove the usb timer tick hook
+	PUSH	HL
+	CALL	remove_usb_tick_hook
+	POP	HL
+
+	; Disable External interrupt signals
+	XOR	A
+	LD	(send_int_to_z80), A
+	LD	(tmr_irq), A
+
 	CALL	_util_get_day_of_month
 	LD	C, A
 	PUSH	BC

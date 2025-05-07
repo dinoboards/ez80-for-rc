@@ -17,6 +17,7 @@
 	XREF	_mem1_bus_mode_and_timing
 
 _main:
+	CALL	remove_usb_tick_hook
 	CALL	__c_startup
 	CALL	_init_clocks
 	CALL	_rx_buffer_init
@@ -55,3 +56,20 @@ _main:
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
 	LD	MB, A
 	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
+
+
+	GLOBAL	remove_usb_tick_hook
+	; remove the usb key/mouse inter handler hook
+remove_usb_tick_hook:
+	XREF 	_system_timer_isr
+	LD	HL, _system_timer_isr
+	XOR	A
+	LD	(HL), A
+	INC 	HL
+	LD	(HL), A
+	INC 	HL
+	LD	(HL), A
+	INC 	HL
+	LD	(HL), A
+	INC 	HL
+	RET

@@ -81,8 +81,7 @@ uint8_t ch_cmd_check_exist(void) {
   uint8_t complement;
   ch_command(CH_CMD_CHECK_EXIST);
   CH376_DATA_PORT = (uint8_t)~0x55;
-  delay();
-  complement = CH376_DATA_PORT;
+  complement      = CH376_DATA_PORT;
   return complement == 0x55;
 }
 
@@ -103,13 +102,10 @@ usb_error_t ch_cmd_set_usb_mode(const uint8_t mode) {
   uint8_t count  = 127;
 
   CH376_COMMAND_PORT = CH_CMD_SET_USB_MODE;
-  delay();
-  CH376_DATA_PORT = mode;
-  delay();
+  CH376_DATA_PORT    = mode;
 
   while (result != CH_CMD_RET_SUCCESS && result != CH_CMD_RET_ABORT && --count != 0) {
     result = CH376_DATA_PORT;
-    delay();
   }
 
   return (result == CH_CMD_RET_SUCCESS) ? USB_ERR_OK : USB_ERR_FAIL;
@@ -151,8 +147,7 @@ usb_error_t ch_data_in_transfer(uint8_t *buffer, int16_t buffer_size, endpoint_p
   do {
     ch_issue_token_in(endpoint);
 
-    result = ch_long_wait_int_and_get_status();
-    CHECK(result);
+    CHECK(ch_long_wait_int_and_get_status());
 
     endpoint->toggle = !endpoint->toggle;
 
