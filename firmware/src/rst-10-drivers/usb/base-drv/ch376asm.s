@@ -13,21 +13,21 @@ _ch_command:
 	ld	b, %ff
 
 l_ch_command_00102:
-	call	_delay
 	ld	a, +(_CH376_COMMAND_PORT/256)
 	in	a, (_CH376_COMMAND_PORT&%FF)
 	bit	4, a
-	jr	z, l_ch_command_00104
-	djnz	l_ch_command_00102
-
-l_ch_command_00104:
-	call	_delay
+	jr	nz, l_ch_command_00104
+l_ch_command_00103:
 	ld	iy, 0
 	add	iy, sp
 	ld	a, (iy+3)
 	ld	bc, _CH376_COMMAND_PORT
 	out	(bc), a
 	ret
+
+l_ch_command_00104:
+	djnz	l_ch_command_00102
+	jr	l_ch_command_00103
 
 	public	_di_and_save
 ; uint24_t di_and_save();
