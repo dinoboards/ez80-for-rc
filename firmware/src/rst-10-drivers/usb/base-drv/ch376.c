@@ -220,11 +220,6 @@ done:
   return result;
 }
 
-void ch_set_usb_address(const uint8_t device_address) {
-  ch_command(CH_CMD_SET_USB_ADDR);
-  CH376_DATA_PORT = device_address;
-}
-
 void ch_configure_nak_retry(const ch_nak_retry_t retry, const uint8_t number_of_retries) {
   ch_command(CH_CMD_WRITE_VAR8);
   CH376_DATA_PORT = CH_VAR_RETRY_TIMES;

@@ -110,8 +110,6 @@ extern usb_error_t    ch_cmd_set_usb_mode(const uint8_t mode);
 extern uint8_t        ch_cmd_get_ic_version(void);
 extern const uint8_t *ch_write_data(const uint8_t *buffer, uint8_t length);
 
-extern void ch_set_usb_address(const uint8_t device_address);
-
 extern usb_error_t ch_control_transfer_request_descriptor(const uint8_t descriptor_type);
 extern usb_error_t ch_control_transfer_set_address(const uint8_t device_address);
 extern usb_error_t ch_control_transfer_set_config(const uint8_t config_value);
@@ -128,5 +126,11 @@ extern void ch_configure_nak_retry(const ch_nak_retry_t retry, const uint8_t num
 extern void ch_issue_token_setup(void);
 extern void ch_issue_token_out_ep0(void);
 extern void ch_issue_token_in_ep0(void);
+
+#define ch_set_usb_address(device_address)                                                                                         \
+  {                                                                                                                                \
+    ch_command(CH_CMD_SET_USB_ADDR);                                                                                               \
+    CH376_DATA_PORT = device_address;                                                                                              \
+  }
 
 #endif
