@@ -59,8 +59,8 @@ usb_error_t usb_scsi_read_capacity(const uint8_t dev_index, scsi_read_capacity_r
 
 usb_error_t usb_scsi_read(const uint8_t dev_index, uint8_t *const buffer) {
   uint8_t                        result;
-  cbw_scsi_read_write_t          cbw     = {{{0}}};
-  device_config_storage_t *const dev     = (device_config_storage_t *)get_usb_device_config(dev_index);
+  cbw_scsi_read_write_t          cbw = {{{0}}};
+  device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
 
   cbw.cbw = scsi_command_block_wrapper;
 
