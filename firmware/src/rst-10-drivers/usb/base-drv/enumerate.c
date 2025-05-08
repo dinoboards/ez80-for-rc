@@ -140,7 +140,6 @@ done:
 
 usb_error_t op_cap_drv_intf(_working_t *const working) {
   usb_error_t                         result;
-  usb_state_t *const                  work_area = get_usb_work_area();
   const interface_descriptor_t *const interface = (interface_descriptor_t *)working->ptr;
 
   working->endpoint_count = interface->bNumEndpoints;
@@ -210,10 +209,9 @@ done:
 }
 
 usb_error_t read_all_configs(enumeration_state_t *const state) {
-  uint8_t            result;
-  uint8_t            config_index;
-  _working_t         working;
-  usb_state_t *const work_area = get_usb_work_area();
+  uint8_t    result;
+  uint8_t    config_index;
+  _working_t working;
 
   memset(&working, 0, sizeof(_working_t));
   working.state = state;
@@ -238,7 +236,6 @@ done:
 
 usb_error_t enumerate_all_devices(void) {
   enumeration_state_t state;
-  usb_state_t *const  work_area = get_usb_work_area();
   memset(&state, 0, sizeof(enumeration_state_t));
 
   return read_all_configs(&state);

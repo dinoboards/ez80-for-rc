@@ -38,8 +38,7 @@ hub_get_status_port(const device_config_hub_t *const hub_config, const uint8_t i
 }
 
 usb_error_t configure_usb_hub(_working_t *const working) {
-  uint8_t            i;
-  usb_state_t *const work_area = get_usb_work_area();
+  uint8_t i;
 
   usb_error_t                      result;
   hub_descriptor_t                 hub_description;

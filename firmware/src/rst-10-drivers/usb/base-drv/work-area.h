@@ -36,8 +36,6 @@ enum device_map_e {
 
 extern uint8_t get_number_of_usb_drives(void);
 
-extern usb_state_t x;
-
-#define get_usb_work_area() (&x)
+extern usb_state_t usb_state;
 
 #endif

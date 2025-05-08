@@ -2,8 +2,8 @@
 #include "ch376.h"
 #include "work-area.h"
 
-extern device_config_t *first_device_config(const usb_state_t *const p);
-extern device_config_t *next_device_config(const usb_state_t *const usb_state, const device_config_t *const p);
+#define /*device_config_t */ first_device_config(/*const usb_state_t *const*/ p) ((device_config_t *)&(usb_state.device_configs[0]))
+extern device_config_t *next_device_config(const device_config_t *const p);
 
 const uint8_t device_config_sizes[_USB_LAST_DEVICE_TYPE] = {
     0,                                /* USB_NOT_SUPPORTED   = 0 */
@@ -16,11 +16,9 @@ const uint8_t device_config_sizes[_USB_LAST_DEVICE_TYPE] = {
 
 // always usb work area
 uint8_t count_of_devices(void) {
-  usb_state_t *const p = get_usb_work_area();
-
   uint8_t count = 0;
 
-  const device_config_t *p_config = first_device_config(p);
+  const device_config_t *p_config = first_device_config();
   while (p_config) {
     const uint8_t type = p_config->type;
 
@@ -28,7 +26,7 @@ uint8_t count_of_devices(void) {
       count++;
     ;
 
-    p_config = next_device_config(p, p_config);
+    p_config = next_device_config(p_config);
   };
 
   return count;
@@ -36,51 +34,36 @@ uint8_t count_of_devices(void) {
 
 // always search in boot
 device_config_t *find_first_free(void) {
-  usb_state_t *const boot_state = get_usb_work_area();
-
-  uint8_t          c = 0;
-  device_config_t *p = first_device_config(boot_state);
+  device_config_t *p = first_device_config();
   while (p) {
     if (p->type == 0)
       return p;
 
-    p = next_device_config(boot_state, p);
+    p = next_device_config(p);
   }
 
   return NULL;
 }
 
-device_config_t *first_device_config(const usb_state_t *const p) { return (device_config_t *)&p->device_configs[0]; }
-
-device_config_t *next_device_config(const usb_state_t *const usb_state, const device_config_t *const p) {
-  uint8_t          size;
+device_config_t *next_device_config(const device_config_t *const p) {
   device_config_t *result;
-  const uint8_t   *_p = (uint8_t *)p;
 
   if (p->type == 0)
     return NULL;
 
-  size = device_config_sizes[p->type];
-  // TODO: bug when size is zero we dont increment the pointer
-  // but if we abort on size 0 - we fail to pick up other devices???
-  // we should not get size of 0 unless the size entry is missing
-  //  if (size == 0)
-  //    return NULL;
+  result = (device_config_t *)(((uint8_t *)p) + device_config_sizes[p->type]);
 
-  result = (device_config_t *)(_p + size);
-
-  if (result >= (device_config_t *)&usb_state->device_configs_end)
+  if (result >= (device_config_t *)&usb_state.device_configs_end)
     return NULL;
 
   return result;
 }
 
 device_config_t *get_usb_device_config(const uint8_t device_index) {
-  device_config_t         *p;
-  const usb_state_t *const usb_state = get_usb_work_area();
-  uint8_t                  counter   = 1;
+  device_config_t *p;
+  uint8_t          counter = 1;
 
-  for (p = first_device_config(usb_state); p; p = next_device_config(usb_state, p)) {
+  for (p = first_device_config(); p; p = next_device_config(p)) {
     if (p->type != USB_NOT_SUPPORTED) {
       if (counter == device_index)
         return p;
@@ -109,10 +92,9 @@ device_config_t      *usb_get_device_type(const uint8_t dev_index) {
  *
  */
 device_config_t *find_by_device_type(const usb_device_t dev_type) {
-  device_config_t         *p;
-  const usb_state_t *const usb_state = get_usb_work_area();
+  device_config_t *p;
 
-  for (p = first_device_config(usb_state); p; p = next_device_config(usb_state, p)) {
+  for (p = first_device_config(); p; p = next_device_config(p)) {
     if (p->type != USB_NOT_SUPPORTED) {
       if (p->type == dev_type)
         return p;
