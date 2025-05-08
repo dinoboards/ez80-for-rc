@@ -1,22 +1,6 @@
 #include "ch376.h"
 #include <stdbool.h>
 
-// void ch_command(const uint8_t command) {
-//   uint8_t counter = 255;
-//   while ((CH376_COMMAND_PORT & PARA_STATE_BUSY) && --counter != 0)
-//     ;
-
-//   // if (counter == 0) {
-//   // It appears that the Ch376 has become blocked
-//   // command will fail and timeout will eventually be returned by the ch_xxx_wait_int_and_get_status
-//   // todo consider a return value to allow callers to respond appropriately
-//   // Experimentation would indicate that USB_RESET_ALL will still work to reset chip
-//   // return;
-//   // }
-
-//   CH376_COMMAND_PORT = command;
-// }
-
 extern usb_error_t ch_wait_int_and_get_status(const int16_t timeout);
 
 usb_error_t ch_long_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(5000); }
@@ -115,12 +99,6 @@ uint8_t ch_cmd_get_ic_version(void) {
   ch_command(CH_CMD_GET_IC_VER);
   return CH376_DATA_PORT & 0x1f;
 }
-
-void ch_issue_token_out_ep0(void) { ch_issue_token(0x40, 0, CH_PID_OUT); }
-
-void ch_issue_token_in_ep0(void) { ch_issue_token(0x80, 0, CH_PID_IN); }
-
-void ch_issue_token_setup(void) { ch_issue_token(0, 0, CH_PID_SETUP); }
 
 usb_error_t ch_data_in_transfer(uint8_t *buffer, int16_t buffer_size, endpoint_param_t *const endpoint) {
   uint8_t count;
