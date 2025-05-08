@@ -1,15 +1,15 @@
 
 
-        INCLUDE "..\..\config.inc"
-	SECTION CODE
-	.assume adl=1
+	include	"..\..\config.inc"
+	section	CODE
+	.assume	adl=1
 
 	XREF	_ch_get_status
 	XREF	_delay
 	XREF	_ch_command
 
-	INCLUDE "usb-constants.inc"
-	INCLUDE "base-drv\ch376asm.inc"
+	include	"usb-constants.inc"
+	include	"base-drv\ch376asm.inc"
 
 ; HL -> timeout
 ; returns
@@ -18,7 +18,7 @@
 ; ---------------------------------
 ; Function ch_wait_int_and_get_status
 ; ---------------------------------
-	GLOBAL	_ch_wait_int_and_get_status
+	global	_ch_wait_int_and_get_status
 _ch_wait_int_and_get_status:
 	ld	iy, 0
 	add	iy, sp
@@ -58,7 +58,7 @@ keep_waiting:
 	ret
 
 ; uint8_t ch_read_data(uint8_t *buffer);
-	GLOBAL	_ch_read_data
+	global	_ch_read_data
 _ch_read_data:
 	CH_CMND	CH_CMD_RD_USB_DATA0
 
@@ -85,7 +85,7 @@ read_block:
 	ret
 
 ;const uint8_t *ch_write_data(const uint8_t *buffer, uint8_t length)
-	GLOBAL	_ch_write_data
+	global	_ch_write_data
 _ch_write_data:
 	CH_CMND	CH_CMD_WR_HOST_DATA
 
@@ -109,4 +109,23 @@ write_block:
 	dec	d
 	jr	nz, write_block
 
+	ret
+
+	public	_increment_uint32
+; extern void increment_uint32(uint8_t* val);
+_increment_uint32:
+	pop	hl
+	pop	iy
+	push	hl
+
+	ld	hl, (iy)
+
+	ld	bc, 1
+	add	hl, bc
+	ld	(iy), hl
+	jr	c, .skip1
+	ret
+
+.skip1:
+	inc	(iy+3)
 	ret

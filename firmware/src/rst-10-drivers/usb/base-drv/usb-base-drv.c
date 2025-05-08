@@ -79,6 +79,6 @@ usb_error_t usb_scsi_seek(const uint16_t dev_index, const uint32_t lba) {
   if (dev == NULL)
     return USB_ERR_NO_DEVICE;
 
-  dev->current_lba = lba;
+  *((uint32_t *)dev->current_lba) = lba;
   return USB_ERR_OK;
 }

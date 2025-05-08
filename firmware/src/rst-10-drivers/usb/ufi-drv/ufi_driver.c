@@ -41,7 +41,8 @@ usb_error_t usb_ufi_read(const uint16_t dev_index, uint8_t *const buffer) {
 
   memset(&sense_codes, 0, sizeof(sense_codes));
 
-  if (ufi_read_write_sector((device_config_t *)dev, false, dev->current_lba, 1, buffer, (uint8_t *)&sense_codes) != USB_ERR_OK)
+  if (ufi_read_write_sector((device_config_t *)dev, false, *((uint32_t *)dev->current_lba), 1, buffer, (uint8_t *)&sense_codes) !=
+      USB_ERR_OK)
     return -1; // general error
 
   memset(&response, 0, sizeof(response));
@@ -72,7 +73,8 @@ usb_error_t usb_ufi_write(const uint16_t dev_index, uint8_t *const buffer) {
     return -1; // Not READY!
 
   memset(&sense_codes, 0, sizeof(sense_codes));
-  if ((ufi_read_write_sector((device_config_t *)dev, true, dev->current_lba, 1, buffer, (uint8_t *)&sense_codes)) != USB_ERR_OK) {
+  if ((ufi_read_write_sector((device_config_t *)dev, true, *((uint32_t *)dev->current_lba), 1, buffer, (uint8_t *)&sense_codes)) !=
+      USB_ERR_OK) {
     return -1;
   }
 

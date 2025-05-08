@@ -57,26 +57,30 @@ usb_error_t usb_scsi_read_capacity(const uint8_t dev_index, scsi_read_capacity_r
 //   return do_scsi_cmd(dev, &cbw_scsi.cbw, inq_result, false);
 // }
 
+extern void increment_uint32(uint8_t *val);
+
 usb_error_t usb_scsi_read(const uint8_t dev_index, uint8_t *const buffer) {
   uint8_t                        result;
-  cbw_scsi_read_write_t          cbw = {{{0}}};
+  cbw_scsi_read_write_x_t        cbw = {{{0}}};
   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
+  uint8_t                       *current_lba;
+  current_lba = dev->current_lba;
 
-  cbw.cbw = scsi_command_block_wrapper;
+  *((scsi_command_block_wrapper_t *)&cbw) = scsi_command_block_wrapper;
 
-  cbw.cbw.bCBWCBLength           = sizeof(scsi_packet_read_write_t);
-  cbw.cbw.dCBWDataTransferLength = 512;
+  cbw.cbw_bCBWCBLength           = sizeof(scsi_packet_read_write_t);
+  cbw.cbw_dCBWDataTransferLength = 512;
 
-  cbw.scsi_cmd.operation_code  = 0x28; // read operation
-  cbw.scsi_cmd.transfer_len[1] = 1;
-  cbw.scsi_cmd.lba[0]          = dev->current_lba >> 24;
-  cbw.scsi_cmd.lba[1]          = dev->current_lba >> 16;
-  cbw.scsi_cmd.lba[2]          = dev->current_lba >> 8;
-  cbw.scsi_cmd.lba[3]          = dev->current_lba;
+  cbw.scsi_cmd_operation_code  = 0x28; // read operation
+  cbw.scsi_cmd_transfer_len[1] = 1;
+  cbw.scsi_cmd_lba[0]          = current_lba[3];
+  cbw.scsi_cmd_lba[1]          = current_lba[2];
+  cbw.scsi_cmd_lba[2]          = current_lba[1];
+  cbw.scsi_cmd_lba[3]          = current_lba[0];
 
-  CHECK(do_scsi_cmd(dev, &cbw.cbw, buffer, false));
+  CHECK(do_scsi_cmd(dev, (scsi_command_block_wrapper_t *)&cbw, buffer, false));
 
-  dev->current_lba++;
+  increment_uint32(current_lba);
 
 done:
   return result;
@@ -84,24 +88,26 @@ done:
 
 usb_error_t usb_scsi_write(const uint8_t dev_index, uint8_t *const buffer) {
   uint8_t                        result;
-  cbw_scsi_read_write_t          cbw = {{{0}}};
+  cbw_scsi_read_write_x_t        cbw = {{0}};
   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
+  uint8_t                       *current_lba;
+  current_lba = dev->current_lba;
 
-  cbw.cbw = scsi_command_block_wrapper;
+  *((scsi_command_block_wrapper_t *)&cbw) = scsi_command_block_wrapper;
 
-  cbw.cbw.bCBWCBLength           = sizeof(scsi_packet_read_write_t);
-  cbw.cbw.dCBWDataTransferLength = 512;
+  cbw.cbw_bCBWCBLength           = sizeof(scsi_packet_read_write_t);
+  cbw.cbw_dCBWDataTransferLength = 512;
 
-  cbw.scsi_cmd.operation_code  = 0x2A; // write operation
-  cbw.scsi_cmd.transfer_len[1] = 1;
-  cbw.scsi_cmd.lba[0]          = dev->current_lba >> 24;
-  cbw.scsi_cmd.lba[1]          = dev->current_lba >> 16;
-  cbw.scsi_cmd.lba[2]          = dev->current_lba >> 8;
-  cbw.scsi_cmd.lba[3]          = dev->current_lba;
+  cbw.scsi_cmd_operation_code  = 0x2A; // write operation
+  cbw.scsi_cmd_transfer_len[1] = 1;
+  cbw.scsi_cmd_lba[0]          = current_lba[3];
+  cbw.scsi_cmd_lba[1]          = current_lba[2];
+  cbw.scsi_cmd_lba[2]          = current_lba[1];
+  cbw.scsi_cmd_lba[3]          = current_lba[0];
 
-  CHECK(do_scsi_cmd(dev, &cbw.cbw, buffer, true));
+  CHECK(do_scsi_cmd(dev, (scsi_command_block_wrapper_t *)&cbw, buffer, true));
 
-  dev->current_lba++;
+  increment_uint32(current_lba);
 
 done:
   return result;

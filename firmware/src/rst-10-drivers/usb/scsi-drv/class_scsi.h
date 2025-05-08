@@ -172,6 +172,26 @@ typedef struct {
   scsi_packet_read_write_t     scsi_cmd;
 } cbw_scsi_read_write_t;
 
+typedef struct {
+  // scsi_command_block_wrapper_t cbw;
+  uint8_t  cbw_dCBWSignature[4];
+  uint16_t cbw_dCBWTag[2];
+  uint32_t cbw_dCBWDataTransferLength;
+  uint8_t  cbw_bmCBWFlags;
+  uint8_t  cbw_bCBWLUN;
+  uint8_t  cbw_bCBWCBLength;
+
+  // scsi_packet_read_write_t     scsi_cmd;
+  uint8_t scsi_cmd_operation_code;  /* 0 */
+  uint8_t scsi_cmd_lun;             /* 1 */
+  uint8_t scsi_cmd_lba[4];          /* 2-5  high-endian block number */
+  uint8_t scsi_cmd_reserved1;       /* 6 */
+  uint8_t scsi_cmd_transfer_len[2]; /* 7-8 high-endian in blocks of block_len (see scsi_capacity) */
+  uint8_t scsi_cmd_reserved2;       /* 9 */
+  uint8_t scsi_cmd_pad[2];          /* 10-11 */
+
+} cbw_scsi_read_write_x_t;
+
 extern scsi_command_block_wrapper_t scsi_command_block_wrapper;
 
 extern usb_error_t do_scsi_cmd(device_config_storage_t *const      dev,
