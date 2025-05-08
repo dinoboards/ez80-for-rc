@@ -57,4 +57,17 @@ extern usb_error_t usbdev_dat_in_trnsfer(device_config_t *const device,
 
 extern usb_error_t usbdev_dat_in_trnsfer_0(device_config_t *const device, uint8_t *const buffer, const uint8_t buffer_size);
 
+/**
+ * @brief Perform a USB control transfer (in or out)
+ * See https://www.beyondlogic.org/usbnutshell/usb4.shtml for a description of the USB control transfer
+ *
+ * @param device the usb device
+ * @param cmd_packet Pointer to the setup packet - top bit of bmRequestType indicate data direction
+ * @param buffer Pointer of data to send or receive into
+ * @return usb_error_t USB_ERR_OK if all good, otherwise specific error code
+ */
+#define /*usb_error_t*/ usbdev_control_transfer(/*device_config_t *const*/ device, /*const setup_packet_t *const*/ cmd_packet,     \
+                                                /*uint8_t *const */ buffer)                                                        \
+  usb_control_transfer(cmd_packet, buffer, device->address, device->max_packet_size)
+
 #endif

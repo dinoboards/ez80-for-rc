@@ -9,6 +9,7 @@
 	XREF	_ch_command
 
 	INCLUDE "usb-constants.inc"
+	INCLUDE "base-drv\ch376asm.inc"
 
 ; HL -> timeout
 ; returns
@@ -59,20 +60,14 @@ keep_waiting:
 ; uint8_t ch_read_data(uint8_t *buffer);
 	GLOBAL	_ch_read_data
 _ch_read_data:
+	CH_CMND	CH_CMD_RD_USB_DATA0
+
 	ld	iy, 0
 	add	iy, sp
 	ld	hl, (iy+3)
 
-	push	hl
-	ld	l, CH_CMD_RD_USB_DATA0
-	push	hl
-	call	_ch_command
-	pop	hl
-	pop	hl
-
-	call	_delay
 	ld	bc, _CH376_DATA_PORT
-	in	a, (c)
+	in	a, (bc)
 
 	or	a
 	ret	z
@@ -80,8 +75,7 @@ _ch_read_data:
 	ld	e, a
 	push	af
 read_block:
-	call	_delay
-	in	a, (c)
+	in	a, (bc)
 	ld	(hl), a
 	inc	hl
 	dec	e
@@ -93,10 +87,7 @@ read_block:
 ;const uint8_t *ch_write_data(const uint8_t *buffer, uint8_t length)
 	GLOBAL	_ch_write_data
 _ch_write_data:
-	ld	l, CH_CMD_WR_HOST_DATA
-	push	hl
-	call	_ch_command
-	pop	hl
+	CH_CMND	CH_CMD_WR_HOST_DATA
 
 	ld	iy, 0
 	add	iy, sp
@@ -104,19 +95,16 @@ _ch_write_data:
 	ld	a, (iy+6)
 
 	ld	bc, _CH376_DATA_PORT
-
 ; _CH376_DATA_PORT = length;
-	call	_delay
-	out	(c), a
+	out	(bc), a
 
 	or	a
 	ret	z
 
 	ld	d, a
 write_block:
-	call	_delay
 	ld	a, (hl)
-	out	(c), a
+	out	(bc), a
 	inc	hl
 	dec	d
 	jr	nz, write_block

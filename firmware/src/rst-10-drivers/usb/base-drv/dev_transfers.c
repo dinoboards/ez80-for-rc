@@ -17,19 +17,6 @@
 #include "protocol.h"
 #include <stdlib.h>
 
-/**
- * @brief Perform a USB control transfer (in or out)
- * See https://www.beyondlogic.org/usbnutshell/usb4.shtml for a description of the USB control transfer
- *
- * @param device the usb device
- * @param cmd_packet Pointer to the setup packet - top bit of bmRequestType indicate data direction
- * @param buffer Pointer of data to send or receive into
- * @return usb_error_t USB_ERR_OK if all good, otherwise specific error code
- */
-usb_error_t usbdev_control_transfer(device_config_t *const device, const setup_packet_t *const cmd_packet, uint8_t *const buffer) {
-  return usb_control_transfer(cmd_packet, buffer, device->address, device->max_packet_size);
-}
-
 usb_error_t usbdev_blk_out_trnsfer(device_config_t *const dev, const uint8_t *const buffer, const uint16_t buffer_size) {
   usb_error_t result;
 
