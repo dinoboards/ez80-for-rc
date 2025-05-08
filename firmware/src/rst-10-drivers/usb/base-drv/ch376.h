@@ -133,4 +133,17 @@ extern void ch_issue_token_in_ep0(void);
     CH376_DATA_PORT = device_address;                                                                                              \
   }
 
+#define ch_issue_token(/*const uint8_t*/ toggle_bit, /*const uint8_t*/ endpoint, /*const ch376_pid_t*/ pid)                        \
+  {                                                                                                                                \
+    ch_command(CH_CMD_ISSUE_TKN_X);                                                                                                \
+    CH376_DATA_PORT = toggle_bit;                                                                                                  \
+    CH376_DATA_PORT = endpoint << 4 | pid;                                                                                         \
+  }
+
+#define ch_issue_token_in(/*const endpoint_param_t *const */ endpoint)                                                             \
+  { ch_issue_token(endpoint->toggle ? 0x80 : 0x00, endpoint->number, CH_PID_IN); }
+
+#define ch_issue_token_out(/*const endpoint_param_t *const */ endpoint)                                                            \
+  { ch_issue_token(endpoint->toggle ? 0x40 : 0x00, endpoint->number, CH_PID_OUT); }
+
 #endif

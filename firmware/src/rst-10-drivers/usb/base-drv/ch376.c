@@ -116,20 +116,6 @@ uint8_t ch_cmd_get_ic_version(void) {
   return CH376_DATA_PORT & 0x1f;
 }
 
-void ch_issue_token(const uint8_t toggle_bit, const uint8_t endpoint, const ch376_pid_t pid) {
-  ch_command(CH_CMD_ISSUE_TKN_X);
-  CH376_DATA_PORT = toggle_bit;
-  CH376_DATA_PORT = endpoint << 4 | pid;
-}
-
-void ch_issue_token_in(const endpoint_param_t *const endpoint) {
-  ch_issue_token(endpoint->toggle ? 0x80 : 0x00, endpoint->number, CH_PID_IN);
-}
-
-void ch_issue_token_out(const endpoint_param_t *const endpoint) {
-  ch_issue_token(endpoint->toggle ? 0x40 : 0x00, endpoint->number, CH_PID_OUT);
-}
-
 void ch_issue_token_out_ep0(void) { ch_issue_token(0x40, 0, CH_PID_OUT); }
 
 void ch_issue_token_in_ep0(void) { ch_issue_token(0x80, 0, CH_PID_IN); }
