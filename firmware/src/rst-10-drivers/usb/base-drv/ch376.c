@@ -1,14 +1,6 @@
 #include "ch376.h"
 #include <stdbool.h>
 
-extern usb_error_t ch_wait_int_and_get_status(const int16_t timeout);
-
-usb_error_t ch_long_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(5000); }
-
-usb_error_t ch_short_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(100); }
-
-usb_error_t ch_very_short_wait_int_and_get_status(void) { return ch_wait_int_and_get_status(10); }
-
 usb_error_t ch_get_status(void) {
   uint8_t ch_status;
   ch_command(CH_CMD_GET_STATUS);

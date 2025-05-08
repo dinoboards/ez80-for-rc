@@ -100,9 +100,6 @@ extern void delay_medium(void);
 
 extern void           ch_command(const uint8_t command);
 extern usb_error_t    ch_get_status(void);
-extern usb_error_t    ch_long_wait_int_and_get_status(void);
-extern usb_error_t    ch_short_wait_int_and_get_status(void);
-extern usb_error_t    ch_very_short_wait_int_and_get_status(void);
 extern uint8_t        ch_read_data(uint8_t *buffer);
 extern void           ch_cmd_reset_all(void);
 extern uint8_t        ch_probe(void);
@@ -117,16 +114,15 @@ extern usb_error_t ch_data_in_transfer(uint8_t *buffer, int16_t data_length, end
 extern usb_error_t ch_data_in_transfer_n(uint8_t *buffer, uint8_t *const buffer_size, endpoint_param_t *const endpoint);
 extern usb_error_t ch_data_out_transfer(const uint8_t *buffer, int16_t buffer_length, endpoint_param_t *const endpoint);
 
-extern void ch_issue_token_setup(void);
-extern void ch_issue_token_out_ep0(void);
-extern void ch_issue_token_in_ep0(void);
+extern usb_error_t ch_wait_int_and_get_status(const int16_t timeout);
 
-#define ch_issue_token_out_ep0()                                                                                                   \
-  { ch_issue_token(0x40, 0, CH_PID_OUT); }
-#define ch_issue_token_in_ep0()                                                                                                    \
-  { ch_issue_token(0x80, 0, CH_PID_IN); }
-#define ch_issue_token_setup()                                                                                                     \
-  { ch_issue_token(0, 0, CH_PID_SETUP); }
+#define ch_long_wait_int_and_get_status()       ch_wait_int_and_get_status(5000)
+#define ch_short_wait_int_and_get_status()      ch_wait_int_and_get_status(100)
+#define ch_very_short_wait_int_and_get_status() ch_wait_int_and_get_status(10)
+
+#define ch_issue_token_out_ep0() ch_issue_token(0x40, 0, CH_PID_OUT)
+#define ch_issue_token_in_ep0()  ch_issue_token(0x80, 0, CH_PID_IN)
+#define ch_issue_token_setup()   ch_issue_token(0, 0, CH_PID_SETUP)
 
 #define ch_configure_nak_retry(/*const ch_nak_retry_t */ retry, /*const uint8_t*/ number_of_retries)                               \
   {                                                                                                                                \
