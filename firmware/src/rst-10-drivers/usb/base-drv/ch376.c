@@ -205,9 +205,3 @@ done:
   USB_MODULE_LEDS = 0x00;
   return result;
 }
-
-void ch_configure_nak_retry(const ch_nak_retry_t retry, const uint8_t number_of_retries) {
-  ch_command(CH_CMD_WRITE_VAR8);
-  CH376_DATA_PORT = CH_VAR_RETRY_TIMES;
-  CH376_DATA_PORT = retry << 6 | (number_of_retries & 0x1F);
-}

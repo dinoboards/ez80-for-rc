@@ -119,13 +119,20 @@ extern usb_error_t ch_data_out_transfer(const uint8_t *buffer, int16_t buffer_le
 
 extern void ch_configure_nak_retry(const ch_nak_retry_t retry, const uint8_t number_of_retries);
 
-#define ch_configure_nak_retry_indefinite() ch_configure_nak_retry(CH_NAK_RETRY_INDEFINITE, 0x1F)
-#define ch_configure_nak_retry_disable()    ch_configure_nak_retry(CH_NAK_RETRY_DONT, 0x1F)
-#define ch_configure_nak_retry_3s()         ch_configure_nak_retry(CH_NAK_RETRY_3S, 0x1F)
-
 extern void ch_issue_token_setup(void);
 extern void ch_issue_token_out_ep0(void);
 extern void ch_issue_token_in_ep0(void);
+
+#define ch_configure_nak_retry(/*const ch_nak_retry_t */ retry, /*const uint8_t*/ number_of_retries)                               \
+  {                                                                                                                                \
+    ch_command(CH_CMD_WRITE_VAR8);                                                                                                 \
+    CH376_DATA_PORT = CH_VAR_RETRY_TIMES;                                                                                          \
+    CH376_DATA_PORT = retry << 6 | (number_of_retries & 0x1F);                                                                     \
+  }
+
+#define ch_configure_nak_retry_indefinite() ch_configure_nak_retry(CH_NAK_RETRY_INDEFINITE, 0x1F)
+#define ch_configure_nak_retry_disable()    ch_configure_nak_retry(CH_NAK_RETRY_DONT, 0x1F)
+#define ch_configure_nak_retry_3s()         ch_configure_nak_retry(CH_NAK_RETRY_3S, 0x1F)
 
 #define ch_set_usb_address(device_address)                                                                                         \
   {                                                                                                                                \
