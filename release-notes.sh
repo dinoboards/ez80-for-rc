@@ -14,7 +14,7 @@ fi
 version=${version:-$(date +"%y-%m-%d")}
 
 # Get the last release tag
-lastRelease=$(git tag -l | sort | tail -n 1)
+lastRelease=$(git tag -l | grep -v "24-09-22" | sort | tail -n 1)
 
 # Output the last release tag
 echo "$lastRelease"
