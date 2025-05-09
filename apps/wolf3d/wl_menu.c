@@ -2472,7 +2472,7 @@ void DrawChangeView(int view) {
 
   PrintY = (screenHeight / scaleFactor) - 39;
   WindowX = 0;
-  WindowY = 320; // TODO: Check this!
+  WindowY = 256; // TODO: Check this!
   SETFONTCOLOR(HIGHLIGHT, BKGDCOLOR);
 
   US_CPrint(STR_SIZE1 "\n");
@@ -2532,13 +2532,7 @@ void IntroScreen(void) {
 #endif
 #define FILLCOLOR 14
 
-  //      long memory;
-  //      long emshere,xmshere;
   int i;
-  /*      int ems[10]={100,200,300,400,500,600,700,800,900,1000},
-                                  xms[10]={100,200,300,400,500,600,700,800,900,1000};
-                  int main[10]={32,64,96,128,160,192,224,256,288,320};*/
-
   //
   // DRAW MAIN MEMORY
   //
@@ -2568,31 +2562,31 @@ void IntroScreen(void) {
         VWB_Bar(129, 163 - 8 * i, 6, 5, XMSCOLOR - i);
   }
 #else
+  for (i = 0; i < 2; i++)
+    VWB_Bar(42 - 7, (163 - 8) - 8 * i, 5, 5, MAINCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(42, 163 - 16 * i, 5, 5, MAINCOLOR - i);
+    VWB_Bar(71, (163 - 8) - 8 * i, 5, 5, EMSCOLOR - i);
   for (i = 0; i < 10; i++)
-    VWB_Bar(71, 163 - 16 * i, 5, 5, EMSCOLOR - i);
-  for (i = 0; i < 10; i++)
-    VWB_Bar(100, 163 - 16 * i, 5, 5, XMSCOLOR - i);
+    VWB_Bar(100 + 6, (163 - 8) - 8 * i, 5, 5, XMSCOLOR - i);
 #endif
 
   //
   // FILL BOXES
   //
   if (MousePresent)
-    VWB_Bar(131, 82, 10, 2, FILLCOLOR);
+    VWB_Bar(131 + 7, 82 - 8, 9, 2, FILLCOLOR);
 
   if (IN_JoyPresent())
-    VWB_Bar(131, 105, 10, 2, FILLCOLOR);
+    VWB_Bar(131 + 7, 105 - 8, 9, 2, FILLCOLOR);
 
   if (AdLibPresent && !SoundBlasterPresent)
-    VWB_Bar(131, 128, 10, 2, FILLCOLOR);
+    VWB_Bar(131 + 7, 128 - 8, 9, 2, FILLCOLOR);
 
   if (SoundBlasterPresent)
-    VWB_Bar(131, 151, 10, 2, FILLCOLOR);
+    VWB_Bar(131 + 7, 151 - 8, 9, 2, FILLCOLOR);
 
-  //    if (SoundSourcePresent)
-  //        VWB_Bar (131, 174, 10, 2, FILLCOLOR);
+  if (SoundSourcePresent)
+    VWB_Bar(131 + 7, 174 - 8, 9, 2, FILLCOLOR);
 }
 
 ////////////////////////////////////////////////////////////////////

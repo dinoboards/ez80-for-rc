@@ -153,5 +153,6 @@ extern int SD_PlayDigitized(word which, int leftpos, int rightpos);
 
 #define SoundBlasterPresent 0
 #define AdLibPresent        0
+#define SoundSourcePresent  0
 
 #endif
