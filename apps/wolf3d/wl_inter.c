@@ -297,10 +297,10 @@ void Victory(void) {
 
 void PG13(void) {
   VW_FadeOut();
-  VWB_Bar(SCREEN_WIDTH_FACTOR(0), 0, SCREEN_WIDTH_FACTOR(320), SCREEN_HEIGHT, 0x82); // background
+  VWB_Bar(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0x82); // background
 
   CA_CacheGrChunk(PG13PIC);
-  VWB_DrawPic(216, 110, PG13PIC);
+  VWB_DrawPic(256 - 90, 192 - 70, PG13PIC);
   VW_UpdateScreen();
 
   UNCACHEGRCHUNK(PG13PIC);

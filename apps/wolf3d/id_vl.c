@@ -67,8 +67,7 @@ CASSERT(lengthof(gamepal) == 256)
 =======================
 */
 
-void VL_Shutdown(void) {
-}
+void VL_Shutdown(void) {}
 
 /*
 =======================

@@ -1399,11 +1399,9 @@ static void DemoLoop() {
 
   StartCPMusic(INTROSONG);
 
-#ifdef DISABLE
 #ifndef JAPAN
   if (!param_nowait)
     PG13();
-#endif
 #endif
 
 #endif
