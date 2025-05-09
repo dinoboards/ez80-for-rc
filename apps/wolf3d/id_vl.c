@@ -68,24 +68,17 @@ CASSERT(lengthof(gamepal) == 256)
 */
 
 void VL_Shutdown(void) {
-  // SDL_FreeSurface(screen);
-  // SDL_FreeSurface(screenBuffer);
-  // for (auto& surface : latchpics) {
-  // 	SDL_FreeSurface(surface);
-  // }
-  // SDL_DestroyRenderer(renderer);
-  // SDL_DestroyWindow(window);
 }
 
 /*
 =======================
 =
-= VL_SetVGAPlaneMode
+= VL_SetV9958VideoMode
 =
 =======================
 */
 
-void VL_SetVGAPlaneMode(void) {
+void VL_SetV9958VideoMode(void) {
   vdp_set_mode(7, 192, PAL);
   vdp_cmd_wait_completion();
   vdp_cmd_vdp_to_vram(0, 0, 256, 192, 0, 0);

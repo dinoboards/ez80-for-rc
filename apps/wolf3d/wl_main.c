@@ -768,7 +768,7 @@ void SetupWalls(void) {
 uint8_t signon_default_colour = 41;
 
 void SignonScreen(void) {
-  VL_SetVGAPlaneMode();
+  VL_SetV9958VideoMode();
 
   FILE *f = fopen("signon.img", "rb");
   if (f == NULL) {
