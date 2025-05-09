@@ -1098,6 +1098,7 @@ $(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb-interrupt.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse-interrupt.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \

@@ -1,73 +1,76 @@
-        INCLUDE "..\..\..\config.inc"
-	INCLUDE "..\usb-constants.inc"
-	INCLUDE "..\kyb-drv\kyb-interrupt.inc"
-	INCLUDE "..\mse-drv\mse-interrupt.inc"
+	include	"..\..\..\config.inc"
+	include	"..\usb-constants.inc"
+	include	"..\kyb-drv\kyb-interrupt.inc"
+	include	"..\mse-drv\mse-interrupt.inc"
+	include	"..\base-drv\ch376asm.inc"
 
-	SECTION CODE
+	section	CODE
 
-	.assume adl=1
+	.assume	adl=1
 
-	GLOBAL	_usb_tick_sr
+	global	_usb_tick_sr
 	XREF	_in_critical_usb_section
 	XREF	_ch_command
+	XREF	usb_tick_toggle
 
-	SEGMENT	INTERNAL_RAM_ROM
+	segment	INTERNAL_RAM_ROM
 
 _usb_tick_sr:
-	PUSH	IX
-	PUSH	IY
-	PUSH	HL
-	PUSH	DE
-	PUSH	BC
-	PUSH	AF
-	CALL	_usb_tick
-	POP	AF
-	POP	BC
-	POP	DE
-	POP	HL
-	POP	IY
-	POP	IX
-	RET
+	push	af
+	call	_usb_tick1
+	pop	af
+	ret
 
-_usb_tick:
-	LD	A, (_in_critical_usb_section)
-	OR	A
-	RET	NZ
+_usb_tick1:
+	ld	a, (_in_critical_usb_section)
+	or	a
+	ret	nz
 
+	ld	a, (usb_tick_toggle)
+	xor	a, %FF
+	ld	(usb_tick_toggle), a
+	ret	z
+
+	push	ix
+	push	iy
+	push	hl
+	push	de
+	push	bc
+	call	_usb_tick2
+	pop	bc
+	pop	de
+	pop	hl
+	pop	iy
+	pop	ix
+	ret
+
+_usb_tick2:
 	; ch_configure_nak_retry_disable();
-	LD	L, CH_CMD_WRITE_VAR8
-	PUSH	HL
-	CALL	_ch_command
-	POP	AF
-	LD	A, CH_VAR_RETRY_TIMES
-	LD	BC, _CH376_DATA_PORT
-	OUT	(BC), A
-	LD	A, CH_NAK_RETRY_DONT << 6 | %1F
-	LD	BC, _CH376_DATA_PORT
-	OUT	(BC), A
+	CH_CMND	CH_CMD_WRITE_VAR8
+	ld	a, CH_VAR_RETRY_TIMES
+	ld	bc, _CH376_DATA_PORT
+	out	(BC), a
+	ld	a, CH_NAK_RETRY_DONT<<6|%1F
+	out	(BC), a
 
 	KYB_DRIVER_INT_RETRIEVE
-	PUSH	AF				; save result of KYB_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
+	push	af				; save result of KYB_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
 
 	MSE_DRIVER_INT_RETRIEVE
-	PUSH	AF				; save result of MSE_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
+	push	af				; save result of MSE_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
 
 	; ch_configure_nak_retry_disable
-	LD	E, CH_CMD_WRITE_VAR8
-	PUSH	DE
-	CALL	_ch_command
-	POP	AF
-	LD	A, CH_VAR_RETRY_TIMES
-	LD	BC, _CH376_DATA_PORT
-	OUT	(BC), A
-	LD	A, CH_NAK_RETRY_3S << 6 | %1F
-	LD	BC, _CH376_DATA_PORT
-	OUT	(BC), A
+	CH_CMND	CH_CMD_WRITE_VAR8
+	ld	a, CH_VAR_RETRY_TIMES
+	ld	bc, _CH376_DATA_PORT
+	out	(BC), a
+	ld	a, CH_NAK_RETRY_3S<<6|%1F
+	out	(BC), a
 
-	POP	AF				; restore result of MSE_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
+	pop	af				; restore result of MSE_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
 	MSE_DRIVER_INT_INJECT
 
-	POP	AF				; restore result of KYB_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
+	pop	af				; restore result of KYB_DRIVER_INT_RETRIEVE(_usbdev_dat_in_trnsfer_0)
 	KYB_DRIVER_INT_INJECT
 
-	RET
+	ret

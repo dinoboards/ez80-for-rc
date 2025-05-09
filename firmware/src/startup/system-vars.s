@@ -23,6 +23,8 @@
 	PUBLIC	_i2_clk_divider
 	PUBLIC	_i2c_bus_freq
 
+	PUBLIC	usb_tick_toggle
+
 _rtc_enabled:
 	DB	0
 
@@ -77,5 +79,8 @@ _ticks_frequency:
 
 _ticks_per_10_us:
 	DB	CPU_CLK_FREQ/16/100000
+
+usb_tick_toggle:
+	DB	0
 
 	END
