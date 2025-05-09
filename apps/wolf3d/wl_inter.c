@@ -296,19 +296,14 @@ void Victory(void) {
 */
 
 void PG13(void) {
+  CA_CacheGrChunk(PG13PIC);
+
   VW_FadeOut();
   VWB_Bar(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0x82); // background
-
-  CA_CacheGrChunk(PG13PIC);
   VWB_DrawPic(256 - 90, 192 - 70, PG13PIC);
   VW_UpdateScreen();
 
   UNCACHEGRCHUNK(PG13PIC);
-
-  VW_FadeIn();
-  IN_UserInput(TickBase * 2);
-
-  VW_FadeOut();
 }
 #endif
 
@@ -975,7 +970,7 @@ void DrawHighScores(void) {
   ClearMScreen();
   DrawStripes(10);
 
-  VWB_DrawPic(48, 0, HIGHSCORESPIC);
+  VWB_DrawPic(16, 0, HIGHSCORESPIC); // 224x56
   UNCACHEGRCHUNK(HIGHSCORESPIC);
 
 #ifndef APOGEE_1_0

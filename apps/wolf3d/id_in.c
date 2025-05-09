@@ -255,6 +255,11 @@ void IN_WaitAndProcessEvents() {
     ;
 }
 
+void IN_WaitAndProcessEvents_AndPreload() {
+  while (!processEvent())
+    PM_Preload(NULL, true);
+}
+
 void IN_ProcessEvents() { processEvent(); }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -438,6 +443,15 @@ void IN_Ack(void) {
   } while (!IN_CheckAck());
 }
 
+void IN_Ack_AndPreload(void) {
+  IN_StartAck();
+
+  do {
+    IN_WaitAndProcessEvents_AndPreload();
+
+  } while (!IN_CheckAck());
+}
+
 ///////////////////////////////////////////////////////////////////////////
 //
 //  IN_UserInput() - Waits for the specified delay time (in ticks) or the
@@ -452,6 +466,20 @@ boolean IN_UserInput(uint24_t delay) {
   lasttime = GetTimeCount();
   IN_StartAck();
   do {
+    IN_ProcessEvents();
+    if (IN_CheckAck())
+      return true;
+  } while (GetTimeCount() - lasttime < delay);
+  return (false);
+}
+
+boolean IN_UserInput_AndPreload(uint24_t delay) {
+  longword lasttime;
+
+  lasttime = GetTimeCount();
+  IN_StartAck();
+  do {
+    PM_Preload(NULL, true);
     IN_ProcessEvents();
     if (IN_CheckAck())
       return true;

@@ -821,7 +821,7 @@ void FinishSignon(void) {
   // VH_UpdateScreen();
 
   if (!param_nowait)
-    IN_Ack();
+    IN_Ack_AndPreload();
 
 #ifndef JAPAN
   VW_Bar(SCREEN_WIDTH_FACTOR(0), SCREEN_HEIGHT - 11, SCREEN_WIDTH_FACTOR(300), 11, signon_default_colour);
@@ -1431,17 +1431,12 @@ static void DemoLoop() {
 
       UNCACHEGRCHUNK(TITLEPALETTE);
 #else
-#ifdef DISABLE
       CA_CacheScreen(TITLEPIC);
       VW_UpdateScreen();
-#endif
       // VW_FadeIn();
-
 #endif
-
-#ifdef DISABLE
-      // if (IN_UserInput(TickBase * 5))
-      //   break;
+      if (IN_UserInput_AndPreload(TickBase * 3))
+        break;
 
       // VW_FadeOut();
       //
@@ -1451,8 +1446,8 @@ static void DemoLoop() {
       VW_UpdateScreen();
       // VW_FadeIn();
 
-      // if (IN_UserInput(TickBase * 5))
-      //   break;
+      if (IN_UserInput_AndPreload(TickBase * 3))
+        break;
       // VW_FadeOut();
       //
       // high scores
@@ -1460,17 +1455,19 @@ static void DemoLoop() {
 
       DrawHighScores();
       VW_UpdateScreen();
-#endif
+
       // VW_FadeIn();
 
-      // if (IN_UserInput(TickBase * 5))
-      //   break;
+      if (IN_UserInput_AndPreload(TickBase * 5))
+        break;
 #endif
-      //
-      // demo
-      //
+        //
+        // demo
+        //
 
 #ifndef SPEARDEMO
+      PM_Preload(NULL, false);
+
       PlayDemo(LastDemo++ % 4);
 #else
       PlayDemo(0);

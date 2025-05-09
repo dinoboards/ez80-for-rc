@@ -859,56 +859,64 @@ void CA_CacheGrChunk(int chunk) {
 ======================
 // */
 
-// void CA_CacheScreen(int chunk) {
-//   int32_t  pos, compressed, expanded;
-//   memptr   bigbufferseg;
-//   int32_t *source;
-//   int      next;
+void CA_CacheScreen(int chunk) {
+  uint24_t t = ez80_timers_ticks_get();
+  int32_t  pos, compressed, expanded;
+  memptr   bigbufferseg;
+  int32_t *source;
+  int      next;
 
-//   //
-//   // load the chunk into a buffer
-//   //
-//   pos  = GRFILEPOS(chunk);
-//   next = chunk + 1;
-//   while (GRFILEPOS(next) == -1) // skip past any sparse tiles
-//     next++;
-//   compressed = GRFILEPOS(next) - pos;
-//   lseek(grhandle, pos, SEEK_SET);
+  //
+  // load the chunk into a buffer
+  //
+  pos  = GRFILEPOS(chunk);
+  next = chunk + 1;
+  while (GRFILEPOS(next) == -1) // skip past any sparse tiles
+    next++;
+  compressed = GRFILEPOS(next) - pos;
+  lseek(grhandle, pos, SEEK_SET);
 
-//   MM_GetPtr(&bigbufferseg, compressed);
-//   read(grhandle, bigbufferseg, compressed);
-//   source = (int32_t *)bigbufferseg;
+  MM_GetPtr(&bigbufferseg, compressed);
+  read(grhandle, bigbufferseg, compressed);
+  source = (int32_t *)bigbufferseg;
 
-//   expanded = *source++;
+  expanded = *source++;
 
-//   //
-//   // allocate final space, decompress it, and free bigbuffer
-//   // Sprites need to have shifts made and various other junk
-//   //
-//   byte *pic;
-//   MM_GetPtr((memptr *)&pic, 64000);
-//   CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
+  //
+  // allocate final space, decompress it, and free bigbuffer
+  // Sprites need to have shifts made and various other junk
+  //
+  byte *pic;
+  MM_GetPtr((memptr *)&pic, 320 * 200);
+  printf("CA_CacheScreen (1): %d\r\n", ez80_timers_ticks_get() - t);
 
-// #define CLIP_LEFT 8
-// #define CLIP_SKIP 5
+  CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
 
-//   byte *vbuf = screenBuffer->xpixels;
-//   for (int y = 0; y < 200; y++) {
-//     int cx = CLIP_LEFT;
+#define CLIP_TOP  8
+#define CLIP_LEFT 8
+#define CLIP_SKIP 5
 
-//     for (int x = 0; x < 256; x++) {
-//       const byte col = pic[(y * 80 + (cx >> 2)) + (cx & 3) * 80 * 200];
+  printf("CA_CacheScreen (2): %d\r\n", ez80_timers_ticks_get() - t);
 
-//       vbuf[y * SCREEN_WIDTH + x] = col;
+  byte *vbuf = screenBuffer->xpixels;
+  for (int y = 0; y < 192; y++) {
+    int cx = CLIP_LEFT;
 
-//       cx++;
-//       if (x % CLIP_SKIP == 0)
-//         cx++;
-//     }
-//   }
-//   MM_FreePtr((memptr *)&pic);
-//   MM_FreePtr((memptr *)&bigbufferseg);
-// }
+    for (int x = 0; x < 256; x++) {
+      const byte col = pic[((y + CLIP_TOP) * 80 + (cx >> 2)) + (cx & 3) * 80 * 200];
+
+      vbuf[y * SCREEN_WIDTH + x] = col;
+
+      cx++;
+      if (x % CLIP_SKIP == 0)
+        cx++;
+    }
+  }
+  MM_FreePtr((memptr *)&pic);
+  MM_FreePtr((memptr *)&bigbufferseg);
+
+  printf("CA_CacheScreen (3): %d\r\n", ez80_timers_ticks_get() - t);
+}
 
 //==========================================================================
 
