@@ -1314,7 +1314,6 @@ void Quit(const char *errorStr, ...) {
     screen = grsegs[ERRORSCREEN];
   }
 #endif
-
   ShutdownId();
 
   if (*error) {

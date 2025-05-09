@@ -473,7 +473,7 @@ void MM_DumpMemoryBlocks(void) {
   mmblocktype *scan = mmhead;
   while (scan) {
     memptr next = scan->start + scan->length;
-    printf("start: %X, length: %X, next: %X, attributes: %X, useptr: %X, next: %X\r\n", (int)scan->start, scan->length, (int)next,
+    printf("start: %X, length: %X, end: %X, attributes: %X, useptr: %X, next: %X\r\n", (int)scan->start, scan->length, (int)next,
            scan->attributes, (int)scan->useptr, (int)scan->next);
     scan = scan->next;
   }

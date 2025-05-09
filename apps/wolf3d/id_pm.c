@@ -141,9 +141,9 @@ void PM_Preload(chunk_load_progress_t update_fn, bool partial) {
 }
 
 void PM_Shutdown() {
-  MM_FreePtr((memptr *)&pageLengths);
-  MM_FreePtr((memptr *)&pageOffsets);
-  MM_FreePtr((memptr *)&PMPages);
-  MM_FreePtr((memptr *)&PMPageData);
+  // MM_FreePtr((memptr *)&pageLengths);
+  // MM_FreePtr((memptr *)&pageOffsets);
+  // MM_FreePtr((memptr *)&PMPages);
+  // MM_FreePtr((memptr *)&PMPageData);
   fclose(file);
 }
