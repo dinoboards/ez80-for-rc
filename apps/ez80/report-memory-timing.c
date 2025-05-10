@@ -22,9 +22,9 @@ bool     ext_mem0_bus_mode;
 bool     ext_mem1_bus_mode;
 bool     io_bus_mode;
 
-static uint24_t bus_cycle_to_ns(uint8_t bc) { return ((uint32_t)bc * 3000000000) / cpu_frequency; }
+static uint24_t bus_cycle_to_ns(uint8_t bc) { return ((uint32_t)bc * 3000000) / (cpu_frequency / 1000); }
 
-static uint24_t ws_to_ns(uint8_t ws) { return (((uint32_t)ws + 1) * 1000000000) / cpu_frequency; }
+static uint24_t ws_to_ns(uint8_t ws) { return (((uint32_t)ws + 1) * 1000000) / (cpu_frequency / 1000); }
 
 void find_ns_timing_for_memory() {
   cpu_frequency     = ez80_cpu_freq_get();
