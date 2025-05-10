@@ -178,8 +178,6 @@ extern uint8_t signon_default_colour;
 
 #define MAXSCALEHEIGHT         256 // largest scale on largest view
 #define MAXVIEWWIDTH           256
-#define SCREEN_WIDTH           256
-#define SCREEN_HEIGHT          192
 #define SCREEN_WIDTH_FACTOR(w) (((w)*1024) / 1280)
 
 #define mapshift 6
@@ -209,7 +207,8 @@ static inline int32_t TextureFromFixedShift(fixed a) { return sr_s32_s32_4(a); }
 #define SOUTH 2
 #define WEST  3
 
-#define STATUSLINES 40
+#define STATUSLINES              40
+#define STATUSBARPIC_LEFT_OFFSET 32 /*shift STATUSBARPIC to the left by 44 (with clipping) to allow to fit in 256 wide screen */
 
 #define SCREENSIZE (SCREENBWIDE * 208)
 #define PAGE1START 0

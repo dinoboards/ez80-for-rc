@@ -62,7 +62,7 @@ void    CA_LoadAllSounds(void);
 void CA_CacheGrChunk(int chunk);
 void CA_CacheMap(int mapnum);
 
-void CA_CacheScreen(int chunk);
+void CA_CacheScreen(int chunk, uint8_t clip_top);
 
 void CA_CannotOpen(const char *name);
 

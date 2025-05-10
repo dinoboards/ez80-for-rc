@@ -768,7 +768,7 @@ void SetupWalls(void) {
 uint8_t signon_default_colour = 41;
 
 void SignonScreen(void) {
-  VL_SetV9958VideoMode();
+  VL_InitVideoMode();
 
   FILE *f = fopen("signon.img", "rb");
   if (f == NULL) {
@@ -814,11 +814,9 @@ void FinishSignon(void) {
   US_CPrint("Oprima una tecla");
 #else
   US_CPrint("Press a key");
-#endif
+#endif // SPANISH
 
-#endif
-
-  // VH_UpdateScreen();
+#endif // JPAN
 
   if (!param_nowait)
     IN_Ack_AndPreload();
@@ -833,9 +831,9 @@ void FinishSignon(void) {
   US_CPrint("pensando...");
 #else
   US_CPrint("Working...");
-#endif
+#endif // SPANISH
 
-#endif
+#endif // JAPAN
 
   SETFONTCOLOR(0, 15);
 #else
@@ -843,7 +841,7 @@ void FinishSignon(void) {
 
   if (!param_nowait)
     VW_WaitVBL(3 * 70);
-#endif
+#endif // SPEAR
 }
 
 //===========================================================================
@@ -1431,8 +1429,7 @@ static void DemoLoop() {
 
       UNCACHEGRCHUNK(TITLEPALETTE);
 #else
-      CA_CacheScreen(TITLEPIC);
-      VW_UpdateScreen();
+      CA_CacheScreen(TITLEPIC, 0);
       // VW_FadeIn();
 #endif
       if (IN_UserInput_AndPreload(TickBase * 3))
@@ -1442,8 +1439,7 @@ static void DemoLoop() {
       //
       // credits page
       //
-      CA_CacheScreen(CREDITSPIC);
-      VW_UpdateScreen();
+      CA_CacheScreen(CREDITSPIC, 8);
       // VW_FadeIn();
 
       if (IN_UserInput_AndPreload(TickBase * 3))
@@ -1454,8 +1450,6 @@ static void DemoLoop() {
       //
 
       DrawHighScores();
-      VW_UpdateScreen();
-
       // VW_FadeIn();
 
       if (IN_UserInput_AndPreload(TickBase * 5))

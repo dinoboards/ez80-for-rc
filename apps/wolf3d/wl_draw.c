@@ -1289,8 +1289,6 @@ void CalcViewVariables() {
 
 int24_t last_system_tick = 0;
 
-uint8_t view_port_buffer[SCREEN_WIDTH * SCREEN_HEIGHT];
-
 void ThreeDRefresh(void) {
   int24_t start = ez80_timers_ticks_get();
 
@@ -1347,7 +1345,7 @@ void ThreeDRefresh(void) {
   } else {
     // change to transmit viewport to screen
     //   VH_UpdateScreen();
-    update_view_port();
+    vdp_buf_update(viewscreenx, viewscreeny, drawing_params.view_width, drawing_params.view_height, view_length);
 
     uint24_t stage6 = ez80_timers_ticks_get() - start;
 

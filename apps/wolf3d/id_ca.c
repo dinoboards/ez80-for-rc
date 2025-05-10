@@ -14,6 +14,8 @@ loaded into the data segment
 =============================================================================
 */
 
+#include "ez80-vdp.h"
+#include "v99x8-hdmi/v99x8-wolf3d.h"
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -858,8 +860,7 @@ void CA_CacheGrChunk(int chunk) {
 =
 ======================
 // */
-
-void CA_CacheScreen(int chunk) {
+void CA_CacheScreen(int chunk, uint8_t clip_top) {
   uint24_t t = ez80_timers_ticks_get();
   int32_t  pos, compressed, expanded;
   memptr   bigbufferseg;
@@ -892,20 +893,19 @@ void CA_CacheScreen(int chunk) {
 
   CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
 
-#define CLIP_TOP  8
 #define CLIP_LEFT 8
 #define CLIP_SKIP 5
 
   printf("CA_CacheScreen (2): %d\r\n", ez80_timers_ticks_get() - t);
 
-  byte *vbuf = screenBuffer->xpixels;
+  vdp_scn_write_init();
+
   for (int y = 0; y < 192; y++) {
     int cx = CLIP_LEFT;
 
     for (int x = 0; x < 256; x++) {
-      const byte col = pic[((y + CLIP_TOP) * 80 + (cx >> 2)) + (cx & 3) * 80 * 200];
-
-      vbuf[y * SCREEN_WIDTH + x] = col;
+      const byte col = gamepal[pic[((y + clip_top) * 80 + (cx >> 2)) + (cx & 3) * 80 * 200]];
+      vdp_scn_write_pixel(col, 0, 256, SCREEN_WIDTH, SCREEN_HEIGHT);
 
       cx++;
       if (x % CLIP_SKIP == 0)
@@ -914,6 +914,8 @@ void CA_CacheScreen(int chunk) {
   }
   MM_FreePtr((memptr *)&pic);
   MM_FreePtr((memptr *)&bigbufferseg);
+
+  vdp_scn_copy_y(0, 256, 0, SCREEN_HEIGHT);
 
   printf("CA_CacheScreen (3): %d\r\n", ez80_timers_ticks_get() - t);
 }

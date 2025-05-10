@@ -17,3 +17,5 @@ pixel_surface_t *vdp_create_vdp_surface(const uint16_t width, const uint16_t hei
   surface->size   = width * height;
   return surface;
 }
+
+uint8_t view_port_buffer[SCREEN_WIDTH * SCREEN_HEIGHT];

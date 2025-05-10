@@ -494,7 +494,7 @@ void BossKey(void) {
   IN_ClearKeysDown();
 
   SD_MusicOn();
-  VL_SetV9958VideoMode();
+  VL_InitVideoMode();
   for (int i = 0; i < 768; i++)
     palette1[0][i] = 0;
 
@@ -521,7 +521,7 @@ void BossKey(void) {
   IN_ClearKeysDown();
 
   SD_MusicOn();
-  VL_SetV9958VideoMode();
+  VL_InitVideoMode();
   for (int i = 0; i < 768; i++)
     palette1[0][i] = 0;
 

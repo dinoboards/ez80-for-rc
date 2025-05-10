@@ -72,16 +72,13 @@ void VL_Shutdown(void) {}
 /*
 =======================
 =
-= VL_SetV9958VideoMode
+= VL_InitVideoMode
 =
 =======================
 */
 
-void VL_SetV9958VideoMode(void) {
-  vdp_set_mode(7, 192, PAL);
-  vdp_cmd_wait_completion();
-  vdp_cmd_vdp_to_vram(0, 0, 256, 192, 0, 0);
-  vdp_cmd_wait_completion();
+void VL_InitVideoMode(void) {
+  vdp_scn_init();
 
   screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
 }
@@ -401,13 +398,6 @@ void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color) {
   assert((unsigned)scy + scheight <= SCREEN_HEIGHT && "VL_Bar: scy+height > SCREEN_HEIGHT!");
 
   vdp_scn_bar(scx, scy, scwidth, scheight, color);
-
-  uint8_t *dest = ((byte *)screenBuffer->xpixels) + scy * SCREEN_WIDTH + scx;
-
-  while (scheight--) {
-    memset(dest, color, scwidth);
-    dest += SCREEN_WIDTH;
-  }
 }
 
 /*
@@ -452,12 +442,12 @@ void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface
 =================
 */
 
-void VL_MemToScreen(byte *source, int width, int height, int destx, int desty) {
+void VL_MemToScreen(const byte *source, int width, int height, int destx, int desty) {
   assert(destx >= 0 && destx + width <= 320 && desty >= 0 && desty + height <= 200 &&
          "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
 
   int clipped_width = width;
-  if (destx + width >= SCREEN_WIDTH) {
+  if (destx + width > SCREEN_WIDTH) {
     printf("Image Width clipped! VL_MemToScreen(%p, %d, %d, %d, %d)\r\n", source, width, height, destx, desty);
 
     clipped_width = SCREEN_WIDTH - destx;
@@ -478,17 +468,7 @@ void VL_MemToScreen(byte *source, int width, int height, int destx, int desty) {
     }
   }
 
-  vdp_scn_vga_picture(source, destx, desty, clipped_width, clipped_height);
-
-  byte *vbuf = (byte *)screenBuffer->xpixels;
-  for (int j = 0; j < clipped_height; j++) {
-    for (int i = 0; i < clipped_width; i++) {
-      const byte color = source[(j * (width >> 2) + (i >> 2)) + (i & 3) * (width >> 2) * height];
-
-      const uint8_t xx                      = i + destx;
-      vbuf[(j + desty) * SCREEN_WIDTH + xx] = color;
-    }
-  }
+  vdp_scn_vga_picture(source, destx, desty, clipped_width, clipped_height, width);
 }
 
 /*

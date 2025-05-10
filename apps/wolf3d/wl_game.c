@@ -799,52 +799,21 @@ void DrawStatusBorder(byte color) {
 */
 
 void DrawPlayBorder(void) {
-  const int px = scaleFactor; // size of one "pixel"
+  VWB_Bar(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - STATUSLINES, bordercol);
 
-  if (bordercol != VIEWCOLOR)
-    DrawStatusBorder(bordercol);
-  else {
-    const int statusborderw = (screenWidth - px * 256) / 2;
-    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
+  // VWB_Bar(8, SCREEN_HEIGHT - STATUSLINES, SCREEN_WIDTH - 16, STATUSLINES, 1);
 
-    VWB_Bar(0, screenHeight - px * STATUSLINES, statusborderw + px * 8, px * STATUSLINES, bordercol);
-    VW_UpdateScreen(); // test
-
-    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
-    VWB_Bar(screenWidth - statusborderw - px * 8, screenHeight - px * STATUSLINES, statusborderw + px * 8, px * STATUSLINES,
-            bordercol);
-    VW_UpdateScreen(); // test
-  }
-
-  if (drawing_params.view_height == screenHeight)
-    return;
-
-  VWB_Bar(0, 0, screenWidth, screenHeight - px * STATUSLINES, bordercol);
-
-  const int xl = screenWidth / 2 - drawing_params.view_half_width;
-  const int yl = (screenHeight - px * STATUSLINES - drawing_params.view_height) / 2;
-  printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
+  const int xl = SCREEN_WIDTH / 2 - drawing_params.view_half_width;
+  const int yl = (SCREEN_HEIGHT - STATUSLINES - drawing_params.view_height) / 2;
 
   VWB_Bar(xl, yl, drawing_params.view_width, drawing_params.view_height, 0);
-  VW_UpdateScreen(); // test
 
-  if (xl != 0) {
-    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
-
-    // Paint game view border lines
-    VWB_Bar(xl - px, yl - px, drawing_params.view_width + px, px, 0);                                         // upper border
-    VWB_Bar(xl, yl + drawing_params.view_height, drawing_params.view_width + px, px, bordercol - 2);          // lower border
-    VWB_Bar(xl - px, yl - px, px, drawing_params.view_height + px, 0);                                        // left border
-    VWB_Bar(xl + drawing_params.view_width, yl - px, px, drawing_params.view_height + 2 * px, bordercol - 2); // right border
-    VWB_Bar(xl - px, yl + drawing_params.view_height, px, px, bordercol - 3); // lower left highlight
-  } else {
-    printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
-
-    // Just paint a lower border line
-    VWB_Bar(0, yl + drawing_params.view_height, drawing_params.view_width, px, bordercol - 2); // lower border
-  }
-
-  printf("DrawPlayBorder: %s:%d\r\n", __FILE__, __LINE__);
+  // Paint game view border lines
+  VWB_Bar(xl - 1, yl - 1, drawing_params.view_width + 1, 1, 0);                                          // upper border
+  VWB_Bar(xl, yl + drawing_params.view_height, drawing_params.view_width + 1, 1, bordercol - 2);         // lower border
+  VWB_Bar(xl - 1, yl - 1, 1, drawing_params.view_height + 1, 0);                                         // left border
+  VWB_Bar(xl + drawing_params.view_width, yl - 1, 1, drawing_params.view_height + 2 * 1, bordercol - 2); // right border
+  VWB_Bar(xl - 1, yl + drawing_params.view_height, 1, 1, bordercol - 3);                                 // lower left highlight
 }
 
 /*
@@ -860,10 +829,13 @@ void waitForKey(void) {
     ;
 }
 
-void DrawPlayScreen(void) {
-  VW_UpdateScreen(); // test
+extern void spike_draw_status_bar_pic_adjusted();
 
-  // VWB_DrawPic(0, screenHeight - STATUSLINES, STATUSBARPIC);
+void DrawPlayScreen(void) {
+  // VW_UpdateScreen(); // test
+
+  // VWB_DrawPic(0, screenHeight - STATUSLINES, STATUSBARPIC); // 320x40
+  spike_draw_status_bar_pic_adjusted();
 
   DrawPlayBorder();
 
@@ -885,14 +857,16 @@ void DrawPlayScreen(void) {
 }
 
 void ShowActStatus() {
-  // Draw status bar without borders
-  byte *source = grsegs[STATUSBARPIC];
-  int   picnum = STATUSBARPIC - STARTPICS;
-  int   width  = pictable[picnum].width;
-  int   height = pictable[picnum].height;
-  int   destx  = 9;
-  int   desty  = screenHeight - (height - 4);
-  VL_MemToScreenScaledCoordN(source, width, height, 9, 4, destx, desty, width - 18, height - 7);
+  // // Draw status bar without borders
+  // byte *source = grsegs[STATUSBARPIC];
+  // int   picnum = STATUSBARPIC - STARTPICS;
+  // int   width  = pictable[picnum].width;
+  // int   height = pictable[picnum].height;
+  // int   destx  = 9;
+  // int   desty  = screenHeight - (height - 4);
+  // VL_MemToScreenScaledCoordN(source, width, height, 9, 4, destx, desty, width - 18, height - 7);
+  spike_draw_status_bar_pic_adjusted();
+  printf("!!!!!!!!!!!!!!!!!!!!!\r\n");
 
   ingame = false;
   DrawFace();

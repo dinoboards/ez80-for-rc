@@ -73,12 +73,9 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 =============================================================================
 */
 
-void VH_UpdateScreen() { vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal); }
-
-extern uint8_t view_port_buffer[SCREEN_WIDTH * SCREEN_HEIGHT];
-void           update_view_port() {
-  vdp_cmd_move_cpu_to_vram_with_palette(view_port_buffer, viewscreenx, viewscreeny, drawing_params.view_width,
-                                                  drawing_params.view_height, 0, view_length, gamepal);
+void VH_UpdateScreen() {
+  printf("UpdateScreen");
+  vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal);
 }
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
@@ -100,6 +97,23 @@ void VWB_DrawPic(int x, int y, int chunknum) {
   }
 
   VL_MemToScreen(grsegs[chunknum], width, height, x, y);
+}
+
+void spike_draw_status_bar_pic_adjusted() {
+  CA_CacheGrChunk(STATUSBARPIC);
+  const uint8_t *source = grsegs[STATUSBARPIC];
+
+  vdp_scn_write_init();
+
+  for (uint16_t y = 0; y < STATUSLINES; y++) {
+    uint16_t xx = STATUSBARPIC_LEFT_OFFSET;
+    for (uint16_t x = 0; x < SCREEN_WIDTH; x++) {
+      const uint8_t color = gamepal[source[(y * (320 >> 2) + (xx >> 2)) + (xx & 3) * (320 >> 2) * STATUSLINES]];
+
+      vdp_scn_write_pixel(color, 0, SCREEN_HEIGHT - STATUSLINES, SCREEN_WIDTH, STATUSLINES);
+      xx++;
+    }
+  }
 }
 
 // void VWB_Plot(int x, int y, int color) {

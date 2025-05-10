@@ -2,9 +2,12 @@
 
 // wolf compatibility
 
+void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color);
+
 #ifndef ID_VL_H
 #define ID_VL_H
 
+#include "ez80-vdp.h"
 #include "wl_def.h"
 
 void Quit(const char *error, ...);
@@ -41,7 +44,7 @@ extern SDL_Color gamepal[256];
 
 #define VL_WaitVBL(a) SDL_Delay((a)*8)
 
-void VL_SetV9958VideoMode(void);
+void VL_InitVideoMode(void);
 void VL_SetTextMode(void);
 void VL_Shutdown(void);
 
@@ -57,12 +60,11 @@ void VL_FadeIn(int start, int end, SDL_Color *palette, int steps);
 void VL_Plot(int x, int y, int color);
 void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color);
 void VL_Vlin(int x, int y, int height, int color);
-void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color);
 static void inline VL_ClearScreen(int color) { SDL_FillRect(screenBuffer, NULL, color); }
 
 void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface, int x, int y);
 void VL_ScreenToScreen(SDL_Surface *source, SDL_Surface *dest);
-void VL_MemToScreen(byte *source, int width, int height, int scx, int scy);
+void VL_MemToScreen(const byte *source, int width, int height, int scx, int scy);
 void VL_MemToScreenScaledCoordN(
     byte *source, int origwidth, int origheight, int srcx, int srcy, int destx, int desty, int width, int height);
 

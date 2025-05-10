@@ -58,8 +58,7 @@ void VWB_Plot(int x, int y, int color);
 void VWB_Hlin(int x1, int x2, int y, int color);
 void VWB_Vlin(int y1, int y2, int x, int color);
 
-void        VH_UpdateScreen();
-extern void update_view_port();
+void VH_UpdateScreen();
 
 #define VW_UpdateScreen VH_UpdateScreen
 
@@ -91,8 +90,6 @@ void VH_Startup();
 
 #define NUMLATCHPICS 100
 extern SDL_Surface *latchpics[NUMLATCHPICS];
-
-extern void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color);
 
 static inline void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
 

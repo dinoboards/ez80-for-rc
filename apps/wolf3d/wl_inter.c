@@ -301,7 +301,6 @@ void PG13(void) {
   VW_FadeOut();
   VWB_Bar(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0x82); // background
   VWB_DrawPic(256 - 90, 192 - 70, PG13PIC);
-  VW_UpdateScreen();
 
   UNCACHEGRCHUNK(PG13PIC);
 }
@@ -968,6 +967,7 @@ void DrawHighScores(void) {
 #endif
 
   ClearMScreen();
+
   DrawStripes(10);
 
   VWB_DrawPic(16, 0, HIGHSCORESPIC); // 224x56
@@ -976,7 +976,7 @@ void DrawHighScores(void) {
 #ifndef APOGEE_1_0
   VWB_DrawPic(4 * 8, 68, C_NAMEPIC);
   VWB_DrawPic(20 * 8, 68, C_LEVELPIC);
-  VWB_DrawPic(28 * 8, 68, C_SCOREPIC);
+  VWB_DrawPic(SCREEN_WIDTH - 32, 68, C_SCOREPIC); // 32x8
 #else
   VWB_DrawPic(35 * 8, 68, C_CODEPIC);
 #endif
@@ -1087,8 +1087,6 @@ void DrawHighScores(void) {
     // #endif
 #endif
   }
-
-  VW_UpdateScreen();
 
 #ifdef SPEAR
   UnCacheLump(HIGHSCORES_LUMP_START, HIGHSCORES_LUMP_END);
