@@ -3,7 +3,7 @@ SHELL := /bin/sh
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-all: WOLF3D.EXE
+all: WOLF3D.EXE WOLFS3D.EXE
 
 # Find all .c files in the current directory
 SRC_FILES := $(wildcard *.c)
@@ -29,4 +29,8 @@ FORCE:
 
 .PHONY: WOLF3D.EXE
 WOLF3D.EXE: $(OPTIMISED_ASM_FILES)
-	@ez80-cc --mem-model 2MB --lib v99x8-hdmi --output-dir ../bin --optimise size WOLF3D.EXE $(SRC_FILES)
+	@ez80-cc --defsym VDP_SUPER_HDMI=1 --mem-model 2MB --lib v99x8-hdmi -DVDP_SUPER_HDMI --output-dir ../bin --optimise size WOLF3D.EXE $(SRC_FILES)
+
+.PHONY: WOLFS3D.EXE
+WOLFS3D.EXE: $(OPTIMISED_ASM_FILES)
+	@ez80-cc --defsym VDP_V9958=1 --mem-model 2MB --lib v99x8-standard -DVDP_V9958 --output-dir ../bin --optimise size WOLFS3D.EXE $(SRC_FILES)

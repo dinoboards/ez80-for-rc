@@ -526,6 +526,7 @@ void VL_SurfaceToScreen(SDL_Surface *source, int scxdest, int scydest) {
   assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= SCREEN_HEIGHT &&
          "VL_SurfaceToScreen: Destination rectangle out of bounds!");
 
+  vdp_cmd_wait_completion();
   vdp_cmd_move_cpu_to_vram_with_palette(src, scxdest, scydest, width, height, 0, width * height, gamepal);
 }
 
@@ -543,6 +544,7 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
 
   uint8_t first_byte = src[(ysrc)*srcPitch + xsrc];
 
+  vdp_cmd_wait_completion();
   vdp_cmd_move_data_to_vram(gamepal[first_byte], scxdest, scydest, width, height, 0, width * height);
 
   for (int j = 0; j < height; j++) {

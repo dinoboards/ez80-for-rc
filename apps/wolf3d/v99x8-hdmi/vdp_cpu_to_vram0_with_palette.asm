@@ -1,6 +1,6 @@
 	.assume	adl=1
 
-	section	.text_on_chip, "ax", @progbits
+	section	.text, "ax", @progbits
 
 	include	"v99x8-hdmi/common.inc"
 
@@ -16,6 +16,8 @@ _vdp_cpu_to_vram0_with_palette:
 	ld	iy, 0
 	add	iy, sp
 
+	SET_SLOW_IO_SPEED
+
 	exx
 	ld	de, (iy+9)
 	exx
@@ -29,24 +31,21 @@ _vdp_cpu_to_vram0_with_palette:
 	xor	a
 
 	ld	bc, VDP_ADDR
-	DELAY_1_7US
 	out	(bc), a			; value for reg 14 (B16..B14)
 	ld	a, $80+14		; VDP register 14
-	DELAY_1_7US
 	out	(bc), a
 
 	xor	a
-	DELAY_1_7US
 	out	(bc), a			; submit bits 0 to 7
 
 	ld	a, %01000000		; enable write mode
-	DELAY_1_7US
 	out	(bc), a			; submit bits 8 to 13
 
 	ld	de, (iy+6)		; length
 	ld	hl, (iy+3)		; source
 	ld	bc, VDP_DATA
 
+	SET_SLOW_MEM_SPEED
 loop:
 	ld	a, (hl)
 
@@ -60,12 +59,14 @@ loop:
 	exx				; 1
 
 	inc	hl
-	DELAY_1_7US
 	out	(bc), a
 	dec	de
-	ld	a, e		; warning only 16bit counter
+	ld	a, e			; warning only 16bit counter
 	or	d
 	jr	nz, loop
+
+	RESTORE_MEM_SPEED
+	RESTORE_IO_SPEED
 
 	ret
 

@@ -75,6 +75,7 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 
 void VH_UpdateScreen() {
   printf("UpdateScreen");
+  vdp_cmd_wait_completion();
   vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal);
 }
 
