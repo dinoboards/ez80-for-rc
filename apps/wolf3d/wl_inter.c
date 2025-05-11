@@ -916,7 +916,7 @@ void PreloadGraphics(void) {
   ClearSplitVWB(); // set up for double buffering in split screen
 
   VWB_Bar(0, 0, screenWidth, screenHeight - (STATUSLINES - 1), bordercol);
-  DrawLatchToSurface(((screenWidth - 224) / 16) * 8, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
+  LatchDrawPic(((screenWidth - 224) / 16) * 8, (screenHeight - (STATUSLINES + 48)) / 2, GETPSYCHEDPIC);
 
   WindowX = (screenWidth - 224) / 2;
   WindowY = (screenHeight - (STATUSLINES + 48)) / 2;

@@ -36,6 +36,7 @@ unsigned     screenPitch;
 
 SDL_Window *window = NULL;
 
+// TODO: deprecate this buffer
 SDL_Surface *screenBuffer = NULL;
 
 SDL_Renderer *renderer = NULL;
@@ -546,19 +547,6 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
 
   vdp_cmd_wait_completion();
   vdp_cmd_move_data_to_vram(gamepal[first_byte], scxdest, scydest, width, height, 0, width * height);
-
-  for (int j = 0; j < height; j++) {
-    for (int i = 0; i < width; i++) {
-      if (i == 0 && j == 0) {
-        continue;
-      }
-
-      byte    color = src[(ysrc + j) * srcPitch + xsrc + i];
-      uint8_t grb   = gamepal[color];
-
-      vdp_cmd_send_byte(grb);
-    }
-  }
 }
 
 //===========================================================================

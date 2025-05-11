@@ -20,14 +20,11 @@ int  fontnumber;
 void VWB_DrawPropString(const char *string) {
   fontstruct *font;
   int         width, step, height;
-  byte       *source, *dest;
+  byte       *source;
   byte        ch;
-
-  byte *vbuf = screenBuffer->xpixels;
 
   font   = (fontstruct *)grsegs[STARTFONT + fontnumber];
   height = font->height;
-  dest   = vbuf + (py * SCREEN_WIDTH + px);
 
   uint16_t x = px;
 
@@ -37,21 +34,6 @@ void VWB_DrawPropString(const char *string) {
 
     vdp_scn_font(source, x, py, width, height, fontcolor);
     x += width;
-
-    // byte ptr source, width&height
-    // iterate width, then height, if byte set, the assign a pixel on
-    // increment
-    while (width--) {
-      for (int i = 0; i < height; i++) {
-        if (source[i * step]) {
-          dest[i * SCREEN_WIDTH] = fontcolor;
-        }
-      }
-
-      source++;
-      px++;
-      dest += 1;
-    }
   }
 }
 
@@ -72,12 +54,6 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 
 =============================================================================
 */
-
-void VH_UpdateScreen() {
-  printf("UpdateScreen");
-  vdp_cmd_wait_completion();
-  vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, screenWidth * screenHeight, gamepal);
-}
 
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
 
@@ -145,23 +121,6 @@ void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
   // printf("LatchDrawPic(%d, %d, %d)\r\n", x, y, picnum);
   SDL_Surface *source = latchpics[2 + picnum - LATCHPICS_LUMP_START];
   VL_SurfaceToScreen(source, x, y);
-}
-
-void DrawLatchToSurface(unsigned x, unsigned y, unsigned picnum) {
-  SDL_Surface *source = latchpics[2 + picnum - LATCHPICS_LUMP_START];
-
-  const byte *src    = (byte *)source->xpixels;
-  const int   width  = source->w;
-  int         height = source->h;
-
-  uint8_t *dest = ((byte *)screenBuffer->xpixels) + y * SCREEN_WIDTH + x;
-
-  while (height--) {
-    for (int xx = 0; xx < width; xx++)
-      *dest++ = *src++;
-
-    dest += SCREEN_WIDTH - width;
-  }
 }
 
 //==========================================================================

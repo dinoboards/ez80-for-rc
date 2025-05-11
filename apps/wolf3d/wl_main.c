@@ -780,8 +780,8 @@ void SignonScreen(void) {
 
   fseek(f, SCREEN_WIDTH * 8, SEEK_SET); // skip first 8 lines?
 
-  int r = fread(vbuf, 1, SCREEN_WIDTH * screenHeight, f);
-  if (r != SCREEN_WIDTH * screenHeight) {
+  int r = fread(vbuf, 1, SCREEN_WIDTH * SCREEN_HEIGHT, f);
+  if (r != SCREEN_WIDTH * SCREEN_HEIGHT) {
     printf("Error: Unable to read file SIGNON.IMG\r\n");
     fclose(f);
     return;
@@ -789,7 +789,8 @@ void SignonScreen(void) {
   fclose(f);
 
   signon_default_colour = vbuf[0];
-  VH_UpdateScreen();
+  vdp_cmd_wait_completion();
+  vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, SCREEN_WIDTH * SCREEN_HEIGHT, gamepal);
 }
 
 /*

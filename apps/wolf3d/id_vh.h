@@ -58,9 +58,9 @@ void VWB_Plot(int x, int y, int color);
 void VWB_Hlin(int x1, int x2, int y, int color);
 void VWB_Vlin(int y1, int y2, int x, int color);
 
-void VH_UpdateScreen();
+#define VH_UpdateScreen()
 
-#define VW_UpdateScreen VH_UpdateScreen
+#define VW_UpdateScreen() VH_UpdateScreen()
 
 //
 // wolfenstein EGA compatability stuff
