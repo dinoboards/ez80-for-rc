@@ -62,7 +62,10 @@ extern HighScore Scores[];
 void US_Startup(void);
 void US_Shutdown(void);
 void US_TextScreen(void), US_UpdateTextScreen(void), US_FinishTextScreen(void);
+
+#ifdef APP_DEBUG
 void US_DrawWindow(word x, word y, word w, word h);
+#endif
 
 void US_SaveWindow(WindowRec *win), US_RestoreWindow(WindowRec *win);
 void US_ClearWindow(void);

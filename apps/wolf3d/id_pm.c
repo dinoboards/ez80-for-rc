@@ -50,10 +50,6 @@ void PM_Startup() {
   if (pageDataSize > (size_t)-1)
     Quit("The page file \"%s\" is too large!", fname);
 
-  printf("ChunksInFile: %d\r\n", ChunksInFile);
-  printf("PMSpriteStart: %d\r\n", PMSpriteStart);
-  printf("PMSoundStart: %d\r\n", PMSoundStart);
-
   pageOffsets[ChunksInFile] = fileSize;
 
   uint32_t dataStart = pageOffsets[0];

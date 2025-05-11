@@ -277,6 +277,7 @@ void US_ClearWindow(void) {
   PrintY = WindowY;
 }
 
+#ifdef APP_DEBUG
 ///////////////////////////////////////////////////////////////////////////
 //
 //  US_DrawWindow() - Draws a frame and sets the current window parms
@@ -309,6 +310,7 @@ void US_DrawWindow(word x, word y, word w, word h) {
   for (i = sy + 8; i <= sy + sh - 8; i += 8)
     VWB_DrawTile8(sx, i, 3), VWB_DrawTile8(sx + sw, i, 4);
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////
 //

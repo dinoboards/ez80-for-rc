@@ -55,7 +55,9 @@ void VW_MeasurePropString(const char *string, word *width, word *height) {
 =============================================================================
 */
 
+#ifdef APP_DEBUG
 void VWB_DrawTile8(int x, int y, int tile) { LatchDrawChar(x, y, tile); }
+#endif
 
 void VWB_DrawPic(int x, int y, int chunknum) {
   int      picnum = chunknum - STARTPICS;

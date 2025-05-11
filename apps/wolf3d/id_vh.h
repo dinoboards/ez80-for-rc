@@ -76,7 +76,9 @@ void VWB_Vlin(int y1, int y2, int x, int color);
 #define VW_FadeOut()        VL_FadeOut(0, 255, 0, 0, 0, 30);
 void VW_MeasurePropString(const char *string, word *width, word *height);
 
+#ifdef APP_DEBUG
 #define LatchDrawChar(x, y, p) VL_LatchToScreen(latchpics[0], ((p)&7) * 8, ((p) >> 3) * 8 * 64, 8, 8, x, y)
+#endif
 
 void LatchDrawPic(unsigned x, unsigned y, unsigned picnum);
 void DrawLatchToSurface(unsigned x, unsigned y, unsigned picnum);

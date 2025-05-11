@@ -60,8 +60,6 @@ static void inline VL_ClearScreen(int color) { vdp_scn_clear(color); }
 
 void VL_MemToLatch(byte *source, int width, int height, pixel_surface_t *destSurface, int x, int y);
 void VL_MemToScreen(const byte *source, int width, int height, int scx, int scy);
-void VL_MemToScreenScaledCoordN(
-    byte *source, int origwidth, int origheight, int srcx, int srcy, int destx, int desty, int width, int height);
 
 void VL_MaskedToScreen(byte *source, int width, int height, int x, int y);
 

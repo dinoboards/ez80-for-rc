@@ -428,43 +428,6 @@ void VL_MemToScreen(const byte *source, int width, int height, int destx, int de
   vdp_scn_vga_picture(source, destx, desty, clipped_width, clipped_height, width);
 }
 
-/*
-=================
-=
-= VL_MemToScreenScaledCoord
-=
-= Draws a part of a block of data to the screen.
-= The block has the size origwidth*origheight.
-= The part at (srcx, srcy) has the size width*height
-= and will be painted to (destx, desty) with scaling according to scaleFactor.
-=
-=================
-*/
-
-void VL_MemToScreenScaledCoordN(
-    byte *source, int origwidth, int origheight, int srcx, int srcy, int destx, int desty, int width, int height) {
-
-  printf("VL_MemToScreenScaledCoordN\r\n");
-  printf("source: %p, origwidth: %d, origheight: %d, srcx: %d, srcy: %d, destx: %d, desty: %d, width: %d, height: %d\r\n", source,
-         origwidth, origheight, srcx, srcy, destx, desty, width, height);
-
-  // assert(destx >= 0 && destx + width * scaleFactor <= (int)screenWidth && desty >= 0 &&
-  //        desty + height * scaleFactor <= (int)screenHeight && "VL_MemToScreenScaledCoord: Destination rectangle out of bounds!");
-
-  printf("TODO!!!! VL_MemToScreenScaledCoordN\r\n");
-  // byte *vbuf = (byte *)screenBuffer->pixels;
-  // for (int j = 0, scj = 0; j < height; j++, scj += scaleFactor) {
-  //   for (int i = 0, sci = 0; i < width; i++, sci += scaleFactor) {
-  //     byte col = source[((j + srcy) * (origwidth >> 2) + ((i + srcx) >> 2)) + ((i + srcx) & 3) * (origwidth >> 2) * origheight];
-  //     for (unsigned m = 0; m < scaleFactor; m++) {
-  //       for (unsigned n = 0; n < scaleFactor; n++) {
-  //         vbuf[(scj + m + desty) * SCREEN_WIDTH + sci + n + destx] = col;
-  //       }
-  //     }
-  //   }
-  // }
-}
-
 //==========================================================================
 
 /*
@@ -488,22 +451,12 @@ void VL_SurfaceToScreen(pixel_surface_t *source, int scxdest, int scydest) {
   vdp_cmd_move_cpu_to_vram_with_palette(src, scxdest, scydest, width, height, 0, size, gamepal);
 }
 
+#ifdef APP_DEBUG
 void VL_LatchToScreen(pixel_surface_t *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
-  // printf("VL_LatchToScreen(");
-  // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d)\r\n", source, xsrc, ysrc, width,
-  // height,
-  //        scxdest, scydest);
-
-  assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= (int)screenHeight &&
-         "VL_LatchToScreen: Destination rectangle out of bounds!");
-
-  byte    *src      = (byte *)source->pixels;
-  uint24_t srcPitch = source->width;
-
-  uint8_t first_byte = src[(ysrc)*srcPitch + xsrc];
-
-  vdp_cmd_wait_completion();
-  vdp_cmd_move_data_to_vram(gamepal[first_byte], scxdest, scydest, width, height, 0, width * height);
+  printf("TODO: VL_LatchToScreen(");
+  printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d)\r\n", source, xsrc, ysrc, width, height,
+         scxdest, scydest);
 }
+#endif
 
 //===========================================================================

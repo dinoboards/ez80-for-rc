@@ -446,7 +446,9 @@ void PollControls(void) {
 #define MAXX SCREEN_WIDTH_FACTOR(320)
 #define MAXY 160
 
+#ifdef APP_DEBUG
 void CenterWindow(word w, word h) { US_DrawWindow(((MAXX / 8) - w) / 2, ((MAXY / 8) - h) / 2, w, h); }
+#endif
 
 //===========================================================================
 
