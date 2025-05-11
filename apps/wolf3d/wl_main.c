@@ -776,7 +776,8 @@ void SignonScreen(void) {
   }
 
   printf("Reading file SIGNON.IMG\r\n");
-  byte *tmpbuf = screenBuffer->xpixels;
+  byte *tmpbuf;
+  MM_GetPtr((memptr *)&tmpbuf, SCREEN_WIDTH * SCREEN_HEIGHT);
 
   fseek(f, SCREEN_WIDTH * 8, SEEK_SET); // skip first 8 lines?
 
@@ -790,7 +791,8 @@ void SignonScreen(void) {
 
   signon_default_colour = tmpbuf[0];
   vdp_cmd_wait_completion();
-  vdp_cpu_to_vram0_with_palette(screenBuffer->xpixels, SCREEN_WIDTH * SCREEN_HEIGHT, gamepal);
+  vdp_cpu_to_vram0_with_palette(tmpbuf, SCREEN_WIDTH * SCREEN_HEIGHT, gamepal);
+  MM_FreePtr((memptr *)&tmpbuf);
 }
 
 /*

@@ -34,11 +34,7 @@ unsigned screenBits = -1; // use "best" color depth according to libSDL
 SDL_Surface *screen = NULL;
 unsigned     screenPitch;
 
-SDL_Window *window = NULL;
-
-// TODO: deprecate this buffer
-SDL_Surface *screenBuffer = NULL;
-
+SDL_Window   *window   = NULL;
 SDL_Renderer *renderer = NULL;
 
 boolean  screenfaded;
@@ -67,22 +63,6 @@ CASSERT(lengthof(gamepal) == 256)
 =
 =======================
 */
-
-void VL_Shutdown(void) {}
-
-/*
-=======================
-=
-= VL_InitVideoMode
-=
-=======================
-*/
-
-void VL_InitVideoMode(void) {
-  vdp_scn_init();
-
-  screenBuffer = SDL_CreateRGBSurface(screenWidth, screenHeight);
-}
 
 /*
 =============================================================================
@@ -325,20 +305,6 @@ void VL_FadeIn(int        start __attribute__((unused)),
 /*
 =================
 =
-= VL_Plot
-=
-=================
-*/
-
-void VL_Plot(int x, int y, int color) {
-  assert(x >= 0 && (unsigned)x < screenWidth && y >= 0 && (unsigned)y < screenHeight && "VL_Plot: Pixel out of bounds!");
-
-  screenBuffer->xpixels[y * SCREEN_WIDTH + x] = color;
-}
-
-/*
-=================
-=
 = VL_Hlin
 =
 =================
@@ -352,9 +318,6 @@ void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color) {
   assert(y < SCREEN_HEIGHT && "VL_Hlin: y >= SCREEN_HEIGHT!");
 
   vdp_scn_h_line(x, y, width, color);
-
-  uint8_t *dest = ((byte *)screenBuffer->xpixels) + y * SCREEN_WIDTH + x;
-  memset(dest, color, width);
 }
 
 /*
@@ -374,13 +337,6 @@ void VL_Vlin(int x, int y, int height, int color) {
   assert((unsigned)y + height <= SCREEN_HEIGHT && "VL_Vlin: Destination rectangle out of bounds!");
 
   vdp_scn_v_line(x, y, height, color);
-
-  uint8_t *dest = ((byte *)screenBuffer->xpixels) + y * SCREEN_WIDTH + x;
-
-  while (height--) {
-    *dest = color;
-    dest += SCREEN_WIDTH;
-  }
 }
 
 /*

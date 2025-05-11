@@ -68,7 +68,6 @@ void VWB_Vlin(int y1, int y2, int x, int color);
 
 #define VW_Shutdown         VL_Shutdown
 #define VW_Bar              VL_Bar
-#define VW_Plot             VL_Plot
 #define VW_Hlin(x, z, y, c) VL_Hlin(x, y, (z) - (x) + 1, c)
 #define VW_Vlin(y, z, x, c) VL_Vlin(x, y, (z) - (y) + 1, c)
 #define VW_DrawPic          VH_DrawPic
