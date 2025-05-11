@@ -1249,10 +1249,10 @@ void    ShutdownId(void);
 =============================================================================
 */
 
-extern gametype     gamestate;
-extern byte         bordercol;
-extern SDL_Surface *latchpics[NUMLATCHPICS];
-extern char         demoname[13];
+extern gametype         gamestate;
+extern byte             bordercol;
+extern pixel_surface_t *latchpics[NUMLATCHPICS];
+extern char             demoname[13];
 
 void SetupGameLevel(void);
 void GameLoop(void);

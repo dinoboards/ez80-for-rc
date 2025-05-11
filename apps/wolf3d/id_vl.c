@@ -417,12 +417,12 @@ void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color) {
 =================
 */
 
-void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface, int x, int y) {
+void VL_MemToLatch(byte *source, int width, int height, pixel_surface_t *destSurface, int x, int y) {
   assert(x >= 0 && (unsigned)x + width <= screenWidth && y >= 0 && (unsigned)y + height <= screenHeight &&
          "VL_MemToLatch: Destination rectangle out of bounds!");
 
-  int   pitch = destSurface->pitch;
-  byte *dest  = (byte *)destSurface->xpixels + y * pitch + x;
+  int   pitch = destSurface->width;
+  byte *dest  = (byte *)destSurface->pixels + y * pitch + x;
   for (int ysrc = 0; ysrc < height; ysrc++) {
     for (int xsrc = 0; xsrc < width; xsrc++) {
       uint8_t color             = source[(ysrc * (width >> 2) + (xsrc >> 2)) + (xsrc & 3) * (width >> 2) * height];
@@ -519,19 +519,20 @@ void VL_MemToScreenScaledCoordN(
 =================
 */
 
-void VL_SurfaceToScreen(SDL_Surface *source, int scxdest, int scydest) {
-  const byte *src    = (byte *)source->xpixels;
-  const int   width  = source->w;
-  const int   height = source->h;
+void VL_SurfaceToScreen(pixel_surface_t *source, int scxdest, int scydest) {
+  const byte    *src    = (byte *)source->pixels;
+  const uint16_t width  = source->width;
+  const uint16_t height = source->height;
+  const uint16_t size   = source->size;
 
   assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= SCREEN_HEIGHT &&
          "VL_SurfaceToScreen: Destination rectangle out of bounds!");
 
   vdp_cmd_wait_completion();
-  vdp_cmd_move_cpu_to_vram_with_palette(src, scxdest, scydest, width, height, 0, width * height, gamepal);
+  vdp_cmd_move_cpu_to_vram_with_palette(src, scxdest, scydest, width, height, 0, size, gamepal);
 }
 
-void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
+void VL_LatchToScreen(pixel_surface_t *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest) {
   // printf("VL_LatchToScreen(");
   // printf("source: %p, xsrc: %d, ysrc: %d, width: %d, height: %d, scxdest: %d, scydest: %d)\r\n", source, xsrc, ysrc, width,
   // height,
@@ -540,8 +541,8 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
   assert(scxdest >= 0 && scxdest + width <= SCREEN_WIDTH && scydest >= 0 && scydest + height <= (int)screenHeight &&
          "VL_LatchToScreen: Destination rectangle out of bounds!");
 
-  byte    *src      = (byte *)source->xpixels;
-  uint24_t srcPitch = source->pitch; // number of bytes to be added, to get to next row
+  byte    *src      = (byte *)source->pixels;
+  uint24_t srcPitch = source->width;
 
   uint8_t first_byte = src[(ysrc)*srcPitch + xsrc];
 
@@ -550,17 +551,3 @@ void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int he
 }
 
 //===========================================================================
-
-/*
-=================
-=
-= VL_ScreenToScreen
-=
-=================
-*/
-
-void VL_ScreenToScreen(SDL_Surface *source __attribute__((unused)), SDL_Surface *dest __attribute__((unused))) {
-  printf("VL_ScreenToScreen\r\n");
-  printf("source: %p, dest: %p\r\n", source, dest);
-  // SDL_BlitSurface(source, NULL, dest, NULL);
-}

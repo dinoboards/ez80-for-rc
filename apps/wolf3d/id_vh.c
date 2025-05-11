@@ -9,7 +9,7 @@
 
 pictabletype *pictable; // TODO this can be pre-allocated based on NUMPICS
 
-SDL_Surface *latchpics[NUMLATCHPICS];
+pixel_surface_t *latchpics[NUMLATCHPICS];
 
 int  px, py;
 byte fontcolor, backcolor;
@@ -119,7 +119,7 @@ void VWB_Vlin(int y1, int y2, int x, int color) { VW_Vlin(y1, y2, x, color); }
 
 void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
   // printf("LatchDrawPic(%d, %d, %d)\r\n", x, y, picnum);
-  SDL_Surface *source = latchpics[2 + picnum - LATCHPICS_LUMP_START];
+  pixel_surface_t *source = latchpics[2 + picnum - LATCHPICS_LUMP_START];
   VL_SurfaceToScreen(source, x, y);
 }
 
@@ -134,15 +134,15 @@ void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
 */
 
 void LoadLatchMem(void) {
-  int          i, width, height, start, end;
-  byte        *src;
-  SDL_Surface *surf;
+  int              i, width, height, start, end;
+  byte            *src;
+  pixel_surface_t *surf;
 
   //
   // tile 8s
   //
 
-  surf = SDL_CreateRGBSurface(8 * 8, ((NUMTILE8 + 7) / 8) * 8);
+  surf = create_pixel_surface(8 * 8, ((NUMTILE8 + 7) / 8) * 8, MM_GetPtr);
   if (surf == NULL) {
     Quit("Unable to create surface for tiles!");
   }
@@ -168,7 +168,7 @@ void LoadLatchMem(void) {
     width  = pictable[i - STARTPICS].width;
     height = pictable[i - STARTPICS].height;
 
-    surf = SDL_CreateRGBSurface(/*0,*/ width, height /*, 8, 0, 0, 0, 0*/);
+    surf = create_pixel_surface(width, height, MM_GetPtr);
     if (surf == NULL) {
       Quit("Unable to create surface for picture!");
     }

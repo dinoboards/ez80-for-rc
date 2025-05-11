@@ -75,7 +75,6 @@ void VWB_Vlin(int y1, int y2, int x, int color);
 #define VW_WaitVBL          VL_WaitVBL
 #define VW_FadeIn()         VL_FadeIn(0, 255, gamepal, 30);
 #define VW_FadeOut()        VL_FadeOut(0, 255, 0, 0, 0, 30);
-#define VW_ScreenToScreen   VL_ScreenToScreen
 void VW_MeasurePropString(const char *string, word *width, word *height);
 
 #define LatchDrawChar(x, y, p) VL_LatchToScreen(latchpics[0], ((p)&7) * 8, ((p) >> 3) * 8 * 64, 8, 8, x, y)
@@ -89,7 +88,7 @@ void VH_Startup();
 #define FizzleFade(...)
 
 #define NUMLATCHPICS 100
-extern SDL_Surface *latchpics[NUMLATCHPICS];
+extern pixel_surface_t *latchpics[NUMLATCHPICS];
 
 static inline void VWB_Bar(int x, int y, int width, int height, int color) { VW_Bar(x, y, width, height, color); }
 

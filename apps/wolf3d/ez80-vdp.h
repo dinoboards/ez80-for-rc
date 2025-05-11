@@ -19,6 +19,19 @@ extern pixel_surface_t *vdp_create_vdp_surface(uint16_t width, uint16_t height);
 
 extern uint8_t gamepal[256];
 
+typedef void mem_alloc(void **baseptr, uint24_t size);
+
+static inline pixel_surface_t *create_pixel_surface(const uint16_t width, const uint16_t height, mem_alloc mm_get_ptr) {
+  pixel_surface_t *surface;
+  const uint16_t   size = width * height;
+  mm_get_ptr((void *)&surface, sizeof(pixel_surface_t) + size);
+  memset(surface->pixels, 0, size);
+  surface->width  = width;
+  surface->height = height;
+  surface->size   = size;
+  return surface;
+}
+
 static inline void vdp_scn_init() {
   vdp_set_mode(7, 192, PAL);
   vdp_cmd_wait_completion();

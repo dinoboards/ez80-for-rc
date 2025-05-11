@@ -63,16 +63,15 @@ void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color);
 void VL_Vlin(int x, int y, int height, int color);
 static void inline VL_ClearScreen(int color) { vdp_scn_clear(color); }
 
-void VL_MemToLatch(byte *source, int width, int height, SDL_Surface *destSurface, int x, int y);
-void VL_ScreenToScreen(SDL_Surface *source, SDL_Surface *dest);
+void VL_MemToLatch(byte *source, int width, int height, pixel_surface_t *destSurface, int x, int y);
 void VL_MemToScreen(const byte *source, int width, int height, int scx, int scy);
 void VL_MemToScreenScaledCoordN(
     byte *source, int origwidth, int origheight, int srcx, int srcy, int destx, int desty, int width, int height);
 
 void VL_MaskedToScreen(byte *source, int width, int height, int x, int y);
 
-void VL_LatchToScreen(SDL_Surface *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest);
-void VL_SurfaceToScreen(SDL_Surface *source, int scxdest, int scydest);
+void VL_LatchToScreen(pixel_surface_t *source, int xsrc, int ysrc, int width, int height, int scxdest, int scydest);
+void VL_SurfaceToScreen(pixel_surface_t *source, int scxdest, int scydest);
 
 /*
  Functions to draw a surface directly to the VDP
