@@ -370,14 +370,12 @@ void BJ_Breathe(void) {
   static int which = 0, max = 10;
   int        pics[2] = {L_GUYPIC, L_GUY2PIC};
 
-  SDL_Delay(5);
-
-  if ((int24_t)GetTimeCount() - lastBreathTime > max) {
+  if ((int24_t)GetTimeCount() > max) {
     which ^= 1;
     VWB_DrawPic(0, 16, pics[which]);
     VW_UpdateScreen();
-    lastBreathTime = GetTimeCount();
-    max            = 35;
+    SetTimeCount(0);
+    max = 35;
   }
 }
 

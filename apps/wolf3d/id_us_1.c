@@ -643,8 +643,8 @@ boolean US_LineInput(int x, int y, char *buf, const char *def, boolean escok, in
       lasttime = curtime;
 
       cursorvis ^= true;
-    } else
-      SDL_Delay(5);
+    }
+
     if (cursorvis)
       USL_XORICursor(x, y, s, cursor);
 

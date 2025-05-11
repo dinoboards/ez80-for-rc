@@ -105,7 +105,7 @@ extern int     DigiChannel[];
 
 static inline void Delay(int wolfticks) {
   if (wolfticks > 0)
-    SDL_Delay(wolfticks);
+    ;
 }
 
 // Function prototypes

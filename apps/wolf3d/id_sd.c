@@ -927,7 +927,7 @@ boolean SD_SetMusicMode(SMMode mode) {
 
   SD_FadeOutMusic();
   while (SD_MusicPlaying())
-    SDL_Delay(5);
+    ;
 
   switch (mode) {
   case smm_Off:
@@ -1248,7 +1248,7 @@ void SD_StopSound(void) {
 ///////////////////////////////////////////////////////////////////////////
 void SD_WaitSoundDone(void) {
   while (SD_SoundPlaying())
-    SDL_Delay(5);
+    ;
 }
 
 ///////////////////////////////////////////////////////////////////////////

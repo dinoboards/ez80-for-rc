@@ -18,9 +18,6 @@
 
 #include "id_mm.h"
 
-void SDL_Delay(uint24_t ms __attribute__((unused))) { /*printf("TODO: implement or remove need for delay (%d)\r", ms);*/
-}
-
 int SDL_LockSurface(SDL_Surface *surface IG) { return 0; }
 
 int SDL_FillRect(SDL_Surface *dst IG, const SDL_Rect *rect IG, uint32_t color IG) { return 0; }

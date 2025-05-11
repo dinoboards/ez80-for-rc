@@ -186,13 +186,16 @@ CP_itemtype CusMenu[] = {{1, "", 0}, {0, "", 0}, {0, "", 0}, {1, "", 0}, {0, "",
                          {0, "", 0}, {1, "", 0}, {0, "", 0}, {1, "", 0}};
 
 // CP_iteminfo struct format: short x, y, amount, curpos, indent;
-CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, 38}, SndItems = {SM_X, SM_Y1, lengthof(SndMenu), 0, 64},
-            LSItems = {LSM_X, LSM_Y, lengthof(LSMenu), 0, 24}, CtlItems = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, 56},
-            CusItems = {1, CST_Y + 13 * 2 - 4, lengthof(CusMenu), -1, 0},
+CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, 38};
+CP_iteminfo SndItems  = {SM_X, SM_Y1, lengthof(SndMenu), 0, 64};
+CP_iteminfo LSItems   = {LSM_X, LSM_Y, lengthof(LSMenu), 0, 24};
+CP_iteminfo CtlItems  = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, 56};
+CP_iteminfo CusItems  = {1, CST_Y + 13 * 2 - 4, lengthof(CusMenu), -1, 0};
+
 #ifndef SPEAR
-            NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, 84},
+CP_iteminfo NewEitems = {NE_X, NE_Y, lengthof(NewEmenu), 0, 84};
 #endif
-            NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, 30};
+CP_iteminfo NewItems = {NM_X, NM_Y, lengthof(NewMenu), 2, 30};
 
 int color_hlite[] = {DEACTIVE, HIGHLIGHT, READHCOLOR, 0x67};
 
@@ -1410,7 +1413,7 @@ int CP_SaveGame(int quick) {
 
       unlink(savepath);
       file = fopen(savepath, "wb");
-      printf("Saving file %s\r\n", savepath);
+      printf("Saving file(1) %s\r\n", savepath);
 
       strcpy(input, &SaveGameNames[which][0]);
 
@@ -1473,7 +1476,7 @@ int CP_SaveGame(int quick) {
 
         unlink(savepath);
         file = fopen(savepath, "wb");
-        printf("Saving file %s\r\n", savepath);
+        printf("Saving file(2) %s\r\n", savepath);
 
         fwrite(input, 32, 1, file);
         fseek(file, 32, SEEK_SET);
@@ -1618,7 +1621,6 @@ int MouseSensitivity(int _ __attribute__((unused))) {
   oldMA = mouseadjustment;
   DrawMouseSens();
   do {
-    SDL_Delay(5);
     ReadAnyControl(&ci);
     switch (ci.dir) {
     case dir_North:
@@ -1848,7 +1850,6 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
       redraw = 0;
     }
 
-    SDL_Delay(5);
     ReadAnyControl(&ci);
 
     if (type == MOUSE || type == JOYSTICK)
@@ -1888,8 +1889,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
           tick ^= 1;
           lastFlashTime = GetTimeCount();
           VW_UpdateScreen();
-        } else
-          SDL_Delay(5);
+        }
 
         //
         // WHICH TYPE OF INPUT DO WE PROCESS?
@@ -2001,7 +2001,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
       redraw = 1;
       SD_PlaySound(MOVEGUN1SND);
       while (ReadAnyControl(&ci), ci.dir != dir_None)
-        SDL_Delay(5);
+        ;
       IN_ClearKeysDown();
       break;
 
@@ -2014,7 +2014,7 @@ void EnterCtrlData(int index, CustomCtrls *cust, void (*DrawRtn)(int), void (*Pr
       redraw = 1;
       SD_PlaySound(MOVEGUN1SND);
       while (ReadAnyControl(&ci), ci.dir != dir_None)
-        SDL_Delay(5);
+        ;
       IN_ClearKeysDown();
       break;
     case dir_North:
@@ -2392,7 +2392,6 @@ int CP_ChangeView(int _ __attribute__((unused))) {
 
   do {
     CheckPause();
-    SDL_Delay(5);
     ReadAnyControl(&ci);
     switch (ci.dir) {
     case dir_South:
@@ -2953,7 +2952,6 @@ void DrawHalfStep(int x, int y) {
   VWB_DrawPic(x, y, C_CURSOR1PIC);
   // VW_UpdateScreen();
   SD_PlaySound(MOVEGUN1SND);
-  SDL_Delay(8);
 }
 
 //
@@ -2986,11 +2984,10 @@ void DrawGun(CP_iteminfo *item_i, CP_itemtype *items, int x, int *y, int which, 
 void TicDelay(int count) {
   ControlInfo ci;
 
-  int32_t startTime = GetTimeCount();
+  int24_t startTime = GetTimeCount();
   do {
-    SDL_Delay(5);
     ReadAnyControl(&ci);
-  } while ((int32_t)GetTimeCount() - startTime < count && ci.dir != dir_None);
+  } while ((int24_t)GetTimeCount() - startTime < count && ci.dir != dir_None);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -3158,8 +3155,7 @@ int Confirm(const char *string) {
       VW_UpdateScreen();
       tick ^= 1;
       lastBlinkTime = GetTimeCount();
-    } else
-      SDL_Delay(5);
+    }
 
 #ifdef SPANISH
   } while (!Keyboard[sc_S] && !Keyboard[USB_KEY_N] && !Keyboard[USB_KEY_ESCAPE]);

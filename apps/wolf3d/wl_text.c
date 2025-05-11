@@ -1,5 +1,6 @@
 // WL_TEXT.C
 
+#include "ez80.h"
 #include "wl_def.h"
 #include <hbios.h>
 
@@ -59,11 +60,11 @@ static unsigned rightmargin[TEXTROWS];
 static char    *text;
 static unsigned rowon;
 
-static int     picx;
-static int     picy;
-static int     picnum;
-static int     picdelay;
-static boolean layoutdone;
+static int      picx;
+static int      picy;
+static int      picnum;
+static uint24_t picdelay;
+static boolean  layoutdone;
 
 //===========================================================================
 
@@ -89,7 +90,7 @@ void RipToEOL(void) {
 =====================
 */
 
-int ParseNumber(void) {
+uint24_t ParseNumber(void) {
   char  ch;
   char  num[80];
   char *numptr;
@@ -152,6 +153,7 @@ void ParseTimedCommand(void) {
 */
 
 void TimedPicCommand(void) {
+  printf("TimedPicCommand\r\n");
   ParseTimedCommand();
 
   //
@@ -162,7 +164,10 @@ void TimedPicCommand(void) {
   //
   // wait for time
   //
-  Delay(picdelay);
+  printf("picdelay: %d", picdelay);
+  SetTimeCount(0);
+  while (GetTimeCount() < picdelay)
+    ;
 
   //
   // draw pic
@@ -608,7 +613,6 @@ void ShowArticle(char *article)
         firstpage = false;
       }
     }
-    SDL_Delay(5);
 
     LastScan = 0;
     ReadAnyControl(&ci);

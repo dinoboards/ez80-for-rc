@@ -855,7 +855,6 @@ typedef union SDL_Event {
 #define SDL_ENABLE  1
 /*@}*/
 
-extern void                SDL_Delay(uint24_t ms);
 extern int                 SDL_LockSurface(SDL_Surface *surface);
 extern int                 SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
 extern int                 SDL_Init(int32_t flags);
