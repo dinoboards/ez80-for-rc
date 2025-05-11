@@ -731,9 +731,6 @@ void SetupGameLevel(void) {
 ===================
 */
 void DrawPlayBorderSides(void) {
-  if (viewsize == 21)
-    return;
-
   const int sw = screenWidth;
   const int sh = screenHeight;
   const int vw = drawing_params.view_width;
@@ -809,11 +806,13 @@ void DrawPlayBorder(void) {
   VWB_Bar(xl, yl, drawing_params.view_width, drawing_params.view_height, 0);
 
   // Paint game view border lines
-  VWB_Bar(xl - 1, yl - 1, drawing_params.view_width + 1, 1, 0);                                          // upper border
-  VWB_Bar(xl, yl + drawing_params.view_height, drawing_params.view_width + 1, 1, bordercol - 2);         // lower border
-  VWB_Bar(xl - 1, yl - 1, 1, drawing_params.view_height + 1, 0);                                         // left border
-  VWB_Bar(xl + drawing_params.view_width, yl - 1, 1, drawing_params.view_height + 2 * 1, bordercol - 2); // right border
-  VWB_Bar(xl - 1, yl + drawing_params.view_height, 1, 1, bordercol - 3);                                 // lower left highlight
+  if (drawing_params.view_width != 256) {
+    VWB_Bar(xl - 1, yl - 1, drawing_params.view_width + 1, 1, 0);                                          // upper border
+    VWB_Bar(xl, yl + drawing_params.view_height, drawing_params.view_width + 1, 1, bordercol - 2);         // lower border
+    VWB_Bar(xl - 1, yl - 1, 1, drawing_params.view_height + 1, 0);                                         // left border
+    VWB_Bar(xl + drawing_params.view_width, yl - 1, 1, drawing_params.view_height + 2 * 1, bordercol - 2); // right border
+    VWB_Bar(xl - 1, yl + drawing_params.view_height, 1, 1, bordercol - 3);                                 // lower left highlight
+  }
 }
 
 /*
@@ -854,30 +853,6 @@ void DrawPlayScreen(void) {
   DrawWeapon();
 
   DrawScore();
-}
-
-void ShowActStatus() {
-  // // Draw status bar without borders
-  // byte *source = grsegs[STATUSBARPIC];
-  // int   picnum = STATUSBARPIC - STARTPICS;
-  // int   width  = pictable[picnum].width;
-  // int   height = pictable[picnum].height;
-  // int   destx  = 9;
-  // int   desty  = screenHeight - (height - 4);
-  // VL_MemToScreenScaledCoordN(source, width, height, 9, 4, destx, desty, width - 18, height - 7);
-  spike_draw_status_bar_pic_adjusted();
-  printf("!!!!!!!!!!!!!!!!!!!!!\r\n");
-
-  ingame = false;
-  DrawFace();
-  DrawHealth();
-  DrawLives();
-  DrawLevel();
-  DrawAmmo();
-  DrawKeys();
-  DrawWeapon();
-  DrawScore();
-  ingame = true;
 }
 
 //==========================================================================
@@ -1218,14 +1193,12 @@ void Died(void) {
     pwallstate = pwallpos = 0;
     gamestate.attackframe = gamestate.attackcount = gamestate.weaponframe = 0;
 
-    if (viewsize != 21) {
-      DrawKeys();
-      DrawWeapon();
-      DrawAmmo();
-      DrawHealth();
-      DrawFace();
-      DrawLives();
-    }
+    DrawKeys();
+    DrawWeapon();
+    DrawAmmo();
+    DrawHealth();
+    DrawFace();
+    DrawLives();
   }
 }
 
@@ -1254,7 +1227,7 @@ restartgame:
   do {
     if (!loadedgame)
       gamestate.score = gamestate.oldscore;
-    if (!died || viewsize != 21)
+    if (!died)
       DrawScore();
 
     startgame = false;
@@ -1325,8 +1298,6 @@ restartgame:
     switch (playstate) {
     case ex_completed:
     case ex_secretlevel:
-      if (viewsize == 21)
-        DrawPlayScreen();
       gamestate.keys = 0;
       DrawKeys();
       VW_FadeOut();
@@ -1334,8 +1305,6 @@ restartgame:
       ClearMemory();
 
       LevelCompleted(); // do the intermission
-      if (viewsize == 21)
-        DrawPlayScreen();
 
 #ifdef SPEARDEMO
       if (gamestate.mapon == 1) {
@@ -1444,8 +1413,6 @@ restartgame:
       return;
 
     case ex_victorious:
-      if (viewsize == 21)
-        DrawPlayScreen();
 #ifndef SPEAR
       VW_FadeOut();
 #else
@@ -1465,8 +1432,6 @@ restartgame:
       return;
 
     default:
-      if (viewsize == 21)
-        DrawPlayScreen();
       ClearMemory();
       break;
     }

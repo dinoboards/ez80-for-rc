@@ -135,7 +135,9 @@ extern uint8_t signon_default_colour;
 
 #define SCREENBWIDE 80
 
-#define HEIGHTRATIO 0.40 // also defined in id_mm.c
+#define HEIGHTRATIO       0.40
+#define MAX_VIEW_SIZE     15
+#define DEFAULT_VIEW_SIZE 12
 
 #define BORDERCOLOR 3
 #define FLASHCOLOR  5
@@ -1260,7 +1262,6 @@ void DrawPlayBorder(void);
 void DrawStatusBorder(byte color);
 void DrawPlayScreen(void);
 void DrawPlayBorderSides(void);
-void ShowActStatus();
 
 void PlayDemo(int demonumber);
 void RecordDemo(void);

@@ -597,8 +597,7 @@ int CP_CheckQuick(ScanCode scancode) {
       SETFONTCOLOR(0, 15);
       IN_ClearKeysDown();
       VW_FadeOut();
-      if (viewsize != 21)
-        DrawPlayScreen();
+      DrawPlayScreen();
 
       if (!startgame && !loadedgame)
         ContinueMusic(lastgamemusicoffset);
@@ -661,8 +660,7 @@ int CP_CheckQuick(ScanCode scancode) {
       SETFONTCOLOR(0, 15);
       IN_ClearKeysDown();
       VW_FadeOut();
-      if (viewsize != 21)
-        DrawPlayScreen();
+      DrawPlayScreen();
 
       if (!startgame && !loadedgame)
         ContinueMusic(lastgamemusicoffset);
@@ -2402,10 +2400,7 @@ int CP_ChangeView(int _ __attribute__((unused))) {
       newview--;
       if (newview < 4)
         newview = 4;
-      if (newview >= 19)
-        DrawChangeView(newview);
-      else
-        ShowViewSize(newview);
+      ShowViewSize(newview);
       VW_UpdateScreen();
       SD_PlaySound(HITWALLSND);
       TicDelay(10);
@@ -2414,8 +2409,8 @@ int CP_ChangeView(int _ __attribute__((unused))) {
     case dir_North:
     case dir_East:
       newview++;
-      if (newview >= 21) {
-        newview = 21;
+      if (newview >= MAX_VIEW_SIZE) {
+        newview = MAX_VIEW_SIZE;
         DrawChangeView(newview);
       } else
         ShowViewSize(newview);
@@ -2459,9 +2454,9 @@ int CP_ChangeView(int _ __attribute__((unused))) {
 // DRAW THE CHANGEVIEW SCREEN
 //
 void DrawChangeView(int view) {
+  printf("DrawChangeView(%d)\r\n", view);
   int rescaledHeight = screenHeight / scaleFactor;
-  if (view != 21)
-    VWB_Bar(SCREEN_WIDTH_FACTOR(0), rescaledHeight - 40, SCREEN_WIDTH_FACTOR(320), 40, bordercol);
+  VWB_Bar(0, rescaledHeight - 40, 256, 40, bordercol);
 
 #ifdef JAPAN
   CA_CacheScreen(S_CHANGEPIC);

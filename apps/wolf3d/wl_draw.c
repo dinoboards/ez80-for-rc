@@ -1327,8 +1327,6 @@ void ThreeDRefresh(void) {
 
   DrawPlayerWeapon(); // draw player's hands
 
-  if (Keyboard[USB_KEY_TAB] && viewsize == 21 && (int)gamestate.weapon != -1)
-    ShowActStatus();
   vbuf = NULL;
 
   uint24_t stage5 = ez80_timers_ticks_get() - start;

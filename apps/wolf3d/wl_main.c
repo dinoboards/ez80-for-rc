@@ -1156,7 +1156,7 @@ static void InitGame() {
   BuildTables(); // trig tables
   SetupWalls();
 
-  viewsize = 12;
+  viewsize = DEFAULT_VIEW_SIZE;
   NewViewSize(viewsize);
 
   //
@@ -1216,31 +1216,17 @@ boolean SetViewSize(unsigned width, unsigned height) {
 void ShowViewSize(int width) {
   int oldwidth, oldheight;
 
+  printf("ShowViewSize(%d)\r\n", width);
+
   oldwidth  = drawing_params.view_width;
   oldheight = drawing_params.view_height;
 
-  if (width == 21) {
-    drawing_params.view_width           = screenWidth;
-    drawing_params.view_half_width      = screenWidth / 2;
-    drawing_params.view_height          = screenHeight;
-    drawing_params.view_height_plus_one = screenHeight + 1;
-    drawing_params.view_half_height     = screenHeight / 2;
-    VWB_Bar(0, 0, screenWidth, screenHeight, 0);
-  } else if (width == 20) {
-    drawing_params.view_width           = screenWidth;
-    drawing_params.view_half_width      = screenWidth / 2;
-    drawing_params.view_height          = screenHeight - STATUSLINES;
-    drawing_params.view_height_plus_one = screenHeight - STATUSLINES + 1;
-    drawing_params.view_half_height     = (screenHeight - STATUSLINES) / 2;
-    DrawPlayBorder();
-  } else {
-    drawing_params.view_width           = width * 16;
-    drawing_params.view_half_width      = width * 8;
-    drawing_params.view_height          = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
-    drawing_params.view_height_plus_one = drawing_params.view_height + 1;
-    drawing_params.view_half_height     = drawing_params.view_half_height;
-    DrawPlayBorder();
-  }
+  drawing_params.view_width           = width * 16;
+  drawing_params.view_half_width      = width * 8;
+  drawing_params.view_height          = (int)(width * 16 * HEIGHTRATIO * screenHeight / 200);
+  drawing_params.view_height_plus_one = drawing_params.view_height + 1;
+  drawing_params.view_half_height     = drawing_params.view_half_height;
+  DrawPlayBorder();
 
   drawing_params.view_width           = oldwidth;
   drawing_params.view_half_width      = oldwidth / 2;
@@ -1250,13 +1236,9 @@ void ShowViewSize(int width) {
 }
 
 void NewViewSize(int width) {
+  printf("NewviewSize(%d)\r\n", width);
   viewsize = width;
-  if (viewsize == 21)
-    SetViewSize(screenWidth, screenHeight);
-  else if (viewsize == 20)
-    SetViewSize(screenWidth, screenHeight - STATUSLINES);
-  else
-    SetViewSize(width * 16, (unsigned)(width * 16 * HEIGHTRATIO));
+  SetViewSize(width * 16, (unsigned)(width * 16 * HEIGHTRATIO));
 }
 
 //===========================================================================
