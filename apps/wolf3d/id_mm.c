@@ -304,40 +304,6 @@ void MM_FreePtr(memptr *baseptr) {
 /*
 =====================
 =
-= MM_SetPurge
-=
-= Sets the purge level for a block (locked blocks cannot be made purgable)
-=
-=====================
-*/
-
-void MM_SetPurge(memptr *baseptr, int purge) {
-  mmblocktype *start;
-
-  start = mmrover;
-
-  do {
-    if (mmrover->useptr == baseptr)
-      break;
-
-    mmrover = mmrover->next;
-
-    if (!mmrover)
-      mmrover = mmhead;
-    else if (mmrover == start)
-      Quit("MM_SetPurge: Block not found!");
-
-  } while (1);
-
-  mmrover->attributes &= ~PURGEBITS;
-  mmrover->attributes |= purge;
-}
-
-//==========================================================================
-
-/*
-=====================
-=
 = MM_SetLock
 =
 = Locks / unlocks the block
@@ -423,6 +389,7 @@ void MM_SortMem(void) {
         //
         // throw out the purgable block
         //
+        // TODO: Nothing is purgable - so should never enter here
         next = scan->next;
         FREEBLOCK(scan);
         last->next = next;
@@ -436,7 +403,7 @@ void MM_SortMem(void) {
           length = scan->length;
           source = scan->start;
           dest   = start;
-          printf("MM_SortMem: moving %d bytes from %p to %p\r\n", length, source, dest);
+          printf("\r\nMM_SortMem: moving %d bytes from %p to %p\r\n", length, source, dest);
           memcpy(dest, source, length);
           scan->start   = start;
           *scan->useptr = start;
@@ -505,8 +472,8 @@ void MM_DumpMemoryBlocks(void) {
 ======================
 */
 
-long MM_UnusedMemory(void) {
-  unsigned     free;
+uint24_t MM_UnusedMemory() {
+  uint24_t     free;
   mmblocktype *scan;
 
   free = 0;
@@ -517,7 +484,7 @@ long MM_UnusedMemory(void) {
     scan = scan->next;
   }
 
-  return free * 16l;
+  return free;
 }
 
 //==========================================================================
@@ -532,8 +499,8 @@ long MM_UnusedMemory(void) {
 ======================
 */
 
-long MM_TotalFree(void) {
-  unsigned     free;
+uint24_t MM_TotalFree(void) {
+  uint24_t     free;
   mmblocktype *scan;
 
   free = 0;
@@ -546,7 +513,7 @@ long MM_TotalFree(void) {
     scan = scan->next;
   }
 
-  return free * 16l;
+  return free;
 }
 
 //==========================================================================

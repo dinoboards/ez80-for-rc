@@ -861,7 +861,6 @@ void CA_CacheGrChunk(int chunk) {
 ======================
 // */
 void CA_CacheScreen(int chunk, uint8_t clip_top) {
-  uint24_t t = ez80_timers_ticks_get();
   int32_t  pos, compressed, expanded;
   memptr   bigbufferseg;
   int32_t *source;
@@ -889,14 +888,11 @@ void CA_CacheScreen(int chunk, uint8_t clip_top) {
   //
   byte *pic;
   MM_GetPtr((memptr *)&pic, 320 * 200);
-  printf("CA_CacheScreen (1): %d\r\n", ez80_timers_ticks_get() - t);
 
   CAL_HuffExpand((byte *)source, pic, expanded /*, grhuffman*/);
 
 #define CLIP_LEFT 8
 #define CLIP_SKIP 5
-
-  printf("CA_CacheScreen (2): %d\r\n", ez80_timers_ticks_get() - t);
 
   vdp_scn_write_init();
 
@@ -916,8 +912,6 @@ void CA_CacheScreen(int chunk, uint8_t clip_top) {
   MM_FreePtr((memptr *)&bigbufferseg);
 
   vdp_scn_copy_y(0, 256, 0, SCREEN_HEIGHT);
-
-  printf("CA_CacheScreen (3): %d\r\n", ez80_timers_ticks_get() - t);
 }
 
 //==========================================================================

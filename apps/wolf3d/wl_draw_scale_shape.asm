@@ -96,9 +96,9 @@ _scale_shape_line:
 	ld	de, (iy+SS_SCRENDY)
 	xor	a
 	sbc	hl, hl
-	ld	a, (_drawing_params+14) 	; de' drawing_params.view_width
+	ld	a, (_drawing_params+12)	; drawing_params.view_height
 	ld	l, a
-	ld	a, (_drawing_params+15) 	; de' drawing_params.view_width
+	ld	a, (_drawing_params+13)	; drawing_params.view_height
 	ld	h, a
 	push	hl
 	pop	bc
@@ -120,6 +120,11 @@ _scale_shape_line:
 	; 	ss_scrstarty++;
 	; }
 
+	ld	de, (iy+SS_SCRSTARTY)
+	ld	hl, (iy+SS_SCRENDY)
+	compare_16bit_signed			; hl: (ss_screndy - ss_scrstarty), de: ss_scrstarty
+	jp	p, .exit
+
 	exx
 	ld	hl, (iy+SS_VMEM)		; hl' ss_vmem
 	ld	de, 0
@@ -129,16 +134,12 @@ _scale_shape_line:
 	ld	d, a
 	exx
 
-	ld	de, (iy+SS_SCRSTARTY)
-	ld	hl, (iy+SS_SCRENDY)
-	compare_16bit_signed			; hl: (ss_screndy - ss_scrstarty), de: ss_scrstarty
-	jp	p, .exit
 	ex	de, hl				; de: counter, hl: ss_scrstarty
 
 	ld	a, (iy+SS_COLOR)
-	ex	af, af'			; af' ss_color
+	ex	af, af'				; af' ss_color
 .loop:
-	ld	a, d			; test if de 0
+	ld	a, d				; test if de 0
 	or	e
 	jr	z, .exit
 

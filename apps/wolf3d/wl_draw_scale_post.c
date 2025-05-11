@@ -16,7 +16,6 @@
 =
 ===================
 */
-extern byte *vbuf;
 
 extern uint8_t scale_post_asm();
 
@@ -29,7 +28,8 @@ void __func_on_chip ScalePost() {
     return;
 
   while (drawing_params.yoffs <= drawing_params.yendoffs) {
-    vbuf[drawing_params.yendoffs] = grb;
+    view_port_buffer[drawing_params.yendoffs] = grb;
+
     drawing_params.ywcount -= TEXTURESIZE / 2;
     if (drawing_params.ywcount <= 0) {
       do {

@@ -134,26 +134,26 @@ void LatchDrawPic(unsigned x, unsigned y, unsigned picnum) {
 */
 
 void LoadLatchMem(void) {
-  int              i, width, height, start, end;
-  byte            *src;
-  pixel_surface_t *surf;
-
+  int   start, end;
+  byte *src;
   //
   // tile 8s
   //
 
-  surf = create_pixel_surface(8 * 8, ((NUMTILE8 + 7) / 8) * 8, MM_GetPtr);
-  if (surf == NULL) {
+  const uint16_t width  = 8 * 8;
+  const uint16_t height = ((NUMTILE8 + 7) / 8) * 8;
+  MM_GetPtr((memptr *)&latchpics[0], sizeof(pixel_surface_t) + width * height);
+  create_pixel_surface(latchpics[0], width, height);
+  if (latchpics[0] == NULL) {
     Quit("Unable to create surface for tiles!");
   }
   // SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
 
-  latchpics[0] = surf;
   CA_CacheGrChunk(STARTTILE8);
   src = grsegs[STARTTILE8];
 
-  for (i = 0; i < NUMTILE8; i++) {
-    VL_MemToLatch(src, 8, 8, surf, (i & 7) * 8, (i >> 3) * 8);
+  for (int i = 0; i < NUMTILE8; i++) {
+    VL_MemToLatch(src, 8, 8, latchpics[0], (i & 7) * 8, (i >> 3) * 8);
     src += 64;
   }
   UNCACHEGRCHUNK(STARTTILE8);
@@ -164,19 +164,19 @@ void LoadLatchMem(void) {
   start = LATCHPICS_LUMP_START;
   end   = LATCHPICS_LUMP_END;
 
-  for (i = start; i <= end; i++) {
-    width  = pictable[i - STARTPICS].width;
-    height = pictable[i - STARTPICS].height;
+  for (int i = start; i <= end; i++) {
+    const uint16_t width  = pictable[i - STARTPICS].width;
+    const uint16_t height = pictable[i - STARTPICS].height;
 
-    surf = create_pixel_surface(width, height, MM_GetPtr);
-    if (surf == NULL) {
+    MM_GetPtr((memptr *)&latchpics[2 + i - start], sizeof(pixel_surface_t) + width * height);
+    create_pixel_surface(latchpics[2 + i - start], width, height);
+    if (latchpics[2 + i - start] == NULL) {
       Quit("Unable to create surface for picture!");
     }
-    SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
+    SDL_SetPaletteColors(latchpics[2 + i - start]->format->palette, gamepal, 0, 256);
 
-    latchpics[2 + i - start] = surf;
     CA_CacheGrChunk(i);
-    VL_MemToLatch(grsegs[i], width, height, surf, 0, 0);
+    VL_MemToLatch(grsegs[i], width, height, latchpics[2 + i - start], 0, 0);
     UNCACHEGRCHUNK(i);
   }
 }

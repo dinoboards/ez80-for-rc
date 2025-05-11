@@ -29,8 +29,6 @@
 =============================================================================
 */
 
-byte *vbuf = NULL;
-
 uint24_t lasttimecount;
 int32_t  frameon;
 // boolean fpscounter;
@@ -535,14 +533,14 @@ byte vgaCeiling[] = {
  * @param gamestate.episode - episode number
  * @param mapon - map number
  * @param view_half_length - half of the view port length
- * @param vbuf - view port buffer
+ * @param view_port_buffer - view port buffer
  */
 void view_port_clear() {
   uint8_t ceiling = vgaCeiling[gamestate.episode * 10 + mapon];
-  memset(vbuf, ceiling, view_half_length);
+  memset(view_port_buffer, ceiling, view_half_length);
 
   // TODO: pre-calculate vbuf + view_half_length
-  memset(vbuf + view_half_length, 0x19, view_half_length);
+  memset(view_port_buffer + view_half_length, 0x19, view_half_length);
 }
 
 //==========================================================================
@@ -632,8 +630,10 @@ void ScaleShape(int xcenter, int shapenum, uint16_t height) {
       if (ss_lpix < 0)
         ss_lpix = 0;
 
-      if (ss_rpix > drawing_params.view_width)
-        ss_rpix = drawing_params.view_width, ss_i_counter = ss_shape->rightpix + 1;
+      if (ss_rpix > drawing_params.view_width) {
+        ss_rpix      = drawing_params.view_width;
+        ss_i_counter = ss_shape->rightpix + 1;
+      }
 
       ss_cline = (byte *)ss_shape + *ss_cmdptr;
 
@@ -649,9 +649,9 @@ void ScaleShape(int xcenter, int shapenum, uint16_t height) {
             ss_screndy  = (ss_ycnt >> 6) + ss_upperedge;
 
             if (ss_screndy < 0)
-              ss_vmem = vbuf + ss_lpix;
+              ss_vmem = view_port_buffer + ss_lpix;
             else
-              ss_vmem = vbuf + ss_screndy * drawing_params.view_width + ss_lpix;
+              ss_vmem = view_port_buffer + ss_screndy * drawing_params.view_width + ss_lpix;
 
             for (; ss_j < ss_endy; ss_j++) {
               ss_scrstarty = ss_screndy;
@@ -710,9 +710,10 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
           ycnt     = j * pixheight;
           screndy  = (ycnt >> 6) + upperedge;
           if (screndy < 0)
-            vmem = vbuf + lpix;
+            vmem = view_port_buffer + lpix;
           else
-            vmem = vbuf + screndy * drawing_params.view_width + lpix;
+            vmem = view_port_buffer + screndy * drawing_params.view_width + lpix;
+
           for (; j < endy; j++) {
             scrstarty = screndy;
             ycnt += pixheight;
@@ -743,7 +744,7 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
 =
 = DrawScaleds
 =
-= Draws all objects that are visable
+= Draws all objects that are visible
 =
 =====================
 */
@@ -751,7 +752,9 @@ void SimpleScaleShape(int xcenter, int shapenum, unsigned height) {
 #define MAXVISABLE 250
 
 typedef struct {
-  short viewx, viewheight, shapenum;
+  short viewx;
+  short viewheight;
+  short shapenum;
 } visobj_t;
 
 visobj_t  vislist[MAXVISABLE];
@@ -876,8 +879,9 @@ void DrawPlayerWeapon(void) {
 #ifndef SPEAR
   if (gamestate.victoryflag) {
 #ifndef APOGEE_1_0
-    if (player->state == &s_deathcam && (GetTimeCount() & 32))
+    if (player->state == &s_deathcam && (GetTimeCount() & 32)) {
       SimpleScaleShape(drawing_params.view_half_width, SPR_DEATHCAM, drawing_params.view_height_plus_one);
+    }
 #endif
     return;
   }
@@ -888,8 +892,9 @@ void DrawPlayerWeapon(void) {
     SimpleScaleShape(drawing_params.view_half_width, shapenum, drawing_params.view_height_plus_one);
   }
 
-  if (demorecord || demoplayback)
+  if (demorecord || demoplayback) {
     SimpleScaleShape(drawing_params.view_half_width, SPR_DEMO, drawing_params.view_height_plus_one);
+  }
 }
 
 //==========================================================================
@@ -1298,10 +1303,6 @@ void ThreeDRefresh(void) {
   memset(spotvis, 0, maparea);
   spotvis[player->tilex][player->tiley] = 1; // Detect all sprites over player fix
 
-  // vbuf = screenBuffer->xpixels + screenofs;
-  vbuf = view_port_buffer;
-  // chnage to a surface of the viewport
-
   CalcViewVariables();
 
   uint24_t stage1 = ez80_timers_ticks_get() - start;
@@ -1327,8 +1328,6 @@ void ThreeDRefresh(void) {
 
   DrawPlayerWeapon(); // draw player's hands
 
-  vbuf = NULL;
-
   uint24_t stage5 = ez80_timers_ticks_get() - start;
 
   //
@@ -1350,7 +1349,7 @@ void ThreeDRefresh(void) {
     int24_t  x    = ez80_timers_ticks_get() * (1000 / 70);
     uint24_t diff = x - last_system_tick;
 
-    printf(" diff: %d, t: %d, s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d    \r", diff, x, stage1 * (1000 / 70),
+    printf(" diff: %d, t: %d, s1: %d, s2: %d, s3: %d, s4: %d, s5: %d, s6: %d   \r", diff, x, stage1 * (1000 / 70),
            (stage2 - stage1) * (1000 / 70), (stage3 - stage2) * (1000 / 70), (stage4 - stage3) * (1000 / 70),
            (stage5 - stage4) * (1000 / 70), (stage6 - stage5) * (1000 / 70));
 

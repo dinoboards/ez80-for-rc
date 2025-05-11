@@ -40,8 +40,8 @@ void MM_SortMem(void);
 void MM_DumpMemoryBlocks(void);
 void MM_ShowMemory(void);
 
-long MM_UnusedMemory(void);
-long MM_TotalFree(void);
+uint24_t MM_UnusedMemory(void);
+uint24_t MM_TotalFree(void);
 
 void MM_BombOnError(boolean bomb);
 

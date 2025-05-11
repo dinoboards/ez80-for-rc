@@ -37,7 +37,7 @@
 ; JP M, de <= hl aka hl >= de
 .macro compare_16bit_signed
 	or	a, a
-	sbc	hl, de
+	sbc.s	hl, de
 
 	jp	pe, 1f
 

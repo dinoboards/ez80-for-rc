@@ -1053,11 +1053,11 @@ void PlayDemo(int demonumber) {
   SetupGameLevel();
 
   StartMusic();
-  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+  printf("\r\nPlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
   PlayLoop();
 
-  printf("PlayDemo: %s:%d\r\n", __FILE__, __LINE__);
+  printf("\r\nPlayDemo: %s:%d\r\n", __FILE__, __LINE__);
 
 #ifdef DEMOSEXTERN
   UNCACHEGRCHUNK(dems[demonumber]);
