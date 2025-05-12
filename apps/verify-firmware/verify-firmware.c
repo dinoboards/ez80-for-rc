@@ -42,13 +42,13 @@ int main(/*const int argc, const char *argv[]*/) {
     }
 
     printf("Testing usb keyboard event que\r\n");
-    kyb_event_t key_event;
+    usb_kyb_event_t key_event;
 
     do {
-      result = kyb_event(&key_event);
+      result = usb_kyb_event(&key_event);
 
       if (result)
-        printf(": %d, %x, %x\r\n", result, key_event.key_code, key_event.key_down);
+        printf(": %d, %d:%c, %x, %x\r\n", result, key_event.key_ascii, key_event.key_ascii, key_event.key_code, key_event.key_down);
 
     } while (!(result && key_event.key_code == 4));
   } else
