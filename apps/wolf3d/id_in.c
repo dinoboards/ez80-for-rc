@@ -48,32 +48,6 @@ boolean  Paused;
 char     LastASCII;
 ScanCode LastScan;
 
-// KeyboardDef   KbdDefs = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
-// static KeyboardDef KbdDefs = {
-//     sc_Control,    // button0
-//     sc_Alt,        // button1
-//     sc_Home,       // upleft
-//     sc_UpArrow,    // up
-//     sc_PgUp,       // upright
-//     sc_LeftArrow,  // left
-//     sc_RightArrow, // right
-//     sc_End,        // downleft
-//     sc_DownArrow,  // down
-//     sc_PgDn        // downright
-// };
-
-// static SDL_Joystick* Joystick;
-static SDL_GameController *GameController;
-// Flip the right stick axes to match usual mapping of Joystick API.
-static SDL_GameControllerAxis GameControllerAxisMap[SDL_CONTROLLER_AXIS_MAX] = {
-    SDL_CONTROLLER_AXIS_LEFTX,       SDL_CONTROLLER_AXIS_LEFTY,  // X, Y
-    SDL_CONTROLLER_AXIS_RIGHTY,      SDL_CONTROLLER_AXIS_RIGHTX, // Z, R
-    SDL_CONTROLLER_AXIS_TRIGGERLEFT, SDL_CONTROLLER_AXIS_TRIGGERRIGHT};
-struct JoystickSens *JoySensitivity;
-int                  JoyNumButtons;
-int                  JoyNumAxes;
-static int           JoyNumHats;
-
 /*
 =============================================================================
 
@@ -132,112 +106,6 @@ static Direction DirTable[] = // Quick lookup for total direction
 
 static inline uint8_t INL_GetMouseButtons(void) { return io_mouse_buttons(); }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  IN_GetJoyDelta() - Returns the relative movement of the specified
-//      joystick (from +/-127)
-//
-///////////////////////////////////////////////////////////////////////////
-void IN_GetJoyDelta(int *dx, int *dy) {
-  int x, y;
-
-  if (!GameController) {
-    *dx = *dy = 0;
-    return;
-  }
-
-  SDL_GameControllerUpdate();
-  x = SDL_GameControllerGetAxis(GameController, SDL_CONTROLLER_AXIS_RIGHTX) >> 8;
-  y = SDL_GameControllerGetAxis(GameController, SDL_CONTROLLER_AXIS_LEFTY) >> 8;
-
-  if (SDL_GameControllerGetButton(GameController, SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
-    x += 127;
-  else if (SDL_GameControllerGetButton(GameController, SDL_CONTROLLER_BUTTON_DPAD_LEFT))
-    x -= 127;
-  if (SDL_GameControllerGetButton(GameController, SDL_CONTROLLER_BUTTON_DPAD_DOWN))
-    y += 127;
-  else if (SDL_GameControllerGetButton(GameController, SDL_CONTROLLER_BUTTON_DPAD_UP))
-    y -= 127;
-
-  *dx = x;
-  *dy = y;
-}
-
-///////////////////////////////////////////////////////////////////////////
-//
-//  IN_GetJoyFineDelta() - Returns the relative movement of the specified
-//      joystick without dividing the results by 256 (from +/-127)
-//
-///////////////////////////////////////////////////////////////////////////
-void IN_GetJoyFineDelta(int *dx, int *dy) {
-  if (!GameController) {
-    *dx = 0;
-    *dy = 0;
-    return;
-  }
-
-  SDL_GameControllerUpdate();
-  int x = SDL_GameControllerGetAxis(GameController, SDL_CONTROLLER_AXIS_RIGHTX) >> 8;
-  int y = SDL_GameControllerGetAxis(GameController, SDL_CONTROLLER_AXIS_LEFTY) >> 8;
-
-  if (x < -128)
-    x = -128;
-  else if (x > 127)
-    x = 127;
-
-  if (y < -128)
-    y = -128;
-  else if (y > 127)
-    y = 127;
-
-  *dx = x;
-  *dy = y;
-}
-
-int IN_GetJoyAxis(int axis) { return SDL_GameControllerGetAxis(GameController, GameControllerAxisMap[axis]); }
-
-/*
-===================
-=
-= IN_JoyButtons
-=
-===================
-*/
-
-int IN_JoyButtons() {
-  SDL_GameControllerUpdate();
-
-  int res = 0;
-  for (int i = 0; i < JoyNumButtons; ++i) {
-    if (SDL_GameControllerGetButton(GameController, (SDL_GameControllerButton)i)) {
-      // Allow controllers or PS4/PS5 controllers to use the game controller API
-      // to enter the menu.
-      if (i == SDL_CONTROLLER_BUTTON_START)
-        US_ControlPanel(buttonstate[bt_esc] = true);
-      else if (i == SDL_CONTROLLER_BUTTON_TOUCHPAD)
-        US_ControlPanel(buttonstate[bt_esc] = true);
-      else
-        res |= 1 << i;
-    }
-  }
-  return res;
-}
-
-boolean IN_JoyPresent() { return GameController != NULL; }
-
-int IN_JoyAxes(void) {
-  SDL_GameControllerUpdate();
-  int res = 0;
-  for (int i = 0; i < JoyNumAxes; ++i) {
-    int16_t pos = SDL_GameControllerGetAxis(GameController, (SDL_GameControllerAxis)GameControllerAxisMap[i]);
-    if (pos <= -0x1000)
-      res |= 1 << (i * 2);
-    else if (pos >= 0x1000)
-      res |= 1 << (i * 2 + 1);
-  }
-  return res;
-}
-
 /**
  * @brief return true if a key event was received and loaded
  *
@@ -273,19 +141,6 @@ void IN_Startup(void) {
 
   IN_ClearKeysDown();
 
-  if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) == 0 && SDL_IsGameController(param_joystickindex)) {
-    GameController = SDL_GameControllerOpen(param_joystickindex);
-    printf("Using game controller: %s\n", SDL_GameControllerName(GameController));
-    SDL_GameControllerEventState(SDL_IGNORE);
-    JoyNumButtons = SDL_CONTROLLER_BUTTON_MAX;
-    JoyNumAxes    = SDL_CONTROLLER_AXIS_MAX;
-    JoyNumHats    = 0;
-
-    // JoySensitivity = new  JoystickSens[JoyNumAxes];
-  }
-
-  SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-
   MousePresent = io_mouse_init();
 
   IN_Started = true;
@@ -299,9 +154,6 @@ void IN_Startup(void) {
 void IN_Shutdown(void) {
   if (!IN_Started)
     return;
-
-  if (GameController)
-    SDL_GameControllerClose(GameController);
 
   IN_Started = false;
 }
@@ -390,7 +242,7 @@ void IN_StartAck(void) {
   IN_ClearKeysDown();
   memset(btnstate, 0, sizeof(btnstate));
 
-  int buttons = IN_JoyButtons() << 4;
+  int buttons = 0;
 
   if (MousePresent)
     buttons |= IN_MouseButtons();
@@ -409,7 +261,7 @@ boolean IN_CheckAck(void) {
   if (LastScan)
     return true;
 
-  int buttons = IN_JoyButtons() << 4;
+  int buttons = 0;
 
   if (MousePresent)
     buttons |= IN_MouseButtons();
@@ -420,7 +272,7 @@ boolean IN_CheckAck(void) {
         // Wait until button has been released
         do {
           IN_WaitAndProcessEvents();
-          buttons = IN_JoyButtons() << 4;
+          buttons = 0;
 
           if (MousePresent)
             buttons |= IN_MouseButtons();

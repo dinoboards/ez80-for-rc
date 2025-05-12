@@ -1538,13 +1538,6 @@ int CP_Control(int _ __attribute__((unused))) {
       ShootSnd();
       break;
 
-    case CTL_JOYENABLE:
-      joystickenabled ^= 1;
-      DrawCtlScreen();
-      CusItems.curpos = -1;
-      ShootSnd();
-      break;
-
     case CTL_MOUSESENS:
     case CTL_CUSTOMIZE:
       DrawCtlScreen();
@@ -1693,9 +1686,6 @@ void DrawCtlScreen(void) {
   WindowW = 256;
   SETFONTCOLOR(TEXTCOLOR, BKGDCOLOR);
 
-  if (IN_JoyPresent())
-    CtlMenu[CTL_JOYENABLE].active = 1;
-
   if (MousePresent) {
     CtlMenu[CTL_MOUSESENS].active = CtlMenu[CTL_MOUSEENABLE].active = 1;
   }
@@ -1712,10 +1702,7 @@ void DrawCtlScreen(void) {
     VWB_DrawPic(x, y, C_NOTSELECTEDPIC);
 
   y = CTL_Y + 29;
-  if (joystickenabled)
-    VWB_DrawPic(x, y, C_SELECTEDPIC);
-  else
-    VWB_DrawPic(x, y, C_NOTSELECTEDPIC);
+  VWB_DrawPic(x, y, C_NOTSELECTEDPIC);
 
   //
   // PICK FIRST AVAILABLE SPOT
@@ -2327,11 +2314,8 @@ void DrawCustJoy(int hilight) {
     color = HIGHLIGHT;
   SETFONTCOLOR(color, BKGDCOLOR);
 
-  if (!joystickenabled) {
-    SETFONTCOLOR(DEACTIVE, BKGDCOLOR);
-    CusMenu[3].active = 0;
-  } else
-    CusMenu[3].active = 1;
+  SETFONTCOLOR(DEACTIVE, BKGDCOLOR);
+  CusMenu[3].active = 0;
 
   PrintY = CST_Y + 13 * 5;
   for (i = 0; i < 4; i++)
@@ -2569,9 +2553,6 @@ void IntroScreen(void) {
   //
   if (MousePresent)
     VWB_Bar(131 + 7, 82 - 8, 9, 2, FILLCOLOR);
-
-  if (IN_JoyPresent())
-    VWB_Bar(131 + 7, 105 - 8, 9, 2, FILLCOLOR);
 
   if (AdLibPresent && !SoundBlasterPresent)
     VWB_Bar(131 + 7, 128 - 8, 9, 2, FILLCOLOR);
@@ -3091,29 +3072,6 @@ void       ReadAnyControl(ControlInfo *ci) {
       ci->button2 = usb_mouse_report.buttons & 4;
       ci->button3 = false;
       mouseactive = 1;
-    }
-  }
-
-  if (joystickenabled && !mouseactive) {
-    int jx, jy, jb;
-
-    IN_GetJoyDelta(&jx, &jy);
-    if (jy < -SENSITIVE)
-      ci->dir = dir_North;
-    else if (jy > SENSITIVE)
-      ci->dir = dir_South;
-
-    if (jx < -SENSITIVE)
-      ci->dir = dir_West;
-    else if (jx > SENSITIVE)
-      ci->dir = dir_East;
-
-    jb = IN_JoyButtons();
-    if (jb) {
-      ci->button0 = jb & 1;
-      ci->button1 = jb & 2;
-      ci->button2 = jb & 4;
-      ci->button3 = jb & 8;
     }
   }
 }

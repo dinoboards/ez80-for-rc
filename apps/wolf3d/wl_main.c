@@ -170,14 +170,8 @@ void ReadConfig(void) {
     if (mouseenabled)
       mouseenabled = true;
 
-    if (joystickenabled)
-      joystickenabled = true;
-
     if (!MousePresent)
       mouseenabled = false;
-
-    if (!IN_JoyPresent())
-      joystickenabled = false;
 
     if (mouseadjustment < 0)
       mouseadjustment = 0;
@@ -211,9 +205,6 @@ void ReadConfig(void) {
 
     if (MousePresent)
       mouseenabled = true;
-
-    if (IN_JoyPresent())
-      joystickenabled = true;
 
     viewsize        = 14; // start with a good size
     mouseadjustment = 5;
@@ -1068,12 +1059,6 @@ static void InitGame() {
 #ifndef SPEARDEMO
   boolean didjukebox = false;
 #endif
-
-  // initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0) {
-    printf("Unable to init SDL: %s\n", SDL_GetError());
-    exit(1);
-  }
 
 #ifdef JOYSTICK_SUPPORT
   int numJoysticks = SDL_NumJoysticks();

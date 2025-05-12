@@ -224,23 +224,6 @@ void PollMouseButtons(void) {
 /*
 ===================
 =
-= PollJoystickButtons
-=
-===================
-*/
-
-void PollJoystickButtons(void) {
-  int buttons = IN_JoyButtons();
-
-  for (int i = 0, val = 1; i < JoyNumButtons; i++, val <<= 1) {
-    if (buttons & val)
-      buttonstate[buttonjoy[i]] = true;
-  }
-}
-
-/*
-===================
-=
 = PollKeyboardMove
 =
 ===================
@@ -272,31 +255,6 @@ void PollMouseMove(void) {
 
   controlx += usb_mouse_report.x * 10 / (13 - mouseadjustment);
   controly += usb_mouse_report.y * 20 / (13 - mouseadjustment);
-}
-
-/*
-===================
-=
-= PollJoystickMove
-=
-===================
-*/
-
-void PollJoystickMove(void) {
-  int joyx, joyy;
-
-  IN_GetJoyDelta(&joyx, &joyy);
-
-  int delta = buttonstate[bt_run] ? RUNMOVE * tics : BASEMOVE * tics;
-
-  if (joyx > 64 || buttonstate[bt_turnright])
-    controlx += delta;
-  else if (joyx < -64 || buttonstate[bt_turnleft])
-    controlx -= delta;
-  if (joyy > 64 || buttonstate[bt_movebackward])
-    controly += delta;
-  else if (joyy < -64 || buttonstate[bt_moveforward])
-    controly -= delta;
 }
 
 /*
@@ -377,9 +335,6 @@ void PollControls(void) {
   if (mouseenabled)
     PollMouseButtons();
 
-  if (joystickenabled)
-    PollJoystickButtons();
-
   //
   // get movements
   //
@@ -387,9 +342,6 @@ void PollControls(void) {
 
   if (mouseenabled)
     PollMouseMove();
-
-  if (joystickenabled)
-    PollJoystickMove();
 
   //
   // bound movement to a maximum

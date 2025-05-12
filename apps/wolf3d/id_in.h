@@ -45,13 +45,7 @@ typedef struct {
   Direction dir;
 } CursorInfo;
 typedef CursorInfo ControlInfo;
-// typedef struct {
-//   ScanCode button0, button1, xupleft, up, upright, left, right, downleft, down, downright;
-// } KeyboardDef;
-typedef struct {
-  word joyMinX, joyMinY, threshMinX, threshMinY, threshMaxX, threshMaxY, joyMaxX, joyMaxY, joyMultXL, joyMultYL, joyMultXH,
-      joyMultYH;
-} JoystickDef;
+
 // Global variables
 #define NumCodes 256
 extern boolean Keyboard[NumCodes];
@@ -61,14 +55,7 @@ extern boolean  MousePresent;
 extern boolean  Paused;
 extern char     LastASCII;
 extern ScanCode LastScan;
-extern int      JoyNumButtons;
 extern boolean  forcegrabmouse;
-
-struct JoystickSens {
-  int sensitivity;
-  int deadzone;
-};
-extern struct JoystickSens *JoySensitivity;
 
 // Function prototypes
 #define IN_KeyDown(code) (Keyboard[(uint8_t)(code)])
@@ -83,14 +70,11 @@ extern struct JoystickSens *JoySensitivity;
 extern void        IN_Startup(void), IN_Shutdown(void);
 extern void        IN_ClearKeysDown(void);
 extern void        IN_ReadControl(int, ControlInfo *);
-extern void        IN_GetJoyAbs(word joy, word *xp, word *yp);
-extern void        IN_SetupJoy(word joy, word minx, word maxx, word miny, word maxy);
 extern void        IN_StopDemo(void), IN_FreeDemoBuffer(void);
 extern void        IN_Ack(void);
 extern void        IN_Ack_AndPreload(void);
 extern boolean     IN_UserInput(uint24_t delay);
 extern boolean     IN_UserInput_AndPreload(uint24_t delay);
-extern word        IN_GetJoyButtonsDB(word joy);
 extern const char *IN_GetScanName(ScanCode);
 
 void IN_WaitAndProcessEvents();
@@ -98,15 +82,7 @@ void IN_ProcessEvents();
 
 int IN_MouseButtons(void);
 
-boolean IN_JoyPresent();
-void    IN_SetJoyCurrent(int joyIndex);
-int     IN_JoyButtons(void);
-void    IN_GetJoyDelta(int *dx, int *dy);
-void    IN_GetJoyFineDelta(int *dx, int *dy);
-
 void    IN_StartAck(void);
 boolean IN_CheckAck(void);
 
-int IN_GetJoyAxis(int axis);
-int IN_JoyAxes(void);
 #endif

@@ -855,13 +855,7 @@ typedef union SDL_Event {
 #define SDL_ENABLE  1
 /*@}*/
 
-extern int                 SDL_LockSurface(SDL_Surface *surface);
-extern int                 SDL_FillRect(SDL_Surface *dst, const SDL_Rect *rect, uint32_t color);
-extern int                 SDL_Init(int32_t flags);
-extern const char         *SDL_GetError(void);
 extern void                SDL_Quit(void);
-extern int                 SDL_NumJoysticks(void);
-extern void                SDL_GameControllerUpdate(void);
 extern int16_t             SDL_GameControllerGetAxis(SDL_GameController *gamecontroller, SDL_GameControllerAxis axis);
 extern uint8_t             SDL_GameControllerGetButton(SDL_GameController *gamecontroller, SDL_GameControllerButton button);
 extern SDL_Keymod          SDL_GetModState(void);
@@ -959,8 +953,6 @@ typedef struct SDL_RWops {
 } SDL_RWops;
 
 #define SDLK_m 'm'
-
-#define Mix_GetError SDL_GetError
 
 typedef void(SDLCALL *Mix_MixCallback)(void *udata, uint8_t *stream, int len);
 typedef void(SDLCALL *Mix_ChannelFinishedCallback)(int channel);

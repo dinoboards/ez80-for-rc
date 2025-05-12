@@ -627,7 +627,7 @@ int SD_PlayDigitized(word which, int leftpos, int rightpos) {
   }
 
   if (Mix_PlayChannel(channel, sample, 0) == -1) {
-    printf("Unable to play sound: %s\n", Mix_GetError());
+    printf("Unable to play sound\n");
     return 0;
   }
 
@@ -1030,7 +1030,7 @@ void SD_Startup(void) {
   //   return;
 
   // if (Mix_OpenAudio(param_samplerate, AUDIO_S16, 2, param_audiobuffer)) {
-  //   printf("Unable to open audio: %s\n", Mix_GetError());
+  //   printf("Unable to open audio\n");
   //   return;
   // }
 

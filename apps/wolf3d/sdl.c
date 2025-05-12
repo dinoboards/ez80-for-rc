@@ -18,20 +18,6 @@
 
 #include "id_mm.h"
 
-int SDL_LockSurface(SDL_Surface *surface IG) { return 0; }
-
-int SDL_FillRect(SDL_Surface *dst IG, const SDL_Rect *rect IG, uint32_t color IG) { return 0; }
-
-int SDL_Init(int32_t flags IG) { return 0; }
-
-const char *SDL_GetError(void) { return NULL; }
-
-#ifdef JOYSTICK_SUPPORT
-int SDL_NumJoysticks(void) { return 0; }
-#endif
-
-void SDL_GameControllerUpdate(void) {}
-
 int16_t SDL_GameControllerGetAxis(SDL_GameController *gamecontroller IG, SDL_GameControllerAxis axis IG) { return 0; }
 
 uint8_t SDL_GameControllerGetButton(SDL_GameController *gamecontroller IG, SDL_GameControllerButton button IG) { return 0; }
