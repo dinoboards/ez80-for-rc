@@ -22,6 +22,7 @@
 	XREF	_usb_kyb_read
 	XREF	_usb_kyb_flush
 	XREF	_usb_kyb_report
+	XREF	_usb_kyb_event
 	XREF	_usb_mse_init
 	XREF	_usb_mse_read
 	XREF	_msb_mse_report
@@ -57,8 +58,10 @@ _usb_dispatch:
 	DEC	A
 	JR	Z, usb_kyb_flush			; B = 34
 	DEC	A
-	JR	Z, _usb_kyb_report			; B = 35
-	SUB	12
+	JR	Z, usb_kyb_report			; B = 35
+	DEC	A
+	JR	Z, usb_kyb_event			; B = 36
+	SUB	11
 	JR	Z, usb_kyb_init				; B = 47
 
 	DEC	A					; B = 48
@@ -316,9 +319,34 @@ usb_kyb_flush:
 ;   A > 0: At least one report available (will be consumed after reading)
 ; When a report is available (A > 0), the 8 bytes at HL are filled
 ; See USB HID Usage Tables specification for key codes
-; usb_kyb_report:
-;
+usb_kyb_report:
+	CALL	_usb_kyb_report
+	RET.L
 
+;
+; Function B = ?? -- usb_kyb_event
+;
+; Inputs
+;  HL: Address of a kyb_event_t (3 bytes) to receive event
+;
+; Outputs
+;   A: Status
+;
+;
+; Retrieve buffered keyboard key events
+;
+; Processes the USB keyboard state buffer using usb_kyb_report to extract
+; individual key press and release events. Returns immediately if no events are
+; available.
+;
+; Modifier keys (Ctrl, Shift, Alt, etc.) are mapped to special key codes
+; ranging from E0-E7, corresponding to USB_KEY_LCTRL through to USB_KEY_RMETA
+
+usb_kyb_event:
+	PUSH	HL
+	CALL	_usb_kyb_event
+	POP	HL
+	RET.L
 ; ----------------------------------------------
 ; MSE INTERFACE
 ; ----------------------------------------------

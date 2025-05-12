@@ -64,8 +64,8 @@ _usb_kyb_report:
 	ld	bc, 8
 	pop	de			; keyboard_report_t*
 	ldir
-	ret.l
+	ret
 
 .no_queued_reports:
 	pop	hl
-	ret.l
+	ret

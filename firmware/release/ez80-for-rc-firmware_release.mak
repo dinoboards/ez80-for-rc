@@ -261,6 +261,20 @@ clean:
             $(RM) "$(WORKDIR)\kyb_driver.lst"
 	@if exist "$(WORKDIR)\kyb_driver.src"  \
             $(RM) "$(WORKDIR)\kyb_driver.src"
+	@if exist "$(WORKDIR)\kyb_driver_event.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.obj"
+	@if exist "$(WORKDIR)\kyb_driver_event.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.lis"
+	@if exist "$(WORKDIR)\kyb_driver_event.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.lst"
+	@if exist "$(WORKDIR)\kyb_driver_event.src"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.src"
+	@if exist "$(WORKDIR)\kyb_driver_eventasm.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driver_eventasm.obj"
+	@if exist "$(WORKDIR)\kyb_driver_eventasm.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driver_eventasm.lis"
+	@if exist "$(WORKDIR)\kyb_driver_eventasm.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driver_eventasm.lst"
 	@if exist "$(WORKDIR)\kyb_driverasm.obj"  \
             $(RM) "$(WORKDIR)\kyb_driverasm.obj"
 	@if exist "$(WORKDIR)\kyb_driverasm.lis"  \
@@ -506,6 +520,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
             $(WORKDIR_ESCSPACE)\internal-hiram.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driver.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driver_event.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\mse_driver.obj  \
@@ -822,6 +838,22 @@ $(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c"
 
+$(WORKDIR_ESCSPACE)\kyb_driver_event.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c"
+
+$(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s"
+
 $(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1099,6 +1131,7 @@ $(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb-interrupt.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse-interrupt.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
