@@ -8,6 +8,13 @@
 #define SCREEN_WIDTH  256
 #define SCREEN_HEIGHT 192
 
+typedef uint8_t GRB_t;
+
+#define RED_FRM_GRB(grb)   ((grb & 0x1C) >> 2)
+#define GREEN_FRM_GRB(grb) ((grb & 0xE0) >> 5)
+#define BLUE_FRM_GRB(grb)  (grb & 0x03)
+#define GRB(g, r, b)       (g >> 3) << 5 | (r >> 3) << 2 | (b >> 4)
+
 typedef struct {
   uint16_t width;
   uint16_t height;
@@ -15,7 +22,7 @@ typedef struct {
   uint8_t  pixels[];
 } pixel_surface_t;
 
-extern uint8_t gamepal[256];
+extern GRB_t gamepal[256];
 
 typedef void mem_alloc(void **baseptr, uint24_t size);
 
@@ -69,12 +76,8 @@ static inline void vdp_scn_v_line(const uint16_t x, const uint16_t y, const uint
   vdp_cmd_vdp_to_vram(x, y, 1, height, gamepal[color], DIX_RIGHT | DIY_DOWN);
 }
 
-static inline void vdp_scn_font(const uint8_t *const font_data,
-                                const uint16_t       x,
-                                const uint16_t       y,
-                                const uint16_t       width,
-                                const uint16_t       height,
-                                uint8_t              color) {
+static inline void vdp_scn_font(
+    const uint8_t *const font_data, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, GRB_t color) {
   color                = gamepal[color];
   const uint8_t  first = font_data[0] ? color : 0;
   const uint16_t size  = width * height;
@@ -92,7 +95,7 @@ static inline void vdp_scn_vga_picture(const uint8_t *const pix_data,
                                        const uint16_t       height,
                                        const uint16_t       vga_plane_width) {
 
-  const uint8_t first = gamepal[pix_data[0]];
+  const GRB_t first = gamepal[pix_data[0]];
 
   const uint8_t *p1 = &pix_data[0];
   const uint8_t *p2 = &pix_data[height * (vga_plane_width / 4)];

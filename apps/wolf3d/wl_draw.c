@@ -1364,9 +1364,6 @@ void ThreeDRefresh(void) {
     //   US_PrintSigned(fps);
     //   US_Print(" fps");
     // }
-
-    // SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-    // SDL_Flip(screen);
   }
 
 #ifdef APP_DEBUG

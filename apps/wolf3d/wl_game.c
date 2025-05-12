@@ -1,6 +1,5 @@
 // WL_GAME.C
 
-#include "sdl.h"
 #include "wl_def.h"
 #include "wl_draw.h"
 #include <math.h>

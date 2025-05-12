@@ -149,7 +149,6 @@ void LoadLatchMem(void) {
   if (latchpics[0] == NULL) {
     Quit("Unable to create surface for tiles!");
   }
-  // SDL_SetPaletteColors(surf->format->palette, gamepal, 0, 256);
 
   CA_CacheGrChunk(STARTTILE8);
   src = grsegs[STARTTILE8];
@@ -175,7 +174,6 @@ void LoadLatchMem(void) {
     if (latchpics[2 + i - start] == NULL) {
       Quit("Unable to create surface for picture!");
     }
-    SDL_SetPaletteColors(latchpics[2 + i - start]->format->palette, gamepal, 0, 256);
 
     CA_CacheGrChunk(i);
     VL_MemToLatch(grsegs[i], width, height, latchpics[2 + i - start], 0, 0);
@@ -216,8 +214,6 @@ static const uint32_t rndmasks[] = {
 
 static unsigned int rndbits_y;
 static unsigned int rndmask;
-
-extern SDL_Color curpal[256];
 
 // Returns the number of bits needed to represent the given value
 static int log2_ceil(uint32_t x) {

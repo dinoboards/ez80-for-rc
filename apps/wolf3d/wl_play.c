@@ -4,8 +4,6 @@
 #include "wl_def.h"
 #include <hbios.h>
 
-#include "sdl.h"
-
 #include "id_mm.h"
 
 /*
@@ -745,8 +743,8 @@ void ContinueMusic(int offs __attribute__((unused))) {
 #define WHITESTEPS     20
 #define WHITETICS      6
 
-SDL_Color redshifts[NUMREDSHIFTS][256];
-SDL_Color whiteshifts[NUMWHITESHIFTS][256];
+GRB_t redshifts[NUMREDSHIFTS][256];
+GRB_t whiteshifts[NUMWHITESHIFTS][256];
 
 int     damagecount, bonuscount;
 boolean palshifted;
@@ -760,8 +758,8 @@ boolean palshifted;
 */
 
 void InitRedShifts(void) {
-  SDL_Color *workptr, *baseptr;
-  int        i, j, delta;
+  GRB_t *workptr, *baseptr;
+  int    i, j, delta;
 
   //
   // fade through intermediate frames

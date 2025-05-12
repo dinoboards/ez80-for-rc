@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sdl.h"
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -1683,7 +1683,5 @@ static inline uint32_t READLONGWORD(byte **_ptr) // byte*&
 
 // By Fabien: This prevents SDL from drawing the surface, openGL does it instead.
 #include "crt.h"
-// Fab's CRT Hack
-#define SDL_Flip(x) CRT_DAC()
 
 #endif

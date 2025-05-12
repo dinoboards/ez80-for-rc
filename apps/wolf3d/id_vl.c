@@ -31,11 +31,7 @@ boolean usedoublebuffering = true;
 
 unsigned screenBits = -1; // use "best" color depth according to libSDL
 
-SDL_Surface *screen = NULL;
-unsigned     screenPitch;
-
-SDL_Window   *window   = NULL;
-SDL_Renderer *renderer = NULL;
+unsigned screenPitch;
 
 boolean  screenfaded;
 unsigned bordercolor;
@@ -44,7 +40,7 @@ unsigned bordercolor;
 
 #define RGB(r, g, b) (g >> 3) << 5 | (r >> 3) << 2 | (b >> 4)
 
-SDL_Color gamepal[] __data_on_chip = {
+GRB_t gamepal[] __data_on_chip = {
 #ifdef SPEAR
 #include "sodpal.inc"
 #else
@@ -82,7 +78,7 @@ CASSERT(lengthof(gamepal) == 256)
 =================
 */
 
-void VL_ConvertPalette(byte *srcpal, SDL_Color *destpal, int numColors) {
+void VL_ConvertPalette(byte *srcpal, GRB_t *destpal, int numColors) {
   for (int i = 0; i < numColors; i++) {
     const uint8_t r = *srcpal++;
     const uint8_t g = *srcpal++;
@@ -91,72 +87,9 @@ void VL_ConvertPalette(byte *srcpal, SDL_Color *destpal, int numColors) {
   }
 }
 
-/*
-=================
-=
-= VL_FillPalette
-=
-=================
-*/
-
-void VL_FillPalette(int red __attribute__((unused)), int green __attribute__((unused)), int blue __attribute__((unused))) {
-  // int i;
-  // SDL_Color pal[256];
-
-  // for (i = 0; i < 256; i++)
-  // {
-  // 	pal[i].r = red;
-  // 	pal[i].g = green;
-  // 	pal[i].b = blue;
-  // }
-
-  // VL_SetPalette(pal, true);
-}
-
 //===========================================================================
 
-/*
-=================
-=
-= VL_SetColor
-=
-=================
-*/
-
-void VL_SetColor(int color __attribute__((unused)),
-                 int red __attribute__((unused)),
-                 int green __attribute__((unused)),
-                 int blue __attribute__((unused))) {
-  // SDL_Color col = { static_cast<uint8_t>(red), static_cast<uint8_t>(green), static_cast<uint8_t>(blue) };
-  // curpal[color] = col;
-
-  // if (screenBits == 8)
-  // 	SDL_SetPaletteColors(screen->format->palette, &col, color, 1);
-  // else
-  // {
-  // 	SDL_SetPaletteColors(screenBuffer->format->palette, &col, color, 1);
-  // 	SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-  // 	SDL_Flip(screen);
-  // }
-}
-
 //===========================================================================
-
-/*
-=================
-=
-= VL_GetColor
-=
-=================
-*/
-
-// void VL_GetColor(int color, int *red, int *green, int *blue) {
-//   SDL_Color *col = &curpal[color];
-//   *red           = RED_FRM_GRB(col);
-//   *green         = GREEN_FRM_GRB(col);
-//   *blue          = BLUE_FRM_GRB(col);
-// }
-
 //===========================================================================
 
 /*
@@ -167,20 +100,8 @@ void VL_SetColor(int color __attribute__((unused)),
 =================
 */
 
-void VL_SetPalette(SDL_Color *palette __attribute__((unused)), bool forceupdate __attribute__((unused))) {
-  // memcpy(curpal, palette, sizeof(SDL_Color) * 256);
-
-  // if (screenBits == 8)
-  // 	SDL_SetPaletteColors(screen->format->palette, palette, 0, 256);
-  // else
-  // {
-  // 	SDL_SetPaletteColors(screenBuffer->format->palette, palette, 0, 256);
-  // 	if (forceupdate)
-  // 	{
-  // 		SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
-  // 		SDL_Flip(screen);
-  // 	}
-  // }
+void VL_SetPalette(GRB_t *palette __attribute__((unused)), bool forceupdate __attribute__((unused))) {
+  printf("VL_SetPalette\r\n");
 }
 
 //===========================================================================
@@ -193,7 +114,7 @@ void VL_SetPalette(SDL_Color *palette __attribute__((unused)), bool forceupdate 
 =================
 */
 
-// void VL_GetPalette(SDL_Color *palette) { memcpy(palette, curpal, sizeof(SDL_Color) * 256); }
+// void VL_GetPalette(GRB_t *palette) { memcpy(palette, curpal, sizeof(GRB_t) * 256); }
 
 //===========================================================================
 
@@ -214,7 +135,7 @@ void VL_FadeOut(int start __attribute__((unused)),
                 int blue __attribute__((unused)),
                 int steps __attribute__((unused))) {
   // int        i, j, orig, delta;
-  // SDL_Color *origptr, *newptr;
+  // GRB_t *origptr, *newptr;
 
   // red   = red * 255 / 63;
   // green = green * 255 / 63;
@@ -222,7 +143,7 @@ void VL_FadeOut(int start __attribute__((unused)),
 
   // VL_WaitVBL(1);
   // VL_GetPalette(palette1);
-  // memcpy(palette2, palette1, sizeof(SDL_Color) * 256);
+  // memcpy(palette2, palette1, sizeof(GRB_t) * 256);
 
   // //
   // // fade through intermediate frames
@@ -267,15 +188,15 @@ void VL_FadeOut(int start __attribute__((unused)),
 =================
 */
 
-void VL_FadeIn(int        start __attribute__((unused)),
-               int        end __attribute__((unused)),
-               SDL_Color *palette __attribute__((unused)),
-               int        steps __attribute__((unused))) {
+void VL_FadeIn(int    start __attribute__((unused)),
+               int    end __attribute__((unused)),
+               GRB_t *palette __attribute__((unused)),
+               int    steps __attribute__((unused))) {
   // int i, j, delta;
 
   // VL_WaitVBL(1);
   // VL_GetPalette(palette1);
-  // memcpy(palette2, palette1, sizeof(SDL_Color) * 256);
+  // memcpy(palette2, palette1, sizeof(GRB_t) * 256);
 
   // //
   // // fade through intermediate frames

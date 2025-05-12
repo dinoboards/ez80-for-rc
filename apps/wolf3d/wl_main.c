@@ -1383,7 +1383,7 @@ static void DemoLoop() {
 #ifndef DEMOTEST
 
 #ifdef SPEAR
-      SDL_Color pal[256];
+      GRB_t pal[256];
       CA_CacheGrChunk(TITLEPALETTE);
       VL_ConvertPalette(grsegs[TITLEPALETTE], pal, 256);
 

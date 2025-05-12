@@ -2,6 +2,8 @@
 
 // wolf compatibility
 
+#include <stdint.h>
+
 void VL_Bar(int scx, int scy, int scwidth, int scheight, uint8_t color);
 
 #ifndef ID_VL_H
@@ -19,9 +21,6 @@ void Quit(const char *error, ...);
 
 //===========================================================================
 
-extern SDL_Window   *window;
-extern SDL_Renderer *renderer;
-
 extern boolean fullscreen, usedoublebuffering;
 #define screenWidth  MAXVIEWWIDTH
 #define screenHeight SCREEN_HEIGHT
@@ -33,7 +32,7 @@ extern unsigned screenBits, screenPitch;
 extern boolean  screenfaded;
 extern unsigned bordercolor;
 
-extern SDL_Color gamepal[256];
+extern uint8_t gamepal[256];
 
 //===========================================================================
 
@@ -45,14 +44,12 @@ extern SDL_Color gamepal[256];
 
 void VL_SetTextMode(void);
 
-void VL_ConvertPalette(byte *srcpal, SDL_Color *destpal, int numColors);
-void VL_FillPalette(int red, int green, int blue);
-void VL_SetColor(int color, int red, int green, int blue);
+void VL_ConvertPalette(byte *srcpal, uint8_t *destpal, int numColors);
 void VL_GetColor(int color, int *red, int *green, int *blue);
-void VL_SetPalette(SDL_Color *palette, bool forceupdate);
-void VL_GetPalette(SDL_Color *palette);
+void VL_SetPalette(uint8_t *palette, bool forceupdate);
+void VL_GetPalette(uint8_t *palette);
 void VL_FadeOut(int start, int end, int red, int green, int blue, int steps);
-void VL_FadeIn(int start, int end, SDL_Color *palette, int steps);
+void VL_FadeIn(int start, int end, uint8_t *palette, int steps);
 
 void VL_Hlin(unsigned x, unsigned y, unsigned width, uint8_t color);
 void VL_Vlin(int x, int y, int height, int color);

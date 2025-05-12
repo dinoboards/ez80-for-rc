@@ -1,5 +1,4 @@
 #ifndef SOUND_ENABLED
-#include "sdl.h"
 #include "wl_def.h"
 
 #include "id_mm.h"
@@ -42,7 +41,6 @@ SDMode  SoundMode = sdm_Off;
 //
 
 // #include "fmopl.h"
-#include "sdl.h"
 #include "wl_def.h"
 
 #include "id_mm.h"
