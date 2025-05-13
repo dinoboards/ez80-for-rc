@@ -35,15 +35,22 @@ static inline void io_mouse_move(int24_t *const total_mouse_x, int24_t *const to
 
 static inline void io_mouse_poll() { ez80_usb_mse_read(&usb_mouse_report); }
 
+static inline void io_keyboard_flush() {
+  ez80_usb_kyb_flush();
+}
+
 static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_scanned_code, char *last_ascii_code) {
-  uint8_t result = usb_kyb_event(&usb_key);
+  uint8_t result = ez80_usb_kyb_event(&usb_key);
 
   if (result == 0)
     return false;
 
   /* Quick Exit option */
-  if (usb_key.key_code == USB_KEY_DELETE)
+  if (usb_key.key_code == USB_KEY_DELETE) {
+    printf("DELETE KEY ABORT!\r\n");
     exit(1);
+  }
+
 
   if (usb_key.key_down) {
     *last_scanned_code = usb_key.key_code;

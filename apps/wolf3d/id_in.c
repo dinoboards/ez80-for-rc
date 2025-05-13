@@ -167,6 +167,8 @@ void IN_ClearKeysDown(void) {
   LastScan  = 0;
   LastASCII = 0;
 
+  io_keyboard_flush();
+
   memset(Keyboard, 0, sizeof(Keyboard));
 }
 
