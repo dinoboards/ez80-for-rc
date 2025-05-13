@@ -188,7 +188,7 @@ CP_itemtype CusMenu[] = {{1, "", 0}, {0, "", 0}, {0, "", 0}, {1, "", 0}, {0, "",
 // CP_iteminfo struct format: short x, y, amount, curpos, indent;
 CP_iteminfo MainItems = {MENU_X, MENU_Y, lengthof(MainMenu), STARTITEM, 38};
 CP_iteminfo SndItems  = {SM_X, SM_Y1, lengthof(SndMenu), 0, 64};
-CP_iteminfo LSItems   = {LSM_X, LSM_Y, lengthof(LSMenu), 0, 24};
+CP_iteminfo LSItems   = {LSM_X, LSM_Y, lengthof(LSMenu), 0, 30};
 CP_iteminfo CtlItems  = {CTL_X, CTL_Y, lengthof(CtlMenu), -1, 56};
 CP_iteminfo CusItems  = {1, CST_Y + 13 * 2 - 4, lengthof(CusMenu), -1, 0};
 
@@ -1461,11 +1461,13 @@ int CP_SaveGame(int quick) {
       name[7] = which + '0';
 
       fontnumber = 0;
-      if (!SaveGamesAvail[which])
+      if (!SaveGamesAvail[which]) {
+        printf("SaveGame1\r\n");
         VWB_Bar(LSM_X + LSItems.indent + 1, LSM_Y + which * 13 + 1, LSM_W - LSItems.indent - 16, 10, BKGDCOLOR);
+      }
       VW_UpdateScreen();
 
-      if (US_LineInput(LSM_X + LSItems.indent + 2, LSM_Y + which * 13 + 1, input, input, true, 31, LSM_W - LSItems.indent - 30)) {
+      if (US_LineInput(LSM_X + LSItems.indent + 2, LSM_Y + which * 13 + 5, input, input, true, 31, LSM_W - LSItems.indent - 30)) {
         SaveGamesAvail[which] = 1;
         strcpy(&SaveGameNames[which][0], input);
 

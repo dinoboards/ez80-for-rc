@@ -70,9 +70,9 @@
 #define CTL_W 228
 #define CTL_H 62
 
-#define LSM_X 48
+#define LSM_X 40
 #define LSM_Y 52
-#define LSM_W 160
+#define LSM_W 175
 #define LSM_H 9 * 13 + 10
 
 #define NM_X 40
