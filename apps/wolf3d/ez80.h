@@ -35,7 +35,7 @@ static inline void io_mouse_move(int24_t *const total_mouse_x, int24_t *const to
 
 static inline void io_mouse_poll() { ez80_usb_mse_read(&usb_mouse_report); }
 
-static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_scanned_code) {
+static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_scanned_code, char *last_ascii_code) {
   uint8_t result = usb_kyb_event(&usb_key);
 
   if (result == 0)
@@ -46,7 +46,9 @@ static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_
     exit(1);
 
   if (usb_key.key_down) {
-    *last_scanned_code                  = usb_key.key_code;
+    *last_scanned_code = usb_key.key_code;
+    *last_ascii_code   = usb_key.key_ascii;
+
     keyboard_states[*last_scanned_code] = 1;
     return true;
   }

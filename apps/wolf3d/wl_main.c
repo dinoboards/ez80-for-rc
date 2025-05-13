@@ -299,7 +299,7 @@ void DiskFlopAnim(int x, int y) {
   which ^= 1;
 }
 
-int32_t DoChecksum(byte *source, unsigned size, int32_t checksum) {
+int24_t DoChecksum(byte *source, uint24_t size, int24_t checksum) {
   unsigned i;
 
   for (i = 0; i < size - 1; i++)
@@ -322,7 +322,7 @@ extern statetype s_player;
 boolean SaveTheGame(FILE *file, int x, int y) {
   //    struct diskfree_t dfree;
   //    int32_t avail,size,checksum;
-  int       checksum;
+  int24_t   checksum;
   objtype  *ob;
   objtype   nullobj;
   statobj_t nullstat;
@@ -466,7 +466,7 @@ boolean SaveTheGame(FILE *file, int x, int y) {
 */
 
 boolean LoadTheGame(FILE *file, int x, int y) {
-  int32_t   checksum, oldchecksum;
+  int24_t   checksum, oldchecksum;
   objtype   nullobj;
   statobj_t nullstat;
 
@@ -518,7 +518,7 @@ boolean LoadTheGame(FILE *file, int x, int y) {
     GetNewActor();
     nullobj.state = (statetype *)((uintptr_t)nullobj.state + (uintptr_t)&s_grdstand);
     // don't copy over the links
-    memcpy(newobj, &nullobj, sizeof(nullobj) - 8);
+    memcpy(newobj, &nullobj, sizeof(nullobj) - (sizeof(void *) * 2));
   }
 
   DiskFlopAnim(x, y);

@@ -1655,6 +1655,7 @@ static inline fixed fixed_rounded_down(fixed a) { return a & 0xffff0000; }
 
 #define DEMOCOND_SDL (!DEMOCOND_ORIG)
 
+// Determine if the pointer quivalent to non null x86 segmented (64K) pointer
 #define ISPOINTER(x) ((((uintptr_t)(x)) & ~0xffff) != 0)
 
 #define CHECKMALLOCRESULT(x)                                                                                                       \
@@ -1681,7 +1682,6 @@ static inline uint32_t READLONGWORD(byte **_ptr) // byte*&
   return val;
 }
 
-// By Fabien: This prevents SDL from drawing the surface, openGL does it instead.
 #include "crt.h"
 
 #endif

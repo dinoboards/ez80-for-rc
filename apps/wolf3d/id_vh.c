@@ -66,14 +66,14 @@ void VWB_DrawPic(int x, int y, int chunknum) {
   width  = pictable[picnum].width;
   height = pictable[picnum].height;
 
-  switch (chunknum) {
-  case 11:
-  case 12:
-    break;
+  // switch (chunknum) {
+  // case 11:
+  // case 12:
+  //   break;
 
-  default:
-    printf("VMB_DrawPic(%d, %d, %d) {%d, %d}\r\n", x, y, chunknum, width, height);
-  }
+  // default:
+  // printf("VMB_DrawPic(%d, %d, %d) {%d, %d}\r\n", x, y, chunknum, width, height);
+  // }
 
   VL_MemToScreen(grsegs[chunknum], width, height, x, y);
 }

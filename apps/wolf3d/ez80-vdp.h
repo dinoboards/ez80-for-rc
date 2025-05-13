@@ -78,6 +78,7 @@ static inline void vdp_scn_v_line(const uint16_t x, const uint16_t y, const uint
 
 static inline void vdp_scn_font(
     const uint8_t *const font_data, const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, GRB_t color) {
+  color                = color == 0 ? 31 : color;
   color                = gamepal[color];
   const uint8_t  first = font_data[0] ? color : 0;
   const uint16_t size  = width * height;

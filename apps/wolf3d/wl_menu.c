@@ -3230,7 +3230,7 @@ void Message(const char *string) {
 
   DrawWindow(WindowX - 5, PrintY - 5, mw + 10, h + 10, TEXTCOLOR);
   DrawOutline(WindowX - 5, PrintY - 5, mw + 10, h + 10, 0, HIGHLIGHT);
-  SETFONTCOLOR(31, TEXTCOLOR);
+  SETFONTCOLOR(0, TEXTCOLOR);
   US_Print(string);
   VW_UpdateScreen();
 }

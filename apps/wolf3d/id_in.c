@@ -113,7 +113,7 @@ static inline uint8_t INL_GetMouseButtons(void) { return io_mouse_buttons(); }
  *
  * @return uint8_t true if a key event was received
  */
-static inline uint8_t processEvent() { return io_keyboard_event(Keyboard, &LastScan); }
+static inline uint8_t processEvent() { return io_keyboard_event(Keyboard, &LastScan, &LastASCII); }
 
 // block waiting for a key event
 // key events are key down, followed eventually by keyup
