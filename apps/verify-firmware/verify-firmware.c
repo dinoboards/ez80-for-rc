@@ -27,6 +27,8 @@ int main(/*const int argc, const char *argv[]*/) {
   if (keyboard_index) {
     printf("Keyboard Found @ %d\r\n", keyboard_index);
 
+    ez80_usb_kyb_flush();
+
     result = ez80_usb_kyb_report(&usb_keyboard_report);
     printf("USB Report: (Press A key on its own to abort)\r\n");
     while (usb_keyboard_report.keyCode[0] != 4) { // A
@@ -44,8 +46,10 @@ int main(/*const int argc, const char *argv[]*/) {
     printf("Testing usb keyboard event que\r\n");
     usb_kyb_event_t key_event;
 
+    ez80_usb_kyb_flush();
+
     do {
-      result = usb_kyb_event(&key_event);
+      result = ez80_usb_kyb_event(&key_event);
 
       if (result)
         printf(": %d, %d:%c, %x, %x\r\n", result, key_event.key_ascii, key_event.key_ascii, key_event.key_code, key_event.key_down);
