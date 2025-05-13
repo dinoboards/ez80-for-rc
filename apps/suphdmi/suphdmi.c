@@ -62,7 +62,7 @@ extern void graphics_mode_7_double_buffering();
 void main_double_buffering_test(void) {
   graphics_mode_6_double_buffering();
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
   vdp_set_super_graphic_2();
   super_graphics_mode_double_buffering(2);
 
@@ -93,7 +93,7 @@ void main_patterns(void) {
   graphics_mode_5_test_pattern(50);
   graphics_mode_6_test_pattern(50);
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
   vdp_set_super_graphic_2();
   super_graphics_mode_test_pattern(2);
 
@@ -108,7 +108,7 @@ void main_patterns(void) {
   graphics_mode_5_test_pattern(60);
   graphics_mode_6_test_pattern(60);
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
   vdp_set_super_graphic_1();
   super_graphics_mode_test_pattern(1);
   vdp_set_super_graphic_3();
@@ -133,7 +133,7 @@ void main_patterns(void) {
   wait_for_key();
 }
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
 void main_test_vdp_cmd_logical_move_vram_to_vram() {
   // draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
   vdp_set_super_graphic_1();
@@ -168,7 +168,7 @@ void main_test_vdp_cmd_logical_move_vram_to_vram() {
 }
 #endif
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
 void main_test_vdp_cmd_move_vram_to_vram() {
   // draw a rectangle in left, then copy it to the right, bottom/left and bottom/right
   vdp_set_super_graphic_1();
@@ -201,7 +201,7 @@ void main_test_vdp_cmd_move_vram_to_vram() {
 }
 #endif
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
 void main_vram_test() {
   vdp_set_extended_palette(large_palette);
 
@@ -236,7 +236,7 @@ void main_vram_test() {
 }
 #endif
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
 void main_vram_tests() {
   // for(int i = 1; i <= 8; i++) {
   // vdp_set_super_graphic(9);
@@ -254,7 +254,7 @@ void main_vram_tests() {
 
 uint8_t source[128 * 128];
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
 void main_test_transfers() {
 
   vdp_set_super_graphic_1();

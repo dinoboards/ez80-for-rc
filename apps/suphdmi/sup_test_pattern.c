@@ -10,7 +10,7 @@
 
 */
 
-#ifdef SUPHDMI
+#ifdef VDP_SUPER_HDMI
 void super_graphics_mode_test_pattern(uint8_t gm) {
   vdp_set_extended_palette(large_palette);
 
