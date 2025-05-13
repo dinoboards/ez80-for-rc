@@ -912,11 +912,11 @@ void CalcTics(void) {
   //
   // calculate tics since last refresh for adaptive timing
   //
-  if (lasttimecount > tm_tick_get())
+  if (lasttimecount > GetTimeCount())
     SetTimeCount(lasttimecount); // if the game was paused a LONG time
 
   do {
-    newtime = tm_tick_get();
+    newtime = GetTimeCount();
     tics    = newtime - lasttimecount;
   } while (!tics); // make sure at least one tic passes
 

@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 extern ez80_usb_mse_report_ex_t usb_mouse_report;
 extern usb_kyb_event_t          usb_key;
@@ -13,13 +14,12 @@ extern uint24_t                 _time_count;
 
 extern void     ez80_startup();
 extern bool     io_mouse_init();
-extern uint24_t tm_tick_get();
 
-#define GetTimeCount tm_tick_get
+static inline uint24_t GetTimeCount() { return ez80_timers_ticks_get(); }
 
-static inline void SetTimeCount(uint24_t new_count) { _time_count = new_count; }
+static inline void SetTimeCount(uint24_t new_count) { ez80_timers_ticks_set(new_count); }
 
-static inline void SubTimeCount(uint24_t new_count) { _time_count -= new_count; }
+static inline void SubTimeCount(uint24_t new_count) { ez80_timers_ticks_set(ez80_timers_ticks_get() - new_count); }
 
 static inline uint8_t io_mouse_buttons() {
   ez80_usb_mse_state(&usb_mouse_report);

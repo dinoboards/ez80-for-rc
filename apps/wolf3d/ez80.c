@@ -7,7 +7,6 @@
 ez80_usb_mse_report_ex_t usb_mouse_report = {0};
 usb_kyb_event_t          usb_key          = {0};
 uint24_t                 _time_count      = 0;
-static uint24_t          previous_t       = 0;
 
 bool io_mouse_init() {
   const uint8_t mouse_index = ez80_usb_find_device_index(USB_IS_MOUSE);
@@ -29,18 +28,6 @@ bool io_mouse_init() {
   printf("'%s'\r\n", str_buffer);
 
   return true;
-}
-
-uint24_t tm_tick_get() {
-  uint24_t t = ez80_timers_ticks_get();
-
-  uint24_t diff = t - previous_t;
-
-  previous_t = t;
-
-  _time_count += diff;
-
-  return _time_count;
 }
 
 static uint8_t original_timer_tick_freq = 50;
