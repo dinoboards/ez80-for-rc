@@ -420,14 +420,14 @@ void HealSelf(int points) {
 ===============
 */
 
-void DrawLevel(void) {
-#ifdef SPEAR
-  if (gamestate.mapon == 20)
-    LatchNumber(2, 16, 2, 18);
-  else
-#endif
-    LatchNumber(1, 16, 2, gamestate.mapon + 1);
-}
+// void DrawLevel(void) {
+// #ifdef SPEAR
+//   if (gamestate.mapon == 20)
+//     LatchNumber(2, 16, 2, 18);
+//   else
+// #endif
+//     LatchNumber(1, 16, 2, gamestate.mapon + 1);
+// }
 
 //===========================================================================
 

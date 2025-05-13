@@ -1483,7 +1483,8 @@ void StatusDrawFace(unsigned picnum);
 void DrawFace(void);
 void DrawHealth(void);
 void HealSelf(int points);
-void DrawLevel(void);
+// void DrawLevel(void);
+static inline void DrawLevel() {}
 void DrawLives(void);
 void GiveExtraMan(void);
 void DrawScore(void);
