@@ -11,6 +11,7 @@
 	global	_usb_tick_sr
 	XREF	_in_critical_usb_section
 	XREF	_ch_command
+	; XREF	_delay
 	XREF	usb_tick_toggle
 
 	segment	INTERNAL_RAM_ROM

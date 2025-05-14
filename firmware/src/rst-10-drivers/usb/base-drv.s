@@ -46,7 +46,6 @@ keep_waiting:
 	or	l
 	jr	nz, try_again
 
-	call	_delay
 	ld	a, %FF
 	in	a, (_CH376_COMMAND_PORT & %FF)
 	bit	4, a			; _CH376_COMMAND_PORT & PARA_STATE_BUSY

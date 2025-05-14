@@ -28,24 +28,3 @@ l_ch_command_00103:
 l_ch_command_00104:
 	djnz	l_ch_command_00102
 	jr	l_ch_command_00103
-
-	public	_di_and_save
-; uint24_t di_and_save();
-_di_and_save:
-	ld	a, i
-	push	af
-	pop	hl
-	ret
-
-	public	_restore_ei
-; void restore_ei(uint24_t s)
-_restore_ei:
-	ld	iy, 0
-	add	iy, sp
-	ld	hl, (iy+3)
-	push	hl
-	pop	af
-	jp	po, .skip
-	ei
-.skip
-	ret

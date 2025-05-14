@@ -6,7 +6,7 @@ $$S1:
 	ld	a, +(_CH376_COMMAND_PORT / 256)
 	in	a, (_CH376_COMMAND_PORT & %FF)
 	bit	4, a
-	jr	nz, $$S4
+	jr	nz, $$S3
 $$S2:
 	ld	bc, _CH376_COMMAND_PORT
 	ld	a, CMD
