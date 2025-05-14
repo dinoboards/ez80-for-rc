@@ -1,3 +1,4 @@
+#include "kyb_driver_event.h"
 #include "class_hid_keyboard.h"
 #include <stdbool.h>
 #include <stdint.h>

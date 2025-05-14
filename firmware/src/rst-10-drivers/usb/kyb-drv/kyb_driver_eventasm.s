@@ -277,6 +277,9 @@ BB0_2:
 
 	SECTION BSS
 
+	GLOBAL	_evnt_write_index
+	GLOBAL	_evnt_read_index
+
 ; usb_keyboard_report_t previous_report = {0};
 _evnt_previous_report:
 	ds	8

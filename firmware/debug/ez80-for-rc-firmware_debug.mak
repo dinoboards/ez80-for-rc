@@ -834,14 +834,16 @@ $(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c"
 
 $(WORKDIR_ESCSPACE)\kyb_driver_event.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c"
 
 $(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj :  \

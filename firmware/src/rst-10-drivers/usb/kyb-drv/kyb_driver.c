@@ -4,6 +4,7 @@
 #include "../base-drv/dev_transfers.h"
 #include "../base-drv/usb_state.h"
 #include "class_hid_keyboard.h"
+#include "kyb_driver_event.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
@@ -100,7 +101,7 @@ uint8_t usb_kyb_flush() {
   uint8_t *b;
 
   DI;
-  write_index = read_index = kyb_rpt_write_index = kyb_rpt_read_index = 0;
+  write_index = read_index = kyb_rpt_write_index = kyb_rpt_read_index = evnt_write_index = evnt_read_index = 0;
 
   i = sizeof(kyb_previous);
   a = (uint8_t *)&kyb_previous;
