@@ -120,6 +120,9 @@ void main_patterns(void) {
   vdp_set_super_graphic_9();
   super_graphics_mode_test_pattern(9);
 
+  vdp_set_super_graphic_10();
+  super_graphics_mode_test_pattern(10);
+
   printf("Rotate through full set of green colours\r\n");
   wait_for_key();
   RGB green = {0, 0, 0};
@@ -314,7 +317,7 @@ int main() {
 
   // main_double_buffering_test();
 
-  // main_patterns();
+  main_patterns();
 
   // while(true) {
   //   vdp_set_super_graphic_3();
@@ -322,7 +325,7 @@ int main() {
   // }
   // main_test_transfers();
 
-  graphics_mode_7_logical_transforms();
+  // graphics_mode_7_logical_transforms();
 
   return 0;
 }

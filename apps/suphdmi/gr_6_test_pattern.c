@@ -40,7 +40,7 @@ void graphics_mode_6_test_pattern(uint8_t refesh_rate) {
 
     printf("Graphics Mode 6 (%d x %d) @ %dHz, 16 Colours\r\n", vdp_get_screen_width(), vdp_get_screen_height(), refesh_rate);
 
-    test_pattern(4, 4);
+    test_pattern(4, 1);
     // wait_for_key();
   }
 }

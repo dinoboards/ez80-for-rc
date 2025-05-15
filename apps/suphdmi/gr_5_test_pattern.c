@@ -29,7 +29,7 @@ void graphics_mode_5_test_pattern(uint8_t refesh_rate) {
 
     printf("Graphics Mode 5 (%d x %d) @ %dHz, 4 Colours\r\n", vdp_get_screen_width(), vdp_get_screen_height(), refesh_rate);
 
-    test_pattern(2, 3);
+    test_pattern(2, 1);
 
     // wait_for_key();
   }

@@ -4,6 +4,25 @@
 #include <stdio.h>
 #include <v99x8-super.h>
 
+static RGB palette[16] = {
+    {0, 0, 0},       // Black
+    {255, 0, 0},     // Bright Red
+    {0, 255, 0},     // Bright Green
+    {0, 0, 255},     // Bright Blue
+    {255, 255, 255}, // White
+    {146, 0, 0},     // Medium Red
+    {0, 146, 0},     // Medium Green
+    {0, 0, 146},     // Medium Blue
+    {109, 109, 109}, // Gray
+    {255, 255, 0},   // Yellow
+    {255, 0, 255},   // Magenta
+    {0, 255, 255},   // Cyan
+    {182, 73, 0},    // Brown
+    {73, 182, 73},   // Light Green
+    {73, 73, 182},   // Light Blue
+    {182, 182, 182}  // Light Gray
+};
+
 void graphics_mode_7_double_buffering() {
   vdp_set_refresh(50);
   vdp_set_lines(212);
@@ -52,12 +71,12 @@ void graphics_mode_7_logical_transforms() {
   vdp_set_refresh(50);
   vdp_set_lines(212);
   vdp_set_graphic_7();
-  // vdp_set_palette(palette);
+  vdp_set_palette(palette);
 
   printf("Graphics Mode 7 (%d x %d), 256 Colours, Logical Transform\r\n", get_screen_width(), get_screen_height());
 
   // erase screen with cpu to vram operation
-  vdp_cmd_move_data_to_vram(255, 0, 0, 256, 212, DIX_RIGHT | DIY_DOWN, 256 * 212);
+  vdp_cmd_move_data_to_vram(0, 0, 0, 256, 212, DIX_RIGHT | DIY_DOWN, 256 * 212);
   for (int i = 1; i < 256 * 212; i++) {
     vdp_cmd_send_byte(i);
     // test_for_escape();

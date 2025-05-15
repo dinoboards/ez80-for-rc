@@ -16,7 +16,7 @@ void super_graphics_mode_test_pattern(uint8_t gm) {
 
   printf("Super Graphics Mode %d (%d x %d), 256 Colours\r\n", gm, get_screen_width(), get_screen_height());
 
-  test_pattern(16, 15);
+  test_pattern(16, 1);
   // wait_for_key();
 }
 

@@ -5,15 +5,15 @@
 #include <ez80-firmware.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 extern ez80_usb_mse_report_ex_t usb_mouse_report;
 extern usb_kyb_event_t          usb_key;
 extern uint24_t                 _time_count;
 
-extern void     ez80_startup();
-extern bool     io_mouse_init();
+extern void ez80_startup();
+extern bool io_mouse_init();
 
 static inline uint24_t GetTimeCount() { return ez80_timers_ticks_get(); }
 
@@ -35,9 +35,7 @@ static inline void io_mouse_move(int24_t *const total_mouse_x, int24_t *const to
 
 static inline void io_mouse_poll() { ez80_usb_mse_read(&usb_mouse_report); }
 
-static inline void io_keyboard_flush() {
-  ez80_usb_kyb_flush();
-}
+static inline void io_keyboard_flush() { ez80_usb_kyb_flush(); }
 
 static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_scanned_code, char *last_ascii_code) {
   uint8_t result = ez80_usb_kyb_event(&usb_key);
@@ -50,7 +48,6 @@ static inline bool io_keyboard_event(bool *const keyboard_states, uint8_t *last_
     printf("DELETE KEY ABORT!\r\n");
     exit(1);
   }
-
 
   if (usb_key.key_down) {
     *last_scanned_code = usb_key.key_code;

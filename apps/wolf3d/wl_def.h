@@ -1485,12 +1485,12 @@ void DrawHealth(void);
 void HealSelf(int points);
 // void DrawLevel(void);
 static inline void DrawLevel() {}
-void DrawLives(void);
-void GiveExtraMan(void);
-void DrawScore(void);
-void DrawWeapon(void);
-void DrawKeys(void);
-void DrawAmmo(void);
+void               DrawLives(void);
+void               GiveExtraMan(void);
+void               DrawScore(void);
+void               DrawWeapon(void);
+void               DrawKeys(void);
+void               DrawAmmo(void);
 
 /*
 =============================================================================
