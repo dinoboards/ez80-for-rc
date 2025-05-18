@@ -74,8 +74,19 @@ C**********************************************************************
  * Enable command line processing (LOOP=10, II=1 if disabled).
  *
  */
+#ifdef __EZ80__
+#include <ez80-firmware.h>
+#include <stdint.h>
+typedef double double_t;
 
+#define native_timer_start() ez80_timers_ticks_get()
+#define native_timer_stop()  ez80_timers_ticks_get()
+#define native_timer_rate()  ez80_timers_freq_tick_get();
+
+#else
 #include <hbios_timer.h>
+
+#endif
 
 #ifdef STATIC
 #undef STATIC
@@ -431,7 +442,7 @@ IILOOP:
 
   finisec = native_timer_stop();
 
-  double_t usertime = (double_t)(finisec - startsec) / (double_t)sysget_tick_rate();
+  double_t usertime = (double_t)(finisec - startsec) / (double_t)native_timer_rate();
   /*
   C----------------------------------------------------------------
   C      Performance in Whetstone KIP's per second is given by

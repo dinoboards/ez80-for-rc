@@ -56,7 +56,7 @@ double_t User_Time, Microseconds, Dhrystones_Per_Second;
 Rec_Type malloc_1;
 Rec_Type malloc_2;
 
-void main(void)
+int main(void)
 /*****/
 
 /* main program, corresponds to procedures        */
@@ -160,7 +160,7 @@ void main(void)
 #endif
 
 #ifdef TIMEFUNC
-  User_Time = (float)(End_Time - Begin_Time) / (float)sysget_tick_rate();
+  User_Time = (float)(End_Time - Begin_Time) / (float)native_timer_rate();
 
   if (User_Time < Too_Small_Time) {
     printf("Measured time too small (less than %d) to obtain meaningful results\n", Too_Small_Time);
@@ -179,6 +179,8 @@ void main(void)
     printf("\n");
   }
 #endif
+
+  return 0;
 }
 
 #ifndef STATIC

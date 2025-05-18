@@ -5,5 +5,6 @@
 
 #define native_timer_start() sysget_tick()
 #define native_timer_stop()  sysget_tick()
+#define native_timer_rate()  sysget_tick_rate()
 
 #endif

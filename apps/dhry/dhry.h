@@ -372,6 +372,19 @@
  *
  */
 
+#ifdef __EZ80__
+#include <ez80-firmware.h>
+#include <stdint.h>
+typedef double double_t;
+
+#define native_timer_start() ez80_timers_ticks_get()
+#define native_timer_stop()  ez80_timers_ticks_get()
+#define native_timer_rate()  ez80_timers_freq_tick_get();
+
+#else
+
+#endif
+
 #define TIMEFUNC
 #define STATIC
 #define PRINTF
@@ -404,10 +417,14 @@ typedef enum { Ident_1, Ident_2, Ident_3, Ident_4, Ident_5, Indent_Unknown } Enu
 #define TIMER_STOP()
 #endif
 
+#ifdef __EZ80__
+
+#else
 #ifdef TIMEFUNC
 #include <hbios_timer.h>
 // These functions return a long whose difference
 // indicates time passage in seconds.
+#endif
 #endif
 
 /* General definitions: */
