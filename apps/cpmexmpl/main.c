@@ -2,22 +2,24 @@
 #include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-CPM_FCB fcb;
-char    buffer[150];
+CPM_FCB fcb __attribute__((section(".bss_z80")));
+char    buffer[150] __attribute__((section(".bss_z80")));
 
 void test_cpmfcb_address(void) {
-  if ((uint24_t)&CPM_SYS_FCB == 0x03005C)
+  if (CPM_SYS_FCB == (CPM_FCB *)0x03005C)
     printf("fcb_address: OK\r\n");
   else {
-    printf("fcb_address: FAIL\r\n");
+    printf("fcb_address: FAIL %X, %X\r\n", (uintptr_t)&CPM_SYS_FCB, (uintptr_t)CPM_SYS_FCB);
+    exit(1);
   }
 
-  CPM_SYS_FCB.drive   = 'A';
-  CPM_SYS_FCB.name[0] = 0;
+  CPM_SYS_FCB->drive   = 'A';
+  CPM_SYS_FCB->name[0] = 0;
 
-  if (CPM_SYS_FCB.drive == 'A' && CPM_SYS_FCB.name[0] == 0)
+  if (CPM_SYS_FCB->drive == 'A' && CPM_SYS_FCB->name[0] == 0)
     printf("fcb update: OK\r\n");
   else {
     printf("fcb update: FAIL\r\n");
@@ -56,7 +58,11 @@ void test_cpm_get_iobyte() {
   printf("Console device: %s\r\n", console_device);
 }
 
-void test_cpm_c_writestr() { cpm_c_writestr(AS_NEAR_PTR("CP/M\r\n$")); }
+void test_cpm_c_writestr() {
+  strcpy(buffer, "CP/M\r\n$");
+
+  cpm_c_writestr(AS_NEAR_PTR(buffer));
+}
 
 void test_cpm_c_readstr() {
   memset(buffer, 0, sizeof(buffer));
