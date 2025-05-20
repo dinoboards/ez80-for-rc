@@ -1,8 +1,10 @@
-# CP/M applications for the eZ80 CPU module
+# Applications compatible the eZ80 CPU module
 
 These applications are designed specifically for operating on the eZ80 CPU running CP/M under RomWBW's HBIOS.
 
 The applications are compiled/assembled with either `z88dk` or `ez80-clang`
+
+Many of the applications can be invoke with the `--help` or `/?` argument to get application usage details.
 
 See below for building the applications yourself.
 
@@ -14,17 +16,13 @@ Draws a rotating 3d cube outline.  Requires a V99x8 VDP Module.
 
 A benchmarking tool using the dhrystone measurement process.  See its [readme](./dhry/readme.md).
 
+### EXE
+
+A tool to load compliant applications into extended linear memory.
+
 ### EZ80
 
 A tool to report on the eZ80 current bus timing and configuration.
-
-### FWMAIN
-
-A tool to erase the *ALT* firmware and revert back to the *main* default firmware.
-
-### FWUPDATE
-
-A tool to flash an *ALT* firmware onto the eZ80.
 
 ### HWADL
 
@@ -49,6 +47,10 @@ Draw a mbrot image.   Requires a V99x8 VDP Module.
 ### WHET
 
 A benchmarking tool using the whetstone measurement process.  See its [readme](./whet/readme.md).
+
+### USB
+
+A utility tool to test and verify USB devices connected to the `USB for RC` module
 
 
 ## Building
