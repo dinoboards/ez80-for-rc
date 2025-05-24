@@ -9,7 +9,6 @@
 	XREF	_rx_buffer_init
 	XREF	_init_clocks
 	XREF	__c_startup
-	XREF	_configure_onchip_mem
 
 	XREF	_io_bus_mode_and_timing
 	XREF	_mem_bus_mode_and_timing
@@ -55,7 +54,12 @@ _main:
 
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
 	LD	MB, A
-	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
+
+	XREF	z80_invoke
+	ld	iy, 0
+	call	z80_invoke
+
+	;JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
 
 
 	GLOBAL	remove_usb_tick_hook

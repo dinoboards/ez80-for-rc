@@ -53,13 +53,13 @@ CFLAGS =  \
 -asmsw:"   \
 	-define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1  \
 	-include:\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\" -list  \
-	-NOlistmac -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn -debug  \
+	-listmac -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn -debug  \
 	-NOigcase -cpu:eZ80F92"
 
 ASFLAGS =  \
 -define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1  \
 -include:"\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\"" -list  \
--NOlistmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn  \
+-listmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn  \
 -debug -NOigcase -cpu:eZ80F92
 
 LDFLAGS = @.\ez80-for-rc-firmware_debug.linkcmd
@@ -84,6 +84,12 @@ clean:
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.hex"
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"
+	@if exist "$(WORKDIR)\z80-emulator.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator.obj"
+	@if exist "$(WORKDIR)\z80-emulator.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator.lis"
+	@if exist "$(WORKDIR)\z80-emulator.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator.lst"
 	@if exist "$(WORKDIR)\base-drv.obj"  \
             $(RM) "$(WORKDIR)\base-drv.obj"
 	@if exist "$(WORKDIR)\base-drv.lis"  \
@@ -495,6 +501,7 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
+            $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
@@ -556,6 +563,14 @@ OBJS =  \
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
+
+$(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator.s"
 
 $(WORKDIR_ESCSPACE)\base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv.s  \
