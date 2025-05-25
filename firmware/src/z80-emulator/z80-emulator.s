@@ -1963,22 +1963,25 @@ ix_instr_table:
 	jp	z80_nop			; DD FE
 	jp	z80_nop			; DD FF
 
-	; $DD 09 add ix, bc
-z80_addixbc:
+z80_addirrr:	macro	ir, rr
+z80_add&ir&rr:
 	exx
-	push	bc
+	push	rr
 	exx
 	pop	bc
-	ld	hl, (ix+z80_reg_ix)
+	ld	hl, (ix+z80_reg_&ir)
 	ex	af, af'
 	add.s	hl, bc
 	ex	af, af'
-	ld	(ix+z80_reg_ix), hl
+	ld	(ix+z80_reg_&ir), hl
 	z80loop
+	endmacro
 
-z80_addixde:
-	call	not_implemented
-	z80loop
+	; $DD 09 add ix, bc
+	z80_addirrr	ix,bc
+
+	; $DD 19 add ix, de
+	z80_addirrr	ix,de
 
 z80_ldirnn	macro ir
 z80_ld&ir&nn:
@@ -2000,9 +2003,18 @@ z80_incix:
 	call	not_implemented
 	z80loop
 
-z80_addixix:
-	call	not_implemented
+z80_addirir	macro	ir
+z80_add&ir&ir:
+	ld	hl, (ix+z80_reg_&ir)
+	ex	af, af'
+	add.s	hl, hl
+	ex	af, af'
+	ld	(ix+z80_reg_&ir), hl
 	z80loop
+	endmacro
+
+	; $DD $29 add ix, ix
+	z80_addirir	ix
 
 z80_ldix_nn_:
 	call	not_implemented
@@ -2024,9 +2036,18 @@ z80_ldix_n_n_:
 	call	not_implemented
 	z80loop
 
-z80_addixsp:
-	call	not_implemented
+z80_addirsp	macro ir
+z80_add&ir&sp:
+	ld	hl, (ix+z80_reg_&ir)
+	ex	af, af'
+	add.s	hl, sp
+	ex	af, af'
+	ld	(ix+z80_reg_&ir), hl
 	z80loop
+	endmacro
+
+	; $DD $39 add ix,sp
+	z80_addirsp	ix
 
 z80_ldbix_n_:
 	call	not_implemented
@@ -2592,21 +2613,10 @@ iy_instr_table:
 	jp	z80_nop			; FD FF
 
 	; $FD 09 add iy, bc
-z80_addiybc:
-	exx
-	push	bc
-	exx
-	pop	bc
-	ld	hl, (ix+z80_reg_iy)
-	ex	af, af'
-	add.s	hl, bc
-	ex	af, af'
-	ld	(ix+z80_reg_iy), hl
-	z80loop
+	z80_addirrr	iy, bc
 
-z80_addiyde:
-	call	not_implemented
-	z80loop
+	; $FD 19 add iy, de
+	z80_addirrr	iy, de
 
 	; $FD 21 ld iy, nn
 	z80_ldirnn	iy
@@ -2619,9 +2629,8 @@ z80_inciy:
 	call	not_implemented
 	z80loop
 
-z80_addiyiy:
-	call	not_implemented
-	z80loop
+	; $fd $29 add iy, iy
+	z80_addirir	iy
 
 z80_ldiy_nn_:
 	call	not_implemented
@@ -2643,9 +2652,8 @@ z80_ldiy_n_n_:
 	call	not_implemented
 	z80loop
 
-z80_addiysp:
-	call	not_implemented
-	z80loop
+	; $FD $39 add iy,sp
+	z80_addirsp	iy
 
 z80_ldbiy_n_:
 	call	not_implemented
