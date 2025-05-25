@@ -52,15 +52,19 @@ _main:
 	;XREF	_spike
 	;call	_spike
 
+IFDEF ZEXALL
+	xref	Z80test
+	call	Z80test
+ENDIF
+
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
 	LD	MB, A
 
-	XREF	z80_invoke
-	ld	iy, 0
-	call	z80_invoke
+	;XREF	z80_invoke
+	;ld	iy, 0
+	;call	z80_invoke
 
-	;JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
-
+	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
 
 	GLOBAL	remove_usb_tick_hook
 	; remove the usb key/mouse inter handler hook

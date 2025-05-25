@@ -84,12 +84,32 @@ clean:
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.hex"
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"
+	@if exist "$(WORKDIR)\z80-test.obj"  \
+            $(RM) "$(WORKDIR)\z80-test.obj"
+	@if exist "$(WORKDIR)\z80-test.lis"  \
+            $(RM) "$(WORKDIR)\z80-test.lis"
+	@if exist "$(WORKDIR)\z80-test.lst"  \
+            $(RM) "$(WORKDIR)\z80-test.lst"
+	@if exist "$(WORKDIR)\z80-emulator-logging.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-logging.obj"
+	@if exist "$(WORKDIR)\z80-emulator-logging.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-logging.lis"
+	@if exist "$(WORKDIR)\z80-emulator-logging.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-logging.lst"
+	@if exist "$(WORKDIR)\z80-emulator-logging.src"  \
+            $(RM) "$(WORKDIR)\z80-emulator-logging.src"
 	@if exist "$(WORKDIR)\z80-emulator.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator.obj"
 	@if exist "$(WORKDIR)\z80-emulator.lis"  \
             $(RM) "$(WORKDIR)\z80-emulator.lis"
 	@if exist "$(WORKDIR)\z80-emulator.lst"  \
             $(RM) "$(WORKDIR)\z80-emulator.lst"
+	@if exist "$(WORKDIR)\zexall.obj"  \
+            $(RM) "$(WORKDIR)\zexall.obj"
+	@if exist "$(WORKDIR)\zexall.lis"  \
+            $(RM) "$(WORKDIR)\zexall.lis"
+	@if exist "$(WORKDIR)\zexall.lst"  \
+            $(RM) "$(WORKDIR)\zexall.lst"
 	@if exist "$(WORKDIR)\base-drv.obj"  \
             $(RM) "$(WORKDIR)\base-drv.obj"
 	@if exist "$(WORKDIR)\base-drv.lis"  \
@@ -501,7 +521,10 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
+            $(WORKDIR_ESCSPACE)\z80-test.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
+            $(WORKDIR_ESCSPACE)\zexall.obj  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
@@ -564,6 +587,22 @@ OBJS =  \
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
 
+$(WORKDIR_ESCSPACE)\z80-test.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-test.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-test.s"
+
+$(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
+
 $(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -571,6 +610,10 @@ $(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator.s"
+
+$(WORKDIR_ESCSPACE)\zexall.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
 
 $(WORKDIR_ESCSPACE)\base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv.s  \

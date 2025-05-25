@@ -2,33 +2,64 @@
 
 	.assume	adl=1
 
-	section	BSS
-
-z80_exmain macro operation
+z80_exmain macro operation, op2, op3, op4
 	exx
 	operation
+	op2
+	op3
+	op4
 	exx
-	jp	z80_loop
+	z80loop
 	endmacro
 
-z80_exaf macro operation
-	ex	af, af'
+z80_exmain2 macro name, operation, op2, op3, op4
+z80_&name:
+	exx
 	operation
-	ex	af, af'
-	jp	z80_loop
+	op2
+	op3
+	op4
+	exx
+	z80loop
 	endmacro
 
-z80_exall	macro	operation
+z80_exaf macro operation, op2, op3
+	ex	af, af'
+	operation
+	op2
+	op3
+	ex	af, af'
+	z80loop
+	endmacro
+
+z80_exall	macro	operation, op2, op3
 	exx
 	ex	af, af'
 	operation
+	op2
+	op3
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 	endmacro
+
+z80_exall2	macro	name, operation, op2, op3
+z80_&name:
+	exx
+	ex	af, af'
+	operation
+	op2
+	op3
+	ex	af, af'
+	exx
+	z80loop
+	endmacro
+
 
 ; ez80's alt version of BC, DE, HL contain the emulated z80's main registers
 ; the ez80's alt registers are stored in reg_aXX below:
+
+	section	BSS
 
 ; registers
 z80_regs:
@@ -56,30 +87,65 @@ _reg_iy:
 	ds	3
 z80_reg_iy	equ	18
 
-; _reg_sp:
-; 	ds	3
-; z80_reg_sp	equ	21
+	global	_reg_af
+	global	_reg_bc
+	global	_reg_de
+	global	_reg_hl
+	global	_reg_ix
+	global	_reg_iy
+	global	_reg_pc
+	global	_reg_sp
+
+; following only used for logging
+_reg_af:
+	ds	3
+z80_reg_af	equ	21
+
+_reg_bc:
+	ds	3
+z80_reg_bc	equ	24
+
+_reg_de:
+	ds	3
+z80_reg_de	equ	27
+
+_reg_hl:
+	ds	3
+z80_reg_hl	equ	30
+
+_reg_pc:
+	ds	3
+z80_reg_pc	equ	33
+
+_reg_sp:
+	ds	3
+z80_reg_sp	equ	36
 
 
 	section	CODE
 	global	z80_invoke
 
-test_poi:
-	push	iy
-	pop	hl
-	ld	de, %ffec
-	or	a
-	sbc.s	hl, de
-	ret	nz
-poi:
-	nop
-	ret
+; test_poi:
+; 	push	iy
+; 	pop	hl
+; 	ld	de, %0217
+; 	or	a
+; 	sbc.s	hl, de
+; 	ret	nz
+; poi:
+; 	nop
+; 	ret
 
-; tstpoi	macro
+; z80loop	macro
 ; 	call	test_poi
+; 	jp	z80_loop
 ; 	endmacro
 
-tstpoi	macro
+test_poi macro
+	endmacro
+
+z80loop	macro
+	jp	z80_loop
 	endmacro
 
 ; start executing z80 code at location: MBASE/IY
@@ -99,9 +165,6 @@ z80_invoke:
 
 	ld	ix, z80_regs
 
-z80_loop:
-	tstpoi
-
 z80_byte_jump	macro	instr_table
 	or	a
 	sbc	hl, hl
@@ -114,6 +177,7 @@ z80_byte_jump	macro	instr_table
 	jp	(hl)
 	endmacro
 
+z80_loop:
 	z80_byte_jump	z80_instr_table
 
 z80_instr_table:
@@ -147,7 +211,7 @@ z80_instr_table:
 	jp	z80_decde		; 1B
 	jp	z80_ince		; 1C
 	jp	z80_dece		; 1D
-	jp	z80_ldenn		; 1E
+	jp	z80_lden		; 1E
 	jp	z80_rra			; 1F
 	jp	z80_jrnzd		; 20
 	jp	z80_ldhlnn		; 21
@@ -294,13 +358,13 @@ z80_instr_table:
 	jp	z80_xor_hl_		; AE
 	jp	z80_xora		; AF
 	jp	z80_orab		; B0
-	jp	z80_orac			; B1
-	jp	z80_orad			; B2
-	jp	z80_orae			; B3
-	jp	z80_orah			; B4
-	jp	z80_oral			; B5
-	jp	z80_or_hl_		; B6
-	jp	z80_oraa			; B7
+	jp	z80_orac		; B1
+	jp	z80_orad		; B2
+	jp	z80_orae		; B3
+	jp	z80_orah		; B4
+	jp	z80_oral		; B5
+	jp	z80_ora_hl_		; B6
+	jp	z80_oraa		; B7
 	jp	z80_cpab		; B8
 	jp	z80_cpac		; B9
 	jp	z80_cpad		; BA
@@ -343,7 +407,7 @@ z80_instr_table:
 	jp	z80_rst18		; DF
 	jp	z80_retpo		; E0
 	jp	z80_pophl		; E1
-	jp	z80_jppon		; E2
+	jp	z80_jppnn		; E2
 	jp	z80_ex_sp_hl		; E3
 	jp	z80_callponn		; E4
 	jp	z80_pushhl		; E5
@@ -379,64 +443,34 @@ not_implemented:
 
 	; $00 nop
 z80_nop:
-	jp	z80_loop
+	z80loop
 
 	; $01 ld bc, nn
-z80_ldbcnn:
-	exx
-	ld.s	bc, (iy)
-	exx
-	inc	iy
-	inc	iy
-	jp	z80_loop
+	z80_exmain2	ldbcnn, {ld.s bc, (iy)}, {inc iy}, {inc iy}
 
 	; $02 ld (bc), a
-z80_ld_bc_a:
-	exx
-	ex	af, af'
-	ld.s	(bc), a
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall2	ld_bc_a, {ld.s (bc), a}
 
 	; $03 inc bc
-z80_incbc:
-	exx
-	inc	bc
-	exx
-	jp	z80_loop
+	z80_exmain2	incbc, {inc bc}
 
 	; $04 inc b
 z80_incb:
-	exx
-	ex	af, af'
-	inc	b
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{inc b}
 
-
+	; $05 dec b
 z80_decb:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{dec b}
 
 	; $06 ld b, n
 z80_ldbn:
-	exx
-	ld.s	b, (iy)
-	exx
-	inc	iy
-	jp	z80_loop
+	z80_exmain	{ld.s	b, (iy)}, {inc iy}
 
 	; $07 rlca
 z80_rlca:
-	ex	af, af'
-	rlca
-	ex	af, af'
-	jp	z80_loop
+	z80_exaf	{rlca}
 
 	; $08 ex af, af'
-
 ; z80 emulated state: A =>1, A'=>2
 ; ez80 state        : ()=>2, A'=>1
 z80_exafaaf:
@@ -448,26 +482,19 @@ z80_exafaaf:
 	push	af
 	pop	bc
 	ld	(ix+z80_reg_aaf), bc	; ()=>1
-	jp	z80_loop
+	z80loop
 
 	; $09 add hl, bc
 z80_addhlbc:
-	exx
-	ex	af, af'
-	add.s	hl, bc
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{add.s	hl, bc}
 
 
 z80_lda_bc_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-
-z80_decbc:
-	call	not_implemented
-	jp	z80_loop
+	; $0B dec bc
+	z80_exmain2	decbc, {dec bc}
 
 	; $0C inc c
 z80_incc:
@@ -479,72 +506,59 @@ z80_decc:
 
 	; $0E ld c, n
 z80_ldcn:
-	exx
-	ld.s	c, (iy)
-	inc	iy
-	exx
-	jp	z80_loop
+	z80_exmain	{ld.s c, (iy)}, {inc iy}
 
 	; $0F rrca
 z80_rrca:
 	z80_exaf	{rrca}
 
-	; $10 djnz d
-z80_djnzd:
+z80_jrccd	macro opand
 	inc	iy
 	exx
 	ex	af, af'
-	djnz	z80_djnzd1
+	opand	$$skip1
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
-z80_djnzd1:
+$$skip1:
 	ex	af, af'
 	exx
 	ld.s	a, (iy-1)
 	jp	_z80_add_a_to_pc
+	endmacro
+
+	; $10 djnz d
+z80_djnzd:
+	z80_jrccd	djnz
 
 	; $11 ld de, nn
 z80_lddenn:
-	exx
-	ld.s	de, (iy)
-	exx
-	inc	iy
-	inc	iy
-	jp	z80_loop
+	z80_exmain	{ld.s de, (iy)}, {inc iy}, {inc iy}
 
-
-z80_ld_de_a:
-	call	not_implemented
-	jp	z80_loop
+	; $12 ld (de), a
+	z80_exall2	ld_de_a, {ld.s (de), a}
 
 	; $13 inc de
 z80_incde:
-	exx
-	inc	de
-	exx
-	jp	z80_loop
+	z80_exmain	{inc de}
 
-
+	; $14 inc d
 z80_incd:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{inc d}
 
-
+	; $15 dec d
 z80_decd:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{dec d}
 
-
+	; $16 ld d, n
 z80_lddn:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain	{ld.s d, (iy)}, {inc iy}
 
 
 z80_rla:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 	; $18 JR d
@@ -557,17 +571,11 @@ _z80_add_a_to_pc:
 	sbc	a, a		; A = 0x00 if positive, 0xFF if negative
 	ld	d, a		; D = sign extension
 	add.s	iy, de
-	tstpoi
-	jp	z80_loop
+	z80loop
 
 	; $19 add hl, de
 z80_addhlde:
-	exx
-	ex	af, af'
-	add.s	hl, de
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{add.s hl, de}
 
 	; $1A ld a, (de)
 z80_lda_de_:
@@ -577,50 +585,29 @@ z80_lda_de_:
 z80_decde:
 	z80_exmain	{dec de}
 
+	; $1D inc e
 z80_ince:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{inc e}
 
-
+	; $1D dec e
 z80_dece:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{dec e}
 
-	; $1E ld de, nn
-z80_ldenn:
-	exx
-	ld.s	de, (iy)
-	inc	iy
-	inc	iy
-	exx
-	jp	z80_loop
-
+	; $1E ld e, n
+z80_lden:
+	z80_exmain  {ld.s e, (iy)}, {inc iy}
 
 z80_rra:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-
+	; $20 jr nz, d
 z80_jrnzd:
-	inc	iy
-	ex	af, af'
-	jr	nz, z80_jrnzd1
-	ex	af, af'
-	jp	z80_loop
-
-z80_jrnzd1:
-	ex	af, af'
-	ld.s	a, (iy-1)
-	jp	_z80_add_a_to_pc
+	z80_jrccd	{jr nz,}
 
 	; $21 ld hl, nn
 z80_ldhlnn:
-	exx
-	ld.s	hl, (iy)
-	exx
-	inc	iy
-	inc	iy
-	jp	z80_loop
+	z80_exmain	{ld.s hl, (iy)}, {inc iy}, {inc iy}
 
 	; $22 ld (nn), hl
 z80_ld_nn_hl:
@@ -632,14 +619,14 @@ z80_ld_nn_hl:
 	exx
 	pop	bc
 	ld.s	(hl), bc
-	jp	z80_loop
+	z80loop
 
 	; $23 inc hl
 z80_inchl:
 	exx
 	inc	hl
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $24 inc h
 z80_inch:
@@ -648,7 +635,7 @@ z80_inch:
 	inc	h
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $25 dec h
 z80_dech:
@@ -657,7 +644,7 @@ z80_dech:
 	dec	h
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $26 ld h, n
 z80_ldhn:
@@ -665,12 +652,11 @@ z80_ldhn:
 	ld.s	h, (iy)
 	inc	iy
 	exx
-	jp	z80_loop
+	z80loop
 
-
+	; $27 daa
 z80_daa:
-	call	not_implemented
-	jp	z80_loop
+	z80_exaf	{daa}
 
 	; $28 jr z, d
 z80_jrzd:
@@ -678,7 +664,7 @@ z80_jrzd:
 	ex	af, af'
 	jr	z, z80_jrzd1
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_jrzd1:
 	ex	af, af'
@@ -692,7 +678,7 @@ z80_addhlhl:
 	add.s	hl, hl
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $2A ld hl, (nn)
 z80_ldhl_nn_:
@@ -708,14 +694,14 @@ z80_ldhl_nn_:
 	exx
 	pop	hl
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $2b dec hl
 z80_dechl:
 	exx
 	dec	hl
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $2C inc l
 z80_incl:
@@ -724,12 +710,12 @@ z80_incl:
 	inc	l
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_decl:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $2e ld l, n
 z80_ldln:
@@ -737,14 +723,14 @@ z80_ldln:
 	ld.s	l, (iy)
 	inc	iy
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $2F cpl
 z80_cpl:
 	ex	af, af'
 	cpl
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $30 jr nc, d
 z80_jrncd:
@@ -752,7 +738,7 @@ z80_jrncd:
 	ex	af, af'
 	jr	nc, z80_jrncd1
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_jrncd1:
 	ex	af, af'
@@ -765,7 +751,7 @@ z80_ldspnn:
 	inc	iy
 	inc	iy
 	ld.s	sp, hl
-	jp	z80_loop
+	z80loop
 
 	; $32 ld (nn), a
 z80_ld_nn_a:
@@ -775,17 +761,15 @@ z80_ld_nn_a:
 	ex	af, af'
 	ld.s	(hl), a
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 
 z80_incsp:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-
-z80_inc_hl_:
-	call	not_implemented
-	jp	z80_loop
+	; $34 inc (hl)
+	z80_exall2	inc_hl_, {inc.s (hl)}
 
 	; $35 dec (hl)
 z80_dec_hl_:
@@ -798,14 +782,14 @@ z80_ld_hl_n:
 	exx
 	ld.s	(hl), a
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $37 scf
 z80_scf:
 	ex	af, af'
 	scf
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $38 jr c,d
 z80_jrcd:
@@ -813,7 +797,7 @@ z80_jrcd:
 	ex	af, af'
 	jr	c, z80_jrcd1
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_jrcd1:
 	ex	af, af'
@@ -825,7 +809,7 @@ z80_addhlsp:
 	exx
 	add.s	hl, sp
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $3A ld a, (nn)
 z80_lda_nn_:
@@ -835,12 +819,12 @@ z80_lda_nn_:
 	ex	af, af'
 	ld.s	a, (hl)
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 
 z80_decsp:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 	; $3C inc a
@@ -848,14 +832,14 @@ z80_inca:
 	ex	af, af'
 	inc	a
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $3D dec a
 z80_deca:
 	ex	af, af'
 	dec	a
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $3E ld a, n
 z80_ldan:
@@ -863,53 +847,51 @@ z80_ldan:
 	ld.s	a, (iy)
 	inc	iy
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 
 z80_ccf:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $40 ld b,b
 z80_ldbb:
 	exx
 	; ld	b,b
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_ldbc:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_ldbd:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_ldbe:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; %44 ld b, h
 z80_ldbh:
 	exx
 	ld	b, h
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $45 ld b, l
 z80_ldbl:
 	exx
 	ld	b, l
 	exx
-	jp	z80_loop
+	z80loop
 
-
-z80_ldb_hl_:
-	call	not_implemented
-	jp	z80_loop
+	; $46 ld b, (hl)
+	z80_exmain2	ldb_hl_, {db %52}, {ld b, (hl)}	; bug in assembler ld.s b, (hl) not supported??
 
 	; $47 ld b, a
 z80_ldba:
@@ -918,54 +900,61 @@ z80_ldba:
 	ld	b, a
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $48 ld c, b
 z80_ldcb:
 	exx
 	ld	c, b
 	exx
-	jp	z80_loop
+	z80loop
 
 	; 49 ld c, c
 z80_ldcc:
-	exx
-	;ld	c, c
-	exx
-	jp	z80_loop
+	ld.s	a, (iy)
+	cp	%D7		; RST.L %10
+	jr	z, rst_l10
+	cp	%C9		; RET.L
+	jr	z, ret_l
+	call	not_implemented
+	z80loop
+ret_l:
+rst_l10:
+	nop	; RST.L %10
+	nop
+	nop
+	jr	rst_l10
 
 	; $4A ld c, d
 z80_ldcd:
 	exx
 	ld	c, d
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $4B ld c, e
 z80_ldce:
 	exx
 	ld	c, e
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $4C ld c, h
 z80_ldch:
 	exx
 	ld	c, h
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $4D ld c, l
 z80_ldcl:
 	exx
 	ld	c, l
 	exx
-	jp	z80_loop
+	z80loop
 
-
-z80_ldc_hl_:
-	call	not_implemented
-	jp	z80_loop
+	; $4E ld c, (hl)
+	z80_exmain2	ldc_hl_, {db %52}, {ld c, (hl)}	; bug in assembler ld.s c, (hl) not supported??
 
 	; $4F ld c, a
 z80_ldca:
@@ -974,129 +963,102 @@ z80_ldca:
 	ld	c, a
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
+	; $50 ld d, b
+	z80_exmain2	lddb, {ld d, b}
 
-z80_lddb:
-	call	not_implemented
-	jp	z80_loop
+	; $51 ld d, c
+	z80_exmain2	lddc, {ld d, c}
 
-
-z80_lddc:
-	call	not_implemented
-	jp	z80_loop
-
-
+	; $52 ld d, d
 z80_lddd:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
+	; $53 ld d, e
+	z80_exmain2	ldde, {ld d, e}
 
-z80_ldde:
-	call	not_implemented
-	jp	z80_loop
+	; $54 ld d, h
+	z80_exmain2	lddh, {ld d, h}
 
-
-z80_lddh:
-	call	not_implemented
-	jp	z80_loop
-
-
-z80_lddl:
-	call	not_implemented
-	jp	z80_loop
+	; $55 ld d, l
+	z80_exmain2	lddl, {ld d, l}
 
 
 z80_ldd_hl_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $57 ld d, a
 z80_ldda:
-	exx
-	ex	af, af'
-	ld	d, a
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall 	{ld d, a}
 
-
+	; $58 ld e, b
 z80_ldeb:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain 	{ld e, b}
 
-
+	; $59 ld e, c
 z80_ldec:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain 	{ld e, c}
 
-
+	; $5A ld e, d
 z80_lded:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain 	{ld e, d}
 
-
+	; $5B ld e, e
 z80_ldee:
 	call	not_implemented
-	jp	z80_loop
+	; z80_exmain 	{ld e, e}
+	z80loop
 
-
+	; $5C ld e, h
 z80_ldeh:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain 	{ld e, h}
 
-
+	; $5D ld e, l
 z80_ldel:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain 	{ld e, l}
 
-
-z80_lde_hl_:
-	call	not_implemented
-	jp	z80_loop
+	; $5E ld e, (hl)
+	z80_exmain2	lde_hl_, {db %52}, {ld e, (hl)}	; bug in assembler ld.s e, (hl) not supported??
 
 	; $5f	ld e, a
 z80_ldea:
-	exx
-	ex	af, af'
-	ld	e, a
-	ex	af, af'
-	exx
-	jp	z80_loop
-
+	z80_exall	{ld e, a}
 
 z80_ldhb:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_ldhc:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $62 ld h, d
 z80_ldhd:
 	exx
 	ld	h, d
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $63 ld h, e
 z80_ldhe:
 	exx
 	ld	h, e
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_ldhh:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_ldhl:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $66 ld h, (hl)
 z80_ldh_hl:
@@ -1104,53 +1066,42 @@ z80_ldh_hl:
 	db	%52		; bug in assembler
 	ld	h, (hl)		; does not support ld.s h, (hl)
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $67 ld h, a
 z80_ldha:
-	exx
-	ex	af, af'
-	ld	h, a
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{ld h, a}
 
-
+	; $67 ld l, b
 z80_ldlb:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain	{ld l, b}
 
-
+;;;;	; $69 ld l, c
 z80_ldlc:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain	{ld l, c}
 
-
+	; $6A ld l, d
 z80_ldld:
-	call	not_implemented
-	jp	z80_loop
+	z80_exmain	{ld l, d}
 
 	; $6B ld l, e
 z80_ldle:
-	exx
-	ld	l, e
-	exx
-	jp	z80_loop
+	z80_exmain	{ld l, e}
 
 
 z80_ldlh:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_ldll:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_ldl_hl_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $6F ld l,a
 z80_ldla:
@@ -1159,114 +1110,83 @@ z80_ldla:
 	ld	l, a
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $70 ld (hl), b
 z80_ld_hl_b:
 	exx
 	ld.s	(hl), b
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $72 ld (hl), c
 z80_ld_hl_c:
 	exx
 	ld.s	(hl), c
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $72 ld (hl), d
 z80_ld_hl_d:
 	exx
 	ld.s	(hl), d
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $73 ld (hl), e
 z80_ld_hl_e:
 	exx
 	ld.s	(hl), e
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $74 ld (hl), h
 z80_ld_hl_h:
 	exx
 	ld.s	(hl), h
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $75 ld (hl), e
 z80_ld_hl_l:
 	exx
 	ld.s	(hl), l
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_halt:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 	; $77 ld (hl), a
 z80_ld_hl_a:
-	ex	af, af'
-	exx
-	ld.s	(hl), a
-	exx
-	ex	af, af'
-	jp	z80_loop
+	z80_exall	{ld.s (hl), a}
 
 	; $78 ld a, b
 z80_ldab:
-	exx
-	ex	af, af'
-	ld	a, b
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{ld a, b}
 
 	; $79 ld a, c
 z80_ldac:
-	exx
-	ex	af, af'
-	ld	a, c
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{ld a, c}
 
-
+	; $7A ld a, d
 z80_ldad:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{ld a, d}
 
 	; $7B ld a, e
 z80_ldae:
-	exx
-	ex	af, af'
-	ld	a, e
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{ld a, e}
 
-	; $7c ld a, h
+	; $7C ld a, h
 z80_ldah:
-	exx
-	ex	af, af'
-	ld	a, h
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{ld a, h}
 
-	; $74 ld a, l
+	; $7D ld a, l
 z80_ldal:
-	exx
-	ex	af, af'
-	ld	a, l
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{ld a, l}
 
 
 z80_lda_hl_:
@@ -1275,50 +1195,50 @@ z80_lda_hl_:
 	ld.s	a, (hl)
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_ldaa:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-	; $90 add a, b
+	; $80 add a, b
 z80_addab:
 	exx
 	ex	af, af'
 	add	a, b
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
-	; $90 add a, c
+	; $81 add a, c
 z80_addac:
 	exx
 	ex	af, af'
 	add	a, c
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_addad:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_addae:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_addah:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_addal:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $86 add a, (hl)
 z80_adda_hl_:
@@ -1327,12 +1247,12 @@ z80_adda_hl_:
 	add.s	a, (hl)
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_addaa:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $88 adc a, b
 z80_adcab:
@@ -1341,42 +1261,42 @@ z80_adcab:
 	adc	a, b
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 
 z80_adcac:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_adcad:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_adcae:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_adcah:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_adcal:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_adca_hl_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_adcaa:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $90 sub a, b
 z80_subab:
@@ -1405,55 +1325,40 @@ z80_subal:
 
 z80_sub_hl_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_suba:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $98 sbc a, b
 z80_sbcab:
-	exx
-	ex	af, af'
-	sbc	a, b
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{sbc a, b}
 
-
+	; $99 sbc a, c
 z80_sbcac:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{sbc a, c}
 
 	; $9A sbc a, d
 z80_sbcad:
-	exx
-	ex	af, af'
-	sbc	a, d
-	ex	af, af'
-	exx
-	jp	z80_loop
+	z80_exall	{sbc a, d}
 
-
+	; $9B sbc a, e
 z80_sbcae:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{sbc a, e}
 
-
+	; $9C sbc a, h
 z80_sbcah:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{sbc a, h}
 
-
+	; $9D sbc a, l
 z80_sbcal:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{sbc a, l}
 
-
+	; $9E sbc a, (hl)
 z80_sbca_hl_:
-	call	not_implemented
-	jp	z80_loop
+	z80_exall	{sbc.s a, (hl)}
 
 	; $9F sbc a, a
 z80_sbcaa:
@@ -1547,9 +1452,9 @@ z80_orah:
 z80_oral:
 	z80_exall	{or a, l}
 
-z80_or_hl_:
-	call	not_implemented
-	jp	z80_loop
+	; $B6 or a, (hl)
+z80_ora_hl_:
+	z80_exall	{or.s a, (hl)}
 
 	; $B7 or a, a
 z80_oraa:
@@ -1558,27 +1463,27 @@ z80_oraa:
 
 z80_cpab:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_cpac:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_cpad:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_cpae:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_cpah:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $BD cp a, l
 z80_cpal:
@@ -1587,7 +1492,7 @@ z80_cpal:
 	cp	a, l
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $BE cp (hl)
 z80_cp_hl_:
@@ -1596,52 +1501,53 @@ z80_cp_hl_:
 	cp.s	a, (hl)
 	ex	af, af'
 	exx
-	jp	z80_loop
+	z80loop
 
 z80_cpaa:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $C0 ret nz
 z80_retnz:
 	ex	af, af'
 	jr	nz, z80_retnz1
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_retnz1:
 	ex	af, af'
 	pop.s	iy
-	tstpoi
-	jp	z80_loop
+	z80loop
 
 	; $C1 pop bc
 z80_popbc:
 	exx
 	pop.s	bc
 	exx
-	jp	z80_loop
+	z80loop
 
-	; $C2 jp nz, nn
-z80_jpnznn:
+z80_jpccnn	macro cc
+z80_jp&cc&nn:
 	ex	af, af'
-	jp	nz, z80_jpnznn1
+	jp	cc, $$skip
 	ex	af, af'
 	inc	iy
 	inc	iy
-	jp	z80_loop
+	z80loop
 
-z80_jpnznn1:
+$$skip:
 	ex	af, af'
 	ld.s	iy, (iy)
-	tstpoi
-	jp	z80_loop
+	z80loop
+	endmacro
+
+	; $C2 jp nz, nn
+	z80_jpccnn	nz
 
 	; $C3 JP nn
 z80_jpnn:
 	ld.s	iy, (iy)
-	tstpoi
-	jp	z80_loop
+	z80loop
 
 z80_callccnn	macro	cc
 z80_call&cc&nn:
@@ -1650,14 +1556,14 @@ z80_call&cc&nn:
 	ex	af, af'
 	inc	iy
 	inc	iy
-	jp	z80_loop
+	z80loop
 $$skip:
 	ex	af, af'
 	ld.s	hl, (iy)
 	pea.s	iy+2
 	push	hl
 	pop	iy
-	jp	z80_loop
+	z80loop
 
 	endmacro
 
@@ -1669,7 +1575,7 @@ z80_pushbc:
 	exx
 	push.s	bc
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $C6 add a, n
 z80_addan:
@@ -1678,35 +1584,31 @@ z80_addan:
 	ex	af, af'
 	add	a, b
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_rst00:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $C8 ret z
 z80_retz:
 	ex	af, af'
 	jr	z, z80_retz1
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_retz1:
 	ex	af, af'
 	pop.s	iy
-	tstpoi
-	jp	z80_loop
+	z80loop
 
-	; $c9 ret
+	; $C9 ret
 z80_ret:
 	pop.s	iy
-	tstpoi
-	jp	z80_loop
+	z80loop
 
-
-z80_jpznn:
-	call	not_implemented
-	jp	z80_loop
+	; $CA jp z, nn
+	z80_jpccnn	z
 
 	section	INTERNAL_RAM_ROM
 z80_bit:
@@ -1731,8 +1633,7 @@ bit_instr:
 	db	%00
 	ex	af, af'
 	exx
-	jp	z80_loop
-
+	z80loop
 
 	section	CODE
 
@@ -1745,44 +1646,32 @@ z80_callnn:
 	pea.s	iy+2
 	push	hl
 	pop	iy
-	jp	z80_loop
+	z80loop
 
 
 z80_adcan:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_rst08:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_retnc:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $d1 pop de
 z80_popde:
 	exx
 	pop.s	de
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $D2 jp nc, nn
-z80_jpncnn:
-	ex	af, af'
-	jp	nc, z80_jpncnn1
-	ex	af, af'
-	inc	iy
-	inc	iy
-	jp	z80_loop
-
-z80_jpncnn1:
-	ex	af, af'
-	ld.s	iy, (iy)
-	tstpoi
-	jp	z80_loop
+	z80_jpccnn	nc
 
 	; $D3 out (n), a
 z80_out_n_a:
@@ -1792,7 +1681,7 @@ z80_out_n_a:
 	ex	af, af'
 	out	(bc), a
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $D4 call nc, nn
 	z80_callccnn	nc
@@ -1802,7 +1691,7 @@ z80_pushde:
 	exx
 	push.s	de
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $d6 sub a, n
 z80_subn:
@@ -1811,17 +1700,17 @@ z80_subn:
 	ex	af, af'
 	sub	a, b
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 
 z80_rst10:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_retc:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $D9 exx
 z80_exx:
@@ -1832,22 +1721,10 @@ z80_exx:
 	ld	(ix+z80_reg_abc), bc
 	ld	(ix+z80_reg_ade), de
 	ld	(ix+z80_reg_ahl), hl
-	jp	z80_loop
+	z80loop
 
 	; $DA jp c, nn
-z80_jpcnn:
-	ex	af, af'
-	jr	c, z80_jpcnn1
-	ex	af, af'
-	inc	iy
-	inc	iy
-	jp	z80_loop
-
-z80_jpcnn1:
-	ex	af, af'
-	ld.s	iy, (iy)
-	tstpoi
-	jp	z80_loop
+	z80_jpccnn	c
 
 	; $DB in a, (n)
 z80_ina_n_:
@@ -1857,7 +1734,7 @@ z80_ina_n_:
 	ex	af, af'
 	in	a, (bc)
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $DC call c, nn
 	z80_callccnn	c
@@ -2132,152 +2009,160 @@ z80_addixbc:
 	pop	bc
 	ld	hl, (ix+z80_reg_ix)
 	ex	af, af'
-	add	hl, bc
+	add.s	hl, bc
 	ex	af, af'
 	ld	(ix+z80_reg_ix), hl
-	jp	z80_loop
+	z80loop
 
 z80_addixde:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-z80_ldixnn:
-	call	not_implemented
-	jp	z80_loop
+z80_ldirnn	macro ir
+z80_ld&ir&nn:
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	ld	(ix+z80_reg_&ir), iy
+	z80loop
+	endmacro
+
+	; $DD $21 ld ix, nn
+	z80_ldirnn	ix
 
 z80_ldnnix:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_incix:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_addixix:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_nn_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_decix:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_incix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_decix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_addixsp:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldbix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldcix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_lddix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldeix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldhix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldlix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_b_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_c_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_d_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_e_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_h_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_l_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldix_n_a_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldaix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_addaix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_adcaix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_subix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_sbcaix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_andix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_xorix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_orix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_cpix_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ixbits
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_popir	macro ir
 z80_pop&ir:
 	pop.s	hl
 	ld	(ix+&z80_reg_&ir), hl
-	jp	z80_loop
+	z80loop
 	endmacro
 
 	; $DD E1
@@ -2285,57 +2170,61 @@ z80_pop&ir:
 
 z80_ex_sp_ix:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-z80_pushi	macro ir
+z80_pushir	macro ir
 z80_push&ir:
 	ld	hl, (ix+&z80_reg_&ir)
 	push.s	hl
-	jp	z80_loop
+	z80loop
 	endmacro
 
 	; $DD $E5 push ix
-	z80_pushi ix
+	z80_pushir ix
 
-z80_jp_ix_:
-	call	not_implemented
-	jp	z80_loop
+z80_jp_ir_	macro	ir
+z80_jp_&ir&_:
+	ld	iy, (ix+z80_reg_&ir)
+	z80loop
+	endmacro
+
+	; #DD $E9 jp (ix)
+	z80_jp_ir_ ix
 
 z80_spix:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_sbcan:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_rst18:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_retpo:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $e1 pop hl
 z80_pophl:
 	exx
 	pop.s	hl
 	exx
-	jp	z80_loop
+	z80loop
 
-
-z80_jppon:
-	call	not_implemented
-	jp	z80_loop
-
+	; $E2 jp po, nn
+	z80_jpccnn	po
 
 z80_ex_sp_hl:
-	call	not_implemented
-	jp	z80_loop
+	exx
+	ex.s	(sp), hl
+	exx
+	z80loop
 
 	; $E4 call po, nn
 	z80_callccnn	po
@@ -2345,7 +2234,7 @@ z80_pushhl:
 	exx
 	push.s	hl
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $e6 and a, n
 z80_andn:
@@ -2354,88 +2243,73 @@ z80_andn:
 	ex	af, af'
 	and	a, b
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $E7 rst %20
 z80_rst20:
 	push.s	iy
 	ld	iy, %20
-	jp	z80_loop
+	z80loop
 
 
 z80_retpe:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 z80_jp_hl_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-
-z80_jppenn:
-	call	not_implemented
-	jp	z80_loop
+	; $EA jp pe, nn
+	z80_jpccnn	pe
 
 	; $EB ex de, hl
 z80_exdehl:
 	exx
 	ex	de, hl
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $EC call pe, nn
 	z80_callccnn	pe
 
 z80_xorn:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $EF rst %28
 z80_rst28:
 	push.s	iy
 	ld	iy, %28
-	jp	z80_loop
+	z80loop
 
 	; $F0 ret p
 z80_retp:
 	ex	af, af'
 	jp	p, z80_retp1
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_retp1:
 	ex	af, af'
 	pop.s	iy
-	tstpoi
-	jp	z80_loop
+	z80loop
 
 	; $F1 pop af
 z80_popaf:
 	ex	af, af'
 	pop.s	af
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $F2 jp p, nn
-z80_jppnn:
-	ex	af, af'
-	jp	p, z80_jppnn1
-	ex	af, af'
-	inc	iy
-	inc	iy
-	jp	z80_loop
-
-z80_jppnn1:
-	ex	af, af'
-	ld.s	iy, (iy)
-	tstpoi
-	jp	z80_loop
+	z80_jpccnn	p
 
 	; $F3 DI
 z80_di:
 	di
-	jp	z80_loop
+	z80loop
 
 	; $F4 call p, nn
 	z80_callccnn	p
@@ -2445,7 +2319,7 @@ z80_pushaf:
 	ex	af, af'
 	push.s	af
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $f6 or a, n
 z80_oran:
@@ -2454,52 +2328,39 @@ z80_oran:
 	ex	af, af'
 	or	a, b
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 
 z80_rst30:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $f8 ret m
 z80_retm:
 	ex	af, af'
 	jp	m, z80_retm1
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 z80_retm1:
 	ex	af, af'
 	pop.s	iy
-	tstpoi
-	jp	z80_loop
+	z80loop
 
 	; $F9 ld sp, hl
 z80_ldsphl:
 	exx
 	ld.s	sp, hl
 	exx
-	jp	z80_loop
+	z80loop
 
 	; $FA jp m, nn
-z80_jpmnn:
-	ex	af, af'
-	jp	m, z80_jpmnn1
-	ex	af, af'
-	inc	iy
-	inc	iy
-	jp	z80_loop
-
-z80_jpmnn1:
-	ex	af, af'
-	ld.s	iy, (iy)
-	tstpoi
-	jp	z80_loop
+	z80_jpccnn	m
 
 
 z80_ei:
 	; ei
-	jp	z80_loop
+	z80loop
 
 	; $FC call m, nn
 	z80_callccnn	m
@@ -2774,165 +2635,162 @@ z80_addiybc:
 	pop	bc
 	ld	hl, (ix+z80_reg_iy)
 	ex	af, af'
-	add	hl, bc
+	add.s	hl, bc
 	ex	af, af'
 	ld	(ix+z80_reg_iy), hl
-	jp	z80_loop
+	z80loop
 
 z80_addiyde:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
-z80_ldiynn:
-	call	not_implemented
-	jp	z80_loop
+	; $FD 21 ld iy, nn
+	z80_ldirnn	iy
 
 z80_ldnniy:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_inciy:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_addiyiy:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_nn_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_deciy:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_inciy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_deciy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_addiysp:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldbiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldciy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_lddiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldeiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldhiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldliy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_b_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_c_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_d_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_e_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_h_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_l_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldiy_n_a_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_ldaiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_addaiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_adcaiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_subiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_sbcaiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_andiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_xoriy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_oriy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_cpiy_n_:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 z80_iybits
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $FD E1 pop iy
 	z80_popir	iy
 
 z80_ex_sp_iy:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 	; $FD $E5 push iy
-; z80_pushiy:
-	z80_pushi iy
+	z80_pushir iy
 
-z80_jp_iy_:
-	call	not_implemented
-	jp	z80_loop
+	; #DD $E9 jp (iy)
+	z80_jp_ir_ iy
 
 z80_spiy:
 	call	not_implemented
-	jp	z80_loop
+	z80loop
 
 
 	; $FE cp a, n
@@ -2942,13 +2800,13 @@ z80_cpn:
 	ex	af, af'
 	cp	b
 	ex	af, af'
-	jp	z80_loop
+	z80loop
 
 	; $FF rst %38
 z80_rst38:
 	push.s	iy
 	ld	iy, %38
-	jp	z80_loop
+	z80loop
 
 ; MISC ED Instructions
 	; $ED
@@ -2981,7 +2839,7 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 16
 	jp	z80_nop		; ED 17 ld de, (hl)
 	jp	z80_nop		; ED 18 in0 e, (n)
-	jp	z80_nop		; ED 19 out0 (n), e
+	jp	z80_out0_n_e	; ED 19 out0 (n), e
 	jp	z80_nop		; ED 1A
 	jp	z80_nop		; ED 1B
 	jp	z80_nop		; ED 1C tst a, e
@@ -3012,8 +2870,8 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 35
 	jp	z80_nop		; ED 36
 	jp	z80_nop		; ED 37 ld ix, (hl)
-	jp	z80_nop		; ED 38 in0 a, (n)
-	jp	z80_nop		; ED 39 out0 (n), a
+	jp	z80_in0a_n_	; ED 38 in0 a, (n)
+	jp	z80_out0_n_a	; ED 39 out0 (n), a
 	jp	z80_nop		; ED 3A
 	jp	z80_nop		; ED 3B
 	jp	z80_nop		; ED 3C tst a, a
@@ -3079,7 +2937,7 @@ z80_instr_misc_table:
 	jp	z80_in_a_c      ; ED 78 in a, (bc)
 	jp	z80_out_c_a     ; ED 79 out (bc), a
 	jp	z80_adc_hl_sp   ; ED 7A adc hl, sp
-	jp	z80_ld_sp_nn    ; ED 7B ld sp, (nn)
+	jp	z80_ldsp_nn_    ; ED 7B ld sp, (nn)
 	jp	z80_nop		; ED 7C mlt sp
 	jp	z80_nop		; ED 7D stmix
 	jp	z80_nop		; ED 7E rsmix
@@ -3213,6 +3071,35 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED FE
 	jp	z80_nop		; ED FF
 
+	; $ED $19 out0 (n), e
+z80_out0_n_e:
+	ld	b, 0
+	ld.s	c, (iy)
+	inc	iy
+	exx
+	out	(bc), e
+	exx
+	z80loop
+
+	; $ED $38 in0 a, (n)
+z80_in0a_n_:
+	ld	b, 0
+	ld.s	c, (iy)
+	inc	iy
+	ex	af, af'
+	in	a, (bc)
+	ex	af, af'
+	z80loop
+
+	; $ED $39 out (n), a
+z80_out0_n_a:
+	ld	b, 0
+	ld.s	c, (iy)
+	inc	iy
+	ex	af, af'
+	out	(bc), a
+	ex	af, af'
+	z80loop
 
 z80_inb_c:
 	call	not_implemented
@@ -3287,7 +3174,7 @@ z80_ld_nn_de:
 	jp	z80_nop
 
 z80_im1:
-	jp	z80_loop
+	z80loop
 
 z80_ld_a_i:
 	call	not_implemented
@@ -3353,9 +3240,16 @@ z80_sbc_hl_sp:
 	call	not_implemented
 	jp	z80_nop
 
+	; $ED $83 ld (nn), sp
 z80_ld_nn_sp:
-	call	not_implemented
-	jp	z80_nop
+	ld	hl, 0
+	add.s	hl, sp
+	ld.s	de, (iy)
+	inc	iy
+	inc	iy
+	ex	de, hl
+	ld.s	(hl), de
+	z80loop
 
 z80_in_a_c:
 	call	not_implemented
@@ -3369,8 +3263,13 @@ z80_adc_hl_sp:
 	call	not_implemented
 	jp	z80_nop
 
-z80_ld_sp_nn:
-	call	not_implemented
+	; $ED 7B ld sp, (nn)
+z80_ldsp_nn_:
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	ld.s	hl, (hl)
+	ld.s	sp, hl
 	jp	z80_nop
 
 z80_ldi:
@@ -3409,7 +3308,7 @@ z80_ldir:
 	exx
 	ldir.s
 	exx
-	jp	z80_loop
+	z80loop
 
 z80_cpir:
 	call	not_implemented
