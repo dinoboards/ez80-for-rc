@@ -32,6 +32,16 @@ z80_exaf macro operation, op2, op3
 	z80loop
 	endmacro
 
+z80_exaf2 macro name, operation, op2, op3
+z80_&name:
+	ex	af, af'
+	operation
+	op2
+	op3
+	ex	af, af'
+	z80loop
+	endmacro
+
 z80_exall	macro	operation, op2, op3
 	exx
 	ex	af, af'
@@ -431,7 +441,7 @@ z80_instr_table:
 	jp	z80_exdehl		; EB
 	jp	z80_callpenn		; EC
 	jp	z80_misc		; ED
-	jp	z80_xorn		; EE
+	jp	z80_xoran		; EE
 	jp	z80_rst28		; EF
 	jp	z80_retp		; F0
 	jp	z80_popaf		; F1
@@ -1633,10 +1643,8 @@ z80_callnn:
 	ld.s	iy, (iy)
 	z80loop
 
-
-z80_adcan:
-	call	not_implemented
-	z80loop
+	; $CE adc a, n
+	z80_exaf2	adcan, {adc.s a, (iy)}, {inc iy}
 
 
 z80_rst08:
@@ -2204,10 +2212,8 @@ z80_spix:
 	call	not_implemented
 	z80loop
 
-
-z80_sbcan:
-	call	not_implemented
-	z80loop
+	; $DE sbc a, n
+	z80_exaf2	sbcan, {sbc.s a, (iy)}, {inc iy}
 
 
 z80_rst18:
@@ -2283,9 +2289,8 @@ z80_exdehl:
 	; $EC call pe, nn
 	z80_callccnn	pe
 
-z80_xorn:
-	call	not_implemented
-	z80loop
+	; $EE xor a, n
+	z80_exaf2	xoran, {xor.s a, (iy)}, {inc iy}
 
 	; $EF rst %28
 z80_rst28:

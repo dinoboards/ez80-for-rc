@@ -24,7 +24,7 @@ Z80test:
 	ldir
 
 	ld	a, %20
-	ld	mb, ag
+	ld	mb, a
 	ld.sis	sp, %FFFF
 	call.sis	%0100
 	; ld	iy, %0100
