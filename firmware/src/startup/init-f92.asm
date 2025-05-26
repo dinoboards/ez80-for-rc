@@ -37,10 +37,71 @@
         SEGMENT	.STARTUP
         .ASSUME	ADL = 1
 
+	xref	_reg_spl
+	xref	_reg_iy
+	xref	z80_invoke
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Minimum default initialization
 __init:
 	IM	2				; Interrtup mode 2
+
+	; determine if we are invoked due to illegal instruction
+	; or due to power/reset
+	; if mbase is z - then assume power on.
+
+	; save register states into emulator storage (assumes we are about to switch to emulator)
+
+	ld	(_reg_spl), sp
+	ld	sp, _reg_iy+3
+
+	; put alt registers into mem store
+	; and place normal registers into alt
+	exx
+	push	iy
+	push	ix
+	push	hl		; regs' goes to store, regs goes to regs'
+	push	de
+	push	bc
+	ex	af, af'
+	push	af		; af' goes to store, af goes to af'
+
+	ld	sp, (_reg_spl)
+	inc	sp		; skip the trap return address
+	inc	sp
+	inc	sp
+
+	ld	a, mb
+	or	a
+	jr	z, power_on_reset
+
+illegal_instruction:
+	; test to see if illegal instruction is $CB $30
+
+	ld	iy, (_reg_spl)
+
+	ld	a, (iy)
+	cp	%02			; called from ADL=0 mode?
+	jr	nz, power_on_reset	; no - so treat as normal illegal instruction and reboot
+
+	ld	ix, (iy+1)		; load address of byte after illegal instruction byte
+
+	ld.s	a, (ix-1)		; should be $CB
+	cp	%CB
+	jr	nz, power_on_reset
+	ld.s	a, (ix)			; should be $30
+	cp	%30
+	jr	nz, power_on_reset
+
+	; we have identified illegal instruction byte codes are:
+	; $CB $30 - switch to emulator
+	; we want iy to equal ix+1
+
+	lea	iy, ix+1
+	jp	z80_invoke
+
+
+power_on_reset:
 	LD	HL, __vector_table
 	LD	A, __vector_table >> 8 & 0ffh
 	LD	I, A				; Load interrupt vector base

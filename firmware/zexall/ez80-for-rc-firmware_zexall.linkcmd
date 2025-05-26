@@ -96,10 +96,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
 
 "Z:\ez80-for-rc\firmware\bin\ez80-for-rc-firmware-zexall"= \
- ".\z80-test.obj", \
- ".\z80-emulator-logging.obj", \
- ".\z80-emulator.obj", \
- ".\zexall.obj", \
  ".\base-drv.obj", \
  ".\build-date.obj", \
  ".\ch376.obj", \
@@ -158,6 +154,10 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb_state.obj", \
  ".\vectors16.obj", \
  ".\work-area.obj", \
+ ".\z80-emulator-logging.obj", \
+ ".\z80-emulator.obj", \
+ ".\z80-test.obj", \
+ ".\zexall.obj", \
  "Z:\ZDS\lib\std\chelpD.lib", \
  "Z:\ZDS\lib\std\crtD.lib", \
  "Z:\ZDS\lib\std\crtSD.lib", \

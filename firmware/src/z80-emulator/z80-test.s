@@ -12,16 +12,15 @@ IFDEF ZEXALL
 	xref	zexall_end
 Z80test:
 
+	; set extended memory timing to 1WS
 	xor	a
 	ld	b,14
 	ld	l, 1
 	RST.L	%10
 
-	ld	de, %200100
 	ld	hl, zexall
 	ld	bc, zexall_end-zexall
 	ldir
-
 
 	ld	a, %20
 	ld	mb, a
@@ -35,10 +34,5 @@ done:
 	nop
 	nop
 	jr	done
-	; copy embedded test into external ram location (say 0x200000)
-	; call to 0x20 0000
-	; pause
-
-	; embedded test needs to be change from cp/m to use firmware bios calls (rst.l for ch out)
 
 ENDIF

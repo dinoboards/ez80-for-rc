@@ -1,12 +1,8 @@
-<project type="Executable" project-type="Standard" configuration="zexall" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
+<project type="Executable" project-type="Standard" configuration="debug" created-by="d:5.3.0:23020901" modified-by="d:5.3.0:23020901" ZDSII="ZDSII - eZ80Acclaim! 5.3.5 (Build 23020901)">
 <cpu>eZ80F92</cpu>
 
 <!-- file information -->
 <files>
-<file filter-key="">src\z80-emulator\z80-test.s</file>
-<file filter-key="">src\z80-emulator\z80-emulator-logging.c</file>
-<file filter-key="">src\z80-emulator\z80-emulator.s</file>
-<file filter-key="">src\z80-emulator\zexall.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv.s</file>
 <file filter-key="">src\rst-10-drivers\build-date.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
@@ -65,6 +61,10 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
 <file filter-key="">src\startup\vectors16.asm</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>
+<file filter-key="">src\z80-emulator\z80-emulator-logging.c</file>
+<file filter-key="">src\z80-emulator\z80-emulator.s</file>
+<file filter-key="">src\z80-emulator\z80-test.s</file>
+<file filter-key="">src\z80-emulator\zexall.s</file>
 </files>
 
 <!-- configuration information -->
@@ -160,9 +160,9 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00E9)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05D0
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05FC
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -296,9 +296,9 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00E9)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05D0
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05FC
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -486,20 +486,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>444</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>2088</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>927</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>2878</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>

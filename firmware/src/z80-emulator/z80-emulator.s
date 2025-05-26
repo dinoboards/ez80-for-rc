@@ -61,31 +61,34 @@ z80_&name:
 
 	section	BSS
 
+	global	_reg_ahl
+	global	_reg_ade
+	global	_reg_iy
 ; registers
-z80_regs:
+z80_regs:				; FD00
 _reg_aaf:
 	ds	3
 z80_reg_aaf	equ	0
 
-_reg_abc:
+_reg_abc:				; FD03
 	ds	3
 z80_reg_abc	equ	3
 
-_reg_ade:
+_reg_ade:				; FD06
 	ds	3
-z80_reg_ade	equ	9
+z80_reg_ade	equ	6
 
 _reg_ahl:
 	ds	3
-z80_reg_ahl	equ	12
+z80_reg_ahl	equ	9
 
 _reg_ix:
 	ds	3
-z80_reg_ix	equ	15
+z80_reg_ix	equ	12
 
 _reg_iy:
 	ds	3
-z80_reg_iy	equ	18
+z80_reg_iy	equ	15
 
 	global	_reg_af
 	global	_reg_bc
@@ -94,33 +97,37 @@ z80_reg_iy	equ	18
 	global	_reg_ix
 	global	_reg_iy
 	global	_reg_pc
-	global	_reg_sp
+	global	_reg_sps
+	global	_reg_spl
 
 ; following only used for logging
 _reg_af:
 	ds	3
-z80_reg_af	equ	21
+z80_reg_af	equ	18
 
 _reg_bc:
 	ds	3
-z80_reg_bc	equ	24
+z80_reg_bc	equ	21
 
 _reg_de:
 	ds	3
-z80_reg_de	equ	27
+z80_reg_de	equ	24
 
 _reg_hl:
 	ds	3
-z80_reg_hl	equ	30
+z80_reg_hl	equ	27
 
 _reg_pc:
 	ds	3
-z80_reg_pc	equ	33
+z80_reg_pc	equ	30
 
-_reg_sp:
+_reg_sps:
 	ds	3
-z80_reg_sp	equ	36
+z80_reg_sps	equ	33
 
+_reg_spl:
+	ds	3
+z80_reg_spl	equ	36
 
 	section	CODE
 	global	z80_invoke
@@ -1575,6 +1582,8 @@ z80_ret:
 z80_bit:
 	ld.s	a, (iy)
 	inc	iy
+	cp	%31		;
+	jp	z, z80_switch_to_native
 	ld	(bit_instr), a
 
 	exx
@@ -1596,7 +1605,33 @@ bit_instr:
 	exx
 	z80loop
 
+z80_switch_to_native:
+	; need to load all registers correctly
+	; then jump.s to original value of iy
+
+	ld	a, iyl
+	ld	(.switch_addr+2), a
+	ld	a, iyh
+	ld	(.switch_addr+3), a
+
+	ld	bc, (ix+z80_reg_aaf)
+	push	bc
+	pop	af
+	ex	af, af'
+
+	ld	bc, (ix+z80_reg_abc)
+	ld	de, (ix+z80_reg_ade)
+	ld	hl, (ix+z80_reg_ahl)
+	exx
+
+	ld	iy, (ix+z80_reg_iy)
+	ld	ix, (ix+z80_reg_ix)
+
+.switch_addr:
+	jp.s	%0000
+
 	section	CODE
+
 
 	; $CC call z, nn
 	z80_callccnn	z
