@@ -157,17 +157,20 @@ z80loop	macro
 
 ; start executing z80 code at location: MBASE/IY
 z80_invoke:
-	ld	bc, %ffab
-	ld	a, %82
-	out	(bc), a	;
+	; hard coded reset of MSX memory system
+	; only required when using the debugger to force memory back to known power-on state
 
-	ld	bc, %FFA8
-	ld	a, 0
-	out	(bc), a
-	in	a, (bc)
-	ld	hl, %03FFFF
-	ld	(hl), 0
-	ld	a, (hl)
+	;ld	bc, %ffab
+	;ld	a, %82
+	;out	(bc), a	;
+
+	;ld	bc, %FFA8
+	;ld	a, 0
+	;out	(bc), a
+	;in	a, (bc)
+	;ld	hl, %03FFFF
+	;ld	(hl), 0
+	;ld	a, (hl)
 
 	ld	ix, z80_regs
 
@@ -494,8 +497,7 @@ z80_exafaaf:
 	z80loop
 
 	; $09 add hl, bc
-z80_addhlbc:
-	z80_exall	{add.s	hl, bc}
+	z80_exall2	addhlbc, {add.s hl, bc}
 
 
 z80_lda_bc_:
@@ -583,8 +585,7 @@ _z80_add_a_to_pc:
 	z80loop
 
 	; $19 add hl, de
-z80_addhlde:
-	z80_exall	{add.s hl, de}
+	z80_exall2	addhlde, {add.s hl, de}
 
 	; $1A ld a, (de)
 z80_lda_de_:
@@ -681,13 +682,7 @@ z80_jrzd1:
 	jp	_z80_add_a_to_pc
 
 	; $29 add hl, hl
-z80_addhlhl:
-	exx
-	ex	af, af'
-	add.s	hl, hl
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2	addhlhl, {add.s	hl, hl}
 
 	; $2A ld hl, (nn)
 z80_ldhl_nn_:
@@ -814,11 +809,7 @@ z80_jrcd1:
 	jp	_z80_add_a_to_pc
 
 	; $39 add hl, sp
-z80_addhlsp:
-	exx
-	add.s	hl, sp
-	exx
-	z80loop
+	z80_exall2	addhlsp, {add.s hl, sp}
 
 	; $3A ld a, (nn)
 z80_lda_nn_:
