@@ -1239,7 +1239,10 @@ $(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-ir.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-ix.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-iy.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator.s"
 
 $(WORKDIR_ESCSPACE)\z80-test.obj :  \
