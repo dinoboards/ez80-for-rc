@@ -353,8 +353,8 @@ z80_instr_table:
 	jp	z80_subae		; 93
 	jp	z80_subah		; 94
 	jp	z80_subal		; 95
-	jp	z80_sub_hl_		; 96
-	jp	z80_suba		; 97
+	jp	z80_suba_hl_		; 96
+	jp	z80_subaa		; 97
 	jp	z80_sbcab		; 98
 	jp	z80_sbcac		; 99
 	jp	z80_sbcad		; 9A
@@ -370,15 +370,15 @@ z80_instr_table:
 	jp	z80_andah		; A4
 	jp	z80_andal		; A5
 	jp	z80_anda_hl_		; A6
-	jp	z80_anda		; A7
+	jp	z80_andaa		; A7
 	jp	z80_xorab		; A8
 	jp	z80_xorac		; A9
 	jp	z80_xorad		; AA
 	jp	z80_xorae		; AB
 	jp	z80_xorah		; AC
 	jp	z80_xoral		; AD
-	jp	z80_xor_hl_		; AE
-	jp	z80_xora		; AF
+	jp	z80_xora_hl_		; AE
+	jp	z80_xoraa		; AF
 	jp	z80_orab		; B0
 	jp	z80_orac		; B1
 	jp	z80_orad		; B2
@@ -393,7 +393,7 @@ z80_instr_table:
 	jp	z80_cpae		; BB
 	jp	z80_cpah		; BC
 	jp	z80_cpal		; BD
-	jp	z80_cp_hl_		; BE
+	jp	z80_cpa_hl_		; BE
 	jp	z80_cpaa		; BF
 	jp	z80_retnz		; C0
 	jp	z80_popbc		; C1
@@ -1204,279 +1204,191 @@ z80_ldaa:
 	; $81 add a, c
 	z80_exall2	addac, {add a, c}
 
+	; $82 add a, d
+	z80_exall2	addad, {add a, d}
 
-z80_addad:
-	call	not_implemented
-	z80loop
+	; $83 add a, e
+	z80_exall2	addae, {add a, e}
 
+	; $84 add a, h
+	z80_exall2	addah, {add a, h}
 
-z80_addae:
-	call	not_implemented
-	z80loop
-
-
-z80_addah:
-	call	not_implemented
-	z80loop
-
-
-z80_addal:
-	call	not_implemented
-	z80loop
+	; $85 add a, l
+	z80_exall2	addal, {add a, l}
 
 	; $86 add a, (hl)
 	z80_exall2	adda_hl_, {add.s a, (hl)}
 
-z80_addaa:
-	call	not_implemented
-	z80loop
+	; $87 add a, a
+	z80_exaf2	addaa, {add a, a}
 
 	; $88 adc a, b
 	z80_exall2	adcab, {adc a, b}
 
+	; $89 adc a, c
+	z80_exall2	adcac, {adc a, c}
 
-z80_adcac:
-	call	not_implemented
-	z80loop
+	; $8A adc a, d
+	z80_exall2	adcad, {adc a, d}
 
+	; $8B adc a, e
+	z80_exall2	adcae, {adc a, e}
 
-z80_adcad:
-	call	not_implemented
-	z80loop
+	; $8C adc a, h
+	z80_exall2	adcah, {adc a, h}
 
+	; $8D adc a, l
+	z80_exall2	adcal, {adc a, l}
 
-z80_adcae:
-	call	not_implemented
-	z80loop
+	; $8E adc a, (hl)
+	z80_exall2	adca_hl_, {adc.s a, (hl)}
 
-
-z80_adcah:
-	call	not_implemented
-	z80loop
-
-
-z80_adcal:
-	call	not_implemented
-	z80loop
-
-
-z80_adca_hl_:
-	call	not_implemented
-	z80loop
-
-
-z80_adcaa:
-	call	not_implemented
-	z80loop
+	; $8F adc a, a
+	z80_exaf2	adcaa, {adc a, a}
 
 	; $90 sub a, b
-z80_subab:
-	z80_exall	{sub a, b}
+	z80_exall2	subab, {sub a, b}
 
 	; $91 sub a, c
-z80_subac:
-	z80_exall	{sub a, c}
+	z80_exall2	subac, {sub a, c}
 
 	; $92 sub a, d
-z80_subad:
-	z80_exall	{sub a, d}
+	z80_exall2	subad, {sub a, d}
 
 	; $93 sub a, e
-z80_subae:
-	z80_exall	{sub a, e}
+	z80_exall2	subae, {sub a, e}
 
 	; $94 sub a, h
-z80_subah:
-	z80_exall	{sub a, h}
+	z80_exall2	subah, {sub a, h}
 
 	; $95 sub a, l
-z80_subal:
-	z80_exall	{sub a, l}
+	z80_exall2	subal, {sub a, l}
 
+	; $96 sub a, (hl)
+	z80_exall2	suba_hl_, {db %52}, {sub a, (hl)} 	; bug in assembler sub.s a, (hl) not supported??
 
-z80_sub_hl_:
-	call	not_implemented
-	z80loop
-
-
-z80_suba:
-	call	not_implemented
-	z80loop
+	; $97 sub a, a
+	z80_exaf2	subaa, {sub a, a}
 
 	; $98 sbc a, b
-z80_sbcab:
-	z80_exall	{sbc a, b}
+	z80_exall2	sbcab, {sbc a, b}
 
 	; $99 sbc a, c
-z80_sbcac:
-	z80_exall	{sbc a, c}
+	z80_exall2	sbcac, {sbc a, c}
 
 	; $9A sbc a, d
-z80_sbcad:
-	z80_exall	{sbc a, d}
+	z80_exall2	sbcad, {sbc a, d}
 
 	; $9B sbc a, e
-z80_sbcae:
-	z80_exall	{sbc a, e}
+	z80_exall2	sbcae, {sbc a, e}
 
 	; $9C sbc a, h
-z80_sbcah:
-	z80_exall	{sbc a, h}
+	z80_exall2	sbcah, {sbc a, h}
 
 	; $9D sbc a, l
-z80_sbcal:
-	z80_exall	{sbc a, l}
+	z80_exall2	sbcal, {sbc a, l}
 
 	; $9E sbc a, (hl)
-z80_sbca_hl_:
-	z80_exall	{sbc.s a, (hl)}
+	z80_exall2	sbca_hl_, {sbc.s a, (hl)}
 
 	; $9F sbc a, a
-z80_sbcaa:
-	z80_exaf	{sbc a, a}
+	z80_exaf2	sbcaa, {sbc a, a}
 
 	; $A0 and a, b
-z80_andab:
-	z80_exall	{and a, b}
+	z80_exall2	andab, {and a, b}
 
 	; $A1 and a,c
-z80_andac:
-	z80_exall	{and a, c}
+	z80_exall2	andac, {and a, c}
 
-	; $A2 and a,c
-z80_andad:
-	z80_exall	{and a, d}
+	; $A2 and a,d
+	z80_exall2	andad, {and a, d}
 
-	; $A3 and a,c
-z80_andae:
-	z80_exall	{and a, e}
+	; $A3 and a,e
+	z80_exall2	andae, {and a, e}
 
-	; $A4 and a,c
-z80_andah:
-	z80_exall	{and a, h}
+	; $A4 and a,h
+	z80_exall2	andah, {and a, h}
 
-	; $A5 and a,c
-z80_andal:
-	z80_exall	{and a, l}
+	; $A5 and a,h
+	z80_exall2	andal, {and a, l}
 
 	; $A6 and a, (hl)
-z80_anda_hl_:
-	z80_exall	{and.s a, (hl)}
+	z80_exall2	anda_hl_, {and.s a, (hl)}
 
-	; $a7 and a, a
-z80_anda:
-	z80_exaf	{and a,a}
+	; $A7 and a, a
+	z80_exaf2	andaa, {and a, a}
 
 	; $A8 xor a, b
-z80_xorab:
-	z80_exall	{xor a, b}
+	z80_exall2	xorab, {xor a, b}
 
 	; $A9 xor a, c
-z80_xorac:
-	z80_exall	{xor a, c}
+	z80_exall2	xorac, {xor a, c}
 
 	; $AA xor a, d
-z80_xorad:
-	z80_exall	{xor a, d}
+	z80_exall2	xorad, {xor a, d}
 
 	; $AB xor a, e
-z80_xorae:
-	z80_exall	{xor a, e}
+	z80_exall2	xorae, {xor a, e}
 
 	; $AC xor a, h
-z80_xorah:
-	z80_exall	{xor a, h}
+	z80_exall2	xorah, {xor a, h}
 
 	; $AD xor a, l
-z80_xoral:
-	z80_exall	{xor a, l}
+	z80_exall2	xoral, {xor a, l}
 
 	; $AE xor (hl)
-z80_xor_hl_:
-	z80_exall	{xor.s a, (hl)}
+	z80_exall2	xora_hl_, {xor.s a, (hl)}
 
 	; $AF xor a
-z80_xora:
-	z80_exaf 	{xor a}
+	z80_exaf2 	xoraa, {xor a, a}
 
 	; $B0 or a, b
-z80_orab:
-	z80_exall	{or a, b}
+	z80_exall2	orab, {or a, b}
 
 	; $B1 or a, c
-z80_orac:
-	z80_exall	{or a, c}
+	z80_exall2	orac, {or a, c}
 
 	; $B2 or a, d
-z80_orad:
-	z80_exall	{or a, d}
+	z80_exall2	orad, {or a, d}
 
 	; $B3 or a, e
-z80_orae:
-	z80_exall	{or a, e}
+	z80_exall2	orae, {or a, e}
 
 	; $B4 or a, h
-z80_orah:
-	z80_exall	{or a, h}
+	z80_exall2	orah, {or a, h}
 
 	; $B5 or a, l
-z80_oral:
-	z80_exall	{or a, l}
+	z80_exall2	oral, {or a, l}
 
 	; $B6 or a, (hl)
-z80_ora_hl_:
-	z80_exall	{or.s a, (hl)}
+	z80_exall2	ora_hl_, {or.s a, (hl)}
 
 	; $B7 or a, a
-z80_oraa:
-	z80_exaf	{or a, a}
+	z80_exaf2	oraa, {or a, a}
 
+	; $B8 cp a, b
+	z80_exall2	cpab, {cp a, b}
 
-z80_cpab:
-	call	not_implemented
-	z80loop
+	; $B9 cp a, c
+	z80_exall2	cpac, {cp a, c}
 
+	; $BA cp a, d
+	z80_exall2	cpad, {cp a, d}
 
-z80_cpac:
-	call	not_implemented
-	z80loop
+	; $BB cp a, e
+	z80_exall2	cpae, {cp a, e}
 
-
-z80_cpad:
-	call	not_implemented
-	z80loop
-
-
-z80_cpae:
-	call	not_implemented
-	z80loop
-
-
-z80_cpah:
-	call	not_implemented
-	z80loop
+	; $BC cp a, h
+	z80_exall2	cpah, {cp a, h}
 
 	; $BD cp a, l
-z80_cpal:
-	exx
-	ex	af, af'
-	cp	a, l
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2	cpal, {cp a, l}
 
 	; $BE cp (hl)
-z80_cp_hl_:
-	exx
-	ex	af, af'
-	cp.s	a, (hl)
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2	cpa_hl_, {cp.s a, (hl)}
 
-z80_cpaa:
-	call	not_implemented
-	z80loop
+	; $BF cp a, a
+	z80_exaf2	cpaa, {cp a, a}
 
 	; $C0 ret nz
 z80_retnz:
