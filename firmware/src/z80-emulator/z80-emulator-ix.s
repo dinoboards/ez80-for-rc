@@ -1,5 +1,16 @@
+	include	"..\config.inc"
+	include	"z80-emulator-macros.inc"
+
+	.assume	adl=1
+
 	section	INTERNAL_RAM_ROM
+
+	xref	z80_nop
+	xref	z80_reg_ix
+regir	equ	z80_reg_ix
+
 	; DD ....
+	global	z80_ix
 z80_ix:
 	z80_byte_jump	ix_instr_table
 	section CODE
@@ -479,55 +490,55 @@ ix_instr_table:
 	z80_niy	adca_ixd_
 
 	; DD 94 sub a, ixh
-	z80_niy	subaixh
+	z80_exaf2	subaixh, {sub a, (ix+z80_reg_ix+1)}
 
 	; DD 95 sub a, ixl
-	z80_niy	subaixl
+	z80_exaf2	subaixl, {sub a, (ix+z80_reg_ix+0)}
 
 	; DD 96 sub a, (ix+d)
 	z80_niy	suba_ixd_
 
 	; DD 9C sbc a, ixh
-	z80_niy	sbcaixh
+	z80_exaf2	sbcaixh, {sbc a, (ix+z80_reg_ix+1)}
 
 	; DD 9D abc a, ixl
-	z80_niy	sbcaixl
+	z80_exaf2	sbcaixl, {sbc a, (ix+z80_reg_ix+0)}
 
 	; DD 9E sbc a, (ix+d)
 	z80_niy	sbca_ixd_
 
 	; DD A4 and a, ixh
-	z80_niy	andaixh
+	z80_exaf2	andaixh, {and a, (ix+z80_reg_ix+1)}
 
 	; DD A5 and a, ixl
-	z80_niy	andaixl
+	z80_exaf2	andaixl, {and a, (ix+z80_reg_ix+0)}
 
 	; DD A6 and a, (ix+d)
 	z80_niy	anda_ixd_
 
 	; DD AC xor a, ixh
-	z80_niy	xoraixh
+	z80_exaf2	xoraixh, {xor a, (ix+z80_reg_ix+1)}
 
 	; DD AD xor a, ixl
-	z80_niy	xoraixl
+	z80_exaf2	xoraixl, {xor a, (ix+z80_reg_ix+0)}
 
 	; DD AE xor a, (ix+d)
 	z80_niy	xora_ixd_
 
 	; DD B4 or a, ixh
-	z80_niy	oraixh
+	z80_exaf2	oraixh, {or a, (ix+z80_reg_ix+1)}
 
 	; DD B5 or a, ixl
-	z80_niy	oraixl
+	z80_exaf2	oraixl, {or a, (ix+z80_reg_ix+0)}
 
 	; DD B6 or a, (ix+d)
 	z80_niy	ora_ixd_
 
 	; DD BC cp a, ixh
-	z80_niy	cpaixh
+	z80_exaf2	cpaixh, {cp a, (ix+z80_reg_ix+1)}
 
 	; DD BD cp a, ixl
-	z80_niy	cpaixl
+	z80_exaf2	cpaixl, {cp a, (ix+z80_reg_ix+0)}
 
 	; DD BE cp a, (ix+d)
 	z80_niy	cpa_ixd_

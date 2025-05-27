@@ -1,75 +1,7 @@
 	include	"..\config.inc"
+	include	"z80-emulator-macros.inc"
 
 	.assume	adl=1
-
-z80_niy	macro name
-z80_&name:
-	call	not_implemented
-	z80loop
-	endmacro
-
-z80_exmain macro operation, op2, op3, op4
-	exx
-	operation
-	op2
-	op3
-	op4
-	exx
-	z80loop
-	endmacro
-
-z80_exmain2 macro name, operation, op2, op3, op4
-z80_&name:
-	exx
-	operation
-	op2
-	op3
-	op4
-	exx
-	z80loop
-	endmacro
-
-z80_exaf macro operation, op2, op3
-	ex	af, af'
-	operation
-	op2
-	op3
-	ex	af, af'
-	z80loop
-	endmacro
-
-z80_exaf2 macro name, operation, op2, op3
-z80_&name:
-	ex	af, af'
-	operation
-	op2
-	op3
-	ex	af, af'
-	z80loop
-	endmacro
-
-z80_exall	macro	operation, op2, op3
-	exx
-	ex	af, af'
-	operation
-	op2
-	op3
-	ex	af, af'
-	exx
-	z80loop
-	endmacro
-
-z80_exall2	macro	name, operation, op2, op3
-z80_&name:
-	exx
-	ex	af, af'
-	operation
-	op2
-	op3
-	ex	af, af'
-	exx
-	z80loop
-	endmacro
 
 
 ; ez80's alt version of BC, DE, HL contain the emulated z80's main registers
@@ -80,6 +12,8 @@ z80_&name:
 	global	_reg_ahl
 	global	_reg_ade
 	global	_reg_iy
+	global z80_reg_ix
+	global z80_reg_iy
 ; registers
 z80_regs:				; FD00
 _reg_aaf:
@@ -148,28 +82,12 @@ z80_reg_spl	equ	36
 	section	CODE
 	global	z80_invoke
 
-; test_poi:
-; 	push	iy
-; 	pop	hl
-; 	ld	de, %05b9
-; 	or	a
-; 	sbc.s	hl, de
-; 	ret	nz
-; poi:
-; 	nop
-; 	ret
 
-; z80loop	macro
-; 	call	test_poi
-; 	jp	z80_loop
-; 	endmacro
 
-test_poi macro
-	endmacro
-
-z80loop	macro
-	jp	z80_loop
-	endmacro
+	section	INTERNAL_RAM_ROM
+z80_loop:
+	z80_byte_jump	z80_instr_table
+	section CODE
 
 ; start executing z80 code at location: MBASE/IY
 z80_invoke:
@@ -190,23 +108,7 @@ z80_invoke:
 
 	ld	ix, z80_regs
 
-z80_byte_jump	macro	instr_table
-	or	a
-	sbc	hl, hl
-	ld.s	l, (iy)
-	inc	iy
-	add	hl, hl
-	add	hl, hl
-	ld	bc, instr_table
-	add	hl, bc
-	jp	(hl)
-	endmacro
-
-
-	section	INTERNAL_RAM_ROM
-z80_loop:
-	z80_byte_jump	z80_instr_table
-	section CODE
+	global	z80_nop
 
 z80_instr_table:
 	jp	z80_nop			; 00
@@ -466,6 +368,7 @@ z80_instr_table:
 	jp	z80_cpn			; FE
 	jp	z80_rst38		; FF
 
+	global	not_implemented
 not_implemented:
 	ret
 
@@ -1651,8 +1554,7 @@ z80_ina_n_:
 	z80_callccnn	c
 
 	; $DD .....
-	include "z80-emulator-ir.inc"
-	include "z80-emulator-ix.inc"
+	XREF	z80_ix
 
 	; $DE sbc a, n
 	z80_exaf2	sbcan, {sbc.s a, (iy)}, {inc iy}
@@ -1822,7 +1724,7 @@ z80_ei:
 	z80_callccnn	m
 
 	; $FD .....
-	include "z80-emulator-iy.inc"
+	XREF	z80_iy
 
 	; $FE cp a, n
 z80_cpn:
