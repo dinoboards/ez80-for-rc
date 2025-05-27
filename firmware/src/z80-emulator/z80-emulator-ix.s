@@ -6,6 +6,7 @@
 	section	INTERNAL_RAM_ROM
 
 	xref	z80_nop
+	xref	z80_regs
 	xref	z80_reg_ix
 regir	equ	z80_reg_ix
 
@@ -478,7 +479,7 @@ ix_instr_table:
 	z80_exaf2	addaixl, {add a, (ix+z80_reg_ix+0)}
 
 	; DD 86 add a,(ix+d)
-	z80_niy	adda_ixd_
+	z80_afir	adda_ixd_, ix, {add.s a, (hl)}
 
 	; DD 8C adc a, ixh
 	z80_exaf2	adcaixh, {adc a, (ix+z80_reg_ix+1)}
@@ -487,7 +488,7 @@ ix_instr_table:
 	z80_exaf2	adcaixl, {adc a, (ix+z80_reg_ix+0)}
 
 	; DD 8E adc a,(ix+d)
-	z80_niy	adca_ixd_
+	z80_afir	adca_ixd_, ix, {adc.s a, (hl)}
 
 	; DD 94 sub a, ixh
 	z80_exaf2	subaixh, {sub a, (ix+z80_reg_ix+1)}
@@ -496,7 +497,7 @@ ix_instr_table:
 	z80_exaf2	subaixl, {sub a, (ix+z80_reg_ix+0)}
 
 	; DD 96 sub a, (ix+d)
-	z80_niy	suba_ixd_
+	z80_afir	suba_ixd_, ix, {db %52}, {sub a, (hl)} 	; bug in assembler sub.s a, (hl)
 
 	; DD 9C sbc a, ixh
 	z80_exaf2	sbcaixh, {sbc a, (ix+z80_reg_ix+1)}
@@ -505,7 +506,7 @@ ix_instr_table:
 	z80_exaf2	sbcaixl, {sbc a, (ix+z80_reg_ix+0)}
 
 	; DD 9E sbc a, (ix+d)
-	z80_niy	sbca_ixd_
+	z80_afir	sbca_ixd_, ix, {sbc.s a, (hl)}
 
 	; DD A4 and a, ixh
 	z80_exaf2	andaixh, {and a, (ix+z80_reg_ix+1)}
@@ -514,7 +515,7 @@ ix_instr_table:
 	z80_exaf2	andaixl, {and a, (ix+z80_reg_ix+0)}
 
 	; DD A6 and a, (ix+d)
-	z80_niy	anda_ixd_
+	z80_afir	anda_ixd_, ix, {and.s a, (hl)}
 
 	; DD AC xor a, ixh
 	z80_exaf2	xoraixh, {xor a, (ix+z80_reg_ix+1)}
@@ -523,7 +524,7 @@ ix_instr_table:
 	z80_exaf2	xoraixl, {xor a, (ix+z80_reg_ix+0)}
 
 	; DD AE xor a, (ix+d)
-	z80_niy	xora_ixd_
+	z80_afir	xora_ixd_, ix, {xor.s a, (hl)}
 
 	; DD B4 or a, ixh
 	z80_exaf2	oraixh, {or a, (ix+z80_reg_ix+1)}
@@ -532,7 +533,7 @@ ix_instr_table:
 	z80_exaf2	oraixl, {or a, (ix+z80_reg_ix+0)}
 
 	; DD B6 or a, (ix+d)
-	z80_niy	ora_ixd_
+	z80_afir	ora_ixd_, ix, {or.s a, (hl)}
 
 	; DD BC cp a, ixh
 	z80_exaf2	cpaixh, {cp a, (ix+z80_reg_ix+1)}
@@ -541,7 +542,7 @@ ix_instr_table:
 	z80_exaf2	cpaixl, {cp a, (ix+z80_reg_ix+0)}
 
 	; DD BE cp a, (ix+d)
-	z80_niy	cpa_ixd_
+	z80_afir	cpa_ixd_, ix, {cp.s a, (hl)}
 
 	; DD CB ix bit operators
 	z80_niy	ixbits

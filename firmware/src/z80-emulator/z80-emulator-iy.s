@@ -6,6 +6,7 @@
 	section	INTERNAL_RAM_ROM
 
 	xref	z80_nop
+	xref	z80_regs
 	XREF	z80_reg_iy
 regir	equ	z80_reg_iy
 	; FD ....
@@ -477,7 +478,7 @@ iy_instr_table:
 	z80_exaf2	addaiyl, {add a, (ix+z80_reg_iy+0)}
 
 	; FD 86 add a,(iy+d)
-	z80_niy	adda_iyd_
+	z80_afir	adda_iyd_, iy, {add.s a, (hl)}
 
 	; FD 8C adc a, iyh
 	z80_exaf2	adcaiyh, {adc a, (ix+z80_reg_iy+1)}
@@ -486,7 +487,7 @@ iy_instr_table:
 	z80_exaf2	adcaiyl, {adc a, (ix+z80_reg_iy+0)}
 
 	; FD 8E adc a,(iy+d)
-	z80_niy	adca_iyd_
+	z80_afir	adca_iyd_, iy, {adc.s a, (hl)}
 
 	; FD 94 sub a, iyh
 	z80_exaf2	subaiyh, {sub a, (ix+z80_reg_iy+1)}
@@ -495,7 +496,7 @@ iy_instr_table:
 	z80_exaf2	subaiyl, {sub a, (ix+z80_reg_iy+0)}
 
 	; FD 96 sub a, (iy+d)
-	z80_niy	suba_iyd_
+	z80_afir	suba_iyd_, iy, {db %52}, {sub a, (hl)} 	; bug in assembler sub.s a, (hl)
 
 	; FD 9C sbc a, iyh
 	z80_exaf2	sbcaiyh, {sbc a, (ix+z80_reg_iy+1)}
@@ -504,7 +505,7 @@ iy_instr_table:
 	z80_exaf2	sbcaiyl, {sbc a, (ix+z80_reg_iy+0)}
 
 	; FD 9E sbc a, (iy+d)
-	z80_niy	sbca_iyd_
+	z80_afir	sbca_iyd_, iy, {sbc.s a, (hl)}
 
 	; FD A4 and a, iyh
 	z80_exaf2	andaiyh, {and a, (ix+z80_reg_iy+1)}
@@ -513,7 +514,7 @@ iy_instr_table:
 	z80_exaf2	andaiyl, {and a, (ix+z80_reg_iy+0)}
 
 	; FD A6 and a, (iy+d)
-	z80_niy	anda_iyd_
+	z80_afir	anda_iyd_, iy, {and.s a, (hl)}
 
 	; FD AC xor a, iyh
 	z80_exaf2	xoraiyh, {xor a, (ix+z80_reg_iy+1)}
@@ -522,7 +523,7 @@ iy_instr_table:
 	z80_exaf2	xoraiyl, {xor a, (ix+z80_reg_iy+0)}
 
 	; FD AE xor a, (iy+d)
-	z80_niy	xora_iyd_
+	z80_afir	xora_iyd_, iy, {xor.s a, (hl)}
 
 	; FD B4 or a, iyh
 	z80_exaf2	oraiyh, {or a, (ix+z80_reg_iy+1)}
@@ -531,7 +532,7 @@ iy_instr_table:
 	z80_exaf2	oraiyl, {or a, (ix+z80_reg_iy+0)}
 
 	; FD B6 or a, (iy+d)
-	z80_niy	ora_iyd_
+	z80_afir	ora_iyd_, iy, {or.s a, (hl)}
 
 	; FD BC cp a, iyh
 	z80_exaf2	cpaiyh, {cp a, (ix+z80_reg_iy+1)}
@@ -540,7 +541,7 @@ iy_instr_table:
 	z80_exaf2	cpaiyl, {cp a, (ix+z80_reg_iy+0)}
 
 	; FD BE cp a, (iy+d)
-	z80_niy	cpa_iyd_
+	z80_afir	cpa_iyd_, iy, {cp.s a, (hl)}
 
 	; FD CB iy bit operators
 	z80_niy	iybits

@@ -168,3 +168,24 @@ z80_&name:
 	exx
 	z80loop
 	endmacro
+
+z80_afir	macro	name, ir, operation, op2
+z80_&name
+	ld.s	a, (iy)
+	inc	iy
+
+	; Sign-extend 8-bit A into 16-bit HL
+	ld	l, a  ; Store low byte
+	add	a, a  ; Push sign into carry
+	sbc	a     ; Turn it into 0 or -1
+	ld	h, a  ; Store high byte
+
+	ld	bc, (ix+z80_reg_&ir)
+	add.s	hl, bc
+
+	ex	af, af'
+	operation
+	op2
+	ex	af, af'
+	z80loop
+	endmacro

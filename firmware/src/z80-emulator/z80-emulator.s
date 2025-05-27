@@ -9,6 +9,7 @@
 
 	section	BSS
 
+	global	z80_regs
 	global	_reg_ahl
 	global	_reg_ade
 	global	_reg_iy
