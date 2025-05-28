@@ -1401,6 +1401,7 @@ z80_ret:
 	; $CA jp z, nn
 	z80_jpccnn	jr, z
 
+	; $CB ....
 	section	INTERNAL_RAM_ROM
 z80_bit:
 	ld.s	a, (iy)

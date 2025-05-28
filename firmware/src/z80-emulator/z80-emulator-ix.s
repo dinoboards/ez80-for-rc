@@ -3,7 +3,6 @@
 
 	.assume	adl=1
 
-	section	INTERNAL_RAM_ROM
 
 	xref	z80_nop
 	xref	z80_regs
@@ -12,6 +11,7 @@ regir	equ	z80_reg_ix
 
 	; DD ....
 	global	z80_ix
+	section	INTERNAL_RAM_ROM
 z80_ix:
 	z80_byte_jump	ix_instr_table
 	section CODE
@@ -545,7 +545,33 @@ ix_instr_table:
 	z80_afir	cpa_ixd_, ix, {cp.s a, (hl)}
 
 	; DD CB ix bit operators
-	z80_niy	ixbits
+	; DD, CB, dd, kk -> 52, DD, CB, dd, kk
+z80_ixbits:
+	ld.s	bc, (iy)
+	inc	iy
+	inc	iy
+	ld	hl, bit_instr
+	ld	(hl), c
+	inc	hl
+	ld	(hl), b
+	ld	ix, (ix+z80_reg_ix)
+	exx
+	ex	af, af'
+	jp	z80_ixbits2
+
+	section	INTERNAL_RAM_ROM
+z80_ixbits2:
+	db	%52
+	db	%DD	; bit operand
+	db	%CB	; bit operand
+bit_instr:
+	db	%00
+	db	%06
+	ex	af, af'
+	exx
+	ld	ix, z80_regs
+	z80loop
+	section	CODE
 
 	; $DD E1 pop ix
 	z80_popir	ix

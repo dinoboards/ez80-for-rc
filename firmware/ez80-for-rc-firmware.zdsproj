@@ -164,7 +164,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05FC
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $061C
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -300,7 +300,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05FC
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $061C
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -436,7 +436,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0200)
 LOCATE DATA at (BASE OF BSS - $0100)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0600
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0680
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -492,6 +492,13 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <line-number>374</line-number>
 <pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
 <address>17632</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>550</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator-ix.s</pathname>
+<address>0</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>

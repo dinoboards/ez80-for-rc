@@ -23,10 +23,10 @@ zexall:
 	db %00
 	db %00
 	db %11
-	db %eb
+	db %e5
 	db %08
 	db %cd
-	db %c5
+	db %bf
 	db %08
 	db %21
 	db %31
@@ -39,26 +39,20 @@ zexall:
 	db %01
 	db %2b
 	db %cd
-	db %bb
+	db %b5
 	db %05
 	db %c3
 	db %1c
 	db %01
 	db %11
-	db %07
+	db %01
 	db %09
 	db %cd
-	db %c5
+	db %bf
 	db %08
 	db %49
 	db %c9
-	db %db
-	db %03
-	db %3b
-	db %04
-	db %9b
-	db %04
-	db %fb
+	db %35
 	db %04
 	db %00
 	db %00
@@ -1221,7 +1215,7 @@ zexall:
 	db %6f
 	db %7e
 	db %32
-	db %3d
+	db %37
 	db %08
 	db %23
 	db %e5
@@ -1230,10 +1224,10 @@ zexall:
 	db %00
 	db %19
 	db %11
-	db %ab
+	db %a5
 	db %07
 	db %cd
-	db %1a
+	db %14
 	db %07
 	db %e1
 	db %e5
@@ -1242,20 +1236,20 @@ zexall:
 	db %00
 	db %19
 	db %11
-	db %d3
+	db %cd
 	db %07
 	db %cd
-	db %1a
+	db %14
 	db %07
 	db %21
-	db %d3
+	db %cd
 	db %07
 	db %36
 	db %01
 	db %e1
 	db %e5
 	db %11
-	db %18
+	db %12
 	db %08
 	db %01
 	db %04
@@ -1276,83 +1270,83 @@ zexall:
 	db %19
 	db %eb
 	db %cd
-	db %c5
+	db %bf
 	db %08
 	db %cd
-	db %82
+	db %7c
 	db %09
 	db %3a
-	db %18
+	db %12
 	db %08
 	db %fe
 	db %76
 	db %ca
-	db %15
+	db %0f
 	db %06
 	db %e6
 	db %df
 	db %fe
 	db %dd
 	db %c2
-	db %12
+	db %0c
 	db %06
 	db %3a
-	db %19
+	db %13
 	db %08
 	db %fe
 	db %76
 	db %c4
-	db %fb
+	db %f5
 	db %07
 	db %cd
-	db %5a
+	db %54
 	db %07
 	db %c4
-	db %7e
+	db %78
 	db %07
 	db %e1
 	db %ca
-	db %4b
+	db %45
 	db %06
 	db %11
 	db %3c
 	db %00
 	db %19
 	db %cd
-	db %43
+	db %3d
 	db %09
 	db %11
-	db %16
+	db %10
 	db %09
 	db %ca
-	db %44
+	db %3e
 	db %06
 	db %11
-	db %1d
+	db %17
 	db %09
 	db %cd
-	db %c5
+	db %bf
 	db %08
 	db %cd
-	db %71
+	db %6b
 	db %08
 	db %11
-	db %38
+	db %32
 	db %09
 	db %cd
-	db %c5
+	db %bf
 	db %08
 	db %21
-	db %96
+	db %90
 	db %09
 	db %cd
-	db %71
+	db %6b
 	db %08
 	db %11
-	db %40
+	db %3a
 	db %09
 	db %cd
-	db %c5
+	db %bf
 	db %08
 	db %e1
 	db %23
@@ -1362,32 +1356,32 @@ zexall:
 	db %3e
 	db %01
 	db %32
-	db %c1
+	db %bb
 	db %06
 	db %32
-	db %e5
+	db %df
 	db %06
 	db %21
-	db %ab
+	db %a5
 	db %07
 	db %22
-	db %c2
+	db %bc
 	db %06
 	db %21
-	db %d3
+	db %cd
 	db %07
 	db %22
-	db %e6
+	db %e0
 	db %06
 	db %06
 	db %04
 	db %e1
 	db %e5
 	db %11
-	db %18
+	db %12
 	db %08
 	db %cd
-	db %75
+	db %6f
 	db %06
 	db %06
 	db %10
@@ -1395,18 +1389,18 @@ zexall:
 	db %03
 	db %01
 	db %cd
-	db %75
+	db %6f
 	db %06
 	db %c3
-	db %fe
+	db %f8
 	db %05
 	db %cd
-	db %7e
+	db %78
 	db %06
 	db %23
 	db %05
 	db %c2
-	db %75
+	db %6f
 	db %06
 	db %c9
 	db %c5
@@ -1421,7 +1415,7 @@ zexall:
 	db %fe
 	db %00
 	db %ca
-	db %9f
+	db %99
 	db %06
 	db %06
 	db %08
@@ -1430,7 +1424,7 @@ zexall:
 	db %3e
 	db %00
 	db %dc
-	db %c4
+	db %be
 	db %06
 	db %a9
 	db %0f
@@ -1438,7 +1432,7 @@ zexall:
 	db %f1
 	db %05
 	db %c2
-	db %8e
+	db %88
 	db %06
 	db %06
 	db %08
@@ -1450,7 +1444,7 @@ zexall:
 	db %fe
 	db %00
 	db %ca
-	db %ba
+	db %b4
 	db %06
 	db %06
 	db %08
@@ -1459,7 +1453,7 @@ zexall:
 	db %3e
 	db %00
 	db %dc
-	db %e8
+	db %e2
 	db %06
 	db %a9
 	db %0f
@@ -1467,7 +1461,7 @@ zexall:
 	db %f1
 	db %05
 	db %c2
-	db %ab
+	db %a5
 	db %06
 	db %e1
 	db %d1
@@ -1482,11 +1476,11 @@ zexall:
 	db %c5
 	db %e5
 	db %2a
-	db %c2
+	db %bc
 	db %06
 	db %46
 	db %21
-	db %c1
+	db %bb
 	db %06
 	db %7e
 	db %4f
@@ -1495,14 +1489,14 @@ zexall:
 	db %fe
 	db %01
 	db %c2
-	db %dd
+	db %d7
 	db %06
 	db %2a
-	db %c2
+	db %bc
 	db %06
 	db %23
 	db %22
-	db %c2
+	db %bc
 	db %06
 	db %78
 	db %a1
@@ -1518,11 +1512,11 @@ zexall:
 	db %c5
 	db %e5
 	db %2a
-	db %e6
+	db %e0
 	db %06
 	db %46
 	db %21
-	db %e5
+	db %df
 	db %06
 	db %7e
 	db %4f
@@ -1531,14 +1525,14 @@ zexall:
 	db %fe
 	db %01
 	db %c2
-	db %01
-	db %07
+	db %fb
+	db %06
 	db %2a
-	db %e6
+	db %e0
 	db %06
 	db %23
 	db %22
-	db %e6
+	db %e0
 	db %06
 	db %78
 	db %a1
@@ -1571,7 +1565,7 @@ zexall:
 	db %28
 	db %00
 	db %cd
-	db %09
+	db %03
 	db %07
 	db %eb
 	db %06
@@ -1584,7 +1578,7 @@ zexall:
 	db %7b
 	db %a1
 	db %ca
-	db %30
+	db %2a
 	db %07
 	db %14
 	db %79
@@ -1593,12 +1587,12 @@ zexall:
 	db %fe
 	db %01
 	db %c2
-	db %2a
+	db %24
 	db %07
 	db %23
 	db %05
 	db %c2
-	db %29
+	db %23
 	db %07
 	db %7a
 	db %e6
@@ -1619,7 +1613,7 @@ zexall:
 	db %07
 	db %05
 	db %c2
-	db %4d
+	db %47
 	db %07
 	db %d1
 	db %19
@@ -1633,7 +1627,7 @@ zexall:
 	db %d5
 	db %e5
 	db %21
-	db %ab
+	db %a5
 	db %07
 	db %11
 	db %14
@@ -1646,13 +1640,13 @@ zexall:
 	db %fe
 	db %00
 	db %ca
-	db %79
+	db %73
 	db %07
 	db %47
 	db %1a
 	db %a0
 	db %ca
-	db %75
+	db %6f
 	db %07
 	db %36
 	db %00
@@ -1663,13 +1657,13 @@ zexall:
 	db %23
 	db %13
 	db %c3
-	db %66
+	db %60
 	db %07
 	db %c5
 	db %d5
 	db %e5
 	db %21
-	db %d3
+	db %cd
 	db %07
 	db %11
 	db %14
@@ -1680,20 +1674,20 @@ zexall:
 	db %7e
 	db %b7
 	db %ca
-	db %a6
+	db %a0
 	db %07
 	db %47
 	db %1a
 	db %a0
 	db %c2
-	db %a2
+	db %9c
 	db %07
 	db %78
 	db %07
 	db %fe
 	db %01
 	db %c2
-	db %a0
+	db %9a
 	db %07
 	db %36
 	db %00
@@ -1708,7 +1702,7 @@ zexall:
 	db %23
 	db %13
 	db %c3
-	db %8a
+	db %84
 	db %07
 	db %00
 	db %00
@@ -1795,12 +1789,12 @@ zexall:
 	db %d5
 	db %e5
 	db %cd
-	db %a4
+	db %9e
 	db %08
 	db %f3
 	db %ed
 	db %73
-	db %65
+	db %5f
 	db %08
 	db %cb
 	db %30
@@ -1825,10 +1819,10 @@ zexall:
 	db %00
 	db %ed
 	db %73
-	db %63
+	db %5d
 	db %08
 	db %31
-	db %63
+	db %5d
 	db %08
 	db %f5
 	db %c5
@@ -1842,17 +1836,17 @@ zexall:
 	db %31
 	db %ed
 	db %7b
-	db %65
+	db %5f
 	db %08
 	db %fb
 	db %2a
 	db %03
 	db %01
 	db %22
-	db %55
+	db %4f
 	db %08
 	db %21
-	db %61
+	db %5b
 	db %08
 	db %7e
 	db %e6
@@ -1861,19 +1855,19 @@ zexall:
 	db %06
 	db %10
 	db %11
-	db %55
+	db %4f
 	db %08
 	db %21
-	db %96
+	db %90
 	db %09
 	db %1a
 	db %13
 	db %cd
-	db %5a
+	db %54
 	db %09
 	db %05
 	db %c2
-	db %47
+	db %41
 	db %08
 	db %e1
 	db %d1
@@ -1900,12 +1894,12 @@ zexall:
 	db %00
 	db %7e
 	db %cd
-	db %83
+	db %7d
 	db %08
 	db %23
 	db %05
 	db %c2
-	db %67
+	db %61
 	db %08
 	db %c9
 	db %f5
@@ -1915,12 +1909,12 @@ zexall:
 	db %04
 	db %7e
 	db %cd
-	db %83
+	db %7d
 	db %08
 	db %23
 	db %05
 	db %c2
-	db %76
+	db %70
 	db %08
 	db %e1
 	db %c1
@@ -1932,7 +1926,7 @@ zexall:
 	db %0f
 	db %0f
 	db %cd
-	db %8c
+	db %86
 	db %08
 	db %f1
 	db %f5
@@ -1944,7 +1938,7 @@ zexall:
 	db %fe
 	db %0a
 	db %da
-	db %99
+	db %93
 	db %08
 	db %c6
 	db %27
@@ -1952,7 +1946,7 @@ zexall:
 	db %30
 	db %5f
 	db %cd
-	db %de
+	db %d8
 	db %08
 	db %e1
 	db %d1
@@ -1962,11 +1956,11 @@ zexall:
 	db %e5
 	db %f5
 	db %2a
-	db %c3
+	db %bd
 	db %08
 	db %23
 	db %22
-	db %c3
+	db %bd
 	db %08
 	db %7d
 	db %b7
@@ -1980,12 +1974,12 @@ zexall:
 	db %ed
 	db %62
 	db %22
-	db %c3
+	db %bd
 	db %08
 	db %1e
 	db %2e
 	db %cd
-	db %de
+	db %d8
 	db %08
 	db %f1
 	db %e1
@@ -2007,7 +2001,7 @@ zexall:
 	db %07
 	db %5f
 	db %cd
-	db %de
+	db %d8
 	db %08
 	db %23
 	db %18
@@ -2122,20 +2116,20 @@ zexall:
 	db %d5
 	db %e5
 	db %11
-	db %96
+	db %90
 	db %09
 	db %06
 	db %04
 	db %1a
 	db %be
 	db %c2
-	db %56
+	db %50
 	db %09
 	db %23
 	db %13
 	db %05
 	db %c2
-	db %4b
+	db %45
 	db %09
 	db %e1
 	db %d1
@@ -2158,7 +2152,7 @@ zexall:
 	db %29
 	db %eb
 	db %21
-	db %9a
+	db %94
 	db %09
 	db %19
 	db %eb
@@ -2174,7 +2168,7 @@ zexall:
 	db %23
 	db %0d
 	db %c2
-	db %73
+	db %6d
 	db %09
 	db %e1
 	db %d1
@@ -2185,7 +2179,7 @@ zexall:
 	db %c5
 	db %e5
 	db %21
-	db %96
+	db %90
 	db %09
 	db %3e
 	db %ff
@@ -2195,7 +2189,7 @@ zexall:
 	db %23
 	db %05
 	db %c2
-	db %8c
+	db %86
 	db %09
 	db %e1
 	db %c1
