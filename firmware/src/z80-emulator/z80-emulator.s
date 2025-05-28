@@ -658,8 +658,7 @@ z80_incsp:
 	z80_exall2	inc_hl_, {inc.s (hl)}
 
 	; $35 dec (hl)
-z80_dec_hl_:
-	z80_exall	{dec.s (hl)}
+	z80_exall2	dec_hl_, {dec.s (hl)}
 
 
 z80_ld_hl_n:
