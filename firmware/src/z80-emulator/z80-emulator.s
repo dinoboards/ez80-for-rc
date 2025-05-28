@@ -387,12 +387,10 @@ z80_nop:
 	z80_exmain2	incbc, {inc bc}
 
 	; $04 inc b
-z80_incb:
-	z80_exall	{inc b}
+	z80_exall2	incb, {inc b}
 
 	; $05 dec b
-z80_decb:
-	z80_exall	{dec b}
+	z80_exall2	decb, {dec b}
 
 	; $06 ld b, n
 z80_ldbn:

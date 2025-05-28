@@ -496,9 +496,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <preserve-type>0</preserve-type>
 </breakpoint>
 <breakpoint temporary="false" enabled="true" >
-<line-number>2224</line-number>
+<line-number>2225</line-number>
 <pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>25810</address>
+<address>25840</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>
