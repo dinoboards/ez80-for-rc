@@ -1402,26 +1402,19 @@ z80_ret:
 	z80_jpccnn	jr, z
 
 	; $CB ....
-	section	INTERNAL_RAM_ROM
 z80_bit:
 	ld.s	a, (iy)
 	inc	iy
 	cp	%31		;
 	jp	z, z80_switch_to_native
 	ld	(bit_instr), a
-
 	exx
-	; ensure hl' upper byte is mbase
-	push	iy
-	push	hl
-	ld	iy, 0
-	add	iy, sp
-	ld	a, mb
-	ld	(iy+2), a
-	pop	hl
-	pop	iy
-
 	ex	af, af'
+	jp	z80_bit2
+
+	section	INTERNAL_RAM_ROM
+z80_bit2:
+	db	%52	; .S prefix
 	db	%CB	; bit operand
 bit_instr:
 	db	%00
@@ -1429,6 +1422,7 @@ bit_instr:
 	exx
 	z80loop
 
+	section	CODE
 z80_switch_to_native:
 	; need to load all registers correctly
 	; then jump.s to original value of iy
@@ -1450,10 +1444,11 @@ z80_switch_to_native:
 
 	ld	iy, (ix+z80_reg_iy)
 	ld	ix, (ix+z80_reg_ix)
+	jp	.switch_addr
 
+	section	INTERNAL_RAM_ROM
 .switch_addr:
 	jp.s	%0000
-
 	section	CODE
 
 

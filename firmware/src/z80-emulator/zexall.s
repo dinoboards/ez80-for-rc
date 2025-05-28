@@ -52,7 +52,7 @@ zexall:
 	db %08
 	db %49
 	db %c9
-	db %35
+	db %95
 	db %04
 	db %00
 	db %00

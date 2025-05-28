@@ -89,7 +89,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $061C
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05D7
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
 
@@ -152,12 +152,12 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb_state.obj", \
  ".\vectors16.obj", \
  ".\work-area.obj", \
+ ".\z80-emulator-ix.obj", \
+ ".\z80-emulator-iy.obj", \
  ".\z80-emulator-logging.obj", \
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
- ".\z80-emulator-ix.obj", \
- ".\z80-emulator-iy.obj", \
  "Z:\ZDS\lib\std\chelpD.lib", \
  "Z:\ZDS\lib\std\crtD.lib", \
  "Z:\ZDS\lib\std\crtSD.lib", \

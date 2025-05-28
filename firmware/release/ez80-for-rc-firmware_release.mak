@@ -489,6 +489,18 @@ clean:
             $(RM) "$(WORKDIR)\work-area.lst"
 	@if exist "$(WORKDIR)\work-area.src"  \
             $(RM) "$(WORKDIR)\work-area.src"
+	@if exist "$(WORKDIR)\z80-emulator-ix.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-ix.obj"
+	@if exist "$(WORKDIR)\z80-emulator-ix.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-ix.lis"
+	@if exist "$(WORKDIR)\z80-emulator-ix.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-ix.lst"
+	@if exist "$(WORKDIR)\z80-emulator-iy.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-iy.obj"
+	@if exist "$(WORKDIR)\z80-emulator-iy.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-iy.lis"
+	@if exist "$(WORKDIR)\z80-emulator-iy.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-iy.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.obj"
 	@if exist "$(WORKDIR)\z80-emulator-logging.lis"  \
@@ -515,18 +527,6 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
-	@if exist "$(WORKDIR)\z80-emulator-ix.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-ix.obj"
-	@if exist "$(WORKDIR)\z80-emulator-ix.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-ix.lis"
-	@if exist "$(WORKDIR)\z80-emulator-ix.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-ix.lst"
-	@if exist "$(WORKDIR)\z80-emulator-iy.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-iy.obj"
-	@if exist "$(WORKDIR)\z80-emulator-iy.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-iy.lis"
-	@if exist "$(WORKDIR)\z80-emulator-iy.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-iy.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -592,12 +592,12 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
             $(WORKDIR_ESCSPACE)\work-area.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -1240,6 +1240,24 @@ $(WORKDIR_ESCSPACE)\work-area.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\work-area.c"
 
+$(WORKDIR_ESCSPACE)\z80-emulator-ix.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-ix.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-ix.s"
+
+$(WORKDIR_ESCSPACE)\z80-emulator-iy.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-iy.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-iy.s"
+
 $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
@@ -1268,22 +1286,4 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-ix.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-ix.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-ix.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-iy.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-iy.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-iy.s"
 
