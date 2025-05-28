@@ -585,8 +585,7 @@ z80_ldhn:
 	z80loop
 
 	; $27 daa
-z80_daa:
-	z80_exaf	{daa}
+	z80_exaf2	daa, {daa}
 
 	; $28 jr z, d
 z80_jrzd:
@@ -650,11 +649,7 @@ z80_ldln:
 	z80loop
 
 	; $2F cpl
-z80_cpl:
-	ex	af, af'
-	cpl
-	ex	af, af'
-	z80loop
+	z80_exaf2	cpl, {cpl}
 
 	; $30 jr nc, d
 z80_jrncd:
@@ -709,11 +704,7 @@ z80_ld_hl_n:
 	z80loop
 
 	; $37 scf
-z80_scf:
-	ex	af, af'
-	scf
-	ex	af, af'
-	z80loop
+	z80_exaf2	scf, {scf}
 
 	; $38 jr c,d
 z80_jrcd:
@@ -769,10 +760,8 @@ z80_ldan:
 	ex	af, af'
 	z80loop
 
-
-z80_ccf:
-	call	not_implemented
-	z80loop
+	; $3F ccf
+	z80_exaf2	ccf, {ccf}
 
 	; $40 ld b,b
 z80_ldbb:
