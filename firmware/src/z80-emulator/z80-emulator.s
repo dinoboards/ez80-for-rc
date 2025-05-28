@@ -2203,9 +2203,8 @@ z80_ldi:
 	call	not_implemented
 	jp	z80_nop
 
-z80_cpi:
-	call	not_implemented
-	jp	z80_nop
+	; $ED A1
+	z80_exall2	cpi, {cpi.s}
 
 z80_ini:
 	call	not_implemented
@@ -2219,27 +2218,24 @@ z80_ldd:
 	call	not_implemented
 	jp	z80_nop
 
-z80_cpd:
-	call	not_implemented
-	jp	z80_nop
+	; $ED A9 cpd
+	z80_exall2	cpd, {cpd.s}
+
 
 z80_ind:
 	call	not_implemented
 	jp	z80_nop
 
+
 z80_outd:
 	call	not_implemented
 	jp	z80_nop
 
-z80_ldir:
-	exx
-	ldir.s
-	exx
-	z80loop
+	; $ED $B0
+	z80_exall2	ldir, {ldir.s}
 
-z80_cpir:
-	call	not_implemented
-	jp	z80_nop
+	; $ED B1
+	z80_exall2	cpir, {cpir.s}
 
 z80_inir:
 	call	not_implemented
@@ -2253,9 +2249,8 @@ z80_lddr:
 	call	not_implemented
 	jp	z80_nop
 
-z80_cpdr:
-	call	not_implemented
-	jp	z80_nop
+	; $ED B9 cpdr
+	z80_exall2	cpdr, {cpdr.s}
 
 z80_indr:
 	call	not_implemented
