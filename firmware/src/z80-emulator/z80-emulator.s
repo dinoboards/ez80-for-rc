@@ -737,20 +737,11 @@ z80_decsp:
 	call	not_implemented
 	z80loop
 
-
 	; $3C inc a
-z80_inca:
-	ex	af, af'
-	inc	a
-	ex	af, af'
-	z80loop
+	z80_exaf2	inca, {inc a}
 
 	; $3D dec a
-z80_deca:
-	ex	af, af'
-	dec	a
-	ex	af, af'
-	z80loop
+	z80_exaf2	deca, {dec a}
 
 	; $3E ld a, n
 z80_ldan:
