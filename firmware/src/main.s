@@ -60,9 +60,30 @@ ENDIF
 	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
 	LD	MB, A
 
-	;XREF	z80_invoke
-	;ld	iy, 0
-	;call	z80_invoke
+
+	; ; set main mem to 15bc
+	; xor	a
+	; ld	b,8
+	; ld	l, %80 + 15
+	; RST.L	%10
+
+
+	; XREF	z80_invoke
+	; ; hard coded reset of MSX memory system
+	; ; only required when using the debugger to force memory back to known power-on state
+
+	; ld	bc, %ffab
+	; ld	a, %82
+	; out	(bc), a
+	; ld	bc, %FFA8
+	; ld	a, 0
+	; out	(bc), a
+	; in	a, (bc)
+	; ld	hl, %03FFFF
+	; ld	(hl), 0
+	; ld	a, (hl)
+	; ld	iy, 0
+	; call	z80_invoke
 
 	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
 

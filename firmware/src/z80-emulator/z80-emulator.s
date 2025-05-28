@@ -92,21 +92,6 @@ z80_loop:
 
 ; start executing z80 code at location: MBASE/IY
 z80_invoke:
-	; hard coded reset of MSX memory system
-	; only required when using the debugger to force memory back to known power-on state
-
-	;ld	bc, %ffab
-	;ld	a, %82
-	;out	(bc), a	;
-
-	;ld	bc, %FFA8
-	;ld	a, 0
-	;out	(bc), a
-	;in	a, (bc)
-	;ld	hl, %03FFFF
-	;ld	(hl), 0
-	;ld	a, (hl)
-
 	ld	ix, z80_regs
 
 	global	z80_nop
@@ -479,11 +464,8 @@ z80_lddenn:
 z80_lddn:
 	z80_exmain	{ld.s d, (iy)}, {inc iy}
 
-
-z80_rla:
-	call	not_implemented
-	z80loop
-
+	; $17 rla
+	z80_exaf2	rla, {rla}
 
 	; $18 JR d
 z80_jrd:
@@ -515,12 +497,10 @@ z80_decde:
 	z80_exall2	dece, {dec e}
 
 	; $1E ld e, n
-z80_lden:
-	z80_exmain  {ld.s e, (iy)}, {inc iy}
+	z80_exmain2  	lden, {ld.s e, (iy)}, {inc iy}
 
-z80_rra:
-	call	not_implemented
-	z80loop
+	; $1F rra
+	z80_exaf2	rra, {rra}
 
 	; $20 jr nz, d
 z80_jrnzd:
@@ -732,10 +712,8 @@ z80_ldbc:
 	call	not_implemented
 	z80loop
 
-
-z80_ldbd:
-	call	not_implemented
-	z80loop
+	; $42 ld b, d
+	z80_exmain2	ldbd, {ld b, d}
 
 
 z80_ldbe:
@@ -1417,7 +1395,14 @@ z80_rst08:
 
 
 z80_retnc:
-	call	not_implemented
+	ex	af, af'
+	jr	nc, z80_retnc1
+	ex	af, af'
+	z80loop
+
+z80_retnc1:
+	ex	af, af'
+	pop.s	iy
 	z80loop
 
 	; $d1 pop de
@@ -1464,9 +1449,16 @@ z80_rst10:
 	call	not_implemented
 	z80loop
 
-
+	; $D8 ret c
 z80_retc:
-	call	not_implemented
+	ex	af, af'
+	jr	c, z80_retc1
+	ex	af, af'
+	z80loop
+
+z80_retc1:
+	ex	af, af'
+	pop.s	iy
 	z80loop
 
 	; $D9 exx
@@ -1504,7 +1496,8 @@ z80_ina_n_:
 
 
 z80_rst18:
-	call	not_implemented
+	push.s	iy
+	ld	iy, %18
 	z80loop
 
 
@@ -1558,9 +1551,12 @@ z80_retpe:
 	call	not_implemented
 	z80loop
 
-
+	; $E9 jp (hl)
 z80_jp_hl_:
-	call	not_implemented
+	exx
+	push	hl
+	exx
+	pop	iy
 	z80loop
 
 	; $EA jp pe, nn
@@ -1779,7 +1775,7 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 54 lea ix, iy+d
 	jp	z80_nop	        ; ED 55 lea iy, ix+d
 	jp	z80_im1		; ED 56 im 1
-	jp	z80_ld_a_i      ; ED 57 ld a, i
+	jp	z80_ldai	; ED 57 ld a, i
 	jp	z80_in_e_c      ; ED 58 in e, (bc)
 	jp	z80_out_c_e     ; ED 59 out (bc), e
 	jp	z80_adchlde	; ED 5A adc hl, de
@@ -1795,7 +1791,7 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 64 tst a, n
 	jp	z80_nop		; ED 65 pea ix+d
 	jp	z80_nop		; ED 66 pea iy+d
-	jp	z80_rrd		; ED 67 rrd
+	jp	z80_rrd_hl_	; ED 67 rrd (hl)
 	jp	z80_in_l_c      ; ED 68 in l, (bc)
 	jp	z80_out_c_l     ; ED 69 out (bc), l
 	jp	z80_adchlhl	; ED 6A adc hl, hl
@@ -1803,7 +1799,7 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 6C mlt hl
 	jp	z80_nop		; ED 6D ld mb, a
 	jp	z80_nop		; ED 6E ld a, mb
-	jp	z80_rld		; ED 6F rld
+	jp	z80_rld_hl_	; ED 6F rld (hl)
 	jp	z80_nop		; ED 70
 	jp	z80_nop		; ED 71
 	jp	z80_sbchlsp   ; ED 72 sbc hl, sp
@@ -2052,9 +2048,8 @@ z80_ld_nn_de:
 z80_im1:
 	z80loop
 
-z80_ld_a_i:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 57 ld a, i
+	z80_exaf2	ldai, {ld a, i}
 
 z80_in_e_c:
 	call	not_implemented
@@ -2067,9 +2062,17 @@ z80_out_c_e:
 	; $ED 5A adc hl, de
 	z80_exall2	adchlde, {adc.s hl, de}
 
+	; $ED 5B ld de, (nn)
 z80_ld_de_nn:
-	call	not_implemented
-	jp	z80_nop
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	ld.s	hl, (hl)
+	push	hl
+	exx
+	pop	de
+	exx
+	z80loop
 
 z80_im2:
 	call	not_implemented
@@ -2090,9 +2093,8 @@ z80_out_c_h:
 	; $ED 62 add hl, hl
 	z80_exall2	sbchlhl, {sbc.s hl, hl}
 
-z80_rrd:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 67 rrd (hl)
+	z80_exall2	rrd_hl_, {db %52}, {rrd (hl)}
 
 z80_in_l_c:
 	call	not_implemented
@@ -2105,11 +2107,8 @@ z80_out_c_l:
 	; $ED 6A adc hl, hl
 	z80_exall2	adchlhl, {adc.s hl, hl}
 
-	; $ED 6F rld
-z80_rld:
-	call	not_implemented
-	jp	z80_nop
-	; z80_exall2	rld, {db %52}, {rld}
+	; $ED 6F rld (hl)
+	z80_exall2	rld_hl_, {db %52}, {rld (hl)}
 
 	; $ED $72 sbc hl, sp
 	z80_exall2	sbchlsp, {sbc.s hl, sp}
@@ -2191,9 +2190,8 @@ z80_otir:
 	call	not_implemented
 	jp	z80_nop
 
-z80_lddr:
-	call	not_implemented
-	jp	z80_nop
+	; $ED d8 lddr
+	z80_exall2	lddr, {lddr.s}
 
 	; $ED B9 cpdr
 	z80_exall2	cpdr, {cpdr.s}

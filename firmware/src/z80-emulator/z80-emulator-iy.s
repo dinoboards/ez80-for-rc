@@ -449,7 +449,25 @@ z80_deciy:
 	z80_niy	ldiyla
 
 	; FD 70 ld (iy+d),b
-	z80_niy	ld_iyd_b
+z80_ld_iyd_b:
+	ld.s	a, (iy)
+	inc	iy
+
+	; Sign-extend 8-bit A into 16-bit HL
+	ld	l, a  ; Store low byte
+	add	a, a  ; Push sign into carry
+	sbc	a     ; Turn it into 0 or -1
+	ld	h, a  ; Store high byte
+
+	ld	bc, (ix+z80_reg_iy)
+	add.s	hl, bc
+
+	exx
+	push	bc
+	exx
+	pop	bc
+	ld.s	(hl), b
+	z80loop
 
 	; FD 71 ld (iy+d),c
 	z80_niy	ld_iyd_c
