@@ -426,12 +426,10 @@ z80_lda_bc_:
 	z80_exmain2	decbc, {dec bc}
 
 	; $0C inc c
-z80_incc:
-	z80_exall	{inc c}
+	z80_exall2	incc, {inc c}
 
 	; $0d dec c
-z80_decc:
-	z80_exall	{dec c}
+	z80_exall2	decc, {dec c}
 
 	; $0E ld c, n
 z80_ldcn:
@@ -469,16 +467,13 @@ z80_lddenn:
 	z80_exall2	ld_de_a, {ld.s (de), a}
 
 	; $13 inc de
-z80_incde:
-	z80_exmain	{inc de}
+	z80_exmain2	incde, {inc de}
 
 	; $14 inc d
-z80_incd:
-	z80_exall	{inc d}
+	z80_exall2	incd, {inc d}
 
 	; $15 dec d
-z80_decd:
-	z80_exall	{dec d}
+	z80_exall2	decd, {dec d}
 
 	; $16 ld d, n
 z80_lddn:
@@ -514,12 +509,10 @@ z80_decde:
 	z80_exmain	{dec de}
 
 	; $1D inc e
-z80_ince:
-	z80_exall	{inc e}
+	z80_exall2	ince, {inc e}
 
 	; $1D dec e
-z80_dece:
-	z80_exall	{dec e}
+	z80_exall2	dece, {dec e}
 
 	; $1E ld e, n
 z80_lden:
@@ -550,29 +543,13 @@ z80_ld_nn_hl:
 	z80loop
 
 	; $23 inc hl
-z80_inchl:
-	exx
-	inc	hl
-	exx
-	z80loop
+	z80_exmain2	inchl, {inc hl}
 
 	; $24 inc h
-z80_inch:
-	exx
-	ex	af, af'
-	inc	h
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2	inch, {inc h}
 
 	; $25 dec h
-z80_dech:
-	exx
-	ex	af, af'
-	dec	h
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2	dech, {dec h}
 
 	; $26 ld h, n
 z80_ldhn:
@@ -625,18 +602,10 @@ z80_dechl:
 	z80loop
 
 	; $2C inc l
-z80_incl:
-	exx
-	ex	af, af'
-	inc	l
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2	incl, {inc l}
 
-
-z80_decl:
-	call	not_implemented
-	z80loop
+	; $2D dec l
+	z80_exall2	decl, {dec l}
 
 	; $2e ld l, n
 z80_ldln:

@@ -297,7 +297,11 @@ iy_instr_table:
 	z80_niy	ld_nn_iy
 
 	; FD 23 inc iy
-	z80_niy	inciy
+z80_inciy:
+	ld	hl, (ix+z80_reg_iy)
+	inc	hl
+	ld	(ix+z80_reg_iy), hl
+	z80loop
 
 	; FD 24 inc iyh
 	z80_niy	inciyh
@@ -318,7 +322,11 @@ iy_instr_table:
 	z80_niy	ldiy_nn_
 
 	; FD 2B dec iy
-	z80_niy	deciy
+z80_deciy:
+	ld	hl, (ix+z80_reg_iy)
+	dec	hl
+	ld	(ix+z80_reg_iy), hl
+	z80loop
 
 	; FD 2C inc iyl
 	z80_niy	inciyl

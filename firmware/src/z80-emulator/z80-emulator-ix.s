@@ -299,7 +299,11 @@ ix_instr_table:
 	z80_niy	ld_nn_ix
 
 	; DD 23 inc ix
-	z80_niy	incix
+z80_incix:
+	ld	hl, (ix+z80_reg_ix)
+	inc	hl
+	ld	(ix+z80_reg_ix), hl
+	z80loop
 
 	; DD 24 inc ixh
 	z80_niy	incixh
@@ -320,7 +324,11 @@ ix_instr_table:
 	z80_niy	ldix_nn_
 
 	; DD 2B dec ix
-	z80_niy	decix
+z80_decix:
+	ld	hl, (ix+z80_reg_ix)
+	dec	hl
+	ld	(ix+z80_reg_ix), hl
+	z80loop
 
 	; DD 2C inc ixl
 	z80_niy	incixl
