@@ -306,10 +306,10 @@ z80_incix:
 	z80loop
 
 	; DD 24 inc ixh
-	z80_niy	incixh
+	z80_exaf2	incixh, {inc (ix+z80_reg_ix+1)}
 
-	; DD 25 dec ixl
-	z80_niy	decixh
+	; DD 25 dec ixh
+	z80_exaf2	decixh, {dec (ix+z80_reg_ix+1)}
 
 	; DD 26 ld ixh, n
 	z80_niy	ldixhn
@@ -331,10 +331,10 @@ z80_decix:
 	z80loop
 
 	; DD 2C inc ixl
-	z80_niy	incixl
+	z80_exaf2	incixl, {inc (ix+z80_reg_ix+0)}
 
 	; DD 2D dec ixl
-	z80_niy	decixl
+	z80_exaf2	decixl, {dec (ix+z80_reg_ix+0)}
 
 	; DD 2E ld ixl, n
 	z80_niy	ldixln
@@ -346,10 +346,10 @@ z80_decix:
 	z80_niy	ldiy_ixd_
 
 	; DD 34 inc (ix+d)
-	z80_niy	inc_ixd_
+	z80_afir	inc_ixd_, ix, {inc.s (hl)}
 
 	; DD 35 dec (ix+d)
-	z80_niy	dec_ixd_
+	z80_afir	dec_ixd_, ix, {dec.s (hl)}
 
 	; DD 36 ld (ix+d),n
 	z80_niy	ld_ixd_n_

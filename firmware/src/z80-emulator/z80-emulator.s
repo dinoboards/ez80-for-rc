@@ -649,9 +649,9 @@ z80_ld_nn_a:
 	ex	af, af'
 	z80loop
 
-
+	; $33 inc sp
 z80_incsp:
-	call	not_implemented
+	inc.s	sp
 	z80loop
 
 	; $34 inc (hl)
@@ -698,9 +698,9 @@ z80_lda_nn_:
 	ex	af, af'
 	z80loop
 
-
+	; $3B dec sp
 z80_decsp:
-	call	not_implemented
+	dec.s	sp
 	z80loop
 
 	; $3C inc a

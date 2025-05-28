@@ -304,10 +304,10 @@ z80_inciy:
 	z80loop
 
 	; FD 24 inc iyh
-	z80_niy	inciyh
+	z80_exaf2	inciyh, {inc (ix+z80_reg_iy+1)}
 
-	; FD 25 dec iyl
-	z80_niy	deciyh
+	; FD 25 dec iyh
+	z80_exaf2	deciyh, {dec (ix+z80_reg_iy+1)}
 
 	; FD 26 ld iyh, n
 	z80_niy	ldiyhn
@@ -329,10 +329,10 @@ z80_deciy:
 	z80loop
 
 	; FD 2C inc iyl
-	z80_niy	inciyl
+	z80_exaf2	inciyl, {inc (ix+z80_reg_iy+0)}
 
 	; FD 2D dec iyl
-	z80_niy	deciyl
+	z80_exaf2	deciyl, {dec (ix+z80_reg_iy+0)}
 
 	; FD 2E ld iyl, n
 	z80_niy	ldiyln
@@ -344,10 +344,10 @@ z80_deciy:
 	z80_niy	ldix_iyd_
 
 	; FD 34 inc (iy+d)
-	z80_niy	inc_iyd_
+	z80_afir	inc_iyd_, iy, {inc.s (hl)}
 
 	; FD 35 dec (iy+d)
-	z80_niy	dec_iyd_
+	z80_afir	dec_iyd_, iy, {dec.s (hl)}
 
 	; FD 36 ld (iy+d),n
 	z80_niy	ld_iyd_n_
