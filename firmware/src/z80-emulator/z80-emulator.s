@@ -83,7 +83,16 @@ z80_reg_spl	equ	36
 	section	CODE
 	global	z80_invoke
 
-
+; test_poi:
+; 	push	iy
+; 	pop	hl
+; 	ld	de, %4202
+; 	or	a
+; 	sbc.s	hl, de
+; 	ret	nz
+; poi:
+; 	nop
+; 	ret
 
 	section	INTERNAL_RAM_ROM
 z80_loop:
@@ -199,7 +208,7 @@ z80_instr_table:
 	jp	z80_ldhe		; 63
 	jp	z80_ldhh		; 64
 	jp	z80_ldhl		; 65
-	jp	z80_ldh_hl		; 66
+	jp	z80_ldh_hl_		; 66
 	jp	z80_ldha		; 67
 	jp	z80_ldlb		; 68
 	jp	z80_ldlc		; 69
@@ -905,38 +914,25 @@ z80_ldhl:
 	z80loop
 
 	; $66 ld h, (hl)
-z80_ldh_hl:
-	exx
-	db	%52		; bug in assembler
-	ld	h, (hl)		; does not support ld.s h, (hl)
-	exx
-	z80loop
+	z80_exall2	ldh_hl_, {db %52}, {ld h, (hl)}		; bug in assembler does not support ld.s h, (hl)
 
 	; $67 ld h, a
-z80_ldha:
-	z80_exall	{ld h, a}
+	z80_exall2	ldha, {ld h, a}
 
 	; $67 ld l, b
-z80_ldlb:
-	z80_exmain	{ld l, b}
+	z80_exmain2	ldlb, {ld l, b}
 
-;;;;	; $69 ld l, c
-z80_ldlc:
-	z80_exmain	{ld l, c}
+	; $69 ld l, c
+	z80_exmain2	ldlc, {ld l, c}
 
 	; $6A ld l, d
-z80_ldld:
-	z80_exmain	{ld l, d}
+	z80_exmain2	ldld, {ld l, d}
 
 	; $6B ld l, e
-z80_ldle:
-	z80_exmain	{ld l, e}
+	z80_exmain2	ldle, {ld l, e}
 
-
-z80_ldlh:
-	call	not_implemented
-	z80loop
-
+	; $6C ld l, h
+	z80_exmain2	ldlh, {ld l, h}
 
 z80_ldll:
 	call	not_implemented
@@ -1225,16 +1221,7 @@ z80_ldaa:
 	z80_exaf2	cpaa, {cp a, a}
 
 	; $C0 ret nz
-z80_retnz:
-	ex	af, af'
-	jr	nz, z80_retnz1
-	ex	af, af'
-	z80loop
-
-z80_retnz1:
-	ex	af, af'
-	pop.s	iy
-	z80loop
+	z80_retcc	jr, nz
 
 	; $C1 pop bc
 z80_popbc:
@@ -1306,16 +1293,7 @@ z80_rst00:
 	z80loop
 
 	; $C8 ret z
-z80_retz:
-	ex	af, af'
-	jr	z, z80_retz1
-	ex	af, af'
-	z80loop
-
-z80_retz1:
-	ex	af, af'
-	pop.s	iy
-	z80loop
+	z80_retcc	jr, z
 
 	; $C9 ret
 z80_ret:
@@ -1393,17 +1371,8 @@ z80_rst08:
 	call	not_implemented
 	z80loop
 
-
-z80_retnc:
-	ex	af, af'
-	jr	nc, z80_retnc1
-	ex	af, af'
-	z80loop
-
-z80_retnc1:
-	ex	af, af'
-	pop.s	iy
-	z80loop
+	; $D0 ret nc
+	z80_retcc	jr, nc
 
 	; $d1 pop de
 z80_popde:
@@ -1450,16 +1419,7 @@ z80_rst10:
 	z80loop
 
 	; $D8 ret c
-z80_retc:
-	ex	af, af'
-	jr	c, z80_retc1
-	ex	af, af'
-	z80loop
-
-z80_retc1:
-	ex	af, af'
-	pop.s	iy
-	z80loop
+	z80_retcc	jr, c
 
 	; $D9 exx
 z80_exx:
@@ -1500,10 +1460,8 @@ z80_rst18:
 	ld	iy, %18
 	z80loop
 
-
-z80_retpo:
-	call	not_implemented
-	z80loop
+	; $E0 ret po
+	z80_retcc	jp, po
 
 	; $e1 pop hl
 z80_pophl:
@@ -1546,10 +1504,8 @@ z80_rst20:
 	ld	iy, %20
 	z80loop
 
-
-z80_retpe:
-	call	not_implemented
-	z80loop
+	; $E8 ret pe
+	z80_retcc	jp, pe
 
 	; $E9 jp (hl)
 z80_jp_hl_:
@@ -1582,16 +1538,7 @@ z80_rst28:
 	z80loop
 
 	; $F0 ret p
-z80_retp:
-	ex	af, af'
-	jp	p, z80_retp1
-	ex	af, af'
-	z80loop
-
-z80_retp1:
-	ex	af, af'
-	pop.s	iy
-	z80loop
+	z80_retcc	jp, p
 
 	; $F1 pop af
 z80_popaf:
@@ -1633,16 +1580,7 @@ z80_rst30:
 	z80loop
 
 	; $f8 ret m
-z80_retm:
-	ex	af, af'
-	jp	m, z80_retm1
-	ex	af, af'
-	z80loop
-
-z80_retm1:
-	ex	af, af'
-	pop.s	iy
-	z80loop
+	z80_retcc	jp, m
 
 	; $F9 ld sp, hl
 z80_ldsphl:
@@ -2186,9 +2124,24 @@ z80_inir:
 	call	not_implemented
 	jp	z80_nop
 
+	; $ED B3 otir
 z80_otir:
-	call	not_implemented
-	jp	z80_nop
+	ex	af, af'
+	exx
+otir1:
+	ex	af, af'
+	ld.s	a, (hl)
+	inc	hl
+	push	bc
+	ld	b, %FF
+	out	(bc), a
+	pop	bc
+	RST.L	%18	; this delay is too much!
+	ex	af, af'
+	djnz	otir1
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED d8 lddr
 	z80_exall2	lddr, {lddr.s}
@@ -2203,3 +2156,4 @@ z80_indr:
 z80_otdr:
 	call	not_implemented
 	jp	z80_nop
+

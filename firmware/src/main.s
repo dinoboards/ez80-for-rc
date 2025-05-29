@@ -61,10 +61,22 @@ ENDIF
 	LD	MB, A
 
 
-	; ; set main mem to 15bc
+	; ; set main mem to 2bc (for 32mhz)
 	; xor	a
 	; ld	b,8
-	; ld	l, %80 + 15
+	; ld	l, %80 + 2
+	; RST.L	%10
+
+	; ; set io to 5bc (for 32mhz)
+	; xor	a
+	; ld	b,9
+	; ld	l, %80 + 5
+	; RST.L	%10
+
+	; ; set flash to 1ws (for 32mhz)
+	; xor	a
+	; ld	b,14
+	; ld	l, 1
 	; RST.L	%10
 
 

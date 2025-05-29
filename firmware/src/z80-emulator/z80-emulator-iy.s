@@ -318,8 +318,14 @@ z80_inciy:
 	; $fd $29 add iy, iy
 	z80_addirir	iy
 
-	; FD 2A ld iy,(nn)
-	z80_niy	ldiy_nn_
+	; FD 2A ld iy, (nn)
+z80_ldiy_nn_:
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	ld.s	hl, (hl)
+	ld	(ix+z80_reg_iy), hl
+	z80loop
 
 	; FD 2B dec iy
 z80_deciy:
@@ -611,4 +617,8 @@ bit_instr:
 	z80_jp_ir_ iy
 
 	; FD F9 ld sp, iy
-	z80_niy	spiy
+z80_spiy:
+	ld	hl, (ix+z80_reg_iy)
+	ld.s	sp, hl
+	z80loop
+

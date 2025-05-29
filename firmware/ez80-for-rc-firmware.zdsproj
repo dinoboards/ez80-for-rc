@@ -300,7 +300,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05D7
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0620
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -488,6 +488,34 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- breakpoint information -->
 <breakpoints>
+<breakpoint temporary="false" enabled="true" >
+<line-number>368</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
+<address>21783</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>2133</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
+<address>26078</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>2140</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
+<address>26091</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>2133</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
+<address>0</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
 </breakpoints>
 
 </project>

@@ -1,24 +1,12 @@
 
-; test_poi:
-; 	push	iy
-; 	pop	hl
-; 	ld	de, %05b9
-; 	or	a
-; 	sbc.s	hl, de
-; 	ret	nz
-; poi:
-; 	nop
-; 	ret
+ 	xref	z80_loop
+	xref	test_poi
 
 ; z80loop	macro
 ; 	call	test_poi
 ; 	jp	z80_loop
 ; 	endmacro
 
-test_poi macro
-	endmacro
-
-	xref	z80_loop
 z80loop	macro
 	jp	z80_loop
 	endmacro
@@ -54,7 +42,7 @@ z80_ld&ir&nn:
 	ld.s	hl, (iy)
 	inc	iy
 	inc	iy
-	ld	(ix+z80_reg_&ir), iy
+	ld	(ix+z80_reg_&ir), hl
 	z80loop
 	endmacro
 
@@ -190,3 +178,16 @@ z80_&name
 	z80loop
 	endmacro
 
+
+z80_retcc	macro		op, cc
+z80_ret&cc:
+	ex	af, af'
+	op	cc, $$z80_retcc1
+	ex	af, af'
+	z80loop
+
+$$z80_retcc1:
+	ex	af, af'
+	pop.s	iy
+	z80loop
+	endmacro
