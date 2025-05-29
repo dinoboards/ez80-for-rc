@@ -15,42 +15,35 @@
 	global z80_reg_ix
 	global z80_reg_iy
 ; registers
-z80_regs:				; FD00
-_reg_aaf:
-	ds	3
+z80_regs:
+_reg_aaf:	ds	3
 z80_reg_aaf	equ	0
 
-_reg_abc:				; FD03
-	ds	3
+_reg_abc:	ds	3
 z80_reg_abc	equ	3
 
-_reg_ade:				; FD06
-	ds	3
+_reg_ade:	ds	3
 z80_reg_ade	equ	6
 
-_reg_ahl:
-	ds	3
+_reg_ahl:	ds	3
 z80_reg_ahl	equ	9
 
-_reg_ix:
-	ds	3
+_reg_ix:	ds	3
 z80_reg_ix	equ	12
 
-_reg_iy:
-	ds	3
+_reg_iy:	ds	3
 z80_reg_iy	equ	15
 
 	global	_reg_spl
 
-_reg_spl:
-	ds	3
+_reg_spl:	ds	3
 z80_reg_spl	equ	18
 
-_reg_ei:	db 	1
-z80_reg_ei	equ	21		; true if maskable ints enabled
+_z80_fl_ei:	db 	1
+z80_fl_ei	equ	21		; true if maskable ints enabled
 
-_z80_int:	db	1		; bit 0 indicate an int request pending
-z80_reg_int	equ	22
+_z80_fl_int:	db	1		; bit 0 indicate an int request pending
+z80_fl_int	equ	22
 
 	section	CODE
 	global	z80_invoke
@@ -58,28 +51,35 @@ z80_reg_int	equ	22
 ; test_poi:
 ; 	push	iy
 ; 	pop	hl
-; 	ld	de, %4202
+; 	ld	de, %f398
+; 	or	a
+; 	sbc.s	hl, de
+; 	ret	nz
+
+; 	ld	hl, (ix+z80_reg_ix)
+; 	ld	de, %66
 ; 	or	a
 ; 	sbc.s	hl, de
 ; 	ret	nz
 ; poi:
 ; 	nop
 ; 	ret
+
 	section	INTERNAL_RAM_ROM
 z80_int_request:
 	xor	a
-	ld	(ix+z80_reg_int), a
-	ld	(ix+z80_reg_ei), a
+	ld	(ix+z80_fl_int), a
+	ld	(ix+z80_fl_ei), a
 	push.s	iy
 	ld	iy, %0038
 	jr	z80_loop2
 
 z80_loop:
-	ld	a, (ix+z80_reg_ei)
+	ld	a, (ix+z80_fl_ei)
 	or	a
 	jr	z, z80_loop2		; ints are currently disabled
 
-	ld	a, (ix+z80_reg_int)
+	ld	a, (ix+z80_fl_int)
 	or	a
 	jr	nz, z80_int_request
 
@@ -994,7 +994,13 @@ z80_ld_hl_l:
 
 
 z80_halt:
-	call	not_implemented
+	ld	a, (ix+z80_fl_int)
+	or	a
+	jr	z, z80_halt
+	nop
+	nop
+	nop
+	nop
 	z80loop
 
 	; $77 ld (hl), a
@@ -1551,7 +1557,7 @@ z80_popaf:
 	; $F3 DI
 z80_di:
 	ld	a, 0
-	ld	(ix+z80_reg_ei), a
+	ld	(ix+z80_fl_ei), a
 	di
 	z80loop
 
@@ -1595,7 +1601,7 @@ z80_ldsphl:
 
 z80_ei:
 	ld	a, 1
-	ld	(ix+z80_reg_ei), a
+	ld	(ix+z80_fl_ei), a
 	ei
 	jp	z80_loop2
 
@@ -1920,9 +1926,16 @@ z80_inb_c:
 	call	not_implemented
 	jp	z80_nop
 
+	; $ED $41 out (c), b
 z80_out_c_b:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	push	bc
+	ld	a, b
+	ld	b, %FF
+	out	(bc), a
+	pop	bc
+	exx
+	z80loop
 
 	; $ED $42 sbc hl, bc
 	z80_exall2	sbchlbc, {sbc.s hl, bc}
@@ -1936,8 +1949,8 @@ z80_neg:
 	jp	z80_nop
 
 z80_retn:
-	call	not_implemented
-	jp	z80_nop
+	pop.s	iy
+	z80loop
 
 z80_im0:
 	call	not_implemented
@@ -1951,9 +1964,16 @@ z80_in_c_c:
 	call	not_implemented
 	jp	z80_nop
 
+	; $ED $49 out (c), c
 z80_out_c_c:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	push	bc
+	ld	a, c
+	ld	b, %FF
+	out	(bc), a
+	pop	bc
+	exx
+	z80loop
 
 	; $ED 4A adc hl, bc
 	z80_exall2	adchlbc, {adc.s hl, bc}
@@ -1964,7 +1984,7 @@ z80_ld_bc_nn:
 
 	; $ED 4D reti - redirected to ret
 z80_reti:
-	pop.s	iyq
+	pop.s	iy
 	z80loop
 
 
@@ -1976,9 +1996,8 @@ z80_in_d_c:
 	call	not_implemented
 	jp	z80_nop
 
-z80_out_c_d:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 59 out (c), d
+	z80_out_c_jj	d
 
 	; $ED 52 add hl, de
 	z80_exall2	sbchlde, {sbc.s hl, de}
@@ -1997,9 +2016,8 @@ z80_in_e_c:
 	call	not_implemented
 	jp	z80_nop
 
-z80_out_c_e:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 59 out (c), e
+	z80_out_c_jj	e
 
 	; $ED 5A adc hl, de
 	z80_exall2	adchlde, {adc.s hl, de}
@@ -2028,9 +2046,8 @@ z80_in_h_c:
 	call	not_implemented
 	jp	z80_nop
 
-z80_out_c_h:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 61 out (c), h
+	z80_out_c_jj	h
 
 	; $ED 62 add hl, hl
 	z80_exall2	sbchlhl, {sbc.s hl, hl}
@@ -2042,9 +2059,8 @@ z80_in_l_c:
 	call	not_implemented
 	jp	z80_nop
 
-z80_out_c_l:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 69 out (c), l
+	z80_out_c_jj	l
 
 	; $ED 6A adc hl, hl
 	z80_exall2	adchlhl, {adc.s hl, hl}
@@ -2167,7 +2183,7 @@ z80_otdr:
 z80_marshall_isr:
 	push	af
 	ld	a, 1
-	ld	(_z80_int),a
+	ld	(_z80_fl_int), a
 	pop	af
 
 	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE

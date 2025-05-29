@@ -356,7 +356,7 @@ z80_deciy:
 	z80_afir	dec_iyd_, iy, {dec.s (hl)}
 
 	; FD 36 ld (iy+d),n
-	z80_niy	ld_iyd_n_
+	z80_irtohl	ld_iyd_n_, iy, {ld.s a, (iy)}, {inc iy}, {ld.s (hl), a}
 
 	; FD 37 ld iy, (iy+d)
 	z80_niy	ldiy_iyd_
@@ -491,7 +491,7 @@ z80_ld_iyd_b:
 	z80_niy	ld_iyd_l
 
 	; FD 77 ld (iy+d),a
-	z80_niy	ld_iyd_a
+	z80_afir	ld_iyd_a, iy, {ld.s (hl), a}
 
 	; FD 7C ld a, iyh
 	z80_niy	ldaiyh
