@@ -39,11 +39,8 @@ z80_reg_iy	equ	15
 _reg_spl:	ds	3
 z80_reg_spl	equ	18
 
-_z80_fl_ei:	db 	1
-z80_fl_ei	equ	21		; true if maskable ints enabled
-
-_z80_fl_int:	db	1		; bit 0 indicate an int request pending
-z80_fl_int	equ	22
+_z80_flags:	db 	1		; bit 0 -> ei-state, bit 1 -> int-pending
+z80_flags	equ	21		; true if maskable ints enabled
 
 	section	CODE
 	global	z80_invoke
@@ -68,31 +65,21 @@ z80_fl_int	equ	22
 	section	INTERNAL_RAM_ROM
 z80_int_request:
 	xor	a
-	ld	(ix+z80_fl_int), a
-	ld	(ix+z80_fl_ei), a
+	ld	(ix+z80_flags), a
 	push.s	iy
 	ld	iy, %0038
 	jr	z80_loop2
 
 z80_loop:
-	ld	a, (ix+z80_fl_ei)
-	or	a
-	jr	z, z80_loop2		; ints are currently disabled
+	ld	a, (ix+z80_flags)
+	bit	0, a			; ei enabled?
+	jr	z, z80_loop2
 
-	ld	a, (ix+z80_fl_int)
-	or	a
+	bit	1, a			; int pending?
 	jr	nz, z80_int_request
 
 z80_loop2:
-	or	a
-	sbc	hl, hl
-	ld.s	l, (iy)
-	add	hl, hl
-	add	hl, hl
-	ld	bc, z80_instr_table
-	add	hl, bc
-	inc	iy
-	jp	(hl)
+	z80_byte_jump	z80_instr_table
 
 	z80_byte_jump	z80_instr_table
 	section CODE
@@ -571,11 +558,11 @@ z80_ldhl_nn_:
 	inc	iy
 	inc	iy
 	ld.s	a, (hl)
-	ld	e, a
+	ld	c, a
 	inc	hl
 	ld.s	a, (hl)
-	ld	d, a
-	push	de
+	ld	b, a
+	push	bc
 	exx
 	pop	hl
 	exx
@@ -994,8 +981,7 @@ z80_ld_hl_l:
 
 
 z80_halt:
-	ld	a, (ix+z80_fl_int)
-	or	a
+	bit	1, (ix+z80_flags)		; int pending?
 	jr	z, z80_halt
 	nop
 	nop
@@ -1350,6 +1336,7 @@ z80_switch_to_native:
 
 	ld	iy, (ix+z80_reg_iy)
 	ld	ix, (ix+z80_reg_ix)
+
 	jp	.switch_addr
 
 	section	INTERNAL_RAM_ROM
@@ -1556,8 +1543,7 @@ z80_popaf:
 
 	; $F3 DI
 z80_di:
-	ld	a, 0
-	ld	(ix+z80_fl_ei), a
+	res	0, (ix+z80_flags)
 	di
 	z80loop
 
@@ -1600,8 +1586,7 @@ z80_ldsphl:
 
 
 z80_ei:
-	ld	a, 1
-	ld	(ix+z80_fl_ei), a
+	set	0, (ix+z80_flags)
 	ei
 	jp	z80_loop2
 
@@ -2182,8 +2167,9 @@ z80_otdr:
 	global	z80_marshall_isr
 z80_marshall_isr:
 	push	af
-	ld	a, 1
-	ld	(_z80_fl_int), a
+	ld	a, (_z80_flags)
+	set	1, a
+	ld	(_z80_flags), a
 	pop	af
 
 	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE
