@@ -3,7 +3,6 @@
 
 	.assume	adl=1
 
-
 ; ez80's alt version of BC, DE, HL contain the emulated z80's main registers
 ; the ez80's alt registers are stored in reg_aXX below:
 
@@ -47,6 +46,12 @@ _reg_spl:
 	ds	3
 z80_reg_spl	equ	18
 
+_reg_ei:	db 	1
+z80_reg_ei	equ	21		; true if maskable ints enabled
+
+_z80_int:	db	1		; bit 0 indicate an int request pending
+z80_reg_int	equ	22
+
 	section	CODE
 	global	z80_invoke
 
@@ -60,9 +65,35 @@ z80_reg_spl	equ	18
 ; poi:
 ; 	nop
 ; 	ret
-
 	section	INTERNAL_RAM_ROM
+z80_int_request:
+	xor	a
+	ld	(ix+z80_reg_int), a
+	ld	(ix+z80_reg_ei), a
+	push.s	iy
+	ld	iy, %0038
+	jr	z80_loop2
+
 z80_loop:
+	ld	a, (ix+z80_reg_ei)
+	or	a
+	jr	z, z80_loop2		; ints are currently disabled
+
+	ld	a, (ix+z80_reg_int)
+	or	a
+	jr	nz, z80_int_request
+
+z80_loop2:
+	or	a
+	sbc	hl, hl
+	ld.s	l, (iy)
+	add	hl, hl
+	add	hl, hl
+	ld	bc, z80_instr_table
+	add	hl, bc
+	inc	iy
+	jp	(hl)
+
 	z80_byte_jump	z80_instr_table
 	section CODE
 
@@ -1519,6 +1550,8 @@ z80_popaf:
 
 	; $F3 DI
 z80_di:
+	ld	a, 0
+	ld	(ix+z80_reg_ei), a
 	di
 	z80loop
 
@@ -1561,8 +1594,10 @@ z80_ldsphl:
 
 
 z80_ei:
-	; ei
-	z80loop
+	ld	a, 1
+	ld	(ix+z80_reg_ei), a
+	ei
+	jp	z80_loop2
 
 	; $FC call m, nn
 	z80_callccnn	m
@@ -1667,10 +1702,10 @@ z80_instr_misc_table:
 	jp	z80_ld_i_a      ; ED 47 ld i, a
 	jp	z80_in_c_c      ; ED 48 in c, (bc)
 	jp	z80_out_c_c     ; ED 49 out (bc), c
-	jp	z80_adchlbc   ; ED 4A adc hl, bc
+	jp	z80_adchlbc	; ED 4A adc hl, bc
 	jp	z80_ld_bc_nn    ; ED 4B ld bc, (nn)
 	jp	z80_nop		; ED 4C mlt bc
-	jp	z80_reti        ; ED 4D reti
+	jp	z80_reti	; ED 4D reti
 	jp	z80_nop		; ED 4E
 	jp	z80_ld_r_a      ; ED 4F ld r,a
 	jp	z80_in_d_c      ; ED 50 in d, (bc)
@@ -1927,9 +1962,11 @@ z80_ld_bc_nn:
 	call	not_implemented
 	jp	z80_nop
 
+	; $ED 4D reti - redirected to ret
 z80_reti:
-	call	not_implemented
-	jp	z80_nop
+	pop.s	iyq
+	z80loop
+
 
 z80_ld_r_a:
 	call	not_implemented
@@ -2124,3 +2161,13 @@ z80_otdr:
 	call	not_implemented
 	jp	z80_nop
 
+
+
+	global	z80_marshall_isr
+z80_marshall_isr:
+	push	af
+	ld	a, 1
+	ld	(_z80_int),a
+	pop	af
+
+	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE

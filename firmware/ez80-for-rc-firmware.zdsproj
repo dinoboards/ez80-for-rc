@@ -489,30 +489,23 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <!-- breakpoint information -->
 <breakpoints>
 <breakpoint temporary="false" enabled="true" >
-<line-number>368</line-number>
+<line-number>92</line-number>
 <pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>21783</address>
+<address>195785</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>
 <breakpoint temporary="false" enabled="true" >
-<line-number>2133</line-number>
+<line-number>1615</line-number>
 <pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>26078</address>
+<address>24483</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>
 <breakpoint temporary="false" enabled="true" >
-<line-number>2140</line-number>
+<line-number>1985</line-number>
 <pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>26091</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>2133</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>0</address>
+<address>25720</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>

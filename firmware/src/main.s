@@ -81,6 +81,8 @@ ENDIF
 
 
 	; XREF	z80_invoke
+	; XREF	_marshall_isr_hook
+	; XREF	z80_marshall_isr
 	; ; hard coded reset of MSX memory system
 	; ; only required when using the debugger to force memory back to known power-on state
 
@@ -94,7 +96,13 @@ ENDIF
 	; ld	hl, %03FFFF
 	; ld	(hl), 0
 	; ld	a, (hl)
+
+	; di
 	; ld	iy, 0
+	; ld	hl, _marshall_isr_hook+1
+	; ld	de, z80_marshall_isr
+	; ld	(hl), de
+
 	; call	z80_invoke
 
 	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
