@@ -41,44 +41,11 @@ _reg_iy:
 	ds	3
 z80_reg_iy	equ	15
 
-	global	_reg_af
-	global	_reg_bc
-	global	_reg_de
-	global	_reg_hl
-	global	_reg_ix
-	global	_reg_iy
-	global	_reg_pc
-	global	_reg_sps
 	global	_reg_spl
-
-; following only used for logging
-_reg_af:
-	ds	3
-z80_reg_af	equ	18
-
-_reg_bc:
-	ds	3
-z80_reg_bc	equ	21
-
-_reg_de:
-	ds	3
-z80_reg_de	equ	24
-
-_reg_hl:
-	ds	3
-z80_reg_hl	equ	27
-
-_reg_pc:
-	ds	3
-z80_reg_pc	equ	30
-
-_reg_sps:
-	ds	3
-z80_reg_sps	equ	33
 
 _reg_spl:
 	ds	3
-z80_reg_spl	equ	36
+z80_reg_spl	equ	18
 
 	section	CODE
 	global	z80_invoke
