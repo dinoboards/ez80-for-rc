@@ -1953,9 +1953,8 @@ z80_in_c_c:
 z80_out_c_c:
 	exx
 	push	bc
-	ld	a, c
 	ld	b, %FF
-	out	(bc), a
+	out	(bc), c
 	pop	bc
 	exx
 	z80loop
@@ -2071,9 +2070,17 @@ z80_in_a_c:
 	call	not_implemented
 	jp	z80_nop
 
+	; $ED 79 out (c), a
 z80_out_c_a:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	ex	af, af'
+	push	bc
+	ld	b, %FF
+	out	(bc), a
+	pop	bc
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED $7A adc hl, sp
 	z80_exall2	adchlsp, {adc.s hl, sp}
