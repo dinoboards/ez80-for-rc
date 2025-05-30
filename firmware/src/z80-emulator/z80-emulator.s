@@ -1906,9 +1906,13 @@ z80_out0_n_a:
 	ex	af, af'
 	z80loop
 
-z80_inb_c:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 40 in b, (bc)
+ z80_inb_c:
+	exx
+	ld	b, IO_SEGMENT
+	in	b, (bc)
+	exx
+	z80loop
 
 	; $ED $41 out (c), b
 z80_out_c_b:
@@ -2155,9 +2159,23 @@ z80_outd:
 	; $ED B1
 	z80_exall2	cpir, {cpir.s}
 
+	; $ED B2 inir
 z80_inir:
-	call	not_implemented
-	jp	z80_nop
+	ex	af, af'
+	exx
+inir1:
+	ex	af, af'
+	push	bc
+	ld	b, IO_SEGMENT
+	in	a, (bc)
+	pop	bc
+	ld.s	(hl),a
+	inc	hl
+	ex	af, af'
+	djnz	inir1
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED B3 otir
 z80_otir:
