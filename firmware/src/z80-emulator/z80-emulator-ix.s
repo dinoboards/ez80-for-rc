@@ -379,7 +379,7 @@ z80_decix:
 	z80_niy	ldbixl
 
 	; DD 46 ld b,(ix+d)
-	z80_niy	ldb_ixd_
+	z80_irtoix	ldb_ixd_, ix, {ld.s b, (ix)}
 
 	; DD 4C ld c, ixh
 	z80_niy	ldcixh
@@ -388,7 +388,7 @@ z80_decix:
 	z80_niy	ldcixl
 
 	; DD 4E ld c,(ix+d)
-	z80_niy	ldc_ixd_
+	z80_irtoix	ldc_ixd_, ix, {ld.s c, (ix)}
 
 	; DD 54 ld d, ixh
 	z80_niy	lddixh
@@ -397,7 +397,7 @@ z80_decix:
 	z80_niy	lddixl
 
 	; DD 56 ld d,(ix+d)
-	z80_niy	ldd_ixd_
+	z80_irtoix	ldd_ixd_, ix, {ld.s d, (ix)}
 
 	; DD 5C ld e, ixh
 	z80_niy	ldeixh
@@ -406,7 +406,7 @@ z80_decix:
 	z80_niy	ldeixl
 
 	; DD 5E ld e,(ix+d)
-	z80_niy	lde_ixd_
+	z80_irtoix	lde_ixd_, ix, {ld.s e, (ix)}
 
 	; DD 60 ld ixh, b
 	z80_niy	ldixhb
@@ -427,7 +427,7 @@ z80_decix:
 	z80_niy	ldixhixl
 
 	; DD 66 ld h,(ix+d)
-	z80_niy	ldh_ixd_
+	z80_irtoix	ldh_ixd_, ix, {ld.s h, (ix)}
 
 	; DD 67 ld ixh, a
 	z80_niy	ldixha
@@ -451,7 +451,7 @@ z80_decix:
 	z80_niy	ldixlixl
 
 	; DD 6E ld l,(ix+d)
-	z80_niy	ldl_ixd_
+	z80_irtoix	ldl_ixd_, ix, {ld.s l, (ix)}
 
 	; DD 6F ld ixl, a
 	z80_niy	ldixla
@@ -502,7 +502,7 @@ z80_ld_ixd_b:
 	z80_niy	ldaixl
 
 	; DD 7E ld a,(ix+d)
-	z80_niy	lda_ixd_
+	z80_afir	lda_ixd_, ix, {ld.s a, (hl)}
 
 	; DD 84 add a, ixh
 	z80_exaf2	addaixh, {add a, (ix+z80_reg_ix+1)}

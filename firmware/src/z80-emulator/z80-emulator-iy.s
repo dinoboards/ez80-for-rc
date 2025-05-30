@@ -377,7 +377,7 @@ z80_deciy:
 	z80_niy	ldbiyl
 
 	; FD 46 ld b,(iy+d)
-	z80_niy	ldb_iyd_
+	z80_irtoix	ldb_iyd_, iy, {ld.s b, (ix)}
 
 	; FD 4C ld c, iyh
 	z80_niy	ldciyh
@@ -386,7 +386,7 @@ z80_deciy:
 	z80_niy	ldciyl
 
 	; FD 4E ld c,(iy+d)
-	z80_niy	ldc_iyd_
+	z80_irtoix	ldc_iyd_, iy, {ld.s c, (ix)}
 
 	; FD 54 ld d, iyh
 	z80_niy	lddiyh
@@ -395,7 +395,7 @@ z80_deciy:
 	z80_niy	lddiyl
 
 	; FD 56 ld d,(iy+d)
-	z80_niy	ldd_iyd_
+	z80_irtoix	ldd_iyd_, iy, {ld.s d, (ix)}
 
 	; FD 5C ld e, iyh
 	z80_niy	ldeiyh
@@ -404,7 +404,7 @@ z80_deciy:
 	z80_niy	ldeiyl
 
 	; FD 5E ld e,(iy+d)
-	z80_niy	lde_iyd_
+	z80_irtoix	lde_iyd_, iy, {ld.s e, (ix)}
 
 	; FD 60 ld iyh, b
 	z80_niy	ldiyhb
@@ -425,7 +425,7 @@ z80_deciy:
 	z80_niy	ldiyhiyl
 
 	; FD 66 ld h,(iy+d)
-	z80_niy	ldh_iyd_
+	z80_irtoix	ldh_iyd_, iy, {ld.s h, (ix)}
 
 	; FD 67 ld iyh, a
 	z80_niy	ldiyha
@@ -449,7 +449,7 @@ z80_deciy:
 	z80_niy	ldiyliyl
 
 	; FD 6E ld l,(iy+d)
-	z80_niy	ldl_iyd_
+	z80_irtoix	ldl_iyd_, iy, {ld.s l, (ix)}
 
 	; FD 6F ld iyl, a
 	z80_niy	ldiyla
@@ -500,7 +500,7 @@ z80_ld_iyd_b:
 	z80_niy	ldaiyl
 
 	; FD 7E ld a,(iy+d)
-	z80_niy	lda_iyd_
+	z80_afir	lda_iyd_, iy, {ld.s a, (hl)}
 
 	; FD 84 add a, iyh
 	z80_exaf2	addaiyh, {add a, (ix+z80_reg_iy+1)}
