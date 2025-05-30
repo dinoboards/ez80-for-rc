@@ -1378,7 +1378,7 @@ z80_popde:
 z80_out_n_a:
 	ld.s	c, (iy)
 	inc	iy
-	ld	b, %FF
+	ld	b, IO_SEGMENT
 	ex	af, af'
 	out	(bc), a
 	ex	af, af'
@@ -1429,7 +1429,7 @@ z80_exx:
 z80_ina_n_:
 	ld.s	c, (iy)
 	inc	iy
-	ld	b, %FF
+	ld	b, IO_SEGMENT
 	ex	af, af'
 	in	a, (bc)
 	ex	af, af'
@@ -1915,7 +1915,7 @@ z80_out_c_b:
 	exx
 	push	bc
 	ld	a, b
-	ld	b, %FF
+	ld	b, IO_SEGMENT
 	out	(bc), a
 	pop	bc
 	exx
@@ -1960,7 +1960,7 @@ z80_in_c_c:
 z80_out_c_c:
 	exx
 	push	bc
-	ld	b, %FF
+	ld	b, IO_SEGMENT
 	out	(bc), c
 	pop	bc
 	exx
@@ -2098,7 +2098,7 @@ z80_out_c_a:
 	exx
 	ex	af, af'
 	push	bc
-	ld	b, %FF
+	ld	b, IO_SEGMENT
 	out	(bc), a
 	pop	bc
 	ex	af, af'
@@ -2168,7 +2168,7 @@ otir1:
 	ld.s	a, (hl)
 	inc	hl
 	push	bc
-	ld	b, %FF
+	ld	b, IO_SEGMENT
 	out	(bc), a
 	pop	bc
 	RST.L	%18	; this delay is too much!
