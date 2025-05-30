@@ -1970,9 +1970,17 @@ z80_out_c_c:
 	; $ED 4A adc hl, bc
 	z80_exall2	adchlbc, {adc.s hl, bc}
 
+	; $ED 48 ld bc, (nn)
 z80_ld_bc_nn:
-	call	not_implemented
-	jp	z80_nop
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	ld.s	bc, (hl)
+	push	bc
+	exx
+	pop	bc
+	exx
+	z80loop
 
 	; $ED 4D reti - redirected to ret
 z80_reti:
