@@ -1925,9 +1925,17 @@ z80_out_c_b:
 	; $ED $42 sbc hl, bc
 	z80_exall2	sbchlbc, {sbc.s hl, bc}
 
+	; $ED 43 ld (nn), bc
 z80_ld_nn_bc:
-	call	not_implemented
-	jp	z80_nop
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	exx
+	push	bc
+	exx
+	pop	bc
+	ld.s	(hl), bc
+	z80loop
 
 z80_neg:
 	call	not_implemented
@@ -1986,9 +1994,17 @@ z80_in_d_c:
 	; $ED 52 add hl, de
 	z80_exall2	sbchlde, {sbc.s hl, de}
 
+	; $ED 53 ld (nn), de
 z80_ld_nn_de:
-	call	not_implemented
-	jp	z80_nop
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	exx
+	push	de
+	exx
+	pop	bc
+	ld.s	(hl), bc
+	z80loop
 
 z80_im1:
 	z80loop
