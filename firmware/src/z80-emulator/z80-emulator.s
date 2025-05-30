@@ -397,9 +397,8 @@ z80_exafaaf:
 	z80_exall2	addhlbc, {add.s hl, bc}
 
 
-z80_lda_bc_:
-	call	not_implemented
-	z80loop
+	; $0A ld a, (bc)
+	z80_exall2	lda_bc_, {ld.s a, (bc)}
 
 	; $0B dec bc
 	z80_exmain2	decbc, {dec bc}
