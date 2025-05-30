@@ -763,44 +763,22 @@ rst_l10:
 	jr	rst_l10
 
 	; $4A ld c, d
-z80_ldcd:
-	exx
-	ld	c, d
-	exx
-	z80loop
+	z80_exmain2     ldcd, {ld c, d}
 
 	; $4B ld c, e
-z80_ldce:
-	exx
-	ld	c, e
-	exx
-	z80loop
+	z80_exmain2     ldce, {ld c, e}
 
 	; $4C ld c, h
-z80_ldch:
-	exx
-	ld	c, h
-	exx
-	z80loop
+	z80_exmain2     ldch, {ld c, h}
 
 	; $4D ld c, l
-z80_ldcl:
-	exx
-	ld	c, l
-	exx
-	z80loop
+	z80_exmain2     ldcl, {ld c, l}
 
 	; $4E ld c, (hl)
 	z80_exmain2	ldc_hl_, {db %52}, {ld c, (hl)}	; bug in assembler ld.s c, (hl) not supported??
 
 	; $4F ld c, a
-z80_ldca:
-	exx
-	ex	af, af'
-	ld	c, a
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2      ldca, {ld c, a}
 
 	; $50 ld d, b
 	z80_exmain2	lddb, {ld d, b}
@@ -828,20 +806,16 @@ z80_ldd_hl_:
 	z80loop
 
 	; $57 ld d, a
-z80_ldda:
-	z80_exall 	{ld d, a}
+	z80_exall2	ldda, {ld d, a}
 
 	; $58 ld e, b
-z80_ldeb:
-	z80_exmain 	{ld e, b}
+	z80_exmain2	ldeb, {ld e, b}
 
 	; $59 ld e, c
-z80_ldec:
-	z80_exmain 	{ld e, c}
+	z80_exmain2	ldec, {ld e, c}
 
 	; $5A ld e, d
-z80_lded:
-	z80_exmain 	{ld e, d}
+	z80_exmain2	lded, {ld e, d}
 
 	; $5B ld e, e
 z80_ldee:
@@ -850,19 +824,16 @@ z80_ldee:
 	z80loop
 
 	; $5C ld e, h
-z80_ldeh:
-	z80_exmain 	{ld e, h}
+	z80_exmain2	ldeh, {ld e, h}
 
 	; $5D ld e, l
-z80_ldel:
-	z80_exmain 	{ld e, l}
+	z80_exmain2	ldel, {ld e, l}
 
 	; $5E ld e, (hl)
 	z80_exmain2	lde_hl_, {db %52}, {ld e, (hl)}	; bug in assembler ld.s e, (hl) not supported??
 
 	; $5f	ld e, a
-z80_ldea:
-	z80_exall	{ld e, a}
+	z80_exall2	ldea, {ld e, a}
 
 z80_ldhb:
 	call	not_implemented
@@ -874,18 +845,10 @@ z80_ldhc:
 	z80loop
 
 	; $62 ld h, d
-z80_ldhd:
-	exx
-	ld	h, d
-	exx
-	z80loop
+	z80_exmain2     ldhd, {ld h, d}
 
 	; $63 ld h, e
-z80_ldhe:
-	exx
-	ld	h, e
-	exx
-	z80loop
+	z80_exmain2     ldhe, {ld h, e}
 
 
 z80_ldhh:
