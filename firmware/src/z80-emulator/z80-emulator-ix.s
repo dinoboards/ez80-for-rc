@@ -3,18 +3,18 @@
 
 	.assume	adl=1
 
+	section	CODE
 
 	xref	z80_nop
 	xref	z80_regs
 	xref	z80_reg_ix
+	xref	dd_bit_instr
+	xref	z80_ixbits2
+
 regir	equ	z80_reg_ix
 
 	; DD ....
-	global	z80_ix
-	section	INTERNAL_RAM_ROM
-z80_ix:
-	z80_byte_jump	ix_instr_table
-	section CODE
+	global	ix_instr_table
 
 ix_instr_table:
 	jp	z80_nop			; DD 00
@@ -478,19 +478,19 @@ z80_ld_ixd_b:
 	z80loop
 
 	; DD 71 ld (ix+d),c
-	z80_niy	ld_ixd_c
+	z80_irtoix	ld_ixd_c, ix, {ld.s (ix), c}
 
 	; DD 72 ld (ix+d),d
-	z80_niy	ld_ixd_d
+	z80_irtoix	ld_ixd_d, ix, {ld.s (ix), d}
 
 	; DD 73 ld (ix+d),e
-	z80_niy	ld_ixd_e
+	z80_irtoix	ld_ixd_e, ix, {ld.s (ix), e}
 
 	; DD 74 ld (ix+d),h
-	z80_niy	ld_ixd_h
+	z80_irtoix	ld_ixd_h, ix, {ld.s (ix), h}
 
 	; DD 75 ld (ix+d),l
-	z80_niy	ld_ixd_l
+	z80_irtoix	ld_ixd_l, ix, {ld.s (ix), l}
 
 	; DD 77 ld (ix+d),a
 	z80_afir	ld_ixd_a, ix, {ld.s (hl), a}
@@ -582,7 +582,7 @@ z80_ixbits:
 	ld.s	bc, (iy)
 	inc	iy
 	inc	iy
-	ld	hl, bit_instr
+	ld	hl, dd_bit_instr
 	ld	(hl), c
 	inc	hl
 	ld	(hl), b
@@ -590,20 +590,6 @@ z80_ixbits:
 	exx
 	ex	af, af'
 	jp	z80_ixbits2
-
-	section	INTERNAL_RAM_ROM
-z80_ixbits2:
-	db	%52
-	db	%DD	; bit operand
-	db	%CB	; bit operand
-bit_instr:
-	db	%00
-	db	%06
-	ex	af, af'
-	exx
-	ld	ix, z80_regs
-	z80loop
-	section	CODE
 
 	; $DD E1 pop ix
 	z80_popir	ix

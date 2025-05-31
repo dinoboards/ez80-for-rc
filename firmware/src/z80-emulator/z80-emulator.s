@@ -3,44 +3,21 @@
 
 	.assume	adl=1
 
-; ez80's alt version of BC, DE, HL contain the emulated z80's main registers
-; the ez80's alt registers are stored in reg_aXX below:
+	xref	_z80_flags
+	xref	z80_flags
+	xref	z80_misc
+	xref	z80_reg_aaf
+	xref	z80_reg_abc
+	xref	z80_reg_ade
+	xref	z80_reg_ahl
+	xref	z80_reg_ix
+	xref	z80_reg_iy
+	xref	z80_regs
 
-	section	BSS
-
-	global	z80_regs
-	global	_reg_ahl
-	global	_reg_ade
-	global	_reg_iy
-	global z80_reg_ix
-	global z80_reg_iy
-; registers
-z80_regs:
-_reg_aaf:	ds	3
-z80_reg_aaf	equ	0
-
-_reg_abc:	ds	3
-z80_reg_abc	equ	3
-
-_reg_ade:	ds	3
-z80_reg_ade	equ	6
-
-_reg_ahl:	ds	3
-z80_reg_ahl	equ	9
-
-_reg_ix:	ds	3
-z80_reg_ix	equ	12
-
-_reg_iy:	ds	3
-z80_reg_iy	equ	15
-
-	global	_reg_spl
-
-_reg_spl:	ds	3
-z80_reg_spl	equ	18
-
-_z80_flags:	db 	1		; bit 0 -> ei-state, bit 1 -> int-pending
-z80_flags	equ	21		; true if maskable ints enabled
+	xref	cb_bit_instr
+	xref	z80_bit2
+	xref	switch_addr
+	xref	z80_loop2
 
 	section	CODE
 	global	z80_invoke
@@ -62,33 +39,11 @@ z80_flags	equ	21		; true if maskable ints enabled
 ; 	nop
 ; 	ret
 
-	section	INTERNAL_RAM_ROM
-z80_int_request:
-	xor	a
-	ld	(ix+z80_flags), a
-	push.s	iy
-	ld	iy, %0038
-	jr	z80_loop2
-
-z80_loop:
-	ld	a, (ix+z80_flags)
-	bit	0, a			; ei enabled?
-	jr	z, z80_loop2
-
-	bit	1, a			; int pending?
-	jr	nz, z80_int_request
-
-z80_loop2:
-	z80_byte_jump	z80_instr_table
-
-	z80_byte_jump	z80_instr_table
-	section CODE
-
 ; start executing z80 code at location: MBASE/IY
 z80_invoke:
 	ld	ix, z80_regs
 
-	global	z80_nop
+	global	z80_instr_table
 
 z80_instr_table:
 	jp	z80_nop			; 00
@@ -353,6 +308,7 @@ not_implemented:
 	ret
 
 	; $00 nop
+	global	z80_nop
 z80_nop:
 	z80loop
 
@@ -835,14 +791,11 @@ z80_ldee:
 	; $5f	ld e, a
 	z80_exall2	ldea, {ld e, a}
 
-z80_ldhb:
-	call	not_implemented
-	z80loop
+	; $60 ld h, b
+	z80_exmain2	ldhb, {ld h, b}
 
-
-z80_ldhc:
-	call	not_implemented
-	z80loop
+	; $61 ld h, c
+	z80_exmain2	ldhc, {ld h, c}
 
 	; $62 ld h, d
 	z80_exmain2     ldhd, {ld h, d}
@@ -850,15 +803,12 @@ z80_ldhc:
 	; $63 ld h, e
 	z80_exmain2     ldhe, {ld h, e}
 
-
 z80_ldhh:
 	call	not_implemented
 	z80loop
 
-
-z80_ldhl:
-	call	not_implemented
-	z80loop
+	; $ 65 ld h, l
+	z80_exmain2	ldhl, {ld h, l}
 
 	; $66 ld h, (hl)
 	z80_exall2	ldh_hl_, {db %52}, {ld h, (hl)}		; bug in assembler does not support ld.s h, (hl)
@@ -941,14 +891,10 @@ z80_ld_hl_l:
 	exx
 	z80loop
 
-
+	; $76 halt
 z80_halt:
 	bit	1, (ix+z80_flags)		; int pending?
 	jr	z, z80_halt
-	nop
-	nop
-	nop
-	nop
 	z80loop
 
 	; $77 ld (hl), a
@@ -1261,30 +1207,19 @@ z80_bit:
 	inc	iy
 	cp	%31		;
 	jp	z, z80_switch_to_native
-	ld	(bit_instr), a
+	ld	(cb_bit_instr), a
 	exx
 	ex	af, af'
 	jp	z80_bit2
 
-	section	INTERNAL_RAM_ROM
-z80_bit2:
-	db	%52	; .S prefix
-	db	%CB	; bit operand
-bit_instr:
-	db	%00
-	ex	af, af'
-	exx
-	z80loop
-
-	section	CODE
 z80_switch_to_native:
 	; need to load all registers correctly
 	; then jump.s to original value of iy
 
 	ld	a, iyl
-	ld	(.switch_addr+2), a
+	ld	(switch_addr+2), a
 	ld	a, iyh
-	ld	(.switch_addr+3), a
+	ld	(switch_addr+3), a
 
 	ld	bc, (ix+z80_reg_aaf)
 	push	bc
@@ -1299,12 +1234,7 @@ z80_switch_to_native:
 	ld	iy, (ix+z80_reg_iy)
 	ld	ix, (ix+z80_reg_ix)
 
-	jp	.switch_addr
-
-	section	INTERNAL_RAM_ROM
-.switch_addr:
-	jp.s	%0000
-	section	CODE
+	jp	switch_addr
 
 
 	; $CC call z, nn
@@ -1389,6 +1319,7 @@ z80_exx:
 	z80_jpccnn	jr, c
 
 	; $DB in a, (n)
+	global	z80_ina_n_
 z80_ina_n_:
 	ld.s	c, (iy)
 	inc	iy
@@ -1574,12 +1505,7 @@ z80_rst38:
 	z80loop
 
 ; MISC ED Instructions
-	section	INTERNAL_RAM_ROM
-	; $ED
-z80_misc:
-	z80_byte_jump	z80_instr_misc_table
-	section CODE
-
+	global	z80_instr_misc_table
 z80_instr_misc_table:
 	jp	z80_nop		; ED 00 in0 b,(n)
 	jp	z80_nop		; ED 01 out0 (n), b
@@ -2172,15 +2098,3 @@ z80_indr:
 z80_otdr:
 	call	not_implemented
 	jp	z80_nop
-
-
-
-	global	z80_marshall_isr
-z80_marshall_isr:
-	push	af
-	ld	a, (_z80_flags)
-	set	1, a
-	ld	(_z80_flags), a
-	pop	af
-
-	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE

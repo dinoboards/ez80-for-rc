@@ -61,9 +61,11 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
 <file filter-key="">src\startup\vectors16.asm</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>
+<file filter-key="">src\z80-emulator\z80-emulator-critical.s</file>
 <file filter-key="">src\z80-emulator\z80-emulator-ix.s</file>
 <file filter-key="">src\z80-emulator\z80-emulator-iy.s</file>
 <file filter-key="">src\z80-emulator\z80-emulator-logging.c</file>
+<file filter-key="">src\z80-emulator\z80-emulator-state.s</file>
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
@@ -164,7 +166,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05D7
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05FE
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -300,7 +302,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00EC)
 LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0620
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $05FE
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -317,7 +319,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="warnoverlap" type="boolean" change-action="none">true</option>
 <option name="xref" type="boolean" change-action="none">true</option>
 <option name="undefisfatal" type="boolean" change-action="none">true</option>
-<option name="warnisfatal" type="boolean" change-action="none">false</option>
+<option name="warnisfatal" type="boolean" change-action="none">true</option>
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
 <option name="fplib" type="string" change-action="build">None</option>
@@ -488,20 +490,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>373</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>21824</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>361</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator-ix.s</pathname>
-<address>0</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>

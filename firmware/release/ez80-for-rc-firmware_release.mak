@@ -489,6 +489,12 @@ clean:
             $(RM) "$(WORKDIR)\work-area.lst"
 	@if exist "$(WORKDIR)\work-area.src"  \
             $(RM) "$(WORKDIR)\work-area.src"
+	@if exist "$(WORKDIR)\z80-emulator-critical.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-critical.obj"
+	@if exist "$(WORKDIR)\z80-emulator-critical.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-critical.lis"
+	@if exist "$(WORKDIR)\z80-emulator-critical.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-critical.lst"
 	@if exist "$(WORKDIR)\z80-emulator-ix.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator-ix.obj"
 	@if exist "$(WORKDIR)\z80-emulator-ix.lis"  \
@@ -509,6 +515,12 @@ clean:
             $(RM) "$(WORKDIR)\z80-emulator-logging.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.src"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.src"
+	@if exist "$(WORKDIR)\z80-emulator-state.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-state.obj"
+	@if exist "$(WORKDIR)\z80-emulator-state.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-state.lis"
+	@if exist "$(WORKDIR)\z80-emulator-state.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-state.lst"
 	@if exist "$(WORKDIR)\z80-emulator.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator.obj"
 	@if exist "$(WORKDIR)\z80-emulator.lis"  \
@@ -592,9 +604,11 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
             $(WORKDIR_ESCSPACE)\work-area.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-state.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
             $(WORKDIR_ESCSPACE)\zexall.obj
@@ -1240,6 +1254,15 @@ $(WORKDIR_ESCSPACE)\work-area.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\work-area.c"
 
+$(WORKDIR_ESCSPACE)\z80-emulator-critical.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-critical.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-critical.s"
+
 $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-ix.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1265,6 +1288,15 @@ $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
+
+$(WORKDIR_ESCSPACE)\z80-emulator-state.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-state.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-state.s"
 
 $(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator.s  \
