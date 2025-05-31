@@ -656,32 +656,20 @@ z80_ldbb:
 	exx
 	z80loop
 
-
-z80_ldbc:
-	call	not_implemented
-	z80loop
+	; $41 ld b, c
+	z80_exmain2	ldbc, {ld b, c}
 
 	; $42 ld b, d
 	z80_exmain2	ldbd, {ld b, d}
 
-
-z80_ldbe:
-	call	not_implemented
-	z80loop
+	; $43 ld b, e
+	z80_exmain2	ldbe, {ld b, e}
 
 	; %44 ld b, h
-z80_ldbh:
-	exx
-	ld	b, h
-	exx
-	z80loop
+	z80_exmain2	ldbh, {ld b, h}
 
 	; $45 ld b, l
-z80_ldbl:
-	exx
-	ld	b, l
-	exx
-	z80loop
+	z80_exmain2	ldbl, {ld b, l}
 
 	; $46 ld b, (hl)
 	z80_exmain2	ldb_hl_, {db %52}, {ld b, (hl)}	; bug in assembler ld.s b, (hl) not supported??
@@ -756,10 +744,8 @@ z80_lddd:
 	; $55 ld d, l
 	z80_exmain2	lddl, {ld d, l}
 
-
-z80_ldd_hl_:
-	call	not_implemented
-	z80loop
+	; $56 ld d, (hl)
+	z80_exmain2	ldd_hl_, {db %52}, {ld d, (hl)}	; bug in assembler ld.s d, (hl) not supported??
 
 	; $57 ld d, a
 	z80_exall2	ldda, {ld d, a}
@@ -835,10 +821,8 @@ z80_ldll:
 	call	not_implemented
 	z80loop
 
-
-z80_ldl_hl_:
-	call	not_implemented
-	z80loop
+	; $6E ld l, (hl)
+	z80_exall2	ldl_hl_, {db %52}, {ld l, (hl)}		; bug in assembler does not support ld.s l, (hl)
 
 	; $6F ld l,a
 z80_ldla:
@@ -1459,9 +1443,10 @@ z80_oran:
 	ex	af, af'
 	z80loop
 
-
+	; $F7 rst 30
 z80_rst30:
-	call	not_implemented
+	push.s	iy
+	ld	iy, %30
 	z80loop
 
 	; $f8 ret m
@@ -1621,7 +1606,7 @@ z80_instr_misc_table:
 	jp	z80_rld_hl_	; ED 6F rld (hl)
 	jp	z80_nop		; ED 70
 	jp	z80_nop		; ED 71
-	jp	z80_sbchlsp   ; ED 72 sbc hl, sp
+	jp	z80_sbchlsp	; ED 72 sbc hl, sp
 	jp	z80_ld_nn_sp    ; ED 73 ld (nn), sp
 	jp	z80_nop		; ED 74 tstio n
 	jp	z80_nop		; ED 75
@@ -1629,7 +1614,7 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 77
 	jp	z80_in_a_c      ; ED 78 in a, (bc)
 	jp	z80_out_c_a     ; ED 79 out (bc), a
-	jp	z80_adchlsp   ; ED 7A adc hl, sp
+	jp	z80_adchlsp	; ED 7A adc hl, sp
 	jp	z80_ldsp_nn_    ; ED 7B ld sp, (nn)
 	jp	z80_nop		; ED 7C mlt sp
 	jp	z80_nop		; ED 7D stmix
@@ -1829,9 +1814,8 @@ z80_ld_nn_bc:
 	ld.s	(hl), bc
 	z80loop
 
-z80_neg:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 44 neg
+	z80_exaf2	neg, {neg}
 
 z80_retn:
 	pop.s	iy
@@ -2008,11 +1992,10 @@ z80_ldsp_nn_:
 	inc	iy
 	ld.s	hl, (hl)
 	ld.s	sp, hl
-	jp	z80_nop
+	z80loop
 
-z80_ldi:
-	call	not_implemented
-	jp	z80_nop
+	; $ED A0 ldi
+	z80_exall2	ldi, {ldi.s}
 
 	; $ED A1
 	z80_exall2	cpi, {cpi.s}

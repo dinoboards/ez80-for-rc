@@ -295,7 +295,13 @@ iy_instr_table:
 	z80_ldirnn	iy
 
 	; FD 22 ld (nn),iy
-	z80_niy	ld_nn_iy
+z80_ld_nn_iy:
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	ld	bc, (ix+z80_reg_iy)
+	ld.s	(hl), bc
+	z80loop
 
 	; FD 23 inc iy
 z80_inciy:
@@ -408,28 +414,28 @@ z80_deciy:
 	z80_irtoix	lde_iyd_, iy, {ld.s e, (ix)}
 
 	; FD 60 ld iyh, b
-	z80_niy	ldiyhb
+	z80_exmain2	ldiyhb, {ld (ix+z80_reg_iy+1), b}
 
 	; FD 61 ld iyh, c
-	z80_niy	ldiyhc
+	z80_exmain2	ldiyhc, {ld (ix+z80_reg_iy+1), c}
 
 	; FD 62 ld iyh, d
-	z80_niy	ldiyhd
+	z80_exmain2	ldiyhd, {ld (ix+z80_reg_iy+1), d}
 
 	; FD 63 ld iyh, e
-	z80_niy	ldiyhe
+	z80_exmain2	ldiyhe, {ld (ix+z80_reg_iy+1), e}
 
 	; FD 64 ld iyh, iyh
 	z80_niy	ldiyhiyh
 
 	; FD 65 ld iyh, iyl
-	z80_niy	ldiyhiyl
+	z80_exmain2	ldiyhiyl, {ld a, (ix+z80_reg_iy+0)}, {ld (ix+z80_reg_iy+1), a}
 
 	; FD 66 ld h,(iy+d)
 	z80_irtoix	ldh_iyd_, iy, {ld.s h, (ix)}
 
 	; FD 67 ld iyh, a
-	z80_niy	ldiyha
+	z80_exaf2	ldiyha, {ld (ix+z80_reg_iy+1), a}
 
 	; FD 68 ld iyl, b
 	z80_niy	ldiylb
@@ -594,7 +600,11 @@ z80_iybits:
 	z80_popir	iy
 
 	; FD E3 ex (sp), iy
-	z80_niy	ex_sp_iy
+z80_ex_sp_iy:
+	ld	hl, (ix+z80_reg_iy)
+	ex.s	(sp), hl
+	ld	(ix+z80_reg_iy), hl
+	z80loop
 
 	; $FD $E5 push iy
 	z80_pushir iy

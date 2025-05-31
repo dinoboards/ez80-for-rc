@@ -296,7 +296,13 @@ ix_instr_table:
 	z80_ldirnn	ix
 
 	; DD 22 ld (nn),ix
-	z80_niy	ld_nn_ix
+z80_ld_nn_ix:
+	ld.s	hl, (iy)
+	inc	iy
+	inc	iy
+	ld	bc, (ix+z80_reg_ix)
+	ld.s	(hl), bc
+	z80loop
 
 	; DD 23 inc ix
 z80_incix:
@@ -409,28 +415,28 @@ z80_decix:
 	z80_irtoix	lde_ixd_, ix, {ld.s e, (ix)}
 
 	; DD 60 ld ixh, b
-	z80_niy	ldixhb
+	z80_exmain2	ldixhb, {ld (ix+z80_reg_ix+1), b}
 
 	; DD 61 ld ixh, c
-	z80_niy	ldixhc
+	z80_exmain2	ldixhc, {ld (ix+z80_reg_ix+1), c}
 
 	; DD 62 ld ixh, d
-	z80_niy	ldixhd
+	z80_exmain2	ldixhd, {ld (ix+z80_reg_ix+1), d}
 
 	; DD 63 ld ixh, e
-	z80_niy	ldixhe
+	z80_exmain2	ldixhe, {ld (ix+z80_reg_ix+1), e}
 
 	; DD 64 ld ixh, ixh
 	z80_niy	ldixhixh
 
 	; DD 65 ld ixh, ixl
-	z80_niy	ldixhixl
+	z80_exmain2	ldixhixl, {ld a, (ix+z80_reg_ix+0)}, {ld (ix+z80_reg_ix+1), a}
 
 	; DD 66 ld h,(ix+d)
 	z80_irtoix	ldh_ixd_, ix, {ld.s h, (ix)}
 
 	; DD 67 ld ixh, a
-	z80_niy	ldixha
+	z80_exaf2	ldixha, {ld (ix+z80_reg_ix+1), a}
 
 	; DD 68 ld ixl, b
 	z80_niy	ldixlb
@@ -595,7 +601,11 @@ z80_ixbits:
 	z80_popir	ix
 
 	; DD E3 ex (sp), ix
-	z80_niy	ex_sp_ix
+z80_ex_sp_ix:
+	ld	hl, (ix+z80_reg_ix)
+	ex.s	(sp), hl
+	ld	(ix+z80_reg_ix), hl
+	z80loop
 
 	; $DD $E5 push ix
 	z80_pushir ix
