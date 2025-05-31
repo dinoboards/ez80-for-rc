@@ -318,7 +318,11 @@ z80_incix:
 	z80_exaf2	decixh, {dec (ix+z80_reg_ix+1)}
 
 	; DD 26 ld ixh, n
-	z80_niy	ldixhn
+z80_ldixhn:
+	ld.s	a, (iy)
+	inc	iy
+	ld	(ix+z80_reg_ix+1), a
+	z80loop
 
 	; DD 27 ld hl, (ix+d)
 	z80_niy	ldhl_ixd_
@@ -349,7 +353,11 @@ z80_decix:
 	z80_exaf2	decixl, {dec (ix+z80_reg_ix+0)}
 
 	; DD 2E ld ixl, n
-	z80_niy	ldixln
+z80_ldixln:
+	ld.s	a, (iy)
+	inc	iy
+	ld	(ix+z80_reg_ix+0), a
+	z80loop
 
 	; DD 2F ld (ix+d), hl
 	z80_niy	ld_ixd_hl
