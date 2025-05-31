@@ -19,6 +19,52 @@
 	xref	switch_addr
 	xref	z80_loop2
 
+	global	z80_ldbb
+	global	z80_ldbc
+	global	z80_ldbd
+	global	z80_ldbe
+	global	z80_ldba
+	global	z80_ldcb
+	global	z80_ldcc
+	global	z80_ldcd
+	global	z80_ldce
+	global	z80_ldca
+	global	z80_lddb
+	global	z80_lddc
+	global	z80_lddd
+	global	z80_ldde
+	global	z80_ldda
+	global	z80_ldeb
+	global	z80_ldec
+	global	z80_lded
+	global	z80_ldee
+	global	z80_ldea
+	global	z80_ldab
+	global	z80_ldac
+	global	z80_ldad
+	global	z80_ldae
+	global	z80_ldaa
+	global	z80_addab
+	global	z80_addac
+	global	z80_addad
+	global	z80_addac
+	global	z80_addaa
+	global	z80_adcab
+	global	z80_adcac
+	global	z80_adcad
+	global	z80_adcae
+	global	z80_adcaa
+	global	z80_subab
+	global	z80_subac
+	global	z80_subad
+	global	z80_subae
+	global	z80_subaa
+	global	z80_sbcaa
+	global	z80_andab
+	global	z80_andac
+	global	z80_andad
+	global	z80_andae
+
 	section	CODE
 	global	z80_invoke
 
@@ -651,9 +697,6 @@ z80_ldan:
 
 	; $40 ld b,b
 z80_ldbb:
-	exx
-	; ld	b,b
-	exx
 	z80loop
 
 	; $41 ld b, c
@@ -697,8 +740,8 @@ z80_ldcc:
 	jr	z, rst_l10
 	cp	%C9		; RET.L
 	jr	z, ret_l
-	call	not_implemented
 	z80loop
+
 ret_l:
 rst_l10:
 	nop	; RST.L %10
@@ -732,7 +775,6 @@ rst_l10:
 
 	; $52 ld d, d
 z80_lddd:
-	call	not_implemented
 	z80loop
 
 	; $53 ld d, e
@@ -761,8 +803,6 @@ z80_lddd:
 
 	; $5B ld e, e
 z80_ldee:
-	call	not_implemented
-	; z80_exmain 	{ld e, e}
 	z80loop
 
 	; $5C ld e, h
@@ -790,7 +830,6 @@ z80_ldee:
 	z80_exmain2     ldhe, {ld h, e}
 
 z80_ldhh:
-	call	not_implemented
 	z80loop
 
 	; $ 65 ld h, l
@@ -818,7 +857,6 @@ z80_ldhh:
 	z80_exmain2	ldlh, {ld l, h}
 
 z80_ldll:
-	call	not_implemented
 	z80loop
 
 	; $6E ld l, (hl)
@@ -907,7 +945,7 @@ z80_halt:
 
 
 z80_ldaa:
-	call	not_implemented
+	; call	not_implemented
 	z80loop
 
 	; $80 add a, b
