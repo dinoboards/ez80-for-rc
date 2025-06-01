@@ -653,6 +653,15 @@ z80_iybits:
 	ld.s	bc, (iy)
 	inc	iy
 	inc	iy
+
+	ld	a, b		; kk
+	cp	%36	; undocumented sl1 not implemented
+	jr	z, z80_iybits_nop
+
+	and	%07		; if 6 or e ok, otherwise nop
+	cp	%06
+	jr	nz, z80_iybits_nop
+
 	ld	hl, fd_bit_instr
 	ld	(hl), c
 	inc	hl
@@ -661,6 +670,9 @@ z80_iybits:
 	exx
 	ex	af, af'
 	jp	z80_iybits2
+
+z80_iybits_nop:
+	z80loop
 
 	; $FD E1 pop iy
 	z80_popir	iy

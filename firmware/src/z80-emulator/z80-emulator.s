@@ -2046,9 +2046,8 @@ z80_outi:
 	call	not_implemented
 	jp	z80_nop
 
-z80_ldd:
-	call	not_implemented
-	jp	z80_nop
+	; $ED A8 ldd
+	z80_exall2	ldd, {ldd.s}
 
 	; $ED A9 cpd
 	z80_exall2	cpd, {cpd.s}

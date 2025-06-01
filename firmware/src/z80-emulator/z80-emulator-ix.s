@@ -650,10 +650,19 @@ z80_ld_ixd_b:
 
 	; DD CB ix bit operators
 	; DD, CB, dd, kk -> 52, DD, CB, dd, kk
+
 z80_ixbits:
 	ld.s	bc, (iy)
 	inc	iy
 	inc	iy
+
+	ld	a, b		; kk
+	cp	%36		; undocumented sl1 not implemented
+	jr	z, z80_ixbits_nop
+	and	%07		; if 6 or e ok, otherwise nop
+	cp	%06
+	jr	nz, z80_ixbits_nop
+
 	ld	hl, dd_bit_instr
 	ld	(hl), c
 	inc	hl
@@ -662,6 +671,9 @@ z80_ixbits:
 	exx
 	ex	af, af'
 	jp	z80_ixbits2
+
+z80_ixbits_nop:
+	z80loop
 
 	; $DD E1 pop ix
 	z80_popir	ix
