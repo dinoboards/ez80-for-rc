@@ -31,6 +31,62 @@ If like me, you don't have an actual drive mounted as `Z:`, you can create a net
 
 Once you have created a `Z:` drive, you can follow the recommended instruction above to clone this repo.
 
+### using wine on linux
+
+Wine on linux can be used to also build firmware
+
+> Although the ZDS IDE will run just fine under wine - it can not be used to flash or debug with the Zilog Smart Cable as wine has no support for mapping linux usb devices to applications
+
+1. Install wine as per your system requirements
+
+2. Download the ZDS IDE https://zilog.com/index.php?option=com_zcm&task=view&soft_id=54&Itemid=74
+
+3. unzip the file and copy it to your wine's drive
+
+   `cp ~/Downloads/zds2_eZ80Acclaim\!_5.3.5_23020901.exe ~/.wine/drive_c/install.exe`
+
+4. configure Z: drive to point to *parent* directory of this repo, using the `winecfg` utility.
+   *This is very important - as ZDS IDE project files all assume a specific root path -- failure to do this will cause file paths to be 'dynamically' changed in the project and make files.*
+
+5. Install the IDE targeting the install directory of: `Z:\ZDS\`
+
+   `wine c:\install.exe`
+
+6. Add the ZDE bin directory to the path by exporting the env var `WINEPATH` in your host (eg: in your .bashrc)
+
+   `export WINEPATH="Z:\\ZDS\\bin"`
+
+Confirm this installation
+
+7. start wine with windows terminal program
+
+   `wine cmd.exe`
+
+8. Then within the wine env, you should now to able to compile the code:
+
+   ```
+   cd z:\ez80-for-rc\firmware
+   make-debug.bat
+   ```
+
+9. To run the gui IDE - required for step-by-step debugging:
+
+    `wine Zds2Ide.exe`
+
+
+### Installing within a VM
+
+I have used kvm to host a windows virtual machine (windows 10 pro), installing ZDS within that environment.
+
+I also setup virtiofs to map a directory on my linux host into the VM.  I can not, at this stage though, run ZDS from the Z: over the mapped drive (due to case sensitivity issues) - so ZDS needs to be installed into the VM's native windows ntfs drive (C:\ZDS)
+
+I had limited success with [winapps](https://nowsci.com/winapps/) to enable running the IDE as as 'normal' linux window (not a fully shared desktop).  Window disappears when attempting to flash or start a debug session.
+
+> running winapps (remoteApp) requires windows Pro - with the following registry edit applied:
+> `[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services] "fAllowUnlistedRemotePrograms"=dword:00000001`
+
+
+
 ### Zilog Tool set
 
 The Zilog ZDS IDE can be found at: https://zilog.com/index.php?option=com_zcm&task=view&soft_id=54&Itemid=74
