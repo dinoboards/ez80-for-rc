@@ -100,12 +100,10 @@ fd_bit_instr:
 	global	z80_marshall_isr
 z80_marshall_isr:
 	push	af
-
 	ld	a, (_z80_flags)
 	set	1, a
 	ld	(_z80_flags), a
 	pop	af
-
 	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE
 
 	SECTION	code

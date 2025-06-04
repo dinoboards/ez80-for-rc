@@ -49,9 +49,6 @@ _main:
 	ld	e, 1
 	RST.L	%10
 
-	;XREF	_spike
-	;call	_spike
-
 IFDEF ZEXALL
 	xref	Z80test
 	call	Z80test
@@ -64,13 +61,13 @@ ENDIF
 	; ; set main mem to 2bc (for 32mhz)
 	; xor	a
 	; ld	b,8
-	; ld	l, %80 + 2
+	; ld	l, %80 + 1
 	; RST.L	%10
 
 	; ; set io to 5bc (for 32mhz)
 	; xor	a
 	; ld	b,9
-	; ld	l, %80 + 5
+	; ld	l, %80 + 4
 	; RST.L	%10
 
 	; ; set flash to 1ws (for 32mhz)
@@ -78,6 +75,9 @@ ENDIF
 	; ld	b,14
 	; ld	l, 1
 	; RST.L	%10
+
+	;XREF	_spike
+	;call	_spike
 
 
 	; XREF	z80_invoke

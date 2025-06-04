@@ -19,7 +19,7 @@
 ;
 ; **************
 
-        INCLUDE "startup\ez80f92.inc"
+        INCLUDE "startup\ez80F92.inc"
         INCLUDE ".\romwbw.inc"
         INCLUDE ".\rst-10-constants.inc"
 

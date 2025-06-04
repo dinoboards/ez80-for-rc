@@ -1,6 +1,6 @@
 
 if 0
-        INCLUDE "startup\ez80f92.inc"
+        INCLUDE "startup\ez80F92.inc"
 
 	SECTION CODE
 
@@ -13,7 +13,6 @@ if 0
 	XREF	__INTERNAL_RAM_LEN
 _spike:
 	di
-
 
 	; write spike code here to be run in ADL mode on  on-chip rom
 

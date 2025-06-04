@@ -71,18 +71,48 @@
 ; test_poi:
 ; 	push	iy
 ; 	pop	hl
-; 	ld	de, %f398
+; 	ld	de, %4122
 ; 	or	a
 ; 	sbc.s	hl, de
 ; 	ret	nz
 
-; 	ld	hl, (ix+z80_reg_ix)
-; 	ld	de, %66
-; 	or	a
-; 	sbc.s	hl, de
-; 	ret	nz
+; 	; ld	hl, (ix+z80_reg_ix)
+; 	; ld	de, %66
+; 	; or	a
+; 	; sbc.s	hl, de
+; 	; ret	nz
 ; poi:
 ; 	nop
+; 	ret
+
+; 	xref	_log_ldir
+; log_ldir:
+; 	push	bc
+; 	push	hl
+; 	push	de
+; 	exx
+; 	push	ix
+; 	push	iy
+; 	push	af
+; 	ex	af, af'
+; 	push	af
+
+; 	push	hl
+; 	push	de
+; 	push	bc
+; 	call	_log_ldir
+; 	pop	bc
+; 	pop	de
+; 	pop	hl
+; 	exx
+; 	pop	af
+; 	ex	af, af'
+; 	pop	af
+; 	pop	iy
+; 	pop	ix
+; 	pop	de
+; 	pop	hl
+; 	pop	bc
 ; 	ret
 
 ; start executing z80 code at location: MBASE/IY
@@ -1961,8 +1991,10 @@ z80_im2:
 	jp	z80_nop
 
 z80_ld_a_r:
-	call	not_implemented
-	jp	z80_nop
+	ex	af, af'
+	ld	a, r
+	ex	af, af'
+	z80loop
 
 z80_in_h_c:
 	call	not_implemented
@@ -2042,9 +2074,20 @@ z80_ini:
 	call	not_implemented
 	jp	z80_nop
 
+	; $ED A3
 z80_outi:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	ld	a, (hl)
+	inc	hl
+	push	bc
+	ld	b, IO_SEGMENT
+	out	(bc), a
+	pop	bc
+	ex	af, af'
+	dec	b		; flag may not be consistent with outi
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED A8 ldd
 	z80_exall2	ldd, {ldd.s}
@@ -2063,7 +2106,15 @@ z80_outd:
 	jp	z80_nop
 
 	; $ED $B0
-	z80_exall2	ldir, {ldir.s}
+z80_ldir:
+	exx
+	ex	af, af'
+ldirnext:
+	ldi.s				; ldir.s seems to have some
+	jp	pe, ldirnext		; kind of compatibility issue
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED B1
 	z80_exall2	cpir, {cpir.s}
@@ -2106,7 +2157,15 @@ otir1:
 	z80loop
 
 	; $ED d8 lddr
-	z80_exall2	lddr, {lddr.s}
+z80_lddr:
+	exx
+	ex	af, af'
+lddrnext:
+	ldd.s
+	jp	pe, lddrnext
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED B9 cpdr
 	z80_exall2	cpdr, {cpdr.s}
