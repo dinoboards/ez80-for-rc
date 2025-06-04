@@ -2036,9 +2036,17 @@ z80_ld_nn_sp:
 	ld.s	(hl), de
 	z80loop
 
+	; $ED 78 in a, (c)
 z80_in_a_c:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	ex	af, af'
+	push	bc
+	ld	b, IO_SEGMENT
+	in	a, (bc)
+	pop	bc
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED 79 out (c), a
 z80_out_c_a:

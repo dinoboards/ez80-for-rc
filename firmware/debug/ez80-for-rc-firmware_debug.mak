@@ -69,7 +69,7 @@ buildall: clean ez80-for-rc-firmware
 
 relink: deltarget ez80-for-rc-firmware
 
-deltarget:
+deltarget: 
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.lod"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.lod"
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.hex"  \
@@ -77,7 +77,7 @@ deltarget:
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"
 
-clean:
+clean: 
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.lod"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.lod"
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.hex"  \
@@ -540,9 +540,9 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lst"
 
 # pre-4.11.0 compatibility
-rebuildall: buildall
+rebuildall: buildall 
 
-LIBS =
+LIBS = 
 
 OBJS =  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
