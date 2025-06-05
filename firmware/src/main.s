@@ -1,124 +1,85 @@
-	INCLUDE	"config.inc"
+	include	"config.inc"
 
-	SECTION CODE
+	section	CODE
 
-	.assume adl=1
+	.assume	adl=1
 
-	PUBLIC	_main
-	XREF	_uart0_init
-	XREF	_rx_buffer_init
-	XREF	_init_clocks
-	XREF	__c_startup
+	public	_main
+	xref	_uart0_init
+	xref	_rx_buffer_init
+	xref	_init_clocks
+	xref	__c_startup
 
-	XREF	_io_bus_mode_and_timing
-	XREF	_mem_bus_mode_and_timing
-	XREF	_mem0_bus_mode_and_timing
-	XREF	_mem1_bus_mode_and_timing
+	xref	_io_bus_mode_and_timing
+	xref	_mem_bus_mode_and_timing
+	xref	_mem0_bus_mode_and_timing
+	xref	_mem1_bus_mode_and_timing
+
+	xref	probe_for_msx_system
+	xref	z80_invoke
 
 _main:
-	CALL	remove_usb_tick_hook
-	CALL	__c_startup
-	CALL	_init_clocks
-	CALL	_rx_buffer_init
-	CALL	_uart0_init
+	call	remove_usb_tick_hook
+	call	__c_startup
+	call	_init_clocks
+	call	_rx_buffer_init
+	call	_uart0_init
 
 	; Align stored timings to actual configured startup timings.
-	LD	A, IO_BUS_CYCLES | %80
-	LD	(_io_bus_mode_and_timing), A
+	ld	a, IO_BUS_CYCLES|%80
+	ld	(_io_bus_mode_and_timing), a
 
-	LD	A, MEM_BUS_CYCLES | %80
-	LD	(_mem_bus_mode_and_timing), A
+	ld	a, MEM_BUS_CYCLES|%80
+	ld	(_mem_bus_mode_and_timing), a
 
-	LD	A, MEM_BUS_CYCLES | %80
-	LD	(_mem0_bus_mode_and_timing), A
+	ld	a, MEM_BUS_CYCLES|%80
+	ld	(_mem0_bus_mode_and_timing), a
 
-	LD	A, MEM_BUS_CYCLES | %80
-	LD	(_mem1_bus_mode_and_timing), A
+	ld	a, MEM_BUS_CYCLES|%80
+	ld	(_mem1_bus_mode_and_timing), a
 
 	; Auto configure CS0's timing
-	LD	A, 0
-	LD	B, 17
+	ld	a, 0
+	ld	b, 17
 	ld	hl, 70 ; 80ns
 	ld	e, 1
 	RST.L	%10
 
 	; Auto configure CS1's timing
-	LD	A, 0
-	LD	B, 18
+	ld	a, 0
+	ld	b, 18
 	ld	hl, 30 ; 80ns
 	ld	e, 1
 	RST.L	%10
 
-IFDEF ZEXALL
+IFDEF	ZEXALL
 	xref	Z80test
 	call	Z80test
 ENDIF
 
-	LD	A, Z80_ADDR_MBASE		; set MBASE to $03
-	LD	MB, A
-
-
-	; ; set main mem to 2bc (for 32mhz)
-	; xor	a
-	; ld	b,8
-	; ld	l, %80 + 1
-	; RST.L	%10
-
-	; ; set io to 5bc (for 32mhz)
-	; xor	a
-	; ld	b,9
-	; ld	l, %80 + 4
-	; RST.L	%10
-
-	; ; set flash to 1ws (for 32mhz)
-	; xor	a
-	; ld	b,14
-	; ld	l, 1
-	; RST.L	%10
-
-	;XREF	_spike
+	;xref	_spike
 	;call	_spike
 
+	ld	a, Z80_ADDR_MBASE		; set MBASE to $03
+	ld	MB, a
 
-	; XREF	z80_invoke
-	; XREF	_marshall_isr_hook
-	; XREF	z80_marshall_isr
-	; ; hard coded reset of MSX memory system
-	; ; only required when using the debugger to force memory back to known power-on state
+	call	probe_for_msx_system
+	jp.sis	nz, 0
 
-	; ld	bc, %ffab
-	; ld	a, %82
-	; out	(bc), a
-	; ld	bc, %FFA8
-	; ld	a, 0
-	; out	(bc), a
-	; in	a, (bc)
-	; ld	hl, %03FFFF
-	; ld	(hl), 0
-	; ld	a, (hl)
+	jp	z80_invoke
 
-	; di
-	; ld	iy, 0
-	; ld	hl, _marshall_isr_hook+1
-	; ld	de, z80_marshall_isr
-	; ld	(hl), de
-
-	; call	z80_invoke
-
-	JP.SIS	0				; transfer to external Memory under Z80 Compatible mode
-
-	GLOBAL	remove_usb_tick_hook
+	global	remove_usb_tick_hook
 	; remove the usb key/mouse inter handler hook
 remove_usb_tick_hook:
-	XREF 	_system_timer_isr
-	LD	HL, _system_timer_isr
-	XOR	A
-	LD	(HL), A
-	INC 	HL
-	LD	(HL), A
-	INC 	HL
-	LD	(HL), A
-	INC 	HL
-	LD	(HL), A
-	INC 	HL
-	RET
+	xref	_system_timer_isr
+	ld	hl, _system_timer_isr
+	xor	a
+	ld	(HL), a
+	inc	hl
+	ld	(HL), a
+	inc	hl
+	ld	(HL), a
+	inc	hl
+	ld	(HL), a
+	inc	hl
+	ret

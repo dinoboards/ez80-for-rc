@@ -60,6 +60,12 @@ MEM_BUS_CYCLES 		.EQU	BMX_BC_1
 ALT_FIRMWARE_BASE	.EQU	%010000
 ALT_FIRMWARE_INFO	.EQU	%01FF00
 
+; PPI/Keyboard ports
+PSL_STAT:       equ     %FFA8             ; slot status
+KBD_STAT:       equ     %FFA9             ; keyboard status
+GIO_REGS:       equ     %FFAA             ; General IO Register
+PPI_REGS:       equ     %FFAB             ; PPI register
+
 ROM_BASE	.EQU	%000000
 
 	; aka INTERNAL_RAM_RAM

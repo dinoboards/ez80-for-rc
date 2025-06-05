@@ -19,6 +19,9 @@
 	xref	switch_addr
 	xref	z80_loop2
 
+	xref	_marshall_isr_hook
+	xref	z80_marshall_isr
+
 	global	z80_ldbb
 	global	z80_ldbc
 	global	z80_ldbd
@@ -68,55 +71,9 @@
 	section	CODE
 	global	z80_invoke
 
-; test_poi:
-; 	push	iy
-; 	pop	hl
-; 	ld	de, %4122
-; 	or	a
-; 	sbc.s	hl, de
-; 	ret	nz
-
-; 	; ld	hl, (ix+z80_reg_ix)
-; 	; ld	de, %66
-; 	; or	a
-; 	; sbc.s	hl, de
-; 	; ret	nz
-; poi:
-; 	nop
-; 	ret
-
-; 	xref	_log_ldir
-; log_ldir:
-; 	push	bc
-; 	push	hl
-; 	push	de
-; 	exx
-; 	push	ix
-; 	push	iy
-; 	push	af
-; 	ex	af, af'
-; 	push	af
-
-; 	push	hl
-; 	push	de
-; 	push	bc
-; 	call	_log_ldir
-; 	pop	bc
-; 	pop	de
-; 	pop	hl
-; 	exx
-; 	pop	af
-; 	ex	af, af'
-; 	pop	af
-; 	pop	iy
-; 	pop	ix
-; 	pop	de
-; 	pop	hl
-; 	pop	bc
-; 	ret
-
-; start executing z80 code at location: MBASE/IY
+; start executing z80 code at MBASE:0000
 z80_invoke:
+	ld	iy, 0
 	ld	ix, z80_regs
 
 	ld	a, 28			; required timeout value for 25Mhz operation
@@ -126,8 +83,44 @@ z80_invoke:
 	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
 	OUT0	(TMR2_CTL), A
 
-	global	z80_instr_table
+	; hard coded reset of MSX memory system
+	; only required when using the debugger to force memory back to known power-on state
 
+	; set main mem to 2bc (for 32mhz)
+	xor	a
+	ld	b, 8
+	ld	l, %80+3	; needs to be 3 (25mhz) to load pacman
+	RST.L	%10		; but can be 1(25mhz) for msx-dos
+
+	; set io to 5bc (for 32mhz)
+	xor	a
+	ld	b, 9
+	ld	l, %80+5	; needs to be 5 (25mhz) for pacman
+	RST.L	%10		; but can be 4 (25mhz) for msx-dos
+
+	; set flash to 1ws (for 32mhz)
+	xor	a
+	ld	b, 14
+	ld	l, 1
+	RST.L	%10
+
+	; set sub slot to 3-0
+	ld	hl, %FFFF
+	ld.s	(hl), %00	; 00 00 00 00
+
+	; set page 3 to slot 0
+	ld	bc, PSL_STAT
+	ld	a, %00		; 00 00 00 00
+	out	(bc), a
+
+	ld	hl, _marshall_isr_hook+1
+	ld	de, z80_marshall_isr
+	ld	(hl), de
+
+	ld	iy, 0
+	; fall through to z80_nop
+
+	global	z80_instr_table
 z80_instr_table:
 	jp	z80_nop			; 00
 	jp	z80_ldbcnn		; 01

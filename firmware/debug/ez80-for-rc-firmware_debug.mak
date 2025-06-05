@@ -294,6 +294,12 @@ clean:
             $(RM) "$(WORKDIR)\mse_driver.lst"
 	@if exist "$(WORKDIR)\mse_driver.src"  \
             $(RM) "$(WORKDIR)\mse_driver.src"
+	@if exist "$(WORKDIR)\msx-memory-probe.obj"  \
+            $(RM) "$(WORKDIR)\msx-memory-probe.obj"
+	@if exist "$(WORKDIR)\msx-memory-probe.lis"  \
+            $(RM) "$(WORKDIR)\msx-memory-probe.lis"
+	@if exist "$(WORKDIR)\msx-memory-probe.lst"  \
+            $(RM) "$(WORKDIR)\msx-memory-probe.lst"
 	@if exist "$(WORKDIR)\protocol.obj"  \
             $(RM) "$(WORKDIR)\protocol.obj"
 	@if exist "$(WORKDIR)\protocol.lis"  \
@@ -574,6 +580,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\mse_driver.obj  \
+            $(WORKDIR_ESCSPACE)\msx-memory-probe.obj  \
             $(WORKDIR_ESCSPACE)\protocol.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
@@ -947,6 +954,10 @@ $(WORKDIR_ESCSPACE)\mse_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\mse-drv\mse_driver.c"
+
+$(WORKDIR_ESCSPACE)\msx-memory-probe.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\msx-memory-probe.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\msx-memory-probe.s"
 
 $(WORKDIR_ESCSPACE)\protocol.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.c  \

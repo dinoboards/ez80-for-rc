@@ -32,6 +32,7 @@
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
 <file filter-key="">src\main.s</file>
 <file filter-key="">src\rst-10-drivers\usb\mse-drv\mse_driver.c</file>
+<file filter-key="">src\z80-emulator\msx-memory-probe.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
 <file filter-key="">src\rst-08-io.s</file>
@@ -489,13 +490,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>384</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\z80-emulator\z80-emulator.s</pathname>
-<address>22568</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>
