@@ -102,3 +102,7 @@ uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_st
 
   return bc | 0x80; // OR in Z80/BUS CYCLE mode flag
 }
+
+uint8_t calculate_io_clock_rate() {
+  return cpu_freq_calculated / 865000;
+}

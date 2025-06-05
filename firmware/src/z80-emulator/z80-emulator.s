@@ -18,9 +18,11 @@
 	xref	z80_bit2
 	xref	switch_addr
 	xref	z80_loop2
+	xref	_calculate_io_clock_rate
 
 	xref	_marshall_isr_hook
 	xref	z80_marshall_isr
+
 
 	global	z80_ldbb
 	global	z80_ldbc
@@ -76,7 +78,7 @@ z80_invoke:
 	ld	iy, 0
 	ld	ix, z80_regs
 
-	ld	a, 28			; required timeout value for 25Mhz operation
+	call	_calculate_io_clock_rate	; required timeout value for 28 (25Mhz) operation
 	OUT0	(TMR2_RR_L), A
 	XOR	A
 	OUT0	(TMR2_RR_H), A
@@ -88,20 +90,22 @@ z80_invoke:
 
 	; set main mem to 2bc (for 32mhz)
 	xor	a
-	ld	b, 8
-	ld	l, %80+3	; needs to be 3 (25mhz) to load pacman
-	RST.L	%10		; but can be 1(25mhz) for msx-dos
+	ld	b, 12		; SYSUTL_MEMTMFQ_SET
+	ld	hl, 180		; 180ns
+	ld	e, %80		; must be B/C
+	RST.L	%10		; but can be 1 (25mhz) for msx-dos
 
 	; set io to 5bc (for 32mhz)
 	xor	a
-	ld	b, 9
-	ld	l, %80+5	; needs to be 5 (25mhz) for pacman
+	ld	b, 13		; SYSUTL_IOTMFQ_SET
+	ld	hl, 320		;
+	ld	e, %80		; must be B/C
 	RST.L	%10		; but can be 4 (25mhz) for msx-dos
 
 	; set flash to 1ws (for 32mhz)
 	xor	a
-	ld	b, 14
-	ld	l, 1
+	ld	b, 16		; SYSUTL_FLSHFQ_SET
+	ld	hl, 45
 	RST.L	%10
 
 	; set sub slot to 3-0
@@ -1317,9 +1321,11 @@ z80_out_n_a:
 	ld.s	c, (iy)
 	inc	iy
 	ld	b, IO_SEGMENT
+	io_rate_start
 	ex	af, af'
 	out	(bc), a
 	ex	af, af'
+	io_rate_end
 	z80loop
 
 	; $D4 call nc, nn
@@ -1369,9 +1375,11 @@ z80_ina_n_:
 	ld.s	c, (iy)
 	inc	iy
 	ld	b, IO_SEGMENT
+	io_rate_start
 	ex	af, af'
 	in	a, (bc)
 	ex	af, af'
+	io_rate_end
 	z80loop
 
 	; $DC call c, nn
@@ -1845,7 +1853,9 @@ z80_out0_n_a:
  z80_inb_c:
 	exx
 	ld	b, IO_SEGMENT
+	io_rate_start
 	in	b, (bc)
+	io_rate_end
 	exx
 	z80loop
 
@@ -1853,9 +1863,11 @@ z80_out0_n_a:
 z80_out_c_b:
 	exx
 	push	bc
+	io_rate_start
 	ld	a, b
 	ld	b, IO_SEGMENT
 	out	(bc), a
+	io_rate_end
 	pop	bc
 	exx
 	z80loop
@@ -1898,7 +1910,9 @@ z80_out_c_c:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
+	io_rate_start
 	out	(bc), c
+	io_rate_end
 	pop	bc
 	exx
 	z80loop
@@ -2027,24 +2041,28 @@ z80_ld_nn_sp:
 	; $ED 78 in a, (c)
 z80_in_a_c:
 	exx
-	ex	af, af'
 	push	bc
 	ld	b, IO_SEGMENT
-	in	a, (bc)
-	pop	bc
+	io_rate_start
 	ex	af, af'
+	in	a, (bc)
+	ex	af, af'
+	io_rate_end
+	pop	bc
 	exx
 	z80loop
 
 	; $ED 79 out (c), a
 z80_out_c_a:
 	exx
-	ex	af, af'
 	push	bc
 	ld	b, IO_SEGMENT
-	out	(bc), a
-	pop	bc
+	io_rate_start
 	ex	af, af'
+	out	(bc), a
+	ex	af, af'
+	io_rate_end
+	pop	bc
 	exx
 	z80loop
 
@@ -2072,11 +2090,13 @@ z80_ini:
 	; $ED A3
 z80_outi:
 	exx
-	ld.s	a, (hl)
-	inc	hl
 	push	bc
 	ld	b, IO_SEGMENT
+	io_rate_start
+	ld.s	a, (hl)
 	out	(bc), a
+	io_rate_end
+	inc	hl
 	pop	bc
 	ex	af, af'
 	dec	b		; flag may not be consistent with outi
@@ -2123,16 +2143,10 @@ inir1:
 	push	bc
 	ld	b, IO_SEGMENT
 
-inir1_wait:
-	IN0	A, (TMR2_DR_L)
-	JR	nz, inir1_wait
-
-inir1_timeout:
+	io_rate_start
 	in	a, (bc)
 	ld.s	(hl), a
-
-	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
-	OUT0	(TMR2_CTL), A
+	io_rate_end
 
 	pop	bc
 	inc	hl
@@ -2152,16 +2166,10 @@ otir1:
 	push	bc
 	ld	b, IO_SEGMENT
 
-otir1_wait:
-	IN0	A, (TMR2_DR_L)
-	JR	nz, otir1_wait
-
-timeout:
+	io_rate_start
 	ld.s	a, (hl)
 	out	(bc), a
-
-	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
-	OUT0	(TMR2_CTL), A
+	io_rate_end
 
 	pop	bc
 	inc	hl

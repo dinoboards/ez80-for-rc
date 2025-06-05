@@ -240,8 +240,21 @@ z80_out_c_&jj:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
+	io_rate_start
 	out	(bc), &jj
+	io_rate_end
 	pop	bc
 	exx
 	z80loop
+	endmacro
+
+io_rate_start	macro
+$$wait:
+	IN0	A, (TMR2_DR_L)
+	JR	nz, $$wait
+	endmacro
+
+io_rate_end	macro
+	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
+	OUT0	(TMR2_CTL), A
 	endmacro
