@@ -23,7 +23,6 @@
 	xref	_marshall_isr_hook
 	xref	z80_marshall_isr
 
-
 	global	z80_ldbb
 	global	z80_ldbc
 	global	z80_ldbd
@@ -408,12 +407,10 @@ z80_nop:
 	z80_exall2	decb, {dec b}
 
 	; $06 ld b, n
-z80_ldbn:
-	z80_exmain	{ld.s	b, (iy)}, {inc iy}
+	z80_exmain2	ldbn, {ld.s b, (iy)}, {inc iy}
 
 	; $07 rlca
-z80_rlca:
-	z80_exaf	{rlca}
+	z80_exaf2	rlca, {rlca}
 
 	; $08 ex af, af'
 ; z80 emulated state: A =>1, A'=>2
@@ -432,7 +429,6 @@ z80_exafaaf:
 	; $09 add hl, bc
 	z80_exall2	addhlbc, {add.s hl, bc}
 
-
 	; $0A ld a, (bc)
 	z80_exall2	lda_bc_, {ld.s a, (bc)}
 
@@ -446,36 +442,17 @@ z80_exafaaf:
 	z80_exall2	decc, {dec c}
 
 	; $0E ld c, n
-z80_ldcn:
-	z80_exmain	{ld.s c, (iy)}, {inc iy}
+	z80_exmain2	ldcn, {ld.s c, (iy)}, {inc iy}
 
 	; $0F rrca
-z80_rrca:
-	z80_exaf	{rrca}
-
-z80_jrccd	macro opand
-	inc	iy
-	exx
-	ex	af, af'
-	opand	$$skip1
-	ex	af, af'
-	exx
-	z80loop
-
-$$skip1:
-	ex	af, af'
-	exx
-	ld.s	a, (iy-1)
-	jp	_z80_add_a_to_pc
-	endmacro
+	z80_exaf2	rrca, {rrca}
 
 	; $10 djnz d
 z80_djnzd:
 	z80_jrccd	djnz
 
 	; $11 ld de, nn
-z80_lddenn:
-	z80_exmain	{ld.s de, (iy)}, {lea iy, iy+2}
+	z80_exmain2	lddenn, {ld.s de, (iy)}, {lea iy, iy+2}
 
 	; $12 ld (de), a
 	z80_exall2	ld_de_a, {ld.s (de), a}
@@ -490,8 +467,7 @@ z80_lddenn:
 	z80_exall2	decd, {dec d}
 
 	; $16 ld d, n
-z80_lddn:
-	z80_exmain	{ld.s d, (iy)}, {inc iy}
+	z80_exmain2	lddn, {ld.s d, (iy)}, {inc iy}
 
 	; $17 rla
 	z80_exaf2	rla, {rla}
@@ -512,12 +488,10 @@ _z80_add_a_to_pc:
 	z80_exall2	addhlde, {add.s hl, de}
 
 	; $1A ld a, (de)
-z80_lda_de_:
-	z80_exall	{ld.s a, (de)}
+	z80_exall2	lda_de_, {ld.s a, (de)}
 
 	; $1B dec de
-z80_decde:
-	z80_exmain	{dec de}
+	z80_exmain2	decde, {dec de}
 
 	; $1D inc e
 	z80_exall2	ince, {inc e}
@@ -536,8 +510,7 @@ z80_jrnzd:
 	z80_jrccd	{jr nz,}
 
 	; $21 ld hl, nn
-z80_ldhlnn:
-	z80_exmain	{ld.s hl, (iy)}, {lea iy, iy+2}
+	z80_exmain2	ldhlnn, {ld.s hl, (iy)}, {lea iy, iy+2}
 
 	; $22 ld (nn), hl
 z80_ld_nn_hl:
@@ -974,7 +947,6 @@ z80_halt:
 
 
 z80_ldaa:
-	; call	not_implemented
 	z80loop
 
 	; $80 add a, b
@@ -1173,25 +1145,7 @@ z80_ldaa:
 	z80_retcc	jr, nz
 
 	; $C1 pop bc
-z80_popbc:
-	exx
-	pop.s	bc
-	exx
-	z80loop
-
-z80_jpccnn	macro j, cc
-z80_jp&cc&nn:
-	ex	af, af'
-	j	cc, $$skip
-	ex	af, af'
-	lea	iy, iy+2
-	z80loop
-
-$$skip:
-	ex	af, af'
-	ld.s	iy, (iy)
-	z80loop
-	endmacro
+	z80_exmain2	popbc, {pop.s bc}
 
 	; $C2 jp nz, nn
 	z80_jpccnn	jr, nz
@@ -1201,30 +1155,11 @@ z80_jpnn:
 	ld.s	iy, (iy)
 	z80loop
 
-z80_callccnn	macro	cc
-z80_call&cc&nn:
-	ex	af, af'
-	jp	cc, $$skip
-	ex	af, af'
-	lea	iy, iy+2
-	z80loop
-$$skip:
-	ex	af, af'
-	pea.s	iy+2
-	ld.s	iy, (iy)
-	z80loop
-
-	endmacro
-
 	; $ C4 call nz, nn
 	z80_callccnn	nz
 
 	; $c5 push bc
-z80_pushbc:
-	exx
-	push.s	bc
-	exx
-	z80loop
+	z80_exmain2	pushbc, {push.s bc}
 
 	; $C6 add a, n
 z80_addan:

@@ -95,16 +95,6 @@ z80_&name:
 	z80loop
 	endmacro
 
-z80_exmain macro operation, op2, op3, op4
-	exx
-	operation
-	op2
-	op3
-	op4
-	exx
-	z80loop
-	endmacro
-
 z80_exmain2 macro name, operation, op2, op3, op4
 z80_&name:
 	exx
@@ -116,15 +106,6 @@ z80_&name:
 	z80loop
 	endmacro
 
-z80_exaf macro operation, op2, op3
-	ex	af, af'
-	operation
-	op2
-	op3
-	ex	af, af'
-	z80loop
-	endmacro
-
 z80_exaf2 macro name, operation, op2, op3
 z80_&name:
 	ex	af, af'
@@ -132,17 +113,6 @@ z80_&name:
 	op2
 	op3
 	ex	af, af'
-	z80loop
-	endmacro
-
-z80_exall	macro	operation, op2, op3
-	exx
-	ex	af, af'
-	operation
-	op2
-	op3
-	ex	af, af'
-	exx
 	z80loop
 	endmacro
 
@@ -233,6 +203,51 @@ $$z80_retcc1:
 	ex	af, af'
 	pop.s	iy
 	z80loop
+	endmacro
+
+z80_jrccd	macro opand
+	inc	iy
+	exx
+	ex	af, af'
+	opand	$$skip1
+	ex	af, af'
+	exx
+	z80loop
+
+$$skip1:
+	ex	af, af'
+	exx
+	ld.s	a, (iy-1)
+	jp	_z80_add_a_to_pc
+	endmacro
+
+z80_jpccnn	macro j, cc
+z80_jp&cc&nn:
+	ex	af, af'
+	j	cc, $$skip
+	ex	af, af'
+	lea	iy, iy+2
+	z80loop
+
+$$skip:
+	ex	af, af'
+	ld.s	iy, (iy)
+	z80loop
+	endmacro
+
+z80_callccnn	macro	cc
+z80_call&cc&nn:
+	ex	af, af'
+	jp	cc, $$skip
+	ex	af, af'
+	lea	iy, iy+2
+	z80loop
+$$skip:
+	ex	af, af'
+	pea.s	iy+2
+	ld.s	iy, (iy)
+	z80loop
+
 	endmacro
 
 z80_out_c_jj	macro	jj
