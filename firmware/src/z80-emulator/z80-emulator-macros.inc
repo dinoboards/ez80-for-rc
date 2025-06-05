@@ -240,7 +240,7 @@ z80_out_c_jj	macro	jj
 z80_out_c_&jj:
 	exx
 	push	bc
-	ld	b, %FF
+	ld	b, IO_SEGMENT
 	out	(bc), &jj
 	pop	bc
 	exx

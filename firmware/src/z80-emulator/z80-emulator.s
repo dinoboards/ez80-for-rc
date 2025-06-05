@@ -119,6 +119,13 @@
 z80_invoke:
 	ld	ix, z80_regs
 
+	ld	a, 28			; required timeout value for 25Mhz operation
+	OUT0	(TMR2_RR_L), A
+	XOR	A
+	OUT0	(TMR2_RR_H), A
+	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
+	OUT0	(TMR2_CTL), A
+
 	global	z80_instr_table
 
 z80_instr_table:
@@ -1838,7 +1845,7 @@ z80_in0a_n_:
 	ex	af, af'
 	z80loop
 
-	; $ED $39 out (n), a
+	; $ED $39 out0 (n), a
 z80_out0_n_a:
 	ld	b, 0
 	ld.s	c, (iy)
@@ -2085,7 +2092,7 @@ z80_ini:
 	; $ED A3
 z80_outi:
 	exx
-	ld	a, (hl)
+	ld.s	a, (hl)
 	inc	hl
 	push	bc
 	ld	b, IO_SEGMENT
@@ -2135,9 +2142,19 @@ inir1:
 	ex	af, af'
 	push	bc
 	ld	b, IO_SEGMENT
+
+inir1_wait:
+	IN0	A, (TMR2_DR_L)
+	JR	nz, inir1_wait
+
+inir1_timeout:
 	in	a, (bc)
+	ld.s	(hl), a
+
+	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
+	OUT0	(TMR2_CTL), A
+
 	pop	bc
-	ld.s	(hl),a
 	inc	hl
 	ex	af, af'
 	djnz	inir1
@@ -2151,17 +2168,28 @@ z80_otir:
 	exx
 otir1:
 	ex	af, af'
-	ld.s	a, (hl)
-	inc	hl
+
 	push	bc
 	ld	b, IO_SEGMENT
+
+otir1_wait:
+	IN0	A, (TMR2_DR_L)
+	JR	nz, otir1_wait
+
+timeout:
+	ld.s	a, (hl)
 	out	(bc), a
+
+	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
+	OUT0	(TMR2_CTL), A
+
 	pop	bc
-	RST.L	%18	; this delay is too much!
+	inc	hl
 	ex	af, af'
 	djnz	otir1
 	ex	af, af'
 	exx
+
 	z80loop
 
 	; $ED d8 lddr
