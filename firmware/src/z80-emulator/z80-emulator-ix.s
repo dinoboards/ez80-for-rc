@@ -348,8 +348,7 @@ z80_ix_nop:
 	; DD 22 ld (nn),ix
 z80_ld_nn_ix:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ld	bc, (ix+z80_reg_ix)
 	ld.s	(hl), bc
 	z80loop
@@ -383,8 +382,7 @@ z80_ldixhn:
 	; DD 2A ld ix, (nn)
 z80_ldix_nn_:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ld.s	hl, (hl)
 	ld	(ix+z80_reg_ix), hl
 	z80loop
@@ -653,8 +651,7 @@ z80_ld_ixd_b:
 
 z80_ixbits:
 	ld.s	bc, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 
 	ld	a, b		; kk
 	cp	%36		; undocumented sl1 not implemented

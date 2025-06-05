@@ -42,8 +42,7 @@ z80_add&ir&rr:
 z80_ldirnn	macro ir
 z80_ld&ir&nn:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy,iy+2
 	ld	(ix+z80_reg_&ir), hl
 	z80loop
 	endmacro

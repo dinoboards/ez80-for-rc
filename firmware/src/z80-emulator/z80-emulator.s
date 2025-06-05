@@ -396,7 +396,7 @@ z80_nop:
 	z80loop
 
 	; $01 ld bc, nn
-	z80_exmain2	ldbcnn, {ld.s bc, (iy)}, {inc iy}, {inc iy}
+	z80_exmain2	ldbcnn, {ld.s bc, (iy)}, {lea iy, iy+2}
 
 	; $02 ld (bc), a
 	z80_exall2	ld_bc_a, {ld.s (bc), a}
@@ -478,7 +478,7 @@ z80_djnzd:
 
 	; $11 ld de, nn
 z80_lddenn:
-	z80_exmain	{ld.s de, (iy)}, {inc iy}, {inc iy}
+	z80_exmain	{ld.s de, (iy)}, {lea iy, iy+2}
 
 	; $12 ld (de), a
 	z80_exall2	ld_de_a, {ld.s (de), a}
@@ -540,13 +540,12 @@ z80_jrnzd:
 
 	; $21 ld hl, nn
 z80_ldhlnn:
-	z80_exmain	{ld.s hl, (iy)}, {inc iy}, {inc iy}
+	z80_exmain	{ld.s hl, (iy)}, {lea iy, iy+2}
 
 	; $22 ld (nn), hl
 z80_ld_nn_hl:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	exx
 	push	hl
 	exx
@@ -593,8 +592,7 @@ z80_jrzd1:
 	; $2A ld hl, (nn)
 z80_ldhl_nn_:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ld.s	a, (hl)
 	ld	c, a
 	inc	hl
@@ -646,16 +644,14 @@ z80_jrncd1:
 	; $31 ld sp, nn
 z80_ldspnn:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ld.s	sp, hl
 	z80loop
 
 	; $32 ld (nn), a
 z80_ld_nn_a:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ex	af, af'
 	ld.s	(hl), a
 	ex	af, af'
@@ -703,8 +699,7 @@ z80_jrcd1:
 	; $3A ld a, (nn)
 z80_lda_nn_:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ex	af, af'
 	ld.s	a, (hl)
 	ex	af, af'
@@ -1192,8 +1187,7 @@ z80_jp&cc&nn:
 	ex	af, af'
 	j	cc, $$skip
 	ex	af, af'
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	z80loop
 
 $$skip:
@@ -1215,8 +1209,7 @@ z80_call&cc&nn:
 	ex	af, af'
 	jp	cc, $$skip
 	ex	af, af'
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	z80loop
 $$skip:
 	ex	af, af'
@@ -1880,8 +1873,7 @@ z80_out_c_b:
 	; $ED 43 ld (nn), bc
 z80_ld_nn_bc:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	exx
 	push	bc
 	exx
@@ -1924,8 +1916,7 @@ z80_out_c_c:
 	; $ED 48 ld bc, (nn)
 z80_ld_bc_nn:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ld.s	bc, (hl)
 	push	bc
 	exx
@@ -1956,8 +1947,7 @@ z80_in_d_c:
 	; $ED 53 ld (nn), de
 z80_ld_nn_de:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	exx
 	push	de
 	exx
@@ -1984,8 +1974,7 @@ z80_in_e_c:
 	; $ED 5B ld de, (nn)
 z80_ld_de_nn:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ld.s	hl, (hl)
 	push	hl
 	exx
@@ -2037,8 +2026,7 @@ z80_ld_nn_sp:
 	ld	hl, 0
 	add.s	hl, sp
 	ld.s	de, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ex	de, hl
 	ld.s	(hl), de
 	z80loop
@@ -2073,8 +2061,7 @@ z80_out_c_a:
 	; $ED 7B ld sp, (nn)
 z80_ldsp_nn_:
 	ld.s	hl, (iy)
-	inc	iy
-	inc	iy
+	lea	iy, iy+2
 	ld.s	hl, (hl)
 	ld.s	sp, hl
 	z80loop
