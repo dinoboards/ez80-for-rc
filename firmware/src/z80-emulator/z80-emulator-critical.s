@@ -22,10 +22,10 @@ z80_int_request:
 
 z80_loop:
 	ld	a, (ix+z80_flags)
-	bit	0, a			; ei enabled?
-	jr	z, z80_loop2
+	bit	1, a			; ei enabled?
+	jr	nz, z80_loop2
 
-	bit	1, a			; int pending?
+	bit	0, a			; int pending?
 	jr	nz, z80_int_request
 
 	global	z80_loop2
@@ -101,7 +101,7 @@ fd_bit_instr:
 z80_marshall_isr:
 	push	af
 	ld	a, (_z80_flags)
-	set	1, a
+	set	0, a
 	ld	(_z80_flags), a
 	pop	af
 	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE

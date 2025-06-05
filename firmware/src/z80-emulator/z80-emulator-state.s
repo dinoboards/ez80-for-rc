@@ -45,5 +45,5 @@ z80_reg_iy	equ	15
 _reg_spl:	ds	3
 z80_reg_spl	equ	18
 
-_z80_flags:	db 	1		; bit 0 -> ei-state, bit 1 -> int-pending
+_z80_flags:	db 	1		; bit 1 on -> DI, off -> EI, bit 0 on -> int-pending
 z80_flags	equ	21		; true if maskable ints enabled

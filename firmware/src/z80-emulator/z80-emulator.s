@@ -944,7 +944,7 @@ z80_ld_hl_l:
 
 	; $76 halt
 z80_halt:
-	bit	1, (ix+z80_flags)		; int pending?
+	bit	0, (ix+z80_flags)		; int pending?
 	jr	z, z80_halt
 	z80loop
 
@@ -1489,7 +1489,7 @@ z80_popaf:
 
 	; $F3 DI
 z80_di:
-	res	0, (ix+z80_flags)
+	set	1, (ix+z80_flags)	; IEF2 unset
 	di
 	z80loop
 
@@ -1533,7 +1533,7 @@ z80_ldsphl:
 
 
 z80_ei:
-	set	0, (ix+z80_flags)
+	res	1, (ix+z80_flags)	; IEF2 set
 	ei
 	jp	z80_loop2
 
@@ -1966,7 +1966,10 @@ z80_im1:
 	z80loop
 
 	; $ED 57 ld a, i
-	z80_exaf2	ldai, {ld a, i}
+	; simulate the i register - by setting the P/V flag
+	; as per current emulated IEFx state
+	; will be 0 (flag PE) when EI, 1 (flag PO) when DI
+	z80_exaf2	ldai, {ld a, (ix+z80_flags)}, {and a, 1}, {ld a, 0}
 
 z80_in_e_c:
 	call	not_implemented
