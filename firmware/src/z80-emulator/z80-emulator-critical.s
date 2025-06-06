@@ -14,7 +14,7 @@
 	section	INTERNAL_RAM_ROM
 
 z80_int_request:
-	xor	a
+	ld	a, %02
 	ld	(ix+z80_flags), a
 	push.s	iy
 	ld	iy, %0038

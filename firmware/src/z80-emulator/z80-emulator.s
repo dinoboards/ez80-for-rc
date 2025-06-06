@@ -104,7 +104,7 @@ z80_invoke:
 	; set flash to 1ws (for 32mhz)
 	xor	a
 	ld	b, 16		; SYSUTL_FLSHFQ_SET
-	ld	hl, 45
+	ld	hl, 60
 	RST.L	%10
 
 	; set sub slot to 3-0
@@ -1429,7 +1429,7 @@ z80_popaf:
 z80_di:
 	set	1, (ix+z80_flags)	; IEF2 unset
 	di
-	z80loop
+	jp	z80_loop2
 
 	; $F4 call p, nn
 	z80_callccnn	p
