@@ -1312,6 +1312,9 @@ z80_ina_n_:
 	ld	b, IO_SEGMENT
 	io_rate_start
 	ex	af, af'
+	align	2
+	global	unknown_issue1	; this address must *not* align with address ...XXXXXX01
+unknown_issue1:			; Unknown glitch 1 - see notes
 	in	a, (bc)
 	ex	af, af'
 	io_rate_end
