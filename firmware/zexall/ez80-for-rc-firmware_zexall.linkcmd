@@ -125,6 +125,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\kyb_driverasm.obj", \
  ".\main.obj", \
  ".\mse_driver.obj", \
+ ".\msx-memory-probe.obj", \
  ".\protocol.obj", \
  ".\rom-flashing-calculator.obj", \
  ".\rst-08-io.obj", \

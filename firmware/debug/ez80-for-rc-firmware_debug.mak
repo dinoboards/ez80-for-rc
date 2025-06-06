@@ -956,7 +956,12 @@ $(WORKDIR_ESCSPACE)\mse_driver.obj :  \
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\mse-drv\mse_driver.c"
 
 $(WORKDIR_ESCSPACE)\msx-memory-probe.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\msx-memory-probe.s
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\msx-memory-probe.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\msx-memory-probe.s"
 
 $(WORKDIR_ESCSPACE)\protocol.obj :  \
