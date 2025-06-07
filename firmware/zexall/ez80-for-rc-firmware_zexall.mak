@@ -522,12 +522,6 @@ clean:
             $(RM) "$(WORKDIR)\z80-emulator-logging.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.src"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.src"
-	@if exist "$(WORKDIR)\z80-emulator-state.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-state.obj"
-	@if exist "$(WORKDIR)\z80-emulator-state.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-state.lis"
-	@if exist "$(WORKDIR)\z80-emulator-state.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-state.lst"
 	@if exist "$(WORKDIR)\z80-emulator.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator.obj"
 	@if exist "$(WORKDIR)\z80-emulator.lis"  \
@@ -546,6 +540,12 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
+	@if exist "$(WORKDIR)\rst-18-function.obj"  \
+            $(RM) "$(WORKDIR)\rst-18-function.obj"
+	@if exist "$(WORKDIR)\rst-18-function.lis"  \
+            $(RM) "$(WORKDIR)\rst-18-function.lis"
+	@if exist "$(WORKDIR)\rst-18-function.lst"  \
+            $(RM) "$(WORKDIR)\rst-18-function.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -616,10 +616,10 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-state.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj  \
+            $(WORKDIR_ESCSPACE)\rst-18-function.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -1306,15 +1306,6 @@ $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
 
-$(WORKDIR_ESCSPACE)\z80-emulator-state.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-state.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-state.s"
-
 $(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1335,4 +1326,12 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
+
+$(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-18-function.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-function.s"
 

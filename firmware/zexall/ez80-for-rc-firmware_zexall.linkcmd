@@ -82,6 +82,7 @@ DEFINE __INTERNAL_RAM_ROM = COPY BASE OF INTERNAL_RAM_RAM
 DEFINE __INTERNAL_RAM_RAM = BASE OF INTERNAL_RAM_RAM
 DEFINE __INTERNAL_RAM_LEN = LENGTH OF INTERNAL_RAM_RAM
 LOCATE INTERNAL_HIRAM_RAM at $02FF00
+LOCATE INTERNAL_VARS_RAM at $02FFE0
 CHANGE INTERNAL_HIRAM_ROM=INTERNAL_HIRAM_RAM
 COPY INTERNAL_HIRAM_RAM ROM
 DEFINE __INTERNAL_HIRAM_ROM = COPY BASE OF INTERNAL_HIRAM_RAM
@@ -159,10 +160,10 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator-ix.obj", \
  ".\z80-emulator-iy.obj", \
  ".\z80-emulator-logging.obj", \
- ".\z80-emulator-state.obj", \
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
+ ".\rst-18-function.obj", \
  "Z:\ZDS\lib\std\chelpD.lib", \
  "Z:\ZDS\lib\std\crtD.lib", \
  "Z:\ZDS\lib\std\crtSD.lib", \

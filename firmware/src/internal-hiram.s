@@ -41,42 +41,57 @@ _marshall_isr_hook:
 _uart0_receive_isr_hook:
 	JP	_uart0_receive_isr
 
+	xref	_default_mi_handler
 	PUBLIC	_default_mi_handler_hook
-_default_mi_handler_hook:				; hook for default interrupt handler
-	POP	AF					; original A is persisted on the stack
-	EI						; and current A indicates the index of the interrupt
-	RETI.L
+_default_mi_handler_hook:
+	JP	_default_mi_handler
 
-	DB	0, 0, 0, 0
+	.assume	adl=1
 
-; EZ80_DELAY (RST %18)
-; Wait 5 to 6 us (approx) for the eZ80
-; independent of the clock speed
-;
-; Input
-;  None
-;
-; Output
-;  None
-;
-	PUBLIC	firmware_rst_18_hook
-firmware_rst_18_hook:
-	; //timer 0 has reload value that will equate to about 5-6us
-; 	; so set it off, and wait.
-
-	DI_AND_SAVE
-	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
-	OUT0	(TMR0_CTL), A
-
-wait:
-	IN0	A, (TMR0_DR_L)
-	JR	NZ, wait
-	RESTORE_EI
-	RET.L
+; ez80's alt version of BC, DE, HL contain the emulated z80's main registers
+; the ez80's alt registers are stored in reg_aXX below:
 
 
-_reserved:
-	DB	0, 0, 0, 0, 0, 0, 0, 0
-	DB	0, 0, 0, 0, 0, 0, 0, 0
+	global	_reg_ade
+	global	_reg_ahl
+	global	_reg_iy
+	global	_reg_spl
+	global	_z80_flags
+	global	z80_reg_aaf
+	global	z80_reg_abc
+	global	z80_reg_ade
+	global	z80_reg_ahl
+	global	z80_reg_ix
+	global	z80_reg_iy
+	global	z80_regs
+	global	z80_flags
 
+	DEFINE	INTERNAL_VARS_RAM, SPACE = RAM
+	; ORG=%02FFE0
+	SEGMENT	INTERNAL_VARS_RAM
+_INTERNAL_VARS_RAM	equ	%02FFE0
+; registers
+z80_regs:
+_reg_aaf:	ds	3
+z80_reg_aaf	equ	0
 
+_reg_abc:	ds	3
+z80_reg_abc	equ	3
+
+_reg_ade:	ds	3
+z80_reg_ade	equ	6
+
+_reg_ahl:	ds	3
+z80_reg_ahl	equ	9
+
+_reg_ix:	ds	3
+z80_reg_ix	equ	12
+
+_reg_iy:	ds	3
+z80_reg_iy	equ	15
+
+_reg_spl:	ds	3
+z80_reg_spl	equ	18
+
+_z80_flags:	db 	1		; bit 1 on -> DI, off -> EI, bit 0 on -> int-pending
+z80_flags	equ	21		; true if maskable ints enabled

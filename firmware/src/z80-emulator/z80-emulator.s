@@ -76,6 +76,7 @@
 z80_invoke:
 	ld	iy, 0
 	ld	ix, z80_regs
+	ld	(ix+z80_flags), %02		; DI and no ints pending
 
 	call	_calculate_io_clock_rate	; required timeout value for 28 (25Mhz) operation
 	OUT0	(TMR2_RR_L), A

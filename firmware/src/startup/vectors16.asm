@@ -196,4 +196,15 @@ __vector_table:
 	dw	_default_mi_2E_handler		; 5CH - Port D6
 	dw	_default_mi_2F_handler		; 5EH - Port D7
 
+	section	CODE
+
+; hook for default interrupt handler
+; original A is persisted on the stack
+; and current A indicates the index of the interrupt
+	global	_default_mi_handler
+_default_mi_handler:
+	POP	AF
+	EI
+	RETI.L
+
 	END
