@@ -104,5 +104,5 @@ uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_st
 }
 
 uint8_t calculate_emulated_io_clock_rate() {
-  return cpu_freq_calculated / 865000;
+  return cpu_freq_calculated / 750000;
 }
