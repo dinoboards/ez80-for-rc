@@ -1490,73 +1490,73 @@ z80_rst38:
 ; MISC ED Instructions
 	global	z80_instr_misc_table
 z80_instr_misc_table:
-	jp	z80_nop		; ED 00 in0 b,(n)
-	jp	z80_nop		; ED 01 out0 (n), b
-	jp	z80_nop		; ED 02 lea bc, ix+d
-	jp	z80_nop		; ED 03 lea bc, iy+d
-	jp	z80_nop		; ED 04 tst a, b
+	jp	z80_in0b_n_	; ED 00 in0 b,(n)
+	jp	z80_out0_n_b	; ED 01 out0 (n), b
+	jp	z80_leabcixd	; ED 02 lea bc, ix+d
+	jp	z80_leabciyd	; ED 03 lea bc, iy+d
+	jp	z80_tstab	; ED 04 tst a, b
 	jp	z80_nop		; ED 05
 	jp	z80_nop		; ED 06
-	jp	z80_nop		; ED 07 ld bc, (hl)
-	jp	z80_nop		; ED 08 in0 c, (n)
-	jp	z80_nop		; ED 09 out0 (n),c
+	jp	z80_ldbc_hl_	; ED 07 ld bc, (hl)
+	jp	z80_in0c_n_	; ED 08 in0 c, (n)
+	jp	z80_out0_n_c	; ED 09 out0 (n),c
 	jp	z80_nop		; ED 0A
 	jp	z80_nop		; ED 0B
-	jp	z80_nop		; ED 0C tst a, c
+	jp	z80_tstac	; ED 0C tst a, c
 	jp	z80_nop		; ED 0D
 	jp	z80_nop		; ED 0E
-	jp	z80_nop		; ED 0F ld (hl), bc
-	jp	z80_nop		; ED 10 in0 d, (n)
-	jp	z80_nop		; ED 11 out0 (n), d
-	jp	z80_nop		; ED 12 lea de, ix+d
-	jp	z80_nop		; ED 13 lea de, iy+d
-	jp	z80_nop		; ED 14 tst a, d
+	jp	z80_ld_hl_bc	; ED 0F ld (hl), bc
+	jp	z80_in0d_n_	; ED 10 in0 d, (n)
+	jp	z80_out0_n_d	; ED 11 out0 (n), d
+	jp	z80_leadeixd	; ED 12 lea de, ix+d
+	jp	z80_leadeiyd	; ED 13 lea de, iy+d
+	jp	z80_tstad	; ED 14 tst a, d
 	jp	z80_nop		; ED 15
 	jp	z80_nop		; ED 16
-	jp	z80_nop		; ED 17 ld de, (hl)
-	jp	z80_nop		; ED 18 in0 e, (n)
+	jp	z80_ldde_hl	; ED 17 ld de, (hl)
+	jp	z80_in0e_n_	; ED 18 in0 e, (n)
 	jp	z80_out0_n_e	; ED 19 out0 (n), e
 	jp	z80_nop		; ED 1A
 	jp	z80_nop		; ED 1B
-	jp	z80_nop		; ED 1C tst a, e
+	jp	z80_tstae	; ED 1C tst a, e
 	jp	z80_nop		; ED 1D
 	jp	z80_nop		; ED 1E
-	jp	z80_nop		; ED 1F ld (hl), de
-	jp	z80_nop		; ED 20 in0 h, (n)
-	jp	z80_nop		; ED 21 out0 (n), h
+	jp	z80_ld_hl_de	; ED 1F ld (hl), de
+	jp	z80_in0h_n_	; ED 20 in0 h, (n)
+	jp	z80_out0_n_h	; ED 21 out0 (n), h
 	jp	z80_leahlixd	; ED 22 lea hl, ix+d
-	jp	z80_nop		; ED 23 lea hl, iy+d
-	jp	z80_nop		; ED 24 tst a, h
+	jp	z80_leahliyd	; ED 23 lea hl, iy+d
+	jp	z80_tstah	; ED 24 tst a, h
 	jp	z80_nop		; ED 25
 	jp	z80_nop		; ED 26
-	jp	z80_nop		; ED 27 ld hl, (hl)
-	jp	z80_nop		; ED 28 in0 l, (n)
-	jp	z80_nop		; ED 29 out0 (n), l
+	jp	z80_ldhl_hl_	; ED 27 ld hl, (hl)
+	jp	z80_in0l_n_	; ED 28 in0 l, (n)
+	jp	z80_out0_n_l	; ED 29 out0 (n), l
 	jp	z80_nop		; ED 2A
 	jp	z80_nop		; ED 2B
-	jp	z80_nop		; ED 2C tst a, l
+	jp	z80_tstal	; ED 2C tst a, l
 	jp	z80_nop		; ED 2D
 	jp	z80_nop		; ED 2E
-	jp	z80_nop		; ED 2F ld (hl), hl
+	jp	z80_ld_hl_hl	; ED 2F ld (hl), hl
 	jp	z80_nop		; ED 30
-	jp	z80_nop		; ED 31 ld iy, (hl)
-	jp	z80_nop		; ED 32 lea ix, ix+d
-	jp	z80_nop		; ED 33 lea iy, iy+d
-	jp	z80_nop		; ED 34 tst a, (hl)
+	jp	z80_ldiy_hl_	; ED 31 ld iy, (hl)
+	jp	z80_leaixixd	; ED 32 lea ix, ix+d
+	jp	z80_leaiyiyd	; ED 33 lea iy, iy+d
+	jp	z80_tsta_hl_	; ED 34 tst a, (hl)
 	jp	z80_nop		; ED 35
 	jp	z80_nop		; ED 36
-	jp	z80_nop		; ED 37 ld ix, (hl)
+	jp	z80_ldix_hl_	; ED 37 ld ix, (hl)
 	jp	z80_in0a_n_	; ED 38 in0 a, (n)
 	jp	z80_out0_n_a	; ED 39 out0 (n), a
 	jp	z80_nop		; ED 3A
 	jp	z80_nop		; ED 3B
-	jp	z80_nop		; ED 3C tst a, a
+	jp	z80_tstaa	; ED 3C tst a, a
 	jp	z80_nop		; ED 3D
-	jp	z80_nop		; ED 3E ld (hl), iy
-	jp	z80_nop		; ED 3F ld (hl), ix
+	jp	z80_ld_hl_iy	; ED 3E ld (hl), iy
+	jp	z80_ld_hl_ix	; ED 3F ld (hl), ix
 	jp	z80_inb_c       ; ED 40 in b, (bc)
 	jp	z80_out_c_b     ; ED 41 out (bc), b
-	jp	z80_sbchlbc   ; ED 42 sbc hl, bc
+	jp	z80_sbchlbc	; ED 42 sbc hl, bc
 	jp	z80_ld_nn_bc    ; ED 43 ld (nn), bc
 	jp	z80_neg		; ED 44 neg
 	jp	z80_retn        ; ED 45 retn
@@ -1566,7 +1566,7 @@ z80_instr_misc_table:
 	jp	z80_out_c_c     ; ED 49 out (bc), c
 	jp	z80_adchlbc	; ED 4A adc hl, bc
 	jp	z80_ld_bc_nn    ; ED 4B ld bc, (nn)
-	jp	z80_nop		; ED 4C mlt bc
+	jp	z80_mltbc	; ED 4C mlt bc
 	jp	z80_reti	; ED 4D reti
 	jp	z80_nop		; ED 4E
 	jp	z80_ld_r_a      ; ED 4F ld r,a
@@ -1574,31 +1574,31 @@ z80_instr_misc_table:
 	jp	z80_out_c_d     ; ED 51 out (bc), d
 	jp	z80_sbchlde	; ED 52 sbc hl, de
 	jp	z80_ld_nn_de    ; ED 53 ld (nn), de
-	jp	z80_nop		; ED 54 lea ix, iy+d
-	jp	z80_nop	        ; ED 55 lea iy, ix+d
+	jp	z80_leaixiyd	; ED 54 lea ix, iy+d
+	jp	z80_leaiyixd	; ED 55 lea iy, ix+d
 	jp	z80_im1		; ED 56 im 1
 	jp	z80_ldai	; ED 57 ld a, i
 	jp	z80_in_e_c      ; ED 58 in e, (bc)
 	jp	z80_out_c_e     ; ED 59 out (bc), e
 	jp	z80_adchlde	; ED 5A adc hl, de
 	jp	z80_ld_de_nn    ; ED 5B ld de, (nn)
-	jp	z80_nop		; ED 5C mlt de
+	jp	z80_mltde	; ED 5C mlt de
 	jp	z80_nop		; ED 5D
 	jp	z80_im2		; ED 5E im 2
 	jp	z80_ld_a_r      ; ED 5F ld a, r
 	jp	z80_in_h_c      ; ED 60 in h, (bc)
 	jp	z80_out_c_h     ; ED 61 out (bc), h
 	jp	z80_sbchlhl	; ED 62 sbc hl, hl
-	jp	z80_nop		; ED 63 ld (nn), hl
-	jp	z80_nop		; ED 64 tst a, n
-	jp	z80_nop		; ED 65 pea ix+d
-	jp	z80_nop		; ED 66 pea iy+d
+	jp	z80_ld_nn_hl	; ED 63 ld (nn), hl
+	jp	z80_tstan	; ED 64 tst a, n
+	jp	z80_peaixd	; ED 65 pea ix+d
+	jp	z80_peaiyd	; ED 66 pea iy+d
 	jp	z80_rrd_hl_	; ED 67 rrd (hl)
 	jp	z80_in_l_c      ; ED 68 in l, (bc)
 	jp	z80_out_c_l     ; ED 69 out (bc), l
 	jp	z80_adchlhl	; ED 6A adc hl, hl
-	jp	z80_nop		; ED 6B ld hl, (nn)
-	jp	z80_nop		; ED 6C mlt hl
+	jp	z80_ldhl_nn_	; ED 6B ld hl, (nn)
+	jp	z80_mlthl	; ED 6C mlt hl
 	jp	z80_nop		; ED 6D ld mb, a
 	jp	z80_nop		; ED 6E ld a, mb
 	jp	z80_rld_hl_	; ED 6F rld (hl)
@@ -1606,47 +1606,47 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 71
 	jp	z80_sbchlsp	; ED 72 sbc hl, sp
 	jp	z80_ld_nn_sp    ; ED 73 ld (nn), sp
-	jp	z80_nop		; ED 74 tstio n
+	jp	z80_tstion	; ED 74 tstio n
 	jp	z80_nop		; ED 75
-	jp	z80_nop		; ED 76 slp
+	jp	z80_slp		; ED 76 slp
 	jp	z80_nop		; ED 77
 	jp	z80_in_a_c      ; ED 78 in a, (bc)
 	jp	z80_out_c_a     ; ED 79 out (bc), a
 	jp	z80_adchlsp	; ED 7A adc hl, sp
 	jp	z80_ldsp_nn_    ; ED 7B ld sp, (nn)
-	jp	z80_nop		; ED 7C mlt sp
+	jp	z80_mltsp	; ED 7C mlt sp
 	jp	z80_nop		; ED 7D stmix
 	jp	z80_nop		; ED 7E rsmix
 	jp	z80_nop		; ED 7F
 	jp	z80_nop		; ED 80
 	jp	z80_nop		; ED 81
-	jp	z80_nop		; ED 82 inim
-	jp	z80_nop		; ED 83 otim
-	jp	z80_nop		; ED 84 ini2
+	jp	z80_inim	; ED 82 inim
+	jp	z80_otim	; ED 83 otim
+	jp	z80_ini2	; ED 84 ini2
 	jp	z80_nop		; ED 85
 	jp	z80_nop		; ED 86
 	jp	z80_nop		; ED 87
 	jp	z80_nop		; ED 88
 	jp	z80_nop		; ED 89
-	jp	z80_nop		; ED 8A indm
-	jp	z80_nop		; ED 8B otdm
-	jp	z80_nop		; ED 8C ind2
+	jp	z80_indm	; ED 8A indm
+	jp	z80_otdm	; ED 8B otdm
+	jp	z80_ind2	; ED 8C ind2
 	jp	z80_nop		; ED 8D
 	jp	z80_nop		; ED 8E
 	jp	z80_nop		; ED 8F
 	jp	z80_nop		; ED 90
 	jp	z80_nop		; ED 91
-	jp	z80_nop		; ED 92 inimr
-	jp	z80_nop		; ED 93 otimr
-	jp	z80_nop		; ED 94 ini2r
+	jp	z80_inimr	; ED 92 inimr
+	jp	z80_otimr	; ED 93 otimr
+	jp	z80_ini2r	; ED 94 ini2r
 	jp	z80_nop		; ED 95
 	jp	z80_nop		; ED 96
 	jp	z80_nop		; ED 97
 	jp	z80_nop		; ED 98
 	jp	z80_nop		; ED 99
-	jp	z80_nop		; ED 9A indmr
-	jp	z80_nop		; ED 9B otdmr
-	jp	z80_nop		; ED 9C ind2r
+	jp	z80_indmr	; ED 9A indmr
+	jp	z80_ordmr	; ED 9B otdmr
+	jp	z80_ind2r	; ED 9C ind2r
 	jp	z80_nop		; ED 9D
 	jp	z80_nop		; ED 9E
 	jp	z80_nop		; ED 9F
@@ -1654,7 +1654,7 @@ z80_instr_misc_table:
 	jp	z80_cpi		; ED A1 cpi
 	jp	z80_ini		; ED A2 ini
 	jp	z80_outi        ; ED A3 outi
-	jp	z80_nop		; ED A4 outi2
+	jp	z80_outi2	; ED A4 outi2
 	jp	z80_nop		; ED A5
 	jp	z80_nop		; ED A6
 	jp	z80_nop		; ED A7
@@ -1662,7 +1662,7 @@ z80_instr_misc_table:
 	jp	z80_cpd		; ED A9 cpd
 	jp	z80_ind		; ED AA ind
 	jp	z80_outd        ; ED AB outd
-	jp	z80_nop		; ED AC outd2
+	jp	z80_outd2	; ED AC outd2
 	jp	z80_nop		; ED AD
 	jp	z80_nop		; ED AE
 	jp	z80_nop		; ED AF
@@ -1670,7 +1670,7 @@ z80_instr_misc_table:
 	jp	z80_cpir        ; ED B1 cpir
 	jp	z80_inir        ; ED B2 inir
 	jp	z80_otir        ; ED B3 otir
-	jp	z80_nop		; ED B4 oti2r
+	jp	z80_oti2r	; ED B4 oti2r
 	jp	z80_nop		; ED B5
 	jp	z80_nop		; ED B6
 	jp	z80_nop		; ED B7
@@ -1678,22 +1678,22 @@ z80_instr_misc_table:
 	jp	z80_cpdr        ; ED B9 cpdr
 	jp	z80_indr        ; ED BA indr
 	jp	z80_otdr        ; ED BB otdr
-	jp	z80_nop		; ED BC otd2r
+	jp	z80_otd2r	; ED BC otd2r
 	jp	z80_nop		; ED BD
 	jp	z80_nop		; ED BE
 	jp	z80_nop		; ED BF
 	jp	z80_nop		; ED C0
 	jp	z80_nop		; ED C1
-	jp	z80_nop		; ED C2 inirx
-	jp	z80_nop		; ED C3 otirx
+	jp	z80_inirx	; ED C2 inirx
+	jp	z80_otirx	; ED C3 otirx
 	jp	z80_nop		; ED C4
 	jp	z80_nop		; ED C5
 	jp	z80_nop		; ED C6
 	jp	z80_nop		; ED C7 ld i, hl
 	jp	z80_nop		; ED C8
 	jp	z80_nop		; ED C9
-	jp	z80_nop		; ED CA indrx
-	jp	z80_nop		; ED CB otdrx
+	jp	z80_indrx	; ED CA indrx
+	jp	z80_otdrx	; ED CB otdrx
 	jp	z80_nop		; ED CC
 	jp	z80_nop		; ED CD
 	jp	z80_nop		; ED CE
@@ -2136,6 +2136,275 @@ z80_indr:
 z80_otdr:
 	call	not_implemented
 	jp	z80_nop
+
+z80_inimr:
+	call	not_implemented
+	z80loop
+
+z80_inirx:
+	call	not_implemented
+	z80loop
+
+z80_otdrx:
+	call	not_implemented
+	z80loop
+
+z80_leabciyd:
+	call	not_implemented
+	z80loop
+
+z80_in0l_n_:
+	call	not_implemented
+	z80loop
+
+z80_in0h_n_:
+	call	not_implemented
+	z80loop
+
+z80_in0c_n_:
+	call	not_implemented
+	z80loop
+
+z80_in0b_n_:
+	call	not_implemented
+	z80loop
+
+z80_ldix_hl_:
+	call	not_implemented
+	z80loop
+
+z80_tstaa:
+	call	not_implemented
+	z80loop
+
+z80_indmr:
+	call	not_implemented
+	z80loop
+
+z80_tstab:
+	call	not_implemented
+	z80loop
+
+z80_otirx:
+	call	not_implemented
+	z80loop
+
+z80_tstac:
+	call	not_implemented
+	z80loop
+
+z80_slp:
+	call	not_implemented
+	z80loop
+
+z80_tstad:
+	call	not_implemented
+	z80loop
+
+z80_indrx:
+	call	not_implemented
+	z80loop
+
+z80_tstae:
+	call	not_implemented
+	z80loop
+
+z80_leahliyd:
+	call	not_implemented
+	z80loop
+
+z80_tstion:
+	call	not_implemented
+	z80loop
+
+z80_leaiyiyd:
+	call	not_implemented
+	z80loop
+
+z80_tstah:
+	call	not_implemented
+	z80loop
+
+z80_peaiyd:
+	call	not_implemented
+	z80loop
+
+z80_otim:
+	call	not_implemented
+	z80loop
+
+z80_ldiy_hl_:
+	call	not_implemented
+	z80loop
+
+z80_mltde:
+	call	not_implemented
+	z80loop
+
+z80_tstal:
+	call	not_implemented
+	z80loop
+
+z80_ordmr:
+	call	not_implemented
+	z80loop
+
+z80_ind2r:
+	call	not_implemented
+	z80loop
+
+z80_tstan:
+	call	not_implemented
+	z80loop
+
+z80_ld_hl_de:
+	call	not_implemented
+	z80loop
+
+z80_ldbc_hl_:
+	call	not_implemented
+	z80loop
+
+z80_ld_hl_ix:
+	call	not_implemented
+	z80loop
+
+z80_ld_hl_iy:
+	call	not_implemented
+	z80loop
+
+z80_indm:
+	call	not_implemented
+	z80loop
+
+z80_outi2:
+	call	not_implemented
+	z80loop
+
+z80_in0e_n_:
+	call	not_implemented
+	z80loop
+
+z80_out0_n_b:
+	call	not_implemented
+	z80loop
+
+z80_out0_n_c:
+	call	not_implemented
+	z80loop
+
+z80_tsta_hl_:
+	call	not_implemented
+	z80loop
+
+z80_out0_n_d:
+	call	not_implemented
+	z80loop
+
+z80_outd2:
+	call	not_implemented
+	z80loop
+
+z80_leadeixd:
+	call	not_implemented
+	z80loop
+
+z80_leaiyixd:
+	call	not_implemented
+	z80loop
+
+z80_ini2:
+	call	not_implemented
+	z80loop
+
+z80_out0_n_h:
+	call	not_implemented
+	z80loop
+
+z80_leaixixd:
+	call	not_implemented
+	z80loop
+
+z80_otimr:
+	call	not_implemented
+	z80loop
+
+z80_peaixd:
+	call	not_implemented
+	z80loop
+
+z80_mltbc:
+	call	not_implemented
+	z80loop
+
+z80_out0_n_l:
+	call	not_implemented
+	z80loop
+
+z80_oti2r:
+	call	not_implemented
+	z80loop
+
+z80_ld_hl_bc:
+	call	not_implemented
+	z80loop
+
+z80_leabcixd:
+	call	not_implemented
+	z80loop
+
+z80_mlthl:
+	call	not_implemented
+	z80loop
+
+z80_in0d_n_:
+	call	not_implemented
+	z80loop
+
+z80_otd2r:
+	call	not_implemented
+	z80loop
+
+z80_ldde_hl:
+	call	not_implemented
+	z80loop
+
+z80_inim:
+	call	not_implemented
+	z80loop
+
+z80_ini2r:
+	call	not_implemented
+	z80loop
+
+z80_ld_hl_hl:
+	call	not_implemented
+	z80loop
+
+z80_leadeiyd:
+	call	not_implemented
+	z80loop
+
+z80_ldhl_hl_:
+	call	not_implemented
+	z80loop
+
+z80_leaixiyd:
+	call	not_implemented
+	z80loop
+
+z80_otdm:
+	call	not_implemented
+	z80loop
+
+z80_ind2:
+	call	not_implemented
+	z80loop
+
+z80_mltsp:
+	call	not_implemented
+	z80loop
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
