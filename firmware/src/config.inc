@@ -66,7 +66,9 @@ KBD_STAT:       equ     %FFA9             ; keyboard status
 GIO_REGS:       equ     %FFAA             ; General IO Register
 PPI_REGS:       equ     %FFAB             ; PPI register
 
-ROM_BASE	.EQU	%000000
+ROM_BASE	equ	%000000
+
+IO_SEGMENT	equ	%FF
 
 	; aka INTERNAL_RAM_RAM
         DEFINE	INTERNAL_RAM_RAM, SPACE = RAM

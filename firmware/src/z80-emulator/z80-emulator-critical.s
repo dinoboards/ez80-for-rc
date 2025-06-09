@@ -46,8 +46,20 @@ cb_bit_instr:
 
 
 	; $CB 31 switch to native
+	global	z80_switch_to_native2
 	global	switch_addr
-switch_addr:
+	global  original_isr_hook
+	xref	_marshall_isr_hook
+z80_switch_to_native2:
+
+	; restore int handler for native marshalling
+original_isr_hook	equ	$+1
+	ld	hl, 0
+	ld	(_marshall_isr_hook+1), hl
+	pop	hl
+	RESTORE_EI
+
+switch_addr	equ	$+2
 	jp.s	%0000
 
 

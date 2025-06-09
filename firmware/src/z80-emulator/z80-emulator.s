@@ -17,11 +17,13 @@
 	xref	cb_bit_instr
 	xref	z80_bit2
 	xref	switch_addr
+	xref	z80_switch_to_native2
 	xref	z80_loop2
-	xref	_calculate_io_clock_rate
+	xref	_calculate_emulated_io_clock_rate
 
 	xref	_marshall_isr_hook
 	xref	z80_marshall_isr
+	xref	original_isr_hook
 
 	global	z80_ldbb
 	global	z80_ldbc
@@ -71,6 +73,7 @@
 
 	section	CODE
 	global	z80_invoke
+	global	z80_invoke_iy
 
 ; start executing z80 code at MBASE:0000
 z80_invoke:
@@ -78,50 +81,15 @@ z80_invoke:
 	ld	ix, z80_regs
 	ld	(ix+z80_flags), %02		; DI and no ints pending
 
-	call	_calculate_io_clock_rate	; required timeout value for 28 (25Mhz) operation
-	OUT0	(TMR2_RR_L), A
-	XOR	A
-	OUT0	(TMR2_RR_H), A
-	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
-	OUT0	(TMR2_CTL), A
+	ld	iy, 0
 
-	; hard coded reset of MSX memory system
-	; only required when using the debugger to force memory back to known power-on state
-
-	; set main mem to 2bc (for 32mhz)
-	xor	a
-	ld	b, 12		; SYSUTL_MEMTMFQ_SET
-	ld	hl, 180		; 180ns
-	ld	e, %80		; must be B/C
-	RST.L	%10		; but can be 1 (25mhz) for msx-dos
-
-	; set io to 5bc (for 32mhz)
-	xor	a
-	ld	b, 13		; SYSUTL_IOTMFQ_SET
-	ld	hl, 320		;
-	ld	e, %80		; must be B/C
-	RST.L	%10		; but can be 4 (25mhz) for msx-dos
-
-	; set flash to 1ws (for 32mhz)
-	xor	a
-	ld	b, 16		; SYSUTL_FLSHFQ_SET
-	ld	hl, 60
-	RST.L	%10
-
-	; set sub slot to 3-0
-	ld	hl, %FFFF
-	ld.s	(hl), %00	; 00 00 00 00
-
-	; set page 3 to slot 0
-	ld	bc, PSL_STAT
-	ld	a, %00		; 00 00 00 00
-	out	(bc), a
-
+z80_invoke_iy:
 	ld	hl, _marshall_isr_hook+1
+	ld	de, (hl)
+	ld	(original_isr_hook), de
 	ld	de, z80_marshall_isr
 	ld	(hl), de
 
-	ld	iy, 0
 	; fall through to z80_nop
 
 	global	z80_instr_table
@@ -743,14 +711,25 @@ z80_ldcc:
 	jr	z, rst_l10
 	cp	%C9		; RET.L
 	jr	z, ret_l
+	cp	%CF		; RST.L %08
+	jp	z, rst_l08
+	call	not_implemented
 	z80loop
 
 ret_l:
+	call	not_implemented
+ret_l_wait:
+	nop
+	nop
+	jr	ret_l_wait
+
+rst_l08:
+	inc	iy
+	z80loop
+
 rst_l10:
-	nop	; RST.L %10
-	nop
-	nop
-	jr	rst_l10
+	dec	iy
+	jp	z80_switch_to_native
 
 	; $4A ld c, d
 	z80_exmain2     ldcd, {ld c, d}
@@ -1200,11 +1179,12 @@ z80_bit:
 z80_switch_to_native:
 	; need to load all registers correctly
 	; then jump.s to original value of iy
+	DI_AND_SAVE
 
 	ld	a, iyl
-	ld	(switch_addr+2), a
+	ld	(switch_addr+0), a
 	ld	a, iyh
-	ld	(switch_addr+3), a
+	ld	(switch_addr+1), a
 
 	ld	bc, (ix+z80_reg_aaf)
 	push	bc
@@ -1219,7 +1199,8 @@ z80_switch_to_native:
 	ld	iy, (ix+z80_reg_iy)
 	ld	ix, (ix+z80_reg_ix)
 
-	jp	switch_addr
+	push	hl
+	jp	z80_switch_to_native2
 
 
 	; $CC call z, nn
@@ -1236,7 +1217,8 @@ z80_callnn:
 
 
 z80_rst08:
-	call	not_implemented
+	push.s	iy
+	ld	iy, %08
 	z80loop
 
 	; $D0 ret nc
@@ -1313,7 +1295,8 @@ z80_ina_n_:
 	ld	b, IO_SEGMENT
 	io_rate_start
 	ex	af, af'
-	align	2
+	jr	unknown_issue1
+	align	2		; this does not fill with zeros - but %FF
 	global	unknown_issue1	; this address must *not* align with address ...XXXXXX01
 unknown_issue1:			; Unknown glitch 1 - see notes
 	in	a, (bc)
@@ -1330,7 +1313,7 @@ unknown_issue1:			; Unknown glitch 1 - see notes
 	; $DE sbc a, n
 	z80_exaf2	sbcan, {sbc.s a, (iy)}, {inc iy}
 
-
+	; $DF rst $18
 z80_rst18:
 	push.s	iy
 	ld	iy, %18

@@ -39,7 +39,7 @@
 
 	xref	_reg_spl
 	xref	_reg_iy
-	xref	z80_invoke
+	xref	z80_invoke_iy
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Minimum default initialization
@@ -98,7 +98,7 @@ illegal_instruction:
 	; we want iy to equal ix+1
 
 	lea	iy, ix+1
-	jp	z80_invoke
+	jp	z80_invoke_iy
 
 
 power_on_reset:
@@ -106,7 +106,7 @@ power_on_reset:
 	LD	A, __vector_table >> 8 & 0ffh
 	LD	I, A				; Load interrupt vector base
 
-	LD	A, %FF
+	LD	A, IO_SEGMENT
 	OUT0	(PB_DDR), A			; GPIO
 	OUT0	(PC_DDR), A			;
 	OUT0	(PD_DDR), A			;
@@ -164,10 +164,9 @@ power_on_reset:
 	OUT0	(CS1_CTL), A
 
 	; CS2 is enabled for I/O @ $FFxx
-	LD	A, %FF
+	LD	A, IO_SEGMENT
 	OUT0	(CS2_LBR), A
 	OUT0	(CS2_UBR), A
-
 	LD	A, IO_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPARATE
 	OUT0	(CS2_BMC), A
 	LD	A, CSX_TYPE_IO | CSX_ENABLED
@@ -175,6 +174,7 @@ power_on_reset:
 
 	; CS3 is enabled for memory @ $03xxxx
 	LD	A, Z80_ADDR_MBASE
+	ld	mb, a
 	OUT0	(CS3_LBR), A
 	OUT0	(CS3_UBR), A
 	LD	A, MEM_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPARATE

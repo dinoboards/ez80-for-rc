@@ -25,6 +25,7 @@
 	XREF	_assign_cpu_frequency
 	XREF	_rtc_enabled
 	XREF	_calculate_tmr0_rr
+	XREF	_calculate_emulated_io_clock_rate
 
 	XREF	__lshru
 	XREF	__idivu
@@ -34,6 +35,7 @@ RTC_CLOCK_RATE EQU 32768
 COUNT_FOR_60HZ_RTC EQU RTC_CLOCK_RATE / 60
 
 _init_clocks:
+	call	configure_tmr2
 	CALL	configure_tmr4
 	CALL	configure_tmr5
 
@@ -160,6 +162,15 @@ configure_tmr0:
 	OUT0	(TMR0_RR_H), A
 	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
 	OUT0	(TMR0_CTL), A
+	RET
+
+configure_tmr2:
+	CALL	_calculate_emulated_io_clock_rate		; required timeout value for 28 (25Mhz) operation
+	OUT0	(TMR2_RR_L), A
+	XOR	A
+	OUT0	(TMR2_RR_H), A
+	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
+	OUT0	(TMR2_CTL), A
 	RET
 ;
 ; Configure TMR4 as a continuous timer based on CPU clock /16

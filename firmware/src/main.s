@@ -15,7 +15,6 @@
 	xref	_mem0_bus_mode_and_timing
 	xref	_mem1_bus_mode_and_timing
 
-	xref	probe_for_msx_system
 	xref	z80_invoke
 
 _main:
@@ -24,33 +23,7 @@ _main:
 	call	_init_clocks
 	call	_rx_buffer_init
 	call	_uart0_init
-
-	; Align stored timings to actual configured startup timings.
-	ld	a, IO_BUS_CYCLES|%80
-	ld	(_io_bus_mode_and_timing), a
-
-	ld	a, MEM_BUS_CYCLES|%80
-	ld	(_mem_bus_mode_and_timing), a
-
-	ld	a, MEM_BUS_CYCLES|%80
-	ld	(_mem0_bus_mode_and_timing), a
-
-	ld	a, MEM_BUS_CYCLES|%80
-	ld	(_mem1_bus_mode_and_timing), a
-
-	; Auto configure CS0's timing
-	ld	a, 0
-	ld	b, 17
-	ld	hl, 70 ; 80ns
-	ld	e, 1
-	RST.L	%10
-
-	; Auto configure CS1's timing
-	ld	a, 0
-	ld	b, 18
-	ld	hl, 30 ; 80ns
-	ld	e, 1
-	RST.L	%10
+	call	_init_memory_timings
 
 IFDEF	ZEXALL
 	xref	Z80test
@@ -59,12 +32,6 @@ ENDIF
 
 	;xref	_spike
 	;call	_spike
-
-	ld	a, Z80_ADDR_MBASE		; set MBASE to $03
-	ld	MB, a
-
-	call	probe_for_msx_system
-	jp.sis	nz, 0
 
 	jp	z80_invoke
 
@@ -82,4 +49,41 @@ remove_usb_tick_hook:
 	inc	hl
 	ld	(HL), a
 	inc	hl
+	ret
+
+_init_memory_timings:
+	; Auto configure CS0's timing
+	ld	a, 0
+	ld	b, 17
+	ld	hl, 70			; 70ns
+	ld	e, 1
+	rst.l	%10
+
+	; Auto configure CS1's timing
+	ld	a, 0
+	ld	b, 18
+	ld	hl, 30			; 30ns
+	ld	e, 1
+	rst.l	%10
+
+	; set main mem to 2bc (for 32mhz)
+	xor	a
+	ld	b, 12			; SYSUTL_MEMTMFQ_SET
+	ld	hl, 180			; 180ns
+	ld	e, %80			; must be B/C
+	rst.l	%10			; but can be 1 (25mhz) for msx-dos
+
+       ; set io to 5bc (for 32mhz)
+	xor	a
+	ld	b, 13			; SYSUTL_IOTMFQ_SET
+	ld	hl, 320			;
+	ld	e, %80			; must be B/C
+	rst.l	%10			; but can be 4 (25mhz) for msx-dos
+
+	; set flash to 1ws (for 32mhz)
+	xor	a
+	ld	b, 16			; SYSUTL_FLSHFQ_SET
+	ld	hl, 60
+	rst.l	%10
+
 	ret

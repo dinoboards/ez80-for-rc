@@ -2,8 +2,6 @@
  	xref	z80_loop
 	xref	test_poi
 
-IO_SEGMENT	equ	%FF
-
 ; z80loop	macro
 ; 	call	test_poi
 ; 	jp	z80_loop
