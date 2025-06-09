@@ -54,6 +54,7 @@ _default_mi_handler_hook:
 
 	global	_reg_ade
 	global	_reg_ahl
+	global	_reg_ix
 	global	_reg_iy
 	global	_reg_spl
 	global	_z80_flags

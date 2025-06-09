@@ -78,12 +78,11 @@
 ; start executing z80 code at MBASE:0000
 z80_invoke:
 	ld	iy, 0
+
+z80_invoke_iy:
 	ld	ix, z80_regs
 	ld	(ix+z80_flags), %02		; DI and no ints pending
 
-	ld	iy, 0
-
-z80_invoke_iy:
 	ld	hl, _marshall_isr_hook+1
 	ld	de, (hl)
 	ld	(original_isr_hook), de
@@ -709,10 +708,10 @@ z80_ldcc:
 	ld.s	a, (iy)
 	cp	%D7		; RST.L %10
 	jr	z, rst_l10
-	cp	%C9		; RET.L
-	jr	z, ret_l
 	cp	%CF		; RST.L %08
 	jp	z, rst_l08
+	cp	%C9		; RET.L
+	jr	z, ret_l
 	call	not_implemented
 	z80loop
 
@@ -727,7 +726,31 @@ rst_l08:
 	inc	iy
 	z80loop
 
+	xref	_reg_ix
+
 rst_l10:
+	ex	af, af'
+	exx
+	cp	b
+	jr	z, rst_l10_exch_ver
+	ex	af, af'
+	exx
+
+	inc	iy
+
+	call	z80_restore_all_registers
+
+	rst.l	%10
+
+	call	z80_save_all_registers
+
+	z80loop
+
+	; SYSUTL_VER_EXCHANGE also enables
+	; switch to native execution
+rst_l10_exch_ver:
+	ex	af, af'
+	exx
 	dec	iy
 	jp	z80_switch_to_native
 
@@ -1181,23 +1204,7 @@ z80_switch_to_native:
 	; then jump.s to original value of iy
 	DI_AND_SAVE
 
-	ld	a, iyl
-	ld	(switch_addr+0), a
-	ld	a, iyh
-	ld	(switch_addr+1), a
-
-	ld	bc, (ix+z80_reg_aaf)
-	push	bc
-	pop	af
-	ex	af, af'
-
-	ld	bc, (ix+z80_reg_abc)
-	ld	de, (ix+z80_reg_ade)
-	ld	hl, (ix+z80_reg_ahl)
-	exx
-
-	ld	iy, (ix+z80_reg_iy)
-	ld	ix, (ix+z80_reg_ix)
+	call	z80_restore_all_registers
 
 	push	hl
 	jp	z80_switch_to_native2
@@ -1517,7 +1524,7 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 1F ld (hl), de
 	jp	z80_nop		; ED 20 in0 h, (n)
 	jp	z80_nop		; ED 21 out0 (n), h
-	jp	z80_nop		; ED 22 lea hl, ix+d
+	jp	z80_leahlixd	; ED 22 lea hl, ix+d
 	jp	z80_nop		; ED 23 lea hl, iy+d
 	jp	z80_nop		; ED 24 tst a, h
 	jp	z80_nop		; ED 25
@@ -1750,6 +1757,9 @@ z80_out0_n_e:
 	exx
 	out	(bc), a
 	z80loop
+
+	; ED 22 lea hl, ix+d
+	z80_irtoix	leahlixd, ix, {lea hl, ix+0}
 
 	; $ED $38 in0 a, (n)
 z80_in0a_n_:
@@ -2126,3 +2136,49 @@ z80_indr:
 z80_otdr:
 	call	not_implemented
 	jp	z80_nop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+z80_restore_all_registers:
+	ld	a, iyl
+	ld	(switch_addr+0), a
+	ld	a, iyh
+	ld	(switch_addr+1), a
+
+	ld	bc, (ix+z80_reg_aaf)
+	push	bc
+	pop	af
+	ex	af, af'
+
+	ld	bc, (ix+z80_reg_abc)
+	ld	de, (ix+z80_reg_ade)
+	ld	hl, (ix+z80_reg_ahl)
+	exx
+
+	ld	iy, (ix+z80_reg_iy)
+	ld	ix, (ix+z80_reg_ix)
+	ret
+
+z80_save_all_registers:
+	ld	(_reg_ix), ix
+	ld	ix, z80_regs
+	ld	(ix+z80_reg_iy), iy
+
+	exx
+	ld	(ix+z80_reg_abc), bc
+	ld	(ix+z80_reg_ade), de
+	ld	(ix+z80_reg_ahl), hl
+	ex	af, af'
+	push	af
+	pop	bc
+	ld	(ix+z80_reg_aaf), bc
+
+	ld	iy, (switch_addr)
+
+	LD	A, I
+	JP	PO, z80_set_di
+	res	1, (ix+z80_flags)
+	ret
+z80_set_di:
+	set	1, (ix+z80_flags)
+	ret

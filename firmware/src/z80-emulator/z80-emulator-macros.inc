@@ -271,3 +271,4 @@ io_rate_end	macro
 	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
 	OUT0	(TMR2_CTL), A
 	endmacro
+
