@@ -4,8 +4,12 @@ extern uint32_t cpu_freq_calculated;
 extern uint8_t  ticks_per_10_us;
 
 // Factor for evaluation loop, where on-chip rom has 4 wait states
-#define TIMER_FACTOR (270)
+#define TIMER_FACTOR (370)
 
+#define UPPER_FOR_40MHZ ((40000000 / TIMER_FACTOR) + 64)
+#define LOWER_FOR_40MHZ (UPPER_FOR_40MHZ - 1024)
+#define UPPER_FOR_35MHZ ((35000000 / TIMER_FACTOR) + 64)
+#define LOWER_FOR_35MHZ (UPPER_FOR_35MHZ - 1024)
 #define UPPER_FOR_32MHZ ((32000000 / TIMER_FACTOR) + 64)
 #define LOWER_FOR_32MHZ (UPPER_FOR_32MHZ - 1024)
 #define UPPER_FOR_25MHZ ((25000000 / TIMER_FACTOR) + 64)
@@ -49,6 +53,12 @@ void assign_cpu_frequency(const unsigned de) {
 
   else if (de >= LOWER_FOR_32MHZ && de <= UPPER_FOR_32MHZ)
     cpu_freq_calculated = 32000000;
+
+  else if (de >= LOWER_FOR_35MHZ && de <= UPPER_FOR_35MHZ)
+    cpu_freq_calculated = 35000000;
+
+  else if (de >= LOWER_FOR_40MHZ && de <= UPPER_FOR_40MHZ)
+    cpu_freq_calculated = 40000000;
 
   ticks_per_10_us = cpu_freq_calculated / 1600000;
 }

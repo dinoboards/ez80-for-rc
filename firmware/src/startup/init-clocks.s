@@ -30,15 +30,23 @@
 	XREF	__lshru
 	XREF	__idivu
 
+tmr_oneshort	macro	val
+	LD	A, TMR0_IN_SYSCLK | TMR1_IN_RTC | TMR2_IN_SYSCLK | TMR3_IN_SYSCLK
+	OUT0	(TMR_ISS), A
+	LD	A, val & 255
+	OUT0	(TMR1_RR_L), A
+	LD	A, val >> 8
+	OUT0	(TMR1_RR_H), A
+	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_16  ; CLK DIV NOT APPLIED IF BASED ON RTC CLOCK SOURCE
+	OUT0	(TMR1_CTL), A
+	endmacro
+
+
 RTC_CLOCK_RATE EQU 32768
 
 COUNT_FOR_60HZ_RTC EQU RTC_CLOCK_RATE / 60
 
 _init_clocks:
-	call	configure_tmr2
-	CALL	configure_tmr4
-	CALL	configure_tmr5
-
 	IN0	A, (RTC_CTRL)
 	AND	%70 ; 01110000
 	CP	RTC_INT_DISABLE | RTC_BCD_ENABLE | RTC_CLK_32KHZ
@@ -61,12 +69,7 @@ _init_clocks:
 	OUT0	(RTC_CTRL), A
 
 rtc_already_enabled:
-	LD	HL, 1
-	CALL	_configure_tmr1_to_rtc			; CONFIGURE TM1 FOR RTC CLOCK AS FULL SPEED
-
-	EI						; SEE IF THE TIMER ISR IS TRIGGERED
-	LD	HL, _system_ticks			; BY NOTING IF _system_ticks CHANGES
-	LD	A, (HL)
+	tmr_oneshort	1
 	LD	B, 0
 wait:
 	PUSH	AF
@@ -74,13 +77,10 @@ wait:
 	POP	BC
 	POP	AF
 	DJNZ	wait
-	DI
 
-	CP	(HL)
-	JR	Z, no_rtc
-
-	LD	HL, COUNT_FOR_60HZ_RTC
-	CALL	_configure_tmr1_to_rtc
+	IN0	A, (TMR1_DR_L)
+	or	a
+	JR	nz, no_rtc
 
 	CALL	measure_cpu_freq			; MEASURE CPU FREQUENCY WITH A 60HZ CLOCK
 
@@ -90,17 +90,23 @@ wait:
 	LD	HL, 0
 	LD	(_system_ticks), HL
 
-	CPL						; RETURN NZ FOR RTC PRESENT
+	ld	a, 1
 	LD	(_rtc_enabled), A
+
+config_all_tmrs:
+	CALL	configure_tmr0
+	call	configure_tmr2
+	CALL	configure_tmr4
+	CALL	configure_tmr5
 	RET
 
 no_rtc:
 	CALL	_get_ticks_for_sysclk
 	CALL	_configure_tmr1_to_sysclk
 
-	XOR	A					; RETURN 0 FOR NO RTC
+	XOR	A
 	LD	(_rtc_enabled), A
-	RET
+	jr	config_all_tmrs
 
 _configure_tmr1_to_rtc:
 	LD	A, TMR0_IN_SYSCLK | TMR1_IN_RTC | TMR2_IN_SYSCLK | TMR3_IN_SYSCLK
@@ -123,34 +129,20 @@ _configure_tmr1_to_sysclk:
 
 
 measure_cpu_freq:
-	EI
-	; // use timer ticks (60Hz) to evaluate the current CPU frequency
-repeat:
-	LD	HL, _system_ticks
-
-	LD	DE, 0
-	LD	C, 7
-
-	LD	A, (HL)
-sync_tick:
-	CP	(HL)					; SYNC TO NEXT TICK EDGE
-	JR	Z, sync_tick
-
-	ADD	C
+	ld	de, 0
+	tmr_oneshort	+((32767/10))		; 1/6th of a second?
 
 cycle_counter:
 	INC	DE
-	CP	(HL)					; COUNT FOR 6 TICKS
+	IN0	A, (TMR1_DR_L)
+	JR	NZ, cycle_counter
+	IN0	A, (TMR1_DR_H)
 	JR	NZ, cycle_counter
 
-skip:
 	PUSH	DE
 	CALL	_assign_cpu_frequency
 	POP	DE
 
-	CALL	configure_tmr0
-
-	DI
 	RET
 ;
 ; Configure TMR0 for as a single shot timer for a duration of 5us
