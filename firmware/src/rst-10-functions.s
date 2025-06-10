@@ -6,6 +6,7 @@
 	XREF	_uart_dispatch
 	XREF	_i2c_dispatch
 	XREF	_usb_dispatch
+	xref	_emulator_invoke
 
 	SECTION INTERNAL_RAM_ROM
 
@@ -20,8 +21,8 @@ HOOK_CNT	EQU	4
 ; A = 3 -> UART-FUNC, B-> SUB-FUNCTION
 ; A = 4 -> I2C-FUNC, B-> SUB-FUNCTION
 ; A = 5 -> SPI-FUNC, B-> SUB-FUNCTION
-; A = 6 -> RESERVED, B-> SUB-FUNCTION
-; A = 7 -> ROM-FLASHING, B-> SUB-FUNCTION
+; A = 6 -> USB, B-> SUB-FUNCTION
+; A = 7 -> EMULATOR_INVOKE, {MBASE}:BC
 
 	PUBLIC	_rst_10_functions
 _rst_10_functions:
@@ -38,9 +39,9 @@ _rst_10_functions:
 	DEC	A
 	JR	Z, _spi_dispatch			; A = 5, SPI_xxx functions
 	DEC	A
-	JR	Z, _usb_dispatch			; A = 6, RESERVED functions
+	JR	Z, _usb_dispatch			; A = 6, USB_xxx functions
 	DEC	A
-	JR	Z, _reserved_dispatch			; A = 7, RESERVED functions
+	JR	Z, _emulator_invoke			; A = 7, emulator invoke function
 
 _spi_dispatch:
 _reserved_dispatch:

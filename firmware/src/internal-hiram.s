@@ -31,10 +31,10 @@ firmware_rst_10_hook:
 _system_timer_isr_hook:
 	JP	_system_timer_isr
 
-	XREF	_marshall_isr
+	XREF	z80_emulator_isr
 	PUBLIC	_marshall_isr_hook
 _marshall_isr_hook:
-	JP	_marshall_isr
+	JP	z80_emulator_isr	; changes to _marshall_isr if version exchanged is invoked
 
 	XREF	_uart0_receive_isr
 	PUBLIC	_uart0_receive_isr_hook

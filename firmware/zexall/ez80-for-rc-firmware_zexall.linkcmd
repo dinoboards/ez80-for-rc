@@ -136,7 +136,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-03-uart-functions.obj", \
  ".\rst-10-04-i2c-functions.obj", \
  ".\rst-10-06-usb-functions.obj", \
+ ".\rst-10-07-emulator-function.obj", \
  ".\rst-10-functions.obj", \
+ ".\rst-18-function.obj", \
  ".\scsi_driver.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
@@ -159,11 +161,11 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator-critical.obj", \
  ".\z80-emulator-ix.obj", \
  ".\z80-emulator-iy.obj", \
+ ".\z80-emulator-lil.obj", \
  ".\z80-emulator-logging.obj", \
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
- ".\rst-18-function.obj", \
  "Z:\ZDS\lib\std\chelpD.lib", \
  "Z:\ZDS\lib\std\crtD.lib", \
  "Z:\ZDS\lib\std\crtSD.lib", \

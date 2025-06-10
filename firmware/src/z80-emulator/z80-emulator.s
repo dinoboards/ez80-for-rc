@@ -2,10 +2,11 @@
 	include	"z80-emulator-macros.inc"
 
 	.assume	adl=1
+	section	CODE
 
+	xref	_reg_ix
 	xref	_z80_flags
 	xref	z80_flags
-	xref	z80_misc
 	xref	z80_reg_aaf
 	xref	z80_reg_abc
 	xref	z80_reg_ade
@@ -14,16 +15,16 @@
 	xref	z80_reg_iy
 	xref	z80_regs
 
-	xref	cb_bit_instr
-	xref	z80_bit2
-	xref	switch_addr
-	xref	z80_switch_to_native2
-	xref	z80_loop2
 	xref	_calculate_emulated_io_clock_rate
-
 	xref	_marshall_isr_hook
-	xref	z80_marshall_isr
-	xref	original_isr_hook
+	xref	cb_bit_instr
+	xref	switch_addr
+	xref	z80_bit2
+	xref	z80_ldcc
+	xref	z80_loop2
+	xref	z80_emulator_isr
+	xref	z80_misc
+	xref	z80_switch_to_native2
 
 	global	z80_ldbb
 	global	z80_ldbc
@@ -31,7 +32,6 @@
 	global	z80_ldbe
 	global	z80_ldba
 	global	z80_ldcb
-	global	z80_ldcc
 	global	z80_ldcd
 	global	z80_ldce
 	global	z80_ldca
@@ -71,24 +71,20 @@
 	global	z80_andad
 	global	z80_andae
 
-	section	CODE
 	global	z80_invoke
 	global	z80_invoke_iy
+	global	z80_restore_all_registers
+	global	z80_save_all_registers
+	global	z80_set_int_state
+	global	z80_switch_to_native
 
 ; start executing z80 code at MBASE:0000
 z80_invoke:
+	ld	ix, z80_regs
+	ld	(ix+z80_flags), 0
 	ld	iy, 0
 
 z80_invoke_iy:
-	ld	ix, z80_regs
-	ld	(ix+z80_flags), %02		; DI and no ints pending
-
-	ld	hl, _marshall_isr_hook+1
-	ld	de, (hl)
-	ld	(original_isr_hook), de
-	ld	de, z80_marshall_isr
-	ld	(hl), de
-
 	; fall through to z80_nop
 
 	global	z80_instr_table
@@ -703,56 +699,8 @@ z80_ldcb:
 	exx
 	z80loop
 
-	; 49 ld c, c
-z80_ldcc:
-	ld.s	a, (iy)
-	cp	%D7		; RST.L %10
-	jr	z, rst_l10
-	cp	%CF		; RST.L %08
-	jp	z, rst_l08
-	cp	%C9		; RET.L
-	jr	z, ret_l
-	call	not_implemented
-	z80loop
-
-ret_l:
-	call	not_implemented
-ret_l_wait:
-	nop
-	nop
-	jr	ret_l_wait
-
-rst_l08:
-	inc	iy
-	z80loop
-
-	xref	_reg_ix
-
-rst_l10:
-	ex	af, af'
-	exx
-	cp	b
-	jr	z, rst_l10_exch_ver
-	ex	af, af'
-	exx
-
-	inc	iy
-
-	call	z80_restore_all_registers
-
-	rst.l	%10
-
-	call	z80_save_all_registers
-
-	z80loop
-
-	; SYSUTL_VER_EXCHANGE also enables
-	; switch to native execution
-rst_l10_exch_ver:
-	ex	af, af'
-	exx
-	dec	iy
-	jp	z80_switch_to_native
+	; 49 ld c, c aka lil suffix
+	; implemented i z80-emulator-lil.s
 
 	; $4A ld c, d
 	z80_exmain2     ldcd, {ld c, d}
@@ -778,8 +726,47 @@ rst_l10_exch_ver:
 	; $51 ld d, c
 	z80_exmain2	lddc, {ld d, c}
 
-	; $52 ld d, d
+	; $52 ld d, d aka il suffix - call.il
 z80_lddd:
+	ld	a, (iy)
+	cp	%CD		; call.il
+	jr	z, z80_callilmmn
+	call	not_implemented
+	z80loop
+
+	; $52 CD MM mm nn call.il Mmn
+	; todo how do we inject interrupts during this call
+	xref	z80_callilmmn_addr
+	xref	z80_callilmmn2
+z80_callilmmn:
+	DI_AND_SAVE
+	ld	hl, (iy+1)
+	lea	iy, iy+4
+	ld	(z80_callilmmn_addr), hl
+
+	; set flag to indicate special int handling logic
+	; note the current IY (return address) value  	RETURN_PTR
+	; when int happens
+	;   save all registers to spl
+	;   set iy -> 38
+	;   push sps RETURN_PTR (or maybe just push 0000)
+	;   call z80_invoke_iy
+	;   restore all registers from spl
+	;   ret.l
+	;
+	; special hanlder on each loop
+	;  check if iy == RETURN_PTR (or 0000)
+	;  return from z80_invoke_iy
+
+
+	set	2, (ix+z80_flags)
+	call	z80_restore_all_registers
+	RESTORE_EI
+	call.il	z80_callilmmn2
+	DI_AND_SAVE
+	call	z80_save_all_registers
+	res	2, (ix+z80_flags)
+	RESTORE_EI
 	z80loop
 
 	; $53 ld d, e
@@ -806,8 +793,9 @@ z80_lddd:
 	; $5A ld e, d
 	z80_exmain2	lded, {ld e, d}
 
-	; $5B ld e, e
+	; $5B ld e, e aka lil suffix - call.lil
 z80_ldee:
+	call	not_implemented
 	z80loop
 
 	; $5C ld e, h
@@ -1203,12 +1191,8 @@ z80_switch_to_native:
 	; need to load all registers correctly
 	; then jump.s to original value of iy
 	DI_AND_SAVE
-
 	call	z80_restore_all_registers
-
-	push	hl
 	jp	z80_switch_to_native2
-
 
 	; $CC call z, nn
 	z80_callccnn	z
@@ -1462,8 +1446,18 @@ z80_ldsphl:
 
 
 z80_ei:
+	bit	2, (ix+z80_flags)	; special handling active?
+	jr	nz, z80_ei_special
+
 	res	1, (ix+z80_flags)	; IEF2 set
 	ei
+	jp	z80_loop2
+
+z80_ei_special:
+	ld	a, %FB			; defer execution of EI until outer marshaller is finished
+	ld	(special_isr2), a
+
+	res	1, (ix+z80_flags)	; IEF2 set
 	jp	z80_loop2
 
 	; $FC call m, nn
@@ -2444,6 +2438,7 @@ z80_save_all_registers:
 
 	ld	iy, (switch_addr)
 
+z80_set_int_state:
 	LD	A, I
 	JP	PO, z80_set_di
 	res	1, (ix+z80_flags)
@@ -2451,3 +2446,49 @@ z80_save_all_registers:
 z80_set_di:
 	set	1, (ix+z80_flags)
 	ret
+
+;;;;;;;;;;;;;;;;;;
+
+	global	special_isr
+	xref	z80_int_request2
+	xref	special_isr2
+special_isr:
+	; ld	(_z80_flags), a
+	ex	af, af'
+	push	af
+	push	bc
+	push	de
+	push	hl
+	exx
+	push	bc
+	push	de
+	push	hl
+	push	ix
+	push	iy
+
+	or	a
+	sbc	hl, hl
+	push.s	hl
+
+	xor	a			; clear EI on main handler
+	ld	(special_isr2), a
+
+	ld	ix, z80_regs
+
+	call	z80_int_request2
+
+	pop	iy
+	pop	ix
+	pop	hl
+	pop	de
+	pop	bc
+	exx
+	pop	hl
+	pop	de
+	pop	bc
+	pop	af
+	ex	af, af'
+	pop	af
+
+	jp	special_isr2
+

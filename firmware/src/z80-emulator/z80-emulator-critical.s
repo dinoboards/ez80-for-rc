@@ -10,6 +10,7 @@
 	xref	z80_instr_misc_table
 	xref	z80_instr_table
 	xref	z80_regs
+	xref	z80_int_request2
 
 	section	INTERNAL_RAM_ROM
 
@@ -17,8 +18,15 @@ z80_int_request:
 	ld	a, %02
 	ld	(ix+z80_flags), a
 	push.s	iy
+z80_int_request2:
 	ld	iy, %0038
 	jr	z80_loop2
+
+z80_special:
+	ld	a, iyl
+	cp	a, iyh
+	jr	nz, z80_loop3
+	ret
 
 z80_loop:
 	ld	a, (ix+z80_flags)
@@ -30,6 +38,10 @@ z80_loop:
 
 	global	z80_loop2
 z80_loop2:
+	bit	2, a
+	jr	nz, z80_special
+
+z80_loop3:
 	z80_byte_jump	z80_instr_table
 
 	; $CB ....
@@ -48,19 +60,18 @@ cb_bit_instr:
 	; $CB 31 switch to native
 	global	z80_switch_to_native2
 	global	switch_addr
-	global  original_isr_hook
 	xref	_marshall_isr_hook
 z80_switch_to_native2:
-
-	; restore int handler for native marshalling
-original_isr_hook	equ	$+1
-	ld	hl, 0
-	ld	(_marshall_isr_hook+1), hl
-	pop	hl
 	RESTORE_EI
 
 switch_addr	equ	$+2
 	jp.s	%0000
+
+	global	z80_callilmmn2
+	global	z80_callilmmn_addr
+z80_callilmmn2:
+z80_callilmmn_addr	equ	$+1
+	jp	0
 
 
 ; MISC ED Instructions
@@ -109,13 +120,20 @@ fd_bit_instr:
 	ld	ix, z80_regs
 	z80loop
 
-	global	z80_marshall_isr
-z80_marshall_isr:
+	global	z80_emulator_isr
+	global	special_isr2
+	xref	special_isr
+z80_emulator_isr:
 	push	af
 	ld	a, (_z80_flags)
+	bit	2, a
+	jp	nz, special_isr
 	set	0, a
 	ld	(_z80_flags), a
 	pop	af
 	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE
 
+special_isr2:
+	nop			; will be set to ei, if emulator's handler calls ei
+	ret.l
 	SECTION	code

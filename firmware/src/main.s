@@ -32,7 +32,6 @@ ENDIF
 
 	;xref	_spike
 	;call	_spike
-
 	jp	z80_invoke
 
 	global	remove_usb_tick_hook

@@ -37,14 +37,17 @@
         SEGMENT	.STARTUP
         .ASSUME	ADL = 1
 
-	xref	_reg_spl
 	xref	_reg_iy
+	xref	_reg_spl
+	xref	z80_flags
 	xref	z80_invoke_iy
+	xref	z80_regs
+	xref	z80_set_int_state
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Minimum default initialization
 __init:
-	IM	2				; Interrtup mode 2
+	IM	2				; Interrupt mode 2 - the only valid mode for eZ80
 
 	; determine if we are invoked due to illegal instruction
 	; or due to power/reset
@@ -98,6 +101,10 @@ illegal_instruction:
 	; we want iy to equal ix+1
 
 	lea	iy, ix+1
+	ld	ix, z80_regs
+	ld	(ix+z80_flags), 0
+	call	z80_set_int_state
+
 	jp	z80_invoke_iy
 
 

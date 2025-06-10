@@ -359,12 +359,24 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-06-usb-functions.lis"
 	@if exist "$(WORKDIR)\rst-10-06-usb-functions.lst"  \
             $(RM) "$(WORKDIR)\rst-10-06-usb-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-07-emulator-function.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.obj"
+	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lis"
+	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lst"
 	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-10-functions.obj"
 	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
             $(RM) "$(WORKDIR)\rst-10-functions.lis"
 	@if exist "$(WORKDIR)\rst-10-functions.lst"  \
             $(RM) "$(WORKDIR)\rst-10-functions.lst"
+	@if exist "$(WORKDIR)\rst-18-function.obj"  \
+            $(RM) "$(WORKDIR)\rst-18-function.obj"
+	@if exist "$(WORKDIR)\rst-18-function.lis"  \
+            $(RM) "$(WORKDIR)\rst-18-function.lis"
+	@if exist "$(WORKDIR)\rst-18-function.lst"  \
+            $(RM) "$(WORKDIR)\rst-18-function.lst"
 	@if exist "$(WORKDIR)\scsi_driver.obj"  \
             $(RM) "$(WORKDIR)\scsi_driver.obj"
 	@if exist "$(WORKDIR)\scsi_driver.lis"  \
@@ -513,6 +525,12 @@ clean:
             $(RM) "$(WORKDIR)\z80-emulator-iy.lis"
 	@if exist "$(WORKDIR)\z80-emulator-iy.lst"  \
             $(RM) "$(WORKDIR)\z80-emulator-iy.lst"
+	@if exist "$(WORKDIR)\z80-emulator-lil.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lil.obj"
+	@if exist "$(WORKDIR)\z80-emulator-lil.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lil.lis"
+	@if exist "$(WORKDIR)\z80-emulator-lil.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lil.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.obj"
 	@if exist "$(WORKDIR)\z80-emulator-logging.lis"  \
@@ -539,12 +557,6 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
-	@if exist "$(WORKDIR)\rst-18-function.obj"  \
-            $(RM) "$(WORKDIR)\rst-18-function.obj"
-	@if exist "$(WORKDIR)\rst-18-function.lis"  \
-            $(RM) "$(WORKDIR)\rst-18-function.lis"
-	@if exist "$(WORKDIR)\rst-18-function.lst"  \
-            $(RM) "$(WORKDIR)\rst-18-function.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -591,7 +603,9 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
@@ -614,11 +628,11 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-lil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj  \
-            $(WORKDIR_ESCSPACE)\rst-18-function.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -1044,6 +1058,14 @@ $(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-06-usb-functions.s"
 
+$(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-07-emulator-function.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-07-emulator-function.s"
+
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1051,6 +1073,14 @@ $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-18-function.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-function.s"
 
 $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c  \
@@ -1297,6 +1327,15 @@ $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-iy.s"
 
+$(WORKDIR_ESCSPACE)\z80-emulator-lil.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-lil.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-lil.s"
+
 $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
@@ -1325,12 +1364,4 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
-
-$(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-18-function.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-function.s"
 

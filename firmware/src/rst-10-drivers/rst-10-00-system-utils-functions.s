@@ -90,6 +90,9 @@ _system_utils_dispatch:
 	DEC	A
 	JR	Z, ez80_mem1_bus_timing_freq_set	; B = 18, SYSUTL_MEMTMFQ_SET (CS1)
 
+	DEC	A
+	jr	z, ez80_emulation_state_get		; B = 19, SYSUTL_EMULSTAT_GET
+
 not_supported:
 	LD	A, %FF					; UNKNOWN FUNCTION
 	RET.L
@@ -602,3 +605,20 @@ ez80_mem1_bus_timing_freq_set:
 	POP	DE
 	LD	L, A
 	JP	ez80_mem1_bus_timing_set
+
+;
+; Function B = 19 SYSUTL_EMULSTAT_GET
+; Return state of caller's Z80 execution environment
+;
+; if function invoked in ADL mode, will return 1: Native Environment
+; typically call this function via rst.l within z80 or emulated modes
+;
+; Output
+;  A = 01 -> Native Environment
+;  A = 02 -> Emulated Environment
+
+ez80_emulation_state_get:
+	; the emulator will intercept this request
+	; as such, a hard coded value works
+	ld	a, 1
+	ret.l
