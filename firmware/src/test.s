@@ -47,14 +47,18 @@ longspike:
 	ld	iy, bdosspike - step1 + %00E000
 	rst.l	%10			; EMULATOR INVOKE
 
-	; call.sis	bdosspike - step1 + %00E000
+	ld	a, 3
+	ld	b, 1
+	rst.l	%10
 
-blocked:
-	nop
-	nop
-	jr	blocked
+; 	; call.sis	bdosspike - step1 + %00E000
 
-	ret.l
+; blocked:
+; 	nop
+; 	nop
+; 	jr	blocked
+
+	ret.l		; this should return to the emulator
 
 _spike:
 	di
@@ -107,38 +111,40 @@ step1:
 ; 	jr	_z80
 
 ; _detected_ez80:
-	ld	a, 0
-	ld	b, 0
-	ld	c, 2
-	ld	d, 1
-	ld	e, 0
-	ld	hl, 0
-	rst.l	%10	; exchange ver and switch to native
-			; int should change to marshalling (and require handler to use ret.l)
-
-	ei
-
-	xor	a
-	ld	b, 19
-	rst.l	%10		; get emulation state
+	; ld	a, 0
+	; ld	b, 0
+	; ld	c, 2
+	; ld	d, 1
+	; ld	e, 0
+	; ld	hl, 0
+	; rst.l	%10	; exchange ver and switch to native
+	; 		; int should change to marshalling (and require handler to use ret.l)
 
 	; ei
-	; call.il	longspike
 
+	; xor	a
+	; ld	b, 19
+	; rst.l	%10		; get emulation state
+
+	; ei
+
+	;call.il	longspike	; aka call.sil
 
 	ld	a, 3
 	ld	b, 1
-	ld	e, 65
+	ld	e, 65		; print A
+	rst.l	%10
+
+	call.lil longspike	; bad but should be made to work
+
+	ld	a, 3
+	ld	b, 1
+	ld	e, 66		; print B
 	rst.l	%10
 
 	ld	a, 3
 	ld	b, 1
-	ld	e, 66
-	rst.l	%10
-
-	ld	a, 3
-	ld	b, 1
-	ld	e, 67
+	ld	e, 67		; print C
 	rst.l	%10
 
 
@@ -167,10 +173,11 @@ spikeemulatedint_rom:
 bdosspike:			; this should be executed emulated
 	ld	a, %12
 	ld	bc, %3456
-	ld	de, %789a
-bdosspikelp:
-	nop
-	jr	bdosspikelp
+	; ld	de, %789a
+	ld	e, 'X'
+; bdosspikelp:
+; 	nop
+; 	jr	bdosspikelp
 
 	ret.l
 

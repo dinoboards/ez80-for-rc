@@ -11,17 +11,17 @@
 	xref	z80_load_all_registers
 	xref	z80_save_all_registers
 
-	global	z80_ldee
-
-	; $5B ld e, e aka lil suffix
-z80_ldee:
+	global	z80_lddd
+	; $52 ld d, d aka .sil/il suffix - call.il/call.sil
+z80_lddd:
 	ld.s	a, (iy)
-	cp	%CD		; call.lil
+	cp	%CD		; call.sil
 	jr	z, z80_callilmmn
 	call	not_implemented
 	z80loop
 
 z80_callilmmn:
+	DI_AND_SAVE
 	ld.s	hl, (iy+1)	;todo fix this needs to load 24bit addr
 	lea	iy, iy+4
 	ld	(z80_callilmmn_addr), hl

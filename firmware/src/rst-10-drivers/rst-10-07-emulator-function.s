@@ -8,7 +8,7 @@
 	xref	switch_addr
 	xref	z80_save_all_registers
 	xref	z80_invoke_iy
-	xref	z80_restore_all_registers
+	xref	z80_load_all_registers
 
 ; call z80 function, using the z80 emulator
 ;
@@ -22,15 +22,11 @@
 ; IY -> address within MBASE segment of function
 ;
 _emulator_invoke:
-	ld	a, iyl
-	ld	(switch_addr+0), a
-	ld	a, iyh
-	ld	(switch_addr+1), a
 	ex	af, af'
 	call	z80_save_all_registers
 
 	call	z80_invoke_iy
 
-	call	z80_restore_all_registers
+	call	z80_load_all_registers
 
 	ret.l

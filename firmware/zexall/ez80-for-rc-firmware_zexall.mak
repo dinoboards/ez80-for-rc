@@ -532,6 +532,12 @@ clean:
             $(RM) "$(WORKDIR)\z80-emulator-lil.lis"
 	@if exist "$(WORKDIR)\z80-emulator-lil.lst"  \
             $(RM) "$(WORKDIR)\z80-emulator-lil.lst"
+	@if exist "$(WORKDIR)\z80-emulator-lis.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lis.obj"
+	@if exist "$(WORKDIR)\z80-emulator-lis.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lis.lis"
+	@if exist "$(WORKDIR)\z80-emulator-lis.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lis.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.obj"
 	@if exist "$(WORKDIR)\z80-emulator-logging.lis"  \
@@ -540,6 +546,12 @@ clean:
             $(RM) "$(WORKDIR)\z80-emulator-logging.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.src"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.src"
+	@if exist "$(WORKDIR)\z80-emulator-sil.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-sil.obj"
+	@if exist "$(WORKDIR)\z80-emulator-sil.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-sil.lis"
+	@if exist "$(WORKDIR)\z80-emulator-sil.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-sil.lst"
 	@if exist "$(WORKDIR)\z80-emulator.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator.obj"
 	@if exist "$(WORKDIR)\z80-emulator.lis"  \
@@ -630,7 +642,9 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-lil.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-lis.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
             $(WORKDIR_ESCSPACE)\zexall.obj
@@ -1337,6 +1351,10 @@ $(WORKDIR_ESCSPACE)\z80-emulator-lil.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-lil.s"
 
+$(WORKDIR_ESCSPACE)\z80-emulator-lis.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-lis.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-lis.s"
+
 $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
@@ -1344,6 +1362,10 @@ $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
+
+$(WORKDIR_ESCSPACE)\z80-emulator-sil.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-sil.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-sil.s"
 
 $(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator.s  \

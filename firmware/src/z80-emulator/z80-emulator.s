@@ -21,6 +21,8 @@
 	xref	switch_addr
 	xref	z80_bit2
 	xref	z80_ldcc
+	xref	z80_lddd
+	xref	z80_ldee
 	xref	z80_loop2
 	xref	z80_emulator_isr
 	xref	z80_misc
@@ -37,13 +39,11 @@
 	global	z80_ldca
 	global	z80_lddb
 	global	z80_lddc
-	global	z80_lddd
 	global	z80_ldde
 	global	z80_ldda
 	global	z80_ldeb
 	global	z80_ldec
 	global	z80_lded
-	global	z80_ldee
 	global	z80_ldea
 	global	z80_ldab
 	global	z80_ldac
@@ -73,7 +73,7 @@
 
 	global	z80_invoke
 	global	z80_invoke_iy
-	global	z80_restore_all_registers
+	global	z80_load_all_registers
 	global	z80_save_all_registers
 	global	z80_set_int_state
 	global	z80_switch_to_native
@@ -700,7 +700,7 @@ z80_ldcb:
 	z80loop
 
 	; 49 ld c, c aka lil suffix
-	; implemented i z80-emulator-lil.s
+	; implemented in z80-emulator-lis.s
 
 	; $4A ld c, d
 	z80_exmain2     ldcd, {ld c, d}
@@ -726,48 +726,8 @@ z80_ldcb:
 	; $51 ld d, c
 	z80_exmain2	lddc, {ld d, c}
 
-	; $52 ld d, d aka il suffix - call.il
-z80_lddd:
-	ld	a, (iy)
-	cp	%CD		; call.il
-	jr	z, z80_callilmmn
-	call	not_implemented
-	z80loop
-
-	; $52 CD MM mm nn call.il Mmn
-	; todo how do we inject interrupts during this call
-	xref	z80_callilmmn_addr
-	xref	z80_callilmmn2
-z80_callilmmn:
-	DI_AND_SAVE
-	ld	hl, (iy+1)
-	lea	iy, iy+4
-	ld	(z80_callilmmn_addr), hl
-
-	; set flag to indicate special int handling logic
-	; note the current IY (return address) value  	RETURN_PTR
-	; when int happens
-	;   save all registers to spl
-	;   set iy -> 38
-	;   push sps RETURN_PTR (or maybe just push 0000)
-	;   call z80_invoke_iy
-	;   restore all registers from spl
-	;   ret.l
-	;
-	; special hanlder on each loop
-	;  check if iy == RETURN_PTR (or 0000)
-	;  return from z80_invoke_iy
-
-
-	set	2, (ix+z80_flags)
-	call	z80_restore_all_registers
-	RESTORE_EI
-	call.il	z80_callilmmn2
-	DI_AND_SAVE
-	call	z80_save_all_registers
-	res	2, (ix+z80_flags)
-	RESTORE_EI
-	z80loop
+	; $52 ld d, d aka .sil/il suffix
+	; implemented in z80-emulator-sil.s
 
 	; $53 ld d, e
 	z80_exmain2	ldde, {ld d, e}
@@ -793,10 +753,8 @@ z80_callilmmn:
 	; $5A ld e, d
 	z80_exmain2	lded, {ld e, d}
 
-	; $5B ld e, e aka lil suffix - call.lil
-z80_ldee:
-	call	not_implemented
-	z80loop
+	; $5B ld e, e aka lil suffix
+	; implemented in z80-emulator-lil.s
 
 	; $5C ld e, h
 	z80_exmain2	ldeh, {ld e, h}
@@ -1191,7 +1149,11 @@ z80_switch_to_native:
 	; need to load all registers correctly
 	; then jump.s to original value of iy
 	DI_AND_SAVE
-	call	z80_restore_all_registers
+	ld	a, iyl
+	ld	(switch_addr+0), a
+	ld	a, iyh
+	ld	(switch_addr+1), a
+	call	z80_load_all_registers
 	jp	z80_switch_to_native2
 
 	; $CC call z, nn
@@ -2402,12 +2364,7 @@ z80_mltsp:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-z80_restore_all_registers:
-	ld	a, iyl
-	ld	(switch_addr+0), a
-	ld	a, iyh
-	ld	(switch_addr+1), a
-
+z80_load_all_registers:
 	ld	bc, (ix+z80_reg_aaf)
 	push	bc
 	pop	af
@@ -2435,8 +2392,6 @@ z80_save_all_registers:
 	push	af
 	pop	bc
 	ld	(ix+z80_reg_aaf), bc
-
-	ld	iy, (switch_addr)
 
 z80_set_int_state:
 	LD	A, I
