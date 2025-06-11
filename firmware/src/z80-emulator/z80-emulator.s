@@ -315,7 +315,7 @@ z80_instr_table:
 	jp	z80_rst18		; DF
 	jp	z80_retpo		; E0
 	jp	z80_pophl		; E1
-	jp	z80_jppnn		; E2
+	jp	z80_jpponn		; E2
 	jp	z80_ex_sp_hl		; E3
 	jp	z80_callponn		; E4
 	jp	z80_pushhl		; E5
