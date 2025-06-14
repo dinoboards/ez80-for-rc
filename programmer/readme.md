@@ -16,7 +16,7 @@ Under linux, you can use a pre-built docker image that contains the required Ras
 Within the `programmer` directory, run this:
 
 ```
-docker run -v ${PWD}:/programmer/ -u $(id -u ${USER}):$(id -g ${USER}) --privileged=true -it dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
+docker run --rm -v ${PWD}:/programmer/ -u $(id -u ${USER}):$(id -g ${USER}) --privileged=true -it dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
 ```
 
 You can also use VS Code, with the official `Raspberry Pi Pico` VS Code extension [https://github.com/raspberrypi/pico-vscode](https://github.com/raspberrypi/pico-vscode)

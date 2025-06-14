@@ -68,13 +68,13 @@ jobs:
 
       - name: pull docker tool chain
         run: |
-          docker pull dinoboards/ez80-rc-builder:0.0.1
+          docker pull dinoboards/ez80-rc-builder:0.0.2
 
       - name: firmware make-debug
-        run: docker run --rm -e CI=${CI} -v ./:/ez80-for-rc --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "cd firmware & make-debug.bat"
+        run: docker run --rm -e CI=${CI} -v ./:/ez80-for-rc --privileged=true -t dinoboards/ez80-rc-builder:0.0.2 wine cmd.exe /c "cd firmware & make-debug.bat"
 
       - name: firmware make-release
-        run: docker run --rm -e CI=${CI} -v ./:/ez80-for-rc --privileged=true -t dinoboards/ez80-rc-builder:0.0.1 wine cmd.exe /c "cd firmware & make-release.bat"
+        run: docker run --rm -e CI=${CI} -v ./:/ez80-for-rc --privileged=true -t dinoboards/ez80-rc-builder:0.0.2 wine cmd.exe /c "cd firmware & make-release.bat"
 
       - name: Archive firmware
         uses: actions/upload-artifact@v4

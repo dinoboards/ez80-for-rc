@@ -4,7 +4,7 @@
 # docker build -f ez80-for-rc/hardware/Dockerfile --progress plain -t dinoboards/wincupl:0.0.1 .
 #
 # from within the hardware dir
-# docker run -v ${PWD}:/ez80-for-rc/hardware/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/wincupl:0.0.1 ./make-jed.sh
+# docker run --rm -v ${PWD}:/ez80-for-rc/hardware/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/wincupl:0.0.1 ./make-jed.sh
 
 FROM ubuntu:focal-20240530
 

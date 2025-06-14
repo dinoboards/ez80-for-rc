@@ -8,18 +8,18 @@
 /* -define:NDEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
 /* -define:RC2014_FIRMWARE -genprintf -NOkeepasm -NOkeeplst -NOlist */
 /* -NOlistinc -NOmodsect -optsize -promote -NOreduceopt */
-/* -stdinc:"\"..;..\src\includes;Z:\ZDS\include\std;Z:\ZDS\include\zilog\"" */
+/* -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -NOdebug */
 /* -cpu:eZ80F92 */
 /*-asmsw:"  */
 	/* -define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE */
-	/* -include:\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\" -NOlist */
+	/* -include:\"..;C:\ZDS\include\std;C:\ZDS\include\zilog\" -NOlist */
 	/* -NOlistmac -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn -NOdebug */
 	/* -NOigcase -cpu:eZ80F92" */
 
 /* assembler options */
 /* -define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE */
-/* -include:"\"..;Z:\ZDS\include\std;Z:\ZDS\include\zilog\"" -NOlist */
+/* -include:"\"..;C:\ZDS\include\std;C:\ZDS\include\zilog\"" -NOlist */
 /* -NOlistmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn */
 /* -NOdebug -NOigcase -cpu:eZ80F92 */
 
@@ -167,9 +167,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
- "Z:\ZDS\lib\std\chelp.lib", \
- "Z:\ZDS\lib\std\crt.lib", \
- "Z:\ZDS\lib\std\crtS.lib", \
- "Z:\ZDS\lib\std\nokernel.lib", \
- "Z:\ZDS\lib\zilog\zsldevinitdummy.obj"
+ "C:\ZDS\lib\std\chelp.lib", \
+ "C:\ZDS\lib\std\crt.lib", \
+ "C:\ZDS\lib\std\crtS.lib", \
+ "C:\ZDS\lib\std\nokernel.lib", \
+ "C:\ZDS\lib\zilog\zsldevinitdummy.obj"
 

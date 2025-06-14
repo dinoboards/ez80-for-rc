@@ -8,7 +8,7 @@ ZCC_EXTRA := --vc -Cs --Werror
 
 USER_ID := $(shell id -u ${USER})
 GROUP_ID := $(shell id -g ${USER})
-Z88DK_DOCKER := docker run -w /host/$${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -t z88dk/z88dk
+Z88DK_DOCKER := docker run --rm -w /host/$${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -t z88dk/z88dk
 Z88DK_DOCKER_MAKE := $(Z88DK_DOCKER)
 
 # ZCC_EXTRA += -SO3 --max-allocs-per-node200000

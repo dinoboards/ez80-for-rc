@@ -2,12 +2,12 @@
 SETLOCAL
 
 cd release
-make -B -f .\ez80-for-rc-firmware_release.mak
+make -f .\ez80-for-rc-firmware_release.mak
 
 copy ..\bin\ez80-rc-firmware-release.hex ..\..\programmer\
 
 REM Get the current date in YYYY-MM-DD format
-for /f "tokens=*" %%i in ('wmic os get localdatetime /value') do set datetime=%%i
+for /f "skip=1 tokens=*" %%i in ('wmic os get localdatetime') do set datetime=%%i
 set year=%datetime:~0,4%
 set month=%datetime:~4,2%
 set day=%datetime:~6,2%

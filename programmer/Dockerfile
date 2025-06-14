@@ -2,11 +2,11 @@
 #
 # docker build --progress plain -t pipico:0.0.2 .
 #
-# docker run -v ${PWD}:/programmer/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/pipico:0.0.2
+# docker run --rm -v ${PWD}:/programmer/ --privileged=true -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/pipico:0.0.2
 #
 # or
 #
-# docker run -v ${PWD}:/programmer/ -u $(id -u ${USER}):$(id -g ${USER}) --privileged=true -t dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
+# docker run --rm -v ${PWD}:/programmer/ -u $(id -u ${USER}):$(id -g ${USER}) --privileged=true -t dinoboards/pipico:0.0.2 /bin/bash -c "mkdir -p build && cd build && cmake .. && make"
 
 FROM ubuntu:focal-20240530
 

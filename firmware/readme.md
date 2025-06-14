@@ -6,6 +6,10 @@ See [RomWBW](https://github.com/wwarthen/RomWBW)
 
 The firmware will manage startup, configuration of on-chip devices, interrupt marshalling and handover to RomWBW in an external ROM/RAM module.
 
+**NOTE: Change of installation recommendation**
+> Previously it was recommended that the Zilog IDE be installed at `Z:\ZDS`.  This has been changed
+> to the more conventional windows path of `C:\ZDS\`.  The source code is still recommended to be `Z:\....`
+
 ## Building the firmware code
 
 This is a ZDSII ez80Acclaim (5.3.5) project.
@@ -14,7 +18,7 @@ The build process requires a windows installation, and that the source be placed
 
 Recommend process:
 * Clone repo to `Z:\ez80-for-rc`
-* Install the ZDS IDE to `Z:\ZDS`
+* Install the ZDS IDE to `C:\ZDS`
 * Using ZDSII IDE, open the project file in Z:\ez80-for-rc\firmware\ez80-for-rc-firmware.zdsproj
 
 > Many of the configuration files created and managed by the ZDSII IDE include full absolute paths to files.  So if you try open the project file
@@ -22,7 +26,7 @@ under a different local path, many of the project files will be updated to that 
 
 ### Using a local share to create a 'Z:' drive on your PC
 
-If like me, you don't have an actual drive mounted as `Z:`, you can create a network mount to a directory on your computer.
+If you don't have an actual drive mounted as `Z:`, you can create a network mount to a directory on your computer.
 
 1. Choose/create any empty directory on your computer.
 2. Create a network share on this directory (typically right click on windows explorer and choose Properties, then choose 'Share' tab) - call it `EZ80`
@@ -33,28 +37,36 @@ Once you have created a `Z:` drive, you can follow the recommended instruction a
 
 ### using wine on linux
 
-Wine on linux can be used to also build firmware
+Wine on linux can be used to also build the firmware.
 
-> Although the ZDS IDE will run just fine under wine - it can not be used to flash or debug with the Zilog Smart Cable as wine has no support for mapping linux usb devices to applications
+> Although the ZDS IDE will run just fine under wine - it can not be used to flash or debug with the Zilog Smart Cable as wine has no support for mapping linux usb devices to applications.
 
-1. Install wine as per your system requirements
+1. Install wine as per your system requirements.  See (https://gitlab.winehq.org/wine/wine/-/wikis/Download)
 
 2. Download the ZDS IDE https://zilog.com/index.php?option=com_zcm&task=view&soft_id=54&Itemid=74
 
-3. unzip the file and copy it to your wine's drive
+3. Ensure your wine is initialised by starting a couple of test programs:
+
+   `wine notepad.exe`
+
+   `wine cmd.exe`
+
+4. unzip the file and copy it to your wine's c drive.
 
    `cp ~/Downloads/zds2_eZ80Acclaim\!_5.3.5_23020901.exe ~/.wine/drive_c/install.exe`
 
-4. configure Z: drive to point to *parent* directory of this repo, using the `winecfg` utility.
+5. configure `Z:` drive to point to the *parent* directory of this repo, using the `winecfg` utility.
    *This is very important - as ZDS IDE project files all assume a specific root path -- failure to do this will cause file paths to be 'dynamically' changed in the project and make files.*
 
-5. Install the IDE targeting the install directory of: `Z:\ZDS\`
+6. **Important!** Install the IDE targeting the install directory of: `C:\ZDS\`
 
    `wine c:\install.exe`
 
-6. Add the ZDE bin directory to the path by exporting the env var `WINEPATH` in your host (eg: in your .bashrc)
+> decline the smart cable driver install - this will not work under wine
 
-   `export WINEPATH="Z:\\ZDS\\bin"`
+7. Add the ZDE bin directory to the path by exporting the env var `WINEPATH` in your host (eg: in your .bashrc)
+
+   `export WINEPATH="C:\\ZDS\\bin"`
 
 Confirm this installation
 
@@ -69,31 +81,51 @@ Confirm this installation
    make-debug.bat
    ```
 
-9. To run the gui IDE - required for step-by-step debugging:
+9. To run the gui IDE.
 
     `wine Zds2Ide.exe`
 
 
-### Installing within a VM
+### Installing within a VM (Recommend)
 
-I have used kvm to host a windows virtual machine (windows 10 pro), installing ZDS within that environment.
+For linux users, who have the Zilog Smart Cable - a Virtual Machine is the recommended and only configuration that can be made to work.  Its a little involved, but once its all done and configured you will be able to flash and debug code on chip easily.
 
-I also setup virtiofs to map a directory on my linux host into the VM.  I can not, at this stage though, run ZDS from the Z: over the mapped drive (due to case sensitivity issues) - so ZDS needs to be installed into the VM's native windows ntfs drive (C:\ZDS)
+I have used KVM to host a windows virtual machine (windows 10 pro) and installing ZDS IDE within that environment.  Your linux distro may already have KVM and its associated GUI manager *Virtual Machine Manager* installed.
 
-I had limited success with [winapps](https://nowsci.com/winapps/) to enable running the IDE as as 'normal' linux window (not a fully shared desktop).  Window disappears when attempting to flash or start a debug session.
+Recommend windows configuration
 
-> running winapps (remoteApp) requires windows Pro - with the following registry edit applied:
-> `[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services] "fAllowUnlistedRemotePrograms"=dword:00000001`
+* Once windows is installed in the VM - remove as many apps and features to minimise it memory usage - i run my Windows 10 Pro with just 4Gigs and 2 CPU - and the IDE is still very responsive.
+* Setup virtiofs (https://www.heiko-sieger.info/sharing-files-between-the-linux-host-and-a-windows-vm-using-virtiofs/)
+  * You may need to install virtiofsd on your linux machine: `sudo apt install virtiofsd -y`
+  * Download winfsp and install on Windows (https://github.com/winfsp/winfsp/releases/tag/v2.1)
+  * Enable shared memory in the VM (to allow for virtiofs)
+  * Configure a virtiofs FileSystem in the VM - (TargetPath: `Z:`, SourcePath: `<parent dir of this repo>`)
+  * Confirm windows boots now with a Z: drive - (you can now optionally disable network access by removing the virtual network hardware)
+  * Install the virtio drivers.  Download the iso and mount the iso into your VM (https://github.com/virtio-win/virtio-win-pkg-scripts/blob/master/README.md)
+* Install Zilog's ZDS IDE II (See *Zilog Tool set* section below).  Allow the Smart Cable driver to also be installed.
+  * copy the exe install into your shared drive for access on the VM
 
+#### Enabling the smart cable usb driver
 
+After installing the Smart Cable driver in Windows and forwarding the USB Zilog Smart Cable to the VM, the *Device Manager* will be complaining about a signature issue with the driver.  This driver is not compatible with Secure Boot UEFI.
+
+So Secure boot needs to be disabled in the VM's firmware.  See this link for a guide on the process: (https://www.partitionwizard.com/news/value-is-protected-by-secure-boot-policy.html)
+
+Next disable the driver signature check policy in windows.  In the windows VM, open a terminal as administrator.  Then run the following command:
+
+```
+bcdedit /set testsigning off
+```
+
+Now when you boot windows, and open device Manager -- you should be able to confirm that the device driver for the Smart Cable is 'accepted' and working.
 
 ### Zilog Tool set
 
 The Zilog ZDS IDE can be found at: https://zilog.com/index.php?option=com_zcm&task=view&soft_id=54&Itemid=74
 
-As mentioned above, it is recommended you install it into the path `Z:\ZDS`
+As mentioned above, it is recommended you install it into the path `C:\ZDS`
 
-> You should end up with the executable files within the directory `Z:\ZDS\bin\`
+> You should end up with the executable files within the directory `C:\ZDS\bin\`
 
 This is a very old tool set.  But it does allow for on-chip debugging.
 

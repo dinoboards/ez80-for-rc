@@ -32,7 +32,7 @@ common-libs:
 	@$(MAKE) -C common
 
 z88dk:
-	@docker run -w /host/${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -it z88dk/z88dk
+	@docker run --rm -w /host/${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -it z88dk/z88dk
 
 clean:
 	@rm -rf $(BIN)
