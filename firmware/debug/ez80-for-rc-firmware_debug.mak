@@ -1076,7 +1076,8 @@ $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj :  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-07-emulator-function.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \

@@ -9,6 +9,7 @@
 	xref	not_implemented
 	xref	z80_load_all_registers
 	xref	z80_save_all_registers
+	xref	z80_set_int_state
 	xref	z80_switch_to_native
 
 	global	z80_ldcc
@@ -52,15 +53,20 @@ rst_l10:
 	ex	af, af'
 
 rst_l10_passthrough:
-	ex	af, af'
-	exx
+	ex	af, af'		; have we corrupted the flags in test for this rst fn?
+	exx	
+	di_and_save_s
 
 	push	iy
 	call	z80_load_all_registers
+	restore_ei_s
 
 	rst.l	%10
 
+	di_and_save_s
 	call	z80_save_all_registers
+	restore_ei_s
+	call	z80_set_int_state
 	pop	iy
 
 	z80loop

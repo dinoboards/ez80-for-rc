@@ -94,5 +94,12 @@ z80_reg_iy	equ	15
 _reg_spl:	ds	3
 z80_reg_spl	equ	18
 
-_z80_flags:	db 	1		; bit 1 on -> DI, off -> EI, bit 0 on -> int-pending
+; bit 0 on -> emulated executed interrupt pending request
+; bit 1 on -> DI, off -> EI,
+; bit 2 on -> executing ADL code, invoked by emulator - int requests must still be processed in emulator
+; bit 3
+_z80_flags:	db 	1
 z80_flags	equ	21		; true if maskable ints enabled
+
+	global	z80_ei_enabled
+z80_ei_enabled:	db	1		; tmp store when copying register state

@@ -1,4 +1,5 @@
 	include "../config.inc"
+	include	"../z80-emulator/z80-emulator-macros.inc"
 
 	section	CODE
 
@@ -9,6 +10,8 @@
 	xref	z80_save_all_registers
 	xref	z80_invoke_iy
 	xref	z80_load_all_registers
+	xref	z80_set_int_state
+	xref	z80_flags
 
 ; call z80 function, using the z80 emulator
 ;
@@ -22,11 +25,18 @@
 ; IY -> address within MBASE segment of function
 ;
 _emulator_invoke:
+	di_and_save_s
 	ex	af, af'
 	call	z80_save_all_registers
+	res	2, (ix+z80_flags)
+	restore_ei_s
+	call	z80_set_int_state
 
 	call	z80_invoke_iy
 
+	di_and_save_s
+	set	2, (ix+z80_flags)
 	call	z80_load_all_registers
+	restore_ei_s
 
 	ret.l

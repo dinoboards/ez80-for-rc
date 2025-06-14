@@ -10,6 +10,7 @@
 	xref	z80_flags
 	xref	z80_load_all_registers
 	xref	z80_save_all_registers
+	xref	z80_set_int_state
 
 	global	z80_ldee
 
@@ -22,7 +23,26 @@ z80_ldee:
 	z80loop
 
 z80_callilmmn:
-	ld.s	hl, (iy+1)	;todo fix this needs to load 24bit addr
+	di_and_save_s
+
+	; invoke ei/nop just before call.il
+	ld	a, (z80_ei_enabled)
+	or	a
+	ld	a, %FB	; EI
+	jr	nz, __xei
+	xor	a
+__xei:
+	ld	(z80_callilmmn2), a
+
+	; iy = {mb}:iy
+	push	iy
+	ld	iy, 0
+	add	iy, sp
+	ld	a, mb
+	ld	(iy+2), a
+	pop	iy
+
+	ld	hl, (iy+1)
 	lea	iy, iy+4
 	ld	(z80_callilmmn_addr), hl
 
@@ -36,19 +56,20 @@ z80_callilmmn:
 	;   restore all registers from spl
 	;   ret.l
 	;
-	; special hanlder on each loop
+	; special handler on each loop
 	;  check if iy == RETURN_PTR (or 0000)
 	;  return from z80_invoke_iy
 
 	push	iy			; save return PC
-	DI_AND_SAVE
 	set	2, (ix+z80_flags)
 	call	z80_load_all_registers
-	RESTORE_EI
-	call.il	z80_callilmmn2
-	DI_AND_SAVE
+
+	call	z80_callilmmn2
+
+	di_and_save_s
 	call	z80_save_all_registers
 	res	2, (ix+z80_flags)
-	RESTORE_EI
 	pop	iy			; retrieve saved PC
+	restore_ei_s
+	call	z80_set_int_state
 	z80loop

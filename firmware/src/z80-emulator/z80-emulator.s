@@ -1146,9 +1146,7 @@ z80_bit:
 	jp	z80_bit2
 
 z80_switch_to_native:
-	; need to load all registers correctly
-	; then jump.s to original value of iy
-	DI_AND_SAVE
+	di_and_save_s
 	ld	a, iyl
 	ld	(switch_addr+0), a
 	ld	a, iyh
@@ -2392,6 +2390,7 @@ z80_save_all_registers:
 	push	af
 	pop	bc
 	ld	(ix+z80_reg_aaf), bc
+	ret
 
 z80_set_int_state:
 	LD	A, I
@@ -2408,7 +2407,6 @@ z80_set_di:
 	xref	z80_int_request2
 	xref	special_isr2
 special_isr:
-	; ld	(_z80_flags), a
 	ex	af, af'
 	push	af
 	push	bc

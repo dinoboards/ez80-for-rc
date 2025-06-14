@@ -62,7 +62,7 @@ cb_bit_instr:
 	global	switch_addr
 	xref	_marshall_isr_hook
 z80_switch_to_native2:
-	RESTORE_EI
+	restore_ei_s		; todo could switch_addr be corrupted by an int handler?
 
 switch_addr	equ	$+2
 	jp.s	%0000
@@ -70,8 +70,10 @@ switch_addr	equ	$+2
 	global	z80_callilmmn2
 	global	z80_callilmmn_addr
 z80_callilmmn2:
-z80_callilmmn_addr	equ	$+1
-	jp	0
+	ei	; ei or nop
+z80_callilmmn_addr	equ	$+2
+	call.il	0
+	ret
 
 
 ; MISC ED Instructions

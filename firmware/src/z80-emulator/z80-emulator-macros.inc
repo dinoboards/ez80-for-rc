@@ -272,3 +272,25 @@ io_rate_end	macro
 	OUT0	(TMR2_CTL), A
 	endmacro
 
+	xref	z80_ei_enabled
+di_and_save_s:	macro
+	push	af
+	ld	a, i
+	di
+	ld	a, 0
+	jp	po, $$_di
+	ld	a, 1
+$$_di:
+	ld	(z80_ei_enabled), a
+	pop	af
+	endmac	di_and_save_s
+
+restore_ei_s:	macro
+	push	af
+	ld	a, (z80_ei_enabled)
+	or	a
+	jr	z, $$_di
+	ei
+$$_di:
+	pop	af
+	endmac	restore_ei_s
