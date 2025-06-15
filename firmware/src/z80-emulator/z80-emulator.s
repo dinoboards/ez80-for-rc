@@ -413,7 +413,19 @@ z80_exafaaf:
 
 	; $10 djnz d
 z80_djnzd:
-	z80_jrccd	djnz
+	inc	iy
+	exx
+	ex	af, af'
+	djnz	z80_jrccd1
+	ex	af, af'
+	exx
+	z80loop
+
+z80_jrccd1:
+	ex	af, af'
+	exx
+	ld.s	a, (iy-1)
+	jp	_z80_add_a_to_pc
 
 	; $11 ld de, nn
 	z80_exmain2	lddenn, {ld.s de, (iy)}, {lea iy, iy+2}
@@ -497,12 +509,7 @@ z80_ld_nn_hl:
 	z80_exall2	dech, {dec h}
 
 	; $26 ld h, n
-z80_ldhn:
-	exx
-	ld.s	h, (iy)
-	inc	iy
-	exx
-	z80loop
+	z80_exmain2	ldhn, {ld.s h, (iy)}, {inc iy}
 
 	; $27 daa
 	z80_exaf2	daa, {daa}
@@ -539,11 +546,7 @@ z80_ldhl_nn_:
 	z80loop
 
 	; $2b dec hl
-z80_dechl:
-	exx
-	dec	hl
-	exx
-	z80loop
+	z80_exmain2	dechl, {dec hl}
 
 	; $2C inc l
 	z80_exall2	incl, {inc l}
@@ -552,28 +555,13 @@ z80_dechl:
 	z80_exall2	decl, {dec l}
 
 	; $2e ld l, n
-z80_ldln:
-	exx
-	ld.s	l, (iy)
-	inc	iy
-	exx
-	z80loop
-
+	z80_exmain2	ldln, {ld.s l, (iy)}, {inc iy}
 	; $2F cpl
 	z80_exaf2	cpl, {cpl}
 
 	; $30 jr nc, d
 z80_jrncd:
-	inc	iy
-	ex	af, af'
-	jr	nc, z80_jrncd1
-	ex	af, af'
-	z80loop
-
-z80_jrncd1:
-	ex	af, af'
-	ld.s	a, (iy-1)
-	jp	_z80_add_a_to_pc
+	z80_jrccd	{jr nc,}
 
 	; $31 ld sp, nn
 z80_ldspnn:

@@ -205,16 +205,13 @@ $$z80_retcc1:
 
 z80_jrccd	macro opand
 	inc	iy
-	exx
 	ex	af, af'
 	opand	$$skip1
 	ex	af, af'
-	exx
 	z80loop
 
 $$skip1:
 	ex	af, af'
-	exx
 	ld.s	a, (iy-1)
 	jp	_z80_add_a_to_pc
 	endmacro
