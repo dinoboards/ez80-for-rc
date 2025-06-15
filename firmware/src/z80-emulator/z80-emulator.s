@@ -1395,19 +1395,9 @@ z80_ldsphl:
 
 
 z80_ei:
-	bit	2, (ix+z80_flags)	; special handling active?
-	jr	nz, z80_ei_special
-
 	res	1, (ix+z80_flags)	; IEF2 set
 	ei
-	jp	z80_loop2
-
-z80_ei_special:
-	ld	a, %FB			; defer execution of EI until outer marshaller is finished
-	ld	(special_isr2), a
-
-	res	1, (ix+z80_flags)	; IEF2 set
-	jp	z80_loop2
+	z80loop
 
 	; $FC call m, nn
 	z80_callccnn	m
@@ -2389,48 +2379,4 @@ z80_set_int_state:
 z80_set_di:
 	set	1, (ix+z80_flags)
 	ret
-
-;;;;;;;;;;;;;;;;;;
-
-	global	special_isr
-	xref	z80_int_request2
-	xref	special_isr2
-special_isr:
-	ex	af, af'
-	push	af
-	push	bc
-	push	de
-	push	hl
-	exx
-	push	bc
-	push	de
-	push	hl
-	push	ix
-	push	iy
-
-	or	a
-	sbc	hl, hl
-	push.s	hl
-
-	xor	a			; clear EI on main handler
-	ld	(special_isr2), a
-
-	ld	ix, z80_regs
-
-	call	z80_int_request2
-
-	pop	iy
-	pop	ix
-	pop	hl
-	pop	de
-	pop	bc
-	exx
-	pop	hl
-	pop	de
-	pop	bc
-	pop	af
-	ex	af, af'
-	pop	af
-
-	jp	special_isr2
 

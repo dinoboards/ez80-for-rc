@@ -96,8 +96,6 @@ z80_reg_spl	equ	18
 
 ; bit 0 on -> emulated executed interrupt pending request
 ; bit 1 on -> DI, off -> EI,
-; bit 2 on -> executing ADL code, invoked by emulator - int requests must still be processed in emulator
-; bit 3
 _z80_flags:	db 	1
 z80_flags	equ	21		; true if maskable ints enabled
 

@@ -22,12 +22,6 @@ z80_int_request2:
 	ld	iy, %0038
 	jr	z80_loop2
 
-z80_special:
-	ld	a, iyl
-	cp	a, iyh
-	jr	nz, z80_loop3
-	ret
-
 z80_loop:
 	ld	a, (ix+z80_flags)
 	bit	1, a			; ei enabled?
@@ -38,8 +32,8 @@ z80_loop:
 
 	global	z80_loop2
 z80_loop2:
-	bit	2, a
-	jr	nz, z80_special
+	; bit	2, a
+	; jr	nz, z80_special
 
 z80_loop3:
 	z80_byte_jump	z80_instr_table
@@ -70,7 +64,6 @@ switch_addr	equ	$+2
 	global	z80_callilmmn2
 	global	z80_callilmmn_addr
 z80_callilmmn2:
-	ei	; ei or nop
 z80_callilmmn_addr	equ	$+2
 	call.il	0
 	ret
@@ -123,19 +116,12 @@ fd_bit_instr:
 	z80loop
 
 	global	z80_emulator_isr
-	global	special_isr2
-	xref	special_isr
 z80_emulator_isr:
 	push	af
 	ld	a, (_z80_flags)
-	bit	2, a
-	jp	nz, special_isr
 	set	0, a
 	ld	(_z80_flags), a
 	pop	af
 	RET.L			; WE SHOULD BE RETURNING INTO ADL MODE
 
-special_isr2:
-	nop			; will be set to ei, if emulator's handler calls ei
-	ret.l
 	SECTION	code
