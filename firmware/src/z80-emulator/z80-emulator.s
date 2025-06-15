@@ -1218,7 +1218,8 @@ z80_subn:
 
 
 z80_rst10:
-	call	not_implemented
+	push.s	iy
+	ld	iy, %10
 	z80loop
 
 	; $D8 ret c
