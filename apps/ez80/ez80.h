@@ -32,4 +32,6 @@ extern uint24_t cs0_ns;
 extern uint24_t cs1_ns;
 extern uint24_t io_ns;
 
+extern uint8_t emulator_detected;
+
 #endif

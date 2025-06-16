@@ -9,6 +9,7 @@ all: EZ80.COM
 EZ80.COM:
 	@mkdir -p ../bin
 	@ez80-cc --optimise size --output-dir ../bin --iquote ../common EZ80.COM \
+	support_emulation.asm \
 	config-io.c \
 	config-mem.c \
 	config-mem0.c \

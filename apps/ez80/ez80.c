@@ -40,6 +40,7 @@ static mem_config_t mem0_config;
 static mem_config_t mem1_config;
 static uint8_t      tick_value;
 static uint24_t     cmd = 0;
+uint8_t emulator_detected = 0;
 
 // if just -T, then CMD_T_SHOW
 // if -T=<number>, then CMD_T_SET
@@ -177,6 +178,7 @@ bool argument_help(const char *arg) {
 }
 
 int main(const int argc, const char *argv[]) {
+
   find_ns_timing_for_memory();
 
   if (argc == 1) {

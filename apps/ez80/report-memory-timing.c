@@ -71,6 +71,7 @@ void report_memory_timing(void) {
   find_ns_timing_for_memory();
 
   printf("              CPU frequency: %ld Hz\n", (cpu_frequency));
+  printf("            Z80 Environment: %s\n", emulator_detected ? "Emulated" : "eZ80's Z80 Compatibility");
 
   printf("      On-chip Flash W/S: %u  (%dns)\n", flash_wait_cycles, flash_ns);
 
