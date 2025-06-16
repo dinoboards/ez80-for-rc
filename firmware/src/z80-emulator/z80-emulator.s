@@ -1107,8 +1107,10 @@ z80_addan:
 	ex	af, af'
 	z80loop
 
+	; $C7 rst 0
 z80_rst00:
-	call	not_implemented
+	push.s	iy
+	ld	iy, %00
 	z80loop
 
 	; $C8 ret z
