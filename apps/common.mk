@@ -11,24 +11,14 @@ GROUP_ID := $(shell id -g ${USER})
 Z88DK_DOCKER := docker run --rm -w /host/$${PWD} -v /:/host/ -u $(USER_ID):$(GROUP_ID) -t z88dk/z88dk
 Z88DK_DOCKER_MAKE := $(Z88DK_DOCKER)
 
-# ZCC_EXTRA += -SO3 --max-allocs-per-node200000
 BIN = ../bin/
 ZCC := $(Z88DK_DOCKER_MAKE) zcc +cpm -compiler=sdcc -lm -I../common -SO3 --max-allocs-per-node200000
 
-TARGETS := $(addsuffix .COM,$(addprefix $(BIN),$(APPS)))
-
-all: $(addsuffix .COM,$(APPS))
+.PHONY: $(BIN)*.COM
+.PHONY: *.COM
 
 %.COM: $(BIN)%.COM
 	@echo > /dev/null
-
-$(TARGETS):
-	@set -e
-	mkdir -p $(BIN)$(APPS)
-	$(ZCC) $(ZCC_EXTRA) $(foreach lib,$(filter %.lib,$^),-l$(lib)) $(filter-out %.inc,$(filter-out %.h,$(filter-out %.lib,$^))) -o $@ -create-app
-	filesize=$$(stat -c%s "$@")
-	rm -f $(BIN)$(APPS)_CODE.bin
-	echo "Compiled $(notdir $@) ($$filesize bytes) from $(notdir $(filter-out %.h,$(filter-out %.lib,$^)))"
 
 clean:
 	@rm -rf $(BIN)
@@ -36,8 +26,16 @@ clean:
 define compile
 	@set -e
 	@mkdir -p $(dir $@)
-	$(ZCC) $(ZCC_EXTRA) --c-code-in-asm --assemble-only $< -o $@
-	echo "Compiled $(notdir $@) from $(notdir $<)"
+	echo "Compiling $(filter-out %.inc,$(filter-out %.h,$(filter-out %.lib,$^))) to $(notdir $@)"
+	$(ZCC) $(ZCC_EXTRA) $(foreach lib,$(filter %.lib,$^),-l$(lib)) $(filter-out %.inc,$(filter-out %.h,$(filter-out %.lib,$^))) -o $@ -create-app
+endef
+
+define compile-cpm-hbios
+	$(compile) -l$(HBIOS_LIB) -DHBIOS
+endef
+
+define compile-msxdos2
+	$(compile) -DMSXDOS2
 endef
 
 define assemble
@@ -63,8 +61,8 @@ $(BIN)common/%.o: ../common/%.asm;	$(assemble)
 .PRECIOUS: $(BIN)%.c.o
 $(BIN)%.c.o: $(BIN)%.c.asm; $(assemble)
 
-.PRECIOUS: $(BIN)$(APPS)/%.c.asm
-$(BIN)$(APPS)/%.c.asm: %.c; $(compile)
+# .PRECIOUS: $(BIN)$(APPS)/%.c.asm
+# $(BIN)$(APPS)/%.c.asm: %.c; $(compile)
 
 EZ80_ASM_FILES := $(wildcard ../common/ez80-instr/*.asm)
 EZ80_O_FILES := $(patsubst ../common/ez80-instr/%.asm,$(BIN)common/ez80-instr/%.o,$(EZ80_ASM_FILES))

@@ -1,14 +1,17 @@
-APPS := WHET
-
-all: WHET.EXE WHET.COM
+all: WHETEZ80.COM WHETHB.COM WHETMSX.COM
 
 include ../common.mk
+ZCC_EXTRA += -clib=sdcc_iy -pragma-include:zpragma.inc
 
-ZCC_EXTRA := -clib=sdcc_iy -SO3 --max-allocs-per-node200000 -pragma-include:zpragma.inc
+# z80: cpm with hbios for timing
+$(BIN)WHETHB.COM: whetstone.c
+	$(compile-cpm-hbios)
 
-$(BIN)$(APPS).COM: $(BIN)$(APPS)/whetstone.c.o $(HBIOS_LIB)
+# z80: msx - using msx jiffy timer
+$(BIN)WHETMSX.COM: whetstone.c
+	$(compile-msxdos2)
 
-
-.PHONY: WHET.EXE
-WHET.EXE:
-	@ez80-cc --optimise size --mem-model 2MB --output-dir ../bin WHET.EXE whetstone.c nanoprintf.c
+# ez80: cpm with ez80-firmware
+.PHONY: WHETEZ80.COM
+WHETEZ80.COM:
+	@ez80-cc --optimise size --output-dir ../bin WHETEZ80.COM whetstone.c nanoprintf.c

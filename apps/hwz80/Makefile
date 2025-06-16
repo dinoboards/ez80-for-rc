@@ -1,5 +1,7 @@
-APPS := HWZ80
+all: HWZ80.COM
 
 include ../common.mk
 
-$(BIN)$(APPS).COM: $(BIN)$(APPS)/hello-world.c.o $(EZ80_LIB)
+# CP/M
+$(BIN)HWZ80.COM: hello-world.c
+	$(compile)

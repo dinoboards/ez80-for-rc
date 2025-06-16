@@ -77,14 +77,32 @@ C**********************************************************************
 #ifdef __EZ80__
 #include <ez80-firmware.h>
 #include <stdint.h>
-typedef double double_t;
+typedef double   double_t;
+typedef uint24_t ticks_t;
 
 #define native_timer_start() ez80_timers_ticks_get()
 #define native_timer_stop()  ez80_timers_ticks_get()
 #define native_timer_rate()  ez80_timers_freq_tick_get();
 
-#else
+#elif defined(HBIOS)
+#include <stdint.h>
+typedef uint32_t ticks_t;
 #include <hbios_timer.h>
+
+#elif defined(MSXDOS2)
+#include <stdint.h>
+typedef uint16_t ticks_t;
+
+#define JIFFY_ADDR  __at(0xFC9E)
+#define RG9SAV_ADDR __at(0xFFE8)
+
+// FC9E-FC9F: software clock, updated at each VDP interrupt
+ticks_t JIFFY_ADDR  JIFFY;
+uint8_t RG9SAV_ADDR RG9SAV;
+
+#define native_timer_start() JIFFY
+#define native_timer_stop()  JIFFY
+#define native_timer_rate()  ((RG9SAV & 0x02) ? 50 : 60)
 
 #endif
 
@@ -152,7 +170,7 @@ int main(int argc, char *argv[]) {
   /* added for this version */
 
   STATIC long     loopstart;
-  STATIC long     startsec, finisec;
+  STATIC ticks_t  startsec, finisec;
   STATIC double_t KIPS;
   STATIC int      continuous;
 

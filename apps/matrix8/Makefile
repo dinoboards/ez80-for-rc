@@ -1,5 +1,7 @@
-APPS := MATRIX8
+all: MATRIX8.COM
 
 include ../common.mk
 
-$(BIN)$(APPS).COM: $(BIN)$(APPS)/main.c.o $(I2C_LIB) adafruit-8x8matrix.h ../common/i2c.h
+# CP/M
+$(BIN)MATRIX8.COM: main.c $(I2C_LIB)
+	$(compile)

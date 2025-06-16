@@ -40,8 +40,10 @@ void Proc_6(Enumeration Enum_Val_Par, Enumeration *Enum_Ref_Par)
     /* then, not executed */
     *Enum_Ref_Par = Ident_4;
 
+#ifdef __EZ80__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wswitch"
+#endif
   switch (Enum_Val_Par) {
   case Ident_1:
     *Enum_Ref_Par = Ident_1;
@@ -62,7 +64,9 @@ void Proc_6(Enumeration Enum_Val_Par, Enumeration *Enum_Ref_Par)
     *Enum_Ref_Par = Ident_3;
     break;
   } /* switch */
+#ifdef __EZ80__
 #pragma clang diagnostic pop
+#endif
 } /* Proc_6 */
 
 void Proc_7(One_Fifty Int_1_Par_Val, One_Fifty Int_2_Par_Val, One_Fifty *Int_Par_Ref)

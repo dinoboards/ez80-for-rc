@@ -1,12 +1,17 @@
-APPS := DHRY
+all: DHRYEZ80.COM DHRYHB.COM DHRYMSX.COM
 
-all: DHRY.EXE DHRY.COM
 include ../common.mk
+ZCC_EXTRA = --vc -clib=sdcc_iy -pragma-include:zpragma.inc
 
-ZCC_EXTRA := -clib=sdcc_iy -pragma-include:zpragma.inc
+# z80: cpm with hbios for timing
+$(BIN)DHRYHB.COM: dhry_1.c dhry_2.c
+	$(compile-cpm-hbios)
 
-$(BIN)$(APPS).COM: $(BIN)$(APPS)/dhry_1.c.o $(BIN)$(APPS)/dhry_2.c.o dhry.h $(HBIOS_LIB)
+# z80: msx - using msx jiffy timer
+$(BIN)DHRYMSX.COM: dhry_1.c dhry_2.c jiffy.c
+	$(compile-msxdos2)
 
-.PHONY: DHRY.EXE
-DHRY.EXE:
-	@ez80-cc --optimise size --mem-model 2MB --output-dir ../bin DHRY.EXE dhry_1.c dhry_2.c nanoprintf.c
+# ez80: cpm with ez80-firmware
+.PHONY: DHRYEZ80.COM
+DHRYEZ80.COM:
+	@ez80-cc --optimise size --output-dir ../bin DHRYEZ80.COM dhry_1.c dhry_2.c nanoprintf.c

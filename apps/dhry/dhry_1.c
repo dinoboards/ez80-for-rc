@@ -47,7 +47,7 @@ int         Arr_2_Glob[50][50];
 #define Too_Small_Time 2
 /* Measurements should last at least about 2 seconds */
 
-uint32_t Begin_Time, End_Time;
+ticks_t Begin_Time, End_Time;
 
 double_t User_Time, Microseconds, Dhrystones_Per_Second;
 
