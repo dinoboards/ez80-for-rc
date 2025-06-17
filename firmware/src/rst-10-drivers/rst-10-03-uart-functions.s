@@ -12,7 +12,7 @@
 	XREF	_rx_buffer_get_length
 	XREF	_get_brg
 
-	SECTION INTERNAL_RAM_ROM
+	SECTION CODE
 
 	.assume adl=1
 
@@ -292,6 +292,8 @@ _uart0_init:
 
 	EI
 	RET
+
+	SECTION INTERNAL_RAM_ROM
 
 	PUBLIC	_uart0_receive_isr
 	XREF	_rx_buffer_add_to

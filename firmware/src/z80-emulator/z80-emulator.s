@@ -2049,277 +2049,73 @@ lddrnext:
 	z80_exall2	cpdr, {cpdr.s}
 
 z80_indr:
-	call	not_implemented
-	jp	z80_nop
-
 z80_otdr:
-	call	not_implemented
-	jp	z80_nop
-
 z80_inimr:
-	call	not_implemented
-	z80loop
-
 z80_inirx:
-	call	not_implemented
-	z80loop
-
 z80_otdrx:
-	call	not_implemented
-	z80loop
-
 z80_leabciyd:
-	call	not_implemented
-	z80loop
-
 z80_in0l_n_:
-	call	not_implemented
-	z80loop
-
 z80_in0h_n_:
-	call	not_implemented
-	z80loop
-
 z80_in0c_n_:
-	call	not_implemented
-	z80loop
-
 z80_in0b_n_:
-	call	not_implemented
-	z80loop
-
 z80_ldix_hl_:
-	call	not_implemented
-	z80loop
-
 z80_tstaa:
-	call	not_implemented
-	z80loop
-
 z80_indmr:
-	call	not_implemented
-	z80loop
-
 z80_tstab:
-	call	not_implemented
-	z80loop
-
 z80_otirx:
-	call	not_implemented
-	z80loop
-
 z80_tstac:
-	call	not_implemented
-	z80loop
-
 z80_slp:
-	call	not_implemented
-	z80loop
-
 z80_tstad:
-	call	not_implemented
-	z80loop
-
 z80_indrx:
-	call	not_implemented
-	z80loop
-
 z80_tstae:
-	call	not_implemented
-	z80loop
-
 z80_leahliyd:
-	call	not_implemented
-	z80loop
-
 z80_tstion:
-	call	not_implemented
-	z80loop
-
 z80_leaiyiyd:
-	call	not_implemented
-	z80loop
-
 z80_tstah:
-	call	not_implemented
-	z80loop
-
 z80_peaiyd:
-	call	not_implemented
-	z80loop
-
 z80_otim:
-	call	not_implemented
-	z80loop
-
 z80_ldiy_hl_:
-	call	not_implemented
-	z80loop
-
 z80_mltde:
-	call	not_implemented
-	z80loop
-
 z80_tstal:
-	call	not_implemented
-	z80loop
-
 z80_ordmr:
-	call	not_implemented
-	z80loop
-
 z80_ind2r:
-	call	not_implemented
-	z80loop
-
 z80_tstan:
-	call	not_implemented
-	z80loop
-
 z80_ld_hl_de:
-	call	not_implemented
-	z80loop
-
 z80_ldbc_hl_:
-	call	not_implemented
-	z80loop
-
 z80_ld_hl_ix:
-	call	not_implemented
-	z80loop
-
 z80_ld_hl_iy:
-	call	not_implemented
-	z80loop
-
 z80_indm:
-	call	not_implemented
-	z80loop
-
 z80_outi2:
-	call	not_implemented
-	z80loop
-
 z80_in0e_n_:
-	call	not_implemented
-	z80loop
-
 z80_out0_n_b:
-	call	not_implemented
-	z80loop
-
 z80_out0_n_c:
-	call	not_implemented
-	z80loop
-
 z80_tsta_hl_:
-	call	not_implemented
-	z80loop
-
 z80_out0_n_d:
-	call	not_implemented
-	z80loop
-
 z80_outd2:
-	call	not_implemented
-	z80loop
-
 z80_leadeixd:
-	call	not_implemented
-	z80loop
-
 z80_leaiyixd:
-	call	not_implemented
-	z80loop
-
 z80_ini2:
-	call	not_implemented
-	z80loop
-
 z80_out0_n_h:
-	call	not_implemented
-	z80loop
-
 z80_leaixixd:
-	call	not_implemented
-	z80loop
-
 z80_otimr:
-	call	not_implemented
-	z80loop
-
 z80_peaixd:
-	call	not_implemented
-	z80loop
-
 z80_mltbc:
-	call	not_implemented
-	z80loop
-
 z80_out0_n_l:
-	call	not_implemented
-	z80loop
-
 z80_oti2r:
-	call	not_implemented
-	z80loop
-
 z80_ld_hl_bc:
-	call	not_implemented
-	z80loop
-
 z80_leabcixd:
-	call	not_implemented
-	z80loop
-
 z80_mlthl:
-	call	not_implemented
-	z80loop
-
 z80_in0d_n_:
-	call	not_implemented
-	z80loop
-
 z80_otd2r:
-	call	not_implemented
-	z80loop
-
 z80_ldde_hl:
-	call	not_implemented
-	z80loop
-
 z80_inim:
-	call	not_implemented
-	z80loop
-
 z80_ini2r:
-	call	not_implemented
-	z80loop
-
 z80_ld_hl_hl:
-	call	not_implemented
-	z80loop
-
 z80_leadeiyd:
-	call	not_implemented
-	z80loop
-
 z80_ldhl_hl_:
-	call	not_implemented
-	z80loop
-
 z80_leaixiyd:
-	call	not_implemented
-	z80loop
-
 z80_otdm:
-	call	not_implemented
-	z80loop
-
 z80_ind2:
-	call	not_implemented
-	z80loop
-
 z80_mltsp:
 	call	not_implemented
 	z80loop
