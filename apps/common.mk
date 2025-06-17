@@ -20,6 +20,11 @@ ZCC := $(Z88DK_DOCKER_MAKE) zcc +cpm -compiler=sdcc -lm -I../common -SO3 --max-a
 %.COM: $(BIN)%.COM
 	@echo > /dev/null
 
+all: $(BIN)
+
+$(BIN):
+	mkdir -p $(BIN)
+
 clean:
 	@rm -rf $(BIN)
 
@@ -79,3 +84,5 @@ HBIOS_LIB=$(BIN)common/hbios_sysget_tick.lib
 I2C_LIB=$(BIN)common/i2c.lib ../common/i2c.h
 
 $(EZ80_O_FILES) $(EZ80_FIRMWARE_O_FILES): ../common/ez80-instr.inc
+
+
