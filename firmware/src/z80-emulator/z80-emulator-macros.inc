@@ -250,9 +250,7 @@ z80_out_c_&jj:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
-	io_rate_start
 	out	(bc), &jj
-	io_rate_end
 	pop	bc
 	exx
 	z80loop
@@ -264,6 +262,8 @@ $$wait:
 	JR	nz, $$wait
 	endmacro
 
+	; call within repeating io instructions (eg: otir)
+	; to rate limit high speed io
 io_rate_end	macro
 	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
 	OUT0	(TMR2_CTL), A

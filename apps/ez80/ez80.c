@@ -39,8 +39,8 @@ static mem_config_t io_config;
 static mem_config_t mem0_config;
 static mem_config_t mem1_config;
 static uint8_t      tick_value;
-static uint24_t     cmd = 0;
-uint8_t emulator_detected = 0;
+static uint24_t     cmd               = 0;
+uint8_t             emulator_detected = 0;
 
 // if just -T, then CMD_T_SHOW
 // if -T=<number>, then CMD_T_SET

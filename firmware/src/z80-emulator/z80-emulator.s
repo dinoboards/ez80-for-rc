@@ -1180,11 +1180,9 @@ z80_out_n_a:
 	ld.s	c, (iy)
 	inc	iy
 	ld	b, IO_SEGMENT
-	io_rate_start
 	ex	af, af'
 	out	(bc), a
 	ex	af, af'
-	io_rate_end
 	z80loop
 
 	; $D4 call nc, nn
@@ -1235,7 +1233,6 @@ z80_ina_n_:
 	ld.s	c, (iy)
 	inc	iy
 	ld	b, IO_SEGMENT
-	io_rate_start
 	ex	af, af'
 	jr	unknown_issue1
 	align	2		; this does not fill with zeros - but %FF
@@ -1243,7 +1240,6 @@ z80_ina_n_:
 unknown_issue1:			; Unknown glitch 1 - see notes
 	in	a, (bc)
 	ex	af, af'
-	io_rate_end
 	z80loop
 
 	; $DC call c, nn
@@ -1720,9 +1716,7 @@ z80_out0_n_a:
  z80_inb_c:
 	exx
 	ld	b, IO_SEGMENT
-	io_rate_start
 	in	b, (bc)
-	io_rate_end
 	exx
 	z80loop
 
@@ -1730,11 +1724,9 @@ z80_out0_n_a:
 z80_out_c_b:
 	exx
 	push	bc
-	io_rate_start
 	ld	a, b
 	ld	b, IO_SEGMENT
 	out	(bc), a
-	io_rate_end
 	pop	bc
 	exx
 	z80loop
@@ -1777,9 +1769,7 @@ z80_out_c_c:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
-	io_rate_start
 	out	(bc), c
-	io_rate_end
 	pop	bc
 	exx
 	z80loop
@@ -1913,11 +1903,9 @@ z80_in_a_c:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
-	io_rate_start
 	ex	af, af'
 	in	a, (bc)
 	ex	af, af'
-	io_rate_end
 	pop	bc
 	exx
 	z80loop
@@ -1927,11 +1915,9 @@ z80_out_c_a:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
-	io_rate_start
 	ex	af, af'
 	out	(bc), a
 	ex	af, af'
-	io_rate_end
 	pop	bc
 	exx
 	z80loop
@@ -1962,10 +1948,8 @@ z80_outi:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
-	io_rate_start
 	ld.s	a, (hl)
 	out	(bc), a
-	io_rate_end
 	inc	hl
 	pop	bc
 	ex	af, af'
