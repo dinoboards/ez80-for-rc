@@ -71,7 +71,7 @@ _init_memory_timings:
 	ld	b, 12			; SYSUTL_MEMTMFQ_SET
 	ld	hl, MEM_CS3_TIMING
 	ld	e, %80			; must be B/C
-	rst.l	%10			; but can be 1 (25mhz) for msx-dos
+	rst.l	%10			; but can be 3 (25mhz) for pacman
 
 
        ; set io to 5bc (for 32mhz)

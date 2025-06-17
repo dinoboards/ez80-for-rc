@@ -57,7 +57,7 @@ Z80_ADDR_MBASE		.EQU	%03
 MEM_CS0_TIMING 		.EQU	70		; Extended Memory timing of 70ns
 MEM_CS1_TIMING 		.EQU	60		; High Speed Extended Memory timing of 60ns
 IO_CS2_TIMING 		.EQU	320		; External IO timing of 320ns
-MEM_CS3_TIMING 		.EQU	120		; Main 64K External Memory timing of 180ns
+MEM_CS3_TIMING 		.EQU	360		; Main 64K External Memory timing of 360ns
 MEM_FLSH_TIMING		.EQU	60		; Main onboard flash timing of 60ns
 
 
