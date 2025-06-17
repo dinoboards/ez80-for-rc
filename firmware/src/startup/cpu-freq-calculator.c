@@ -78,38 +78,31 @@ uint8_t calculate_tmr0_rr() {
   return (uint8_t)result;
 }
 
+static uint24_t bus_cycle_to_ns(const uint8_t bc, const uint24_t cpu_mhz) { return ((uint24_t)bc * 3000) / cpu_mhz; }
+
+static uint24_t ws_to_ns(const uint8_t ws, const uint24_t cpu_mhz) { return (((uint24_t)ws + 1) * 1000) / cpu_mhz; }
+
 // Min state
 // minimum_states - top most bit, if set, must return as Bus Cycle
 uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_states /* only 8 bit value accepted */) {
-  uint8_t  bc;
-  uint24_t ws;
-  uint24_t duration_kns;
+  const uint24_t cpu_mhz    = cpu_freq_calculated / 1000000;
+  const uint8_t  must_be_BC = minimum_states & 0x80;
+  uint8_t        state;
 
-  uint8_t  must_be_BC       = minimum_states & 0x80;
-  uint24_t cpu_freq_khz     = cpu_freq_calculated / 1000;
-  uint24_t ns_per_cycle     = 1000000 / cpu_freq_khz;
-  uint24_t min_duration_kns = (min_nanoseconds * 1000);
-  minimum_states            = (minimum_states & 0x7F) * 1000;
+  if (must_be_BC) {
+    for (state = minimum_states & 0x7F; state <= 7; state++) {
+      if (bus_cycle_to_ns(state, cpu_mhz) >= min_nanoseconds)
+        return state + 0x80;
+    }
 
-  for (ws = 500; ws < 44500; ws += 1000) {
-    duration_kns = (ns_per_cycle * ws);
-
-    if (duration_kns >= min_duration_kns)
-      break;
+    return 0x87;
   }
 
-  if (ws <= minimum_states)
-    ws = (minimum_states);
+  for (state = 0; state <= 15; state++)
+    if (ws_to_ns(state, cpu_mhz) >= min_nanoseconds)
+      return state;
 
-  if (!must_be_BC && ws <= 7000)
-    return ws / 1000;
-
-  // Must use Z80 BUS CYCLES to get sufficient wait states
-  bc = (ws / 2000) + 1;
-
-  if (bc > 15)
-    bc = 15;
-
-  return bc | 0x80; // OR in Z80/BUS CYCLE mode flag
+  return 15;
 }
+
 uint8_t calculate_emulated_io_clock_rate() { return cpu_freq_calculated / 670000; }

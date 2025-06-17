@@ -55,35 +55,36 @@ _init_memory_timings:
 	; Auto configure CS0's timing
 	ld	a, 0
 	ld	b, 17
-	ld	hl, 70			; 70ns
+	ld	hl, MEM_CS0_TIMING
 	ld	e, 1
 	rst.l	%10
 
 	; Auto configure CS1's timing
 	ld	a, 0
 	ld	b, 18
-	ld	hl, 30			; 30ns
+	ld	hl, MEM_CS1_TIMING
 	ld	e, 1
 	rst.l	%10
 
 	; set main mem to 2bc (for 32mhz)
 	xor	a
 	ld	b, 12			; SYSUTL_MEMTMFQ_SET
-	ld	hl, 180			; 180ns
+	ld	hl, MEM_CS3_TIMING
 	ld	e, %80			; must be B/C
 	rst.l	%10			; but can be 1 (25mhz) for msx-dos
+
 
        ; set io to 5bc (for 32mhz)
 	xor	a
 	ld	b, 13			; SYSUTL_IOTMFQ_SET
-	ld	hl, 320			;
-	ld	e, %80			; must be B/C
+	ld	hl, IO_CS2_TIMING
+	ld	e, %84			; must be B/C and at least 4bc
 	rst.l	%10			; but can be 4 (25mhz) for msx-dos
 
 	; set flash to 1ws (for 32mhz)
 	xor	a
 	ld	b, 16			; SYSUTL_FLSHFQ_SET
-	ld	hl, 60
+	ld	hl, MEM_FLSH_TIMING
 	rst.l	%10
 
 	ret
