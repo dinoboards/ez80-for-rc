@@ -39,9 +39,19 @@ z80_loop3:
 	z80_byte_jump	z80_instr_table
 
 	; $CB ....
-	global	z80_bit2
 	global	cb_bit_instr
-z80_bit2:
+	global	z80_bit
+	xref	z80_switch_to_native
+z80_bit:
+	ld.s	a, (iy)
+	inc	iy
+	cp	%31		;
+	jp	z, z80_switch_to_native
+	ld	(cb_bit_instr), a
+	exx
+	ex	af, af'
+; 	jp	z80_bit2
+; z80_bit2:
 	db	%52	; .S prefix
 	db	%CB	; bit operand
 cb_bit_instr:

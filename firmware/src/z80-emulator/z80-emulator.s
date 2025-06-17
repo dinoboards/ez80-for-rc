@@ -411,6 +411,7 @@ z80_exafaaf:
 	; $0F rrca
 	z80_exaf2	rrca, {rrca}
 
+	section	INTERNAL_RAM_ROM
 	; $10 djnz d
 z80_djnzd:
 	inc	iy
@@ -420,6 +421,7 @@ z80_djnzd:
 	ex	af, af'
 	exx
 	z80loop
+	section	CODE
 
 z80_jrccd1:
 	ex	af, af'
@@ -449,6 +451,7 @@ z80_jrccd1:
 	z80_exaf2	rla, {rla}
 
 	; $18 JR d
+	section	INTERNAL_RAM_ROM
 z80_jrd:
 	ld.s	a, (iy)
 	inc	iy
@@ -459,6 +462,8 @@ _z80_add_a_to_pc:
 	ld	d, a		; D = sign extension
 	add.s	iy, de
 	z80loop
+
+	section	CODE
 
 	; $19 add hl, de
 	z80_exall2	addhlde, {add.s hl, de}
@@ -482,8 +487,10 @@ _z80_add_a_to_pc:
 	z80_exaf2	rra, {rra}
 
 	; $20 jr nz, d
+	section	INTERNAL_RAM_ROM
 z80_jrnzd:
 	z80_jrccd	{jr nz,}
+	section	CODE
 
 	; $21 ld hl, nn
 	z80_exmain2	ldhlnn, {ld.s hl, (iy)}, {lea iy, iy+2}
@@ -515,17 +522,10 @@ z80_ld_nn_hl:
 	z80_exaf2	daa, {daa}
 
 	; $28 jr z, d
+	section	INTERNAL_RAM_ROM
 z80_jrzd:
-	inc	iy
-	ex	af, af'
-	jr	z, z80_jrzd1
-	ex	af, af'
-	z80loop
-
-z80_jrzd1:
-	ex	af, af'
-	ld.s	a, (iy-1)
-	jp	_z80_add_a_to_pc
+	z80_jrccd	{jr z,}
+	section	CODE
 
 	; $29 add hl, hl
 	z80_exall2	addhlhl, {add.s	hl, hl}
@@ -560,8 +560,10 @@ z80_ldhl_nn_:
 	z80_exaf2	cpl, {cpl}
 
 	; $30 jr nc, d
+	section	INTERNAL_RAM_ROM
 z80_jrncd:
 	z80_jrccd	{jr nc,}
+	section	CODE
 
 	; $31 ld sp, nn
 z80_ldspnn:
@@ -603,17 +605,10 @@ z80_ld_hl_n:
 	z80_exaf2	scf, {scf}
 
 	; $38 jr c,d
+	section	INTERNAL_RAM_ROM
 z80_jrcd:
-	inc	iy
-	ex	af, af'
-	jr	c, z80_jrcd1
-	ex	af, af'
-	z80loop
-
-z80_jrcd1:
-	ex	af, af'
-	ld.s	a, (iy-1)
-	jp	_z80_add_a_to_pc
+	z80_jrccd	{jr c,}
+	section	CODE
 
 	; $39 add hl, sp
 	z80_exall2	addhlsp, {add.s hl, sp}
@@ -1125,16 +1120,9 @@ z80_ret:
 	z80_jpccnn	jr, z
 
 	; $CB ....
-z80_bit:
-	ld.s	a, (iy)
-	inc	iy
-	cp	%31		;
-	jp	z, z80_switch_to_native
-	ld	(cb_bit_instr), a
-	exx
-	ex	af, af'
-	jp	z80_bit2
+	xref	z80_bit
 
+	global	z80_switch_to_native
 z80_switch_to_native:
 	di_and_save_s
 	ld	a, iyl
@@ -1147,7 +1135,7 @@ z80_switch_to_native:
 	; $CC call z, nn
 	z80_callccnn	z
 
-	; $cd nn
+	; $CD nn
 z80_callnn:
 	pea.s	iy+2
 	ld.s	iy, (iy)

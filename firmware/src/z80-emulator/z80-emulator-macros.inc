@@ -242,7 +242,7 @@ $$skip:
 	pea.s	iy+2
 	ld.s	iy, (iy)
 	z80loop
-
+	SECTION	CODE
 	endmacro
 
 z80_out_c_jj	macro	jj
