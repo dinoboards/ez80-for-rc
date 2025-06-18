@@ -1,11 +1,8 @@
 
- 	xref	z80_loop
-	xref	test_poi
+EN_NOP_UNKNOWN	EQU	1	; Enable unknown opcodes to be processed as NOP - else processed as HALT/Not Implemented
+EN_EZ80_INSTR	EQU	1	; Enabled extended eZ80 instructions (still only Z80 compatibility mode)
 
-; z80loop	macro
-; 	call	test_poi
-; 	jp	z80_loop
-; 	endmacro
+	xref	z80_loop
 
 z80loop	macro
 	jp	z80_loop
@@ -89,8 +86,7 @@ z80_jp_&ir&_:
 z80_niy	macro name
 	xref	not_implemented
 z80_&name:
-	call	not_implemented
-	z80loop
+	jp	not_implemented
 	endmacro
 
 z80_exmain2 macro name, operation, op2, op3, op4

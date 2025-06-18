@@ -16,6 +16,7 @@
 
 	; 49 ld c,c aka .lis/.l suffix
 z80_ldcc:
+.if	EN_EZ80_INSTR
 	ld.s	a, (iy)
 	cp	%D7		; RST.L %10
 	jr	z, rst_l10
@@ -23,8 +24,10 @@ z80_ldcc:
 	jp	z, rst_l08
 	cp	%C9		; RET.L
 	jr	z, ret_l
-	call	not_implemented
+	jp	not_implemented
+.else
 	z80loop
+.endif
 
 ret_l:	; we would have been called by RST.L %10 (EMULATOR_INVOKE) handler
 	; so we just exit emulator and return
@@ -54,7 +57,7 @@ rst_l10:
 
 rst_l10_passthrough:
 	ex	af, af'		; have we corrupted the flags in test for this rst fn?
-	exx	
+	exx
 	di_and_save_s
 
 	push	iy

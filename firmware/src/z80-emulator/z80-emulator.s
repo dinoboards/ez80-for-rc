@@ -348,7 +348,10 @@ z80_instr_table:
 
 	global	not_implemented
 not_implemented:
-	ret
+	di
+	nop
+	nop
+	halt
 
 	; $00 nop
 	global	z80_nop
@@ -644,9 +647,13 @@ z80_ldan:
 	; $3F ccf
 	z80_exaf2	ccf, {ccf}
 
-	; $40 ld b,b
+	; $40 ld b,b aka .SIS suffix
 z80_ldbb:
+.if	EN_EZ80_INSTR
+	jp	not_implemented
+.else
 	z80loop
+.endif
 
 	; $41 ld b, c
 	z80_exmain2	ldbc, {ld b, c}
@@ -763,6 +770,7 @@ z80_ldcb:
 	; $63 ld h, e
 	z80_exmain2     ldhe, {ld h, e}
 
+	; $64 ld h, h
 z80_ldhh:
 	z80loop
 
@@ -790,6 +798,7 @@ z80_ldhh:
 	; $6C ld l, h
 	z80_exmain2	ldlh, {ld l, h}
 
+	; $6D ld l, l
 z80_ldll:
 	z80loop
 
@@ -1480,16 +1489,16 @@ z80_instr_misc_table:
 	jp	z80_neg		; ED 44 neg
 	jp	z80_retn        ; ED 45 retn
 	jp	z80_im0		; ED 46 im 0
-	jp	z80_ld_i_a      ; ED 47 ld i, a
-	jp	z80_in_c_c      ; ED 48 in c, (bc)
+	jp	z80_ldia	; ED 47 ld i, a
+	jp	z80_inc_c_      ; ED 48 in c, (bc)
 	jp	z80_out_c_c     ; ED 49 out (bc), c
 	jp	z80_adchlbc	; ED 4A adc hl, bc
 	jp	z80_ld_bc_nn    ; ED 4B ld bc, (nn)
 	jp	z80_mltbc	; ED 4C mlt bc
 	jp	z80_reti	; ED 4D reti
 	jp	z80_nop		; ED 4E
-	jp	z80_ld_r_a      ; ED 4F ld r,a
-	jp	z80_in_d_c      ; ED 50 in d, (bc)
+	jp	z80_ldra	; ED 4F ld r,a
+	jp	z80_ind_c_      ; ED 50 in d, (bc)
 	jp	z80_out_c_d     ; ED 51 out (bc), d
 	jp	z80_sbchlde	; ED 52 sbc hl, de
 	jp	z80_ld_nn_de    ; ED 53 ld (nn), de
@@ -1497,15 +1506,15 @@ z80_instr_misc_table:
 	jp	z80_leaiyixd	; ED 55 lea iy, ix+d
 	jp	z80_im1		; ED 56 im 1
 	jp	z80_ldai	; ED 57 ld a, i
-	jp	z80_in_e_c      ; ED 58 in e, (bc)
+	jp	z80_ine_c_      ; ED 58 in e, (bc)
 	jp	z80_out_c_e     ; ED 59 out (bc), e
 	jp	z80_adchlde	; ED 5A adc hl, de
 	jp	z80_ld_de_nn    ; ED 5B ld de, (nn)
 	jp	z80_mltde	; ED 5C mlt de
 	jp	z80_nop		; ED 5D
 	jp	z80_im2		; ED 5E im 2
-	jp	z80_ld_a_r      ; ED 5F ld a, r
-	jp	z80_in_h_c      ; ED 60 in h, (bc)
+	jp	z80_ldar	; ED 5F ld a, r
+	jp	z80_inh_c_      ; ED 60 in h, (bc)
 	jp	z80_out_c_h     ; ED 61 out (bc), h
 	jp	z80_sbchlhl	; ED 62 sbc hl, hl
 	jp	z80_ld_nn_hl	; ED 63 ld (nn), hl
@@ -1513,7 +1522,7 @@ z80_instr_misc_table:
 	jp	z80_peaixd	; ED 65 pea ix+d
 	jp	z80_peaiyd	; ED 66 pea iy+d
 	jp	z80_rrd_hl_	; ED 67 rrd (hl)
-	jp	z80_in_l_c      ; ED 68 in l, (bc)
+	jp	z80_inl_c_      ; ED 68 in l, (bc)
 	jp	z80_out_c_l     ; ED 69 out (bc), l
 	jp	z80_adchlhl	; ED 6A adc hl, hl
 	jp	z80_ldhl_nn_	; ED 6B ld hl, (nn)
@@ -1529,7 +1538,7 @@ z80_instr_misc_table:
 	jp	z80_nop		; ED 75
 	jp	z80_slp		; ED 76 slp
 	jp	z80_nop		; ED 77
-	jp	z80_in_a_c      ; ED 78 in a, (bc)
+	jp	z80_ina_c_      ; ED 78 in a, (bc)
 	jp	z80_out_c_a     ; ED 79 out (bc), a
 	jp	z80_adchlsp	; ED 7A adc hl, sp
 	jp	z80_ldsp_nn_    ; ED 7B ld sp, (nn)
@@ -1736,21 +1745,30 @@ z80_ld_nn_bc:
 	; $ED 44 neg
 	z80_exaf2	neg, {neg}
 
+	; $ED 45 retn
 z80_retn:
 	pop.s	iy
 	z80loop
 
-z80_im0:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 46 im 0
+z80_im0:	; IM 1 is always active and only mode supported
+	z80loop
 
-z80_ld_i_a:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 47 ld i, a
+	; TODO testing
+	z80_exaf2	ldia, {ld i, a}
 
-z80_in_c_c:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 48 in c, (c)
+	; TODO testing
+z80_inc_c_:
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	in	a, (bc)
+	pop	bc
+	ld	c, a
+	exx
+	z80loop
 
 	; $ED $49 out (c), c
 z80_out_c_c:
@@ -1781,14 +1799,20 @@ z80_reti:
 	pop.s	iy
 	z80loop
 
+	; $ED 4F ld r, a
+	; TODO testing
+	z80_exaf2	ldra, {ld r, a}
 
-z80_ld_r_a:
-	call	not_implemented
-	jp	z80_nop
-
-z80_in_d_c:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 50 in d, (c)
+	; TODO testing
+z80_ind_c_:
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	in	d, (bc)
+	pop	bc
+	exx
+	z80loop
 
 	; $ED 59 out (c), d
 	z80_out_c_jj	d
@@ -1807,7 +1831,8 @@ z80_ld_nn_de:
 	ld.s	(hl), bc
 	z80loop
 
-z80_im1:
+	; $ED 56 im 1
+z80_im1:	; IM 1 is always active and only mode supported
 	z80loop
 
 	; $ED 57 ld a, i
@@ -1816,9 +1841,16 @@ z80_im1:
 	; will be 0 (flag PE) when EI, 1 (flag PO) when DI
 	z80_exaf2	ldai, {ld a, (ix+z80_flags)}, {and a, 1}, {ld a, 0}
 
-z80_in_e_c:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 58 in e, (c)
+	; TODO testing
+z80_ine_c_:
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	in	e, (bc)
+	pop	bc
+	exx
+	z80loop
 
 	; $ED 59 out (c), e
 	z80_out_c_jj	e
@@ -1837,19 +1869,23 @@ z80_ld_de_nn:
 	exx
 	z80loop
 
-z80_im2:
-	call	not_implemented
-	jp	z80_nop
-
-z80_ld_a_r:
-	ex	af, af'
-	ld	a, r
-	ex	af, af'
+	; $ED 5E
+z80_im2:	; IM 1 is always active and only mode supported
 	z80loop
 
-z80_in_h_c:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 5F ld a, r
+	z80_exaf2	ldar, {ld a, r}
+
+	; $ED 60 in h, (c)
+	; TODO testing
+z80_inh_c_:
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	in	h, (bc)
+	pop	bc
+	exx
+	z80loop
 
 	; $ED 61 out (c), h
 	z80_out_c_jj	h
@@ -1860,9 +1896,16 @@ z80_in_h_c:
 	; $ED 67 rrd (hl)
 	z80_exall2	rrd_hl_, {db %52}, {rrd (hl)}
 
-z80_in_l_c:
-	call	not_implemented
-	jp	z80_nop
+	; $ED 58 in l, (c)
+	; TODO testing
+z80_inl_c_:
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	in	l, (bc)
+	pop	bc
+	exx
+	z80loop
 
 	; $ED 69 out (c), l
 	z80_out_c_jj	l
@@ -1887,7 +1930,8 @@ z80_ld_nn_sp:
 	z80loop
 
 	; $ED 78 in a, (c)
-z80_in_a_c:
+	; TODO testing
+z80_ina_c_:
 	exx
 	push	bc
 	ld	b, IO_SEGMENT
@@ -1927,9 +1971,21 @@ z80_ldsp_nn_:
 	; $ED A1
 	z80_exall2	cpi, {cpi.s}
 
+	; $ED A2 ini
+	; TODO testing
 z80_ini:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	in	a, (bc)
+	ld.s	(hl), a
+	inc	hl
+	pop	bc
+	ex	af, af'
+	dec	b		; flag may not be consistent with ini
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED A3
 z80_outi:
@@ -1952,15 +2008,37 @@ z80_outi:
 	; $ED A9 cpd
 	z80_exall2	cpd, {cpd.s}
 
-
+	; $ED AA ind
+	; TODO testing
 z80_ind:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	in	a, (bc)
+	ld.s	(hl), a
+	dec	hl
+	pop	bc
+	ex	af, af'
+	dec	b		; flag may not be consistent with ini
+	ex	af, af'
+	exx
+	z80loop
 
-
+	; $ED AB outd
+	; TODO testing
 z80_outd:
-	call	not_implemented
-	jp	z80_nop
+	exx
+	push	bc
+	ld	b, IO_SEGMENT
+	ld.s	a, (hl)
+	out	(bc), a
+	dec	hl
+	pop	bc
+	ex	af, af'
+	dec	b		; flag may not be consistent with outi
+	ex	af, af'
+	exx
+	z80loop
 
 	; $ED $B0
 z80_ldir:
@@ -2105,8 +2183,17 @@ z80_leaixiyd:
 z80_otdm:
 z80_ind2:
 z80_mltsp:
-	call	not_implemented
+.if EN_EZ80_INSTR
+	jp	not_implemented
+.else
+
+.if EN_NOP_UNKNOWN
 	z80loop
+.else
+	jp	not_implemented
+.endif
+
+.endif
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

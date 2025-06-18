@@ -15,6 +15,7 @@
 	global	z80_lddd
 	; $52 ld d, d aka .sil/il suffix - call.il/call.sil
 z80_lddd:
+.if	EN_EZ80_INSTR
 	; iy = {mb}:iy
 	push	iy
 	ld	iy, 0
@@ -48,8 +49,10 @@ z80_lddd:
 	cp	%fc
 	jr	z, z80_callilmmmn
 
-	call	not_implemented
+	jp	not_implemented
+.else
 	z80loop
+.endif
 
 z80_callilmmn:
 	push	iy			; save return PC

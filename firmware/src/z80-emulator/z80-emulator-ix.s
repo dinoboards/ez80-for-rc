@@ -321,8 +321,11 @@ ix_instr_table:
 	jp	z80_ix_nop		; DD FF
 
 z80_ix_nop:
-	call	not_implemented
-	jp	z80_nop
+.if EN_NOP_UNKNOWN
+	z80loop
+.else
+	jp	not_implemented
+.endif
 
 	; $DD 07 ld bc, (ix+d)
 	z80_niy	ldbc_ixd_

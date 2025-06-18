@@ -16,11 +16,14 @@
 
 	; $5B ld e, e aka lil suffix
 z80_ldee:
+.if	EN_EZ80_INSTR
 	ld.s	a, (iy)
 	cp	%CD		; call.lil
 	jr	z, z80_callilmmn
-	call	not_implemented
+	jp	not_implemented
+.else
 	z80loop
+.endif
 
 z80_callilmmn:
 	; iy = {mb}:iy

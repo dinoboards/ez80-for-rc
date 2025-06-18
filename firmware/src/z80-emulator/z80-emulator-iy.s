@@ -320,8 +320,11 @@ iy_instr_table:
 	jp	z80_iy_nop		; FD FF
 
 z80_iy_nop:
-	call	not_implemented
-	jp	z80_nop
+.if EN_NOP_UNKNOWN
+	z80loop
+.else
+	jp	not_implemented
+.endif
 
 	; $FD 07 ld bc, (iy+d)
 	z80_niy	ldbc_iyd_
