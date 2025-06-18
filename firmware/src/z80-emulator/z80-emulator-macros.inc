@@ -15,8 +15,9 @@ z80_byte_jump	macro	instr_table
 	inc	iy
 	add	hl, hl
 	add	hl, hl
-	ld	bc, instr_table
+	ld	bc, instr_table+1
 	add	hl, bc
+	ld	hl, (hl)
 	jp	(hl)
 	endmacro
 

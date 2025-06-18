@@ -349,8 +349,6 @@ z80_instr_table:
 	global	not_implemented
 not_implemented:
 	di
-	nop
-	nop
 	halt
 
 	; $00 nop
