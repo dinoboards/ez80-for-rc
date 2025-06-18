@@ -595,7 +595,7 @@ z80_incsp:
 	; $35 dec (hl)
 	z80_exall2	dec_hl_, {dec.s (hl)}
 
-
+	; $36 ld (hl), n
 z80_ld_hl_n:
 	ld.s	a, (iy)
 	inc	iy
@@ -674,20 +674,10 @@ z80_ldbb:
 	z80_exmain2	ldb_hl_, {db %52}, {ld b, (hl)}	; bug in assembler ld.s b, (hl) not supported??
 
 	; $47 ld b, a
-z80_ldba:
-	exx
-	ex	af, af'
-	ld	b, a
-	ex	af, af'
-	exx
-	z80loop
+	z80_exall2	ldba, {ld b, a}
 
 	; $48 ld c, b
-z80_ldcb:
-	exx
-	ld	c, b
-	exx
-	z80loop
+	z80_exmain2	ldcb, {ld c, b}
 
 	; 49 ld c, c aka lil suffix
 	; implemented in z80-emulator-lis.s
@@ -805,56 +795,26 @@ z80_ldll:
 	; $6E ld l, (hl)
 	z80_exall2	ldl_hl_, {db %52}, {ld l, (hl)}		; bug in assembler does not support ld.s l, (hl)
 
-	; $6F ld l,a
-z80_ldla:
-	exx
-	ex	af, af'
-	ld	l, a
-	ex	af, af'
-	exx
-	z80loop
+	; $6F ld l, a
+	z80_exall2	ldla, {ld l, a}
 
 	; $70 ld (hl), b
-z80_ld_hl_b:
-	exx
-	ld.s	(hl), b
-	exx
-	z80loop
+	z80_exmain2	ld_hl_b, {ld.s (hl), b}
 
 	; $72 ld (hl), c
-z80_ld_hl_c:
-	exx
-	ld.s	(hl), c
-	exx
-	z80loop
+	z80_exmain2	ld_hl_c, {ld.s (hl), c}
 
 	; $72 ld (hl), d
-z80_ld_hl_d:
-	exx
-	ld.s	(hl), d
-	exx
-	z80loop
+	z80_exmain2	ld_hl_d, {ld.s (hl), d}
 
 	; $73 ld (hl), e
-z80_ld_hl_e:
-	exx
-	ld.s	(hl), e
-	exx
-	z80loop
+	z80_exmain2	ld_hl_e, {ld.s (hl), e}
 
 	; $74 ld (hl), h
-z80_ld_hl_h:
-	exx
-	ld.s	(hl), h
-	exx
-	z80loop
+	z80_exmain2	ld_hl_h, {ld.s (hl), h}
 
 	; $75 ld (hl), e
-z80_ld_hl_l:
-	exx
-	ld.s	(hl), l
-	exx
-	z80loop
+	z80_exmain2	ld_hl_l, {ld.s (hl), l}
 
 	; $76 halt
 z80_halt:
@@ -886,7 +846,7 @@ z80_halt:
 	; $7E ld a, (hl)
 	z80_exall2	lda_hl_, {ld.s a, (hl)}
 
-
+	; $7F ld a, a
 z80_ldaa:
 	z80loop
 
@@ -1153,7 +1113,7 @@ z80_callnn:
 	; $CE adc a, n
 	z80_exaf2	adcan, {adc.s a, (iy)}, {inc iy}
 
-
+	; $CF rst $08
 z80_rst08:
 	push.s	iy
 	ld	iy, %08
@@ -1163,11 +1123,7 @@ z80_rst08:
 	z80_retcc	jr, nc
 
 	; $d1 pop de
-z80_popde:
-	exx
-	pop.s	de
-	exx
-	z80loop
+	z80_exmain2	popde, {pop.s de}
 
 	; $D2 jp nc, nn
 	z80_jpccnn	jr, nc
@@ -1185,14 +1141,10 @@ z80_out_n_a:
 	; $D4 call nc, nn
 	z80_callccnn	nc
 
-	; $d5 push de
-z80_pushde:
-	exx
-	push.s	de
-	exx
-	z80loop
+	; $D5 push de
+	z80_exmain2	pushde, {push.s de}
 
-	; $d6 sub a, n
+	; $D6 sub a, n
 z80_subn:
 	ld.s	b, (iy)
 	inc	iy
@@ -1201,7 +1153,7 @@ z80_subn:
 	ex	af, af'
 	z80loop
 
-
+	; $D7 rst $10
 z80_rst10:
 	push.s	iy
 	ld	iy, %10
@@ -1257,16 +1209,13 @@ z80_rst18:
 	; $E0 ret po
 	z80_retcc	jp, po
 
-	; $e1 pop hl
-z80_pophl:
-	exx
-	pop.s	hl
-	exx
-	z80loop
+	; $E1 pop hl
+	z80_exmain2	pophl, {pop.s hl}
 
 	; $E2 jp po, nn
 	z80_jpccnn	jp, po
 
+	; $E3 ex (sp), hl
 z80_ex_sp_hl:
 	exx
 	ex.s	(sp), hl
@@ -1276,14 +1225,10 @@ z80_ex_sp_hl:
 	; $E4 call po, nn
 	z80_callccnn	po
 
-	; $e5 push hl
-z80_pushhl:
-	exx
-	push.s	hl
-	exx
-	z80loop
+	; $E5 push hl
+	z80_exmain2	pushhl, {push.s hl}
 
-	; $e6 and a, n
+	; $E6 and a, n
 z80_andn:
 	ld.s	b, (iy)
 	inc	iy
@@ -1313,11 +1258,7 @@ z80_jp_hl_:
 	z80_jpccnn	jp, pe
 
 	; $EB ex de, hl
-z80_exdehl:
-	exx
-	ex	de, hl
-	exx
-	z80loop
+	z80_exmain2	exdehl, {ex de, hl}
 
 	; $EC call pe, nn
 	z80_callccnn	pe
@@ -1335,11 +1276,7 @@ z80_rst28:
 	z80_retcc	jp, p
 
 	; $F1 pop af
-z80_popaf:
-	ex	af, af'
-	pop.s	af
-	ex	af, af'
-	z80loop
+	z80_exaf2	popaf, {pop.s af}
 
 	; $F2 jp p, nn
 	z80_jpccnn	jp, p
@@ -1353,14 +1290,10 @@ z80_di:
 	; $F4 call p, nn
 	z80_callccnn	p
 
-	; $f5 push af
-z80_pushaf:
-	ex	af, af'
-	push.s	af
-	ex	af, af'
-	z80loop
+	; $F5 push af
+	z80_exaf2	pushaf, {push.s af}
 
-	; $f6 or a, n
+	; $F6 or a, n
 z80_oran:
 	ld.s	b, (iy)
 	inc	iy
@@ -1379,16 +1312,12 @@ z80_rst30:
 	z80_retcc	jp, m
 
 	; $F9 ld sp, hl
-z80_ldsphl:
-	exx
-	ld.s	sp, hl
-	exx
-	z80loop
+	z80_exmain2	ldsphl, {ld.s sp, hl}
 
 	; $FA jp m, nn
 	z80_jpccnn	jp, m
 
-
+	; $FB ei
 z80_ei:
 	res	1, (ix+z80_flags)	; IEF2 set
 	ei
