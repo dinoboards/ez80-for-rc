@@ -32,7 +32,6 @@
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
 <file filter-key="">src\main.s</file>
 <file filter-key="">src\rst-10-drivers\usb\mse-drv\mse_driver.c</file>
-<file filter-key="">src\z80-emulator\msx-memory-probe.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
 <file filter-key="">src\rst-08-io.s</file>
