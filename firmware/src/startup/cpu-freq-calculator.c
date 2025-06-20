@@ -90,19 +90,25 @@ uint8_t calculate_wait_state(const uint24_t min_nanoseconds, uint24_t minimum_st
   uint8_t        state;
 
   if (must_be_BC) {
-    for (state = minimum_states & 0x7F; state <= 7; state++) {
+    for (state = minimum_states & 0x7F; state <= 15; state++) {
       if (bus_cycle_to_ns(state, cpu_mhz) >= min_nanoseconds)
         return state + 0x80;
     }
 
-    return 0x87;
+    return 0x8F;
   }
 
-  for (state = 0; state <= 15; state++)
-    if (ws_to_ns(state, cpu_mhz) >= min_nanoseconds)
-      return state;
+  for (state = 0; state <= 7; state++) {
+    uint24_t t = ws_to_ns(state, cpu_mhz);
+    if (t >= min_nanoseconds) {
+      goto finish;
+    }
+  }
 
-  return 15;
+  state = 7;
+
+finish:
+  return state;
 }
 
 uint8_t calculate_emulated_io_clock_rate() { return cpu_freq_calculated / 670000; }
