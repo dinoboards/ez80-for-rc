@@ -85,6 +85,7 @@ rst_l10_exch_ver:
 	ex	af, af'
 	exx
 	dec	iy
+	dec	iy
 	jp	z80_switch_to_native
 
 	; SYSUTL_EMULSTAT_GET
