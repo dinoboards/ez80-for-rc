@@ -31,6 +31,7 @@ A successful build will create a file called `programmer.uf2` in the `programmer
 4. Copy the `programmer.uf2` to the root of the mounted storage device.
 5. After copying, the device should reboot
 6. Confirm you can connect on serial over USB, using your favourite serial terminal application (such as PuTTY).  You will need to find the COMx number that the USB has remounted as.
+  (On linux it may mount the serial device as /dev/ttyACM0.  Using minicom, the following open a serial connection to the device: `minicom -D /dev/ttyACM0`)
 
 ## Wiring the Pi Pico to your eZ80 ZDI interface
 
