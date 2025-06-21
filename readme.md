@@ -36,6 +36,13 @@ The RomWBW image needs to be assembled with the EZ80 STD target (see RomWBW buil
 
 See [RomWBW](https://github.com/wwarthen/RomWBW)
 
+## Yellow MSX
+
+With the latest firmware (date 2026-06-20 or after), the eZ80 can operate as a CPU for the Yellow MSX series.  It achieves this by executing all Z80 code through an interpreter, aka the Z80 emulator.
+
+In this emulation mode, it achieves a performance similar to a standard Z80 at around 3.5MHz.  Since its not able to achieve cycle-accurate execution of Z80 code, some instructions will be slower and while others will be faster.  For example the repeating instructions (eg: LDIR, OTIR) will operate significantly faster - whereas most instructions will incur some overhead due to the interpreter.
+
+So far I have tested with NEXTOR/MSX-BASIC BIOS and a small number of cartridge-based games without observing any issues. The games seem to play at normal speed, and sounds are reproduced correctly.  In testing the games, I did not play all the way through - just the first few levels - higher levels might trigger compatibility issues.  Games tested include: "Pacman," "Salamander," and "Metal Gear".
 
 ### Programming/Flashing the eZ80
 
