@@ -54,7 +54,7 @@ UART_BPS		.EQU	115200
 
 Z80_ADDR_MBASE		.EQU	%03
 
-MEM_CS0_TIMING 		.EQU	70		; Extended Memory timing of 70ns
+MEM_CS0_TIMING 		.EQU	100		; Extended Memory timing of 100ns
 MEM_CS1_TIMING 		.EQU	60		; High Speed Extended Memory timing of 60ns
 IO_CS2_TIMING 		.EQU	320		; External IO timing of 320ns
 MEM_CS3_TIMING 		.EQU	360		; Main 64K External Memory timing of 360ns
