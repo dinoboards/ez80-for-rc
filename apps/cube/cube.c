@@ -13,9 +13,9 @@
 #define HEIGHT (BOTTOM - TOP)
 
 uint16_t page_height;
-uint8_t change_colour = true;
-uint8_t graphic_mode;
-uint8_t super_mode = false;
+uint8_t  change_colour = true;
+uint8_t  graphic_mode;
+uint8_t  super_mode = false;
 
 #define cx   (WIDTH / 2)
 #define cy   (HEIGHT / 2)
@@ -169,7 +169,6 @@ void init() {
   vertices[7] = (POINT3D){cx - size, cy + size, cz + size};
 }
 
-
 char input[4];
 
 void set_video_mode(void) {
@@ -196,68 +195,68 @@ retry:
   printf("\r\n");
 
   char sel = input[0];
-  if (sel >= 'A' && sel <= 'Z') sel += 'a' - 'A'; // to lower
+  if (sel >= 'A' && sel <= 'Z')
+    sel += 'a' - 'A'; // to lower
 
   switch (sel) {
-    case 'a':
-      vdp_set_graphic_6();
-      break;
-    case 'b':
-      vdp_set_graphic_7();
-      break;
+  case 'a':
+    vdp_set_graphic_6();
+    break;
+  case 'b':
+    vdp_set_graphic_7();
+    break;
 
 #ifdef VDP_SUPER_HDMI
-    case 'c':
-      vdp_set_super_graphic_1();
-      break;
-    case 'd':
-      vdp_set_super_graphic_2();
-      break;
-    case 'e':
-      vdp_set_super_graphic_3();
-      break;
-    case 'f':
-      vdp_set_super_graphic_4();
-      break;
-    case 'g':
-      vdp_set_super_graphic_5();
-      break;
-    case 'h':
-      vdp_set_super_graphic_6();
-      break;
-    case 'i':
-      vdp_set_super_graphic_7();
-      break;
-    case 'j':
-      vdp_set_super_graphic_8();
-      break;
-    case 'k':
-      vdp_set_super_graphic_9();
-      break;
+  case 'c':
+    vdp_set_super_graphic_1();
+    break;
+  case 'd':
+    vdp_set_super_graphic_2();
+    break;
+  case 'e':
+    vdp_set_super_graphic_3();
+    break;
+  case 'f':
+    vdp_set_super_graphic_4();
+    break;
+  case 'g':
+    vdp_set_super_graphic_5();
+    break;
+  case 'h':
+    vdp_set_super_graphic_6();
+    break;
+  case 'i':
+    vdp_set_super_graphic_7();
+    break;
+  case 'j':
+    vdp_set_super_graphic_8();
+    break;
+  case 'k':
+    vdp_set_super_graphic_9();
+    break;
 #endif
 
-    default:
-      printf("Invalid selection. Try again.\n");
-      goto retry;
+  default:
+    printf("Invalid selection. Try again.\n");
+    goto retry;
   }
 
 #ifdef VDP_SUPER_HDMI
   if (sel >= 'c') {
     graphic_mode = sel - 'c' + 1;
     vdp_set_extended_palette(large_palette);
-    page_height = ((int24_t)vdp_get_screen_height());
+    page_height   = ((int24_t)vdp_get_screen_height());
     change_colour = true;
-    super_mode = true;
-  }
-  else {
+    super_mode    = true;
+  } else {
 #endif
     graphic_mode = sel - 'a' + 1;
     vdp_set_lines(212);
     vdp_set_refresh(PAL);
-    page_height = 256;
+    page_height   = 256;
     change_colour = false;
-    colour = 2;
-    super_mode = false;
+    colour        = 2;
+    super_mode    = false;
 #ifdef VDP_SUPER_HDMI
   }
 #endif
@@ -268,11 +267,8 @@ int main(/*const int argc, const char *argv[]*/) {
   vdp_init();
   set_video_mode();
 
-  printf("%sGraphics Mode %d (%d x %d)%s\r\n",
-    (super_mode ? "Super " : ""),
-    graphic_mode,
-    vdp_get_screen_width(), vdp_get_screen_height(),
-    (super_mode ? ", 256 Colours" : ""));
+  printf("%sGraphics Mode %d (%d x %d)%s\r\n", (super_mode ? "Super " : ""), graphic_mode, vdp_get_screen_width(),
+         vdp_get_screen_height(), (super_mode ? ", 256 Colours" : ""));
 
   init();
 
