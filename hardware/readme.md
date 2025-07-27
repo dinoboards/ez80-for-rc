@@ -38,3 +38,12 @@ minipro -p ATF16V8C -w ./bin/ez80-cpu-v1.7.jed
 
 * [eZ80 Interface Module (v1.7)](../docs/assets/SCHEMATIC-EZ80-INTERFACE-V1.7.pdf)
 * [ez80 CPU Module (v1.3)](../docs/assets/SCHEMATIC-EZ80-V1.3.pdf)
+
+
+## eZ80 CPU Module pinout
+
+<img src="../docs/ez80-cpu-module-pinout.png" style="width:70%">
+
+## eZ80 CPU Module Render
+
+<img src="../docs/ez80-cpu-module.png"  style="width:70%">
