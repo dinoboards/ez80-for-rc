@@ -12,6 +12,36 @@
 #define ZDI_RESET_PIN 16
 #define ZDI_POWER_PIN 17
 
+#define CS0_LBR 0xA8
+#define CS0_CTL 0xAA
+#define CS0_BMC 0xF0
+#define CS0_UBR 0xA9
+
+#define CS1_CTL 0xAD
+#define CS1_BMC 0xF1
+#define CS1_UBR 0xAC
+#define CS1_LBR 0xAB
+
+#define CS2_LBR 0xAE
+#define CS2_UBR 0xAF
+#define CS2_CTL 0xB0
+#define CS2_BMC 0xF2
+
+#define CS3_LBR 0xB1
+#define CS3_UBR 0xB2
+#define CS3_CTL 0xB3
+#define CS3_BMC 0xF3
+
+#define CSX_TYPE_IO  0x10
+#define CSX_ENABLED  0x08
+#define CSX_TYPE_MEM 0x00
+
+#define BMX_BC_4 0x04
+#define BMX_BC_5 0x05
+
+#define BMX_BM_Z80      (0x01 << 6)
+#define BMX_AD_SEPARATE (0x00 << 5)
+
 // #define GPIO_22     22
 
 #define ZDI_READ  1
@@ -76,6 +106,7 @@ typedef void (*report_ez80_id_fn_t)(uint8_t zdi_id_low, uint8_t zdi_id_high, uin
 typedef void (*report_ez80_id_failed_fn_t)(void);
 
 extern void zdi_instr_di(void);
+extern void zdi_ld_mb_a(void);
 extern void zdi_load_a_nn(uint8_t nn);
 extern void zdi_out0_nn_a(uint8_t nn);
 extern void zdi_init_pins(void);

@@ -45,6 +45,7 @@ set pc [ADDR]
 wr or read [ADDR]
   Read 16 bytes from the eZ80 memory
 
+
 reboot
   Reset and restart the eZ80 firmware
 
@@ -60,6 +61,7 @@ void process_mode_command(void);
 void process_set_command(void);
 void process_led_command(void);
 void process_read_command(void);
+void process_str_command(void);
 void process_reboot_command(void);
 
 void process_command(void) {
@@ -88,6 +90,7 @@ void process_command(void) {
            "  Read the current firmware version image\r\n"
            "  and compare to verify correctness\r\n"
            "  upload: expects an intel hex file to be streamed over stdin\r\n"
+           "\r\n"
            "break or b\r\n"
            "  break the ez80  \r\n"
            "\r\n"
@@ -113,7 +116,10 @@ void process_command(void) {
            //  "  Write a byte to the eZ80 memory\r\n"
            //  "\r\n"
            "rd or read [ADDR]\r\n"
-           "  Read a byte from the eZ80 memory\r\n"
+           "  Read bytes from memory\r\n"
+           "\r\n"
+           "str [ADDR]\r\n"
+           "  Read a null terminated string from memory\r\n"
            "\r\n"
            "reboot\r\n"
            "  Reset and restart the eZ80 firmware\r\n");
@@ -137,6 +143,8 @@ void process_command(void) {
     process_set_command();
   } else if (strcmp(input_buffer, "led") == 0) {
     process_led_command();
+  } else if (strcmp(input_buffer, "str") == 0) {
+    process_str_command();
   } else if (strcmp(input_buffer, "rd") == 0 || strcmp(input_buffer, "read") == 0) {
     process_read_command();
   } else if (strcmp(input_buffer, "reboot") == 0) {
@@ -376,6 +384,33 @@ void process_read_command(void) {
     printf("0x%02X ", data[i]);
   }
   printf("\r\n");
+
+  write_reg_pc(pc);
+}
+
+void process_str_command(void) {
+  const char *addr_str = strtok(NULL, " ");
+  if (addr_str == NULL) {
+    printf("str command requires an address\r\n");
+    return;
+  }
+
+  const uint32_t addr = strtoul(addr_str, NULL, 16);
+
+  uint32_t pc = read_reg_pc();
+
+  // Work around - need to initiate a read for the proceeding byte to get reliable read
+  // first byte always seems to be incorrect
+  // dont know why
+  zdi_read_byte(addr - 1);
+
+  uint8_t data[129];
+  for (int i = 0; i < 128; i++) {
+    data[i] = zdi_read_byte(addr + i);
+  }
+
+  data[128] = 0;
+  printf("\r\n%s\r\n", data);
 
   write_reg_pc(pc);
 }

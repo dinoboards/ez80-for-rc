@@ -89,7 +89,10 @@ led [on|off]
   Configure PC0 as output and turn led on or off
 
 rd or read [ADDR]
-  Read a byte from the eZ80 memory
+  Read bytes from memory
+
+str [ADDR]
+  Read a null terminated string from memory
 
 reboot
   Reset and restart the eZ80 firmware

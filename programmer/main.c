@@ -49,6 +49,9 @@ void conduct_test() {
     sleep_ms(1000);
   }
 }
+
+extern void process_status_command();
+
 int main() {
   zdi_init_pins();
 
@@ -68,6 +71,9 @@ wait_for_valid_connection:
 
   printf("Available Firmware Version: %d.%d.%d.%d (%s)\r\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, REVISION_VERSION,
          FIRMWARE_DATE);
+
+  zdi_full_reset();
+  process_status_command();
 
   while (true) {
     printf("ZDI> ");

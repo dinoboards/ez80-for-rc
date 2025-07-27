@@ -243,9 +243,54 @@ void zdi_out0_nn_a(uint8_t nn) {
   zdi_wr_reg_byte(ZDI_WR_IS0, OUT0_NN_A[0]);
 }
 
+void zdi_ld_mb_a() {
+  zdi_wr_reg_byte(ZDI_WR_IS1, 0x6D);
+  zdi_wr_reg_byte(ZDI_WR_IS0, 0xED);
+}
+
 void zdi_set_mode_adl() { zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_SET_ADL); }
 
 void zdi_set_mode_z80() { zdi_wr_reg_byte(ZDI_WR_RW_CTL, RW_CTL_RESET_ADL); }
+
+/*
+  ; configure CS2 to CS3
+
+        ; CS0 and CS1 are disabled
+        XOR	A
+        OUT0	(CS0_LBR), A
+        OUT0	(CS0_UBR), A
+        OUT0	(CS0_BMC), A
+        OUT0	(CS0_CTL), A
+
+        OUT0	(CS1_LBR), A
+        OUT0	(CS1_UBR), A
+        OUT0	(CS1_BMC), A
+        OUT0	(CS1_CTL), A
+
+
+        ; CS2 is enabled for I/O @ $FFxx
+        LD	A, IO_SEGMENT
+        OUT0	(CS2_LBR), A
+        OUT0	(CS2_UBR), A
+        LD	A, INIT_IO_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPARATE
+        OUT0	(CS2_BMC), A
+        LD	A, CSX_TYPE_IO | CSX_ENABLED
+        OUT0	(CS2_CTL), A
+
+        ; CS3 is enabled for memory @ $03xxxx
+        LD	A, Z80_ADDR_MBASE
+        ld	mb, a
+        OUT0	(CS3_LBR), A
+        OUT0	(CS3_UBR), A
+        LD	A, INIT_MEM_BUS_CYCLES & %0F | BMX_BM_Z80 | BMX_AD_SEPARATE
+        OUT0	(CS3_BMC), A
+        LD	A, CSX_TYPE_MEM | CSX_ENABLED
+        OUT0	(CS3_CTL), A
+
+*/
+
+#define IO_SEGMENT     0xFF
+#define Z80_ADDR_MBASE 0x03
 
 void zdi_full_reset() {
   zdi_debug_break();
@@ -265,6 +310,40 @@ void zdi_full_reset() {
   zdi_out0_nn_a(FLASH_KEY);
   zdi_load_a_nn(fdiv);
   zdi_out0_nn_a(FLASH_FDIV);
+
+  // disable cs0 and cs1
+  zdi_load_a_nn(0);
+  zdi_out0_nn_a(CS0_LBR);
+  zdi_out0_nn_a(CS0_UBR);
+  zdi_out0_nn_a(CS0_BMC);
+  zdi_out0_nn_a(CS0_CTL);
+
+  zdi_out0_nn_a(CS1_LBR);
+  zdi_out0_nn_a(CS1_UBR);
+  zdi_out0_nn_a(CS1_BMC);
+  zdi_out0_nn_a(CS1_CTL);
+
+  // configure CS2 and CS3
+  zdi_load_a_nn(IO_SEGMENT);
+  zdi_out0_nn_a(CS2_LBR);
+  zdi_out0_nn_a(CS2_UBR);
+
+  zdi_load_a_nn(BMX_BC_5 | BMX_BM_Z80 | BMX_AD_SEPARATE);
+  zdi_out0_nn_a(CS2_BMC);
+
+  zdi_load_a_nn(CSX_TYPE_IO | CSX_ENABLED);
+  zdi_out0_nn_a(CS2_CTL);
+
+  zdi_load_a_nn(Z80_ADDR_MBASE);
+  zdi_ld_mb_a();
+  zdi_out0_nn_a(CS3_LBR);
+  zdi_out0_nn_a(CS3_UBR);
+
+  zdi_load_a_nn(BMX_BC_4 | BMX_BM_Z80 | BMX_AD_SEPARATE);
+  zdi_out0_nn_a(CS3_BMC);
+
+  zdi_load_a_nn(CSX_TYPE_MEM | CSX_ENABLED);
+  zdi_out0_nn_a(CS3_CTL);
 
   zdi_wr_reg_byte(ZDI_WR_DATA_L, 0x00);
   zdi_wr_reg_byte(ZDI_WR_DATA_H, 0x00);
