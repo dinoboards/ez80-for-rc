@@ -20,6 +20,20 @@ For PCB version 1.7, please note the following corrections:
 </ol>
 </div>
 
+### Building the PLD in linux
+
+From within the hardware directory
+
+```bash
+docker run --rm -v ${PWD}:/ez80-for-rc/hardware/  -u $(id -u ${USER}):$(id -g ${USER}) -it dinoboards/wincupl:0.0.1 ./make-jed.sh
+```
+
+### Flashing the PLD in linux
+
+```bash
+minipro -p ATF16V8C -w ./bin/ez80-cpu-v1.7.jed
+```
+
 ## Schematics
 
 * [eZ80 Interface Module (v1.7)](../docs/assets/SCHEMATIC-EZ80-INTERFACE-V1.7.pdf)
