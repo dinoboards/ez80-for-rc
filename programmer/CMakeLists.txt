@@ -91,6 +91,7 @@ add_executable(programmer
     hex_record.c
     ifl.c
     utils.c
+    led.c
     firmware_version.h
     ez80_rc_firmware_release.c
 )

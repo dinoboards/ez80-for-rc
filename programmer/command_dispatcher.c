@@ -1,6 +1,7 @@
 #include "firmware_version.h"
 #include "hex_record.h"
 #include "ifl.h"
+#include "led.h"
 #include "pico/stdlib.h"
 #include "read_line.h"
 #include "utils.h"
@@ -57,6 +58,7 @@ void process_continue_command(void);
 void process_reset_command(void);
 void process_mode_command(void);
 void process_set_command(void);
+void process_led_command(void);
 void process_read_command(void);
 void process_reboot_command(void);
 
@@ -98,6 +100,9 @@ void process_command(void) {
            "mode or m [ADL|Z80]\r\n"
            "  Set the CPU mode to ADL or Z80\r\n"
            "\r\n"
+           "led [on|off]\r\n"
+           "  Configure PC0 as output and turn led on or off\r\n"
+           "\r\n"
            //  "set cpu-freq [FREQ]\r\n"
            //  "  Set the CPU frequency in Mhz or Hz\r\n"
            //  "\r\n"
@@ -130,6 +135,8 @@ void process_command(void) {
     process_mode_command();
   } else if (strcmp(input_buffer, "set") == 0) {
     process_set_command();
+  } else if (strcmp(input_buffer, "led") == 0) {
+    process_led_command();
   } else if (strcmp(input_buffer, "rd") == 0 || strcmp(input_buffer, "read") == 0) {
     process_read_command();
   } else if (strcmp(input_buffer, "reboot") == 0) {
@@ -323,6 +330,24 @@ void set_pc_addr(void) {
   write_reg_pc(addr);
 
   printf("PC assigned to 0x%06lX\r\n", addr);
+}
+
+void process_led_command(void) {
+  char *mode = strtok(NULL, " ");
+  if (mode == NULL) {
+    printf("led command requires 'on' or 'off' argument\r\n");
+    return;
+  }
+
+  if (strcmp(mode, "off") == 0) {
+    turn_led_off();
+    printf("Turning LED off\r\n");
+  } else if (strcmp(mode, "on") == 0) {
+    turn_led_on();
+    printf("Turning LED on\r\n");
+  } else {
+    printf("Unknown led state: %s\r\n", mode);
+  }
 }
 
 void process_read_command(void) {

@@ -75,34 +75,37 @@ typedef void (*report_non_connection_fn_t)(void);
 typedef void (*report_ez80_id_fn_t)(uint8_t zdi_id_low, uint8_t zdi_id_high, uint8_t zdi_id_rev);
 typedef void (*report_ez80_id_failed_fn_t)(void);
 
-void zdi_init_pins(void);
-void zdi_wait_for_connection(const report_connection_fn_t, const report_non_connection_fn_t);
-void zdi_configure_pins(void);
-bool zdi_connection_lost(void);
-void zdi_wait_for_valid_identity(const report_ez80_id_fn_t, const report_ez80_id_failed_fn_t);
+extern void zdi_instr_di(void);
+extern void zdi_load_a_nn(uint8_t nn);
+extern void zdi_out0_nn_a(uint8_t nn);
+extern void zdi_init_pins(void);
+extern void zdi_wait_for_connection(const report_connection_fn_t, const report_non_connection_fn_t);
+extern void zdi_configure_pins(void);
+extern bool zdi_connection_lost(void);
+extern void zdi_wait_for_valid_identity(const report_ez80_id_fn_t, const report_ez80_id_failed_fn_t);
 
-uint8_t IN_RAM zdi_rd_reg(const uint8_t reg_addr, const uint8_t separator_id);
-void IN_RAM    zdi_wr_reg(const uint8_t reg_addr, const uint8_t value, const uint8_t separator_id);
+extern uint8_t IN_RAM zdi_rd_reg(const uint8_t reg_addr, const uint8_t separator_id);
+extern void IN_RAM    zdi_wr_reg(const uint8_t reg_addr, const uint8_t value, const uint8_t separator_id);
 
 #define zdi_rd_reg_byte(reg_addr)        zdi_rd_reg(reg_addr, ZDI_SEP_DONE)
 #define zdi_wr_reg_byte(reg_addr, value) zdi_wr_reg(reg_addr, value, ZDI_SEP_DONE)
 
-void zdi_debug_break();
-void zdi_debug_continue();
-void zdi_full_reset();
-void zdi_set_mode_adl();
-void zdi_set_mode_z80();
+extern void zdi_debug_break();
+extern void zdi_debug_continue();
+extern void zdi_full_reset();
+extern void zdi_set_mode_adl();
+extern void zdi_set_mode_z80();
 
-void zdi_set_cpu_freq(const uint32_t freq);
+extern void zdi_set_cpu_freq(const uint32_t freq);
 
-void zdi_flash_write_enable(void);
-void zdi_flash_write_disable(void);
-void zdi_erase_flash(void);
-void zdi_flash_write_bytes(const uint32_t address, const uint8_t *data, const uint16_t len);
+extern void zdi_flash_write_enable(void);
+extern void zdi_flash_write_disable(void);
+extern void zdi_erase_flash(void);
+extern void zdi_flash_write_bytes(const uint32_t address, const uint8_t *data, const uint16_t len);
 
-void     zdi_write_byte(const uint32_t address, const uint8_t data);
-uint8_t  zdi_read_byte(const uint32_t address);
-uint32_t read_reg_pc();
-void     write_reg_pc(const uint32_t pc);
+extern void     zdi_write_byte(const uint32_t address, const uint8_t data);
+extern uint8_t  zdi_read_byte(const uint32_t address);
+extern uint32_t read_reg_pc();
+extern void     write_reg_pc(const uint32_t pc);
 
 #endif
