@@ -116,10 +116,12 @@ power_on_reset:
 	LD	A, __vector_table >> 8 & 0ffh
 	LD	I, A				; Load interrupt vector base
 
-	LD	A, IO_SEGMENT
+	LD	A, %FF
 	OUT0	(PB_DDR), A			; GPIO
-	OUT0	(PC_DDR), A			;
 	OUT0	(PD_DDR), A			;
+
+	LD	A, %FE				; SET PC0 as output, rest of PCs pins as input
+	OUT0	(PC_DDR), A			;
 	XOR	A
 	OUT0	(PB_ALT1), A			;
 	OUT0	(PC_ALT1), A			;
@@ -142,6 +144,10 @@ power_on_reset:
 	AND	A, %BE				; resets the RTC count prescaler allowing
 	OUT0	(RTC_CTRL), A			; the RTC to be synchronized to another
                              			; time source.
+
+	; SET ON BOARD LED TO TURN ON
+	LD	A, 0
+	OUT0	(PC_DR), A
 
 	; CONFIGURE PB4 & PB5
 	; SEND TIMER 5 TO PB5

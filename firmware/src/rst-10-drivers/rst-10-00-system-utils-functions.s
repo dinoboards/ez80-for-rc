@@ -33,6 +33,50 @@
 
 	.assume adl=1
 
+	PUBLIC	_system_led_timer_isr
+	XREF	_led_flashing_state
+	XREF	_led_flash_delay_count
+	XREF	_led_flash_delay_period
+
+; interrupt to control flash rate of on board led
+_system_led_timer_isr:
+	push	hl
+	push	de
+	push	af
+
+	IN0    A, (TMR3_CTL)				; CLEAR INTERRUPT SIGNAL
+
+	xor	a
+	sbc	hl, hl
+	ex	hl, de
+	LD	HL, (_led_flash_delay_count)
+	dec	hl
+	ld	(_led_flash_delay_count), hl
+	or	a
+	sbc	hl, de
+	jr	nz, led_continue
+
+	push	bc
+	ld	hl, (_led_flash_delay_period)
+	ld	(_led_flash_delay_count), hl
+	LD	HL, _led_flashing_state
+	LD	A, (HL)
+	XOR	%01
+	LD	(HL), A
+	LD	B, A
+	IN	A, (PC_DR)
+	AND	%FE
+	OR	B
+	OUT0	(PC_DR), A
+	pop	bc
+
+led_continue:
+	pop	af
+	pop	de
+	pop	hl
+	ei
+	ret.l
+
 	PUBLIC	_system_utils_dispatch
 ;
 ; SYSTEM UTILS DISPATCH
@@ -130,6 +174,11 @@ ez80_version_exchange:
 	LD	(send_int_to_z80), A
 	LD	(tmr_irq), A
 
+	; Double rate of LED FLASHING
+	LD	HL, (_led_flash_delay_period)
+	ADD	HL, HL
+	LD	(_led_flash_delay_period), HL
+
 	CALL	_util_get_day_of_month
 	LD	C, A
 	PUSH	BC
@@ -141,9 +190,8 @@ ez80_version_exchange:
 	POP	BC
 	LD	E, A
 	EXX
-	LD	D, MAJOR_VERSION
-	LD	E, MINOR_VERSION
-	LD	HL, PATCH_VERSION << 16 | REVISION_VERSION
+	LD	DE, MAJOR_VERSION << 8 | MINOR_VERSION
+	LD	HL, PATCH_VERSION << 8 | REVISION_VERSION
 	LD	C, 0
 
 	XOR	A

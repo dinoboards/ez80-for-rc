@@ -51,13 +51,13 @@ CFLAGS =  \
 -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
-	-define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1  \
+	-define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1 -define:_DEBUG  \
 	-include:\"..;C:\ZDS\include\std;C:\ZDS\include\zilog\" -list  \
 	-listmac -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn -debug  \
 	-NOigcase -cpu:eZ80F92"
 
 ASFLAGS =  \
--define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1  \
+-define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE=1 -define:_DEBUG  \
 -include:"\"..;C:\ZDS\include\std;C:\ZDS\include\zilog\"" -list  \
 -listmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn  \
 -debug -NOigcase -cpu:eZ80F92
@@ -90,6 +90,14 @@ clean:
             $(RM) "$(WORKDIR)\base-drv.lis"
 	@if exist "$(WORKDIR)\base-drv.lst"  \
             $(RM) "$(WORKDIR)\base-drv.lst"
+	@if exist "$(WORKDIR)\boot_prompt.obj"  \
+            $(RM) "$(WORKDIR)\boot_prompt.obj"
+	@if exist "$(WORKDIR)\boot_prompt.lis"  \
+            $(RM) "$(WORKDIR)\boot_prompt.lis"
+	@if exist "$(WORKDIR)\boot_prompt.lst"  \
+            $(RM) "$(WORKDIR)\boot_prompt.lst"
+	@if exist "$(WORKDIR)\boot_prompt.src"  \
+            $(RM) "$(WORKDIR)\boot_prompt.src"
 	@if exist "$(WORKDIR)\build-date.obj"  \
             $(RM) "$(WORKDIR)\build-date.obj"
 	@if exist "$(WORKDIR)\build-date.lis"  \
@@ -570,6 +578,7 @@ LIBS =
 
 OBJS =  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
+            $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
             $(WORKDIR_ESCSPACE)\ch376asm.obj  \
@@ -652,6 +661,10 @@ $(WORKDIR_ESCSPACE)\base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv.s"
+
+$(WORKDIR_ESCSPACE)\boot_prompt.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\boot_prompt.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\boot_prompt.c"
 
 $(WORKDIR_ESCSPACE)\build-date.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\build-date.c  \

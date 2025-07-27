@@ -6,11 +6,31 @@ See [RomWBW](https://github.com/wwarthen/RomWBW)
 
 The firmware will manage startup, configuration of on-chip devices, interrupt marshalling and handover to RomWBW in an external ROM/RAM module.
 
+## Boot up process
+
+When the eZ80 is powered on, its onboard firmware starts and performs the following tasks:
+
+1. The onboard LED is switched on.
+2. Detect if there is power to the Real Time Clock(RTC), typically powered by a battery.
+3. If the RTC is installed, then the system will use that known clock rate to measure the installed CPU's oscillator frequency.
+4. If the RTC is not installed, then the system will assume the CPU's oscillator is 20Mhz.
+5. Based on the determined CPU's oscillator frequency, the UART0 is configured for 115200 baud rate.
+6. Interrupt handlers and buffers are initialised to manage the UART serial interface.
+7. The onboard LED is configured to flash twice a second.
+8. The eZ80 will then execute code at address 0x030000 in emulated/Z80 mode - typically this will be the RomWBW image.
+9.  When the external ROM execute the firmware function (SYSUTL_VER_EXCHANGE), indicating that the external ROM is executing correctly, the onboard LED flash rate slows to once per second.
+
+> The onboard LED activation is in the pre-release verison only
+
+> Additional, when the debug firmware image is flashed onto the eZ80, the firmware will output a boot prompt message after the UART has been initislied, but before the external ROM/RomWBW has been started.
+
+
+
+## Building the firmware code
+
 **NOTE: Change of installation recommendation**
 > Previously it was recommended that the Zilog IDE be installed at `Z:\ZDS`.  This has been changed
 > to the more conventional windows path of `C:\ZDS\`.  The source code is still recommended to be `Z:\....`
-
-## Building the firmware code
 
 This is a ZDSII ez80Acclaim (5.3.5) project.
 
@@ -164,7 +184,7 @@ Refer to the following images for the correct installation orientation.
 | ---------------- | ----------- |
 | 000000 -> 01FFFF | ON-CHIP ROM |
 | 02E000 -> 02FFFF | ON-CHIP RAM (__RAM_ADDR_U_INIT_PARAM) |
-| 030000 -> 03FFFF | EXTERNAL RAM (CS3) |
+| 030000 -> 03FFFF | EXTERNAL ROM/RAM (CS3) FOR Z80 COMPATIBILITY MODE |
 | 040000 -> 23FFFF | WIP EXTERNAL FLAT RAM (CS0) 2MB |
 | 240000 -> FFFFFF | WIP OTHER (CS1) 14MB |
 

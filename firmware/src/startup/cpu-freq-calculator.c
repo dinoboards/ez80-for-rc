@@ -112,3 +112,9 @@ finish:
 }
 
 uint8_t calculate_emulated_io_clock_rate() { return cpu_freq_calculated / 670000; }
+
+uint16_t calculate_default_led_flash_clock_rate() {
+  // once every 1/4 seconds
+
+  return cpu_freq_calculated / (256 * 4096 * 4);
+}

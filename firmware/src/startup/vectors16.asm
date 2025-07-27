@@ -84,7 +84,6 @@ DEFAULT_MI_HANLDER 03
 DEFAULT_MI_HANLDER 04
 DEFAULT_MI_HANLDER 05
 DEFAULT_MI_HANLDER 07
-DEFAULT_MI_HANLDER 08
 DEFAULT_MI_HANLDER 09
 DEFAULT_MI_HANLDER 0A
 DEFAULT_MI_HANLDER 0B
@@ -123,6 +122,9 @@ DEFAULT_MI_HANLDER 2D
 DEFAULT_MI_HANLDER 2E
 DEFAULT_MI_HANLDER 2F
 
+_system_led_timer_rom_hook:
+	JP	_system_led_timer_hook
+
 _system_timer_isr_rom_hook:
 	JP	_system_timer_isr_hook
 
@@ -143,6 +145,7 @@ _marshall_isr_rom_hook:
 
 	PUBLIC	__vector_table
 	EXTERN	_system_timer_isr_hook
+	EXTERN	_system_led_timer_hook
 	EXTERN _uart0_receive_isr_hook
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -155,7 +158,7 @@ __vector_table:
 	dw	_default_mi_05_handler		; 0AH - PRT 0
 	dw	_system_timer_isr_rom_hook	; 0CH - PRT 1
 	dw	_default_mi_07_handler		; 0EH - PRT 2
-	dw	_default_mi_08_handler		; 10H - PRT 3
+	dw	_system_led_timer_rom_hook	; 10H - PRT 3 led flasher
 	dw	_default_mi_09_handler		; 12H - PRT 4
 	dw	_default_mi_0A_handler		; 14H - PRT 5
 	dw	_default_mi_0B_handler		; 16H - RTC

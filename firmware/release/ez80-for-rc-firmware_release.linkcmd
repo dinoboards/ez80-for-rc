@@ -13,12 +13,14 @@
 /* -cpu:eZ80F92 */
 /*-asmsw:"  */
 	/* -define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE */
+	/* -define:_RELEASE=1 */
 	/* -include:\"..;C:\ZDS\include\std;C:\ZDS\include\zilog\" -NOlist */
 	/* -NOlistmac -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn -NOdebug */
 	/* -NOigcase -cpu:eZ80F92" */
 
 /* assembler options */
 /* -define:_EZ80ACCLAIM!=1 -define:RC2014_FIRMWARE */
+/* -define:_RELEASE=1 */
 /* -include:"\"..;C:\ZDS\include\std;C:\ZDS\include\zilog\"" -NOlist */
 /* -NOlistmac -name -pagelen:0 -pagewidth:80 -quiet -sdiopt -warn */
 /* -NOdebug -NOigcase -cpu:eZ80F92 */
@@ -97,6 +99,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 
 "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-release"= \
  ".\base-drv.obj", \
+ ".\boot_prompt.obj", \
  ".\build-date.obj", \
  ".\ch376.obj", \
  ".\ch376asm.obj", \

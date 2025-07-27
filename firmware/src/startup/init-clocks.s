@@ -4,6 +4,7 @@
 ; TMR0 -> One shot timer for delay functions
 ; TMR1 -> system ticks - generates a 50Hz or 60Hz counter, based on RTC or CPU clock
 ; TMR2 -> used by emulator to pace emulation
+; TMR3 -> used to control flash rate of on board LED
 ; TMR4 -> continuous down counter, based on CPU clock / 16.  Uses to calculate microsecond delays
 ; TMR5 -> generates a bus clock - CPU clock / 4, sent to PB5
 
@@ -26,6 +27,9 @@
 	XREF	_rtc_enabled
 	XREF	_calculate_tmr0_rr
 	XREF	_calculate_emulated_io_clock_rate
+	XREF	_calculate_default_led_flash_clock_rate
+	XREF	_led_flash_delay_period
+	XREF	_led_flash_delay_count
 
 	XREF	__lshru
 	XREF	__idivu
@@ -96,6 +100,7 @@ wait:
 config_all_tmrs:
 	CALL	configure_tmr0
 	call	configure_tmr2
+	call	configure_tmr3
 	CALL	configure_tmr4
 	CALL	configure_tmr5
 	RET
@@ -165,6 +170,17 @@ configure_tmr2:
 	OUT0	(TMR2_RR_H), A
 	LD	A, TMR_ENABLED | TMR_SINGLE | TMR_RST_EN | TMR_CLK_DIV_4
 	OUT0	(TMR2_CTL), A
+	RET
+
+configure_tmr3:
+	CALL	_calculate_default_led_flash_clock_rate
+	LD	(_led_flash_delay_period), HL
+	LD	(_led_flash_delay_count), HL
+	OUT0	(TMR3_RR_L), A
+	LD	A, %10
+	OUT0	(TMR3_RR_H), A		; RELOAD TO %1000 4096 units
+	LD	A, TMR_ENABLED | TMR_CONTINUOUS | TMR_RST_EN | TMR_CLK_DIV_256 | TMR_IRQ_EN
+	OUT0	(TMR3_CTL), A
 	RET
 ;
 ; Configure TMR4 as a continuous timer based on CPU clock /16

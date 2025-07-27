@@ -9,6 +9,7 @@
 	xref	_rx_buffer_init
 	xref	_init_clocks
 	xref	__c_startup
+	xref	_boot_prompt
 
 	xref	_io_bus_mode_and_timing
 	xref	_mem_bus_mode_and_timing
@@ -25,14 +26,19 @@ _main:
 	call	_uart0_init
 	call	_init_memory_timings
 
+ifdef _DEBUG
+	call	_boot_prompt
+endif
+
 IFDEF	ZEXALL
 	xref	Z80test
 	call	Z80test
 ENDIF
 
+
 	;xref	_spike
 	;call	_spike
-	di
+	; di
 	jp	z80_invoke
 
 	global	remove_usb_tick_hook

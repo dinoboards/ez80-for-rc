@@ -23,6 +23,10 @@
 	PUBLIC	_i2_clk_divider
 	PUBLIC	_i2c_bus_freq
 
+	PUBLIC	_led_flash_delay_period
+	PUBLIC	_led_flash_delay_count
+	PUBLIC	_led_flashing_state
+
 	PUBLIC	usb_tick_toggle
 
 _rtc_enabled:
@@ -68,6 +72,14 @@ _mem1_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles o
 _io_bus_mode_and_timing: ; BIT 7 = 0 -> ez80, 1 -> z80, BITS 0 to 2 = cycles or wait state
 	DS	1
 
+_led_flash_delay_period:
+	DS	3
+
+_led_flash_delay_count:
+	DS	3
+
+_led_flashing_state:
+	DS	1
 
 	SECTION	DATA
 

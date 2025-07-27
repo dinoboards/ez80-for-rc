@@ -46,6 +46,11 @@ _uart0_receive_isr_hook:
 _default_mi_handler_hook:
 	JP	_default_mi_handler
 
+	XREF	_system_led_timer_isr
+	PUBLIC	_system_led_timer_hook
+_system_led_timer_hook:
+	JP	_system_led_timer_isr
+
 	.assume	adl=1
 
 ; ez80's alt version of BC, DE, HL contain the emulated z80's main registers
