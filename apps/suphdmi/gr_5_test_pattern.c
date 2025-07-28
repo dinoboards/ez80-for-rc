@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <v99x8.h>
 
+extern void log_mode();
+
 static RGB palette[16] = {
     {0, 0, 0},       // Black
     {255, 0, 0},     // Bright Red
@@ -27,7 +29,7 @@ void graphics_mode_5_test_pattern(uint8_t refesh_rate) {
     vdp_set_graphic_5();
     vdp_set_palette(palette);
 
-    printf("Graphics Mode 5 (%d x %d) @ %dHz, 4 Colours\r\n", vdp_get_screen_width(), vdp_get_screen_height(), refesh_rate);
+    log_mode();
 
     test_pattern(2, 1);
 

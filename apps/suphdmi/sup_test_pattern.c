@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <v99x8-super.h>
 
+extern void log_mode();
+
 /*
 * Generate a test pattern - a series of rectangles showing all 256 colours
 * populate the palette of 256, with a VGA like standard colour palette
@@ -11,19 +13,20 @@
 */
 
 #ifdef VDP_SUPER_HDMI
-void super_graphics_mode_test_pattern(uint8_t gm) {
+void super_graphics_mode_test_pattern() {
   vdp_set_extended_palette(large_palette);
 
-  printf("Super Graphics Mode %d (%d x %d), 256 Colours\r\n", gm, get_screen_width(), get_screen_height());
+  log_mode();
 
   test_pattern(16, 1);
   // wait_for_key();
 }
 
-void super_graphics_mode_double_buffering(uint8_t gm) {
+void super_graphics_mode_double_buffering() {
   vdp_set_extended_palette(large_palette);
 
-  printf("Super Graphics Mode %d (%d x %d), 256 Colours, Double Buffer Test\r\n", gm, get_screen_width(), get_screen_height());
+  log_mode();
+  printf("double buffering test\n");
 
   vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 1, 0, 0);
   vdp_cmd_wait_completion();

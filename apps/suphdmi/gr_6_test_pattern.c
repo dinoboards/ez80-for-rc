@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <v99x8.h>
 
+extern void log_mode();
+
 static RGB palette[16] = {
     {0, 0, 0},       // Black
     {255, 0, 0},     // Bright Red
@@ -38,7 +40,7 @@ void graphics_mode_6_test_pattern(uint8_t refesh_rate) {
     vdp_set_graphic_6();
     vdp_set_palette(palette);
 
-    printf("Graphics Mode 6 (%d x %d) @ %dHz, 16 Colours\r\n", vdp_get_screen_width(), vdp_get_screen_height(), refesh_rate);
+    log_mode();
 
     test_pattern(4, 1);
     // wait_for_key();
@@ -51,7 +53,7 @@ void graphics_mode_6_double_buffering() {
   vdp_set_graphic_6();
   // vdp_set_palette(palette);
 
-  printf("Graphics Mode 7 (%d x %d), 256 Colours, Double Buffer Test\r\n", get_screen_width(), get_screen_height());
+  log_mode();
 
   vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 1, 0, 0);
   vdp_cmd_wait_completion();

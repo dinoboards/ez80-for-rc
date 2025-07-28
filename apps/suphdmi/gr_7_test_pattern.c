@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <v99x8-super.h>
 
+extern void log_mode();
+
 static RGB palette[16] = {
     {0, 0, 0},       // Black
     {255, 0, 0},     // Bright Red
@@ -29,7 +31,8 @@ void graphics_mode_7_double_buffering() {
   vdp_set_graphic_7();
   // vdp_set_palette(palette);
 
-  printf("Graphics Mode 7 (%d x %d), 256 Colours, Double Buffer Test\r\n", get_screen_width(), get_screen_height());
+  log_mode();
+  printf(" Double Buffer Test\n");
 
   vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 8, 0, 0);
   vdp_cmd_wait_completion();
@@ -73,7 +76,8 @@ void graphics_mode_7_logical_transforms() {
   vdp_set_graphic_7();
   vdp_set_palette(palette);
 
-  printf("Graphics Mode 7 (%d x %d), 256 Colours, Logical Transform\r\n", get_screen_width(), get_screen_height());
+  log_mode();
+  printf("Logical Transform\n");
 
   // erase screen with cpu to vram operation
   vdp_cmd_move_data_to_vram(0, 0, 0, 256, 212, DIX_RIGHT | DIY_DOWN, 256 * 212);

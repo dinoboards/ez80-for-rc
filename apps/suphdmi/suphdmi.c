@@ -2,10 +2,15 @@
 #include "large_palette.h"
 #include "wait_for_key.h"
 #include <cpm.h>
+#include <ez80-firmware.h>
 #include <math.h>
 #include <stdio.h>
 #include <v99x8-super.h>
 
+void sleep_a_bit() {
+  for (volatile int i = 0; i < 700; i++)
+    ;
+}
 RGB default_palette[16] = {
     {0, 0, 0}, // Black
     {7, 0, 0}, // Bright Red
@@ -49,91 +54,132 @@ void vdp_clear_all_memory2(void) {
   EI;
 }
 
+uint8_t super_graphic_50hz_modes[] = {0x02, 0x04, /*0x06, 0x08, 0x09,*/ 0x0A, 0x0C, /*0x16, 0x18, 0x19,*/ 0x1A, 0x1C};
+
+uint8_t super_graphic_60hz_modes[] = {0x01, /*0x03, 0x05, 0x07, */0x0B, /*0x15, 0x17, */0x1B};
+
 uint24_t get_screen_width() { return vdp_get_screen_width(); }
 
 uint24_t    get_screen_height() { return vdp_get_screen_height(); }
 extern void graphics_mode_5_test_pattern(uint8_t refesh_rate);
 extern void graphics_mode_6_test_pattern(uint8_t refesh_rate);
-extern void super_graphics_mode_test_pattern(uint8_t gm);
-extern void super_graphics_mode_double_buffering(uint8_t gm);
+extern void super_graphics_mode_test_pattern();
+extern void super_graphics_mode_double_buffering();
 extern void graphics_mode_6_double_buffering();
 extern void graphics_mode_7_double_buffering();
+
+void log_mode() {
+  uint8_t mode = vdp_get_graphic_mode();
+  if (mode >= 0x80)
+    printf("Super Graphics Mode %d (%d x %d), %d Colours, @ %dHz\n", mode & 0x7f, get_screen_width(), get_screen_height(),
+           vdp_get_screen_max_unique_colours(), vdp_get_refresh());
+  else
+    printf("Graphics Mode %d (%d x %d), %d Colours, @ %dHz\n", mode, get_screen_width(), get_screen_height(),
+           vdp_get_screen_max_unique_colours(), vdp_get_refresh());
+}
+
+uint8_t get_pixel_per_byte() {
+  const uint24_t r = vdp_get_screen_max_unique_colours();
+  switch (r) {
+  case 256:
+    return 1;
+
+  case 16:
+    return 2;
+
+  case 4:
+    return 4;
+
+  default:
+    return 1;
+  }
+}
 
 void main_double_buffering_test(void) {
   graphics_mode_6_double_buffering();
 
 #ifdef VDP_SUPER_HDMI
   vdp_set_super_graphic_2();
-  super_graphics_mode_double_buffering(2);
+  super_graphics_mode_double_buffering();
 
   vdp_set_super_graphic_4();
-  super_graphics_mode_double_buffering(4);
+  super_graphics_mode_double_buffering();
 
   vdp_set_super_graphic_6();
-  super_graphics_mode_double_buffering(6);
+  super_graphics_mode_double_buffering();
 
   vdp_set_super_graphic_8();
-  super_graphics_mode_double_buffering(8);
+  super_graphics_mode_double_buffering();
 
   vdp_set_super_graphic_1();
-  super_graphics_mode_double_buffering(1);
+  super_graphics_mode_double_buffering();
 
   vdp_set_super_graphic_3();
-  super_graphics_mode_double_buffering(3);
+  super_graphics_mode_double_buffering();
 
   vdp_set_super_graphic_5();
-  super_graphics_mode_double_buffering(5);
+  super_graphics_mode_double_buffering();
 
   vdp_set_super_graphic_7();
-  super_graphics_mode_double_buffering(7);
+  super_graphics_mode_double_buffering();
 #endif
 }
 
-void main_patterns(void) {
-  graphics_mode_5_test_pattern(50);
-  graphics_mode_6_test_pattern(50);
-
 #ifdef VDP_SUPER_HDMI
-  vdp_set_super_graphic_2();
-  super_graphics_mode_test_pattern(2);
-
-  vdp_set_super_graphic_4();
-  super_graphics_mode_test_pattern(4);
-  vdp_set_super_graphic_6();
-  super_graphics_mode_test_pattern(6);
-  vdp_set_super_graphic_8();
-  super_graphics_mode_test_pattern(8);
-#endif
-
-  graphics_mode_5_test_pattern(60);
-  graphics_mode_6_test_pattern(60);
-
-#ifdef VDP_SUPER_HDMI
-  vdp_set_super_graphic_1();
-  super_graphics_mode_test_pattern(1);
-  vdp_set_super_graphic_3();
-  super_graphics_mode_test_pattern(3);
-  vdp_set_super_graphic_5();
-  super_graphics_mode_test_pattern(5);
-  vdp_set_super_graphic_7();
-  super_graphics_mode_test_pattern(7);
-  vdp_set_super_graphic_9();
-  super_graphics_mode_test_pattern(9);
-
-  vdp_set_super_graphic_10();
-  super_graphics_mode_test_pattern(10);
-
-  printf("Rotate through full set of green colours\r\n");
-  wait_for_key();
+void rotate_256_palettes() {
+  printf("Set palette to range of 256 green colours\r\n");
+  // wait_for_key();
   RGB green = {0, 0, 0};
   for (int i = 0; i < 256; i++) {
     green.green = i;
     vdp_set_extended_palette_entry(i, green);
   }
+  // wait_for_key();
+}
+
+void rotate_16_palettes() {
+  printf("Set palette to range of 16 green colours\r\n");
+  // wait_for_key();
+  RGB green = {0, 0, 0};
+  for (int i = 0; i < 16; i++) {
+    green.green = i * 16;
+    vdp_set_extended_palette_entry(i, green);
+  }
+  // wait_for_key();
+}
 #endif
 
-  printf("press key to exit\r\n");
-  wait_for_key();
+void main_patterns(void) {
+  // graphics_mode_5_test_pattern(50);
+  // graphics_mode_6_test_pattern(50);
+
+#ifdef VDP_SUPER_HDMI
+  while(true) {
+  for (uint8_t m = 0; m < sizeof(super_graphic_60hz_modes); m++) {
+    vdp_set_super_graphic_mode(super_graphic_60hz_modes[m]);
+    super_graphics_mode_test_pattern();
+
+    if (get_pixel_per_byte() == 2)
+      rotate_16_palettes();
+    else
+      rotate_256_palettes();
+
+    sleep_ms(1000);
+  }
+}
+
+  for (uint8_t m = 0; m < sizeof(super_graphic_50hz_modes); m++) {
+    vdp_set_super_graphic_mode(super_graphic_50hz_modes[m]);
+    super_graphics_mode_test_pattern();
+
+        if (get_pixel_per_byte() == 2)
+      rotate_16_palettes();
+    else
+      rotate_256_palettes();
+
+    sleep_ms(1000);
+  }
+#endif
 }
 
 #ifdef VDP_SUPER_HDMI
@@ -204,49 +250,103 @@ void main_test_vdp_cmd_move_vram_to_vram() {
 }
 #endif
 
+void fill(const uint8_t fill_data, const uint24_t count, uint24_t from, const uint24_t increment) {
+  for (uint24_t i = 0; i < count; i++) {
+    vdp_cpu_to_vram(&fill_data, from, 1);
+    sleep_a_bit();
+    from += increment;
+    test_for_escape();
+  }
+}
+
 #ifdef VDP_SUPER_HDMI
+
+#define RGB_256_GREEN  2
+#define RGB_256_YELLOW 3
+#define RGB_256_PURPLE 5
+#define RGB_256_CYAN   6
+#define RGB_256_RED    9
+#define RGB_256_WHITE  8
+
 void main_vram_test() {
   vdp_set_extended_palette(large_palette);
+  log_mode();
 
-  vdp_reg_write(7, 4);
+  uint8_t       data = 0;
+  const uint8_t ppb  = get_pixel_per_byte();
 
-  uint8_t data = 1;
+  const uint24_t byte_width = get_screen_width() / ppb;
+
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height() + 10, 4, 0, 0);
+  vdp_cmd_wait_completion();
 
   vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 0, 0, 0);
   vdp_cmd_wait_completion();
 
-  data = 2;
-  for (uint24_t i = 0; i < 12; i++) {
-    printf("Byte: %d\r\n", i);
-    wait_for_key();
-    vdp_cpu_to_vram(&data, i, 1);
+  data = RGB_256_GREEN;
+  vdp_cpu_to_vram(&data, byte_width * get_screen_height() - 1, 1);
+  sleep_a_bit();
+
+  // top row - alt colours
+  fill(ppb == 2 ? RGB_256_YELLOW | (RGB_256_YELLOW << 4) : RGB_256_YELLOW, byte_width, 0, 1);
+
+  // 2nd row all one colour
+  fill(ppb == 2 ? 5 | (5 << 4) : 5, byte_width, byte_width, 1);
+
+  // fill first column
+  fill(ppb == 2 ? RGB_256_YELLOW << 4 : RGB_256_YELLOW, get_screen_height(), 0, byte_width);
+
+  // fill second column
+  fill(ppb == 2 ? RGB_256_YELLOW << 4 | RGB_256_GREEN : RGB_256_GREEN, get_screen_height(), ppb == 2 ? 0 : 1, byte_width);
+
+  // fill third column
+  fill(ppb == 2 ? RGB_256_CYAN << 4 : RGB_256_CYAN, get_screen_height(), ppb == 2 ? 1 : 2, byte_width);
+
+  // fill fourth column
+  fill(ppb == 2 ? RGB_256_CYAN << 4 | RGB_256_WHITE : RGB_256_WHITE, get_screen_height(), ppb == 2 ? 1 : 3, byte_width);
+
+  // fill fifth column
+  fill(ppb == 2 ? RGB_256_RED << 4 : RGB_256_RED, get_screen_height(), ppb == 2 ? 2 : 4, byte_width);
+
+  data = RGB_256_WHITE;
+  for (uint8_t phase = 0; phase < 2; phase++) {
+    uint24_t b = byte_width / 2;
+    if (ppb == 2) {
+      for (uint24_t x = 0; x <= 5; x++)
+        fill(data, get_screen_height(), b + x, byte_width);
+      data = RGB_256_WHITE << 4;
+    } else {
+      for (uint24_t x = 0; x <= 5; x++)
+        fill(data, get_screen_height(), b + x * 2 + phase, byte_width);
+    }
   }
 
-  for (uint24_t i = get_screen_width() - 8; i < get_screen_width() + 8; i++) {
-    vdp_cpu_to_vram(&data, i, 1);
-    printf("Byte: %d\r\n", i);
-    wait_for_key();
-  }
+  // fill right most column
+  fill(RGB_256_YELLOW, get_screen_height(), byte_width - 1, byte_width);
 
-  for (uint24_t i = get_screen_width() * 2 - 8; i < get_screen_width() * 2 + 8; i++) {
-    vdp_cpu_to_vram(&data, i, 1);
-    printf("Byte: %d\r\n", i);
-    wait_for_key();
-  }
+  // bottom row
+  fill(ppb == 2 ? RGB_256_YELLOW << 4 | RGB_256_YELLOW : RGB_256_YELLOW, get_screen_width(), byte_width * (get_screen_height() - 1),
+       1);
 
-  printf("confirm\r\n");
-  wait_for_key();
+  // printf("confirm\r\n");
+  // wait_for_key();
 }
 #endif
 
 #ifdef VDP_SUPER_HDMI
-void main_vram_tests() {
-  // for(int i = 1; i <= 8; i++) {
-  // vdp_set_super_graphic(9);
-  vdp_set_super_graphic_9();
-  printf("Super Graphics Mode %d (%d x %d), 256 Colours\r\n", 9, get_screen_width(), get_screen_height());
-  main_vram_test();
-  // }
+
+void main_vram_tests(void) {
+  for (uint8_t m = 0; m < sizeof(super_graphic_60hz_modes); m++) {
+    vdp_set_super_graphic_mode(super_graphic_60hz_modes[m]);
+    main_vram_test();
+    sleep_ms(1000);
+  }
+
+  for (uint8_t m = 0; m < sizeof(super_graphic_50hz_modes); m++) {
+    vdp_set_super_graphic_mode(super_graphic_50hz_modes[m]);
+    main_vram_test();
+    sleep_ms(1000);
+  }
 }
 #endif
 
@@ -309,8 +409,10 @@ int main() {
     printf("VDP Detected: SUPER HDMI\r\n");
     break;
   }
-  // main_vram_tests();
 
+#ifdef VDP_SUPER_HDMI
+  main_vram_tests();
+#endif
   // main_test_vdp_cmd_move_vram_to_vram();
 
   // main_test_vdp_cmd_logical_move_vram_to_vram();
