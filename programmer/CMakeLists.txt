@@ -35,6 +35,7 @@ project(programmer C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
+
 # Add executable. Default name is the project name, version 0.1
 
 # Set optimization level for all C files
@@ -96,8 +97,12 @@ add_executable(programmer
     ez80_rc_firmware_release.c
 )
 
+
+# by default the header is generated into the build dir
+pico_generate_pio_header(programmer ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
+
 # pull in common dependencies
-target_link_libraries(programmer pico_stdlib)
+target_link_libraries(programmer pico_stdlib hardware_pio)
 
 if (PICO_CYW43_SUPPORTED)
     target_link_libraries(programmer pico_cyw43_arch_none)

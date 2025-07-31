@@ -2,6 +2,9 @@
 #include "command_dispatcher.h"
 #include "firmware_version.h"
 #include "pico/stdlib.h"
+#include "hardware/pio.h"
+#include "hardware/clocks.h"
+#include "blink.pio.h"
 #include "read_line.h"
 #include "zdi.h"
 #include <stdio.h>
@@ -52,10 +55,33 @@ void conduct_test() {
 
 extern void process_status_command();
 
+void blink_pin_forever(PIO pio, uint sm, uint offset, uint pin, uint freq);
+
+
+#define PIO_CLK_OUT 22
+
 int main() {
   zdi_init_pins();
 
   stdio_init_all();
+  sleep_ms(2000);
+
+  assert(PIO_CLK_OUT < 31);
+  assert(PIO_BLINK_LED3_GPIO < 31 || PIO_BLINK_LED3_GPIO >= 32);
+
+  PIO pio;
+  uint sm;
+  uint offset;
+
+  // Find a free pio and state machine and add the program
+  bool rc = pio_claim_free_sm_and_add_program_for_gpio_range(&blink_program, &pio, &sm, &offset, PIO_CLK_OUT, 1, true);
+  hard_assert(rc);
+  printf("\r\nLoaded program at %u on pio %u\n", offset, PIO_NUM(pio));
+
+  // Start led1 flashing
+  blink_pin_forever(pio, sm, offset, PIO_CLK_OUT, 16000000);
+
+   printf("LED should be flashing\r\n");
 
   // conduct_test();
 
@@ -82,17 +108,16 @@ wait_for_valid_connection:
     else
       goto wait_for_valid_connection;
   }
+}
 
-  // while (true) {
-  //   gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
 
-  //   while (gpio_get(ZDI_ZDA_PIN) == 0 || gpio_get(ZDI_ZCL_PIN) == 0)
-  //     ;
+void blink_pin_forever(PIO pio, uint sm, uint offset, uint pin, uint freq) {
+    blink_program_init(pio, sm, offset, pin);
+    pio_sm_set_enabled(pio, sm, true);
 
-  //   uint8_t r0 = zdi_rd_reg_byte(3);
-  //   gpio_set_dir(ZDI_ZDA_PIN, GPIO_IN);
+    printf("Blinking pin %d at %d Hz\n", pin, freq);
 
-  //   printf("R0 = %02X\r\n", r0);
-  //   sleep_ms(500);
-  // }
+    // PIO counter program takes 3 more cycles in total than we pass as
+    // input (wait for n + 1; mov; jmp)
+    pio->txf[sm] = (clock_get_hz(clk_sys) / (2 * freq)) - 3;
 }
