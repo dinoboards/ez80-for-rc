@@ -1,4 +1,4 @@
-#include "large_palette.h"
+#include "palettes.h"
 #include "test_pattern.h"
 #include "wait_for_key.h"
 #include <stdio.h>
@@ -14,7 +14,7 @@ extern void log_mode();
 
 #ifdef VDP_SUPER_HDMI
 void super_graphics_mode_test_pattern() {
-  vdp_set_extended_palette(large_palette);
+  vdp_set_extended_palette(palette_256);
 
   log_mode();
 
@@ -23,24 +23,24 @@ void super_graphics_mode_test_pattern() {
 }
 
 void super_graphics_mode_double_buffering() {
-  vdp_set_extended_palette(large_palette);
+  vdp_set_extended_palette(palette_256);
 
   log_mode();
   printf("double buffering test\n");
 
-  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 1, 0, 0);
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 1, 0, 0);
   vdp_cmd_wait_completion();
 
   vdp_set_command_page(1);
-  vdp_cmd_logical_move_vdp_to_vram(0, 0, get_screen_width(), get_screen_height(), 2, 0, 0);
+  vdp_cmd_logical_move_vdp_to_vram(0, 0, vdp_get_screen_width(), vdp_get_screen_height(), 2, 0, 0);
   vdp_cmd_wait_completion();
 
   // draw a box in the middle of the 2nd screen
   const uint16_t box_width  = 100;
   const uint16_t box_height = 100;
 
-  const uint16_t box_x = (get_screen_width() - box_width) / 2;
-  const uint16_t box_y = (get_screen_height() - box_height) / 2;
+  const uint16_t box_x = (vdp_get_screen_width() - box_width) / 2;
+  const uint16_t box_y = (vdp_get_screen_height() - box_height) / 2;
 
   vdp_cmd_logical_move_vdp_to_vram(box_x, box_y, box_width, box_height, 3, 0, 0);
   vdp_cmd_wait_completion();
