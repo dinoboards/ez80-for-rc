@@ -663,7 +663,8 @@ $(WORKDIR_ESCSPACE)\base-drv.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv.s"
 
 $(WORKDIR_ESCSPACE)\boot_prompt.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\boot_prompt.c
+            $(PRJDIR_ESCSPACE)\src\startup\boot_prompt.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\boot_prompt.c"
 
 $(WORKDIR_ESCSPACE)\build-date.obj :  \
