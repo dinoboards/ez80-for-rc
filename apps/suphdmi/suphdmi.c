@@ -31,15 +31,20 @@ extern void super_graphics_mode_test_pattern();
 extern void super_graphics_mode_double_buffering();
 extern void graphics_mode_6_double_buffering();
 extern void graphics_mode_7_double_buffering();
+extern void load_font_data(void);
 
-void log_mode() {
+char log_buffer[257];
+
+void log_mode(void) {
   uint8_t mode = vdp_get_graphic_mode();
   if (mode >= 0x80)
-    printf("Super Graphics Mode %d (%d x %d), %d Colours, @ %dHz\n", mode & 0x7f, vdp_get_screen_width(), vdp_get_screen_height(),
-           vdp_get_screen_max_unique_colours(), vdp_get_refresh());
+    snprintf(log_buffer, sizeof(log_buffer), "Super Graphics Mode %d (%d x %d), %d Colours, @ %dHz\n", mode & 0x7f,
+             vdp_get_screen_width(), vdp_get_screen_height(), vdp_get_screen_max_unique_colours(), vdp_get_refresh());
   else
-    printf("Graphics Mode %d (%d x %d), %d Colours, @ %dHz\n", mode, vdp_get_screen_width(), vdp_get_screen_height(),
-           vdp_get_screen_max_unique_colours(), vdp_get_refresh());
+    snprintf(log_buffer, sizeof(log_buffer), "Graphics Mode %d (%d x %d), %d Colours, @ %dHz\n", mode, vdp_get_screen_width(),
+             vdp_get_screen_height(), vdp_get_screen_max_unique_colours(), vdp_get_refresh());
+
+  printf("%s", log_buffer);
 }
 
 uint8_t get_pixel_per_byte() {
@@ -92,13 +97,11 @@ void main_double_buffering_test(void) {
 #ifdef VDP_SUPER_HDMI
 void rotate_256_palettes() {
   printf("Set palette to range of 256 green colours\r\n");
-  // wait_for_key();
   RGB green = {0, 0, 0};
   for (int i = 0; i < 256; i++) {
     green.green = i;
     vdp_set_extended_palette_entry(i, green);
   }
-  // wait_for_key();
 }
 
 void rotate_16_palettes() {
@@ -109,11 +112,13 @@ void rotate_16_palettes() {
     green.green = i * 16;
     vdp_set_extended_palette_entry(i, green);
   }
-  // wait_for_key();
 }
 #endif
 
 void main_patterns(void) {
+#ifdef VDP_SUPER_HDMI
+  load_font_data();
+#endif
   graphics_mode_test_pattern(4, 60, palette_16);
   graphics_mode_test_pattern(5, 60, palette_4);
 
@@ -228,7 +233,7 @@ void fill(const uint8_t fill_data, const uint24_t count, uint24_t from, const ui
 #define RGB_256_WHITE  8
 
 void main_vram_test() {
-  vdp_set_extended_palette(palette_256);
+  // vdp_set_extended_palette(palette_256);
   log_mode();
 
   uint8_t       data = 0;
@@ -291,6 +296,16 @@ void main_vram_test() {
 #ifdef VDP_SUPER_HDMI
 
 void main_vram_tests(void) {
+  vdp_set_refresh(60);
+  for (int l = 192; l <= 212; l += 20) {
+    vdp_set_lines(l);
+    vdp_set_graphic_mode(4);
+    vdp_set_palette(palette_16);
+
+    main_vram_test();
+    sleep_ms(1000);
+  }
+
   for (uint8_t m = 0; m < sizeof(super_graphic_60hz_modes); m++) {
     vdp_set_super_graphic_mode(super_graphic_60hz_modes[m]);
     main_vram_test();
@@ -366,7 +381,7 @@ int main() {
   }
 
 #ifdef VDP_SUPER_HDMI
-  // main_vram_tests();
+  main_vram_tests();
 #endif
   // main_test_vdp_cmd_move_vram_to_vram();
 
@@ -376,10 +391,6 @@ int main() {
 
   main_patterns();
 
-  // while(true) {
-  //   vdp_set_super_graphic_3();
-  //   super_graphics_mode_test_pattern(3);
-  // }
   // main_test_transfers();
 
   // graphics_mode_7_logical_transforms();

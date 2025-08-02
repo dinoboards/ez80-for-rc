@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <v99x8.h>
 
+void print_to_screen(void);
+
 extern uint8_t get_pixel_per_byte();
 
 void test_spike_pattern() {
@@ -109,6 +111,10 @@ break1:
   vdp_reset_status_reg();
   EI();
 break2:
+
+#ifdef VDP_SUPER_HDMI
+  print_to_screen();
+#endif
 
   sleep_ms(2000);
 
