@@ -26,7 +26,6 @@ uint8_t super_graphic_50hz_modes[] = {0x02, 0x04, 0x06, 0x08, 0x09, 0x0A, 0x0C, 
 
 uint8_t super_graphic_60hz_modes[] = {0x01, 0x03, 0x05, 0x07, 0x0B, 0x15, 0x17, 0x1B};
 
-
 extern void graphics_mode_test_pattern(uint8_t mode, uint8_t refresh_rate, RGB *palette);
 extern void super_graphics_mode_test_pattern();
 extern void super_graphics_mode_double_buffering();
@@ -170,14 +169,13 @@ void main_test_vdp_cmd_logical_move_vram_to_vram() {
 
   // copy it to the right/bottom
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vram_to_vram(10, 10, vdp_get_screen_width() / 2 + 10, vdp_get_screen_height() / 2 + 10, box_width, box_height,
-                                    DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
+  vdp_cmd_logical_move_vram_to_vram(10, 10, vdp_get_screen_width() / 2 + 10, vdp_get_screen_height() / 2 + 10, box_width,
+                                    box_height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_IMP);
 
   // copy it to the left/bottom
   vdp_cmd_wait_completion();
   vdp_cmd_logical_move_vram_to_vram(10, 10, 10, vdp_get_screen_height() / 2 + 10, box_width, box_height, DIX_RIGHT | DIY_DOWN,
                                     CMD_LOGIC_IMP);
-
 }
 #endif
 
@@ -209,7 +207,6 @@ void main_test_vdp_cmd_move_vram_to_vram() {
   // copy it to the left/bottom
   vdp_cmd_wait_completion();
   vdp_cmd_move_vram_to_vram(10, 10, 10, vdp_get_screen_height() / 2 + 10, box_width, box_height, DIX_RIGHT | DIY_DOWN);
-
 }
 #endif
 
@@ -288,9 +285,8 @@ void main_vram_test() {
   fill(RGB_256_YELLOW, vdp_get_screen_height(), byte_width - 1, byte_width);
 
   // bottom row
-  fill(ppb == 2 ? RGB_256_YELLOW << 4 | RGB_256_YELLOW : RGB_256_YELLOW, vdp_get_screen_width(), byte_width * (vdp_get_screen_height() - 1),
-       1);
-
+  fill(ppb == 2 ? RGB_256_YELLOW << 4 | RGB_256_YELLOW : RGB_256_YELLOW, vdp_get_screen_width(),
+       byte_width * (vdp_get_screen_height() - 1), 1);
 }
 #endif
 
@@ -351,6 +347,8 @@ void main_test_transfers() {
 
 extern void graphics_mode_7_logical_transforms();
 
+extern void test_logic_remap();
+
 int main() {
   uint8_t r = vdp_init();
   switch (r) {
@@ -380,8 +378,11 @@ int main() {
 
   // main_double_buffering_test();
 
-  main_patterns();
+  // main_patterns();
 
+#ifdef VDP_SUPER_HDMI
+  test_logic_remap();
+#endif
   // while(true) {
   //   vdp_set_super_graphic_3();
   //   super_graphics_mode_test_pattern(3);
