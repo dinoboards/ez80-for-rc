@@ -33,7 +33,7 @@ void crt_font_8x8_load_patterns(const uint8_t *const font_patterns, const uint8_
   uint24_t       gpos_y = crt_font_8x8_stored_y(start_ch);
   const uint8_t *p      = &font_patterns[0];
 
-  // DI;
+  // DI();
 
   vdp_reg_write(45, 0);
 
@@ -75,7 +75,7 @@ void crt_font_8x8_load_patterns(const uint8_t *const font_patterns, const uint8_
     }
   }
 
-  // EI;
+  // EI();
 }
 
 void crt_font_8x8_clear_patterns() {

@@ -3,11 +3,9 @@
 #include "../base-drv/class_hid.h"
 #include "../base-drv/dev_transfers.h"
 #include "../base-drv/usb_state.h"
+#include <defines.h>
 #include <stdbool.h>
 #include <stdint.h>
-
-#define DI asm("DI")
-#define EI asm("EI")
 
 device_config_boot_hid_t *mouse_config = NULL;
 
@@ -102,10 +100,10 @@ uint8_t usb_mse_read(usb_mouse_report_ex_t *rpt, uint8_t request_type) {
   if (write_index == read_index) // Check if buffer is empty
     return 255;                  // empty
 
-  DI;
+  DI();
   *rpt       = buffer[read_index];
   read_index = (read_index + 1) & MOUSE_BUFFER_SIZE_MASK;
-  EI;
+  EI();
 
   return 0; // item returned
 }
