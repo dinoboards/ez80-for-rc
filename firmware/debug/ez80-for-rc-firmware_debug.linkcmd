@@ -6,8 +6,8 @@
 
 /* compiler options */
 /* -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
-/* -define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list */
-/* -listinc -NOmodsect -optsize -promote -NOreduceopt */
+/* -define:RC2014_FIRMWARE -define:_ZILOG_C -genprintf -keepasm */
+/* -keeplst -list -listinc -NOmodsect -optsize -promote -NOreduceopt */
 /* -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92 */
 /*-asmsw:"  */
@@ -90,13 +90,14 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00CC)
-LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $057E
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00E4)
+LOCATE DATA at (BASE OF BSS - $0500)
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $059B
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
 
 "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug"= \
+ ".\_vdp_reg_write.obj", \
  ".\base-drv.obj", \
  ".\boot_prompt.obj", \
  ".\build-date.obj", \
@@ -110,6 +111,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\clib.obj", \
  ".\cpu-freq-calculator.obj", \
  ".\critical-section.obj", \
+ ".\crt.obj", \
  ".\cstartup.obj", \
  ".\delay.obj", \
  ".\dev_transfers.obj", \
@@ -125,6 +127,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\kyb_driver_event.obj", \
  ".\kyb_driver_eventasm.obj", \
  ".\kyb_driverasm.obj", \
+ ".\line_clip.obj", \
+ ".\logic_to_physical_coords.obj", \
  ".\main.obj", \
  ".\mse_driver.obj", \
  ".\protocol.obj", \
@@ -137,12 +141,15 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-04-i2c-functions.obj", \
  ".\rst-10-06-usb-functions.obj", \
  ".\rst-10-07-emulator-function.obj", \
+ ".\rst-10-08-crt.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-function.obj", \
  ".\scsi_driver.obj", \
+ ".\sysfont.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
  ".\transfers.obj", \
+ ".\triangle.obj", \
  ".\uart-calculate.obj", \
  ".\uart-rx-buffer-add-to.obj", \
  ".\uart-rx-buffer-empty.obj", \
@@ -156,6 +163,71 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb-tick-sr.obj", \
  ".\usb_cbi.obj", \
  ".\usb_state.obj", \
+ ".\v99x8.obj", \
+ ".\v99x8asm.obj", \
+ ".\variables.obj", \
+ ".\vdp_cmd_line.obj", \
+ ".\vdp_cmd_logical_move_vdp_to_vram.obj", \
+ ".\vdp_cmd_logical_move_vram_to_vram.obj", \
+ ".\vdp_cmd_move_vram_to_vram.obj", \
+ ".\vdp_cmd_pset.obj", \
+ ".\vdp_cmd_vdp_to_vram.obj", \
+ ".\vdp_cmd_wait_completion.obj", \
+ ".\vdp_draw_line.obj", \
+ ".\vdp_get_screen_height.obj", \
+ ".\vdp_get_screen_max_unique_colours.obj", \
+ ".\vdp_get_screen_width.obj", \
+ ".\vdp_get_status.obj", \
+ ".\vdp_init.obj", \
+ ".\vdp_out_reg_int16.obj", \
+ ".\vdp_set_extended_palette.obj", \
+ ".\vdp_set_graphic_4.obj", \
+ ".\vdp_set_graphic_5.obj", \
+ ".\vdp_set_graphic_6.obj", \
+ ".\vdp_set_graphic_7.obj", \
+ ".\vdp_set_graphic_mode.obj", \
+ ".\vdp_set_lines.obj", \
+ ".\vdp_set_palette.obj", \
+ ".\vdp_set_refresh.obj", \
+ ".\vdp_set_remap.obj", \
+ ".\vdp_set_super_graphic_1.obj", \
+ ".\vdp_set_super_graphic_10.obj", \
+ ".\vdp_set_super_graphic_11.obj", \
+ ".\vdp_set_super_graphic_12.obj", \
+ ".\vdp_set_super_graphic_2.obj", \
+ ".\vdp_set_super_graphic_21.obj", \
+ ".\vdp_set_super_graphic_22.obj", \
+ ".\vdp_set_super_graphic_23.obj", \
+ ".\vdp_set_super_graphic_24.obj", \
+ ".\vdp_set_super_graphic_25.obj", \
+ ".\vdp_set_super_graphic_26.obj", \
+ ".\vdp_set_super_graphic_27.obj", \
+ ".\vdp_set_super_graphic_28.obj", \
+ ".\vdp_set_super_graphic_3.obj", \
+ ".\vdp_set_super_graphic_4.obj", \
+ ".\vdp_set_super_graphic_5.obj", \
+ ".\vdp_set_super_graphic_6.obj", \
+ ".\vdp_set_super_graphic_7.obj", \
+ ".\vdp_set_super_graphic_8.obj", \
+ ".\vdp_set_super_graphic_9.obj", \
+ ".\vdp_set_super_graphic_mode.obj", \
+ ".\vdu-spike.obj", \
+ ".\vdu.obj", \
+ ".\vdu_08.obj", \
+ ".\vdu_10.obj", \
+ ".\vdu_12.obj", \
+ ".\vdu_13.obj", \
+ ".\vdu_16.obj", \
+ ".\vdu_17.obj", \
+ ".\vdu_18.obj", \
+ ".\vdu_19.obj", \
+ ".\vdu_22.obj", \
+ ".\vdu_23.obj", \
+ ".\vdu_24.obj", \
+ ".\vdu_25.obj", \
+ ".\vdu_28.obj", \
+ ".\vdu_29.obj", \
+ ".\vdu_31.obj", \
  ".\vectors16.obj", \
  ".\work-area.obj", \
  ".\z80-emulator-critical.obj", \

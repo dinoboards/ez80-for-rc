@@ -16,6 +16,8 @@
 	xref	_mem0_bus_mode_and_timing
 	xref	_mem1_bus_mode_and_timing
 
+	xref	_vdu_init
+
 	xref	z80_invoke
 
 _main:
@@ -26,7 +28,10 @@ _main:
 	call	_uart0_init
 	call	_init_memory_timings
 
+	call	_vdu_init
+
 ifdef _DEBUG
+
 	call	_boot_prompt
 endif
 
@@ -36,8 +41,8 @@ IFDEF	ZEXALL
 ENDIF
 
 
-	;xref	_spike
-	;call	_spike
+	; xref	_spike
+	; call	_spike
 	; di
 	jp	z80_invoke
 

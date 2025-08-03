@@ -46,8 +46,9 @@ WEBTOC = @"$(BIN)\mkwebpage"
 
 CFLAGS =  \
 -define:NDEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
--define:RC2014_FIRMWARE -genprintf -NOkeepasm -NOkeeplst -NOlist  \
--NOlistinc -NOmodsect -optsize -promote -NOreduceopt  \
+-define:RC2014_FIRMWARE -define:_ZILOG_C -genprintf -NOkeepasm  \
+-NOkeeplst -NOlist -NOlistinc -NOmodsect -optsize -promote  \
+-NOreduceopt  \
 -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -NOdebug  \
 -cpu:eZ80F92  \
@@ -87,6 +88,12 @@ clean:
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-release.hex"
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-release.map"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-release.map"
+	@if exist "$(WORKDIR)\_vdp_reg_write.obj"  \
+            $(RM) "$(WORKDIR)\_vdp_reg_write.obj"
+	@if exist "$(WORKDIR)\_vdp_reg_write.lis"  \
+            $(RM) "$(WORKDIR)\_vdp_reg_write.lis"
+	@if exist "$(WORKDIR)\_vdp_reg_write.lst"  \
+            $(RM) "$(WORKDIR)\_vdp_reg_write.lst"
 	@if exist "$(WORKDIR)\base-drv.obj"  \
             $(RM) "$(WORKDIR)\base-drv.obj"
 	@if exist "$(WORKDIR)\base-drv.lis"  \
@@ -497,6 +504,324 @@ clean:
             $(RM) "$(WORKDIR)\usb_state.lst"
 	@if exist "$(WORKDIR)\usb_state.src"  \
             $(RM) "$(WORKDIR)\usb_state.src"
+	@if exist "$(WORKDIR)\v99x8.obj"  \
+            $(RM) "$(WORKDIR)\v99x8.obj"
+	@if exist "$(WORKDIR)\v99x8.lis"  \
+            $(RM) "$(WORKDIR)\v99x8.lis"
+	@if exist "$(WORKDIR)\v99x8.lst"  \
+            $(RM) "$(WORKDIR)\v99x8.lst"
+	@if exist "$(WORKDIR)\v99x8.src"  \
+            $(RM) "$(WORKDIR)\v99x8.src"
+	@if exist "$(WORKDIR)\v99x8asm.obj"  \
+            $(RM) "$(WORKDIR)\v99x8asm.obj"
+	@if exist "$(WORKDIR)\v99x8asm.lis"  \
+            $(RM) "$(WORKDIR)\v99x8asm.lis"
+	@if exist "$(WORKDIR)\v99x8asm.lst"  \
+            $(RM) "$(WORKDIR)\v99x8asm.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.src"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.src"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.src"
+	@if exist "$(WORKDIR)\vdp_get_status.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.obj"
+	@if exist "$(WORKDIR)\vdp_get_status.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.lis"
+	@if exist "$(WORKDIR)\vdp_get_status.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.lst"
+	@if exist "$(WORKDIR)\vdp_init.obj"  \
+            $(RM) "$(WORKDIR)\vdp_init.obj"
+	@if exist "$(WORKDIR)\vdp_init.lis"  \
+            $(RM) "$(WORKDIR)\vdp_init.lis"
+	@if exist "$(WORKDIR)\vdp_init.lst"  \
+            $(RM) "$(WORKDIR)\vdp_init.lst"
+	@if exist "$(WORKDIR)\vdp_init.src"  \
+            $(RM) "$(WORKDIR)\vdp_init.src"
+	@if exist "$(WORKDIR)\vdp_out_reg_int16.obj"  \
+            $(RM) "$(WORKDIR)\vdp_out_reg_int16.obj"
+	@if exist "$(WORKDIR)\vdp_out_reg_int16.lis"  \
+            $(RM) "$(WORKDIR)\vdp_out_reg_int16.lis"
+	@if exist "$(WORKDIR)\vdp_out_reg_int16.lst"  \
+            $(RM) "$(WORKDIR)\vdp_out_reg_int16.lst"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.obj"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.lis"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.lst"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.src"
+	@if exist "$(WORKDIR)\vdp_set_lines.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.obj"
+	@if exist "$(WORKDIR)\vdp_set_lines.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.lis"
+	@if exist "$(WORKDIR)\vdp_set_lines.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.lst"
+	@if exist "$(WORKDIR)\vdp_set_lines.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.src"
+	@if exist "$(WORKDIR)\vdp_set_palette.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.obj"
+	@if exist "$(WORKDIR)\vdp_set_palette.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.lis"
+	@if exist "$(WORKDIR)\vdp_set_palette.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.lst"
+	@if exist "$(WORKDIR)\vdp_set_palette.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.src"
+	@if exist "$(WORKDIR)\vdp_set_refresh.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.obj"
+	@if exist "$(WORKDIR)\vdp_set_refresh.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.lis"
+	@if exist "$(WORKDIR)\vdp_set_refresh.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.lst"
+	@if exist "$(WORKDIR)\vdp_set_refresh.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.src"
+	@if exist "$(WORKDIR)\vdu.obj"  \
+            $(RM) "$(WORKDIR)\vdu.obj"
+	@if exist "$(WORKDIR)\vdu.lis"  \
+            $(RM) "$(WORKDIR)\vdu.lis"
+	@if exist "$(WORKDIR)\vdu.lst"  \
+            $(RM) "$(WORKDIR)\vdu.lst"
+	@if exist "$(WORKDIR)\vdu.src"  \
+            $(RM) "$(WORKDIR)\vdu.src"
 	@if exist "$(WORKDIR)\vectors16.obj"  \
             $(RM) "$(WORKDIR)\vectors16.obj"
 	@if exist "$(WORKDIR)\vectors16.lis"  \
@@ -580,6 +905,7 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
+            $(WORKDIR_ESCSPACE)\_vdp_reg_write.obj  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
@@ -639,6 +965,47 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
+            $(WORKDIR_ESCSPACE)\v99x8.obj  \
+            $(WORKDIR_ESCSPACE)\v99x8asm.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_max_unique_colours.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_status.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_init.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_out_reg_int16.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_extended_palette.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_5.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_6.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_7.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_mode.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_lines.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_palette.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_refresh.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_10.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_11.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_12.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_2.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_21.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_22.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_23.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_24.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_25.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_26.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_27.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_28.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_3.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_4.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_6.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_7.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_8.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_9.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_mode.obj  \
+            $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
             $(WORKDIR_ESCSPACE)\work-area.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
@@ -654,6 +1021,10 @@ OBJS =  \
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
+
+$(WORKDIR_ESCSPACE)\_vdp_reg_write.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\_vdp_reg_write.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\_vdp_reg_write.asm"
 
 $(WORKDIR_ESCSPACE)\base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv.s  \
@@ -1291,6 +1662,170 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
+
+$(WORKDIR_ESCSPACE)\v99x8.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\v99x8.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\v99x8.c"
+
+$(WORKDIR_ESCSPACE)\v99x8asm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\v99x8asm.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\v99x8asm.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vdp_to_vram.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vdp_to_vram.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_wait_completion.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_wait_completion.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_screen_height.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_screen_height.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_max_unique_colours.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_screen_max_unique_colours.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_screen_max_unique_colours.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_screen_width.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_screen_width.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_status.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_status.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_status.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_init.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_init.c"
+
+$(WORKDIR_ESCSPACE)\vdp_out_reg_int16.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_out_reg_int16.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_out_reg_int16.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_set_extended_palette.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_extended_palette.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_extended_palette.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_4.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_4.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_5.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_5.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_5.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_6.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_6.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_6.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_7.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_7.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_7.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_mode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_mode.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_mode.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_lines.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_lines.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_lines.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_palette.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_palette.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_palette.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_refresh.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_refresh.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_refresh.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_1.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_1.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_10.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_10.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_10.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_11.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_11.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_11.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_12.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_12.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_12.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_2.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_2.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_2.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_21.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_21.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_21.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_22.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_22.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_22.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_23.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_23.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_23.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_24.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_24.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_24.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_25.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_25.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_25.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_26.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_26.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_26.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_27.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_27.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_27.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_28.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_28.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_28.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_3.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_3.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_3.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_4.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_4.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_4.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_5.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_5.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_6.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_6.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_6.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_7.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_7.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_7.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_8.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_8.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_8.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_9.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_9.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_9.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_mode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_mode.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_mode.c"
+
+$(WORKDIR_ESCSPACE)\vdu.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdu.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdu.c"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm  \

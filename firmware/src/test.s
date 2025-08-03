@@ -22,7 +22,7 @@
 ;  test int during emulator_invoke execution ./
 
 
-if 0
+if 1
         INCLUDE "startup\ez80F92.inc"
 
 	SECTION CODE
@@ -37,152 +37,56 @@ if 0
 	XREF	__INTERNAL_RAM_RAM
 	XREF	__INTERNAL_RAM_LEN
 
-longspike:
-	ld	a, 3
-	ld	b, 1
-	ld	e, 'l'
-	rst.l	%10			; log out 'l'
-
-	ld	a, 7
-	ld	iy, bdosspike - step1 + %00E000
-	rst.l	%10			; EMULATOR INVOKE
-
-	ld	a, 3
-	ld	b, 1
-	rst.l	%10
-
-; 	; call.sis	bdosspike - step1 + %00E000
-
-; blocked:
-; 	nop
-; 	nop
-; 	jr	blocked
-
-	ret.l		; this should return to the emulator
-
 _spike:
-	di
+;	ld	a, 8
+;	ld	b, 0
 
-	; write spike code here to be run in ADL mode on  on-chip rom
+	; ld	c, 22 ;set mode
+	; rst	%10
 
-RAM_FREE	.EQU	__INTERNAL_RAM_RAM+__INTERNAL_RAM_LEN
-RAM_FREE_BASE	.EQU	RAM_FREE & %FFFF
+	; ld	c, 0 ;set mode 0
+	; rst	%10
 
-	; copy code from rom to ram and run it in Z80 mode
-	LD	HL, step1
-	ld	de, %02E000
-	ld	bc, step1_size
-	ldir
+;	ld	c, 'A'
+;	rst	%10
 
-	xref	z80_int_request2
-	ld	hl, spikeemulatedint_rom - step1 + %00E000
-	ld	(z80_int_request2+2), hl
+;	ld	c, 'a'
+;	rst	%10
 
-	LD	A, 02H
-	LD	MB, A
-	LD.SIS	SP, 0EA00H
-	NOP
-	NOP
-	ld	iy, %02E000
-	ld	ix, z80_regs
-	ld	(ix+z80_flags), 0
-
-	call	z80_invoke_iy
-
-	SEGMENT CODE
-
-	.assume adl = 0
-
-	; todo:
-	; 1 discover if running emulation
-
-step1:
-; 	ld	hl, %0040
-; 	ld	ix, %0000
-
-; 	lea	hl, ix+0
-
-; 	ld	a, l
-; 	or	a
-; 	jr	z, _detected_ez80
-; _z80:
-; 	nop
-; 	nop
-; 	jr	_z80
-
-; _detected_ez80:
-	; ld	a, 0
-	; ld	b, 0
-	; ld	c, 2
-	; ld	d, 1
-	; ld	e, 0
-	; ld	hl, 0
-	; rst.l	%10	; exchange ver and switch to native
-	; 		; int should change to marshalling (and require handler to use ret.l)
-
-	; ei
-
-	; xor	a
-	; ld	b, 19
-	; rst.l	%10		; get emulation state
-
-	; ei
-
-	;call.il	longspike	; aka call.sil
-
-	ld	a, 3
-	ld	b, 1
-	ld	e, 65		; print A
-	rst.l	%10
-
-	call.lil longspike	; bad but should be made to work
-
-	ld	a, 3
-	ld	b, 1
-	ld	e, 66		; print B
-	rst.l	%10
-
-	ld	a, 3
-	ld	b, 1
-	ld	e, 67		; print C
-	rst.l	%10
-
-
-loop:
+;	ld	c, 'b'
+;	rst	%10
+_halt:
 	nop
-	jr	loop
-
 	nop
+	jr	_halt
 
-	; write code here to be run in z80 mode on on-chip rom
+; 	di
 
-spikeemulatedint_rom:
-	push	af
-	push	bc
-	push	de
-	ld	a, 3
-	ld	b, 1
-	ld	e, 'i'
-	rst.l	%10			; log out 'l'
-	pop	de
-	pop	bc
-	pop	af
-	ei
-	ret.l			; when marshalled native - needs to be change to ret.l
+; 	; write spike code here to be run in ADL mode on  on-chip rom
 
-bdosspike:			; this should be executed emulated
-	ld	a, %12
-	ld	bc, %3456
-	; ld	de, %789a
-	ld	e, 'X'
-; bdosspikelp:
-; 	nop
-; 	jr	bdosspikelp
+; RAM_FREE	.EQU	__INTERNAL_RAM_RAM+__INTERNAL_RAM_LEN
+; RAM_FREE_BASE	.EQU	RAM_FREE & %FFFF
 
-	ret.l
+; 	; copy code from rom to ram and run it in Z80 mode
+; 	LD	HL, step1
+; 	ld	de, %02E000
+; 	ld	bc, step1_size
+; 	ldir
 
-step1_end:
+; 	call.sis	%E000
+; 	ret.l
 
-step1_size	equ	step1_end-step1
+; 	SEGMENT CODE
+
+; 	.assume adl = 0
+
+; step1:
+
+; 	ret.l			; when marshalled native - needs to be change to ret.l
+
+
+; step1_end:
+
+; step1_size	equ	step1_end-step1
 
 endif

@@ -76,10 +76,19 @@ uart_in_end:
 ; indefinitely.  The returned Status (A) is a standard HBIOS result code.
 ; Will block if CTS flow control enabled, and receiver does not assert (low) our CTS input.
 ;
+	XREF	crt_vdu
 uart_out:
+	LD	C, E
+	PUSH	DE
+	push	ix
+	CALL	crt_vdu
+	pop	ix
+	POP	DE
+
+uart_out_lp:
 	IN0	A, (UART0_LSR)				; WAIT FOR TX READY
 	AND	LSR_THRE
-	JR	Z, uart_out
+	JR	Z, uart_out_lp
 
 	LD	A, (_line_control)			; IS CTS FLOW CONTROL ENABLED
 	BIT	5, A

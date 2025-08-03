@@ -27,21 +27,21 @@ _rst0:
 
 	ORG	ROM_BASE+%08
 _rst8:
-	jp.lil	firmware_rst_08_hook
+	jp.lil	firmware_rst_08_hook	; io prefix helper
 
 	org	ROM_BASE+%10
 _rst10:
-	jp.lil	firmware_rst_10_hook
+	jp.lil	firmware_rst_10_hook	; general firmware functions
 
 	org	ROM_BASE+%18
 _rst18:
-	jp.lil	firmware_rst_18_hook
+	jp.lil	firmware_rst_18_hook	; fast sleep helper
 
 	org	ROM_BASE+%20
 _rst20:
 	di
 	stmix
-	jp.lil	__init
+	jp.lil	__init			; change to vdu/ansi stream
 _rst28:
 	di
 	stmix

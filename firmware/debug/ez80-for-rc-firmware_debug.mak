@@ -46,8 +46,8 @@ WEBTOC = @"$(BIN)\mkwebpage"
 
 CFLAGS =  \
 -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
--define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
--listinc -NOmodsect -optsize -promote -NOreduceopt  \
+-define:RC2014_FIRMWARE -define:_ZILOG_C -genprintf -keepasm  \
+-keeplst -list -listinc -NOmodsect -optsize -promote -NOreduceopt  \
 -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
@@ -84,6 +84,12 @@ clean:
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.hex"
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"
+	@if exist "$(WORKDIR)\_vdp_reg_write.obj"  \
+            $(RM) "$(WORKDIR)\_vdp_reg_write.obj"
+	@if exist "$(WORKDIR)\_vdp_reg_write.lis"  \
+            $(RM) "$(WORKDIR)\_vdp_reg_write.lis"
+	@if exist "$(WORKDIR)\_vdp_reg_write.lst"  \
+            $(RM) "$(WORKDIR)\_vdp_reg_write.lst"
 	@if exist "$(WORKDIR)\base-drv.obj"  \
             $(RM) "$(WORKDIR)\base-drv.obj"
 	@if exist "$(WORKDIR)\base-drv.lis"  \
@@ -184,6 +190,14 @@ clean:
             $(RM) "$(WORKDIR)\critical-section.lst"
 	@if exist "$(WORKDIR)\critical-section.src"  \
             $(RM) "$(WORKDIR)\critical-section.src"
+	@if exist "$(WORKDIR)\crt.obj"  \
+            $(RM) "$(WORKDIR)\crt.obj"
+	@if exist "$(WORKDIR)\crt.lis"  \
+            $(RM) "$(WORKDIR)\crt.lis"
+	@if exist "$(WORKDIR)\crt.lst"  \
+            $(RM) "$(WORKDIR)\crt.lst"
+	@if exist "$(WORKDIR)\crt.src"  \
+            $(RM) "$(WORKDIR)\crt.src"
 	@if exist "$(WORKDIR)\cstartup.obj"  \
             $(RM) "$(WORKDIR)\cstartup.obj"
 	@if exist "$(WORKDIR)\cstartup.lis"  \
@@ -288,6 +302,22 @@ clean:
             $(RM) "$(WORKDIR)\kyb_driverasm.lis"
 	@if exist "$(WORKDIR)\kyb_driverasm.lst"  \
             $(RM) "$(WORKDIR)\kyb_driverasm.lst"
+	@if exist "$(WORKDIR)\line_clip.obj"  \
+            $(RM) "$(WORKDIR)\line_clip.obj"
+	@if exist "$(WORKDIR)\line_clip.lis"  \
+            $(RM) "$(WORKDIR)\line_clip.lis"
+	@if exist "$(WORKDIR)\line_clip.lst"  \
+            $(RM) "$(WORKDIR)\line_clip.lst"
+	@if exist "$(WORKDIR)\line_clip.src"  \
+            $(RM) "$(WORKDIR)\line_clip.src"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.obj"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.obj"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.lis"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.lis"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.lst"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.lst"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.src"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.src"
 	@if exist "$(WORKDIR)\main.obj"  \
             $(RM) "$(WORKDIR)\main.obj"
 	@if exist "$(WORKDIR)\main.lis"  \
@@ -366,6 +396,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lis"
 	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lst"  \
             $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lst"
+	@if exist "$(WORKDIR)\rst-10-08-crt.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.obj"
+	@if exist "$(WORKDIR)\rst-10-08-crt.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.lis"
+	@if exist "$(WORKDIR)\rst-10-08-crt.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.lst"
 	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-10-functions.obj"
 	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
@@ -386,6 +422,12 @@ clean:
             $(RM) "$(WORKDIR)\scsi_driver.lst"
 	@if exist "$(WORKDIR)\scsi_driver.src"  \
             $(RM) "$(WORKDIR)\scsi_driver.src"
+	@if exist "$(WORKDIR)\sysfont.obj"  \
+            $(RM) "$(WORKDIR)\sysfont.obj"
+	@if exist "$(WORKDIR)\sysfont.lis"  \
+            $(RM) "$(WORKDIR)\sysfont.lis"
+	@if exist "$(WORKDIR)\sysfont.lst"  \
+            $(RM) "$(WORKDIR)\sysfont.lst"
 	@if exist "$(WORKDIR)\system-vars.obj"  \
             $(RM) "$(WORKDIR)\system-vars.obj"
 	@if exist "$(WORKDIR)\system-vars.lis"  \
@@ -406,6 +448,14 @@ clean:
             $(RM) "$(WORKDIR)\transfers.lst"
 	@if exist "$(WORKDIR)\transfers.src"  \
             $(RM) "$(WORKDIR)\transfers.src"
+	@if exist "$(WORKDIR)\triangle.obj"  \
+            $(RM) "$(WORKDIR)\triangle.obj"
+	@if exist "$(WORKDIR)\triangle.lis"  \
+            $(RM) "$(WORKDIR)\triangle.lis"
+	@if exist "$(WORKDIR)\triangle.lst"  \
+            $(RM) "$(WORKDIR)\triangle.lst"
+	@if exist "$(WORKDIR)\triangle.src"  \
+            $(RM) "$(WORKDIR)\triangle.src"
 	@if exist "$(WORKDIR)\uart-calculate.obj"  \
             $(RM) "$(WORKDIR)\uart-calculate.obj"
 	@if exist "$(WORKDIR)\uart-calculate.lis"  \
@@ -494,6 +544,506 @@ clean:
             $(RM) "$(WORKDIR)\usb_state.lst"
 	@if exist "$(WORKDIR)\usb_state.src"  \
             $(RM) "$(WORKDIR)\usb_state.src"
+	@if exist "$(WORKDIR)\v99x8.obj"  \
+            $(RM) "$(WORKDIR)\v99x8.obj"
+	@if exist "$(WORKDIR)\v99x8.lis"  \
+            $(RM) "$(WORKDIR)\v99x8.lis"
+	@if exist "$(WORKDIR)\v99x8.lst"  \
+            $(RM) "$(WORKDIR)\v99x8.lst"
+	@if exist "$(WORKDIR)\v99x8.src"  \
+            $(RM) "$(WORKDIR)\v99x8.src"
+	@if exist "$(WORKDIR)\v99x8asm.obj"  \
+            $(RM) "$(WORKDIR)\v99x8asm.obj"
+	@if exist "$(WORKDIR)\v99x8asm.lis"  \
+            $(RM) "$(WORKDIR)\v99x8asm.lis"
+	@if exist "$(WORKDIR)\v99x8asm.lst"  \
+            $(RM) "$(WORKDIR)\v99x8asm.lst"
+	@if exist "$(WORKDIR)\variables.obj"  \
+            $(RM) "$(WORKDIR)\variables.obj"
+	@if exist "$(WORKDIR)\variables.lis"  \
+            $(RM) "$(WORKDIR)\variables.lis"
+	@if exist "$(WORKDIR)\variables.lst"  \
+            $(RM) "$(WORKDIR)\variables.lst"
+	@if exist "$(WORKDIR)\variables.src"  \
+            $(RM) "$(WORKDIR)\variables.src"
+	@if exist "$(WORKDIR)\vdp_cmd_line.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_line.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_line.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_line.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_line.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_line.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vram_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vram_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vram_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vram_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vram_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vram_to_vram.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_move_vram_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_vram_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_pset.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_pset.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_pset.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_pset.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_pset.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_pset.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_vdp_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_vdp_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_vdp_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_vdp_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_vdp_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_vdp_to_vram.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lst"
+	@if exist "$(WORKDIR)\vdp_draw_line.obj"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.obj"
+	@if exist "$(WORKDIR)\vdp_draw_line.lis"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.lis"
+	@if exist "$(WORKDIR)\vdp_draw_line.lst"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.lst"
+	@if exist "$(WORKDIR)\vdp_draw_line.src"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.src"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.src"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_max_unique_colours.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_max_unique_colours.src"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.src"
+	@if exist "$(WORKDIR)\vdp_get_status.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.obj"
+	@if exist "$(WORKDIR)\vdp_get_status.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.lis"
+	@if exist "$(WORKDIR)\vdp_get_status.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.lst"
+	@if exist "$(WORKDIR)\vdp_init.obj"  \
+            $(RM) "$(WORKDIR)\vdp_init.obj"
+	@if exist "$(WORKDIR)\vdp_init.lis"  \
+            $(RM) "$(WORKDIR)\vdp_init.lis"
+	@if exist "$(WORKDIR)\vdp_init.lst"  \
+            $(RM) "$(WORKDIR)\vdp_init.lst"
+	@if exist "$(WORKDIR)\vdp_init.src"  \
+            $(RM) "$(WORKDIR)\vdp_init.src"
+	@if exist "$(WORKDIR)\vdp_out_reg_int16.obj"  \
+            $(RM) "$(WORKDIR)\vdp_out_reg_int16.obj"
+	@if exist "$(WORKDIR)\vdp_out_reg_int16.lis"  \
+            $(RM) "$(WORKDIR)\vdp_out_reg_int16.lis"
+	@if exist "$(WORKDIR)\vdp_out_reg_int16.lst"  \
+            $(RM) "$(WORKDIR)\vdp_out_reg_int16.lst"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.obj"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.lis"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.lst"
+	@if exist "$(WORKDIR)\vdp_set_extended_palette.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_extended_palette.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_5.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_5.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_6.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_6.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_mode.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_mode.src"
+	@if exist "$(WORKDIR)\vdp_set_lines.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.obj"
+	@if exist "$(WORKDIR)\vdp_set_lines.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.lis"
+	@if exist "$(WORKDIR)\vdp_set_lines.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.lst"
+	@if exist "$(WORKDIR)\vdp_set_lines.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.src"
+	@if exist "$(WORKDIR)\vdp_set_palette.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.obj"
+	@if exist "$(WORKDIR)\vdp_set_palette.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.lis"
+	@if exist "$(WORKDIR)\vdp_set_palette.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.lst"
+	@if exist "$(WORKDIR)\vdp_set_palette.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.src"
+	@if exist "$(WORKDIR)\vdp_set_refresh.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.obj"
+	@if exist "$(WORKDIR)\vdp_set_refresh.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.lis"
+	@if exist "$(WORKDIR)\vdp_set_refresh.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.lst"
+	@if exist "$(WORKDIR)\vdp_set_refresh.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.src"
+	@if exist "$(WORKDIR)\vdp_set_remap.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.obj"
+	@if exist "$(WORKDIR)\vdp_set_remap.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.lis"
+	@if exist "$(WORKDIR)\vdp_set_remap.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.lst"
+	@if exist "$(WORKDIR)\vdp_set_remap.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_11.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_11.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_12.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_12.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_22.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_22.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_23.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_23.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_24.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_24.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_25.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_25.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_27.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_27.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_28.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_28.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_3.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_3.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_4.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_4.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_6.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_6.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_7.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_7.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_8.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_8.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_9.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_9.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_mode.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_mode.src"
+	@if exist "$(WORKDIR)\vdu-spike.obj"  \
+            $(RM) "$(WORKDIR)\vdu-spike.obj"
+	@if exist "$(WORKDIR)\vdu-spike.lis"  \
+            $(RM) "$(WORKDIR)\vdu-spike.lis"
+	@if exist "$(WORKDIR)\vdu-spike.lst"  \
+            $(RM) "$(WORKDIR)\vdu-spike.lst"
+	@if exist "$(WORKDIR)\vdu-spike.src"  \
+            $(RM) "$(WORKDIR)\vdu-spike.src"
+	@if exist "$(WORKDIR)\vdu.obj"  \
+            $(RM) "$(WORKDIR)\vdu.obj"
+	@if exist "$(WORKDIR)\vdu.lis"  \
+            $(RM) "$(WORKDIR)\vdu.lis"
+	@if exist "$(WORKDIR)\vdu.lst"  \
+            $(RM) "$(WORKDIR)\vdu.lst"
+	@if exist "$(WORKDIR)\vdu.src"  \
+            $(RM) "$(WORKDIR)\vdu.src"
+	@if exist "$(WORKDIR)\vdu_08.obj"  \
+            $(RM) "$(WORKDIR)\vdu_08.obj"
+	@if exist "$(WORKDIR)\vdu_08.lis"  \
+            $(RM) "$(WORKDIR)\vdu_08.lis"
+	@if exist "$(WORKDIR)\vdu_08.lst"  \
+            $(RM) "$(WORKDIR)\vdu_08.lst"
+	@if exist "$(WORKDIR)\vdu_08.src"  \
+            $(RM) "$(WORKDIR)\vdu_08.src"
+	@if exist "$(WORKDIR)\vdu_10.obj"  \
+            $(RM) "$(WORKDIR)\vdu_10.obj"
+	@if exist "$(WORKDIR)\vdu_10.lis"  \
+            $(RM) "$(WORKDIR)\vdu_10.lis"
+	@if exist "$(WORKDIR)\vdu_10.lst"  \
+            $(RM) "$(WORKDIR)\vdu_10.lst"
+	@if exist "$(WORKDIR)\vdu_10.src"  \
+            $(RM) "$(WORKDIR)\vdu_10.src"
+	@if exist "$(WORKDIR)\vdu_12.obj"  \
+            $(RM) "$(WORKDIR)\vdu_12.obj"
+	@if exist "$(WORKDIR)\vdu_12.lis"  \
+            $(RM) "$(WORKDIR)\vdu_12.lis"
+	@if exist "$(WORKDIR)\vdu_12.lst"  \
+            $(RM) "$(WORKDIR)\vdu_12.lst"
+	@if exist "$(WORKDIR)\vdu_12.src"  \
+            $(RM) "$(WORKDIR)\vdu_12.src"
+	@if exist "$(WORKDIR)\vdu_13.obj"  \
+            $(RM) "$(WORKDIR)\vdu_13.obj"
+	@if exist "$(WORKDIR)\vdu_13.lis"  \
+            $(RM) "$(WORKDIR)\vdu_13.lis"
+	@if exist "$(WORKDIR)\vdu_13.lst"  \
+            $(RM) "$(WORKDIR)\vdu_13.lst"
+	@if exist "$(WORKDIR)\vdu_13.src"  \
+            $(RM) "$(WORKDIR)\vdu_13.src"
+	@if exist "$(WORKDIR)\vdu_16.obj"  \
+            $(RM) "$(WORKDIR)\vdu_16.obj"
+	@if exist "$(WORKDIR)\vdu_16.lis"  \
+            $(RM) "$(WORKDIR)\vdu_16.lis"
+	@if exist "$(WORKDIR)\vdu_16.lst"  \
+            $(RM) "$(WORKDIR)\vdu_16.lst"
+	@if exist "$(WORKDIR)\vdu_16.src"  \
+            $(RM) "$(WORKDIR)\vdu_16.src"
+	@if exist "$(WORKDIR)\vdu_17.obj"  \
+            $(RM) "$(WORKDIR)\vdu_17.obj"
+	@if exist "$(WORKDIR)\vdu_17.lis"  \
+            $(RM) "$(WORKDIR)\vdu_17.lis"
+	@if exist "$(WORKDIR)\vdu_17.lst"  \
+            $(RM) "$(WORKDIR)\vdu_17.lst"
+	@if exist "$(WORKDIR)\vdu_17.src"  \
+            $(RM) "$(WORKDIR)\vdu_17.src"
+	@if exist "$(WORKDIR)\vdu_18.obj"  \
+            $(RM) "$(WORKDIR)\vdu_18.obj"
+	@if exist "$(WORKDIR)\vdu_18.lis"  \
+            $(RM) "$(WORKDIR)\vdu_18.lis"
+	@if exist "$(WORKDIR)\vdu_18.lst"  \
+            $(RM) "$(WORKDIR)\vdu_18.lst"
+	@if exist "$(WORKDIR)\vdu_18.src"  \
+            $(RM) "$(WORKDIR)\vdu_18.src"
+	@if exist "$(WORKDIR)\vdu_19.obj"  \
+            $(RM) "$(WORKDIR)\vdu_19.obj"
+	@if exist "$(WORKDIR)\vdu_19.lis"  \
+            $(RM) "$(WORKDIR)\vdu_19.lis"
+	@if exist "$(WORKDIR)\vdu_19.lst"  \
+            $(RM) "$(WORKDIR)\vdu_19.lst"
+	@if exist "$(WORKDIR)\vdu_19.src"  \
+            $(RM) "$(WORKDIR)\vdu_19.src"
+	@if exist "$(WORKDIR)\vdu_22.obj"  \
+            $(RM) "$(WORKDIR)\vdu_22.obj"
+	@if exist "$(WORKDIR)\vdu_22.lis"  \
+            $(RM) "$(WORKDIR)\vdu_22.lis"
+	@if exist "$(WORKDIR)\vdu_22.lst"  \
+            $(RM) "$(WORKDIR)\vdu_22.lst"
+	@if exist "$(WORKDIR)\vdu_22.src"  \
+            $(RM) "$(WORKDIR)\vdu_22.src"
+	@if exist "$(WORKDIR)\vdu_23.obj"  \
+            $(RM) "$(WORKDIR)\vdu_23.obj"
+	@if exist "$(WORKDIR)\vdu_23.lis"  \
+            $(RM) "$(WORKDIR)\vdu_23.lis"
+	@if exist "$(WORKDIR)\vdu_23.lst"  \
+            $(RM) "$(WORKDIR)\vdu_23.lst"
+	@if exist "$(WORKDIR)\vdu_23.src"  \
+            $(RM) "$(WORKDIR)\vdu_23.src"
+	@if exist "$(WORKDIR)\vdu_24.obj"  \
+            $(RM) "$(WORKDIR)\vdu_24.obj"
+	@if exist "$(WORKDIR)\vdu_24.lis"  \
+            $(RM) "$(WORKDIR)\vdu_24.lis"
+	@if exist "$(WORKDIR)\vdu_24.lst"  \
+            $(RM) "$(WORKDIR)\vdu_24.lst"
+	@if exist "$(WORKDIR)\vdu_24.src"  \
+            $(RM) "$(WORKDIR)\vdu_24.src"
+	@if exist "$(WORKDIR)\vdu_25.obj"  \
+            $(RM) "$(WORKDIR)\vdu_25.obj"
+	@if exist "$(WORKDIR)\vdu_25.lis"  \
+            $(RM) "$(WORKDIR)\vdu_25.lis"
+	@if exist "$(WORKDIR)\vdu_25.lst"  \
+            $(RM) "$(WORKDIR)\vdu_25.lst"
+	@if exist "$(WORKDIR)\vdu_25.src"  \
+            $(RM) "$(WORKDIR)\vdu_25.src"
+	@if exist "$(WORKDIR)\vdu_28.obj"  \
+            $(RM) "$(WORKDIR)\vdu_28.obj"
+	@if exist "$(WORKDIR)\vdu_28.lis"  \
+            $(RM) "$(WORKDIR)\vdu_28.lis"
+	@if exist "$(WORKDIR)\vdu_28.lst"  \
+            $(RM) "$(WORKDIR)\vdu_28.lst"
+	@if exist "$(WORKDIR)\vdu_28.src"  \
+            $(RM) "$(WORKDIR)\vdu_28.src"
+	@if exist "$(WORKDIR)\vdu_29.obj"  \
+            $(RM) "$(WORKDIR)\vdu_29.obj"
+	@if exist "$(WORKDIR)\vdu_29.lis"  \
+            $(RM) "$(WORKDIR)\vdu_29.lis"
+	@if exist "$(WORKDIR)\vdu_29.lst"  \
+            $(RM) "$(WORKDIR)\vdu_29.lst"
+	@if exist "$(WORKDIR)\vdu_29.src"  \
+            $(RM) "$(WORKDIR)\vdu_29.src"
+	@if exist "$(WORKDIR)\vdu_31.obj"  \
+            $(RM) "$(WORKDIR)\vdu_31.obj"
+	@if exist "$(WORKDIR)\vdu_31.lis"  \
+            $(RM) "$(WORKDIR)\vdu_31.lis"
+	@if exist "$(WORKDIR)\vdu_31.lst"  \
+            $(RM) "$(WORKDIR)\vdu_31.lst"
+	@if exist "$(WORKDIR)\vdu_31.src"  \
+            $(RM) "$(WORKDIR)\vdu_31.src"
 	@if exist "$(WORKDIR)\vectors16.obj"  \
             $(RM) "$(WORKDIR)\vectors16.obj"
 	@if exist "$(WORKDIR)\vectors16.lis"  \
@@ -577,6 +1127,7 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
+            $(WORKDIR_ESCSPACE)\_vdp_reg_write.obj  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
@@ -590,6 +1141,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\clib.obj  \
             $(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj  \
             $(WORKDIR_ESCSPACE)\critical-section.obj  \
+            $(WORKDIR_ESCSPACE)\crt.obj  \
             $(WORKDIR_ESCSPACE)\cstartup.obj  \
             $(WORKDIR_ESCSPACE)\delay.obj  \
             $(WORKDIR_ESCSPACE)\dev_transfers.obj  \
@@ -605,6 +1157,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\kyb_driver_event.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
+            $(WORKDIR_ESCSPACE)\line_clip.obj  \
+            $(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\mse_driver.obj  \
             $(WORKDIR_ESCSPACE)\protocol.obj  \
@@ -617,12 +1171,15 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-08-crt.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
+            $(WORKDIR_ESCSPACE)\sysfont.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\transfers.obj  \
+            $(WORKDIR_ESCSPACE)\triangle.obj  \
             $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj  \
@@ -636,6 +1193,71 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
+            $(WORKDIR_ESCSPACE)\v99x8.obj  \
+            $(WORKDIR_ESCSPACE)\v99x8asm.obj  \
+            $(WORKDIR_ESCSPACE)\variables.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vram_to_vram.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_move_vram_to_vram.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_vdp_to_vram.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_draw_line.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_max_unique_colours.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_status.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_init.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_out_reg_int16.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_extended_palette.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_5.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_6.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_7.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_mode.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_lines.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_palette.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_refresh.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_remap.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_10.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_11.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_12.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_2.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_21.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_22.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_23.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_24.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_25.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_26.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_27.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_28.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_3.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_4.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_6.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_7.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_8.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_9.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_mode.obj  \
+            $(WORKDIR_ESCSPACE)\vdu-spike.obj  \
+            $(WORKDIR_ESCSPACE)\vdu.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_08.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_10.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_12.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_13.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_16.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_17.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_18.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_19.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_22.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_23.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_24.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_25.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_28.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_29.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_31.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
             $(WORKDIR_ESCSPACE)\work-area.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
@@ -651,6 +1273,11 @@ OBJS =  \
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
+
+$(WORKDIR_ESCSPACE)\_vdp_reg_write.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\_vdp_reg_write.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\_vdp_reg_write.asm"
 
 $(WORKDIR_ESCSPACE)\base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv.s  \
@@ -796,6 +1423,15 @@ $(WORKDIR_ESCSPACE)\critical-section.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\critical-section.c"
 
+$(WORKDIR_ESCSPACE)\crt.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\crt.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\crt.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\crt.c"
+
 $(WORKDIR_ESCSPACE)\cstartup.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
@@ -920,6 +1556,7 @@ $(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -964,6 +1601,22 @@ $(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s"
 
+$(WORKDIR_ESCSPACE)\line_clip.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_25\line_clip.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_25\line_clip.c"
+
+$(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\logic_to_physical_coords.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\logic_to_physical_coords.c"
+
 $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\main.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -975,6 +1628,7 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
 $(WORKDIR_ESCSPACE)\mse_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -1078,6 +1732,14 @@ $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-07-emulator-function.s"
 
+$(WORKDIR_ESCSPACE)\rst-10-08-crt.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-08-crt.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-08-crt.s"
+
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1114,6 +1776,10 @@ $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c"
 
+$(WORKDIR_ESCSPACE)\sysfont.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\sysfont.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\sysfont.asm"
+
 $(WORKDIR_ESCSPACE)\system-vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1139,6 +1805,14 @@ $(WORKDIR_ESCSPACE)\transfers.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\transfers.c"
+
+$(WORKDIR_ESCSPACE)\triangle.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_25\triangle.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_25\triangle.c"
 
 $(WORKDIR_ESCSPACE)\uart-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c  \
@@ -1288,6 +1962,671 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
+
+$(WORKDIR_ESCSPACE)\v99x8.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\v99x8.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\v99x8.c"
+
+$(WORKDIR_ESCSPACE)\v99x8asm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\v99x8asm.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\v99x8asm.asm"
+
+$(WORKDIR_ESCSPACE)\variables.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\variables.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\variables.c"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_line.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_line.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_line.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vdp_to_vram.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vdp_to_vram.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vram_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vram_to_vram.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vram_to_vram.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_move_vram_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_move_vram_to_vram.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_move_vram_to_vram.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_pset.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_pset.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_vdp_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_vdp_to_vram.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_vdp_to_vram.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_cmd_wait_completion.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_cmd_wait_completion.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_draw_line.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_draw_line.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_draw_line.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_screen_height.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_screen_height.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_max_unique_colours.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_screen_max_unique_colours.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_screen_max_unique_colours.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_screen_width.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_screen_width.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_status.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_get_status.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_get_status.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_init.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_init.c"
+
+$(WORKDIR_ESCSPACE)\vdp_out_reg_int16.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_out_reg_int16.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\common.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_out_reg_int16.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_set_extended_palette.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_extended_palette.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_extended_palette.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_4.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_4.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_5.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_5.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_5.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_6.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_6.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_6.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_7.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_7.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_7.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_mode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_mode.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_graphic_mode.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_lines.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_lines.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_lines.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_palette.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_palette.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_palette.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_refresh.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_refresh.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_refresh.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_remap.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_remap.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_remap.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_1.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_1.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_10.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_10.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_10.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_11.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_11.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_11.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_12.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_12.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_12.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_2.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_2.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_2.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_21.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_21.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_21.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_22.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_22.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_22.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_23.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_23.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_23.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_24.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_24.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_24.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_25.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_25.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_25.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_26.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_26.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_26.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_27.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_27.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_27.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_28.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_28.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_28.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_3.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_3.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_3.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_4.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_4.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_4.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_5.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_5.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_6.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_6.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_6.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_7.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_7.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_7.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_8.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_8.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_8.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_9.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_9.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_9.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_mode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_mode.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_mode.c"
+
+$(WORKDIR_ESCSPACE)\vdu-spike.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu-spike.c  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu-spike.c"
+
+$(WORKDIR_ESCSPACE)\vdu.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.c  \
+            $(INCLUDE_ESCSPACE)\std\Math.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\crt.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu.c"
+
+$(WORKDIR_ESCSPACE)\vdu_08.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_08.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_08.c"
+
+$(WORKDIR_ESCSPACE)\vdu_10.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_10.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_10.c"
+
+$(WORKDIR_ESCSPACE)\vdu_12.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_12.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_12.c"
+
+$(WORKDIR_ESCSPACE)\vdu_13.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_13.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_13.c"
+
+$(WORKDIR_ESCSPACE)\vdu_16.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_16.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_16.c"
+
+$(WORKDIR_ESCSPACE)\vdu_17.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_17.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\crt.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_17.c"
+
+$(WORKDIR_ESCSPACE)\vdu_18.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_18.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_18.c"
+
+$(WORKDIR_ESCSPACE)\vdu_19.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_19.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_19.c"
+
+$(WORKDIR_ESCSPACE)\vdu_22.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_22.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\crt.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_22.c"
+
+$(WORKDIR_ESCSPACE)\vdu_23.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_23.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_23.c"
+
+$(WORKDIR_ESCSPACE)\vdu_24.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_24.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_24.c"
+
+$(WORKDIR_ESCSPACE)\vdu_25.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_25.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_25\line_clip.c  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_25\triangle.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_25.c"
+
+$(WORKDIR_ESCSPACE)\vdu_28.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_28.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_28.c"
+
+$(WORKDIR_ESCSPACE)\vdu_29.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_29.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_29.c"
+
+$(WORKDIR_ESCSPACE)\vdu_31.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu_31.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\vdu\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\vdu\vdu_31.c"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm  \

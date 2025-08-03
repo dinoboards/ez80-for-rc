@@ -3,6 +3,7 @@
 
 <!-- file information -->
 <files>
+<file filter-key="">src\rst-10-drivers\super-hdmi\_vdp_reg_write.asm</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv.s</file>
 <file filter-key="">src\startup\boot_prompt.c</file>
 <file filter-key="">src\rst-10-drivers\build-date.c</file>
@@ -16,6 +17,7 @@
 <file filter-key="">src\clib.c</file>
 <file filter-key="">src\startup\cpu-freq-calculator.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\critical-section.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\crt.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
 <file filter-key="">src\rst-10-drivers\usb\delay.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\dev_transfers.c</file>
@@ -31,6 +33,8 @@
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c</file>
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s</file>
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_25\line_clip.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\logic_to_physical_coords.c</file>
 <file filter-key="">src\main.s</file>
 <file filter-key="">src\rst-10-drivers\usb\mse-drv\mse_driver.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
@@ -43,12 +47,15 @@
 <file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-06-usb-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-07-emulator-function.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-08-crt.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
 <file filter-key="">src\rst-18-function.s</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\scsi_driver.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\sysfont.asm</file>
 <file filter-key="">src\startup\system-vars.s</file>
 <file filter-key="">src\test.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\transfers.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_25\triangle.c</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-calculate.c</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s</file>
 <file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s</file>
@@ -62,6 +69,71 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb-tick-sr.s</file>
 <file filter-key="">src\rst-10-drivers\usb\ufi-drv\usb_cbi.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\v99x8.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\v99x8asm.asm</file>
+<file filter-key="">src\rst-10-drivers\vdu\variables.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_cmd_line.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vdp_to_vram.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_cmd_logical_move_vram_to_vram.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_cmd_move_vram_to_vram.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_cmd_pset.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_cmd_vdp_to_vram.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_cmd_wait_completion.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_draw_line.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_get_screen_height.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_get_screen_max_unique_colours.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_get_screen_width.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_get_status.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_init.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_out_reg_int16.asm</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_extended_palette.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_graphic_4.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_graphic_5.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_graphic_6.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_graphic_7.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_graphic_mode.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_lines.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_palette.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_refresh.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_remap.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_1.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_10.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_11.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_12.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_2.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_21.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_22.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_23.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_24.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_25.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_26.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_27.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_28.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_3.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_4.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_5.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_6.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_7.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_8.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_9.c</file>
+<file filter-key="">src\rst-10-drivers\super-hdmi\vdp_set_super_graphic_mode.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu-spike.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_08.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_10.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_12.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_13.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_16.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_17.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_18.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_19.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_22.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_23.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_24.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_25.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_28.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_29.c</file>
+<file filter-key="">src\rst-10-drivers\vdu\vdu_31.c</file>
 <file filter-key="">src\startup\vectors16.asm</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>
 <file filter-key="">src\z80-emulator\z80-emulator-critical.s</file>
@@ -96,7 +168,7 @@
 <tool name="Compiler">
 <options>
 <option name="padbranch" type="string" change-action="compile">Off</option>
-<option name="define" type="string" change-action="compile">NDEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE</option>
+<option name="define" type="string" change-action="compile">NDEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE,_ZILOG_C</option>
 <option name="genprintf" type="boolean" change-action="compile">true</option>
 <option name="keepasm" type="boolean" change-action="none">false</option>
 <option name="keeplst" type="boolean" change-action="none">false</option>
@@ -171,8 +243,8 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0110)
-LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $057E
+LOCATE DATA at (BASE OF BSS - $0500)
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $059B
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -233,7 +305,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <tool name="Compiler">
 <options>
 <option name="padbranch" type="string" change-action="compile">Off</option>
-<option name="define" type="string" change-action="compile">_DEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE</option>
+<option name="define" type="string" change-action="compile">_DEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE,_ZILOG_C</option>
 <option name="genprintf" type="boolean" change-action="compile">true</option>
 <option name="keepasm" type="boolean" change-action="none">true</option>
 <option name="keeplst" type="boolean" change-action="none">true</option>
@@ -307,9 +379,9 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00CC)
-LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $057E
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00E4)
+LOCATE DATA at (BASE OF BSS - $0500)
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $059B
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -445,7 +517,7 @@ DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0200)
-LOCATE DATA at (BASE OF BSS - $00D9)
+LOCATE DATA at (BASE OF BSS - $0500)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0680
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -493,8 +565,11 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="z80_flags" />
-<watch-element expression="z80_ei_enabled" />
+<watch-element expression="ch" />
+<watch-element expression="current_tpos" />
+<watch-element expression="number_of_ch" />
+<watch-element expression="wtf" />
+<watch-element expression="str" />
 </watch-elements>
 
 <!-- breakpoint information -->
