@@ -106,8 +106,6 @@ config_all_tmrs:
 	RET
 
 no_rtc:
-	di
-	halt
 	CALL	_get_ticks_for_sysclk
 	CALL	_configure_tmr1_to_sysclk
 
