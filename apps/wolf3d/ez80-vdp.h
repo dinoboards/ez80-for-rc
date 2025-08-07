@@ -83,10 +83,14 @@ static inline void vdp_scn_font(
   const uint8_t  first = font_data[0] ? color : 0;
   const uint16_t size  = width * height;
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_data_to_vram(first, x, y, width, height, DIX_RIGHT | DIY_DOWN, size, CMD_LOGIC_TIMP);
+  DI();
+  vdp_cmd_logical_move_data_to_vram(first, x, y, width, height, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_TIMP);
 
   for (uint24_t i = 1; i < size; i++)
     vdp_cmd_send_byte(font_data[i] ? color : 0);
+
+  vdp_reset_status_reg();
+  EI();
 }
 
 static inline void vdp_scn_vga_picture(const uint8_t *const pix_data,
