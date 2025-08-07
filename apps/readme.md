@@ -16,15 +16,7 @@ A benchmarking tool using the dhrystone measurement process.  See its [readme](.
 
 ### EZ80
 
-A tool to report on the eZ80 current bus timing and configuration.
-
-### FWMAIN
-
-A tool to erase the *ALT* firmware and revert back to the *main* default firmware.
-
-### FWUPDATE
-
-A tool to flash an *ALT* firmware onto the eZ80.
+A tool to report on the eZ80 current bus timing and configuration.  See its [readme](./ez80/readme.md)
 
 ### HWADL
 
