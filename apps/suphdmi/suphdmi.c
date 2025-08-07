@@ -13,13 +13,13 @@ void sleep_a_bit() {
 }
 
 void vdp_clear_all_memory2(void) {
-  DI;
+  DI();
   vdp_reg_write(14, 0);
   vdp_out_cmd(0);
   vdp_out_cmd(0x40);
   for (int i = 0; i < 720 * 576; i++)
     vdp_out_dat(0);
-  EI;
+  EI();
 }
 
 uint8_t super_graphic_50hz_modes[] = {0x02, 0x04, 0x06, 0x08, 0x09, 0x0A, 0x0C, 0x16, 0x18, 0x19, 0x1A, 0x1C};

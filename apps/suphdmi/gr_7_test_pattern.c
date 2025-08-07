@@ -61,7 +61,7 @@ void graphics_mode_7_logical_transforms() {
   printf("Logical Transform\n");
 
   // erase screen with cpu to vram operation
-  vdp_cmd_move_data_to_vram(0, 0, 0, 256, 212, DIX_RIGHT | DIY_DOWN, 256 * 212);
+  vdp_cmd_move_data_to_vram(0, 0, 0, 256, 212, DIX_RIGHT | DIY_DOWN);
   for (int i = 1; i < 256 * 212; i++) {
     vdp_cmd_send_byte(i);
     // test_for_escape();
