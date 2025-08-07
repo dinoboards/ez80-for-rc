@@ -1,7 +1,6 @@
 #include "palettes.h"
 #include <v99x8.h>
 
-
 RGB default_palette[16] = {
     {0, 0, 0}, // Black
     {7, 0, 0}, // Bright Red
@@ -60,7 +59,6 @@ RGB palette_16[16] = {
     {73, 73, 182},   // Light Blue
     {182, 182, 182}  // Light Gray
 };
-
 
 RGB palette_256[256] = {
     {0, 0, 0},       {128, 0, 0},     {0, 128, 0},     {128, 128, 0},   {0, 0, 128},     {128, 0, 128},   {0, 128, 128},
