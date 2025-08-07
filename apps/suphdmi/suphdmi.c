@@ -213,7 +213,6 @@ void main_test_vdp_cmd_move_vram_to_vram() {
 void fill(const uint8_t fill_data, const uint24_t count, uint24_t from, const uint24_t increment) {
   for (uint24_t i = 0; i < count; i++) {
     vdp_cpu_to_vram(&fill_data, from, 1);
-    sleep_a_bit();
     from += increment;
     test_for_escape();
   }
@@ -245,7 +244,6 @@ void main_vram_test() {
 
   data = RGB_256_GREEN;
   vdp_cpu_to_vram(&data, byte_width * vdp_get_screen_height() - 1, 1);
-  sleep_a_bit();
 
   // top row - alt colours
   fill(ppb == 2 ? RGB_256_YELLOW | (RGB_256_YELLOW << 4) : RGB_256_YELLOW, byte_width, 0, 1);

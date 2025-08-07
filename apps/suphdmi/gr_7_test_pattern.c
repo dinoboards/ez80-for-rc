@@ -79,7 +79,7 @@ void graphics_mode_7_logical_transforms() {
 
   vdp_cmd_logical_move_cpu_to_vram(buffer, 100, 100, 50, 50, DIX_RIGHT | DIY_DOWN, 50 * 50, CMD_LOGIC_TIMP);
 
-  vdp_cmd_logical_move_data_to_vram(0, 180, 100, 50, 50, DIX_RIGHT | DIY_DOWN, 50 * 50, CMD_LOGIC_TIMP);
+  vdp_cmd_logical_move_data_to_vram(0, 180, 100, 50, 50, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_TIMP);
   for (int i = 1; i < 50 * 50; i++) {
     if (i % 4 != 0)
       vdp_cmd_send_byte(255);
