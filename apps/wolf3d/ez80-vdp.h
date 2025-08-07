@@ -46,7 +46,7 @@ static inline void vdp_scn_init() {
   {                                                                                                                                \
     if (_first) {                                                                                                                  \
       vdp_cmd_wait_completion();                                                                                                   \
-      vdp_cmd_move_data_to_vram(col, x, y, width, height, DIX_RIGHT | DIY_DOWN, width * height);                                   \
+      vdp_cmd_move_data_to_vram(col, x, y, width, height, DIX_RIGHT | DIY_DOWN);                                                   \
       _first = false;                                                                                                              \
     } else                                                                                                                         \
       vdp_cmd_send_byte(col);                                                                                                      \
@@ -104,7 +104,7 @@ static inline void vdp_scn_vga_picture(const uint8_t *const pix_data,
   const uint8_t *p4 = &pix_data[height * (vga_plane_width / 4) * 3];
 
   vdp_cmd_wait_completion();
-  vdp_cmd_move_data_to_vram(first, x, y, width, height, DIX_RIGHT | DIY_DOWN, width * height);
+  vdp_cmd_move_data_to_vram(first, x, y, width, height, DIX_RIGHT | DIY_DOWN);
 
   bool skip_first = true;
   for (int ysrc = 0; ysrc < height; ysrc++) {
