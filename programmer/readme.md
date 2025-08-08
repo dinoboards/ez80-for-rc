@@ -46,6 +46,92 @@ A successful build will create a file called `programmer.uf2` in the `programmer
 \* Make sure you have short leads, and that the 2 ground pins of the ZDI are connected to ground pins of the Pi Pico
 
 
+When looking at the front of the eZ80 CPU module, the pin layout is as follows:
+
+
+<div style="margin-left: 20px;">
+<table style="table-layout: auto; width: auto;">
+  <tr>
+    <td>ZDA</td>
+    <td>GND</td>
+  </tr>
+  <tr>
+    <td>ZCK</td>
+    <td>GND</td>
+  </tr>
+  <tr>
+    <td>RESET</td>
+    <td>3V3</td>
+  </tr>
+</table>
+</div>
+
+You can use the images below, and follow the colours the ensure you have correct wiring:
+
+
+<div style="margin-left: 20px;">
+<table style="table-layout: auto; width: auto;">
+  <tr>
+    <td>Yellow - ZDA - GPIO 14</td>
+    <td>Orange - GND</td>
+  </tr>
+  <tr>
+    <td>Green - ZCK - GPIO 15</td>
+    <td>Red - GND</td>
+  </tr>
+  <tr>
+    <td>Blue - RESET - GPIO 16</td>
+    <td>Brown - 3V3 - GPIO 17</td>
+  </tr>
+</table>
+</div>
+
+<div style="text-align: center;">
+    <a href="../docs/assets/ez80-zdi-connector-left-side-example.jpg" target="_blank">
+      <img style="width: 50%" src="../docs/assets/ez80-zdi-connector-left-side-example.jpg" alt="ZDI Left Side Wiring Example">
+    </a>
+    <a href="../docs/assets/ez80-zdi-connector-right-side-example.jpg" target="_blank">
+      <img style="width: 50%" src="../docs/assets/ez80-zdi-connector-right-side-example.jpg" alt="ZDI Right Side Wiring Example">
+    </a>
+
+<a href="../docs/assets/pi-pico-example-wiring.jpg" target="_blank">
+  <img style="width: 50%" src="../docs/assets/pi-pico-example-wiring.jpg" style="width:90%" alt="Pi Pico Example">
+</a>
+</div>
+
+### Flashing your eZ80 CPU
+
+1. Plug a USB cable between your *Pi Pico Programmer* and your main PC.
+2. If using windows, identify the mounted COMx port (use Device Manager).  For linux look for the /dev/tty device.
+3. Using your favourite terminal program (such as PuTTY), connect to your *Pi Pico Programmer*
+You should see a message like:
+
+```
+ZDI Connection ......:    (PWR: FAIL, RST: FAIL, ZDA: FAIL, ZCL: FAIL)
+```
+<ol start="4">
+<li>Power on your eZ80's RC2014/RCBus backplane.</li>
+You should now see a message like:
+</ol>
+
+```
+ZDI Connection OK:  (PWR: OK, RST: OK, ZDA: OK, ZCL: OK)
+eZ80 Detected:  ID 0007 Rev AAitialisation...
+Available Firmware Version: 0.1.2.0 (2024-10-03)
+ZDI>
+```
+
+<ol start="5">
+<li>Enter the command <code>FLASH</code></li>
+<li>Your Pi Pico Programmer should have reported a completed flash of your eZ80.</li>
+<li>If you have RomWBW installed on an external memory module, you should now be able to start your retro computer.
+<br/>Enter <code>REBOOT</code> to start it.
+</li>
+</ol>
+
+> To see your retro computer, you will need to have the UART serial connection of the Interface Module connected to a terminal application.
+
+
 ## Operating instructions
 
 Within your serial connection to the Pi Pico Programmer, you can issue a number of commands.

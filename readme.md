@@ -52,9 +52,9 @@ There are 2 options for the programmer.  The Zilog's official programmer (*Zilog
 
 #### Pi Pico Programmer
 
-Click here for instructions for setting up a [Pi Pico Programmer](https://www.dinoboards.com.au/pi-pico-programmer)
+Click here for instructions for setting up a [Pi Pico Programmer](./programmer/readme.md)
 
-  <a href="https://www.dinoboards.com.au/pi-pico-programmer"><img src="./docs/assets/pi-pico-example-wiring.jpg" style="width: 45%;" /></a>
+  <a href="./programmer/readme.md"><img src="./docs/assets/pi-pico-example-wiring.jpg" style="width: 45%;" /></a>
 
 
 #### Zilog's Programmer
@@ -80,5 +80,5 @@ Refer to the following images for the correct installation orientation.
 
 > Incorrect orientation may result in damage to the CPU and or the programmer.  I have yet to do it to find out what happens!
 
-You will need to clone this repo and open the project with Zilog Developer Studio II (ZDSII - eZ80Acclaim!) - available for download at [https://www.zilog.com/index.php?option=com_zcm&task=sdlp&Itemid=74](https://www.zilog.com/index.php?option=com_zcm&task=sdlp&Itemid=74)
+More details of building, flashing and updating the firmware with Zilog's tool set can be found here [./firmware/readme.md](./firmware/readme.md)
 
