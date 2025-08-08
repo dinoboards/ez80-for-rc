@@ -46,6 +46,24 @@ So far I have tested with NEXTOR/MSX-BASIC BIOS and a small number of cartridge-
 
 ### Programming/Flashing the eZ80
 
+Before you can boot you will need to have written an image onto the eZ80's internal ROM.  For that you will need a 'programmer'.
+
+There are 2 options for the programmer.  The Zilog's official programmer (*Zilog eZ80 Acclaim USB Smart Cable*), available from many hardware suppliers such as digikey or mouser; Or a much lower cost alternative is to use a Pi Pico.
+
+#### Pi Pico Programmer
+
+Click here for instructions for setting up a [Pi Pico Programmer](https://www.dinoboards.com.au/pi-pico-programmer)
+
+  <a href="https://www.dinoboards.com.au/pi-pico-programmer"><img src="./docs/assets/pi-pico-example-wiring.jpg" style="width: 45%;" /></a>
+
+
+#### Zilog's Programmer
+
+This is the official programmer for the eZ80 from Zilog.  It cost over a $100 US dollars - so not cheap.
+
+* [Digikey link](https://www.digikey.com.au/en/products/detail/zilog/ZUSBASC0200ZACG/17374332)
+* [Mouser link](https://au.mouser.com/ProductDetail/692-ZUSBASC0200ZACG)
+
 The eZ80 CPU module features a 6-pin header for connecting the Zilog programmer's IDC connector. It is important to note that this header is not keyed, which means the connector can be attached in the incorrect orientation.
 
 The silk screen on the PCB indicates the correct orientation for the IDC connector.
@@ -61,3 +79,6 @@ Refer to the following images for the correct installation orientation.
 <br/>
 
 > Incorrect orientation may result in damage to the CPU and or the programmer.  I have yet to do it to find out what happens!
+
+You will need to clone this repo and open the project with Zilog Developer Studio II (ZDSII - eZ80Acclaim!) - available for download at [https://www.zilog.com/index.php?option=com_zcm&task=sdlp&Itemid=74](https://www.zilog.com/index.php?option=com_zcm&task=sdlp&Itemid=74)
+
