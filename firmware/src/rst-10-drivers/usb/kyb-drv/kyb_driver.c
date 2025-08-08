@@ -5,6 +5,7 @@
 #include "../base-drv/usb_state.h"
 #include "class_hid_keyboard.h"
 #include "kyb_driver_event.h"
+#include <defines.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
@@ -22,9 +23,6 @@ keyboard_report_t kyb_reports[RPT_KEYBOARD_BUFFER_SIZE] = {{0}};
 
 keyboard_report_t kyb_report   = {0};
 keyboard_report_t kyb_previous = {0};
-
-#define DI asm("DI")
-#define EI asm("EI")
 
 void keyboard_report_put() {
   uint8_t next_write_index = (kyb_rpt_write_index + 1) & RPT_KEYBOARD_BUFFER_SIZE_MASK;
@@ -69,14 +67,14 @@ void keyboard_buf_put(const uint8_t indx) {
 uint8_t usb_kyb_status() {
   uint8_t size;
 
-  DI;
+  DI();
 
   if (write_index >= read_index)
     size = write_index - read_index;
   else
     size = KEYBOARD_BUFFER_SIZE - read_index + write_index;
 
-  EI;
+  EI();
   return size;
 }
 
@@ -86,10 +84,10 @@ uint24_t usb_kyb_read() {
   if (write_index == read_index) // Check if buffer is empty
     return 0x00FF00;             // H = -1, L = 0
 
-  DI;
+  DI();
   c          = buffer[read_index];
   read_index = (read_index + 1) & KEYBOARD_BUFFER_SIZE_MASK;
-  EI;
+  EI();
 
   /* H = 0, L = ascii char */
   return c;
@@ -100,7 +98,7 @@ uint8_t usb_kyb_flush() {
   uint8_t *a;
   uint8_t *b;
 
-  DI;
+  DI();
   write_index = read_index = kyb_rpt_write_index = kyb_rpt_read_index = evnt_write_index = evnt_read_index = 0;
 
   i = sizeof(kyb_previous);
@@ -112,7 +110,7 @@ uint8_t usb_kyb_flush() {
     *b++ = 0;
   } while (--i != 0);
 
-  EI;
+  EI();
   return 0;
 }
 
@@ -157,7 +155,7 @@ done:
 
 uint8_t usb_kyb_rpt_que_size() {
   uint8_t alt_size = 0;
-  DI;
+  DI();
 
   if (kyb_rpt_write_index >= kyb_rpt_read_index)
     alt_size = kyb_rpt_write_index - kyb_rpt_read_index;
@@ -167,6 +165,6 @@ uint8_t usb_kyb_rpt_que_size() {
   if (alt_size != 0)
     kyb_rpt_read_index = (kyb_rpt_read_index + 1) & RPT_KEYBOARD_BUFFER_SIZE_MASK;
 
-  EI;
+  EI();
   return alt_size;
 }

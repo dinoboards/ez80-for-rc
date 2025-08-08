@@ -79,12 +79,12 @@ void test_pattern(uint8_t col_row_count, uint8_t white_colour_index) {
 
   vdp_cmd_wait_completion();
 
-  //invert bottom left rectangle
+  // invert bottom left rectangle
   const uint8_t op = 255;
   DI();
   vdp_cmd_logical_move_data_to_vram(op, 0, vdp_get_screen_height() - 52, 51, 52, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_EOR);
   for (int i = 1; i < 51 * 52; i++) {
-    if (!vdp_cmd_send_byte(op)){
+    if (!vdp_cmd_send_byte(op)) {
       vdp_reset_status_reg();
       EI();
       printf("Timed out @ %d\n", i);
@@ -95,12 +95,11 @@ void test_pattern(uint8_t col_row_count, uint8_t white_colour_index) {
   EI();
 break1:
 
-
-  //send 255 (white) to a rectangle at bottom
+  // send 255 (white) to a rectangle at bottom
   DI();
   vdp_cmd_move_data_to_vram(op, 52, vdp_get_screen_height() - 52, 52, 52, DIX_RIGHT | DIY_DOWN);
-  for (int i = get_pixel_per_byte(); i < (52 * 52); i+= get_pixel_per_byte()) {
-    if (!vdp_cmd_send_byte(op)){
+  for (int i = get_pixel_per_byte(); i < (52 * 52); i += get_pixel_per_byte()) {
+    if (!vdp_cmd_send_byte(op)) {
       vdp_reset_status_reg();
       EI();
       printf("Timed out @ %d\n", i);
