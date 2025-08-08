@@ -185,8 +185,8 @@ Refer to the following images for the correct installation orientation.
 | 000000 -> 01FFFF | ON-CHIP ROM |
 | 02E000 -> 02FFFF | ON-CHIP RAM (__RAM_ADDR_U_INIT_PARAM) |
 | 030000 -> 03FFFF | EXTERNAL ROM/RAM (CS3) FOR Z80 COMPATIBILITY MODE |
-| 040000 -> 23FFFF | WIP EXTERNAL FLAT RAM (CS0) 2MB |
-| 240000 -> FFFFFF | WIP OTHER (CS1) 14MB |
+| 200000 -> 3FFFFF | EXTERNAL LINEAR RAM (CS0) 2MB |
+| 400000 -> FFFFFF | UNUSED |
 
 ### Firmware Segments
 
