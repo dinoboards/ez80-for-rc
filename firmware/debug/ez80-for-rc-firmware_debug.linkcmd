@@ -90,8 +90,8 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $00CC)
-LOCATE DATA at (BASE OF BSS - $00D9)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $01F2)
+LOCATE DATA at (BASE OF BSS - $0167)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $057E
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
@@ -100,6 +100,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\base-drv.obj", \
  ".\boot_prompt.obj", \
  ".\build-date.obj", \
+ ".\bytecode.obj", \
  ".\ch376.obj", \
  ".\ch376asm.obj", \
  ".\class_hid.obj", \
@@ -157,6 +158,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb_cbi.obj", \
  ".\usb_state.obj", \
  ".\vectors16.obj", \
+ ".\vm-host.obj", \
+ ".\vm.obj", \
  ".\work-area.obj", \
  ".\z80-emulator-critical.obj", \
  ".\z80-emulator-ix.obj", \
@@ -172,5 +175,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \
  "C:\ZDS\lib\std\nokernelD.lib", \
+ "C:\ZDS\lib\std\fplibD.lib", \
+ "C:\ZDS\lib\std\fplibSD.lib", \
  "C:\ZDS\lib\zilog\zsldevinitdummy.obj"
 

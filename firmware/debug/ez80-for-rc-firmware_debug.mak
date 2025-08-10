@@ -106,6 +106,14 @@ clean:
             $(RM) "$(WORKDIR)\build-date.lst"
 	@if exist "$(WORKDIR)\build-date.src"  \
             $(RM) "$(WORKDIR)\build-date.src"
+	@if exist "$(WORKDIR)\bytecode.obj"  \
+            $(RM) "$(WORKDIR)\bytecode.obj"
+	@if exist "$(WORKDIR)\bytecode.lis"  \
+            $(RM) "$(WORKDIR)\bytecode.lis"
+	@if exist "$(WORKDIR)\bytecode.lst"  \
+            $(RM) "$(WORKDIR)\bytecode.lst"
+	@if exist "$(WORKDIR)\bytecode.src"  \
+            $(RM) "$(WORKDIR)\bytecode.src"
 	@if exist "$(WORKDIR)\ch376.obj"  \
             $(RM) "$(WORKDIR)\ch376.obj"
 	@if exist "$(WORKDIR)\ch376.lis"  \
@@ -500,6 +508,22 @@ clean:
             $(RM) "$(WORKDIR)\vectors16.lis"
 	@if exist "$(WORKDIR)\vectors16.lst"  \
             $(RM) "$(WORKDIR)\vectors16.lst"
+	@if exist "$(WORKDIR)\vm-host.obj"  \
+            $(RM) "$(WORKDIR)\vm-host.obj"
+	@if exist "$(WORKDIR)\vm-host.lis"  \
+            $(RM) "$(WORKDIR)\vm-host.lis"
+	@if exist "$(WORKDIR)\vm-host.lst"  \
+            $(RM) "$(WORKDIR)\vm-host.lst"
+	@if exist "$(WORKDIR)\vm-host.src"  \
+            $(RM) "$(WORKDIR)\vm-host.src"
+	@if exist "$(WORKDIR)\vm.obj"  \
+            $(RM) "$(WORKDIR)\vm.obj"
+	@if exist "$(WORKDIR)\vm.lis"  \
+            $(RM) "$(WORKDIR)\vm.lis"
+	@if exist "$(WORKDIR)\vm.lst"  \
+            $(RM) "$(WORKDIR)\vm.lst"
+	@if exist "$(WORKDIR)\vm.src"  \
+            $(RM) "$(WORKDIR)\vm.src"
 	@if exist "$(WORKDIR)\work-area.obj"  \
             $(RM) "$(WORKDIR)\work-area.obj"
 	@if exist "$(WORKDIR)\work-area.lis"  \
@@ -580,6 +604,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
+            $(WORKDIR_ESCSPACE)\bytecode.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
             $(WORKDIR_ESCSPACE)\ch376asm.obj  \
             $(WORKDIR_ESCSPACE)\class_hid.obj  \
@@ -637,6 +662,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
+            $(WORKDIR_ESCSPACE)\vm-host.obj  \
+            $(WORKDIR_ESCSPACE)\vm.obj  \
             $(WORKDIR_ESCSPACE)\work-area.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
@@ -672,6 +699,11 @@ $(WORKDIR_ESCSPACE)\build-date.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
+
+$(WORKDIR_ESCSPACE)\bytecode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\bytecode.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\bytecode.c"
 
 $(WORKDIR_ESCSPACE)\ch376.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.c  \
@@ -1298,6 +1330,29 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
+
+$(WORKDIR_ESCSPACE)\vm-host.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-host.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-host.c"
+
+$(WORKDIR_ESCSPACE)\vm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm.c"
 
 $(WORKDIR_ESCSPACE)\work-area.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.c  \

@@ -36,8 +36,8 @@ IFDEF	ZEXALL
 ENDIF
 
 
-	;xref	_spike
-	;call	_spike
+	xref	_spike
+	call	_spike
 	; di
 	jp	z80_invoke
 
