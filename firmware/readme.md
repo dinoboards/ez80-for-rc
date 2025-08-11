@@ -208,7 +208,7 @@ RAM is assigned top down.
 
 | Name | Location | Description |
 | ----  | --- | --- |
-| INTERNAL_HIRAM_RAM | @ 0x02FF00 | Reserved firmware jump vectors |
+| INTERNAL_HIRAM_RAM | @ $02FF00 | Reserved firmware jump vectors |
 | INTERNAL_VARS_RAM  | @ $02FFE0  | Reserved firmware variables |
 | BSS                | @ (BASE OF INTERNAL_HIRAM_RAM) - $100 | C uninitialised variables. Zeroed on startup. |
 | DATA               | @ (BASE OF BSS) - $10 | C initialised variables |

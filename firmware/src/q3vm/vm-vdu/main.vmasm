@@ -1,0 +1,68 @@
+export vmMain
+code
+proc vmMain 0 4
+file "main.c"
+line 4
+;1:
+;2:typedef int int32_t;
+;3:
+;4:int32_t vmMain(int32_t command, int32_t arg0, int32_t arg1, int32_t arg2) {
+line 6
+;5:
+;6:  switch(command) {
+ADDRFP4 0
+INDIRI4
+CNSTI4 0
+EQI4 $4
+ADDRGP4 $2
+JUMPV
+LABELV $4
+line 7
+;7:  case 0: {
+line 9
+;8:    //report status to uart
+;9:    print_string("\r\n\r\n\r\nVM-VDU\r\n\r\n");
+ADDRGP4 $5
+ARGP4
+ADDRGP4 print_string
+CALLI4
+pop
+line 10
+;10:    return 0;
+CNSTI4 0
+RETI4
+ADDRGP4 $1
+JUMPV
+LABELV $2
+line 13
+;11:  }
+;12:
+;13:  default: {
+line 15
+;14:    //unknown command
+;15:    return -1;
+CNSTI4 -1
+RETI4
+LABELV $1
+endproc vmMain 0 4
+import print_string
+lit
+align 1
+LABELV $5
+byte 1 13
+byte 1 10
+byte 1 13
+byte 1 10
+byte 1 13
+byte 1 10
+byte 1 86
+byte 1 77
+byte 1 45
+byte 1 86
+byte 1 68
+byte 1 85
+byte 1 13
+byte 1 10
+byte 1 13
+byte 1 10
+byte 1 0

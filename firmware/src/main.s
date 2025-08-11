@@ -35,6 +35,8 @@ IFDEF	ZEXALL
 	call	Z80test
 ENDIF
 
+	xref	_spike_init
+	call	_spike_init
 
 	xref	_spike
 	call	_spike

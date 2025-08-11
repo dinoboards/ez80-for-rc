@@ -106,14 +106,6 @@ clean:
             $(RM) "$(WORKDIR)\build-date.lst"
 	@if exist "$(WORKDIR)\build-date.src"  \
             $(RM) "$(WORKDIR)\build-date.src"
-	@if exist "$(WORKDIR)\bytecode.obj"  \
-            $(RM) "$(WORKDIR)\bytecode.obj"
-	@if exist "$(WORKDIR)\bytecode.lis"  \
-            $(RM) "$(WORKDIR)\bytecode.lis"
-	@if exist "$(WORKDIR)\bytecode.lst"  \
-            $(RM) "$(WORKDIR)\bytecode.lst"
-	@if exist "$(WORKDIR)\bytecode.src"  \
-            $(RM) "$(WORKDIR)\bytecode.src"
 	@if exist "$(WORKDIR)\ch376.obj"  \
             $(RM) "$(WORKDIR)\ch376.obj"
 	@if exist "$(WORKDIR)\ch376.lis"  \
@@ -394,6 +386,14 @@ clean:
             $(RM) "$(WORKDIR)\scsi_driver.lst"
 	@if exist "$(WORKDIR)\scsi_driver.src"  \
             $(RM) "$(WORKDIR)\scsi_driver.src"
+	@if exist "$(WORKDIR)\spike.obj"  \
+            $(RM) "$(WORKDIR)\spike.obj"
+	@if exist "$(WORKDIR)\spike.lis"  \
+            $(RM) "$(WORKDIR)\spike.lis"
+	@if exist "$(WORKDIR)\spike.lst"  \
+            $(RM) "$(WORKDIR)\spike.lst"
+	@if exist "$(WORKDIR)\spike.src"  \
+            $(RM) "$(WORKDIR)\spike.src"
 	@if exist "$(WORKDIR)\system-vars.obj"  \
             $(RM) "$(WORKDIR)\system-vars.obj"
 	@if exist "$(WORKDIR)\system-vars.lis"  \
@@ -604,7 +604,6 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
-            $(WORKDIR_ESCSPACE)\bytecode.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
             $(WORKDIR_ESCSPACE)\ch376asm.obj  \
             $(WORKDIR_ESCSPACE)\class_hid.obj  \
@@ -645,6 +644,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
+            $(WORKDIR_ESCSPACE)\spike.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\transfers.obj  \
@@ -699,11 +699,6 @@ $(WORKDIR_ESCSPACE)\build-date.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
-
-$(WORKDIR_ESCSPACE)\bytecode.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\bytecode.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\bytecode.c"
 
 $(WORKDIR_ESCSPACE)\ch376.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.c  \
@@ -1148,6 +1143,12 @@ $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c"
 
+$(WORKDIR_ESCSPACE)\spike.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-vdu\spike.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-vdu\spike.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-vdu\spike.c"
+
 $(WORKDIR_ESCSPACE)\system-vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1332,18 +1333,19 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
 
 $(WORKDIR_ESCSPACE)\vm-host.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-host.c  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm-host.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
             $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-host.c"
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-vdu\spike.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm-host.c"
 
 $(WORKDIR_ESCSPACE)\vm.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm.c  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
             $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
@@ -1351,8 +1353,8 @@ $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm.c"
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm.c"
 
 $(WORKDIR_ESCSPACE)\work-area.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.c  \

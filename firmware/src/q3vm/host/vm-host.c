@@ -1,4 +1,7 @@
 #include "vm.h"
+#include "../vm-vdu/spike.h"
+
+void print_string(const char *str);
 
 /* The compiled bytecode calls native functions, defined in this file.
  * Read README.md section "How to add a custom native function" for
@@ -8,17 +11,26 @@
  * @return Return value handed back to virtual machine. */
 intptr_t systemCalls(vm_t *vm, intptr_t *args);
 
-extern const uint8_t  __example_bytecode_qvm[];
-extern const uint24_t __example_bytecode_qvm_len;
+vm_t vm;
 
-uint8_t data[256];
+void spike_init() {
+
+  //TODO: On boot, create the VM - with a pre-allocated stack
+  //change q3asm from adding amount to bss for stack - stack can be configured at boot time
+
+  //issue - vm image has a data+bss+stack requirement
+  //vm runtime will have a fixed pre-allocated amount for data+bss+stack
+  //any extra is waste - too little and and wont run
+
+  //update VM to not put string literals into DATA - can we keep them read only
+
+  if (VM_Create(&vm, vm_vdu_image, VM_VDU_IMAGE_SIZE, vm_vdu_ram, VM_VDU_RAM_SIZE, systemCalls)) {
+    print_string("VM Create failed.\n\r");
+  }
+}
 
 void spike() {
-  vm_t vm;
-
-  if (VM_Create(&vm, __example_bytecode_qvm, __example_bytecode_qvm_len, data, sizeof(data), systemCalls) == 0) {
     VM_Call(&vm, 0);
-  }
 }
 
 /* Callback from the VM that something went wrong

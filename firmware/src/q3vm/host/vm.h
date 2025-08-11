@@ -35,10 +35,10 @@ extern size_t strlcpy(char *dst, const char *src, size_t size);
 #endif
 
 /** File start magic number for .qvm files (4 bytes, little endian) */
-#define VM_MAGIC 0x12721444
+#define VM_MAGIC 0x44494E4F
 
 /** Don't change stack size: Hardcoded in q3asm and reserved at end of BSS */
-#define VM_PROGRAM_STACK_SIZE 0x60
+#define VM_PROGRAM_STACK_SIZE 0x1000
 
 /** Max. number of bytes in .qvm */
 #define VM_MAX_IMAGE_SIZE 0x400000
@@ -91,7 +91,8 @@ typedef enum {
   VM_MALLOC_FAILED               = -13, /**< Not enough memory */
   VM_BAD_INSTRUCTION             = -14, /**< Unknown OP code in bytecode */
   VM_NOT_LOADED                  = -15, /**< VM not loaded */
-  VM_NOT_ENOUGH_RAM              = -16  /**< insufficient ram allocated for VM */
+  VM_NOT_ENOUGH_RAM              = -16, /**< insufficient ram allocated for VM */
+  VM_MALFORMED_HEADER            = -17
 } vmErrorCode_t;
 
 /** File header of a bytecode .qvm file. Can be directly mapped to the start of
@@ -125,6 +126,9 @@ typedef struct vmSymbol_s {
  * everything. Call VM_Create(...) to initialize this struct. Call VM_Free(...)
  * to cleanup this struct and free the memory. */
 typedef struct vm_s {
+  vmHeader_t *header; /* Pointer to the bytecode header preceeding the main bytecode image */
+  vm_size_t   bytecodeLength;
+
   vm_size_t programStack; /**< Stack pointer into .data segment. */
 
   /** Function pointer to callback function for native functions called by
@@ -140,13 +144,16 @@ typedef struct vm_s {
 
   /*------------------------------------*/
 
+  std_int instructionCount; /**< Number of instructions for VM */
+
   uint8_t  *codeBase;   /**< Bytecode code segment */
   vm_size_t codeLength; /**< Number of bytes in code segment */
 
-  std_int instructionCount; /**< Number of instructions for VM */
+  uint8_t  *litBase;
+  vm_size_t litLength;
 
-  uint8_t  *dataBase;  /**< Start of .data memory segment */
-  vm_size_t dataAlloc; /**< Number of bytes allocated for dataBase */
+  uint8_t  *dataBase;         /**< base address to apply for access DATA and BSS segments - aka workingRAM - litLength */
+  vm_size_t workingRAMLength; /**< Number of bytes allocated for dataBase */
 
 #ifdef DEBUG_VM
   uint8_t  *debugStorage;
@@ -203,7 +210,7 @@ void VM_Free(vm_t *vm);
 
 /** Run a function from the virtual machine.
  * Use the command argument to tell the VM what to do.
- * You can supply additional (up to 12) parameters to pass to the bytecode.
+ * You can supply additional (up to (`MAX_VMMAIN_ARGS`-1)) parameters to pass to the bytecode.
  * @param[in] vm Pointer to initialized virtual machine.
  * @param[in] command Basic parameter passed to the bytecode.
  * @return Return value of the function call by the VM. */
