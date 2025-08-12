@@ -96,12 +96,10 @@ typedef enum {
 typedef struct {
   uint32_t vmMagic;          /**< 00: Bytecode image shall start with VM_MAGIC */
   uint24_t instructionCount; /**< 04: Number of instructions in .qvm */
-  uint24_t codeOffset;       /**< 07: Byte offset in .qvm file of .code segment */
-  uint24_t codeLength;       /**< 0A: Bytes in code segment */
-  uint24_t dataOffset;       /**< 0D: Byte offset in .qvm file of .data segment */
-  uint24_t dataLength;       /**< 10: Bytes in .data segment */
-  uint24_t litLength;        /**< 13: Bytes in strings segment (after .data segment) */
-  uint24_t bssLength;        /**< 16: How many bytes should be used for .bss segment */
+  uint24_t codeLength;       /**< 07: Bytes in code segment */
+  uint24_t litLength;        /**< 0A: Bytes in strings segment (after .data segment) */
+  uint24_t dataLength;       /**< 0D: Bytes in .data segment */
+  uint24_t bssLength;        /**< 10: How many bytes should be used for .bss segment */
 } vmHeader_t;
 
 #ifdef DEBUG_VM
@@ -122,8 +120,7 @@ typedef struct vmSymbol_s {
  * everything. Call VM_Create(...) to initialize this struct. Call VM_Free(...)
  * to cleanup this struct and free the memory. */
 typedef struct vm_s {
-  vmHeader_t *header; /* Pointer to the bytecode header preceeding the main bytecode image */
-  vm_size_t   bytecodeLength;
+  vm_size_t bytecodeLength;
 
   vm_size_t programStack; /**< Stack pointer into .data segment. */
 

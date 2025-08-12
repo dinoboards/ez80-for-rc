@@ -502,9 +502,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <!-- breakpoint information -->
 <breakpoints>
 <breakpoint temporary="false" enabled="true" >
-<line-number>52</line-number>
+<line-number>51</line-number>
 <pathname>Z:\ez80-for-rc\firmware\src\q3vm\host\vm-host.c</pathname>
-<address>17609</address>
+<address>17634</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>

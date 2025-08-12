@@ -260,7 +260,7 @@ static const char *opnames[OPCODE_TABLE_SIZE] = {
  *******************
  ***********************************************************/
 
-static bool VM_ValidateHeader(const vm_t *const vm);
+static bool VM_ValidateHeader(const vm_t *const vm, const vmHeader_t *const header);
 
 /** Run a function from the virtual machine with the interpreter (i.e. no JIT).
  * @param[in] vm Pointer to initialized virtual machine.
@@ -340,37 +340,39 @@ bool VM_Create(vm_t                *vm,
     return -1;
   }
 
-  Com_Memset(vm, 0, sizeof(vm_t));
-  vm->header           = (vmHeader_t *)bytecode;
-  vm->bytecodeLength   = length;
-  vm->workingRAMLength = workingRAMLength;
+  {
+    const vmHeader_t *const header = (const vmHeader_t *const)bytecode;
 
-  vm->litLength        = to_ustdint(vm->header->litLength);
-  vm->instructionCount = to_ustdint(vm->header->instructionCount);
-  vm->codeLength       = to_ustdint(vm->header->codeLength);
+    Com_Memset(vm, 0, sizeof(vm_t));
+    vm->bytecodeLength   = length;
+    vm->workingRAMLength = workingRAMLength;
 
-  vm->codeBase   = &bytecode[to_ustdint(vm->header->codeOffset)];
-  vm->systemCall = systemCalls;
+    vm->litLength        = to_ustdint(header->litLength);
+    vm->instructionCount = to_ustdint(header->instructionCount);
+    vm->codeLength       = to_ustdint(header->codeLength);
 
-  vm->programStack = to_ustdint(vm->header->dataLength) + to_ustdint(vm->header->litLength) + to_ustdint(vm->header->bssLength) - 4;
+    vm->codeBase   = &bytecode[sizeof(vmHeader_t)];
+    vm->systemCall = systemCalls;
 
-  if (VM_ValidateHeader(vm))
-    return -1;
+    vm->programStack = to_ustdint(header->dataLength) + to_ustdint(header->litLength) + to_ustdint(header->bssLength) - 4;
 
-  /* make sure data section is always initialized with 0
-   * (bss would be enough) */
-  Com_Memset(workingRAM, 0, workingRAMLength);
+    if (VM_ValidateHeader(vm, header))
+      return -1;
 
-  /* copy the intialized data, excluding the lit segment */
-  Com_Memcpy(workingRAM, &bytecode[to_ustdint(vm->header->dataOffset) + to_ustdint(vm->header->litLength)],
-             to_ustdint(vm->header->dataLength));
-  vm->dataBase = workingRAM - to_ustdint(vm->header->litLength);
+    /* make sure data section is always initialized with 0
+     * (bss would be enough) */
+    Com_Memset(workingRAM, 0, workingRAMLength);
 
-  /* the stack is implicitly at the end of the image */
+    /* copy the intialized data, excluding the lit segment */
+    Com_Memcpy(workingRAM, &bytecode[to_ustdint(header->codeLength) + to_ustdint(header->litLength) + sizeof(vmHeader_t)],
+               to_ustdint(header->dataLength));
+    vm->dataBase = workingRAM - to_ustdint(header->litLength);
+
+    /* the stack is implicitly at the end of the image */
 #ifdef DEBUG_VM
-  vm->stackBottom = vm->programStack - VM_PROGRAM_STACK_SIZE;
+    vm->stackBottom = vm->programStack - VM_PROGRAM_STACK_SIZE;
 #endif
-
+  }
   return 0;
 }
 
@@ -396,8 +398,7 @@ int VM_LoadDebugInfo(vm_t *vm, char *mapfileImage, uint8_t *debugStorage, int de
 }
 #endif
 
-static bool VM_ValidateHeader(const vm_t *const vm) {
-  const vmHeader_t *header = vm->header;
+static bool VM_ValidateHeader(const vm_t *const vm, const vmHeader_t *const header) {
 
   if (!header || vm->bytecodeLength <= vm_sizeof(vmHeader_t) || vm->bytecodeLength > VM_MAX_IMAGE_SIZE) {
     Com_Printf("Failed.\n");
@@ -405,14 +406,12 @@ static bool VM_ValidateHeader(const vm_t *const vm) {
   }
 
   if (header->vmMagic == VM_MAGIC) {
-    /* validate */
     if (to_ustdint(header->codeLength) == 0 || to_ustdint(header->instructionCount) == 0 ||
         to_ustdint(header->bssLength) > VM_MAX_BSS_LENGTH ||
-        to_ustdint(header->codeOffset) + to_ustdint(header->codeLength) > vm->bytecodeLength ||
-        to_ustdint(header->dataOffset) + to_ustdint(header->dataLength) + to_ustdint(header->litLength) > vm->bytecodeLength) {
+        to_ustdint(header->codeLength) + to_ustdint(header->litLength) + to_ustdint(header->dataLength) > vm->bytecodeLength) {
       Com_Printf("Warning: bad header\n");
       Com_Error(VM_MALFORMED_HEADER, "Malformed bytecode image\n");
-      return -1;
+      return 0;
     }
   } else {
     Com_Printf("Warning: Invalid magic number in header "
