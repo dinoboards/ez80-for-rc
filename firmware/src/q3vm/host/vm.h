@@ -12,6 +12,8 @@
 #ifndef __Q3VM_H
 #define __Q3VM_H
 
+#include "target-support.h"
+
 /******************************************************************************
  * SYSTEM INCLUDE FILES
  ******************************************************************************/
@@ -61,13 +63,7 @@ extern size_t strlcpy(char *dst, const char *src, size_t size);
 /** Get argument in syscall and interpret it bit by bit as IEEE 754 float */
 #define VMF(x) VM_IntToFloat(args[x])
 
-typedef int std_int; /* can be a 32 or 24 bit number - depending on target CPU */
-
 typedef uint32_t vm_operand_t; /* int to store registers and instruction operand values */
-
-typedef int vm_size_t; /* type to represent size of a vm image (32bits or 24 bits) */
-
-#define vm_sizeof(x) ((vm_size_t)(sizeof(x)))
 
 /******************************************************************************
  * TYPEDEFS
@@ -98,14 +94,14 @@ typedef enum {
 /** File header of a bytecode .qvm file. Can be directly mapped to the start of
  *  the file. This is always little endian encoded in the file. */
 typedef struct {
-  uint32_t vmMagic;          /**< Bytecode image shall start with VM_MAGIC */
-  uint32_t instructionCount; /**< Number of instructions in .qvm */
-  uint32_t codeOffset;       /**< Byte offset in .qvm file of .code segment */
-  uint32_t codeLength;       /**< Bytes in code segment */
-  uint32_t dataOffset;       /**< Byte offset in .qvm file of .data segment */
-  uint32_t dataLength;       /**< Bytes in .data segment */
-  uint32_t litLength;        /**< Bytes in strings segment (after .data segment) */
-  uint32_t bssLength;        /**< How many bytes should be used for .bss segment */
+  uint32_t vmMagic;          /**< 00: Bytecode image shall start with VM_MAGIC */
+  uint24_t instructionCount; /**< 04: Number of instructions in .qvm */
+  uint24_t codeOffset;       /**< 07: Byte offset in .qvm file of .code segment */
+  uint24_t codeLength;       /**< 0A: Bytes in code segment */
+  uint24_t dataOffset;       /**< 0D: Byte offset in .qvm file of .data segment */
+  uint24_t dataLength;       /**< 10: Bytes in .data segment */
+  uint24_t litLength;        /**< 13: Bytes in strings segment (after .data segment) */
+  uint24_t bssLength;        /**< 16: How many bytes should be used for .bss segment */
 } vmHeader_t;
 
 #ifdef DEBUG_VM
@@ -144,10 +140,10 @@ typedef struct vm_s {
 
   /*------------------------------------*/
 
-  std_int instructionCount; /**< Number of instructions for VM */
+  ustdint_t instructionCount; /**< Number of instructions for VM */
 
-  uint8_t  *codeBase;   /**< Bytecode code segment */
-  vm_size_t codeLength; /**< Number of bytes in code segment */
+  const uint8_t *codeBase;   /**< Bytecode code segment */
+  vm_size_t      codeLength; /**< Number of bytes in code segment */
 
   uint8_t  *litBase;
   vm_size_t litLength;
@@ -170,7 +166,8 @@ typedef struct vm_s {
   std_int     breakCount;    /**< Used for breakpoints, triggered by OP_BREAK */
 #endif
 
-  std_int callLevel; /**< Counts recursive VM_Call */
+  /* TODO: this probably can be changed to a uint16_t */
+  ustdint_t callLevel; /**< Counts recursive VM_Call */
 
   vmErrorCode_t lastError; /**< Last known error */
 } vm_t;
@@ -214,7 +211,7 @@ void VM_Free(vm_t *vm);
  * @param[in] vm Pointer to initialized virtual machine.
  * @param[in] command Basic parameter passed to the bytecode.
  * @return Return value of the function call by the VM. */
-intptr_t VM_Call(vm_t *vm, std_int command, ...);
+intptr_t VM_Call(vm_t *vm, ustdint_t command, ...);
 
 /** Helper function for syscalls VMA(x) macro:
  * Translate from virtual machine memory to real machine memory.

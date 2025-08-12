@@ -1,5 +1,5 @@
-#include "vm.h"
 #include "../vm-vdu/spike.h"
+#include "vm.h"
 
 void print_string(const char *str);
 
@@ -15,23 +15,21 @@ vm_t vm;
 
 void spike_init() {
 
-  //TODO: On boot, create the VM - with a pre-allocated stack
-  //change q3asm from adding amount to bss for stack - stack can be configured at boot time
+  // TODO: On boot, create the VM - with a pre-allocated stack
+  // change q3asm from adding amount to bss for stack - stack can be configured at boot time
 
-  //issue - vm image has a data+bss+stack requirement
-  //vm runtime will have a fixed pre-allocated amount for data+bss+stack
-  //any extra is waste - too little and and wont run
+  // issue - vm image has a data+bss+stack requirement
+  // vm runtime will have a fixed pre-allocated amount for data+bss+stack
+  // any extra is waste - too little and and wont run
 
-  //update VM to not put string literals into DATA - can we keep them read only
+  // update VM to not put string literals into DATA - can we keep them read only
 
   if (VM_Create(&vm, vm_vdu_image, VM_VDU_IMAGE_SIZE, vm_vdu_ram, VM_VDU_RAM_SIZE, systemCalls)) {
     print_string("VM Create failed.\n\r");
   }
 }
 
-void spike() {
-    VM_Call(&vm, 0);
-}
+void spike() { VM_Call(&vm, 0); }
 
 /* Callback from the VM that something went wrong
  * @param[in] level Error id, see vmErrorCode_t definition.

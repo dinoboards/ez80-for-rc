@@ -266,7 +266,7 @@ static bool VM_ValidateHeader(const vm_t *const vm);
  * @param[in] vm Pointer to initialized virtual machine.
  * @param[in] args Arguments for function call.
  * @return Return value of the function call. */
-static std_int VM_CallInterpreted(vm_t *vm, std_int *args);
+static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args);
 
 /** Executes a block copy operation (memcpy) within currentVM data space.
  * @param[out] dest Pointer (in VM space).
@@ -315,7 +315,7 @@ static void Q_strncpyz(char *dest, const char *src, int destsize);
  ******************************************************************************/
 
 #define ARRAY_LEN(x)            (sizeof(x) / sizeof(*(x)))
-#define PAD(base, alignment)    (((base) + (alignment) - 1) & ~((alignment) - 1))
+#define PAD(base, alignment)    (((base) + (alignment)-1) & ~((alignment)-1))
 #define PADLEN(base, alignment) (PAD((base), (alignment)) - (base))
 #define PADP(base, alignment)   ((void *)PAD((intptr_t)(base), (alignment)))
 #define Q_ftol(v)               ((long)(v))
@@ -345,14 +345,14 @@ bool VM_Create(vm_t                *vm,
   vm->bytecodeLength   = length;
   vm->workingRAMLength = workingRAMLength;
 
-  vm->litLength        = vm->header->litLength;
-  vm->instructionCount = vm->header->instructionCount;
-  vm->codeLength       = vm->header->codeLength;
+  vm->litLength        = to_ustdint(vm->header->litLength);
+  vm->instructionCount = to_ustdint(vm->header->instructionCount);
+  vm->codeLength       = to_ustdint(vm->header->codeLength);
 
-  vm->codeBase   = (uint8_t *)bytecode + vm->header->codeOffset;
+  vm->codeBase   = &bytecode[to_ustdint(vm->header->codeOffset)];
   vm->systemCall = systemCalls;
 
-  vm->programStack = vm->header->dataLength + vm->header->litLength + vm->header->bssLength - 4;
+  vm->programStack = to_ustdint(vm->header->dataLength) + to_ustdint(vm->header->litLength) + to_ustdint(vm->header->bssLength) - 4;
 
   if (VM_ValidateHeader(vm))
     return -1;
@@ -362,8 +362,9 @@ bool VM_Create(vm_t                *vm,
   Com_Memset(workingRAM, 0, workingRAMLength);
 
   /* copy the intialized data, excluding the lit segment */
-  Com_Memcpy(workingRAM, bytecode + vm->header->dataOffset + vm->header->litLength, vm->header->dataLength);
-  vm->dataBase = workingRAM - vm->header->litLength;
+  Com_Memcpy(workingRAM, &bytecode[to_ustdint(vm->header->dataOffset) + to_ustdint(vm->header->litLength)],
+             to_ustdint(vm->header->dataLength));
+  vm->dataBase = workingRAM - to_ustdint(vm->header->litLength);
 
   /* the stack is implicitly at the end of the image */
 #ifdef DEBUG_VM
@@ -405,9 +406,10 @@ static bool VM_ValidateHeader(const vm_t *const vm) {
 
   if (header->vmMagic == VM_MAGIC) {
     /* validate */
-    if (header->codeLength == 0 || header->instructionCount == 0 || header->bssLength > VM_MAX_BSS_LENGTH ||
-        header->codeOffset + header->codeLength > (uint32_t)vm->bytecodeLength ||
-        header->dataOffset + header->dataLength + header->litLength > (uint32_t)vm->bytecodeLength) {
+    if (to_ustdint(header->codeLength) == 0 || to_ustdint(header->instructionCount) == 0 ||
+        to_ustdint(header->bssLength) > VM_MAX_BSS_LENGTH ||
+        to_ustdint(header->codeOffset) + to_ustdint(header->codeLength) > vm->bytecodeLength ||
+        to_ustdint(header->dataOffset) + to_ustdint(header->dataLength) + to_ustdint(header->litLength) > vm->bytecodeLength) {
       Com_Printf("Warning: bad header\n");
       Com_Error(VM_MALFORMED_HEADER, "Malformed bytecode image\n");
       return -1;
@@ -424,7 +426,7 @@ static bool VM_ValidateHeader(const vm_t *const vm) {
     /* round up to next power of 2 so all data operations can
        be mask protected */
     /*TODO: we can remove need for lit to be included in dataSegment*/
-    const vm_size_t dataLength = header->dataLength + header->bssLength;
+    const vm_size_t dataLength = to_ustdint(header->dataLength) + to_ustdint(header->bssLength);
 
     if (dataLength > vm->workingRAMLength) {
       Com_Printf("Error: Insufficient ram allocated for VM.  Granted %06X, image requires %06X\n", vm->workingRAMLength,
@@ -437,7 +439,8 @@ static bool VM_ValidateHeader(const vm_t *const vm) {
   return 0;
 }
 
-intptr_t VM_Call(vm_t *vm, std_int command, ...) {
+/* FIXME: this needs to be locked to uint24_t to ensure platform agnostic */
+intptr_t VM_Call(vm_t *vm, ustdint_t command, ...) {
   intptr_t r;
 
   if (vm == NULL) {
@@ -453,14 +456,14 @@ intptr_t VM_Call(vm_t *vm, std_int command, ...) {
 
   /* FIXME this is not nice. we should check the actual number of arguments */
   {
-    std_int args[MAX_VMMAIN_ARGS];
-    va_list ap;
-    uint8_t i;
+    ustdint_t args[MAX_VMMAIN_ARGS];
+    va_list   ap;
+    uint8_t   i;
 
     args[0] = command;
     va_start(ap, command);
     for (i = 1; i < (uint8_t)ARRAY_LEN(args); i++) {
-      args[i] = va_arg(ap, std_int);
+      args[i] = va_arg(ap, ustdint_t);
     }
     va_end(ap);
 
@@ -495,7 +498,7 @@ void *VM_ArgPtr(intptr_t vmAddr, vm_t *vm) {
   }
 
   if (vmAddr < vm->litLength)
-  return (void *)(&vm->codeBase[vm->codeLength + vmAddr]);
+    return (void *)(&vm->codeBase[vm->codeLength + vmAddr]);
 
   return (void *)(vm->dataBase + (vmAddr));
 }
@@ -582,7 +585,7 @@ locals from sp
 #define DISPATCH2()         goto nextInstruction2
 #define DISPATCH()          goto nextInstruction
 
-uint8_t *VM_RedirectLit(vm_t *vm, vm_operand_t a) {
+const uint8_t *VM_RedirectLit(vm_t *vm, vm_operand_t a) {
   if (a < (vm_operand_t)vm->litLength) {
     return &vm->codeBase[vm->codeLength + a];
   }
@@ -590,19 +593,20 @@ uint8_t *VM_RedirectLit(vm_t *vm, vm_operand_t a) {
   return &vm->dataBase[a];
 }
 
-static std_int VM_CallInterpreted(vm_t *vm, std_int *args) {
-  uint8_t       stack[OPSTACK_SIZE + 15];
-  vm_operand_t *opStack;
-  uint8_t       opStackOfs;
-  std_int       programCounter;
-  std_int       programStack;
-  std_int       stackOnEntry;
-  uint8_t      *dataBase;
-  uint8_t      *codeBase;
-  vm_operand_t  v1;
-  std_int       arg;
-  uint8_t       opcode;
-  vm_operand_t  r0, r1;
+/* FIXME: this needs to be locked to uint24_t to ensure platform agnostic */
+static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
+  uint8_t        stack[OPSTACK_SIZE + 15];
+  vm_operand_t  *opStack;
+  uint8_t        opStackOfs;
+  stdint_t       programCounter;
+  ustdint_t      programStack;
+  ustdint_t      stackOnEntry;
+  uint8_t       *dataBase;
+  const uint8_t *codeBase;
+  vm_operand_t   v1;
+  ustdint_t      arg;
+  uint8_t        opcode;
+  vm_operand_t   r0, r1;
 
 #ifdef DEBUG_VM
   std_int     prevProgramCounter;
@@ -778,9 +782,9 @@ static std_int VM_CallInterpreted(vm_t *vm, std_int *args) {
         {
           intptr_t      argarr[MAX_VMSYSCALL_ARGS];
           vm_operand_t *imagePtr = (vm_operand_t *)&dataBase[programStack];
-          std_int       i;
+          ustdint_t     i;
 
-          for (i = 0; i < (std_int)ARRAY_LEN(argarr); ++i)
+          for (i = 0; i < (ustdint_t)ARRAY_LEN(argarr); ++i)
             argarr[i] = *(++imagePtr);
 
           r = vm->systemCall(vm, argarr);

@@ -2,11 +2,11 @@
 
 set -e
 
-cp ~/dinoboards/q3vm/bin/linux/lcc ./
-cp ~/dinoboards/q3vm/bin/linux/q3asm ./
-cp ~/dinoboards/q3vm/bin/linux/q3cpp ./
-cp ~/dinoboards/q3vm/bin/linux/q3rcc ./
+cp -u ~/dinoboards/q3vm/bin/linux/lcc ./
+cp -u ~/dinoboards/q3vm/bin/linux/q3asm ./
+cp -u ~/dinoboards/q3vm/bin/linux/q3cpp ./
+cp -u ~/dinoboards/q3vm/bin/linux/q3rcc ./
 
-cp ~/dinoboards/q3vm/src/vm/vm.c ../host/
-cp ~/dinoboards/q3vm/src/vm/vm.h ../host/
+cp -u ~/dinoboards/q3vm/src/vm/vm.c ../host/
+cp -u ~/dinoboards/q3vm/src/vm/vm.h ../host/
 

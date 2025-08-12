@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define VM_VDU_IMAGE_SIZE 128
-#define VM_VDU_RAM_SIZE   512
+#define VM_VDU_IMAGE_SIZE 121
+#define VM_VDU_RAM_SIZE   532
 
 extern const uint8_t vm_vdu_image[VM_VDU_IMAGE_SIZE];
 
