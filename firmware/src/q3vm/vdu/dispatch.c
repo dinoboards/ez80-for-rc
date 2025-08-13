@@ -1,12 +1,18 @@
+#include "../includes/stdint.h"
 
-typedef int int32_t;
+extern void print_string(char *str);
 
 int32_t vmMain(int32_t command, int32_t arg0, int32_t arg1, int32_t arg2) {
+  print_string("vmMain\r\n");
 
   switch (command) {
   case 0: {
-    // report status to uart
-    print_string("\r\n\r\n\r\nVM-VDU\r\n\r\n");
+    vdu((uint8_t)arg0);
+    return 0;
+  }
+
+  case 255: {
+    vdu_init();
     return 0;
   }
 

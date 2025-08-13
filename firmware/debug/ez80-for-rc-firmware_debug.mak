@@ -366,6 +366,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lis"
 	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lst"  \
             $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lst"
+	@if exist "$(WORKDIR)\rst-10-08-crt.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.obj"
+	@if exist "$(WORKDIR)\rst-10-08-crt.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.lis"
+	@if exist "$(WORKDIR)\rst-10-08-crt.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.lst"
 	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-10-functions.obj"
 	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
@@ -386,14 +392,6 @@ clean:
             $(RM) "$(WORKDIR)\scsi_driver.lst"
 	@if exist "$(WORKDIR)\scsi_driver.src"  \
             $(RM) "$(WORKDIR)\scsi_driver.src"
-	@if exist "$(WORKDIR)\spike.obj"  \
-            $(RM) "$(WORKDIR)\spike.obj"
-	@if exist "$(WORKDIR)\spike.lis"  \
-            $(RM) "$(WORKDIR)\spike.lis"
-	@if exist "$(WORKDIR)\spike.lst"  \
-            $(RM) "$(WORKDIR)\spike.lst"
-	@if exist "$(WORKDIR)\spike.src"  \
-            $(RM) "$(WORKDIR)\spike.src"
 	@if exist "$(WORKDIR)\system-vars.obj"  \
             $(RM) "$(WORKDIR)\system-vars.obj"
 	@if exist "$(WORKDIR)\system-vars.lis"  \
@@ -502,20 +500,28 @@ clean:
             $(RM) "$(WORKDIR)\usb_state.lst"
 	@if exist "$(WORKDIR)\usb_state.src"  \
             $(RM) "$(WORKDIR)\usb_state.src"
+	@if exist "$(WORKDIR)\vdu.obj"  \
+            $(RM) "$(WORKDIR)\vdu.obj"
+	@if exist "$(WORKDIR)\vdu.lis"  \
+            $(RM) "$(WORKDIR)\vdu.lis"
+	@if exist "$(WORKDIR)\vdu.lst"  \
+            $(RM) "$(WORKDIR)\vdu.lst"
+	@if exist "$(WORKDIR)\vdu.src"  \
+            $(RM) "$(WORKDIR)\vdu.src"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.obj"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.obj"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.lis"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.lis"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.lst"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.lst"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.src"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.src"
 	@if exist "$(WORKDIR)\vectors16.obj"  \
             $(RM) "$(WORKDIR)\vectors16.obj"
 	@if exist "$(WORKDIR)\vectors16.lis"  \
             $(RM) "$(WORKDIR)\vectors16.lis"
 	@if exist "$(WORKDIR)\vectors16.lst"  \
             $(RM) "$(WORKDIR)\vectors16.lst"
-	@if exist "$(WORKDIR)\vm-host.obj"  \
-            $(RM) "$(WORKDIR)\vm-host.obj"
-	@if exist "$(WORKDIR)\vm-host.lis"  \
-            $(RM) "$(WORKDIR)\vm-host.lis"
-	@if exist "$(WORKDIR)\vm-host.lst"  \
-            $(RM) "$(WORKDIR)\vm-host.lst"
-	@if exist "$(WORKDIR)\vm-host.src"  \
-            $(RM) "$(WORKDIR)\vm-host.src"
 	@if exist "$(WORKDIR)\vm.obj"  \
             $(RM) "$(WORKDIR)\vm.obj"
 	@if exist "$(WORKDIR)\vm.lis"  \
@@ -641,10 +647,10 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-08-crt.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
-            $(WORKDIR_ESCSPACE)\spike.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\transfers.obj  \
@@ -661,8 +667,9 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
+            $(WORKDIR_ESCSPACE)\vdu.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_vm_bytecode.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
-            $(WORKDIR_ESCSPACE)\vm-host.obj  \
             $(WORKDIR_ESCSPACE)\vm.obj  \
             $(WORKDIR_ESCSPACE)\work-area.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
@@ -1107,6 +1114,14 @@ $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-07-emulator-function.s"
 
+$(WORKDIR_ESCSPACE)\rst-10-08-crt.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-08-crt.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-08-crt.s"
+
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1142,12 +1157,6 @@ $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c"
-
-$(WORKDIR_ESCSPACE)\spike.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-vdu\spike.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-vdu\spike.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-vdu\spike.c"
 
 $(WORKDIR_ESCSPACE)\system-vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \
@@ -1324,6 +1333,21 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
 
+$(WORKDIR_ESCSPACE)\vdu.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu.c"
+
+$(WORKDIR_ESCSPACE)\vdu_vm_bytecode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_vm_bytecode.c"
+
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1331,19 +1355,6 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
-
-$(WORKDIR_ESCSPACE)\vm-host.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm-host.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-vdu\spike.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm-host.c"
 
 $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.c  \
@@ -1421,7 +1432,6 @@ $(WORKDIR_ESCSPACE)\z80-emulator-lis.obj :  \
 $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"

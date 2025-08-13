@@ -1,35 +1,24 @@
-#include "../vm-vdu/spike.h"
-#include "vm.h"
+#include "../../q3vm/host/target-support.h"
+#include "../../q3vm/host/vm.h"
+#include "vdu_vm_bytecode.h"
 
-void print_string(const char *str);
+static vm_t vm;
 
-/* The compiled bytecode calls native functions, defined in this file.
- * Read README.md section "How to add a custom native function" for
- * details.
- * @param[in,out] vm Pointer to virtual machine, prepared by VM_Create.
- * @param[in,out] args Array with arguments of function call.
- * @return Return value handed back to virtual machine. */
 intptr_t systemCalls(vm_t *vm, intptr_t *args);
+void     print_string(const char *str);
 
-vm_t vm;
-
-void spike_init() {
-
-  // TODO: On boot, create the VM - with a pre-allocated stack
-  // change q3asm from adding amount to bss for stack - stack can be configured at boot time
-
-  // issue - vm image has a data+bss+stack requirement
-  // vm runtime will have a fixed pre-allocated amount for data+bss+stack
-  // any extra is waste - too little and and wont run
-
-  // update VM to not put string literals into DATA - can we keep them read only
-
-  if (VM_Create(&vm, vm_vdu_image, VM_VDU_IMAGE_SIZE, vm_vdu_ram, VM_VDU_RAM_SIZE, systemCalls)) {
+void vdu_init() {
+  if (VM_Create(&vm, vdu_vm_bytecode, VDU_VM_BYTECODE_SIZE, vdu_vm_bytecode_ram, VDU_VM_BYTECODE_RAM_SIZE, systemCalls)) {
     print_string("VM Create failed.\n\r");
+    return;
   }
+
+  VM_Call(&vm, 255);
 }
 
-void spike() { VM_Call(&vm, 0); }
+void vdu(uint8_t code) { VM_Call(&vm, 0, code); }
+
+/*   VM HOST INTERFACE   */
 
 /* Callback from the VM that something went wrong
  * @param[in] level Error id, see vmErrorCode_t definition.
@@ -39,8 +28,6 @@ void Com_Error(vmErrorCode_t level, const char *error) {
   //  fprintf(stderr, "Err (%i): %s\n", level, error);
   //  exit(level);
 }
-
-void print_string(const char *str);
 
 intptr_t systemCalls(vm_t *vm, intptr_t *args) {
   const int id = -1 - args[0];

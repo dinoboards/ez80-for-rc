@@ -22,7 +22,7 @@
 ;  test int during emulator_invoke execution ./
 
 
-if 0
+if 1
         INCLUDE "startup\ez80F92.inc"
 
 	SECTION CODE
@@ -61,6 +61,14 @@ longspike:
 	ret.l		; this should return to the emulator
 
 _spike:
+	LD	A, 8
+	LD	B, 0
+	LD	C, 65
+	RST.L	%10
+	nop
+	nop
+	ret
+
 	di
 
 	; write spike code here to be run in ADL mode on  on-chip rom

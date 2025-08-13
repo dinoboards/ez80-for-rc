@@ -2,9 +2,11 @@
 
 set -e
 
-PATH=${PATH}:../tools/
+PATH=${PATH}:../../q3vm/tools/
 
-lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -o main.vmasm main.c
+lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -o dispatch.vmasm dispatch.c
+lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu.vmasm vdu.c
+lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu_init.vmasm vdu_init.c
 
 q3asm -s 512 -m -v -f bytecode
 
@@ -36,44 +38,48 @@ echo bss: ${bssLength}
 echo bytecodeSize: ${bytecodeSize}
 echo ramRequired: ${ramRequired}
 
-cat <<EOT > spike.h
-#ifndef __SPIKE
-#define __SPIKE
+IMAGE_NAME=vdu_vm_bytecode
+IMAGE_NAME_UPCASE=VDU_VM_BYTECODE
+OUTPUT_FILE="../../rst-10-drivers/crt/${IMAGE_NAME}"
+
+cat <<EOT > "${OUTPUT_FILE}.h"
+#ifndef __${IMAGE_NAME_UPCASE}
+#define __${IMAGE_NAME_UPCASE}
 
 #include <stdint.h>
 
-#define VM_VDU_IMAGE_SIZE ${bytecodeSize}
-#define VM_VDU_RAM_SIZE ${ramRequired}
+#define ${IMAGE_NAME_UPCASE}_SIZE ${bytecodeSize}
+#define ${IMAGE_NAME_UPCASE}_RAM_SIZE ${ramRequired}
 
-extern const uint8_t vm_vdu_image[VM_VDU_IMAGE_SIZE];
+extern const uint8_t ${IMAGE_NAME}[${IMAGE_NAME_UPCASE}_SIZE];
 
-extern uint8_t vm_vdu_ram[VM_VDU_RAM_SIZE];
+extern uint8_t ${IMAGE_NAME}_ram[${IMAGE_NAME_UPCASE}_RAM_SIZE];
 
 #endif
 
 EOT
 
-cat <<EOT > spike.c
+cat <<EOT > "${OUTPUT_FILE}.c"
 #include <stdint.h>
-#include "spike.h"
+#include "${IMAGE_NAME}.h"
 
-const uint8_t vm_vdu_image[VM_VDU_IMAGE_SIZE] = {
+const uint8_t ${IMAGE_NAME}[${IMAGE_NAME_UPCASE}_SIZE] = {
 EOT
 
 
 xxd -c 1 ./bytecode.qvm | while read offset hex char; do
-  printf "0x" >> ./spike.c
-  printf $hex >> ./spike.c
-  printf "," >> ./spike.c
+  printf "0x" >> ./${OUTPUT_FILE}.c
+  printf $hex >> ./${OUTPUT_FILE}.c
+  printf "," >> ./${OUTPUT_FILE}.c
   #Do something with $hex
 done
 
 
-cat <<EOT >> spike.c
+cat <<EOT >> ${OUTPUT_FILE}.c
 };
 
-uint8_t vm_vdu_ram[VM_VDU_RAM_SIZE];
+uint8_t ${IMAGE_NAME}_ram[${IMAGE_NAME_UPCASE}_RAM_SIZE];
 
 EOT
 
-clang-format -i spike.c spike.h
+clang-format -i "${OUTPUT_FILE}.c" "${OUTPUT_FILE}.h"
