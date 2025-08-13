@@ -170,6 +170,8 @@ typedef enum {
   OP_CVIF, /* Convert to integer from float */
   OP_CVFI, /* Convert to float from integer */
 
+  OP_CONSTU1,
+
   OP_MAX /* Make this the last item */
 } opcode_t;
 
@@ -184,6 +186,7 @@ typedef enum {
 #define goto_OP_PUSH       case OP_PUSH
 #define goto_OP_POP        case OP_POP
 #define goto_OP_CONST      case OP_CONST
+#define goto_OP_CONSTU1    case OP_CONSTU1
 #define goto_OP_LOCAL      case OP_LOCAL
 #define goto_OP_JUMP       case OP_JUMP
 #define goto_OP_EQ         case OP_EQ
@@ -266,7 +269,7 @@ static bool VM_ValidateHeader(const vm_t *const vm, const vmHeader_t *const head
  * @param[in] vm Pointer to initialized virtual machine.
  * @param[in] args Arguments for function call.
  * @return Return value of the function call. */
-static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args);
+static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args);
 
 /** Executes a block copy operation (memcpy) within currentVM data space.
  * @param[out] dest Pointer (in VM space).
@@ -340,6 +343,12 @@ bool VM_Create(vm_t                *vm,
     return -1;
   }
 
+  if (!bytecode) {
+    vm->lastError = VM_INVALID_POINTER;
+    Com_Error(vm->lastError, "bytecode is NULL");
+    return -1;
+  }
+
   {
     const vmHeader_t *const header = (const vmHeader_t *const)bytecode;
 
@@ -370,7 +379,7 @@ bool VM_Create(vm_t                *vm,
 
     /* the stack is implicitly at the end of the image */
 #ifdef DEBUG_VM
-    vm->stackBottom = vm->programStack - VM_PROGRAM_STACK_SIZE;
+    vm->stackBottom = vm->programStack - to_ustdint(header->bssLength);
 #endif
   }
   return 0;
@@ -411,7 +420,7 @@ static bool VM_ValidateHeader(const vm_t *const vm, const vmHeader_t *const head
         to_ustdint(header->codeLength) + to_ustdint(header->litLength) + to_ustdint(header->dataLength) > vm->bytecodeLength) {
       Com_Printf("Warning: bad header\n");
       Com_Error(VM_MALFORMED_HEADER, "Malformed bytecode image\n");
-      return 0;
+      return -1;
     }
   } else {
     Com_Printf("Warning: Invalid magic number in header "
@@ -455,14 +464,14 @@ intptr_t VM_Call(vm_t *vm, ustdint_t command, ...) {
 
   /* FIXME this is not nice. we should check the actual number of arguments */
   {
-    ustdint_t args[MAX_VMMAIN_ARGS];
-    va_list   ap;
-    uint8_t   i;
+    uint32_t args[MAX_VMMAIN_ARGS];
+    va_list  ap;
+    uint8_t  i;
 
     args[0] = command;
     va_start(ap, command);
     for (i = 1; i < (uint8_t)ARRAY_LEN(args); i++) {
-      args[i] = va_arg(ap, ustdint_t);
+      args[i] = va_arg(ap, uint32_t);
     }
     va_end(ap);
 
@@ -491,6 +500,7 @@ void *VM_ArgPtr(intptr_t vmAddr, vm_t *vm) {
   if (!vmAddr) {
     return NULL;
   }
+
   if (vm == NULL) {
     Com_Error(VM_INVALID_POINTER, "Invalid VM pointer");
     return NULL;
@@ -553,7 +563,11 @@ static void VM_BlockCopy(vm_size_t dest, const vm_size_t src, const vm_size_t n,
   if (VM_MemoryRangeValid(src, n, vm))
     return;
 
-  Com_Memcpy(vm->dataBase + dest, vm->dataBase + src, n);
+  {
+    const uint8_t *true_src = (src < vm->litLength) ? &vm->codeBase[vm->codeLength + src] : &vm->dataBase[src];
+
+    Com_Memcpy(vm->dataBase + dest, true_src, n);
+  }
 }
 /*
 ==============
@@ -579,22 +593,22 @@ locals from sp
 */
 
 #define r2                  (*((vm_operand_t *)&codeBase[programCounter]))
+#define r2_int16            (*((uint16_t *)&codeBase[programCounter]))
+#define r2_int24            (*((uint24_t *)&codeBase[programCounter]))
+#define r2_uint8            (codeBase[programCounter])
 #define INT_INCREMENT       sizeof(uint32_t)
+#define INT8_INCREMENT      sizeof(uint8_t)
+#define INT16_INCREMENT     sizeof(uint16_t)
+#define INT24_INCREMENT     sizeof(uint24_t)
 #define MAX_PROGRAM_COUNTER ((unsigned)vm->codeLength)
 #define DISPATCH2()         goto nextInstruction2
 #define DISPATCH()          goto nextInstruction
 
-const uint8_t *VM_RedirectLit(vm_t *vm, vm_operand_t a) {
-  if (a < (vm_operand_t)vm->litLength) {
-    return &vm->codeBase[vm->codeLength + a];
-  }
-
-  return &vm->dataBase[a];
-}
+#define VM_RedirectLit(vm, a) ((a < (vm_operand_t)vm->litLength) ? &vm->codeBase[vm->codeLength + a] : &vm->dataBase[a])
 
 /* FIXME: this needs to be locked to uint24_t to ensure platform agnostic */
-static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
-  uint8_t        stack[OPSTACK_SIZE + 15];
+static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
+  uint8_t        stack[OPSTACK_SIZE + 15]; /* 256 4 byte double words + 15 safety bytes */
   vm_operand_t  *opStack;
   uint8_t        opStackOfs;
   stdint_t       programCounter;
@@ -602,7 +616,6 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
   ustdint_t      stackOnEntry;
   uint8_t       *dataBase;
   const uint8_t *codeBase;
-  vm_operand_t   v1;
   ustdint_t      arg;
   uint8_t        opcode;
   vm_operand_t   r0, r1;
@@ -663,7 +676,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
     opcode = codeBase[programCounter++];
 
 #ifdef DEBUG_VM
-    if (programCounter >= vm->codeLength) {
+    if (programCounter >= (stdint_t)vm->codeLength) {
       vm->lastError = VM_PC_OUT_OF_RANGE;
       Com_Error(vm->lastError, "VM pc out of range");
       return -1;
@@ -682,7 +695,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
     }
 
     if (vm_debugLevel > 1) {
-      Com_Printf("%s%i %s\t(%02X %08X);\tSP=%d, R0=%08X, R1=%08X \n", VM_Indent(vm), opStackOfs,
+      Com_Printf("%s%i %s\t(%02X %08X);\tSP=%08X, R0=%08X, R1=%08X \n", VM_Indent(vm), opStackOfs,
                  opnames[opcode & OPCODE_TABLE_MASK], opcode, r2, programStack, r0, r1);
     }
     profileSymbol->profileCount++;
@@ -751,8 +764,8 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
       programCounter += 1;
       DISPATCH();
     goto_OP_BLOCK_COPY:
-      VM_BlockCopy(r1, r0, r2, vm);
-      programCounter += INT_INCREMENT;
+      VM_BlockCopy(r1, r0, to_ustdint(r2_int24), vm);
+      programCounter += INT24_INCREMENT;
       opStackOfs -= 2;
       DISPATCH();
     goto_OP_CALL:
@@ -818,16 +831,16 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
     goto_OP_POP:
       opStackOfs--;
       DISPATCH();
-    goto_OP_ENTER:
+    goto_OP_ENTER : {
+      const uint16_t localsAndArgsSize = r2_int16;
       /* get size of stack frame */
-      v1 = r2;
-      programCounter += INT_INCREMENT;
-      programStack -= v1;
+      programCounter += INT16_INCREMENT;
+      programStack -= localsAndArgsSize;
 
 #ifdef DEBUG_VM
       profileSymbol = VM_ValueToFunctionSymbol(vm, programCounter - 3);
       /* save old stack frame for debugging traces */
-      *(int *)&dataBase[programStack + 4] = programStack + v1;
+      *(int *)&dataBase[programStack + 4] = programStack + localsAndArgsSize;
       if (vm_debugLevel) {
         Com_Printf("%s%i---> %s\n", VM_Indent(vm), opStackOfs, VM_ValueToSymbol(vm, programCounter - 5 - 3));
         if (vm->breakFunction && programCounter - 5 - 3 == vm->breakFunction) {
@@ -839,11 +852,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
       }
 #endif
       DISPATCH();
-    goto_OP_LEAVE:
+    }
+    goto_OP_LEAVE : {
       /* remove our stack frame */
-      v1 = r2;
-
-      programStack += v1;
+      programStack += r2_int16;
 
       /* grab the saved program counter */
       programCounter = *(vm_operand_t *)&dataBase[programStack];
@@ -861,7 +873,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
         return -1;
       }
       DISPATCH();
-
+    }
       /*
          ===================================================================
          BRANCHES
@@ -1124,6 +1136,17 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, ustdint_t *args) {
     goto_OP_SEX16:
       opStack[opStackOfs] = (int16_t)opStack[opStackOfs];
       DISPATCH();
+    goto_OP_CONSTU1 : {
+      opStackOfs++;
+      r1 = r0;
+      r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint8;
+
+      programCounter += INT8_INCREMENT;
+      DISPATCH2();
+    }
+    default: {
+      Com_Error(VM_ILLEGAL_OPCODE, "Unknown Opcode encountered");
+    }
     }
   }
 
@@ -1329,7 +1352,6 @@ static char *COM_Parse(char **data_p) {
 static void VM_LoadSymbols(vm_t *vm, char *mapfile, uint8_t *debugStorage, int debugStorageLength) {
   char        *text_p;
   char        *token;
-  char         symbols[VM_MAX_QPATH];
   vmSymbol_t **prev, *sym;
   int          count;
   int          value;
@@ -1390,7 +1412,7 @@ static void VM_LoadSymbols(vm_t *vm, char *mapfile, uint8_t *debugStorage, int d
   }
 
   vm->numSymbols = count;
-  Com_Printf("%i symbols parsed from %s\n", count, symbols);
+  Com_Printf("%i symbols parsed\n", count);
 }
 
 static void VM_StackTrace(vm_t *vm, int programCounter, int programStack) {

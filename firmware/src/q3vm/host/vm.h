@@ -63,7 +63,9 @@ extern size_t strlcpy(char *dst, const char *src, size_t size);
 /** Get argument in syscall and interpret it bit by bit as IEEE 754 float */
 #define VMF(x) VM_IntToFloat(args[x])
 
-typedef uint32_t vm_operand_t; /* int to store registers and instruction operand values */
+typedef int std_int; /* can be a 32 or 24 bit number - depending on target CPU */
+
+typedef int32_t vm_operand_t; /* int to store registers and instruction operand values */
 
 /******************************************************************************
  * TYPEDEFS
@@ -88,7 +90,8 @@ typedef enum {
   VM_BAD_INSTRUCTION             = -14, /**< Unknown OP code in bytecode */
   VM_NOT_LOADED                  = -15, /**< VM not loaded */
   VM_NOT_ENOUGH_RAM              = -16, /**< insufficient ram allocated for VM */
-  VM_MALFORMED_HEADER            = -17
+  VM_MALFORMED_HEADER            = -17,
+  VM_ILLEGAL_OPCODE              = -18
 } vmErrorCode_t;
 
 /** File header of a bytecode .qvm file. Can be directly mapped to the start of
@@ -150,7 +153,7 @@ typedef struct vm_s {
 
 #ifdef DEBUG_VM
   uint8_t  *debugStorage;
-  vm_size_t debugStorageLength;
+  stdint_t  debugStorageLength;
   vm_size_t stackBottom; /**< If programStack < stackBottom, error */
 #endif
 

@@ -1340,6 +1340,7 @@ $(WORKDIR_ESCSPACE)\vm-host.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-vdu\spike.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm-host.c"
@@ -1353,6 +1354,7 @@ $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm.c"
 
