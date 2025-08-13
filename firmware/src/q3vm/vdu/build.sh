@@ -4,9 +4,9 @@ set -e
 
 PATH=${PATH}:../../q3vm/tools/
 
-lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -o dispatch.vmasm dispatch.c
-lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu.vmasm vdu.c
-lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu_init.vmasm vdu_init.c
+lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o dispatch.vmasm dispatch.c
+lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu.vmasm vdu.c
+lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu_init.vmasm vdu_init.c
 
 q3asm -s 512 -m -v -f bytecode
 

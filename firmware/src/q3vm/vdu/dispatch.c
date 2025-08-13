@@ -1,6 +1,5 @@
-#include "../includes/stdint.h"
-
-extern void print_string(char *str);
+#include <host-functions.h>
+#include <stdint.h>
 
 int32_t vmMain(int32_t command, int32_t arg0, int32_t arg1, int32_t arg2) {
   print_string("vmMain\r\n");

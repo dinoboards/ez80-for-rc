@@ -1,6 +1,5 @@
-#include "../includes/stdint.h"
-
-extern void print_string(const char *str);
+#include <host-functions.h>
+#include <stdint.h>
 
 void vdu(uint8_t code) {
   char str[] = "  THIS IS THE TEST\n\r";
