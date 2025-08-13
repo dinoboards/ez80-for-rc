@@ -498,35 +498,16 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <!-- watch information -->
 <watch-elements>
 <watch-element expression="vm" />
+<watch-element expression="ch" />
+<watch-element expression="str" />
 </watch-elements>
 
 <!-- breakpoint information -->
 <breakpoints>
 <breakpoint temporary="false" enabled="true" >
-<line-number>51</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\q3vm\host\vm-host.c</pathname>
-<address>0</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>46</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\rst-10-08-crt.s</pathname>
-<address>14356</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>38</line-number>
+<line-number>37</line-number>
 <pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\crt\vdu.c</pathname>
-<address>17753</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>11</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\crt\vdu.c</pathname>
-<address>17611</address>
+<address>17807</address>
 <command></command>
 <preserve-type>0</preserve-type>
 </breakpoint>

@@ -1,6 +1,0 @@
--o "bytecode"
-dispatch.vmasm
-vdu_init.vmasm
-vdu.vmasm
-g_syscalls
-

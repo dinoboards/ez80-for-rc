@@ -1,10 +1,4 @@
 #include <host-functions.h>
 #include <stdint.h>
 
-void vdu(uint8_t code) {
-  char str[] = "  THIS IS THE TEST\n\r";
-
-  str[0] = code;
-
-  print_string(str);
-}
+void vdu(uint8_t code) { trap_Printf("Char %d %c\r\n\n"); }

@@ -4,12 +4,6 @@ set -e
 
 PATH=${PATH}:../../q3vm/tools/
 
-lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o dispatch.vmasm dispatch.c
-lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu.vmasm vdu.c
-lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu_init.vmasm vdu_init.c
-
-q3asm -s 512 -m  -f bytecode
-
 bytecodeSize=$(stat -c %s "bytecode.qvm")
 
 # # typedef struct {
@@ -32,11 +26,6 @@ bssLengthH=$(xxd -s 18 -g 1 -e -l 1 -R never ./bytecode.qvm | cut -d' ' -f2)
 bssLength="${bssLengthH}${bssLengthM}${bssLengthL}"
 
 ramRequired=$((0x$dataLength+0x$bssLength))
-
-echo data: ${dataLength}
-echo bss: ${bssLength}
-echo bytecodeSize: ${bytecodeSize}
-echo ramRequired: ${ramRequired}
 
 IMAGE_NAME=vdu_vm_bytecode
 IMAGE_NAME_UPCASE=VDU_VM_BYTECODE

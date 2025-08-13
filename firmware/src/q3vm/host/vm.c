@@ -171,6 +171,9 @@ typedef enum {
   OP_CVFI, /* Convert to float from integer */
 
   OP_CONSTU1,
+  OP_CONSTI1,
+  OP_CONSTU2,
+  OP_CONSTI2,
 
   OP_MAX /* Make this the last item */
 } opcode_t;
@@ -187,6 +190,9 @@ typedef enum {
 #define goto_OP_POP        case OP_POP
 #define goto_OP_CONST      case OP_CONST
 #define goto_OP_CONSTU1    case OP_CONSTU1
+#define goto_OP_CONSTI1    case OP_CONSTI1
+#define goto_OP_CONSTU2    case OP_CONSTU2
+#define goto_OP_CONSTI2    case OP_CONSTI2
 #define goto_OP_LOCAL      case OP_LOCAL
 #define goto_OP_JUMP       case OP_JUMP
 #define goto_OP_EQ         case OP_EQ
@@ -593,9 +599,11 @@ locals from sp
 */
 
 #define r2                  (*((vm_operand_t *)&codeBase[programCounter]))
-#define r2_int16            (*((uint16_t *)&codeBase[programCounter]))
+#define r2_int16            (*((int16_t *)&codeBase[programCounter]))
+#define r2_uint16           (*((uint16_t *)&codeBase[programCounter]))
 #define r2_int24            (*((uint24_t *)&codeBase[programCounter]))
 #define r2_uint8            (codeBase[programCounter])
+#define r2_int8             (*((int8_t *)&codeBase[programCounter]))
 #define INT_INCREMENT       sizeof(uint32_t)
 #define INT8_INCREMENT      sizeof(uint8_t)
 #define INT16_INCREMENT     sizeof(uint16_t)
@@ -688,12 +696,6 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       return -1;
     }
 
-    if (programStack & 3) {
-      vm->lastError = VM_STACK_MISALIGNED;
-      Com_Error(vm->lastError, "VM program stack misaligned");
-      return -1;
-    }
-
     if (vm_debugLevel > 1) {
       Com_Printf("%s%i %s\t(%02X %08X);\tSP=%08X, R0=%08X, R1=%08X \n", VM_Indent(vm), opStackOfs,
                  opnames[opcode & OPCODE_TABLE_MASK], opcode, r2, programStack, r0, r1);
@@ -721,21 +723,15 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 
       programCounter += INT_INCREMENT;
       DISPATCH2();
+
     goto_OP_LOCAL:
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = r2 + programStack;
-
       programCounter += INT_INCREMENT;
       DISPATCH2();
+
     goto_OP_LOAD4:
-#ifdef DEBUG_VM
-      if (opStack[opStackOfs] & 3) {
-        vm->lastError = VM_OP_LOAD4_MISALIGNED;
-        Com_Error(vm->lastError, "OP_LOAD4 misaligned");
-        return -1;
-      }
-#endif
       r0 = opStack[opStackOfs] = *(vm_operand_t *)VM_RedirectLit(vm, r0);
       DISPATCH2();
     goto_OP_LOAD2:
@@ -749,10 +745,12 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       *(vm_operand_t *)&dataBase[r1] = r0;
       opStackOfs -= 2;
       DISPATCH();
+
     goto_OP_STORE2:
       *(short *)&dataBase[r1] = r0;
       opStackOfs -= 2;
       DISPATCH();
+
     goto_OP_STORE1:
       dataBase[r1] = r0;
       opStackOfs -= 2;
@@ -1136,16 +1134,37 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     goto_OP_SEX16:
       opStack[opStackOfs] = (int16_t)opStack[opStackOfs];
       DISPATCH();
+
     goto_OP_CONSTU1 : {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint8;
-
       programCounter += INT8_INCREMENT;
       DISPATCH2();
     }
-    default: {
-      Com_Error(VM_ILLEGAL_OPCODE, "Unknown Opcode encountered");
+
+    goto_OP_CONSTI1 : {
+      opStackOfs++;
+      r1 = r0;
+      r0 = opStack[opStackOfs] = (vm_operand_t)r2_int8;
+      programCounter += INT8_INCREMENT;
+      DISPATCH2();
+    }
+
+    goto_OP_CONSTU2 : {
+      opStackOfs++;
+      r1 = r0;
+      r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint16;
+      programCounter += INT16_INCREMENT;
+      DISPATCH2();
+    }
+
+    goto_OP_CONSTI2 : {
+      opStackOfs++;
+      r1 = r0;
+      r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int16;
+      programCounter += INT16_INCREMENT;
+      DISPATCH2();
     }
     }
   }
