@@ -71,11 +71,6 @@
 #endif
 #endif
 
-/** Max. number of op codes in op codes table */
-#define OPCODE_TABLE_SIZE 64
-/** Mask for a valid opcode (so no one can escape the sandbox) */
-#define OPCODE_TABLE_MASK (OPCODE_TABLE_SIZE - 1)
-
 /** Max. size of BSS section */
 #define VM_MAX_BSS_LENGTH 10485760
 
@@ -97,7 +92,7 @@ typedef enum {
   OP_PUSH,  /* Push to stack. */
   OP_POP,   /* Discard top-of-stack. */
 
-  OP_CONST, /* Load constant to stack. */
+  OP_CONSTGP4, /* Load constant to stack. */
   OP_LOCAL, /* Get local variable. */
 
   OP_JUMP, /* Unconditional jump. */
@@ -127,13 +122,15 @@ typedef enum {
 
   /*-------------------*/
 
-  OP_LOAD1,  /* Load 1-byte from memory */
-  OP_LOAD2,  /* Load 2-bytes from memory */
-  OP_LOAD4,  /* Load 4-bytes from memory */
-  OP_STORE1, /* Store 1-byte to memory */
-  OP_STORE2, /* Store 2-byte to memory */
-  OP_STORE4, /* *(stack[top-1]) = stack[top] */
-  OP_ARG,    /* Marshal argument */
+  OP_LOAD1, /* Load 1-byte from memory */
+  OP_LOAD2, /* Load 2-bytes from memory */
+  OP_LOAD4, /* Load 4-bytes from memory */
+  OP_LOADF4,
+  OP_STORE1,  /* Store 1-byte to memory */
+  OP_STORE2,  /* Store 2-byte to memory */
+  OP_STORE4,  /* *(stack[top-1]) = stack[top] */
+  OP_STOREF4, /* *(stack[top-1]) = stack[top] */
+  OP_ARG,     /* Marshal argument */
 
   OP_BLOCK_COPY, /* memcpy */
 
@@ -177,9 +174,13 @@ typedef enum {
   OP_CONSTU4,
   OP_CONSTI4,
   OP_CONSTF4,
+  OP_CONSTP4,
 
   OP_MAX /* Make this the last item */
 } opcode_t;
+
+/** Max. number of op codes in op codes table */
+#define OPCODE_TABLE_SIZE OP_MAX
 
 /* for the the computed gotos we need labels,
  * but for the normal switch case we need the cases */
@@ -191,7 +192,7 @@ typedef enum {
 #define goto_OP_CALL       case OP_CALL
 #define goto_OP_PUSH       case OP_PUSH
 #define goto_OP_POP        case OP_POP
-#define goto_OP_CONST      case OP_CONST
+#define goto_OP_CONSTGP4      case OP_CONSTGP4
 #define goto_OP_CONSTU1    case OP_CONSTU1
 #define goto_OP_CONSTI1    case OP_CONSTI1
 #define goto_OP_CONSTU2    case OP_CONSTU2
@@ -199,6 +200,7 @@ typedef enum {
 #define goto_OP_CONSTU4    case OP_CONSTU4
 #define goto_OP_CONSTI4    case OP_CONSTI4
 #define goto_OP_CONSTF4    case OP_CONSTF4
+#define goto_OP_CONSTP4    case OP_CONSTP4
 #define goto_OP_LOCAL      case OP_LOCAL
 #define goto_OP_JUMP       case OP_JUMP
 #define goto_OP_EQ         case OP_EQ
@@ -220,9 +222,11 @@ typedef enum {
 #define goto_OP_LOAD1      case OP_LOAD1
 #define goto_OP_LOAD2      case OP_LOAD2
 #define goto_OP_LOAD4      case OP_LOAD4
+#define goto_OP_LOADF4     case OP_LOADF4
 #define goto_OP_STORE1     case OP_STORE1
 #define goto_OP_STORE2     case OP_STORE2
 #define goto_OP_STORE4     case OP_STORE4
+#define goto_OP_STOREF4    case OP_STOREF4
 #define goto_OP_ARG        case OP_ARG
 #define goto_OP_BLOCK_COPY case OP_BLOCK_COPY
 #define goto_OP_SEX8       case OP_SEX8
@@ -260,13 +264,77 @@ static uint8_t vm_debugLevel; /**< 0: be quiet, 1: debug msgs, 2: print op codes
 
 /** Table to convert op codes to readable names */
 static const char *opnames[OPCODE_TABLE_SIZE] = {
-    "OP_UNDEF",  "OP_IGNORE", "OP_BREAK",  "OP_ENTER", "OP_LEAVE",      "OP_CALL", "OP_PUSH",  "OP_POP",   "OP_CONST", "OP_LOCAL",
-    "OP_JUMP",   "OP_EQ",     "OP_NE",     "OP_LTI",   "OP_LEI",        "OP_GTI",  "OP_GEI",   "OP_LTU",   "OP_LEU",   "OP_GTU",
-    "OP_GEU",    "OP_EQF",    "OP_NEF",    "OP_LTF",   "OP_LEF",        "OP_GTF",  "OP_GEF",   "OP_LOAD1", "OP_LOAD2", "OP_LOAD4",
-    "OP_STORE1", "OP_STORE2", "OP_STORE4", "OP_ARG",   "OP_BLOCK_COPY", "OP_SEX8", "OP_SEX16", "OP_NEGI",  "OP_ADD",   "OP_SUB",
-    "OP_DIVI",   "OP_DIVU",   "OP_MODI",   "OP_MODU",  "OP_MULI",       "OP_MULU", "OP_BAND",  "OP_BOR",   "OP_BXOR",  "OP_BCOM",
-    "OP_LSH",    "OP_RSHI",   "OP_RSHU",   "OP_NEGF",  "OP_ADDF",       "OP_SUBF", "OP_DIVF",  "OP_MULF",  "OP_CVIF",  "OP_CVFI",
-    "OP_UNDEF",  "OP_UNDEF",  "OP_UNDEF",  "OP_UNDEF",
+    "OP_UNDEF",
+    "OP_IGNORE",
+    "OP_BREAK",
+    "OP_ENTER",
+    "OP_LEAVE",
+    "OP_CALL",
+    "OP_PUSH",
+    "OP_POP",
+    "OP_CONSTGP4",
+    "OP_LOCAL",
+    "OP_JUMP",
+    "OP_EQ",
+    "OP_NE",
+    "OP_LTI",
+    "OP_LEI",
+    "OP_GTI",
+    "OP_GEI",
+    "OP_LTU",
+    "OP_LEU",
+    "OP_GTU",
+    "OP_GEU",
+    "OP_EQF",
+    "OP_NEF",
+    "OP_LTF",
+    "OP_LEF",
+    "OP_GTF",
+    "OP_GEF",
+    "OP_LOAD1",
+    "OP_LOAD2",
+    "OP_LOAD4",
+    "OP_LOADF4"
+    "OP_STORE1",
+    "OP_STORE2",
+    "OP_STORE4",
+    "OP_STOREF4",
+    "OP_ARG",
+    "OP_BLOCK_COPY",
+    "OP_SEX8",
+    "OP_SEX16",
+    "OP_NEGI",
+    "OP_ADD",
+    "OP_SUB",
+    "OP_DIVI",
+    "OP_DIVU",
+    "OP_MODI",
+    "OP_MODU",
+    "OP_MULI",
+    "OP_MULU",
+    "OP_BAND",
+    "OP_BOR",
+    "OP_BXOR",
+    "OP_BCOM",
+    "OP_LSH",
+    "OP_RSHI",
+    "OP_RSHU",
+    "OP_NEGF",
+    "OP_ADDF",
+    "OP_SUBF",
+    "OP_DIVF",
+    "OP_MULF",
+    "OP_CVIF",
+    "OP_CVFI",
+    "OP_CONSTU1",
+    "OP_CONSTI1",
+    "OP_CONSTU2",
+    "OP_CONSTI2",
+    "OP_CONSTU4",
+    "OP_CONSTI4",
+    "OP_CONSTF4",
+    "OP_CONSTP4",
+
 };
 #endif
 
@@ -330,7 +398,7 @@ static void Q_strncpyz(char *dest, const char *src, int destsize);
  ******************************************************************************/
 
 #define ARRAY_LEN(x)            (sizeof(x) / sizeof(*(x)))
-#define PAD(base, alignment)    (((base) + (alignment)-1) & ~((alignment)-1))
+#define PAD(base, alignment)    (((base) + (alignment) - 1) & ~((alignment) - 1))
 #define PADLEN(base, alignment) (PAD((base), (alignment)) - (base))
 #define PADP(base, alignment)   ((void *)PAD((intptr_t)(base), (alignment)))
 #define Q_ftol(v)               ((long)(v))
@@ -608,6 +676,7 @@ locals from sp
 
 #define r2_int8  (*((int8_t *)&codeBase[programCounter]))
 #define r2_int16 (*((int16_t *)&codeBase[programCounter]))
+#define r2_int24 (*((int24_t *)&codeBase[programCounter]))
 #define r2_int32 (*((int32_t *)&codeBase[programCounter]))
 
 #define r2_uint8  (codeBase[programCounter])
@@ -709,8 +778,8 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     }
 
     if (vm_debugLevel > 1) {
-      Com_Printf("%s%i %s\t(%02X %08X);\tSP=%08X, R0=%08X, R1=%08X \n", VM_Indent(vm), opStackOfs,
-                 opnames[opcode & OPCODE_TABLE_MASK], opcode, r2, programStack, r0, r1);
+      Com_Printf("%s%i %s\t(%02X %08X);\tSP=%08X, R0=%08X, R1=%08X \n", VM_Indent(vm), opStackOfs, opnames[opcode], opcode, r2,
+                 programStack, r0, r1);
     }
     profileSymbol->profileCount++;
 #endif /* DEBUG_VM */
@@ -728,12 +797,12 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       vm->breakCount++;
 #endif
       DISPATCH2();
-    goto_OP_CONST:
+
+    goto_OP_CONSTGP4:
       opStackOfs++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = r2;
-
-      programCounter += INT_INCREMENT;
+      r0 = opStack[opStackOfs] = to_stdint(r2_int24);
+      programCounter += INT24_INCREMENT;
       DISPATCH2();
 
     goto_OP_LOCAL:
@@ -741,6 +810,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       r1 = r0;
       r0 = opStack[opStackOfs] = r2_uint16 + programStack;
       programCounter += INT16_INCREMENT;
+      DISPATCH2();
+
+    goto_OP_LOADF4:
+      r0 = opStack[opStackOfs] = *(vm_operand_t *)VM_RedirectLit(vm, r0);
       DISPATCH2();
 
     goto_OP_LOAD4:
@@ -754,6 +827,11 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
 
     goto_OP_STORE4:
+      *(vm_operand_t *)&dataBase[r1] = r0;
+      opStackOfs -= 2;
+      DISPATCH();
+
+    goto_OP_STOREF4:
       *(vm_operand_t *)&dataBase[r1] = r0;
       opStackOfs -= 2;
       DISPATCH();
@@ -841,7 +919,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     goto_OP_POP:
       opStackOfs--;
       DISPATCH();
-    goto_OP_ENTER : {
+    goto_OP_ENTER: {
       const uint16_t localsAndArgsSize = r2_int16;
       /* get size of stack frame */
       programCounter += INT16_INCREMENT;
@@ -863,7 +941,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 #endif
       DISPATCH();
     }
-    goto_OP_LEAVE : {
+    goto_OP_LEAVE: {
       /* remove our stack frame */
       programStack += r2_int16;
 
@@ -1147,7 +1225,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       opStack[opStackOfs] = (int16_t)opStack[opStackOfs];
       DISPATCH();
 
-    goto_OP_CONSTU1 : {
+    goto_OP_CONSTU1: {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint8;
@@ -1155,7 +1233,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
     }
 
-    goto_OP_CONSTI1 : {
+    goto_OP_CONSTI1: {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)r2_int8;
@@ -1163,7 +1241,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
     }
 
-    goto_OP_CONSTU2 : {
+    goto_OP_CONSTU2: {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint16;
@@ -1171,7 +1249,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
     }
 
-    goto_OP_CONSTI2 : {
+    goto_OP_CONSTI2: {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int16;
@@ -1179,7 +1257,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
     }
 
-    goto_OP_CONSTU4 : {
+    goto_OP_CONSTU4: {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint32;
@@ -1187,7 +1265,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
     }
 
-    goto_OP_CONSTI4 : {
+    goto_OP_CONSTI4: {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int32;
@@ -1195,11 +1273,19 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
     }
 
-    goto_OP_CONSTF4 : {
+    goto_OP_CONSTF4: {
       opStackOfs++;
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int32;
       programCounter += INT32_INCREMENT;
+      DISPATCH2();
+    }
+
+    goto_OP_CONSTP4: {
+      opStackOfs++;
+      r1 = r0;
+      r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)to_ustdint(r2_uint24);
+      programCounter += INT24_INCREMENT;
       DISPATCH2();
     }
     }

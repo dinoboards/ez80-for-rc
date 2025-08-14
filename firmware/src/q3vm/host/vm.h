@@ -82,8 +82,6 @@ typedef enum {
   VM_PC_OUT_OF_RANGE             = -6,  /**< Program counter out of range */
   VM_JUMP_TO_INVALID_INSTRUCTION = -7,  /**< VM tries to escape sandbox */
   VM_STACK_OVERFLOW              = -8,  /**< Only in DEBUG_VM mode */
-  VM_STACK_MISALIGNED            = -9,  /**< Stack not aligned (DEBUG_VM) */
-  VM_OP_LOAD4_MISALIGNED         = -10, /**< Access misaligned (DEBUG_VM) */
   VM_STACK_ERROR                 = -11, /**< Stack corrupted after call */
   VM_DATA_OUT_OF_RANGE           = -12, /**< Syscall pointer not in sandbox */
   VM_MALLOC_FAILED               = -13, /**< Not enough memory */
