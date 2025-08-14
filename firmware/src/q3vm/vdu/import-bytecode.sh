@@ -56,7 +56,7 @@ const uint8_t ${IMAGE_NAME}[${IMAGE_NAME_UPCASE}_SIZE] = {
 EOT
 
 
-xxd -c 1 ./bytecode.qvm | while read offset hex char; do
+xxd -c 1 ./bytecode.qvm |  cut -d' ' -f2 | while read hex; do
   printf "0x" >> ./${OUTPUT_FILE}.c
   printf $hex >> ./${OUTPUT_FILE}.c
   printf "," >> ./${OUTPUT_FILE}.c

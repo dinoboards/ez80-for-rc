@@ -26,7 +26,7 @@ bg_lib.vmasm: bg_lib.c bg_lib.h $(INCLUDES) $(VM_TOOLS)
 dispatch.vmasm: dispatch.c $(INCLUDES) $(VM_TOOLS)
 
 bytecode.qvm: $(VDU_ASM_FILES)
-	@$(Q3ASM) -s 512 -m -o "bytecode" dispatch.vmasm vdu_init.vmasm vdu.vmasm g_syscalls
+	@$(Q3ASM) -v -s 512 -m -o "bytecode" dispatch.vmasm vdu_init.vmasm vdu.vmasm bg_lib.vmasm g_syscalls
 	@./import-bytecode.sh
 	@echo "Assembled vdu/bytecode.qvm"
 
