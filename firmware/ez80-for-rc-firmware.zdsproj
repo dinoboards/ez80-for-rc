@@ -504,20 +504,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>9</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\startup\boot_prompt.c</pathname>
-<address>1302</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
-<breakpoint temporary="false" enabled="true" >
-<line-number>33</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\crt\vdu.c</pathname>
-<address>17737</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>

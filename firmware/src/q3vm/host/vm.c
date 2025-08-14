@@ -174,6 +174,8 @@ typedef enum {
   OP_CONSTI1,
   OP_CONSTU2,
   OP_CONSTI2,
+  OP_CONSTU4,
+  OP_CONSTI4,
 
   OP_MAX /* Make this the last item */
 } opcode_t;
@@ -193,6 +195,8 @@ typedef enum {
 #define goto_OP_CONSTI1    case OP_CONSTI1
 #define goto_OP_CONSTU2    case OP_CONSTU2
 #define goto_OP_CONSTI2    case OP_CONSTI2
+#define goto_OP_CONSTU4    case OP_CONSTU4
+#define goto_OP_CONSTI4    case OP_CONSTI4
 #define goto_OP_LOCAL      case OP_LOCAL
 #define goto_OP_JUMP       case OP_JUMP
 #define goto_OP_EQ         case OP_EQ
@@ -598,16 +602,22 @@ locals from sp
 ==============
 */
 
-#define r2                  (*((vm_operand_t *)&codeBase[programCounter]))
-#define r2_int16            (*((int16_t *)&codeBase[programCounter]))
-#define r2_uint16           (*((uint16_t *)&codeBase[programCounter]))
-#define r2_int24            (*((uint24_t *)&codeBase[programCounter]))
-#define r2_uint8            (codeBase[programCounter])
-#define r2_int8             (*((int8_t *)&codeBase[programCounter]))
+#define r2 (*((vm_operand_t *)&codeBase[programCounter]))
+
+#define r2_int8  (*((int8_t *)&codeBase[programCounter]))
+#define r2_int16 (*((int16_t *)&codeBase[programCounter]))
+#define r2_int32 (*((int32_t *)&codeBase[programCounter]))
+
+#define r2_uint8  (codeBase[programCounter])
+#define r2_uint16 (*((uint16_t *)&codeBase[programCounter]))
+#define r2_uint24 (*((uint24_t *)&codeBase[programCounter]))
+#define r2_uint32 (*((uint32_t *)&codeBase[programCounter]))
+
 #define INT_INCREMENT       sizeof(uint32_t)
 #define INT8_INCREMENT      sizeof(uint8_t)
 #define INT16_INCREMENT     sizeof(uint16_t)
 #define INT24_INCREMENT     sizeof(uint24_t)
+#define INT32_INCREMENT     sizeof(uint32_t)
 #define MAX_PROGRAM_COUNTER ((unsigned)vm->codeLength)
 #define DISPATCH2()         goto nextInstruction2
 #define DISPATCH()          goto nextInstruction
@@ -762,7 +772,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       programCounter += 1;
       DISPATCH();
     goto_OP_BLOCK_COPY:
-      VM_BlockCopy(r1, r0, to_ustdint(r2_int24), vm);
+      VM_BlockCopy(r1, r0, to_ustdint(r2_uint24), vm);
       programCounter += INT24_INCREMENT;
       opStackOfs -= 2;
       DISPATCH();
@@ -1164,6 +1174,22 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       r1 = r0;
       r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int16;
       programCounter += INT16_INCREMENT;
+      DISPATCH2();
+    }
+
+    goto_OP_CONSTU4 : {
+      opStackOfs++;
+      r1 = r0;
+      r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint32;
+      programCounter += INT32_INCREMENT;
+      DISPATCH2();
+    }
+
+    goto_OP_CONSTI4 : {
+      opStackOfs++;
+      r1 = r0;
+      r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int32;
+      programCounter += INT32_INCREMENT;
       DISPATCH2();
     }
     }
