@@ -93,7 +93,7 @@ typedef enum {
   OP_POP,   /* Discard top-of-stack. */
 
   OP_CONSTGP4, /* Load constant to stack. */
-  OP_LOCAL, /* Get local variable. */
+  OP_LOCAL,    /* Get local variable. */
 
   OP_JUMP, /* Unconditional jump. */
 
@@ -192,7 +192,7 @@ typedef enum {
 #define goto_OP_CALL       case OP_CALL
 #define goto_OP_PUSH       case OP_PUSH
 #define goto_OP_POP        case OP_POP
-#define goto_OP_CONSTGP4      case OP_CONSTGP4
+#define goto_OP_CONSTGP4   case OP_CONSTGP4
 #define goto_OP_CONSTU1    case OP_CONSTU1
 #define goto_OP_CONSTI1    case OP_CONSTI1
 #define goto_OP_CONSTU2    case OP_CONSTU2
@@ -397,11 +397,8 @@ static void Q_strncpyz(char *dest, const char *src, int destsize);
  * LOCAL INLINE FUNCTIONS AND FUNCTION MACROS
  ******************************************************************************/
 
-#define ARRAY_LEN(x)            (sizeof(x) / sizeof(*(x)))
-#define PAD(base, alignment)    (((base) + (alignment) - 1) & ~((alignment) - 1))
-#define PADLEN(base, alignment) (PAD((base), (alignment)) - (base))
-#define PADP(base, alignment)   ((void *)PAD((intptr_t)(base), (alignment)))
-#define Q_ftol(v)               ((long)(v))
+#define ARRAY_LEN(x) (sizeof(x) / sizeof(*(x)))
+#define Q_ftol(v)    ((long)(v))
 
 /******************************************************************************
  * FUNCTION BODIES
@@ -697,9 +694,8 @@ locals from sp
 
 /* FIXME: this needs to be locked to uint24_t to ensure platform agnostic */
 static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
-  uint8_t        stack[OPSTACK_SIZE + 15]; /* 256 4 byte double words + 15 safety bytes */
-  vm_operand_t  *opStack;
-  uint8_t        opStackOfs;
+  uint8_t        _opStack[OPSTACK_SIZE + 4]; /* 256 4 byte double words + 4 safety bytes */
+  vm_operand_t  *opStack = ((vm_operand_t *)&_opStack[4]);
   stdint_t       programCounter;
   ustdint_t      programStack;
   ustdint_t      stackOnEntry;
@@ -738,20 +734,15 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
   *(vm_operand_t *)&dataBase[programStack + 4] = 0;  /* return stack */
   *(vm_operand_t *)&dataBase[programStack]     = -1; /* will terminate the loop on return */
 
-  /* leave a free spot at start of stack so
-     that as long as opStack is valid, opStack-1 will
-     not corrupt anything */
-  opStack    = PADP(stack, 16);
-  *opStack   = 0x0000BEEF;
-  opStackOfs = 0;
+  opStack[0] = 0x0000BEEF;
 
   /* main interpreter loop, will exit when a LEAVE instruction
      grabs the -1 program counter */
 
   while (1) {
   nextInstruction:
-    r0 = opStack[opStackOfs];
-    r1 = opStack[(uint8_t)(opStackOfs - 1)];
+    r0 = opStack[0];
+    r1 = opStack[-1];
   nextInstruction2:
 
 #ifdef DEBUG_VM
@@ -799,62 +790,62 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH2();
 
     goto_OP_CONSTGP4:
-      opStackOfs++;
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = to_stdint(r2_int24);
+      r0 = *opStack = to_stdint(r2_int24);
       programCounter += INT24_INCREMENT;
       DISPATCH2();
 
     goto_OP_LOCAL:
-      opStackOfs++;
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = r2_uint16 + programStack;
+      r0 = *opStack = r2_uint16 + programStack;
       programCounter += INT16_INCREMENT;
       DISPATCH2();
 
     goto_OP_LOADF4:
-      r0 = opStack[opStackOfs] = *(vm_operand_t *)VM_RedirectLit(vm, r0);
+      r0 = *opStack = *(vm_operand_t *)VM_RedirectLit(vm, r0);
       DISPATCH2();
 
     goto_OP_LOAD4:
-      r0 = opStack[opStackOfs] = *(vm_operand_t *)VM_RedirectLit(vm, r0);
+      r0 = *opStack = *(vm_operand_t *)VM_RedirectLit(vm, r0);
       DISPATCH2();
     goto_OP_LOAD2:
-      r0 = opStack[opStackOfs] = *(unsigned short *)VM_RedirectLit(vm, r0);
+      r0 = *opStack = *(unsigned short *)VM_RedirectLit(vm, r0);
       DISPATCH2();
     goto_OP_LOAD1:
-      r0 = opStack[opStackOfs] = *VM_RedirectLit(vm, r0);
+      r0 = *opStack = *VM_RedirectLit(vm, r0);
       DISPATCH2();
 
     goto_OP_STORE4:
       *(vm_operand_t *)&dataBase[r1] = r0;
-      opStackOfs -= 2;
+      opStack -= 2;
       DISPATCH();
 
     goto_OP_STOREF4:
       *(vm_operand_t *)&dataBase[r1] = r0;
-      opStackOfs -= 2;
+      opStack -= 2;
       DISPATCH();
 
     goto_OP_STORE2:
       *(short *)&dataBase[r1] = r0;
-      opStackOfs -= 2;
+      opStack -= 2;
       DISPATCH();
 
     goto_OP_STORE1:
       dataBase[r1] = r0;
-      opStackOfs -= 2;
+      opStack -= 2;
       DISPATCH();
     goto_OP_ARG:
       /* single byte offset from programStack */
       *(vm_operand_t *)&dataBase[(codeBase[programCounter] + programStack)] = r0;
-      opStackOfs--;
+      opStack--;
       programCounter += 1;
       DISPATCH();
     goto_OP_BLOCK_COPY:
       VM_BlockCopy(r1, r0, to_ustdint(r2_uint24), vm);
       programCounter += INT24_INCREMENT;
-      opStackOfs -= 2;
+      opStack -= 2;
       DISPATCH();
     goto_OP_CALL:
       /* save current program counter */
@@ -862,7 +853,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 
       /* jump to the location on the stack */
       programCounter = r0;
-      opStackOfs--;
+      opStack--;
       if (programCounter < 0) /* system call */
       {
         vm_operand_t r;
@@ -897,9 +888,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 #endif
 
         /* save return value */
-        opStackOfs++;
-        opStack[opStackOfs] = r;
-        programCounter      = *(vm_operand_t *)&dataBase[programStack];
+        opStack++;
+        *opStack       = r;
+        programCounter = *(vm_operand_t *)&dataBase[programStack];
 #ifdef DEBUG_VM
         if (vm_debugLevel) {
           Com_Printf("%s%i<--- %s\n", VM_Indent(vm), opStackOfs, VM_ValueToSymbol(vm, programCounter));
@@ -914,12 +905,12 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     /* push and pop are only needed for discarded or bad function return
        values */
     goto_OP_PUSH:
-      opStackOfs++;
+      opStack++;
       DISPATCH();
     goto_OP_POP:
-      opStackOfs--;
+      opStack--;
       DISPATCH();
-    goto_OP_ENTER: {
+    goto_OP_ENTER : {
       const uint16_t localsAndArgsSize = r2_int16;
       /* get size of stack frame */
       programCounter += INT16_INCREMENT;
@@ -941,7 +932,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 #endif
       DISPATCH();
     }
-    goto_OP_LEAVE: {
+    goto_OP_LEAVE : {
       /* remove our stack frame */
       programStack += r2_int16;
 
@@ -976,10 +967,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 
       programCounter = r0;
 
-      opStackOfs--;
+      opStack--;
       DISPATCH();
     goto_OP_EQ:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (r1 == r0) {
         programCounter = r2;
         DISPATCH();
@@ -988,7 +979,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_NE:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (r1 != r0) {
         programCounter = r2;
         DISPATCH();
@@ -997,7 +988,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_LTI:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (r1 < r0) {
         programCounter = r2;
         DISPATCH();
@@ -1006,7 +997,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_LEI:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (r1 <= r0) {
         programCounter = r2;
         DISPATCH();
@@ -1015,7 +1006,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_GTI:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (r1 > r0) {
         programCounter = r2;
         DISPATCH();
@@ -1024,7 +1015,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_GEI:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (r1 >= r0) {
         programCounter = r2;
         DISPATCH();
@@ -1033,7 +1024,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_LTU:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (((unsigned)r1) < ((unsigned)r0)) {
         programCounter = r2;
         DISPATCH();
@@ -1042,7 +1033,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_LEU:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (((unsigned)r1) <= ((unsigned)r0)) {
         programCounter = r2;
         DISPATCH();
@@ -1051,7 +1042,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_GTU:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (((unsigned)r1) > ((unsigned)r0)) {
         programCounter = r2;
         DISPATCH();
@@ -1060,7 +1051,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_GEU:
-      opStackOfs -= 2;
+      opStack -= 2;
       if (((unsigned)r1) >= ((unsigned)r0)) {
         programCounter = r2;
         DISPATCH();
@@ -1069,9 +1060,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_EQF:
-      opStackOfs -= 2;
+      opStack -= 2;
 
-      if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] == ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+      if (((float *)opStack)[1] == ((float *)opStack)[2]) {
         programCounter = r2;
         DISPATCH();
       } else {
@@ -1079,9 +1070,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_NEF:
-      opStackOfs -= 2;
+      opStack -= 2;
 
-      if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] != ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+      if (((float *)opStack)[1] != ((float *)opStack)[2]) {
         programCounter = r2;
         DISPATCH();
       } else {
@@ -1089,9 +1080,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_LTF:
-      opStackOfs -= 2;
+      opStack -= 2;
 
-      if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] < ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+      if (((float *)opStack)[1] < ((float *)opStack)[2]) {
         programCounter = r2;
         DISPATCH();
       } else {
@@ -1099,9 +1090,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_LEF:
-      opStackOfs -= 2;
+      opStack -= 2;
 
-      if (((float *)opStack)[(uint8_t)((uint8_t)(opStackOfs + 1))] <= ((float *)opStack)[(uint8_t)((uint8_t)(opStackOfs + 2))]) {
+      if (((float *)opStack)[1] <= ((float *)opStack)[2]) {
         programCounter = r2;
         DISPATCH();
       } else {
@@ -1109,9 +1100,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_GTF:
-      opStackOfs -= 2;
+      opStack -= 2;
 
-      if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] > ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+      if (((float *)opStack)[1] > ((float *)opStack)[2]) {
         programCounter = r2;
         DISPATCH();
       } else {
@@ -1119,9 +1110,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         DISPATCH();
       }
     goto_OP_GEF:
-      opStackOfs -= 2;
+      opStack -= 2;
 
-      if (((float *)opStack)[(uint8_t)(opStackOfs + 1)] >= ((float *)opStack)[(uint8_t)(opStackOfs + 2)]) {
+      if (((float *)opStack)[1] >= ((float *)opStack)[2]) {
         programCounter = r2;
         DISPATCH();
       } else {
@@ -1132,159 +1123,159 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       /*===================================================================*/
 
     goto_OP_NEGI:
-      opStack[opStackOfs] = -r0;
+      *opStack = -r0;
       DISPATCH();
     goto_OP_ADD:
-      opStackOfs--;
-      opStack[opStackOfs] = r1 + r0;
+      opStack--;
+      *opStack = r1 + r0;
       DISPATCH();
     goto_OP_SUB:
-      opStackOfs--;
-      opStack[opStackOfs] = r1 - r0;
+      opStack--;
+      *opStack = r1 - r0;
       DISPATCH();
     goto_OP_DIVI:
-      opStackOfs--;
-      opStack[opStackOfs] = r1 / r0;
+      opStack--;
+      *opStack = r1 / r0;
       DISPATCH();
     goto_OP_DIVU:
-      opStackOfs--;
-      opStack[opStackOfs] = ((unsigned)r1) / ((unsigned)r0);
+      opStack--;
+      *opStack = ((unsigned)r1) / ((unsigned)r0);
       DISPATCH();
     goto_OP_MODI:
-      opStackOfs--;
-      opStack[opStackOfs] = r1 % r0;
+      opStack--;
+      *opStack = r1 % r0;
       DISPATCH();
     goto_OP_MODU:
-      opStackOfs--;
-      opStack[opStackOfs] = ((unsigned)r1) % ((unsigned)r0);
+      opStack--;
+      *opStack = ((unsigned)r1) % ((unsigned)r0);
       DISPATCH();
     goto_OP_MULI:
-      opStackOfs--;
-      opStack[opStackOfs] = r1 * r0;
+      opStack--;
+      *opStack = r1 * r0;
       DISPATCH();
     goto_OP_MULU:
-      opStackOfs--;
-      opStack[opStackOfs] = ((unsigned)r1) * ((unsigned)r0);
+      opStack--;
+      *opStack = ((unsigned)r1) * ((unsigned)r0);
       DISPATCH();
     goto_OP_BAND:
-      opStackOfs--;
-      opStack[opStackOfs] = ((unsigned)r1) & ((unsigned)r0);
+      opStack--;
+      *opStack = ((unsigned)r1) & ((unsigned)r0);
       DISPATCH();
     goto_OP_BOR:
-      opStackOfs--;
-      opStack[opStackOfs] = ((unsigned)r1) | ((unsigned)r0);
+      opStack--;
+      *opStack = ((unsigned)r1) | ((unsigned)r0);
       DISPATCH();
     goto_OP_BXOR:
-      opStackOfs--;
-      opStack[opStackOfs] = ((unsigned)r1) ^ ((unsigned)r0);
+      opStack--;
+      *opStack = ((unsigned)r1) ^ ((unsigned)r0);
       DISPATCH();
     goto_OP_BCOM:
-      opStack[opStackOfs] = ~((unsigned)r0);
+      *opStack = ~((unsigned)r0);
       DISPATCH();
     goto_OP_LSH:
-      opStackOfs--;
-      opStack[opStackOfs] = r1 << r0;
+      opStack--;
+      *opStack = r1 << r0;
       DISPATCH();
     goto_OP_RSHI:
-      opStackOfs--;
-      opStack[opStackOfs] = r1 >> r0;
+      opStack--;
+      *opStack = r1 >> r0;
       DISPATCH();
     goto_OP_RSHU:
-      opStackOfs--;
-      opStack[opStackOfs] = ((unsigned)r1) >> r0;
+      opStack--;
+      *opStack = ((unsigned)r1) >> r0;
       DISPATCH();
     goto_OP_NEGF:
-      ((float *)opStack)[opStackOfs] = -((float *)opStack)[opStackOfs];
+      ((float *)opStack)[0] = -((float *)opStack)[0];
       DISPATCH();
     goto_OP_ADDF:
-      opStackOfs--;
-      ((float *)opStack)[opStackOfs] = ((float *)opStack)[opStackOfs] + ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+      opStack--;
+      ((float *)opStack)[0] = ((float *)opStack)[0] + ((float *)opStack)[1];
       DISPATCH();
     goto_OP_SUBF:
-      opStackOfs--;
-      ((float *)opStack)[opStackOfs] = ((float *)opStack)[opStackOfs] - ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+      opStack--;
+      ((float *)opStack)[0] = ((float *)opStack)[0] - ((float *)opStack)[1];
       DISPATCH();
     goto_OP_DIVF:
-      opStackOfs--;
-      ((float *)opStack)[opStackOfs] = ((float *)opStack)[opStackOfs] / ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+      opStack--;
+      ((float *)opStack)[0] = ((float *)opStack)[0] / ((float *)opStack)[1];
       DISPATCH();
     goto_OP_MULF:
-      opStackOfs--;
-      ((float *)opStack)[opStackOfs] = ((float *)opStack)[opStackOfs] * ((float *)opStack)[(uint8_t)(opStackOfs + 1)];
+      opStack--;
+      ((float *)opStack)[0] = ((float *)opStack)[0] * ((float *)opStack)[1];
       DISPATCH();
     goto_OP_CVIF:
-      ((float *)opStack)[opStackOfs] = (float)opStack[opStackOfs];
+      ((float *)opStack)[0] = (float)*opStack;
       DISPATCH();
     goto_OP_CVFI:
-      opStack[opStackOfs] = Q_ftol(((float *)opStack)[opStackOfs]);
+      *opStack = Q_ftol(((float *)opStack)[0]);
       DISPATCH();
     goto_OP_SEX8:
-      opStack[opStackOfs] = (int8_t)opStack[opStackOfs];
+      *opStack = (int8_t)*opStack;
       DISPATCH();
     goto_OP_SEX16:
-      opStack[opStackOfs] = (int16_t)opStack[opStackOfs];
+      *opStack = (int16_t)*opStack;
       DISPATCH();
 
-    goto_OP_CONSTU1: {
-      opStackOfs++;
+    goto_OP_CONSTU1 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint8;
+      r0 = *opStack = (vm_operand_t)(uint32_t)r2_uint8;
       programCounter += INT8_INCREMENT;
       DISPATCH2();
     }
 
-    goto_OP_CONSTI1: {
-      opStackOfs++;
+    goto_OP_CONSTI1 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)r2_int8;
+      r0 = *opStack = (vm_operand_t)r2_int8;
       programCounter += INT8_INCREMENT;
       DISPATCH2();
     }
 
-    goto_OP_CONSTU2: {
-      opStackOfs++;
+    goto_OP_CONSTU2 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint16;
+      r0 = *opStack = (vm_operand_t)(uint32_t)r2_uint16;
       programCounter += INT16_INCREMENT;
       DISPATCH2();
     }
 
-    goto_OP_CONSTI2: {
-      opStackOfs++;
+    goto_OP_CONSTI2 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int16;
+      r0 = *opStack = (vm_operand_t)(int32_t)r2_int16;
       programCounter += INT16_INCREMENT;
       DISPATCH2();
     }
 
-    goto_OP_CONSTU4: {
-      opStackOfs++;
+    goto_OP_CONSTU4 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)(uint32_t)r2_uint32;
+      r0 = *opStack = (vm_operand_t)(uint32_t)r2_uint32;
       programCounter += INT32_INCREMENT;
       DISPATCH2();
     }
 
-    goto_OP_CONSTI4: {
-      opStackOfs++;
+    goto_OP_CONSTI4 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int32;
+      r0 = *opStack = (vm_operand_t)(int32_t)r2_int32;
       programCounter += INT32_INCREMENT;
       DISPATCH2();
     }
 
-    goto_OP_CONSTF4: {
-      opStackOfs++;
+    goto_OP_CONSTF4 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)r2_int32;
+      r0 = *opStack = (vm_operand_t)(int32_t)r2_int32;
       programCounter += INT32_INCREMENT;
       DISPATCH2();
     }
 
-    goto_OP_CONSTP4: {
-      opStackOfs++;
+    goto_OP_CONSTP4 : {
+      opStack++;
       r1 = r0;
-      r0 = opStack[opStackOfs] = (vm_operand_t)(int32_t)to_ustdint(r2_uint24);
+      r0 = *opStack = (vm_operand_t)(int32_t)to_ustdint(r2_uint24);
       programCounter += INT24_INCREMENT;
       DISPATCH2();
     }
@@ -1292,14 +1283,14 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
   }
 
 done:
-  if (opStackOfs != 1 || *opStack != 0x0000BEEF) {
+  if (opStack[-1] != 0x0000BEEF) {
     Com_Error(vm->lastError = VM_STACK_ERROR, "Interpreter stack error");
   }
 
   vm->programStack = stackOnEntry;
 
   /* return the result of the bytecode computations */
-  return opStack[opStackOfs];
+  return *opStack;
 }
 
 /* DEBUG FUNCTIONS */
