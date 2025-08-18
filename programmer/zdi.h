@@ -113,7 +113,7 @@ extern void zdi_init_pins(void);
 extern void zdi_wait_for_connection(const report_connection_fn_t, const report_non_connection_fn_t);
 extern void zdi_configure_pins(void);
 extern bool zdi_connection_lost(void);
-extern void zdi_wait_for_valid_identity(const report_ez80_id_fn_t, const report_ez80_id_failed_fn_t);
+extern bool zdi_wait_for_valid_identity(const report_ez80_id_fn_t, const report_ez80_id_failed_fn_t);
 
 extern uint8_t IN_RAM zdi_rd_reg(const uint8_t reg_addr, const uint8_t separator_id);
 extern void IN_RAM    zdi_wr_reg(const uint8_t reg_addr, const uint8_t value, const uint8_t separator_id);

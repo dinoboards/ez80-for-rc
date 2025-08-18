@@ -42,7 +42,11 @@ void zdi_wait_for_connection(const report_connection_fn_t     report_connection_
   bool connected = false;
 
   do {
+#ifdef AUTOMATIC_MODE
+    bool power_detected = true;
+#else
     bool power_detected = gpio_get(ZDI_POWER_PIN);
+#endif
     bool reset_detected = gpio_get(ZDI_RESET_PIN);
     bool zda_detected   = gpio_get(ZDI_ZDA_PIN);
     bool zcl_detected   = gpio_get(ZDI_ZCL_PIN);
@@ -59,7 +63,11 @@ void zdi_wait_for_connection(const report_connection_fn_t     report_connection_
 }
 
 bool zdi_connection_lost() {
+#ifdef AUTOMATIC_MODE
+  bool power_detected = true;
+#else
   bool power_detected = gpio_get(ZDI_POWER_PIN);
+#endif
   bool reset_detected = gpio_get(ZDI_RESET_PIN);
   bool zda_detected   = gpio_get(ZDI_ZDA_PIN);
   bool zcl_detected   = gpio_get(ZDI_ZCL_PIN);
@@ -69,9 +77,10 @@ bool zdi_connection_lost() {
   return !connected;
 }
 
-void zdi_wait_for_valid_identity(const report_ez80_id_fn_t        report_ez80_id_fn,
+bool zdi_wait_for_valid_identity(const report_ez80_id_fn_t        report_ez80_id_fn,
                                  const report_ez80_id_failed_fn_t report_ez80_id_failed_fn) {
   bool valid = false;
+  int  count = 10;
 
   do {
     uint8_t zdi_id_low  = zdi_rd_reg_byte(ZDI_RD_ID_L);
@@ -82,12 +91,17 @@ void zdi_wait_for_valid_identity(const report_ez80_id_fn_t        report_ez80_id
 
     valid = zdi_id_high == 0 && zdi_id_low != 0xFF;
 
-    if (!valid) {
-      sleep_ms(500);
-      report_ez80_id_failed_fn();
-      sleep_ms(250);
-    }
-  } while (!valid);
+    if (valid)
+      return true;
+    sleep_ms(500);
+
+  } while (!valid && count-- > 0);
+
+  printf("\r\n");
+  report_ez80_id_failed_fn();
+  printf("\r\n");
+
+  return false;
 }
 
 void zdi_configure_pins(void) {

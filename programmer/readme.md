@@ -33,6 +33,8 @@ A successful build will create a file called `programmer.uf2` in the `programmer
 6. Confirm you can connect on serial over USB, using your favourite serial terminal application (such as PuTTY).  You will need to find the COMx number that the USB has remounted as.
   (On linux it may mount the serial device as /dev/ttyACM0.  Using minicom, the following open a serial connection to the device: `minicom -D /dev/ttyACM0`)
 
+> Please note the build will also create a programmerauto.uf2 image.  Do not use this image.
+
 ## Wiring the Pi Pico to your eZ80 ZDI interface
 
 | Pi Pico | ZDI Interface   |

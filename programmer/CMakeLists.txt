@@ -6,6 +6,14 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(PICO_COPY_TO_RAM,true)
+set(AUTOMATIC_MODE,true)
+
+# option(AUTOMATIC_MODE "Flash on power up" OFF)
+
+# if(AUTOMATIC_MODE)
+#   add_definitions(-DAUTOMATIC_MODE)
+# endif()
+
 
 # Initialise pico_sdk from installed location
 # (note this can come from environment, CMake cache etc)
@@ -115,3 +123,35 @@ pico_add_extra_outputs(programmer)
 pico_enable_stdio_usb(programmer 1)
 pico_enable_stdio_uart(programmer 0)
 
+
+add_executable(programmerauto
+    main.c
+    read_line.c
+    zdi.c
+    command_dispatcher.c
+    hex_record.c
+    ifl.c
+    utils.c
+    led.c
+    firmware_version.h
+    ez80_rc_firmware_release.c
+)
+
+# by default the header is generated into the build dir
+pico_generate_pio_header(programmerauto ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
+
+# pull in common dependencies
+target_link_libraries(programmerauto pico_stdlib hardware_pio)
+
+if (PICO_CYW43_SUPPORTED)
+    target_link_libraries(programmerauto pico_cyw43_arch_none)
+endif()
+
+# create map/bin/hex file etc.
+pico_add_extra_outputs(programmerauto)
+
+# add url via pico_set_program_url
+pico_enable_stdio_usb(programmerauto 1)
+pico_enable_stdio_uart(programmerauto 0)
+
+target_compile_definitions(programmerauto PRIVATE -DAUTOMATIC_MODE)

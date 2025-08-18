@@ -1,11 +1,13 @@
 #include "main.h"
+#include "blink.pio.h"
 #include "command_dispatcher.h"
 #include "firmware_version.h"
-#include "pico/stdlib.h"
-#include "hardware/pio.h"
 #include "hardware/clocks.h"
-#include "blink.pio.h"
+#include "hardware/pio.h"
+#include "led.h"
+#include "pico/stdlib.h"
 #include "read_line.h"
+#include "tusb.h"
 #include "zdi.h"
 #include <stdio.h>
 #include <string.h>
@@ -36,12 +38,7 @@ void report_zdi_id(uint8_t zdi_id_low, uint8_t zdi_id_high, uint8_t zdi_id_rev) 
     printf("\b");
 }
 
-void report_zdi_id_failed(void) {
-  const char *waiting_message = "eZ80 Detected:  Waiting for Initialisation...";
-  printf(waiting_message);
-  for (size_t i = 0; i < strlen(waiting_message); i++)
-    printf("\b");
-}
+void report_zdi_id_failed(void) { printf("Device Failure. Unable to proceed\r\n"); }
 
 void conduct_test() {
   zdi_configure_pins();
@@ -57,7 +54,6 @@ extern void process_status_command();
 
 void blink_pin_forever(PIO pio, uint sm, uint offset, uint pin, uint freq);
 
-
 #define PIO_CLK_OUT 22
 
 int main() {
@@ -69,21 +65,30 @@ int main() {
   assert(PIO_CLK_OUT < 31);
   assert(PIO_BLINK_LED3_GPIO < 31 || PIO_BLINK_LED3_GPIO >= 32);
 
-  PIO pio;
+  PIO  pio;
   uint sm;
   uint offset;
+
+  printf("\r\n\n\n\n\n");
 
   // Find a free pio and state machine and add the program
   bool rc = pio_claim_free_sm_and_add_program_for_gpio_range(&blink_program, &pio, &sm, &offset, PIO_CLK_OUT, 1, true);
   hard_assert(rc);
-  printf("\r\nLoaded program at %u on pio %u\n", offset, PIO_NUM(pio));
 
-  // Start led1 flashing
+  // Start clock flashing
   blink_pin_forever(pio, sm, offset, PIO_CLK_OUT, 16000000);
 
-   printf("LED should be flashing\r\n");
+  while (!tud_cdc_connected()) {
+    sleep_ms(100);
+  }
 
-  // conduct_test();
+  printf("\r\n");
+
+#ifdef AUTOMATIC_MODE
+  printf("Automatic Mode\r\n");
+#endif
+  printf("Available Firmware Version: %d.%d.%d.%d (%s)\r\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, REVISION_VERSION,
+         FIRMWARE_DATE);
 
 wait_for_valid_connection:
   printf("\r\n---------------\r\n");
@@ -92,14 +97,42 @@ wait_for_valid_connection:
 
   zdi_configure_pins();
 
-  zdi_wait_for_valid_identity(report_zdi_id, report_zdi_id_failed);
-  printf("\r\n");
+  if (!zdi_wait_for_valid_identity(report_zdi_id, report_zdi_id_failed)) {
+    return -1;
+  }
 
-  printf("Available Firmware Version: %d.%d.%d.%d (%s)\r\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION, REVISION_VERSION,
-         FIRMWARE_DATE);
+  printf("\r\n");
 
   zdi_full_reset();
   process_status_command();
+
+  input_buffer[0] = 0;
+
+#ifdef AUTOMATIC_MODE
+  strcpy(input_buffer, "flash");
+  process_command();
+  sleep_ms(500);
+
+  strcpy(input_buffer, "verify");
+  process_command();
+  sleep_ms(500);
+
+  printf("\r\n");
+  while (1) {
+    bool reset_detected = gpio_get(ZDI_RESET_PIN);
+    if (!reset_detected) {
+      printf("\r\n");
+      goto wait_for_valid_connection;
+    }
+    printf("LED ON \r");
+    turn_led_on();
+    sleep_ms(500);
+    printf("LED OFF\r");
+    turn_led_off();
+    sleep_ms(500);
+  }
+
+#endif
 
   while (true) {
     printf("ZDI> ");
@@ -110,14 +143,13 @@ wait_for_valid_connection:
   }
 }
 
-
 void blink_pin_forever(PIO pio, uint sm, uint offset, uint pin, uint freq) {
-    blink_program_init(pio, sm, offset, pin);
-    pio_sm_set_enabled(pio, sm, true);
+  blink_program_init(pio, sm, offset, pin);
+  pio_sm_set_enabled(pio, sm, true);
 
-    printf("Blinking pin %d at %d Hz\n", pin, freq);
+  printf("eZ80 CPU CLOCK: %d Hz\n", freq);
 
-    // PIO counter program takes 3 more cycles in total than we pass as
-    // input (wait for n + 1; mov; jmp)
-    pio->txf[sm] = (clock_get_hz(clk_sys) / (2 * freq)) - 3;
+  // PIO counter program takes 3 more cycles in total than we pass as
+  // input (wait for n + 1; mov; jmp)
+  pio->txf[sm] = (clock_get_hz(clk_sys) / (2 * freq)) - 3;
 }
