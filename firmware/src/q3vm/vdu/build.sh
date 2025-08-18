@@ -8,7 +8,7 @@ lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o dispatch.vmasm dispatc
 lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu.vmasm vdu.c
 lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu_init.vmasm vdu_init.c
 
-q3asm -s 512 -m  -f bytecode
+q3asm -l -v -m -f bytecode
 
 bytecodeSize=$(stat -c %s "bytecode.qvm")
 

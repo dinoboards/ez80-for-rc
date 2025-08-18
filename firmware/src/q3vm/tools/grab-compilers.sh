@@ -9,4 +9,6 @@ cp -u ~/dinoboards/q3vm/bin/linux/q3rcc ./
 
 cp -u ~/dinoboards/q3vm/src/vm/vm.c ../host/
 cp -u ~/dinoboards/q3vm/src/vm/vm.h ../host/
+cp -u ~/dinoboards/q3vm/src/vm/opcodes.h ../host/
+cp -u ~/dinoboards/q3vm/src/vm/opcodes.c.h ../host/
 

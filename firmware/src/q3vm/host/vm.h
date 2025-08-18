@@ -58,10 +58,16 @@ extern size_t strlcpy(char *dst, const char *src, size_t size);
 #define Com_Memcpy memcpy
 
 /** Translate from virtual machine memory to real machine memory. */
-#define VMA(x, vm) VM_ArgPtr(args[x], vm)
+/*#define VMA(x, vm) VM_ArgPtr(args[x], vm)*/
+
+/** Translate from virtual machine memory to real machine memory. */
+#define VMA_PTR(x, vm) VM_ArgPtr(to_ustdint((*(uint24_t *)&(args[x]))), vm)
+
+#define VMA_UINT24(x) to_ustdint((*(uint24_t *)&(args[x])))
+
+#define VMA_F4(x) (*(float *)&(args[x]))
 
 /** Get argument in syscall and interpret it bit by bit as IEEE 754 float */
-#define VMF(x) VM_IntToFloat(args[x])
 
 typedef int std_int; /* can be a 32 or 24 bit number - depending on target CPU */
 
@@ -121,10 +127,6 @@ typedef struct vmSymbol_s {
  * everything. Call VM_Create(...) to initialize this struct. Call VM_Free(...)
  * to cleanup this struct and free the memory. */
 typedef struct vm_s {
-  vm_size_t bytecodeLength;
-
-  vm_size_t programStack; /**< Stack pointer into .data segment. */
-
   /** Function pointer to callback function for native functions called by
    * the bytecode. The function is identified by an integer id that
    * corresponds to the bytecode function ids defined in g_syscalls.asm.
@@ -134,21 +136,32 @@ typedef struct vm_s {
    *    -3 in g_syscalls.asm equals to 2 in the systemCall parms argument
    * and so on. You can convert it back to -1, -2, -3, but the 0 based
    * index might help a lookup table. */
-  intptr_t (*systemCall)(struct vm_s *vm, intptr_t *parms);
+  uint32_t (*systemCall)(struct vm_s *vm, uint8_t *parms);
 
   /*------------------------------------*/
 
   ustdint_t instructionCount; /**< Number of instructions for VM */
 
-  const uint8_t *codeBase;   /**< Bytecode code segment */
+  const uint8_t *codeBase;   /**< Bytecode code segment in ROM */
   vm_size_t      codeLength; /**< Number of bytes in code segment */
 
-  uint8_t  *litBase;
-  vm_size_t litLength;
+  const uint8_t *litBase;   /* Start of the lit segment in ROM */
+  vm_size_t      litLength; /* length of the lit segment*/
 
-  uint8_t  *dataBase;         /**< base address to apply for access DATA and BSS segments - aka workingRAM - litLength */
+  uint8_t  *dataBase; /* Not the actual start location.  Its a calculated offset - workingRam - litLength */
+  vm_size_t dataLength;
+
+  uint8_t  *bssBase; /* Calculated offset of BSS base in RAM */
+  vm_size_t bssLength;
+
+  vm_size_t programStack; /* Index of current stack in RAM - initialised at top of RAM */
+
   vm_size_t workingRAMLength; /**< Number of bytes allocated for dataBase */
 
+  /*
+  stackBottom = workingRamLength - (dataLength + bssLength)
+
+  */
 #ifdef DEBUG_VM
   uint8_t  *debugStorage;
   stdint_t  debugStorageLength;
@@ -193,7 +206,7 @@ bool VM_Create(vm_t                *vm,
                const vm_size_t      length,
                uint8_t *const       dataSegment,
                const vm_size_t      dataSegmentLength,
-               intptr_t (*systemCalls)(vm_t *, intptr_t *));
+               uint32_t (*systemCalls)(vm_t *, uint8_t *));
 
 #ifdef DEBUG_VM
 int VM_LoadDebugInfo(vm_t *vm, char *mapfileImage, uint8_t *debugStorage, int debugStorageLength);

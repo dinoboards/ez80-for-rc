@@ -4,7 +4,7 @@
 
 static vm_t vm;
 
-intptr_t systemCalls(vm_t *vm, intptr_t *args);
+uint32_t systemCalls(vm_t *vm, uint8_t *args);
 void     print_string(const char *str);
 
 void vdu_init() {
@@ -29,29 +29,30 @@ void Com_Error(vmErrorCode_t level, const char *error) {
   //  exit(level);
 }
 
-intptr_t systemCalls(vm_t *vm, intptr_t *args) {
+uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   const int id = -1 - args[0];
 
   switch (id) {
-  case -1: /* PRINT_STRING */
-    print_string((const char *)VMA(1, vm));
+  case -1: /* PRINTF */
+    print_string((const char *)VMA_PTR(3, vm));
     return 0;
 
   case -2: /* ERROR */
+    print_string((const char *)VMA_PTR(3, vm));
     return 0;
 
   case -3: /* MEMSET */
-    if (VM_MemoryRangeValid(args[1] /*addr*/, args[3] /*len*/, vm) == 0) {
-      memset(VMA(1, vm), args[2], args[3]);
+    if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
+      memset(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9));
     }
-    return args[1];
+    return VMA_UINT24(3);
 
   case -4: /* MEMCPY */
-    if (VM_MemoryRangeValid(args[1] /*addr*/, args[3] /*len*/, vm) == 0 &&
-        VM_MemoryRangeValid(args[2] /*addr*/, args[3] /*len*/, vm) == 0) {
-      memcpy(VMA(1, vm), VMA(2, vm), args[3]);
+    if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0 &&
+        VM_MemoryRangeValid(VMA_UINT24(6) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
+      memcpy(VMA_PTR(3, vm), VMA_PTR(6, vm), VMA_UINT24(9));
     }
-    return args[1];
+    return VMA_UINT24(3);
 
   default:
     return -1;
