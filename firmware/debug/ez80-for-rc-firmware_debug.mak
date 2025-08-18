@@ -47,7 +47,7 @@ WEBTOC = @"$(BIN)\mkwebpage"
 CFLAGS =  \
 -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
 -define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
--listinc -NOmodsect -optsize -promote -NOreduceopt  \
+-listinc -NOmodsect -optspeed -promote -NOreduceopt  \
 -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
@@ -1365,6 +1365,8 @@ $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.c.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm.c"

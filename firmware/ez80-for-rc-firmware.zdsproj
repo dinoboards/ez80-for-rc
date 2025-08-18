@@ -174,7 +174,7 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0110)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0=700)
 LOCATE DATA at (BASE OF BSS - $0100)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0583
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
@@ -244,7 +244,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="list" type="boolean" change-action="none">true</option>
 <option name="listinc" type="boolean" change-action="none">true</option>
 <option name="modsect" type="boolean" change-action="compile">false</option>
-<option name="optspeed" type="boolean" change-action="compile">false</option>
+<option name="optspeed" type="boolean" change-action="compile">true</option>
 <option name="promote" type="boolean" change-action="compile">true</option>
 <option name="reduceopt" type="boolean" change-action="compile">false</option>
 <option name="stdinc" type="string" change-action="compile">src\includes</option>
@@ -311,7 +311,7 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0400)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0700)
 LOCATE DATA at (BASE OF BSS - $0100)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0583
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
@@ -448,7 +448,7 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0200)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0700)
 LOCATE DATA at (BASE OF BSS - $0100)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0680
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
