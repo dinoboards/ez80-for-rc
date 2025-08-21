@@ -109,7 +109,7 @@
 
 #ifdef DEBUG_VM
 
-static uint8_t vm_debugLevel = 4; /**< 0: be quiet, 1: debug msgs, 2: print op codes */
+static uint8_t vm_debugLevel; /**< 0: be quiet, 1: debug msgs, 2: print op codes */
 
 #include "opcodes.c.h"
 
@@ -1037,25 +1037,13 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH();
     }
 
-      opStack8 -= 8;
-      if (r1 <= r0) {
-        programCounter = r2;
-        DISPATCH();
-      } else {
-        programCounter += INT_INCREMENT;
-        DISPATCH();
-      }
+    case OP_GTI: {
+      pop_2_int32();
+      log3_3("%08X > %08X\n", r1, r0);
+      programCounter = (r1 > r0) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
 
-    case OP_GTI:
-      opStack8 -= 8;
-      log3_3("%08X >= %08X\n", r1, r0);
-      if (r1 > r0) {
-        programCounter = r2;
-        DISPATCH();
-      } else {
-        programCounter += INT_INCREMENT;
-        DISPATCH();
-      }
     case OP_GEI:
       opStack8 -= 8;
       log3_3("%08X > %08X\n", r1, r0);
@@ -1477,9 +1465,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     }
 
     case OP_CONSTU4: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(uint32_t)r2_uint32;
+      push_1_uint32(r2);
       programCounter += INT32_INCREMENT;
       DISPATCH();
     }

@@ -1086,7 +1086,7 @@ extern const uint8_t chapter_10_valid_multiple_static_file_scope_vars[CHAPTER_10
 
 extern const uint8_t chapter_10_valid_type_before_storage_class[CHAPTER_10_VALID_TYPE_BEFORE_STORAGE_CLASS_SIZE];
 
-#define CHAPTER_10_VALID_SHADOW_STATIC_LOCAL_VAR_SIZE 78
+#define CHAPTER_10_VALID_SHADOW_STATIC_LOCAL_VAR_SIZE 365
 
 extern const uint8_t chapter_10_valid_shadow_static_local_var[CHAPTER_10_VALID_SHADOW_STATIC_LOCAL_VAR_SIZE];
 
@@ -1153,7 +1153,7 @@ extern const uint8_t
 extern const uint8_t
     chapter_10_valid_extra_credit_switch_skip_static_initializer[CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_SKIP_STATIC_INITIALIZER_SIZE];
 
-#define CHAPTER_11_VALID_IMPLICIT_CASTS_COMMON_TYPE_SIZE 493
+#define CHAPTER_11_VALID_IMPLICIT_CASTS_COMMON_TYPE_SIZE 492
 
 extern const uint8_t chapter_11_valid_implicit_casts_common_type[CHAPTER_11_VALID_IMPLICIT_CASTS_COMMON_TYPE_SIZE];
 
@@ -1188,7 +1188,7 @@ extern const uint8_t
 
 extern const uint8_t chapter_11_valid_long_expressions_arithmetic_ops[CHAPTER_11_VALID_LONG_EXPRESSIONS_ARITHMETIC_OPS_SIZE];
 
-#define CHAPTER_11_VALID_LONG_EXPRESSIONS_TYPE_SPECIFIERS_SIZE 52
+#define CHAPTER_11_VALID_LONG_EXPRESSIONS_TYPE_SPECIFIERS_SIZE 317
 
 extern const uint8_t chapter_11_valid_long_expressions_type_specifiers[CHAPTER_11_VALID_LONG_EXPRESSIONS_TYPE_SPECIFIERS_SIZE];
 
