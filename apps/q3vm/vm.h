@@ -30,6 +30,9 @@
 #define MEMORY_SAFE
 
 #if 0
+extern int snprintf(char *__restrict __s, size_t __maxlen, const char *__restrict __format, ...) __THROWNL
+    __attribute__((__format__(__printf__, 3, 4)));
+
 extern size_t strlcpy(char *dst, const char *src, size_t size);
 
 #define DEBUG_VM /**< ifdef: enable debug functions and additional checks */

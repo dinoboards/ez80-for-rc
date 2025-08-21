@@ -23,6 +23,30 @@
 #include "opcodes.h"
 #include "vm.h"
 
+#define FADE   "\033[2m"
+#define NORMAL "\033[0m"
+
+#ifdef DEBUG_VM
+
+#define log3_2(a, b)                                                                                                               \
+  if (vm_debugLevel > 3)                                                                                                           \
+  printf(FADE "\t" a NORMAL, b)
+
+#define log3_3(a, b, c)                                                                                                            \
+  if (vm_debugLevel > 3)                                                                                                           \
+  printf(FADE "\t" a NORMAL, b, c)
+
+#define log3_4(a, b, c, d)                                                                                                         \
+  if (vm_debugLevel > 3)                                                                                                           \
+  printf(FADE "\t" a NORMAL, b, c, d)
+
+#else
+#define log3_2(a, b)
+#define log3_3(a, b, c)
+#define log3_4(a, b, c, d)
+
+#endif
+
 /******************************************************************************
  * DEFINES
  ******************************************************************************/
@@ -85,7 +109,7 @@
 
 #ifdef DEBUG_VM
 
-static uint8_t vm_debugLevel; /**< 0: be quiet, 1: debug msgs, 2: print op codes */
+static uint8_t vm_debugLevel = 4; /**< 0: be quiet, 1: debug msgs, 2: print op codes */
 
 #include "opcodes.c.h"
 
@@ -179,16 +203,16 @@ bool VM_Create(vm_t                *vm,
 
     Com_Memset(vm, 0, sizeof(vm_t));
     vm->systemCall       = systemCalls;
-    vm->instructionCount = to_ustdint(header->instructionCount);
+    vm->instructionCount = UINT(header->instructionCount);
 
     vm->codeBase         = &bytecode[sizeof(vmHeader_t)];
-    vm->codeLength       = to_ustdint(header->codeLength);
+    vm->codeLength       = UINT(header->codeLength);
     vm->litBase          = vm->codeBase + vm->codeLength;
-    vm->litLength        = to_ustdint(header->litLength);
-    vm->dataBase         = workingRAM - to_ustdint(header->litLength);
-    vm->dataLength       = to_ustdint(header->dataLength);
-    vm->bssBase          = vm->dataBase + to_ustdint(header->dataLength);
-    vm->bssLength        = to_ustdint(header->bssLength);
+    vm->litLength        = UINT(header->litLength);
+    vm->dataBase         = workingRAM - UINT(header->litLength);
+    vm->dataLength       = UINT(header->dataLength);
+    vm->bssBase          = vm->dataBase + UINT(header->dataLength);
+    vm->bssLength        = UINT(header->bssLength);
     vm->programStack     = workingRAMLength - 3;
     vm->workingRAMLength = workingRAMLength;
 
@@ -200,8 +224,8 @@ bool VM_Create(vm_t                *vm,
     Com_Memset(workingRAM, 0, workingRAMLength);
 
     /* copy the intialized data, excluding the lit segment */
-    Com_Memcpy(workingRAM, &bytecode[to_ustdint(header->codeLength) + to_ustdint(header->litLength) + sizeof(vmHeader_t)],
-               to_ustdint(header->dataLength));
+    Com_Memcpy(workingRAM, &bytecode[UINT(header->codeLength) + UINT(header->litLength) + sizeof(vmHeader_t)],
+               UINT(header->dataLength));
 
     /* the stack is implicitly at the end of the image */
 #ifdef DEBUG_VM
@@ -210,8 +234,8 @@ bool VM_Create(vm_t                *vm,
     printf("Memory Layout:\n");
     printf("  CodeBase Store: %p\n", vm->codeBase);
     printf("  LitBase Store:  %p\n", vm->litBase);
-    printf(" dataBase Store:  %p\n", vm->dataBase + to_ustdint(header->litLength));
-    printf("  bssBase Store:  %p\n\n", vm->bssBase + to_ustdint(header->litLength));
+    printf(" dataBase Store:  %p\n", vm->dataBase + UINT(header->litLength));
+    printf("  bssBase Store:  %p\n\n", vm->bssBase + UINT(header->litLength));
 
     printf("  RAM Length:     %06X\n", vm->workingRAMLength);
     printf("  Code Length:    %06X\n", vm->codeLength);
@@ -255,9 +279,8 @@ static bool VM_ValidateHeader(const vm_t *const vm, const vmHeader_t *const head
   }
 
   if (header->vmMagic == VM_MAGIC) {
-    if (to_ustdint(header->codeLength) == 0 || to_ustdint(header->instructionCount) == 0 ||
-        to_ustdint(header->bssLength) > VM_MAX_BSS_LENGTH ||
-        to_ustdint(header->codeLength) + to_ustdint(header->litLength) + to_ustdint(header->dataLength) > bytecodeLength) {
+    if (UINT(header->codeLength) == 0 || UINT(header->instructionCount) == 0 || UINT(header->bssLength) > VM_MAX_BSS_LENGTH ||
+        UINT(header->codeLength) + UINT(header->litLength) + UINT(header->dataLength) > bytecodeLength) {
       Com_Printf("Warning: bad header\n");
       Com_Error(VM_MALFORMED_HEADER, "Malformed bytecode image\n");
       return -1;
@@ -274,7 +297,7 @@ static bool VM_ValidateHeader(const vm_t *const vm, const vmHeader_t *const head
     /* round up to next power of 2 so all data operations can
        be mask protected */
     /*TODO: we can remove need for lit to be included in dataSegment*/
-    const vm_size_t dataLength = to_ustdint(header->dataLength) + to_ustdint(header->bssLength);
+    const vm_size_t dataLength = UINT(header->dataLength) + UINT(header->bssLength);
 
     if (dataLength > vm->workingRAMLength) {
       Com_Printf("Error: Insufficient ram allocated for VM.  Granted %06X, image requires %06X\n", vm->workingRAMLength,
@@ -428,13 +451,17 @@ locals from sp
 
 #define r2_int8  (*((int8_t *)&codeBase[programCounter]))
 #define r2_int16 (*((int16_t *)&codeBase[programCounter]))
-#define r2_int24 (*((int24_t *)&codeBase[programCounter]))
 #define r2_int32 (*((int32_t *)&codeBase[programCounter]))
 
 #define r2_uint8  (codeBase[programCounter])
 #define r2_uint16 (*((uint16_t *)&codeBase[programCounter]))
-#define r2_uint24 (*((uint24_t *)&codeBase[programCounter]))
 #define r2_uint32 (*((uint32_t *)&codeBase[programCounter]))
+
+#define r2_int24_old  INT(*((int24_t *)&codeBase[programCounter]))
+#define r2_uint24_old UINT(*((uint24_t *)&codeBase[programCounter]))
+
+#define r2_int24  (*((int24_t *)&codeBase[programCounter]))
+#define r2_uint24 (*((uint24_t *)&codeBase[programCounter]))
 
 #define INT_INCREMENT       sizeof(uint32_t)
 #define INT8_INCREMENT      sizeof(uint8_t)
@@ -444,10 +471,160 @@ locals from sp
 #define MAX_PROGRAM_COUNTER ((unsigned)vm->codeLength)
 #define DISPATCH()          break;
 
-#define VM_RedirectLit(vm, a) ((a < (vm_operand_t)vm->litLength) ? &vm->codeBase[vm->codeLength + a] : &vm->dataBase[a])
+#ifdef MEMORY_SAFE
+uint8_t bad_memory[16];
+
+const uint8_t *VM_RedirectLit(vm_t *vm, int32_t vaddr, int size) {
+  if (vaddr < 0) {
+    Com_Printf("Attempted to read at %06X\n", vaddr);
+    vm->lastError = VM_RAM_ACCESS_ERROR;
+    Com_Error(VM_LIT_ACCESS_ERROR, "Memory Access Error");
+    return bad_memory;
+  }
+
+  if (vaddr < (vm_operand_t)vm->litLength) {
+    if (vaddr + size > (vm_operand_t)vm->litLength) {
+      vm->lastError = VM_RAM_ACCESS_ERROR;
+      Com_Error(VM_LIT_ACCESS_ERROR, "Memory Access Error");
+      return bad_memory;
+    }
+    return &vm->codeBase[vm->codeLength + vaddr];
+  }
+
+  if ((vm_size_t)vaddr + size > vm->workingRAMLength + vm->litLength) {
+    Com_Printf("Attempted to read at %06X -- (%06X %06X)\n", vaddr, vm->workingRAMLength, vm->litLength);
+    vm->lastError = VM_RAM_ACCESS_ERROR;
+    Com_Error(VM_RAM_ACCESS_ERROR, "Memory Access Error");
+    return bad_memory;
+  }
+
+  return &vm->dataBase[vaddr];
+}
+#else
+#define VM_RedirectLit(vm, a, l) ((a < (vm_operand_t)vm->litLength) ? &vm->codeBase[vm->codeLength + a] : &vm->dataBase[a])
+#endif
 
 #define opStack32  ((int32_t *)opStack8)
 #define opStackFlt ((float *)opStack8)
+
+#define VM_DataRead_uint32(vm, vaddr) (*((uint32_t *)VM_RedirectLit(vm, UINT(vaddr), 4)))
+
+#define VM_DataRead_uint24(vm, vaddr)                                                                                              \
+  (*((uint24_t *)((UINT(vaddr) < vm->litLength) ? &vm->codeBase[vm->codeLength + UINT(vaddr)] : &vm->dataBase[UINT(vaddr)])))
+
+#define VM_DataRead_uint16(vm, vaddr)                                                                                              \
+  (*((uint16_t *)((UINT(vaddr) < vm->litLength) ? &vm->codeBase[vm->codeLength + UINT(vaddr)] : &vm->dataBase[UINT(vaddr)])))
+
+#define VM_DataRead_float(vm, vaddr) (*(float *)VM_RedirectLit(vm, vaddr, 4))
+#define VM_DataRead_uint8(vm, vaddr) (*(uint8_t *)VM_RedirectLit(vm, vaddr, 1))
+
+#define pop_2_int32()                                                                                                              \
+  r0 = *((int32_t *)opStack8);                                                                                                     \
+  r1 = *((int32_t *)(opStack8 - 4));                                                                                               \
+  log3_3("%08X %08X POP int32\n", r0, r1);                                                                                         \
+  opStack8 -= 8;
+
+#define pop_2_uint32()                                                                                                             \
+  r0 = *((uint32_t *)opStack8);                                                                                                    \
+  r1 = *((uint32_t *)(opStack8 - 4));                                                                                              \
+  log3_3("%08X %08X POP uint32\n", r0, r1);                                                                                        \
+  opStack8 -= 8;
+
+#define pop_1_uint32()                                                                                                             \
+  r0 = *((uint32_t *)opStack8);                                                                                                    \
+  log3_2("%08X POP uint32\n", r0);                                                                                                 \
+  opStack8 -= 4;
+
+#define pop_1_int32()                                                                                                              \
+  r0 = *((int32_t *)opStack8);                                                                                                     \
+  log3_2("%08X POP int32\n", r0);                                                                                                  \
+  opStack8 -= 4;
+
+#define pop_2_uint24()                                                                                                             \
+  r0_uint24 = *((uint24_t *)opStack8);                                                                                             \
+  r1_uint24 = *((uint24_t *)(opStack8 - 4));                                                                                       \
+  log3_3("%08X %08X POP uint24\n", UINT(r0_uint24), UINT(r1_uint24));                                                              \
+  opStack8 -= 8;
+
+#define pop_2_int24()                                                                                                              \
+  r0_int24 = *((int24_t *)opStack8);                                                                                               \
+  r1_int24 = *((int24_t *)(opStack8 - 4));                                                                                         \
+  log3_3("%06X %06X POP int24\n", INT(r0_int24), INT(r1_int24));                                                                   \
+  opStack8 -= 8;
+
+#define pop_1_uint24()                                                                                                             \
+  r0_uint24 = *((uint24_t *)opStack8);                                                                                             \
+  log3_2("%06X POP uint24\n", UINT(r0_uint24));                                                                                    \
+  opStack8 -= 4;
+
+#define pop_1_int24()                                                                                                              \
+  r0_int24 = *((int24_t *)opStack8);                                                                                               \
+  log3_2("%06X POP int24\n", INT(r0_int24));                                                                                       \
+  opStack8 -= 4;
+
+#define pop_1_uint16()                                                                                                             \
+  r0_uint16 = *((uint16_t *)opStack8);                                                                                             \
+  log3_2("%04X POP uint16\n", r0_uint16);                                                                                          \
+  opStack8 -= 4;
+
+#define pop_1_int16()                                                                                                              \
+  r0_int16 = *((int16_t *)opStack8);                                                                                               \
+  log3_2("%04X POP int16\n", r0_int16);                                                                                            \
+  opStack8 -= 4;
+
+#define pop_1_int8()                                                                                                               \
+  r0_int8 = *((int8_t *)opStack8);                                                                                                 \
+  log3_2("%02X POP int8\n", r0_int8);                                                                                              \
+  opStack8 -= 4;
+
+#define pop_1_uint8()                                                                                                              \
+  r0_uint8 = *((uint8_t *)opStack8);                                                                                               \
+  log3_2("%02X POP uint8\n", r0_uint8);                                                                                            \
+  opStack8 -= 4;
+
+#define push_1_float(a)                                                                                                            \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = a;
+
+#define push_1_int32(a)                                                                                                            \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = a;                                                                                                                  \
+  log3_2("%08X PUSHED int32\n", *opStack32);
+
+#define push_1_uint32(a)                                                                                                           \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = a;                                                                                                                  \
+  log3_2("%08X PUSHED uint32\n", *opStack32);
+
+#define push_1_uint24(a)                                                                                                           \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = (uint32_t)UINT(((uint24_t)(a)));                                                                                    \
+  log3_2("%08X PUSHED uint24\n", *opStack32);
+
+#define push_1_int24(a)                                                                                                            \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = (int32_t)INT(((int24_t)(a)));                                                                                       \
+  log3_2("%08X PUSHED int24\n", *opStack32);
+
+#define push_1_uint16(a)                                                                                                           \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = (uint32_t)(uint16_t)a;                                                                                              \
+  log3_2("%08X PUSHED uint16\n", *opStack32);
+
+#define push_1_int16(a)                                                                                                            \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = (int32_t)(int16_t)a;                                                                                                \
+  log3_2("%08X PUSHED int16\n", *opStack32);
+
+#define push_1_uint8(a)                                                                                                            \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = (uint8_t)(a);                                                                                                       \
+  log3_2("%02X PUSHED uint8\n", *opStack32);
+
+#define push_1_int8(a)                                                                                                             \
+  opStack8 += 4;                                                                                                                   \
+  *opStack32 = (int8_t)(a);                                                                                                        \
+  log3_2("%02X PUSHED int8\n", *opStack32);
 
 /* FIXME: this needs to be locked to uint24_t to ensure platform agnostic */
 static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
@@ -462,8 +639,19 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
   uint8_t        opcode;
   vm_operand_t   r0, r1;
 
+  int24_t r0_int24;
+  int24_t r1_int24;
+
+  uint24_t r0_uint24;
+  uint24_t r1_uint24;
+  uint16_t r0_uint16;
+  int16_t  r0_int16;
+  int8_t   r0_int8;
+  uint8_t  r0_uint8;
+
 #ifdef DEBUG_VM
   vmSymbol_t *profileSymbol;
+  int         stomped;
 #endif
 
   /* we might be called recursively, so this might not be the very top */
@@ -482,19 +670,24 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
   programStack -= (6 + 3 * MAX_VMMAIN_ARGS);
 
   for (arg = 0; arg < MAX_VMMAIN_ARGS; arg++) {
-    *(int24_t *)&dataBase[programStack + 6 + arg * 3] = to_int24(args[arg]);
+    *(int24_t *)&dataBase[programStack + 6 + arg * 3] = INT24(args[arg]);
   }
 
-  *(int24_t *)&dataBase[programStack + 3] = to_int24(0);  /* return stack */
-  *(int24_t *)&dataBase[programStack]     = to_int24(-1); /* will terminate the loop on return */
+  *(int24_t *)&dataBase[programStack + 3] = INT24(0);  /* return stack */
+  *(int24_t *)&dataBase[programStack]     = INT24(-1); /* will terminate the loop on return */
 
-  opStack32[0] = 0x0000BEEF;
+  opStack32[0]  = 0x0000BEEF;
   opStack32[-1] = 0x00000000;
 
   /* main interpreter loop, will exit when a LEAVE instruction
      grabs the -1 program counter */
 
   while (1) {
+    if (vm->lastError) {
+      vm->programStack = programStack = stackOnEntry;
+      opStack8                        = &_opStack[8];
+      goto done;
+    }
     r0 = opStack32[0];
     r1 = opStack32[-1];
 
@@ -541,61 +734,70 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH();
 
     case OP_CONSTGP3:
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = to_stdint(r2_int24);
+      push_1_uint24(r2_uint24);
       programCounter += INT24_INCREMENT;
       DISPATCH();
 
     case OP_CONSTGP4:
       opStack8 += 4;
       r1 = r0;
-      r0 = *opStack32 = to_stdint(r2_int24);
+      r0 = *opStack32 = r2_int24_old;
       programCounter += INT24_INCREMENT;
       DISPATCH();
 
-    case OP_LOCAL:
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = r2_uint16 + programStack;
-#ifdef DEBUG_VM
-      if (vm_debugLevel > 3)
-        printf(" LOCAL: R0 = %06X = *[%06X + %04X (%06X)]\n", r0, programStack, r2_uint16, programStack + r2_uint16);
-#endif
+    case OP_LOCAL: {
+      log3_2("&PS[%04X]", r2_uint16);
+      push_1_uint24(UINT24(r2_uint16 + programStack));
       programCounter += INT16_INCREMENT;
-      DISPATCH();
-
-    case OP_LOADF4: {
-      r0 = *opStack32 = *((uint32_t *)VM_RedirectLit(vm, r0));
       DISPATCH();
     }
 
-    case OP_LOAD4:
-      r0 = *opStack32 = *(vm_operand_t *)VM_RedirectLit(vm, r0);
+    case OP_LOADF4: {
+      r0 = *opStack32 = *((uint32_t *)VM_RedirectLit(vm, r0, 4));
       DISPATCH();
+    }
+
+    case OP_LOAD4: {
+      pop_1_uint24();
+      log3_2("R0: %06X", UINT(r0_uint24));
+      push_1_uint32(VM_DataRead_uint32(vm, r0_uint24));
+      DISPATCH();
+    }
 
     case OP_LOAD3: {
-      if ((r0 < (vm_operand_t)vm->litLength))
-        r0 = *opStack32 = to_stdint(*((int24_t *)&vm->codeBase[vm->codeLength + r0]));
-      else
-        r0 = *opStack32 = to_stdint((*((int24_t *)&vm->dataBase[r0])));
+      pop_1_uint24();
+      log3_2("RO: %06X", UINT(r0_uint24));
+      push_1_uint24(VM_DataRead_uint24(vm, r0_uint24));
       DISPATCH();
     }
 
     case OP_LOAD2:
-      r0 = *opStack32 = *(unsigned short *)VM_RedirectLit(vm, r0);
+      pop_1_uint24();
+      log3_2("R0: %06X", UINT(r0_uint24));
+      push_1_uint16(VM_DataRead_uint16(vm, r0_uint24));
       DISPATCH();
 
-    case OP_LOAD1:
-      r0 = *opStack32 = *VM_RedirectLit(vm, r0);
+    case OP_LOAD1: {
+      pop_1_uint24();
+      log3_2("R0: %06X", UINT(r0_uint24));
+      push_1_uint8(*VM_RedirectLit(vm, (vm_operand_t)UINT(r0_uint24), 1));
       DISPATCH();
+    }
 
     case OP_STORE3:
-      *(int24_t *)&dataBase[r1] = to_int24(r0);
-      opStack8 -= 8;
+      pop_2_uint24();
+      *(uint24_t *)&dataBase[UINT(r1_uint24)] = r0_uint24;
+      log3_3("*(%06X) = %08X  MOVE (3 bytes)\n", UINT(r1_uint24), UINT(r0_uint24));
       DISPATCH();
 
-    case OP_STORE4:
+    case OP_STORE4: {
+      pop_1_uint32();
+      pop_1_uint24();
+      *((uint32_t *)&dataBase[UINT(r0_uint24)]) = r0;
+      log3_3("*(%06X) = %08X  MOVE\n", UINT(r0_uint24), r0);
+      DISPATCH();
+    }
+
       *(vm_operand_t *)&dataBase[r1] = r0;
       opStack8 -= 8;
       DISPATCH();
@@ -606,13 +808,17 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       DISPATCH();
 
     case OP_STORE2:
-      *(short *)&dataBase[r1] = r0;
-      opStack8 -= 8;
+      pop_1_uint16();
+      pop_1_uint24();
+      *((uint16_t *)&dataBase[UINT(r0_uint24)]) = r0_uint16;
+      log3_3("*(%06X) = %04X  MOVE\n", UINT(r0_uint24), r0_uint16);
       DISPATCH();
 
     case OP_STORE1:
-      dataBase[r1] = r0;
-      opStack8 -= 8;
+      pop_1_uint8();
+      pop_1_uint24();
+      dataBase[UINT(r0_uint24)] = r0_uint8;
+      log3_3("*(%06X) = %02X  MOVE\n", UINT(r0_uint24), r0_uint8);
       DISPATCH();
 
     case OP_ARG:
@@ -620,7 +826,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 #ifdef DEBUG_VM
       printf("  ARG *[%06X + %02X (%06X)] = %06X\n", programStack, r2_int8, programStack + r2_int8, r0);
 #endif
-      *(int24_t *)&dataBase[programStack + r2_int8] = to_int24(r0);
+      *(int24_t *)&dataBase[programStack + r2_int8] = INT24(r0);
       opStack8 -= 4;
       programCounter += 1;
       DISPATCH();
@@ -628,7 +834,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     case OP_ARG4:
       /* single byte offset from programStack */
 #ifdef DEBUG_VM
-      printf("  ARG *[%06X + %02X (%06X)] = %06X\n", programStack, r2_int8, programStack + r2_int8, r0);
+      printf("  ARG4 *[%06X + %02X (%06X)] = %06X\n", programStack, r2_int8, programStack + r2_int8, r0);
 #endif
       *(int32_t *)&dataBase[programStack + r2_int8] = r0;
       opStack8 -= 4;
@@ -652,19 +858,19 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     }
 
     case OP_BLOCK_COPY:
-      VM_BlockCopy(r1, r0, to_ustdint(r2_uint24), vm);
+      VM_BlockCopy(r1, r0, r2_uint24_old, vm);
       programCounter += INT24_INCREMENT;
       opStack8 -= 8;
       DISPATCH();
 
     case OP_CALL:
       /* save current program counter */
-      *(int24_t *)&dataBase[programStack] = to_int24(programCounter);
-
+      *(int24_t *)&dataBase[programStack] = INT24(programCounter);
+      pop_1_int24();
       /* jump to the location on the stack */
-      programCounter = r0;
-      opStack8 -= 4;
-      if (programCounter < 0) /* system call */
+      programCounter = INT(r0_int24);
+
+      if ((programCounter) < 0) /* system call */
       {
         vm_operand_t r;
 #ifdef DEBUG_VM
@@ -676,21 +882,21 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         vm->programStack = programStack - 3;
 
 #ifdef DEBUG_VM
-        int stomped = to_stdint(*(int24_t *)&dataBase[programStack + 3]);
+        stomped = INT(*(int24_t *)&dataBase[programStack + 3]);
 #endif
-        *(int24_t *)&dataBase[programStack + 3] = to_int24(-1 - programCounter); /*command*/
+        *(int24_t *)&dataBase[programStack + 3] = INT24(-1 - programCounter); /*command*/
         r                                       = vm->systemCall(vm, &dataBase[programStack + 3]);
 
 #ifdef DEBUG_VM
         /* this is just our stack frame pointer, only needed
            for debugging */
-        *(int24_t *)&dataBase[programStack + 3] = to_int24(stomped);
+        *(int24_t *)&dataBase[programStack + 3] = INT24(stomped);
 #endif
 
         /* save return value */
         opStack8 += 4;
         *opStack32     = r;
-        programCounter = to_stdint(*(int24_t *)&dataBase[programStack]);
+        programCounter = INT(*(int24_t *)&dataBase[programStack]);
 #ifdef DEBUG_VM
         if (vm_debugLevel) {
           Com_Printf("%s%i<--- %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, programCounter));
@@ -710,16 +916,17 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     case OP_POP:
       opStack8 -= 4;
       DISPATCH();
+
     case OP_ENTER: {
       const uint16_t localsAndArgsSize = r2_int16;
-      /* get size of stack frame */
       programCounter += INT16_INCREMENT;
       programStack -= localsAndArgsSize;
+      log3_4("FRAME SIZE: %04X (from %06X to %06X)\n", localsAndArgsSize, programStack + localsAndArgsSize, programStack);
 
 #ifdef DEBUG_VM
       profileSymbol = VM_ValueToFunctionSymbol(vm, programCounter - 3);
       /* save old stack frame for debugging traces */
-      *(int24_t *)&dataBase[programStack + 3] = to_int24(programStack + localsAndArgsSize);
+      *(int24_t *)&dataBase[programStack + 3] = INT24(programStack + localsAndArgsSize);
       if (vm_debugLevel) {
         Com_Printf("%s%i---> %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, programCounter - 3));
         {
@@ -732,12 +939,14 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 #endif
       DISPATCH();
     }
+
     case OP_LEAVE: {
       /* remove our stack frame */
+      log3_4("FRAME SIZE: %06X (from %06X to %06X)\n", r2_int16, programStack, programStack + r2_int16);
       programStack += r2_int16;
 
       /* grab the saved program counter */
-      programCounter = to_stdint(*(int24_t *)&dataBase[programStack]);
+      programCounter = INT(*(int24_t *)&dataBase[programStack]);
 #ifdef DEBUG_VM
       profileSymbol = VM_ValueToFunctionSymbol(vm, programCounter);
       if (vm_debugLevel) {
@@ -766,40 +975,68 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       }
 
       programCounter = r0;
-
       opStack8 -= 4;
       DISPATCH();
-    case OP_EQ:
-      opStack8 -= 8;
-      if (r1 == r0) {
-        programCounter = r2;
-        DISPATCH();
-      } else {
-        programCounter += INT_INCREMENT;
-        DISPATCH();
-      }
-    case OP_NE:
-      opStack8 -= 8;
-      if (r1 != r0) {
-        programCounter = r2;
-        DISPATCH();
-      } else {
-        programCounter += INT_INCREMENT;
-        DISPATCH();
-      }
 
-    case OP_LTI: {
-      opStack8 -= 8;
-      if (r1 < r0) {
-        programCounter = r2;
-        DISPATCH();
-      } else {
-        programCounter += INT_INCREMENT;
-        DISPATCH();
-      }
+    case OP_EQ: {
+      pop_2_int32();
+      log3_3("%08X == %08X\n", r1, r0);
+      programCounter = (r1 == r0) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
     }
 
-    case OP_LEI:
+    case OP_EQ3: {
+      pop_2_uint24();
+      if (UINT(r1_uint24) == UINT(r0_uint24)) {
+        programCounter = r2_int24_old;
+      } else {
+        programCounter += INT24_INCREMENT;
+      }
+      DISPATCH();
+    }
+
+    case OP_NE: {
+      pop_2_int32();
+      log3_3("%08X != %08X\n", r1, r0);
+      programCounter = (r1 != r0) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
+    case OP_NE3: {
+      pop_2_uint24();
+      log3_3("%06X != %06X\n", UINT(r1_uint24), UINT(r0_uint24));
+      programCounter = (UINT(r1_uint24) != UINT(r0_uint24)) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
+    case OP_LTI: {
+      pop_2_int32();
+      log3_3("%08X < %08X\n", r1, r0);
+      programCounter = (r1 < r0) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
+    case OP_LTI3: {
+      pop_2_int24();
+      log3_4("%06X < %06X = %d\n", INT(r1_int24), INT(r0_int24), (INT(r1_int24) < INT(r0_int24)));
+      programCounter = (INT(r1_int24) < INT(r0_int24)) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
+    case OP_LEI: {
+      pop_2_int32();
+      log3_3("%08X <= %08X\n", r1, r0);
+      programCounter = (r1 <= r0) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
+    case OP_LEI3: {
+      pop_2_int24();
+      log3_3("%06X <= %06X\n", INT(r1_int24), INT(r0_int24));
+      programCounter = (INT(r1_int24) <= INT(r0_int24)) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
       opStack8 -= 8;
       if (r1 <= r0) {
         programCounter = r2;
@@ -808,8 +1045,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         programCounter += INT_INCREMENT;
         DISPATCH();
       }
+
     case OP_GTI:
       opStack8 -= 8;
+      log3_3("%08X >= %08X\n", r1, r0);
       if (r1 > r0) {
         programCounter = r2;
         DISPATCH();
@@ -819,6 +1058,8 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       }
     case OP_GEI:
       opStack8 -= 8;
+      log3_3("%08X > %08X\n", r1, r0);
+
       if (r1 >= r0) {
         programCounter = r2;
         DISPATCH();
@@ -826,6 +1067,21 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
         programCounter += INT_INCREMENT;
         DISPATCH();
       }
+
+    case OP_GEI3: {
+      pop_2_int24();
+      log3_3("%06X >= %06X\n", INT(r1_int24), INT(r0_int24));
+      programCounter = (INT(r1_int24) >= INT(r0_int24)) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
+    case OP_GTI3: {
+      pop_2_int24();
+      log3_3("%06X > %06X\n", INT(r1_int24), INT(r0_int24));
+      programCounter = (INT(r1_int24) > INT(r0_int24)) ? UINT(r2_uint24) : programCounter + INT24_INCREMENT;
+      DISPATCH();
+    }
+
     case OP_LTU:
       opStack8 -= 8;
       if (((unsigned)r1) < ((unsigned)r0)) {
@@ -926,69 +1182,169 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
       /*===================================================================*/
 
     case OP_NEGI:
-      *opStack32 = -r0;
+      pop_1_int32();
+      push_1_int32(-r0);
+      DISPATCH();
+
+    case OP_NEGI3:
+      pop_1_int24();
+      push_1_int24(INT24(-INT(r0_int24)));
       DISPATCH();
 
     case OP_ADD3:
-      opStack8 -= 4;
-      *opStack32 = r1 + r0;
+      pop_2_int24();
+      log3_3("%08X + %08X = ", INT(r1_int24), INT(r0_int24));
+      push_1_int24(INT24(INT(r1_int24) + INT(r0_int24)));
       DISPATCH();
 
-    case OP_ADD:
-      opStack8 -= 4;
-      *opStack32 = r1 + r0;
+    case OP_ADD: {
+      pop_2_int32();
+      log3_3("%08X + %08X =", r1, r0);
+      push_1_int32(r1 + r0);
       DISPATCH();
+    }
+
     case OP_SUB:
+      log3_4("%08X - %08X = %08X PUSHED\n", r1, r0, r1 - r0);
       opStack8 -= 4;
       *opStack32 = r1 - r0;
       DISPATCH();
-    case OP_DIVI:
-      opStack8 -= 4;
-      *opStack32 = r1 / r0;
+
+    case OP_SUB3: {
+      pop_2_int24();
+      log3_3("%08X - %08X = ", INT(r1_int24), INT(r0_int24));
+      push_1_int24(INT24(INT(r1_int24) - INT(r0_int24)));
       DISPATCH();
+    }
+
+    case OP_DIVI: {
+      pop_2_int32();
+      log3_3("%08X / %08X =", r1, r0);
+      push_1_int32(r1 / r0);
+      DISPATCH();
+    }
+
+    case OP_DIVI3: {
+      pop_2_int24();
+      log3_3("%08X / %08X =", INT(r1_int24), INT(r0_int24));
+      push_1_int24(INT24(INT(r1_int24) / INT(r0_int24)));
+      DISPATCH();
+    }
+
     case OP_DIVU:
       opStack8 -= 4;
       *opStack32 = ((unsigned)r1) / ((unsigned)r0);
       DISPATCH();
+
     case OP_MODI:
       opStack8 -= 4;
       *opStack32 = r1 % r0;
       DISPATCH();
+
+    case OP_MODI3: {
+      pop_2_int24();
+      log3_3("%08X %% %08X = ", INT(r1_int24), INT(r0_int24));
+      push_1_int24(INT24(INT(r1_int24) % INT(r0_int24)));
+      DISPATCH();
+    }
+
     case OP_MODU:
       opStack8 -= 4;
       *opStack32 = ((unsigned)r1) % ((unsigned)r0);
       DISPATCH();
-    case OP_MULI:
-      opStack8 -= 4;
-      *opStack32 = r1 * r0;
+
+    case OP_MULI: {
+      pop_2_int32();
+      log3_3("%08X * %08X =", r1, r0);
+      push_1_int32(r1 * r0);
       DISPATCH();
+    }
+
+    case OP_MULI3: {
+      pop_2_int24();
+      log3_3("%08X * %08X = ", INT(r1_int24), INT(r0_int24));
+      push_1_int24(INT24(INT(r1_int24) * INT(r0_int24)));
+      DISPATCH();
+    }
+
     case OP_MULU:
       opStack8 -= 4;
       *opStack32 = ((unsigned)r1) * ((unsigned)r0);
       DISPATCH();
-    case OP_BAND:
-      opStack8 -= 4;
-      *opStack32 = ((unsigned)r1) & ((unsigned)r0);
+
+    case OP_BAND: {
+      pop_2_uint32();
+      log3_3("%08X & %08X =", r1, r0);
+      push_1_uint32(r1 & r0);
       DISPATCH();
-    case OP_BOR:
-      opStack8 -= 4;
-      *opStack32 = ((unsigned)r1) | ((unsigned)r0);
+    }
+
+    case OP_BAND3: {
+      pop_2_uint24();
+      log3_3("%08X & %08X = ", UINT(r1_uint24), UINT(r0_uint24));
+      push_1_uint24(UINT24(UINT(r1_uint24) & UINT(r0_uint24)));
       DISPATCH();
-    case OP_BXOR:
-      opStack8 -= 4;
-      *opStack32 = ((unsigned)r1) ^ ((unsigned)r0);
+    }
+
+    case OP_BOR: {
+      pop_2_uint32();
+      log3_3("%08X | %08X =", r1, r0);
+      push_1_uint32(r1 | r0);
       DISPATCH();
+    }
+
+    case OP_BOR3: {
+      pop_2_uint24();
+      log3_3("%08X | %08X = ", UINT(r1_uint24), UINT(r0_uint24));
+      push_1_uint24(UINT24(UINT(r1_uint24) | UINT(r0_uint24)));
+      DISPATCH();
+    }
+
+    case OP_BXOR: {
+      pop_2_uint32();
+      log3_3("%08X ^ %08X =", r1, r0);
+      push_1_uint32(r1 ^ r0);
+      DISPATCH();
+    }
+
+    case OP_BXOR3: {
+      pop_2_uint24();
+      log3_3("%08X ^ %08X = ", UINT(r1_uint24), UINT(r0_uint24));
+      push_1_uint24(UINT24(UINT(r1_uint24) ^ UINT(r0_uint24)));
+      DISPATCH();
+    }
     case OP_BCOM:
       *opStack32 = ~((unsigned)r0);
       DISPATCH();
-    case OP_LSH:
-      opStack8 -= 4;
-      *opStack32 = r1 << r0;
+
+    case OP_LSH: {
+      pop_2_uint32();
+      log3_3("%08X << %08X =", r1, r0);
+      push_1_uint32(r1 << r0);
       DISPATCH();
-    case OP_RSHI:
-      opStack8 -= 4;
-      *opStack32 = r1 >> r0;
+    }
+
+    case OP_LSH3: {
+      pop_2_uint24();
+      log3_3("%08X << %08X = ", UINT(r1_uint24), UINT(r0_uint24));
+      push_1_uint24(UINT24(UINT(r1_uint24) << UINT(r0_uint24)));
       DISPATCH();
+    }
+
+    case OP_RSHI: {
+      pop_2_int32();
+      log3_3("%08X >> %08X =", r1, r0);
+      push_1_int32(r1 >> r0);
+      DISPATCH();
+    }
+
+    case OP_RSHI3: {
+      pop_2_int24();
+      log3_3("%08X >> %08X = ", INT(r1_int24), INT(r0_int24));
+      push_1_int24(INT24(INT(r1_int24) >> INT(r0_int24)));
+      DISPATCH();
+    }
+
     case OP_RSHU:
       opStack8 -= 4;
       *opStack32 = ((unsigned)r1) >> r0;
@@ -1020,58 +1376,103 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     case OP_CVFI:
       *opStack32 = Q_ftol(opStackFlt[0]);
       DISPATCH();
-    case OP_SEX8:
+
+    case OP_CI1I4:
       *opStack32 = (int8_t)*opStack32;
       DISPATCH();
-    case OP_SEX16:
+
+    case OP_CI2I4:
       *opStack32 = (int16_t)*opStack32;
       DISPATCH();
 
+    case OP_CI3I4: {
+      pop_1_int24();
+      push_1_int32((int32_t)(INT(r0_int24)));
+      DISPATCH();
+    }
+
+    /* convert I3 to I1*/
+    case OP_CI3I1: {
+      pop_1_int24();
+      push_1_int8((int8_t)(INT(r0_int24)));
+      DISPATCH();
+    }
+
+      /* convert I3 to I2*/
+    case OP_CI3I2: {
+      pop_1_int24();
+      push_1_int16((int16_t)(INT(r0_int24)));
+      DISPATCH();
+    }
+
+    /* extend sign I2 to I3*/
+    case OP_CI2I3: {
+      pop_1_int16();
+      push_1_int24(INT24(r0_int16));
+      DISPATCH();
+    }
+
+    /* reduce I4 to I3 */
+    case OP_CI4I3: {
+      pop_1_int32();
+      push_1_int24(INT24(r0));
+      DISPATCH();
+    }
+
+      /* extend sign I1 to I3*/
+    case OP_CI1I3: {
+      pop_1_int8();
+      push_1_int24(INT24(r0_int8));
+      DISPATCH();
+    }
+
+    /* reduce store from U3 to U2 */
+    /*TODO: optimse by just remove the high byte stored on stack*/
+    case OP_CU3U2: {
+      pop_1_uint24();
+      push_1_uint16((uint16_t)UINT(r0_uint24));
+      DISPATCH();
+    }
+
+    case OP_CU2I3: {
+      pop_1_uint16();
+      push_1_int24(INT24(r0_uint16));
+      DISPATCH();
+    }
+
     case OP_CONSTU1: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(uint32_t)r2_uint8;
+      push_1_int8(r2_uint8);
       programCounter += INT8_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTI1: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)r2_int8;
+      push_1_int8(r2_int8);
       programCounter += INT8_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTU2: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(uint32_t)r2_uint16;
+      push_1_uint16(r2_uint16);
       programCounter += INT16_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTI2: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(int32_t)r2_int16;
+      push_1_int16(r2_int16);
       programCounter += INT16_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTI3: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(uint32_t)to_stdint(to_int24(r2));
+      push_1_int24(r2_int24);
       programCounter += INT32_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTU3: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(uint32_t)to_ustdint(to_uint24(r2));
-      programCounter += INT32_INCREMENT;
+      push_1_uint24(r2_uint24);
+      programCounter += INT24_INCREMENT;
       DISPATCH();
     }
 
@@ -1084,9 +1485,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     }
 
     case OP_CONSTI4: {
-      opStack8 += 4;
-      r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(int32_t)r2_int32;
+      push_1_int32(r2);
       programCounter += INT32_INCREMENT;
       DISPATCH();
     }
@@ -1102,7 +1501,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     case OP_CONSTP3: {
       opStack8 += 4;
       r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(int32_t)to_ustdint(r2_uint24);
+      r0 = *opStack32 = (vm_operand_t)(int32_t)r2_uint24_old;
       programCounter += INT24_INCREMENT;
       DISPATCH();
     }
@@ -1110,7 +1509,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
     case OP_CONSTP4: {
       opStack8 += 4;
       r1 = r0;
-      r0 = *opStack32 = (vm_operand_t)(int32_t)to_ustdint(r2_uint24);
+      r0 = *opStack32 = (vm_operand_t)(int32_t)r2_uint24_old;
       programCounter += INT24_INCREMENT;
       DISPATCH();
     }
@@ -1119,7 +1518,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, uint32_t *args) {
 
 done:
   if (opStack32[-1] != 0x0000BEEF) {
-    Com_Error(vm->lastError = VM_STACK_ERROR, "Interpreter stack error");
+    Com_Error(vm->lastError = VM_STACK_ERROR, "Operation stack error");
   }
 
   vm->programStack = stackOnEntry;
@@ -1132,6 +1531,17 @@ done:
 /* --------------- */
 
 #ifdef DEBUG_VM
+
+size_t strlcpy(char *dest, const char *src, size_t size) {
+  size_t ret = strlen(src);
+
+  if (size) {
+    size_t len = (ret >= size) ? size - 1 : ret;
+    memcpy(dest, src, len);
+    dest[len] = '\0';
+  }
+  return ret;
+}
 
 void VM_Debug(const uint8_t level) { vm_debugLevel = level; }
 
@@ -1161,7 +1571,7 @@ static const char *VM_ValueToSymbol(vm_t *vm, int value) {
     return sym->symName;
   }
 
-  snprintf(text, sizeof(text), "%s+%i", sym->symName, value - sym->symValue);
+  sprintf(text, "%s+%i", sym->symName, value - sym->symValue);
 
   return text;
 }
@@ -1388,13 +1798,13 @@ static void VM_StackTrace(vm_t *vm, int programCounter, int programStack) {
   count = 0;
   do {
     Com_Printf("STACK: %s %06X %06X\n", VM_ValueToSymbol(vm, programCounter), programCounter, programStack);
-    programStack   = to_stdint(*(int24_t *)&vm->dataBase[programStack + 3]);
-    programCounter = to_stdint(*(int24_t *)&vm->dataBase[programStack]);
+    programStack   = INT(*(int24_t *)&vm->dataBase[programStack + 3]);
+    programCounter = INT(*(int24_t *)&vm->dataBase[programStack]);
   } while (programCounter != -1 && ++count < 5);
 
   if (programCounter == 0) {
     Com_Printf("STACK: %s %06X %06X\n", VM_ValueToSymbol(vm, programCounter), programCounter, programStack);
-    printf("%06X\n", to_stdint(*(int24_t *)&vm->dataBase[programStack - 6]));
+    printf("%06X\n", INT(*(int24_t *)&vm->dataBase[programStack - 6]));
   }
 }
 
