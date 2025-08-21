@@ -45,12 +45,12 @@ int main(/*const int argc, const char *argv[]*/) {
       return -1;
     }
 
-    int32_t retVal = VM_Call(&vm, 0);
+    const uint8_t retVal = VM_Call(&vm, 0);
     if (retVal == q3vm_verification[i].expected)
       printf("Passed: %s\n", q3vm_verification[i].name);
     else {
       printf("Failed: %s\n", q3vm_verification[i].name);
-      printf("   Expected %d but got %ld\n", q3vm_verification[i].expected, retVal);
+      printf("   Expected %d but got %d\n", q3vm_verification[i].expected, retVal);
     }
   }
 
