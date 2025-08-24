@@ -26,8 +26,9 @@
 /******************************************************************************
  * DEFINES
  ******************************************************************************/
-
+#if 1
 #define MEMORY_SAFE
+#endif
 
 #if 0
 extern size_t strlcpy(char *dst, const char *src, size_t size);
@@ -102,12 +103,11 @@ typedef enum {
 /** File header of a bytecode .qvm file. Can be directly mapped to the start of
  *  the file. This is always little endian encoded in the file. */
 typedef struct {
-  uint32_t vmMagic;          /**< 00: Bytecode image shall start with VM_MAGIC */
-  uint24_t instructionCount; /**< 04: Number of instructions in .qvm */
-  uint24_t codeLength;       /**< 07: Bytes in code segment */
-  uint24_t litLength;        /**< 0A: Bytes in strings segment (after .data segment) */
-  uint24_t dataLength;       /**< 0D: Bytes in .data segment */
-  uint24_t bssLength;        /**< 10: How many bytes should be used for .bss segment */
+  uint32_t vmMagic;    /**< 00: Bytecode image shall start with VM_MAGIC */
+  uint24_t codeLength; /**< 07: Bytes in code segment */
+  uint24_t litLength;  /**< 0A: Bytes in strings segment (after .data segment) */
+  uint24_t dataLength; /**< 0D: Bytes in .data segment */
+  uint24_t bssLength;  /**< 10: How many bytes should be used for .bss segment */
 } vmHeader_t;
 
 #ifdef DEBUG_VM
@@ -125,8 +125,7 @@ typedef struct vmSymbol_s {
 
 /** Main struct (think of a kind of a main class) to keep all information of
  * the virtual machine together. Has pointer to the bytecode, the stack and
- * everything. Call VM_Create(...) to initialize this struct. Call VM_Free(...)
- * to cleanup this struct and free the memory. */
+ * everything. Call VM_Create(...) to initialize this struct. */
 typedef struct vm_s {
   /** Function pointer to callback function for native functions called by
    * the bytecode. The function is identified by an integer id that
@@ -140,8 +139,6 @@ typedef struct vm_s {
   uint32_t (*systemCall)(struct vm_s *vm, uint8_t *parms);
 
   /*------------------------------------*/
-
-  ustdint_t instructionCount; /**< Number of instructions for VM */
 
   const uint8_t *codeBase;   /**< Bytecode code segment in ROM */
   vm_size_t      codeLength; /**< Number of bytes in code segment */
@@ -164,8 +161,11 @@ typedef struct vm_s {
 
   */
 #ifdef DEBUG_VM
-  uint8_t  *debugStorage;
-  stdint_t  debugStorageLength;
+  uint8_t *debugStorage;
+  stdint_t debugStorageLength;
+#endif
+
+#ifdef MEMORY_SAFE
   vm_size_t stackBottom; /**< If programStack < stackBottom, error */
 #endif
 
@@ -201,21 +201,17 @@ typedef struct vm_s {
  *   Note however that parms equals to (-1 - function_id). So -1 in
  *   g_syscalls.asm equals to 0 in the systemCall parms argument, -2 in
  *   g_syscalls.asm is 1 in parms, -3 is 2 and so on.
- * @return 0 if everything is OK. -1 if something went wrong. */
-bool VM_Create(vm_t                *vm,
-               const uint8_t *const bytecode,
-               const vm_size_t      length,
-               uint8_t *const       dataSegment,
-               const vm_size_t      dataSegmentLength,
-               uint32_t (*systemCalls)(vm_t *, uint8_t *));
+ * @return 0 if everything is OK. negative if something went wrong. */
+int VM_Create(vm_t                *vm,
+              const uint8_t *const bytecode,
+              const vm_size_t      length,
+              uint8_t *const       dataSegment,
+              const vm_size_t      dataSegmentLength,
+              uint32_t (*systemCalls)(vm_t *, uint8_t *));
 
 #ifdef DEBUG_VM
 int VM_LoadDebugInfo(vm_t *vm, char *mapfileImage, uint8_t *debugStorage, int debugStorageLength);
 #endif
-
-/** Free the memory of the virtual machine.
- * @param[in] vm Pointer to initialized virtual machine. */
-void VM_Free(vm_t *vm);
 
 /** Run a function from the virtual machine.
  * Use the command argument to tell the VM what to do.
@@ -232,7 +228,7 @@ intptr_t VM_Call(vm_t *vm, ustdint_t command, ...);
  * @param[in] vmAddr Address in virtual machine memory
  * @param[in,out] vm Current VM
  * @return translated address. */
-void *VM_ArgPtr(intptr_t vmAddr, vm_t *vm);
+void *VM_ArgPtr(intptr_t vmAddr, vm_t *const vm);
 
 /** Helper function for syscalls VMF(x) macro:
  * Get argument in syscall and interpret it bit by bit as IEEE 754 float.
@@ -269,10 +265,6 @@ void VM_VmProfile_f(vm_t *vm);
  * Set to 1 for general informations and 2 to output every opcode name.
  * @param[in] level If level is 0: be quiet (default). */
 void VM_Debug(uint8_t level);
-#else
-#define VM_VmProfile_f(a)
-#define VM_Debug(a)
-#endif
 
 /******************************************************************************
  * CALLBACK FUNCTIONS (USER DEFINED IN HOST APPLICATION)
@@ -283,5 +275,31 @@ void VM_Debug(uint8_t level);
  * @param[in] level Error identifier, see vmErrorCode_t.
  * @param[in] error Human readable error text. */
 void Com_Error(vmErrorCode_t level, const char *error);
+#define VM_AbortError(a, description)                                                                                              \
+  {                                                                                                                                \
+    vm->lastError = a;                                                                                                             \
+    Com_Error(a, description);                                                                                                     \
+    return a;                                                                                                                      \
+  }
+
+#define VM_Error(a, description)                                                                                                   \
+  {                                                                                                                                \
+    Com_Error(a, description);                                                                                                     \
+  }
+
+#else
+#define VM_VmProfile_f(a)
+#define VM_Debug(a)
+#define Com_Error(level, error)
+
+#define VM_AbortError(a, description)                                                                                              \
+  {                                                                                                                                \
+    vm->lastError = a;                                                                                                             \
+    return a;                                                                                                                      \
+  }
+
+#define VM_Error(a, description)
+
+#endif
 
 #endif /* __Q3VM_H */

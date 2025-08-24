@@ -20,6 +20,7 @@ void vdu(uint8_t code) { VM_Call(&vm, 0, code); }
 
 /*   VM HOST INTERFACE   */
 
+#ifdef DEBUG_VM
 /* Callback from the VM that something went wrong
  * @param[in] level Error id, see vmErrorCode_t definition.
  * @param[in] error Human readable error text. */
@@ -28,6 +29,7 @@ void Com_Error(vmErrorCode_t level, const char *error) {
   //  fprintf(stderr, "Err (%i): %s\n", level, error);
   //  exit(level);
 }
+#endif
 
 uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   const int id = -1 - args[0];

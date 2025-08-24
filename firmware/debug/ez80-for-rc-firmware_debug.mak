@@ -47,7 +47,7 @@ WEBTOC = @"$(BIN)\mkwebpage"
 CFLAGS =  \
 -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
 -define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
--listinc -NOmodsect -optspeed -promote -NOreduceopt  \
+-listinc -NOmodsect -optsize -promote -NOreduceopt  \
 -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
@@ -1336,6 +1336,8 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
@@ -1363,6 +1365,8 @@ $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.c.h  \
