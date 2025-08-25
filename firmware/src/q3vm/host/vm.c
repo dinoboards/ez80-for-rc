@@ -598,6 +598,15 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   log3_2(FMT_INT8 " POP uint8\n", Rx.uint8);                                                                                       \
   opStack8 -= 4;
 
+#define pop_1_float(Rx)                                                                                                            \
+  Rx.flt = *((float *)opStack8);                                                                                                   \
+  log3_2(FMT_FLT " POP float\n", Rx.flt);                                                                                          \
+  opStack8 -= 4;
+
+#define retrieve_1_float(Rx)                                                                                                       \
+  Rx.flt = *((float *)opStack8);                                                                                                   \
+  log3_2(FMT_FLT " POP float\n", Rx.flt);
+
 #define push_1_float(a)                                                                                                            \
   opStack8 += 4;                                                                                                                   \
   *opStackFlt = a;                                                                                                                 \
@@ -605,6 +614,10 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 
 #define push_1_int32(a)                                                                                                            \
   opStack8 += 4;                                                                                                                   \
+  *opStack32 = a;                                                                                                                  \
+  log3_2(FMT_INT32 " PUSHED int32\n", *opStack32);
+
+#define assign_1_int32(a)                                                                                                          \
   *opStack32 = a;                                                                                                                  \
   log3_2(FMT_INT32 " PUSHED int32\n", *opStack32);
 
@@ -648,6 +661,39 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   opStack8 += 4;                                                                                                                   \
   *opStack32 = (int8_t)(a);                                                                                                        \
   log3_2(FMT_INT8 " PUSHED int8\n", *opStack32);
+
+#define R_int24     (*((int24_t *)(opStack8)))
+#define R0_int24(k) (*((int24_t *)(opStack8 - k)))
+#define R1_int24(k) (*((int24_t *)(opStack8 - k - 4)))
+
+#define R_int32     (*((int32_t *)(opStack8)))
+#define R0_int32(k) (*((int32_t *)(opStack8 - k)))
+#define R1_int32(k) (*((int32_t *)(opStack8 - k - 4)))
+
+#define R_uint32     (*((uint32_t *)(opStack8)))
+#define R0_uint32(k) (*((uint32_t *)(opStack8 - k)))
+#define R1_uint32(k) (*((uint32_t *)(opStack8 - k - 4)))
+
+#define op_2_int24_to_1_int24(operation)                                                                                           \
+  log3_3(FMT_INT24 " " FMT_INT24 " POP int24\n", INT(R1_int24(0)), INT(R0_int24(0)));                                              \
+  opStack8 -= 4;                                                                                                                   \
+  log3_3(FMT_INT24 " " #operation " " FMT_INT24 " ", INT(R1_int24(-4)), INT(R0_int24(-4)));                                        \
+  R_int24 = INT24(INT(R1_int24(-4)) operation INT(R0_int24(-4)));                                                                  \
+  log3_2(FMT_INT24 " PUSHED int24\n", INT(R_int24));
+
+#define op_2_int32_to_1_int32(operation)                                                                                           \
+  log3_3(FMT_INT32 " " FMT_INT32 " POP int32\n", R1_int32(0), R0_int32(0));                                                        \
+  opStack8 -= 4;                                                                                                                   \
+  log3_3(FMT_INT32 " " #operation " " FMT_INT32 " =", R1_int32(-4), R0_int32(-4));                                                 \
+  R_int32 = R1_int32(-4) operation R0_int32(-4);                                                                                   \
+  log3_2(FMT_INT32 " PUSHED int32\n", R_int32);
+
+#define op_2_uint32_to_1_uint32(operation)                                                                                         \
+  log3_3(FMT_INT32 " " FMT_INT32 " POP uint32\n", R1_uint32(0), R0_uint32(0));                                                     \
+  opStack8 -= 4;                                                                                                                   \
+  log3_3(FMT_INT32 " " #operation " " FMT_INT32 " =", R1_uint32(-4), R0_uint32(-4));                                               \
+  R_uint32 = R1_uint32(-4) operation R0_uint32(-4);                                                                                \
+  log3_2(FMT_INT32 " PUSHED uint32\n", R_uint32);
 
 typedef union stack_entry_u {
   int8_t   int8;
@@ -763,16 +809,13 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       DISPATCH();
 
     case OP_ADD3: {
-      pop_2_int24();
-      log3_3(FMT_INT32 " + " FMT_INT32 " = ", INT(R1.int24), INT(R0.int24));
-      push_1_int24(INT24(INT(R1.int24) + INT(R0.int24)));
+      op_2_int24_to_1_int24(+);
+
       DISPATCH();
     }
 
     case OP_ADD4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " + " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_int32(R1.int32 + R0.int32);
+      op_2_int32_to_1_int32(+);
       DISPATCH();
     }
 
@@ -932,10 +975,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     }
 
     case OP_CF4I4: {
-      *opStack32 = Q_ftol(opStackFlt[0]);
+      *opStack32 = (int32_t)*((float *)opStack8);
       DISPATCH();
     }
-
       /* extend sign I1 to I3*/
     case OP_CI1I3: {
       pop_1_int8(R0);
@@ -1120,9 +1162,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       DISPATCH();
 
     case OP_DIVI: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " / " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_int32(R1.int32 / R0.int32);
+      // clang-format off
+      op_2_int32_to_1_int32( / );
+      // clang-format on
       DISPATCH();
     }
 
@@ -1134,8 +1176,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     }
 
     case OP_DIVU: {
-      opStack8 -= 4;
-      *opStack32 = ((unsigned)R1.int32) / ((unsigned)R0.int32);
+      // clang-format off
+      op_2_uint32_to_1_uint32( / );
+      // clang-format on
       DISPATCH();
     }
 
