@@ -499,7 +499,7 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
       if (((vm_size_t)(vaddr) > 0xFF0000)) {                                                                                       \
         fn(io_read(vaddr));                                                                                                        \
       } else {                                                                                                                     \
-        fn(*(((vm_size_t)(vaddr) < litLength) ? &codeBase[codeLength + (vm_size_t)(vaddr)] : &dataBase[(vm_size_t)(vaddr)]));      \
+        fn(*(((vm_size_t)(vaddr) < litLength) ? &litBase[(vm_size_t)(vaddr)] : &dataBase[(vm_size_t)(vaddr)]));                    \
       }                                                                                                                            \
     }                                                                                                                              \
   }
@@ -507,7 +507,7 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 #define VM_GetReadAddr(vaddr, size)                                                                                                \
   (!VM_VerifyReadOK(vm, vaddr, size)                                                                                               \
        ? bad_memory                                                                                                                \
-       : (((((vm_size_t)(vaddr) < litLength) ? &codeBase[codeLength + (vm_size_t)(vaddr)] : &dataBase[(vm_size_t)(vaddr)]))))
+       : (((((vm_size_t)(vaddr) < litLength) ? &litBase[(vm_size_t)(vaddr)] : &dataBase[(vm_size_t)(vaddr)]))))
 
 #define VM_WriteAddrByte(vaddr, value)                                                                                             \
   {                                                                                                                                \
@@ -683,6 +683,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
   const uint8_t *const codeBase   = vm->codeBase;
   const vm_size_t      litLength  = vm->litLength;
   const vm_size_t      codeLength = vm->codeLength;
+  const uint8_t *const litBase    = codeBase + codeLength;
 
 #ifdef DEBUG_VM
   vmSymbol_t *profileSymbol;
