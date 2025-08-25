@@ -124,7 +124,7 @@ static const char *VM_ValueToSymbol(vm_t *vm, int value);
  * should have the same path as the .qvm file. */
 static void VM_LoadSymbols(vm_t *vm, char *mapfile, uint8_t *debugStorage, int debugStorageLength);
 /** Print a stack trace on OP_ENTER if vm_debugLevel is > 0 */
-static void VM_StackTrace(vm_t *vm, int programCounter, int programStack);
+static void VM_StackTrace(vm_t *vm, int vPC, int programStack);
 
 #endif
 
@@ -403,7 +403,7 @@ locals from sp
 ==============
 */
 
-#define R2 (*((stack_entry_t *)&codeBase[programCounter]))
+#define R2 (*((stack_entry_t *)PC))
 
 #define INT_INCREMENT       sizeof(uint32_t)
 #define INT8_INCREMENT      sizeof(uint8_t)
@@ -661,11 +661,19 @@ typedef union stack_entry_u {
   float    flt;
 } stack_entry_t;
 
+#define vPC ((int)(PC - codeBase))
+
+typedef const uint8_t *PC_t;
+
 /* FIXME: this needs to be locked to uint24_t to ensure platform agnostic */
 static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
+#ifdef MEMORY_SAFE
+  const uint8_t *const PC_end = &vm->codeBase[vm->codeLength];
+#endif
+
   uint8_t       _opStack[OPSTACK_SIZE + 4]; /* 256 4 byte double words + 4 safety bytes */
   uint8_t      *opStack8 = &_opStack[4];
-  stdint_t      programCounter;
+  PC_t          PC;
   ustdint_t     programStack;
   ustdint_t     stackOnEntry;
   uint8_t       opcode;
@@ -690,7 +698,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
   vm->breakFunction = 0;
 #endif
 
-  programCounter = 0;
+  PC = codeBase;
   programStack -= (6 + 3 * MAX_VMMAIN_ARGS);
 
   memcpy(&dataBase[programStack + 6], args, MAX_VMMAIN_ARGS * 3);
@@ -715,19 +723,19 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 
 #ifdef DEBUG_VM
     if (vm_debugLevel > 1) {
-      Com_Printf(FMT_INT24 ":\t", programCounter);
+      Com_Printf(FMT_INT24 ":\t", vPC);
     }
 #endif
 
 #ifdef MEMORY_SAFE
-    if (programCounter >= (stdint_t)vm->codeLength)
+    if (PC >= PC_end)
       VM_AbortError(VM_PC_OUT_OF_RANGE, "VM pc out of range");
 
     if (programStack <= vm->stackBottom)
       VM_AbortError(VM_STACK_OVERFLOW, "VM stack overflow");
 #endif
 
-    opcode = codeBase[programCounter++];
+    opcode = *PC++;
 
 #ifdef DEBUG_VM
     if (vm_debugLevel > 1) {
@@ -782,7 +790,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
              programStack + R2.int8, UINT(R0.uint24));
 #endif
       *(uint24_t *)&dataBase[programStack + R2.int8] = R0.uint24;
-      programCounter += 1;
+      PC++;
       DISPATCH();
     }
 
@@ -793,7 +801,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
              programStack + R2.int8, R0.uint32);
 #endif
       *(uint32_t *)&dataBase[programStack + R2.int8] = R0.uint32;
-      programCounter += 1;
+      PC++;
       DISPATCH();
     }
 
@@ -809,7 +817,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 
       *((uint32_t *)&dataBase[programStack + R2.int8]) = R0.int32;
       opStack8 -= 4;
-      programCounter += 1;
+      PC++;
       DISPATCH();
     }
 
@@ -843,7 +851,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 
     case OP_BLOCK_COPY: {
       VM_BlockCopy(R1.int32, R0.int32, UINT(R2.uint24), vm);
-      programCounter += INT24_INCREMENT;
+      PC += INT24_INCREMENT;
       opStack8 -= 8;
       DISPATCH();
     }
@@ -877,17 +885,17 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     }
 
     case OP_CALL: {
-      *(int24_t *)&dataBase[programStack] = INT24(programCounter); /* save current program counter */
+      *(int24_t *)&dataBase[programStack] = INT24(vPC); /* save current program counter */
       pop_1_int24(R0);
 
-      programCounter = INT(R0.int24); /* jump to the location on the stack */
+      PC = codeBase + INT(R0.int24); /* jump to the location on the stack */
 
-      if ((programCounter) < 0) /* system call */
+      if (INT(R0.int24) < 0) /* system call */
       {
         vm_operand_t r;
 #ifdef DEBUG_VM
         if (vm_debugLevel) {
-          Com_Printf("%s%i---> systemcall(%i)\n", VM_Indent(vm), (int)(opStack8 - _opStack), -1 - programCounter);
+          Com_Printf("%s%i---> systemcall(%i)\n", VM_Indent(vm), (int)(opStack8 - _opStack), -1 - vPC);
         }
 #endif
 
@@ -896,7 +904,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 #ifdef DEBUG_VM
         stomped = INT(*(int24_t *)&dataBase[programStack + 3]);
 #endif
-        *(int24_t *)&dataBase[programStack + 3] = INT24(-1 - programCounter); /*command*/
+        *(int24_t *)&dataBase[programStack + 3] = INT24(-1 - vPC); /*command*/
 
         r = vm->systemCall(vm, &dataBase[programStack + 3]);
 
@@ -907,16 +915,16 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 #endif
 
         opStack8 += 4; /* save return value */
-        *opStack32     = r;
-        programCounter = INT(*(int24_t *)&dataBase[programStack]);
+        *opStack32 = r;
+        PC         = codeBase + INT(*(int24_t *)&dataBase[programStack]);
 #ifdef DEBUG_VM
         if (vm_debugLevel) {
-          Com_Printf("%s%i<--- %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, programCounter));
+          Com_Printf("%s%i<--- %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, vPC));
         }
 #endif
       }
 #ifdef MEMORY_SAFE
-      else if ((unsigned)programCounter >= MAX_PROGRAM_COUNTER)
+      else if (PC >= PC_end)
         VM_AbortError(VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_CALL");
 #endif
       DISPATCH();
@@ -1004,60 +1012,61 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 
     case OP_CONSTGP3: {
       push_1_uint24(R2.uint24);
-      programCounter += INT24_INCREMENT;
+      PC += INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTI1: {
       push_1_int8(R2.int8);
-      programCounter += INT8_INCREMENT;
+      PC += INT8_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTI2: {
       push_1_int16(R2.int16);
-      programCounter += INT16_INCREMENT;
+      PC += INT16_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTI3: {
       push_1_int24(R2.int24);
-      programCounter += INT32_INCREMENT;
+      PC += INT32_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTI4: {
       push_1_int32(R2.int32);
-      programCounter += INT32_INCREMENT;
+      PC += INT32_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTP3: {
-      push_1_uint24(R2.uint24) programCounter += INT24_INCREMENT;
+      push_1_uint24(R2.uint24);
+      PC += INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTU1: {
       push_1_int8(R2.uint8);
-      programCounter += INT8_INCREMENT;
+      PC += INT8_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTU2: {
       push_1_uint16(R2.uint16);
-      programCounter += INT16_INCREMENT;
+      PC += INT16_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTU3: {
       push_1_uint24(R2.uint24);
-      programCounter += INT24_INCREMENT;
+      PC += INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_CONSTU4: {
       push_1_uint32(R2.uint32);
-      programCounter += INT32_INCREMENT;
+      PC += INT32_INCREMENT;
       DISPATCH();
     }
 
@@ -1134,22 +1143,22 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 
     case OP_ENTER: {
       const uint16_t localsAndArgsSize = R2.int16;
-      programCounter += INT16_INCREMENT;
+      PC += INT16_INCREMENT;
       programStack -= localsAndArgsSize;
       log3_4("FRAME SIZE: " FMT_INT16 " (from " FMT_INT24 " to " FMT_INT24 ")\n", localsAndArgsSize,
              programStack + localsAndArgsSize, programStack);
 
 #ifdef DEBUG_VM
-      profileSymbol = VM_ValueToFunctionSymbol(vm, programCounter - 3);
+      profileSymbol = VM_ValueToFunctionSymbol(vm, vPC - 3);
       /* save old stack frame for debugging traces */
       *(int24_t *)&dataBase[programStack + 3] = INT24(programStack + localsAndArgsSize);
       if (vm_debugLevel) {
-        Com_Printf("%s%i---> %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, programCounter - 3));
+        Com_Printf("%s%i---> %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, vPC - 3));
         {
           /* this is to allow setting breakpoints here in the
            * debugger */
           vm->breakCount++;
-          VM_StackTrace(vm, programCounter - 3, programStack);
+          VM_StackTrace(vm, vPC - 3, programStack);
         }
       }
 #endif
@@ -1159,14 +1168,14 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_EQ3: {
       pop_2_uint24();
       log3_3(FMT_INT24 " == " FMT_INT24 "\n", UINT(R1.uint24), UINT(R0.uint24));
-      programCounter = (UINT(R1.uint24) == UINT(R0.uint24)) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (UINT(R1.uint24) == UINT(R0.uint24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_EQ4: {
       pop_2_int32();
       log3_3(FMT_INT32 " == " FMT_INT32 "\n", R1.int32, R0.int32);
-      programCounter = (R1.int32 == R0.int32) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.int32 == R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
@@ -1174,10 +1183,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       opStack8 -= 8;
 
       if (opStackFlt[1] == opStackFlt[2]) {
-        programCounter = INT(R2.int24);
+        PC = codeBase + INT(R2.int24);
         DISPATCH();
       } else {
-        programCounter += INT_INCREMENT;
+        PC += INT_INCREMENT;
         DISPATCH();
       }
     }
@@ -1188,21 +1197,21 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_GEF4: {
       pop_2_floats();
       log3_3(FMT_FLT " >= " FMT_FLT "\n", R1.flt, R0.flt);
-      programCounter = (R1.flt >= R0.flt) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.flt >= R0.flt) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_GEI3: {
       pop_2_int24();
       log3_3(FMT_INT24 " >= " FMT_INT24 "\n", INT(R1.int24), INT(R0.int24));
-      programCounter = (INT(R1.int24) >= INT(R0.int24)) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (INT(R1.int24) >= INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_GEI4: {
       pop_2_int32();
       log3_3(FMT_INT32 " >= " FMT_INT32 "\n", R1.int32, R0.int32);
-      programCounter = (R1.int32 >= R0.int32) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.int32 >= R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
@@ -1212,10 +1221,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_GEU4: {
       opStack8 -= 8;
       if (((unsigned)R1.int32) >= ((unsigned)R0.int32)) {
-        programCounter = INT(R2.int24);
+        PC = codeBase + INT(R2.int24);
         DISPATCH();
       } else {
-        programCounter += INT_INCREMENT;
+        PC += INT_INCREMENT;
         DISPATCH();
       }
     }
@@ -1224,10 +1233,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       opStack8 -= 8;
 
       if (opStackFlt[1] > opStackFlt[2]) {
-        programCounter = INT(R2.int24);
+        PC = codeBase + INT(R2.int24);
         DISPATCH();
       } else {
-        programCounter += INT_INCREMENT;
+        PC += INT_INCREMENT;
         DISPATCH();
       }
     }
@@ -1235,14 +1244,14 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_GTI3: {
       pop_2_int24();
       log3_3(FMT_INT24 " > " FMT_INT24 "\n", INT(R1.int24), INT(R0.int24));
-      programCounter = (INT(R1.int24) > INT(R0.int24)) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (INT(R1.int24) > INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_GTI4: {
       pop_2_int32();
       log3_3(FMT_INT32 " > " FMT_INT32 "\n", R1.int32, R0.int32);
-      programCounter = (R1.int32 > R0.int32) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.int32 > R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
@@ -1252,10 +1261,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_GTU4: {
       opStack8 -= 8;
       if (((unsigned)R1.int32) > ((unsigned)R0.int32)) {
-        programCounter = INT(R2.int24);
+        PC = codeBase + INT(R2.int24);
         DISPATCH();
       } else {
-        programCounter += INT_INCREMENT;
+        PC += INT_INCREMENT;
         DISPATCH();
       }
     }
@@ -1266,7 +1275,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
         VM_AbortError(VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_JUMP");
 #endif
 
-      programCounter = R0.int32;
+      PC = codeBase + R0.int32;
       opStack8 -= 4;
       DISPATCH();
     }
@@ -1277,19 +1286,19 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       programStack += R2.int16;
 
       /* grab the saved program counter */
-      programCounter = INT(*(int24_t *)&dataBase[programStack]);
+      PC = codeBase + INT(*(int24_t *)&dataBase[programStack]);
 #ifdef DEBUG_VM
-      profileSymbol = VM_ValueToFunctionSymbol(vm, programCounter);
+      profileSymbol = VM_ValueToFunctionSymbol(vm, vPC);
       if (vm_debugLevel) {
-        Com_Printf("%s%i<--- %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, programCounter));
+        Com_Printf("%s%i<--- %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, vPC));
       }
 #endif
       /* check for leaving the VM */
-      if (programCounter == -1)
+      if (vPC == -1)
         goto done;
 
 #ifdef MEMORY_SAFE
-      if ((unsigned)programCounter >= (unsigned)vm->codeLength)
+      if (PC >= PC_end)
         VM_AbortError(VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_LEAVE");
 #endif
 
@@ -1299,31 +1308,31 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_LEF4: {
       pop_2_floats();
       log3_3(FMT_FLT " <= " FMT_FLT "\n", R1.flt, R0.flt);
-      programCounter = (R1.flt <= R0.flt) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.flt <= R0.flt) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_LEI3: {
       pop_2_int24();
       log3_3(FMT_INT24 " <= " FMT_INT24 "\n", INT(R1.int24), INT(R0.int24));
-      programCounter = (INT(R1.int24) <= INT(R0.int24)) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (INT(R1.int24) <= INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_LEI4: {
       pop_2_int32();
       log3_3(FMT_INT32 " <= " FMT_INT32 "\n", R1.int32, R0.int32);
-      programCounter = (R1.int32 <= R0.int32) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.int32 <= R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_LEU: {
       opStack8 -= 8;
       if (((unsigned)R1.int32) <= ((unsigned)R0.int32)) {
-        programCounter = INT(R2.int24);
+        PC = codeBase + INT(R2.int24);
         DISPATCH();
       } else {
-        programCounter += INT_INCREMENT;
+        PC += INT_INCREMENT;
         DISPATCH();
       }
     }
@@ -1365,7 +1374,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_LOCAL: {
       log3_2("&PS[" FMT_INT16 "]", R2.uint16);
       push_1_uint24(UINT24(R2.uint16 + programStack));
-      programCounter += INT16_INCREMENT;
+      PC += INT16_INCREMENT;
       DISPATCH();
     }
 
@@ -1386,31 +1395,31 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_LTF: {
       pop_2_floats();
       log3_3(FMT_FLT " < " FMT_FLT "\n", R1.flt, R0.flt);
-      programCounter = (R1.flt < R0.flt) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.flt < R0.flt) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_LTI3: {
       pop_2_int24();
       log3_4(FMT_INT24 " < " FMT_INT24 " = %d\n", INT(R1.int24), INT(R0.int24), (INT(R1.int24) < INT(R0.int24)));
-      programCounter = (INT(R1.int24) < INT(R0.int24)) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (INT(R1.int24) < INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_LTI4: {
       pop_2_int32();
       log3_3(FMT_INT32 " < " FMT_INT32 "\n", R1.int32, R0.int32);
-      programCounter = (R1.int32 < R0.int32) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.int32 < R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_LTU: {
       opStack8 -= 8;
       if (((unsigned)R1.int32) < ((unsigned)R0.int32)) {
-        programCounter = INT(R2.int24);
+        PC = codeBase + INT(R2.int24);
         DISPATCH();
       } else {
-        programCounter += INT_INCREMENT;
+        PC += INT_INCREMENT;
         DISPATCH();
       }
     }
@@ -1471,14 +1480,14 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     case OP_NE3: {
       pop_2_uint24();
       log3_3(FMT_INT24 " != " FMT_INT24 "\n", UINT(R1.uint24), UINT(R0.uint24));
-      programCounter = (UINT(R1.uint24) != UINT(R0.uint24)) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (UINT(R1.uint24) != UINT(R0.uint24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
     case OP_NE4: {
       pop_2_int32();
       log3_3(FMT_INT32 " != " FMT_INT32 "\n", R1.int32, R0.int32);
-      programCounter = (R1.int32 != R0.int32) ? UINT(R2.uint24) : programCounter + INT24_INCREMENT;
+      PC = (R1.int32 != R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
       DISPATCH();
     }
 
@@ -1486,10 +1495,10 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       opStack8 -= 8;
 
       if (opStackFlt[1] != opStackFlt[2]) {
-        programCounter = INT(R2.int24);
+        PC = codeBase + INT(R2.int24);
         DISPATCH();
       } else {
-        programCounter += INT_INCREMENT;
+        PC += INT_INCREMENT;
         DISPATCH();
       }
     }
@@ -1607,7 +1616,16 @@ done:
   vm->programStack = stackOnEntry;
 
   /* return the result of the bytecode computations */
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
   return *opStack32;
+#pragma GCC diagnostic pop
+#else
+  return *opStack32;
+
+#endif
 }
 
 /* DEBUG FUNCTIONS */
@@ -1877,18 +1895,18 @@ static void VM_LoadSymbols(vm_t *vm, char *mapfile, uint8_t *debugStorage, int d
   Com_Printf("%i symbols parsed\n", count);
 }
 
-static void VM_StackTrace(vm_t *vm, int programCounter, int programStack) {
+static void VM_StackTrace(vm_t *vm, int _program_counter, int programStack) {
   int count;
 
   count = 0;
   do {
-    Com_Printf("STACK: %s " FMT_INT24 " " FMT_INT24 "\n", VM_ValueToSymbol(vm, programCounter), programCounter, programStack);
-    programStack   = INT(*(int24_t *)&vm->dataBase[programStack + 3]);
-    programCounter = INT(*(int24_t *)&vm->dataBase[programStack]);
-  } while (programCounter != -1 && ++count < 5);
+    Com_Printf("STACK: %s " FMT_INT24 " " FMT_INT24 "\n", VM_ValueToSymbol(vm, _program_counter), _program_counter, programStack);
+    programStack     = INT(*(int24_t *)&vm->dataBase[programStack + 3]);
+    _program_counter = INT(*(int24_t *)&vm->dataBase[programStack]);
+  } while (_program_counter != -1 && ++count < 5);
 
-  if (programCounter == 0) {
-    Com_Printf("STACK: %s " FMT_INT24 " " FMT_INT24 "\n", VM_ValueToSymbol(vm, programCounter), programCounter, programStack);
+  if (_program_counter == 0) {
+    Com_Printf("STACK: %s " FMT_INT24 " " FMT_INT24 "\n", VM_ValueToSymbol(vm, _program_counter), _program_counter, programStack);
     printf(FMT_INT24 "\n", INT(*(int24_t *)&vm->dataBase[programStack - 6]));
   }
 }
