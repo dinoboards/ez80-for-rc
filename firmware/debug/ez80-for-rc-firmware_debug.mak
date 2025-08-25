@@ -47,7 +47,7 @@ WEBTOC = @"$(BIN)\mkwebpage"
 CFLAGS =  \
 -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
 -define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
--listinc -NOmodsect -optsize -promote -NOreduceopt  \
+-listinc -NOmodsect -optspeed -promote -NOreduceopt  \
 -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
@@ -600,6 +600,22 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
+	@if exist "$(WORKDIR)\system-calls.obj"  \
+            $(RM) "$(WORKDIR)\system-calls.obj"
+	@if exist "$(WORKDIR)\system-calls.lis"  \
+            $(RM) "$(WORKDIR)\system-calls.lis"
+	@if exist "$(WORKDIR)\system-calls.lst"  \
+            $(RM) "$(WORKDIR)\system-calls.lst"
+	@if exist "$(WORKDIR)\system-calls.src"  \
+            $(RM) "$(WORKDIR)\system-calls.src"
+	@if exist "$(WORKDIR)\vdu_init.obj"  \
+            $(RM) "$(WORKDIR)\vdu_init.obj"
+	@if exist "$(WORKDIR)\vdu_init.lis"  \
+            $(RM) "$(WORKDIR)\vdu_init.lis"
+	@if exist "$(WORKDIR)\vdu_init.lst"  \
+            $(RM) "$(WORKDIR)\vdu_init.lst"
+	@if exist "$(WORKDIR)\vdu_init.src"  \
+            $(RM) "$(WORKDIR)\vdu_init.src"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -681,7 +697,9 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj  \
+            $(WORKDIR_ESCSPACE)\system-calls.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_init.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -1471,4 +1489,12 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
+
+$(WORKDIR_ESCSPACE)\system-calls.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\system-calls.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\system-calls.c"
+
+$(WORKDIR_ESCSPACE)\vdu_init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_init.c"
 

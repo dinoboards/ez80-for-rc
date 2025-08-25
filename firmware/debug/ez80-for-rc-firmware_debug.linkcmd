@@ -7,7 +7,7 @@
 /* compiler options */
 /* -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
 /* -define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list */
-/* -listinc -NOmodsect -optsize -promote -NOreduceopt */
+/* -listinc -NOmodsect -optspeed -promote -NOreduceopt */
 /* -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92 */
 /*-asmsw:"  */
@@ -172,6 +172,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
+ ".\system-calls.obj", \
+ ".\vdu_init.obj", \
  "C:\ZDS\lib\std\chelpD.lib", \
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \

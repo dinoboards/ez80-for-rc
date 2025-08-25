@@ -78,6 +78,8 @@
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
+<file filter-key="">src\rst-10-drivers\crt\system-calls.c</file>
+<file filter-key="">src\rst-10-drivers\crt\vdu_init.c</file>
 </files>
 
 <!-- configuration information -->
@@ -244,7 +246,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="list" type="boolean" change-action="none">true</option>
 <option name="listinc" type="boolean" change-action="none">true</option>
 <option name="modsect" type="boolean" change-action="compile">false</option>
-<option name="optspeed" type="boolean" change-action="compile">false</option>
+<option name="optspeed" type="boolean" change-action="compile">true</option>
 <option name="promote" type="boolean" change-action="compile">true</option>
 <option name="reduceopt" type="boolean" change-action="compile">false</option>
 <option name="stdinc" type="string" change-action="compile">src\includes</option>

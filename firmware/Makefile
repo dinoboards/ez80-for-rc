@@ -12,4 +12,4 @@ release: VM_VDU
 
 .PHONY: VM_VDU
 VM_VDU:
-	@$(MAKE) -C ./src/q3vm/vdu
+	@$(MAKE) -C ./src/rst-10-drivers/crt/vm

@@ -4,12 +4,6 @@ set -e
 
 PATH=${PATH}:../../q3vm/tools/
 
-lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o dispatch.vmasm dispatch.c
-lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu.vmasm vdu.c
-lcc -I../includes -DQ3_VM -S -Wf-target=bytecode -Wf-g -o vdu_init.vmasm vdu_init.c
-
-q3asm -l -v -m -f bytecode
-
 bytecodeSize=$(stat -c %s "bytecode.qvm")
 
 # # typedef struct {
@@ -31,16 +25,12 @@ bssLengthM=$(xxd -s 17 -g 1 -e -l 1 -R never ./bytecode.qvm | cut -d' ' -f2)
 bssLengthH=$(xxd -s 18 -g 1 -e -l 1 -R never ./bytecode.qvm | cut -d' ' -f2)
 bssLength="${bssLengthH}${bssLengthM}${bssLengthL}"
 
-ramRequired=$((0x$dataLength+0x$bssLength))
-
-echo data: ${dataLength}
-echo bss: ${bssLength}
-echo bytecodeSize: ${bytecodeSize}
-echo ramRequired: ${ramRequired}
+ramRequired=516
+# $((0x$dataLength+0x$bssLength))
 
 IMAGE_NAME=vdu_vm_bytecode
 IMAGE_NAME_UPCASE=VDU_VM_BYTECODE
-OUTPUT_FILE="../../rst-10-drivers/crt/${IMAGE_NAME}"
+OUTPUT_FILE="../${IMAGE_NAME}"
 
 cat <<EOT > "${OUTPUT_FILE}.h"
 #ifndef __${IMAGE_NAME_UPCASE}
@@ -67,7 +57,7 @@ const uint8_t ${IMAGE_NAME}[${IMAGE_NAME_UPCASE}_SIZE] = {
 EOT
 
 
-xxd -c 1 ./bytecode.qvm | while read offset hex char; do
+xxd -c 1 ./bytecode.qvm |  cut -d' ' -f2 | while read hex; do
   printf "0x" >> ./${OUTPUT_FILE}.c
   printf $hex >> ./${OUTPUT_FILE}.c
   printf "," >> ./${OUTPUT_FILE}.c

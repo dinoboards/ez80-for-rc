@@ -26,7 +26,7 @@
 /******************************************************************************
  * DEFINES
  ******************************************************************************/
-#if 1
+#if 0
 #define MEMORY_SAFE
 #endif
 
@@ -246,6 +246,7 @@ float VM_IntToFloat(int32_t x);
  * @return Floating point number as integer */
 int32_t VM_FloatToInt(float f);
 
+#ifdef MEMORY_SAFE
 /** Helper function for syscalls:
  * Check if address + range in in the valid VM memory range.
  * Use this function in the syscall callback to keep the VM in its sandbox.
@@ -253,7 +254,8 @@ int32_t VM_FloatToInt(float f);
  * @param[in] len Length in bytes
  * @param[in] vm Current VM
  * @return 0 if valid (!), -1 if invalid. */
-bool VM_MemoryRangeValid(const vm_size_t vmAddr, const vm_size_t len, const vm_t *const vm);
+bool VM_MemoryRangeValid(const vm_size_t vmAddr, const vm_size_t len, vm_t *const vm);
+#endif
 
 #ifdef DEBUG_VM
 /** Print call statistics for every function. Only works with DEBUG_VM.
@@ -298,7 +300,7 @@ void Com_Error(vmErrorCode_t level, const char *error);
     return a;                                                                                                                      \
   }
 
-#define VM_Error(a, description)
+#define VM_Error(a, description) vm->lastError = a;
 
 #endif
 

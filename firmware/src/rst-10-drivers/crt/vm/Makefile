@@ -3,21 +3,24 @@ BIN=./bin/
 MAKEFLAGS += --no-print-directory
 .DELETE_ON_ERROR:
 
-$(shell cd ../tools && ./grab-compilers.sh )
 
-LCC := ../tools/lcc
-Q3ASM := ../tools/q3asm
+$(shell cd ../../../q3vm/tools && ./grab-compilers.sh )
 
-INCLUDES :=  $(wildcard ../includes/*.h)
+LCC := ../../../q3vm/tools/lcc
+Q3ASM := ../../../q3vm/tools/q3asm
+
+INCLUDES :=  $(wildcard ../../../q3vm/includes/*.h)
 VDU_C_SOURCE := $(wildcard ./*.c)
-VM_TOOLS := $(wildcard ../tools/*)
-VM_C_SOURCE := $(wildcard ../host/*)
+VM_TOOLS := $(wildcard ../../../q3vm/tools/*)
+VM_C_SOURCE := $(wildcard ../../../a3vm/host/*)
 VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
-all: bytecode.qvm
+INCLUDE_PATH := ../../../../../../../../../../../../../../../../../../../../$(shell realpath ../../../q3vm/includes/)
+
+all: ../vdu_vm_bytecode.c
 
 %.vmasm: %.c
-	@$(LCC) -I$(shell realpath -s --relative-to="$<" "includes") -DQ3_VM -S -Wf-target=bytecode -Wf-g -o $@ $<
+	@$(LCC) -I$(INCLUDE_PATH) -DQ3_VM -S -Wf-target=bytecode -Wf-g -o $@ $<
 	@echo "Compiled $<"
 
 vdu.vmasm: vdu.c $(INCLUDES) $(VM_TOOLS) $(VM_C_SOURCE)
@@ -27,6 +30,7 @@ dispatch.vmasm: dispatch.c $(INCLUDES) $(VM_TOOLS) $(VM_C_SOURCE)
 
 bytecode.qvm: $(VDU_ASM_FILES)
 	@$(Q3ASM) -v -l -m -o "bytecode" dispatch.vmasm vdu_init.vmasm vdu.vmasm bg_lib.vmasm g_syscalls
-	@./import-bytecode.sh
 	@echo "Assembled vdu/bytecode.qvm"
 
+../vdu_vm_bytecode.c ../vdu_vm_bytecode.h: bytecode.qvm
+	@./export-bytecode.sh

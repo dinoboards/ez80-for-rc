@@ -1260,7 +1260,11 @@ extern const uint8_t
 
 extern const uint8_t chapter_12_valid_explicit_casts_truncate[CHAPTER_12_VALID_EXPLICIT_CASTS_TRUNCATE_SIZE];
 
-#define Q3VM_VERIFICATION_SIZE 300
+#define CHAPTER_99_FLOAT_ARTH_SIZE 377
+
+extern const uint8_t chapter_99_float_arth[CHAPTER_99_FLOAT_ARTH_SIZE];
+
+#define Q3VM_VERIFICATION_SIZE 301
 
 extern test_run_t q3vm_verification[Q3VM_VERIFICATION_SIZE];
 
