@@ -26,11 +26,11 @@
 /******************************************************************************
  * DEFINES
  ******************************************************************************/
-#if 1
+#if 0
 #define MEMORY_SAFE
 #endif
 
-#if 1
+#if 0
 extern size_t strlcpy(char *dst, const char *src, size_t size);
 
 #define DEBUG_VM /**< ifdef: enable debug functions and additional checks */

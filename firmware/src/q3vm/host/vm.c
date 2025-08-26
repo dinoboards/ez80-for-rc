@@ -94,7 +94,7 @@ static bool VM_ValidateHeader(vm_t *const vm, const vmHeader_t *const header, co
  * @param[in] vm Pointer to initialized virtual machine.
  * @param[in] args Arguments for function call.
  * @return Return value of the function call. */
-static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args);
+static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opStack);
 
 /** Executes a block copy operation (memcpy) within currentVM data space.
  * @param[out] dest Pointer (in VM space).
@@ -159,10 +159,10 @@ int VM_Create(vm_t                      *vm,
   }
 
   if (!systemCalls)
-    VM_AbortError(VM_NO_SYSCALL_CALLBACK, "No systemcalls provided");
+    VM_AbortError(vm, VM_NO_SYSCALL_CALLBACK, "No systemcalls provided");
 
   if (!bytecode)
-    VM_AbortError(VM_INVALID_POINTER, "bytecode is NULL");
+    VM_AbortError(vm, VM_INVALID_POINTER, "bytecode is NULL");
 #endif
 
   {
@@ -180,6 +180,7 @@ int VM_Create(vm_t                      *vm,
     vm->bssLength        = UINT(header->bssLength);
     vm->programStack     = workingRAMLength - 3;
     vm->workingRAMLength = workingRAMLength;
+    vm->vm               = vm;
 
 #ifdef MEMORY_SAFE
     if (VM_ValidateHeader(vm, header, length))
@@ -225,7 +226,8 @@ int VM_Create(vm_t                      *vm,
 #ifdef DEBUG_VM
 int VM_LoadDebugInfo(vm_t *vm, char *mapfileImage, uint8_t *debugStorage, int debugStorageLength) {
   if (vm == NULL) {
-    VM_AbortError(VM_INVALID_POINTER, "Invalid vm pointer");
+    VM_Error(VM_INVALID_POINTER, "Invalid vm pointer");
+    return VM_INVALID_POINTER;
   }
   /* load the map file */
   VM_LoadSymbols(vm, mapfileImage, debugStorage, debugStorageLength);
@@ -253,13 +255,13 @@ static bool VM_ValidateHeader(vm_t *const vm, const vmHeader_t *const header, co
     if (UINT(header->codeLength) == 0 || UINT(header->bssLength) > VM_MAX_BSS_LENGTH ||
         UINT(header->codeLength) + UINT(header->litLength) + UINT(header->dataLength) > bytecodeLength) {
       Com_Printf("Warning: bad header\n");
-      VM_AbortError(VM_MALFORMED_HEADER, "Malformed bytecode image\n");
+      VM_AbortError(vm, VM_MALFORMED_HEADER, "Malformed bytecode image\n");
     }
   } else {
     Com_Printf("Warning: Invalid magic number in header "
                "Read: 0x%x, expected: 0x%x\n",
                header->vmMagic, VM_MAGIC);
-    VM_AbortError(VM_MALFORMED_HEADER, "Invalid magic number in header\n");
+    VM_AbortError(vm, VM_MALFORMED_HEADER, "Invalid magic number in header\n");
   }
 
   {
@@ -271,7 +273,7 @@ static bool VM_ValidateHeader(vm_t *const vm, const vmHeader_t *const header, co
     if (dataLength > vm->workingRAMLength) {
       Com_Printf("Error: Insufficient ram allocated for VM.  Granted " FMT_INT24 ", image requires " FMT_INT24 "\n",
                  vm->workingRAMLength, dataLength);
-      VM_AbortError(VM_NOT_ENOUGH_RAM, "Insufficient ram allocated for VM\n");
+      VM_AbortError(vm, VM_NOT_ENOUGH_RAM, "Insufficient ram allocated for VM\n");
     }
   }
 
@@ -290,7 +292,7 @@ intptr_t VM_Call(vm_t *vm, ustdint_t command, ...) {
   }
 
   if (vm->codeLength < 1)
-    VM_AbortError(VM_NOT_LOADED, "VM not loaded");
+    VM_AbortError(vm, VM_NOT_LOADED, "VM not loaded");
 #endif
 
   vm->lastError = 0;
@@ -298,7 +300,9 @@ intptr_t VM_Call(vm_t *vm, ustdint_t command, ...) {
     int24_t args[MAX_VMMAIN_ARGS];
     va_list ap;
     uint8_t i;
+    uint8_t _opStack[OPSTACK_SIZE + 4]; /* 256 4 byte double words + 4 safety bytes */
 
+    // TODO: for ez80 build, this can probably be a memcpy
     args[0] = INT24(command);
     va_start(ap, command);
     for (i = 1; i < (uint8_t)ARRAY_LEN(args); i++) {
@@ -306,9 +310,13 @@ intptr_t VM_Call(vm_t *vm, ustdint_t command, ...) {
     }
     va_end(ap);
 
+#ifdef DEBUG_VM
     ++vm->callLevel;
-    r = VM_CallInterpreted(vm, args);
+#endif
+    r = VM_CallInterpreted(*vm, args, _opStack);
+#ifdef DEBUG_VM
     --vm->callLevel;
+#endif
   }
 
   return r;
@@ -410,7 +418,7 @@ locals from sp
 #define INT16_INCREMENT     sizeof(uint16_t)
 #define INT24_INCREMENT     sizeof(uint24_t)
 #define INT32_INCREMENT     sizeof(uint32_t)
-#define MAX_PROGRAM_COUNTER ((unsigned)vm->codeLength)
+#define MAX_PROGRAM_COUNTER ((unsigned)_vm.vm->codeLength)
 #define DISPATCH()          break;
 
 #ifdef MEMORY_SAFE
@@ -490,40 +498,47 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 // For 8 bit access:
 // If address > FFFF00, map to Z80 I/O
 // if address > FF0000, map to a share host memory range (not yet implemented)
-#define VM_ReadAddrByte(vaddr, fn)                                                                                                 \
-  {                                                                                                                                \
-    if (!VM_VerifyReadOK(vm, vaddr, 1)) {                                                                                          \
-      fn(*bad_memory);                                                                                                             \
-    } else {                                                                                                                       \
-                                                                                                                                   \
-      if (((vm_size_t)(vaddr) > 0xFF0000)) {                                                                                       \
-        fn(io_read(vaddr));                                                                                                        \
-      } else {                                                                                                                     \
-        fn(*(((vm_size_t)(vaddr) < litLength) ? &litBase[(vm_size_t)(vaddr)] : &dataBase[(vm_size_t)(vaddr)]));                    \
-      }                                                                                                                            \
-    }                                                                                                                              \
-  }
-
-#define VM_GetReadAddr(vaddr, size)                                                                                                \
-  (!VM_VerifyReadOK(vm, vaddr, size)                                                                                               \
-       ? bad_memory                                                                                                                \
-       : (((((vm_size_t)(vaddr) < litLength) ? &litBase[(vm_size_t)(vaddr)] : &dataBase[(vm_size_t)(vaddr)]))))
 
 #define VM_WriteAddrByte(vaddr, value)                                                                                             \
   {                                                                                                                                \
-    if (!VM_VerifyWriteOK(vm, vaddr, 1)) {                                                                                         \
+    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 1)) {                                                                                     \
       ;                                                                                                                            \
     } else {                                                                                                                       \
                                                                                                                                    \
       if (((vm_size_t)(vaddr) > 0xFF0000)) {                                                                                       \
         io_write(vaddr, value);                                                                                                    \
       } else {                                                                                                                     \
-        dataBase[(vm_size_t)(vaddr)] = value;                                                                                      \
+        _vm.dataBase[(vm_size_t)(vaddr)] = value;                                                                                  \
       }                                                                                                                            \
     }                                                                                                                              \
   }
 
-#define VM_GetWriteAddr(vaddr, size) (!VM_VerifyWriteOK(vm, vaddr, size) ? bad_memory : &dataBase[(vm_size_t)(vaddr)])
+#define VM_WriteAddrUint16(vaddr, value)                                                                                           \
+  {                                                                                                                                \
+    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 2)) {                                                                                     \
+      ;                                                                                                                            \
+    } else {                                                                                                                       \
+      *((uint16_t *)&_vm.dataBase[(vm_size_t)(vaddr)]) = value;                                                                    \
+    }                                                                                                                              \
+  }
+
+#define VM_WriteAddrUint24(vaddr, value)                                                                                           \
+  {                                                                                                                                \
+    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 3)) {                                                                                     \
+      ;                                                                                                                            \
+    } else {                                                                                                                       \
+      *((uint24_t *)&_vm.dataBase[(vm_size_t)(vaddr)]) = value;                                                                    \
+    }                                                                                                                              \
+  }
+
+#define VM_WriteAddrUint32(vaddr, value)                                                                                           \
+  {                                                                                                                                \
+    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 4)) {                                                                                     \
+      ;                                                                                                                            \
+    } else {                                                                                                                       \
+      *((uint32_t *)&_vm.dataBase[(vm_size_t)(vaddr)]) = value;                                                                    \
+    }                                                                                                                              \
+  }
 
 #define opStack32  ((int32_t *)opStack8)
 #define opStackFlt ((float *)opStack8)
@@ -603,6 +618,10 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   log3_2(FMT_FLT " POP float\n", Rx.flt);                                                                                          \
   opStack8 -= 4;
 
+#define retrieve_1_uint24(Rx)                                                                                                      \
+  Rx.uint24 = R_uint24;                                                                                                            \
+  log3_2(FMT_INT24 " POP uint24\n", UINT(Rx.uint24));
+
 #define retrieve_1_float(Rx)                                                                                                       \
   Rx.flt = *((float *)opStack8);                                                                                                   \
   log3_2(FMT_FLT " POP float\n", Rx.flt);
@@ -617,9 +636,21 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   *opStack32 = a;                                                                                                                  \
   log3_2(FMT_INT32 " PUSHED int32\n", *opStack32);
 
-#define assign_1_int32(a)                                                                                                          \
+#define assign_1_uint8(a)                                                                                                          \
+  *opStack32 = (uint8_t)(a);                                                                                                       \
+  log3_2(FMT_INT8 " PUSHED uint8\n", *opStack8);
+
+#define assign_1_uint16(a)                                                                                                         \
+  *opStack32 = (uint16_t)(a);                                                                                                      \
+  log3_2(FMT_INT16 " PUSHED uint16\n", *opStack32 & 0xFFFF);
+
+#define assign_1_uint24(a)                                                                                                         \
+  *opStack32 = UINT((uint24_t)(a));                                                                                                \
+  log3_2(FMT_INT24 " PUSHED uint24\n", *opStack32 & 0xFFFFFF);
+
+#define assign_1_uint32(a)                                                                                                         \
   *opStack32 = a;                                                                                                                  \
-  log3_2(FMT_INT32 " PUSHED int32\n", *opStack32);
+  log3_2(FMT_INT32 " PUSHED uint32\n", *opStack32);
 
 #define push_1_uint32(a)                                                                                                           \
   {                                                                                                                                \
@@ -662,9 +693,29 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   *opStack32 = (int8_t)(a);                                                                                                        \
   log3_2(FMT_INT8 " PUSHED int8\n", *opStack32);
 
+#define R_int8     (*((int8_t *)(opStack8)))
+#define R0_int8(k) (*((int8_t *)(opStack8 - k)))
+#define R1_int8(k) (*((int8_t *)(opStack8 - k - 4)))
+
+#define R_uint8     (*((uint8_t *)(opStack8)))
+#define R0_uint8(k) (*((uint8_t *)(opStack8 - k)))
+#define R1_uint8(k) (*((uint8_t *)(opStack8 - k - 4)))
+
+#define R_int16     (*((int16_t *)(opStack8)))
+#define R0_int16(k) (*((int16_t *)(opStack8 - k)))
+#define R1_int16(k) (*((int16_t *)(opStack8 - k - 4)))
+
+#define R_uint16     (*((uint16_t *)(opStack8)))
+#define R0_uint16(k) (*((uint16_t *)(opStack8 - k)))
+#define R1_uint16(k) (*((uint16_t *)(opStack8 - k - 4)))
+
 #define R_int24     (*((int24_t *)(opStack8)))
 #define R0_int24(k) (*((int24_t *)(opStack8 - k)))
 #define R1_int24(k) (*((int24_t *)(opStack8 - k - 4)))
+
+#define R_uint24     (*((uint24_t *)(opStack8)))
+#define R0_uint24(k) (*((uint24_t *)(opStack8 - k)))
+#define R1_uint24(k) (*((uint24_t *)(opStack8 - k - 4)))
 
 #define R_int32     (*((int32_t *)(opStack8)))
 #define R0_int32(k) (*((int32_t *)(opStack8 - k)))
@@ -674,12 +725,47 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 #define R0_uint32(k) (*((uint32_t *)(opStack8 - k)))
 #define R1_uint32(k) (*((uint32_t *)(opStack8 - k - 4)))
 
+#define R_float     (*((float *)(opStack8)))
+#define R0_float(k) (*((float *)(opStack8 - k)))
+#define R1_float(k) (*((float *)(opStack8 - k - 4)))
+
 #define op_2_int24_to_1_int24(operation)                                                                                           \
   log3_3(FMT_INT24 " " FMT_INT24 " POP int24\n", INT(R1_int24(0)), INT(R0_int24(0)));                                              \
   opStack8 -= 4;                                                                                                                   \
   log3_3(FMT_INT24 " " #operation " " FMT_INT24 " ", INT(R1_int24(-4)), INT(R0_int24(-4)));                                        \
   R_int24 = INT24(INT(R1_int24(-4)) operation INT(R0_int24(-4)));                                                                  \
   log3_2(FMT_INT24 " PUSHED int24\n", INT(R_int24));
+
+#define op_2_uint24_to_1_uint24(operation)                                                                                         \
+  log3_3(FMT_INT24 " " FMT_INT24 " POP uint24\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));                                         \
+  opStack8 -= 4;                                                                                                                   \
+  log3_3(FMT_INT24 " " #operation " " FMT_INT24 " ", UINT(R1_uint24(-4)), UINT(R0_uint24(-4)));                                    \
+  R_uint24 = UINT24(UINT(R1_uint24(-4)) operation UINT(R0_uint24(-4)));                                                            \
+  log3_2(FMT_INT24 " PUSHED uint24\n", UINT(R_uint24));
+
+#define op_1_int24_to_1_int24(operation)                                                                                           \
+  log3_2(FMT_INT24 " POP int24\n", INT(R0_int24(0)));                                                                              \
+  log3_2(#operation FMT_INT24 " =", INT(R0_int24(0)));                                                                             \
+  R_int24 = INT24(operation INT(R0_int24(0)));                                                                                     \
+  log3_2(FMT_INT24 " PUSHED int24\n", INT(R_int24));
+
+#define op_1_uint24_to_1_uint24(operation)                                                                                         \
+  log3_2(FMT_INT24 " POP uint24\n", UINT(R0_uint24(0)));                                                                           \
+  log3_2(#operation FMT_INT24 " =", UINT(R0_uint24(0)));                                                                           \
+  R_uint24 = UINT24(operation UINT(R0_uint24(0)));                                                                                 \
+  log3_2(FMT_INT24 " PUSHED uint24\n", UINT(R_uint24));
+
+#define op_1_int32_to_1_int32(operation)                                                                                           \
+  log3_2(FMT_INT32 " POP int32\n", R0_int32(0));                                                                                   \
+  log3_2(#operation FMT_INT32 " =", R0_int32(0));                                                                                  \
+  R_int32 = operation R0_int32(0);                                                                                                 \
+  log3_2(FMT_INT32 " PUSHED int32\n", R_int32);
+
+#define op_1_float_to_1_float(operation)                                                                                           \
+  log3_2(FMT_FLT " POP float\n", R0_float(0));                                                                                     \
+  log3_2(#operation FMT_FLT " =", R0_float(0));                                                                                    \
+  R_float = operation R0_float(0);                                                                                                 \
+  log3_2(FMT_FLT " PUSHED float\n", R_float);
 
 #define op_2_int32_to_1_int32(operation)                                                                                           \
   log3_3(FMT_INT32 " " FMT_INT32 " POP int32\n", R1_int32(0), R0_int32(0));                                                        \
@@ -695,6 +781,59 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   R_uint32 = R1_uint32(-4) operation R0_uint32(-4);                                                                                \
   log3_2(FMT_INT32 " PUSHED uint32\n", R_uint32);
 
+#define op_1_uint32_to_1_uint32(operation)                                                                                         \
+  log3_2(FMT_INT32 " POP uint32\n", R0_uint32(0));                                                                                 \
+  log3_2(#operation FMT_INT32 " =", R0_uint32(0));                                                                                 \
+  R_uint32 = ~R0_uint32(0);                                                                                                        \
+  log3_2(FMT_INT32 " PUSHED uint32\n", R_uint32);
+
+#define op_2_float_to_1_float(operation)                                                                                           \
+  log3_3(FMT_FLT " " FMT_FLT " POP float\n", R1_float(0), R0_float(0));                                                            \
+  opStack8 -= 4;                                                                                                                   \
+  log3_3(FMT_FLT " " #operation " " FMT_FLT " =", R1_float(-4), R0_float(-4));                                                     \
+  R_float = R1_float(-4) operation R0_float(-4);                                                                                   \
+  log3_2(FMT_FLT " PUSHED float\n", R_float);
+
+#define op_2_int24_branch(operation)                                                                                               \
+  log3_3(FMT_INT24 " " #operation " " FMT_INT24 "\n", INT(R1_int24(0)), INT(R0_int24(0)));                                         \
+  if ((INT(R1_int24(0)) operation INT(R0_int24(0))))                                                                               \
+    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+  else                                                                                                                             \
+    PC += INT24_INCREMENT;                                                                                                         \
+  opStack8 -= 8;
+
+#define op_2_uint24_branch(operation)                                                                                              \
+  log3_3(FMT_INT24 " " #operation " " FMT_INT24 "\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));                                     \
+  if ((UINT(R1_uint24(0)) operation UINT(R0_uint24(0))))                                                                           \
+    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+  else                                                                                                                             \
+    PC += INT24_INCREMENT;                                                                                                         \
+  opStack8 -= 8;
+
+#define op_2_int32_branch(operation)                                                                                               \
+  log3_3(FMT_INT32 " " #operation " " FMT_INT32 "\n", R1_int32(0), R0_int32(0));                                                   \
+  if ((R1_int32(0) operation R0_int32(0)))                                                                                         \
+    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+  else                                                                                                                             \
+    PC += INT24_INCREMENT;                                                                                                         \
+  opStack8 -= 8;
+
+#define op_2_uint32_branch(operation)                                                                                              \
+  log3_3(FMT_INT32 " " #operation " " FMT_INT32 "\n", R1_uint32(0), R0_uint32(0));                                                 \
+  if ((R1_uint32(0) operation R0_uint32(0)))                                                                                       \
+    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+  else                                                                                                                             \
+    PC += INT24_INCREMENT;                                                                                                         \
+  opStack8 -= 8;
+
+#define op_2_float_branch(operation)                                                                                               \
+  log3_3(FMT_FLT " " #operation " " FMT_FLT "\n", R1_float(0), R0_float(0));                                                       \
+  if ((R1_float(0) operation R0_float(0)))                                                                                         \
+    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+  else                                                                                                                             \
+    PC += INT24_INCREMENT;                                                                                                         \
+  opStack8 -= 8;
+
 typedef union stack_entry_u {
   int8_t   int8;
   uint8_t  uint8;
@@ -707,29 +846,21 @@ typedef union stack_entry_u {
   float    flt;
 } stack_entry_t;
 
-#define vPC ((int)(PC - codeBase))
+#define vPC ((int)(PC - _vm.codeBase))
 
 typedef const uint8_t *PC_t;
 
 /* FIXME: this needs to be locked to uint24_t to ensure platform agnostic */
-static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
+static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opStack) {
 #ifdef MEMORY_SAFE
-  const uint8_t *const PC_end = &vm->codeBase[vm->codeLength];
+  const uint8_t *const PC_end = &_vm.codeBase[_vm.codeLength];
 #endif
 
-  uint8_t       _opStack[OPSTACK_SIZE + 4]; /* 256 4 byte double words + 4 safety bytes */
   uint8_t      *opStack8 = &_opStack[4];
   PC_t          PC;
   ustdint_t     programStack;
   ustdint_t     stackOnEntry;
-  uint8_t       opcode;
   stack_entry_t R0, R1;
-
-  uint8_t *const       dataBase   = vm->dataBase;
-  const uint8_t *const codeBase   = vm->codeBase;
-  const vm_size_t      litLength  = vm->litLength;
-  const vm_size_t      codeLength = vm->codeLength;
-  const uint8_t *const litBase    = codeBase + codeLength;
 
 #ifdef DEBUG_VM
   vmSymbol_t *profileSymbol;
@@ -737,21 +868,21 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 #endif
 
   /* we might be called recursively, so this might not be the very top */
-  programStack = stackOnEntry = vm->programStack;
+  programStack = stackOnEntry = _vm.programStack;
 
 #ifdef DEBUG_VM
-  profileSymbol = VM_ValueToFunctionSymbol(vm, 0);
+  profileSymbol = VM_ValueToFunctionSymbol(_vm.vm, 0);
   /* uncomment this for debugging breakpoints */
-  vm->breakFunction = 0;
+  _vm.vm->breakFunction = 0;
 #endif
 
-  PC = codeBase;
+  PC = _vm.codeBase;
   programStack -= (6 + 3 * MAX_VMMAIN_ARGS);
 
-  memcpy(&dataBase[programStack + 6], args, MAX_VMMAIN_ARGS * 3);
+  memcpy(&_vm.dataBase[programStack + 6], args, MAX_VMMAIN_ARGS * 3);
 
-  *(int24_t *)&dataBase[programStack + 3] = INT24(0);  /* return stack */
-  *(int24_t *)&dataBase[programStack]     = INT24(-1); /* will terminate the loop on return */
+  *(int24_t *)&_vm.dataBase[programStack + 3] = INT24(0);  /* return stack */
+  *(int24_t *)&_vm.dataBase[programStack]     = INT24(-1); /* will terminate the loop on return */
 
   opStack32[0]  = 0x0000BEEF;
   opStack32[-1] = 0x00000000;
@@ -760,13 +891,11 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
      grabs the -1 program counter */
 
   while (1) {
-    if (vm->lastError) {
-      vm->programStack = programStack = stackOnEntry;
-      opStack8                        = &_opStack[8];
+    if (_vm.vm->lastError) {
+      _vm.vm->programStack = programStack = stackOnEntry;
+      opStack8                            = &_opStack[8];
       goto done;
     }
-    R0.int32 = opStack32[0];
-    R1.int32 = opStack32[-1];
 
 #ifdef DEBUG_VM
     if (vm_debugLevel > 1) {
@@ -776,41 +905,36 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 
 #ifdef MEMORY_SAFE
     if (PC >= PC_end)
-      VM_AbortError(VM_PC_OUT_OF_RANGE, "VM pc out of range");
+      VM_AbortError(_vm.vm, VM_PC_OUT_OF_RANGE, "VM pc out of range");
 
-    if (programStack <= vm->stackBottom)
-      VM_AbortError(VM_STACK_OVERFLOW, "VM stack overflow");
+    if (programStack <= _vm.vm->stackBottom)
+      VM_AbortError(_vm.vm, VM_STACK_OVERFLOW, "VM stack overflow");
 #endif
-
-    opcode = *PC++;
 
 #ifdef DEBUG_VM
     if (vm_debugLevel > 1) {
-      Com_Printf("%s%i %s\t(" FMT_INT8 " " FMT_INT24 ");\tSP=" FMT_INT24 ",  R0=" FMT_INT24 ", R1=" FMT_INT24 " \n", VM_Indent(vm),
-                 (int)(opStack8 - _opStack), opnames[opcode], opcode, R2.int32, programStack, R0.int32, R1.int32);
+      Com_Printf("%s%i %s\t(" FMT_INT8 " " FMT_INT24 ");\tSP=" FMT_INT24 ",  R0=" FMT_INT24 ", R1=" FMT_INT24 " \n",
+                 VM_Indent(_vm.vm), (int)(opStack8 - _opStack), opnames[*PC], *PC, R2.int32, programStack, R0.int32, R1.int32);
     }
     profileSymbol->profileCount++;
 #endif /* DEBUG_VM */
-    switch (opcode) {
+    switch (*PC++) {
 #if defined(DEBUG_VM) || defined(MEMORY_SAFE)
     default: /* fall through */
-#endif
-
     case OP_UNDEF:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Bad VM instruction");
-
+      VM_AbortError(_vm.vm, VM_BAD_INSTRUCTION, "Bad VM instruction");
+#endif
+#ifdef DEBUG_VM
     case OP_IGNORE:
       DISPATCH();
 
     case OP_BREAK:
-#ifdef DEBUG_VM
-      vm->breakCount++;
+      _vm.vm->breakCount++;
 #endif
       DISPATCH();
 
     case OP_ADD3: {
       op_2_int24_to_1_int24(+);
-
       DISPATCH();
     }
 
@@ -820,10 +944,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     }
 
     case OP_ADDF4: {
-      pop_2_floats();
-      log3_3(FMT_FLT " + " FMT_FLT " = ", R1.flt, R0.flt);
-      R1.flt += R0.flt;
-      push_1_float(R1.flt);
+      op_2_float_to_1_float(+);
       DISPATCH();
     }
 
@@ -833,7 +954,7 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       printf("  ARG3 *[" FMT_INT24 " + " FMT_INT8 " (" FMT_INT24 ")] = " FMT_INT24 "\n", programStack, R2.int8,
              programStack + R2.int8, UINT(R0.uint24));
 #endif
-      *(uint24_t *)&dataBase[programStack + R2.int8] = R0.uint24;
+      *(uint24_t *)&_vm.dataBase[programStack + R2.int8] = R0.uint24;
       PC++;
       DISPATCH();
     }
@@ -844,212 +965,150 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       printf("  ARG4 *[" FMT_INT24 " + " FMT_INT8 " (" FMT_INT24 ")] = " FMT_INT24 "\n", programStack, R2.int8,
              programStack + R2.int8, R0.uint32);
 #endif
-      *(uint32_t *)&dataBase[programStack + R2.int8] = R0.uint32;
-      PC++;
-      DISPATCH();
-    }
-
-    case OP_ARGF4: {
-      /* single byte offset from programStack */
-#ifdef DEBUG_VM
-      float    f = *((float *)&R0.int32);
-      uint32_t i = *((uint32_t *)&R0.int32);
-
-      printf("  ARGF *[" FMT_INT24 " + " FMT_INT8 " (" FMT_INT24 ")] = %f (" FMT_INT32 ") (from: " FMT_INT24 ")\n", programStack,
-             R2.int8, programStack + R2.int8, f, i, (int)(opStack8 - _opStack));
-#endif
-
-      *((uint32_t *)&dataBase[programStack + R2.int8]) = R0.int32;
-      opStack8 -= 4;
+      *(uint32_t *)&_vm.dataBase[programStack + R2.int8] = R0.uint32;
       PC++;
       DISPATCH();
     }
 
     case OP_BAND3: {
-      pop_2_uint24();
-      log3_3(FMT_INT32 " & " FMT_INT32 " = ", UINT(R1.uint24), UINT(R0.uint24));
-      push_1_uint24(UINT24(UINT(R1.uint24) & UINT(R0.uint24)));
+      op_2_uint24_to_1_uint24(&);
       DISPATCH();
     }
 
     case OP_BAND4: {
-      pop_2_uint32();
-      log3_3(FMT_INT32 " & " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_uint32(R1.int32 & R0.int32);
+      op_2_uint32_to_1_uint32(&);
       DISPATCH();
     }
 
     case OP_BCOM3: {
-      pop_1_uint24(R0);
-      log3_2("~" FMT_INT24 " =", ~UINT((R0.uint24)));
-      push_1_uint24(UINT24(~UINT((R0.uint24))));
+      op_1_uint24_to_1_uint24(~);
       DISPATCH();
     }
 
     case OP_BCOM4: {
-      pop_1_uint32(R0);
-      log3_2("~" FMT_INT32 " =", R0.int32);
-      push_1_uint32(~R0.int32);
+      op_1_uint32_to_1_uint32(~);
       DISPATCH();
     }
 
     case OP_BLOCK_COPY: {
-      VM_BlockCopy(R1.int32, R0.int32, UINT(R2.uint24), vm);
+      pop_2_uint24();
+      VM_BlockCopy(UINT(R1.uint24), UINT(R0.uint24), UINT(R2.uint24), _vm.vm);
       PC += INT24_INCREMENT;
-      opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_BOR3: {
-      pop_2_uint24();
-      log3_3(FMT_INT32 " | " FMT_INT32 " = ", UINT(R1.uint24), UINT(R0.uint24));
-      push_1_uint24(UINT24(UINT(R1.uint24) | UINT(R0.uint24)));
+      op_2_uint24_to_1_uint24(|);
       DISPATCH();
     }
 
     case OP_BOR4: {
-      pop_2_uint32();
-      log3_3(FMT_INT32 " | " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_uint32(R1.int32 | R0.int32);
+      op_2_uint32_to_1_uint32(|);
       DISPATCH();
     }
 
     case OP_BXOR3: {
-      pop_2_uint24();
-      log3_3(FMT_INT32 " ^ " FMT_INT32 " = ", UINT(R1.uint24), UINT(R0.uint24));
-      push_1_uint24(UINT24(UINT(R1.uint24) ^ UINT(R0.uint24)));
+      op_2_uint24_to_1_uint24(^);
       DISPATCH();
     }
 
     case OP_BXOR4: {
-      pop_2_uint32();
-      log3_3(FMT_INT32 " ^ " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_uint32(R1.int32 ^ R0.int32);
+      op_2_uint32_to_1_uint32(^);
       DISPATCH();
     }
 
     case OP_CALL: {
-      *(int24_t *)&dataBase[programStack] = INT24(vPC); /* save current program counter */
+      *(int24_t *)&_vm.dataBase[programStack] = INT24(vPC); /* save current program counter */
       pop_1_int24(R0);
 
-      PC = codeBase + INT(R0.int24); /* jump to the location on the stack */
+      PC = _vm.codeBase + INT(R0.int24); /* jump to the location on the stack */
 
       if (INT(R0.int24) < 0) /* system call */
       {
-        vm_operand_t r;
+        uint32_t r;
 #ifdef DEBUG_VM
         if (vm_debugLevel) {
-          Com_Printf("%s%i---> systemcall(%i)\n", VM_Indent(vm), (int)(opStack8 - _opStack), -1 - vPC);
+          Com_Printf("%s%i---> systemcall(%i)\n", VM_Indent(_vm.vm), (int)(opStack8 - _opStack), -1 - vPC);
         }
 #endif
 
-        vm->programStack = programStack - 3; /* save the stack to allow recursive VM entry */
+        _vm.vm->programStack = programStack - 3; /* save the stack to allow recursive VM entry */
 
 #ifdef DEBUG_VM
-        stomped = INT(*(int24_t *)&dataBase[programStack + 3]);
+        stomped = INT(*(int24_t *)&_vm.dataBase[programStack + 3]);
 #endif
-        *(int24_t *)&dataBase[programStack + 3] = INT24(-1 - vPC); /*command*/
+        *(int24_t *)&_vm.dataBase[programStack + 3] = INT24(-1 - vPC); /*command*/
 
-        r = vm->systemCall(vm, &dataBase[programStack + 3]);
+        r = _vm.systemCall(_vm.vm, &_vm.dataBase[programStack + 3]);
 
 #ifdef DEBUG_VM
         /* this is just our stack frame pointer, only needed
            for debugging */
-        *(int24_t *)&dataBase[programStack + 3] = INT24(stomped);
+        *(int24_t *)&_vm.dataBase[programStack + 3] = INT24(stomped);
 #endif
 
-        opStack8 += 4; /* save return value */
-        *opStack32 = r;
-        PC         = codeBase + INT(*(int24_t *)&dataBase[programStack]);
+        push_1_uint32(r);
+        PC = _vm.codeBase + INT(*(int24_t *)&_vm.dataBase[programStack]);
 #ifdef DEBUG_VM
         if (vm_debugLevel) {
-          Com_Printf("%s%i<--- %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, vPC));
+          Com_Printf("%s%i<--- %s\n", VM_Indent(_vm.vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(_vm.vm, vPC));
         }
 #endif
       }
 #ifdef MEMORY_SAFE
       else if (PC >= PC_end)
-        VM_AbortError(VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_CALL");
+        VM_AbortError(_vm.vm, VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_CALL");
 #endif
       DISPATCH();
     }
 
+    case OP_CF4I3: {
+      log3_2(FMT_FLT " POP float\n", R0_float(0));
+      R_int24 = INT24(R0_float(0));
+      log3_2(FMT_INT24 " PUSH int24\n", INT(R_int24) & 0xFFFFFF);
+      DISPATCH();
+    }
+
     case OP_CF4I4: {
-      *opStack32 = (int32_t)*((float *)opStack8);
+      log3_2(FMT_FLT " POP float\n", R0_float(0));
+      R_int32 = R0_float(0);
+      log3_2(FMT_INT32 " PUSH int32\n", R_int32);
       DISPATCH();
     }
       /* extend sign I1 to I3*/
     case OP_CI1I3: {
-      pop_1_int8(R0);
-      push_1_int24(INT24(R0.int8));
-      DISPATCH();
-    }
-
-    case OP_CI1I4: {
-      *opStack32 = (int8_t)*opStack32;
+      log3_2(FMT_INT8 " POP int8\n", R0_int8(0) & 0xFF);
+      R_int24 = INT24(R0_int8(0));
+      log3_2(FMT_INT24 " PUSH int24\n", INT(R_int24) & 0xFFFFFF);
       DISPATCH();
     }
 
       /* extend sign I2 to I3*/
     case OP_CI2I3: {
-      pop_1_int16(R0);
-      push_1_int24(INT24(R0.int16));
-      DISPATCH();
-    }
-
-    case OP_CI2I4: {
-      *opStack32 = (int16_t)*opStack32;
+      log3_2(FMT_INT16 " POP int16\n", R0_int16(0) & 0xFFFF);
+      R_int24 = INT24(R0_int16(0));
+      log3_2(FMT_INT24 " PUSH int24\n", INT(R_int24) & 0xFFFFFF);
       DISPATCH();
     }
 
     case OP_CI3F4: {
-      pop_1_int24(R0);
-      push_1_float((float)INT(R0.int24));
+      log3_2(FMT_INT24 " POP int24\n", INT(R0_int24(0)) & 0xFFFFFF);
+      R_float = (float)INT(R0_int24(0));
+      log3_2(FMT_FLT " PUSH float\n", R_float);
       DISPATCH();
     }
 
-    /* convert I3 to I1*/
-    case OP_CI3I1: {
-      pop_1_int24(R0);
-      push_1_int8((int8_t)(INT(R0.int24)));
-      DISPATCH();
-    }
-
-      /* convert I3 to I2*/
-    case OP_CI3I2: {
-      pop_1_int24(R0);
-      push_1_int16((int16_t)(INT(R0.int24)));
-      DISPATCH();
-    }
-
-    case OP_CI3I4: {
-      pop_1_int24(R0);
-      push_1_int32((int32_t)(INT(R0.int24)));
-      DISPATCH();
-    }
-
-    case OP_CI3U4: {
-      pop_1_int24(R0);
-      push_1_uint32((uint32_t)INT(R0.int24));
+    case OP_CI3s4: {
+      log3_2(FMT_INT24 " POP int24\n", INT(R0_int24(0)) & 0xFFFFFF);
+      R_int32 = (int32_t)INT(R0_int24(0));
+      log3_2(FMT_INT32 " PUSH int32\n", R_int32);
       DISPATCH();
     }
 
     case OP_CI4F4: {
-      pop_1_int32(R0);
-      push_1_float((float)R0.int32);
-      DISPATCH();
-    }
-
-      /* reduce I4 to I3 */
-    case OP_CI4I3: {
-      pop_1_int32(R0);
-      push_1_int24(INT24(R0.int32));
-      DISPATCH();
-    }
-
-    case OP_CI4U3: {
-      pop_1_int32(R0);
-      push_1_uint24(UINT24((uint32_t)R0.int32));
+      log3_2(FMT_INT32 " POP int32\n", R0_int32(0));
+      R_float = (float)R0_int32(0);
+      log3_2(FMT_FLT " PUSH float\n", R_float);
       DISPATCH();
     }
 
@@ -1059,150 +1118,110 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       DISPATCH();
     }
 
-    case OP_CONSTI1: {
-      push_1_int8(R2.int8);
-      PC += INT8_INCREMENT;
-      DISPATCH();
-    }
-
-    case OP_CONSTI2: {
-      push_1_int16(R2.int16);
-      PC += INT16_INCREMENT;
-      DISPATCH();
-    }
-
-    case OP_CONSTI3: {
-      push_1_int24(R2.int24);
-      PC += INT32_INCREMENT;
-      DISPATCH();
-    }
-
-    case OP_CONSTI4: {
-      push_1_int32(R2.int32);
-      PC += INT32_INCREMENT;
-      DISPATCH();
-    }
-
     case OP_CONSTP3: {
       push_1_uint24(R2.uint24);
       PC += INT24_INCREMENT;
       DISPATCH();
     }
 
-    case OP_CONSTU1: {
-      push_1_int8(R2.uint8);
+    case OP_CONSTs1: {
+      push_1_int8(R2.int8);
       PC += INT8_INCREMENT;
       DISPATCH();
     }
 
-    case OP_CONSTU2: {
-      push_1_uint16(R2.uint16);
+    case OP_CONSTs2: {
+      push_1_int16(R2.int16);
       PC += INT16_INCREMENT;
       DISPATCH();
     }
 
-    case OP_CONSTU3: {
-      push_1_uint24(R2.uint24);
+    case OP_CONSTs3: {
+      push_1_int24(R2.int24);
       PC += INT24_INCREMENT;
       DISPATCH();
     }
 
-    case OP_CONSTU4: {
+    case OP_CONSTs4: {
       push_1_uint32(R2.uint32);
       PC += INT32_INCREMENT;
       DISPATCH();
     }
 
     case OP_CU1I3: {
-      pop_1_uint8(R0);
-      push_1_int24(INT24(R0.uint8));
+      log3_2(FMT_INT8 " POP uint8\n", R0_uint8(0) & 0xFF);
+      R_int24 = INT24(R0_uint8(0));
+      log3_2(FMT_INT24 " PUSH int24\n", INT(R_int24) & 0xFFFFFF);
       DISPATCH();
     }
 
     case OP_CU2I3: {
-      pop_1_uint16(R0);
-      push_1_int24(INT24(R0.uint16));
-      DISPATCH();
-    }
-
-      /* reduce store from U3 to U2 */
-    /*TODO: optimse by just remove the high byte stored on stack*/
-    case OP_CU3U2: {
-      pop_1_uint24(R0);
-      push_1_uint16((uint16_t)UINT(R0.uint24));
+      log3_2(FMT_INT16 " POP uint16\n", R0_uint16(0) & 0xFFFF);
+      R_int24 = INT24(R0_uint16(0));
+      log3_2(FMT_INT24 " PUSH int24\n", INT(R_int24) & 0xFFFFFF);
       DISPATCH();
     }
 
     case OP_CU3U4: {
-      pop_1_uint24(R0);
-      push_1_uint32((uint32_t)UINT(R0.uint24));
+      log3_2(FMT_INT24 " POP uint24\n", UINT(R0_uint24(0)) & 0xFFFFFF);
+      R_int32 = UINT(R0_uint24(0));
+      log3_2(FMT_INT32 " PUSH int32\n", R_int32);
       DISPATCH();
     }
-
-    case OP_CU4I3: {
-      pop_1_uint32(R0);
-      push_1_int24(INT24(R0.int32));
-      DISPATCH();
-    }
-
-    case OP_CU4U3: {
-      pop_1_uint32(R0);
-      push_1_uint24(UINT24((uint32_t)R0.int32));
-      DISPATCH();
-    }
-
-    case OP_CVFI3:
-    case OP_CVIU3:
-    case OP_CVUI3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
 
     case OP_DIVF4:
       opStack8 -= 4;
       opStackFlt[0] = opStackFlt[0] / opStackFlt[1];
       DISPATCH();
 
-    case OP_DIVI: {
+    case OP_DIVI3: {
+      // clang-format off
+      op_2_int24_to_1_int24( / );
+      // clang-format on
+      DISPATCH();
+    }
+
+    case OP_DIVI4: {
       // clang-format off
       op_2_int32_to_1_int32( / );
       // clang-format on
       DISPATCH();
     }
 
-    case OP_DIVI3: {
-      pop_2_int24();
-      log3_3(FMT_INT32 " / " FMT_INT32 " =", INT(R1.int24), INT(R0.int24));
-      push_1_int24(INT24(INT(R1.int24) / INT(R0.int24)));
+    case OP_DIVU3: {
+      // clang-format off
+      op_2_uint24_to_1_uint24( / );
+      // clang-format on
       DISPATCH();
     }
 
-    case OP_DIVU: {
+    case OP_DIVU4: {
       // clang-format off
       op_2_uint32_to_1_uint32( / );
       // clang-format on
       DISPATCH();
     }
 
-    case OP_DIVU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
-
     case OP_ENTER: {
-      const uint16_t localsAndArgsSize = R2.int16;
+#ifdef DEBUG_VM
+      uint16_t localsAndArgsSize = R2.int16;
+#endif
+      programStack -= R2.int16;
+      log3_4("FRAME SIZE: " FMT_INT16 " (from " FMT_INT24 " to " FMT_INT24 ")\n", R2.int16, programStack + R2.int16, programStack);
+
       PC += INT16_INCREMENT;
-      programStack -= localsAndArgsSize;
-      log3_4("FRAME SIZE: " FMT_INT16 " (from " FMT_INT24 " to " FMT_INT24 ")\n", localsAndArgsSize,
-             programStack + localsAndArgsSize, programStack);
 
 #ifdef DEBUG_VM
-      profileSymbol = VM_ValueToFunctionSymbol(vm, vPC - 3);
+      profileSymbol = VM_ValueToFunctionSymbol(_vm.vm, vPC - 3);
       /* save old stack frame for debugging traces */
-      *(int24_t *)&dataBase[programStack + 3] = INT24(programStack + localsAndArgsSize);
+      *(int24_t *)&_vm.dataBase[programStack + 3] = INT24(programStack + localsAndArgsSize);
       if (vm_debugLevel) {
-        Com_Printf("%s%i---> %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, vPC - 3));
+        Com_Printf("%s%i---> %s\n", VM_Indent(_vm.vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(_vm.vm, vPC - 3));
         {
           /* this is to allow setting breakpoints here in the
            * debugger */
-          vm->breakCount++;
-          VM_StackTrace(vm, vPC - 3, programStack);
+          _vm.vm->breakCount++;
+          VM_StackTrace(_vm.vm, vPC - 3, programStack);
         }
       }
 #endif
@@ -1210,117 +1229,79 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     }
 
     case OP_EQ3: {
-      pop_2_uint24();
-      log3_3(FMT_INT24 " == " FMT_INT24 "\n", UINT(R1.uint24), UINT(R0.uint24));
-      PC = (UINT(R1.uint24) == UINT(R0.uint24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_uint24_branch(==);
       DISPATCH();
     }
 
     case OP_EQ4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " == " FMT_INT32 "\n", R1.int32, R0.int32);
-      PC = (R1.int32 == R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_uint32_branch(==);
       DISPATCH();
     }
 
     case OP_EQF4: {
-      opStack8 -= 8;
-
-      if (opStackFlt[1] == opStackFlt[2]) {
-        PC = codeBase + INT(R2.int24);
-        DISPATCH();
-      } else {
-        PC += INT_INCREMENT;
-        DISPATCH();
-      }
+      op_2_float_branch(==);
+      DISPATCH();
     }
 
-    case OP_EQU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
-
     case OP_GEF4: {
-      pop_2_floats();
-      log3_3(FMT_FLT " >= " FMT_FLT "\n", R1.flt, R0.flt);
-      PC = (R1.flt >= R0.flt) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_float_branch(>=);
       DISPATCH();
     }
 
     case OP_GEI3: {
-      pop_2_int24();
-      log3_3(FMT_INT24 " >= " FMT_INT24 "\n", INT(R1.int24), INT(R0.int24));
-      PC = (INT(R1.int24) >= INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int24_branch(>=);
       DISPATCH();
     }
 
     case OP_GEI4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " >= " FMT_INT32 "\n", R1.int32, R0.int32);
-      PC = (R1.int32 >= R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int32_branch(>=);
       DISPATCH();
     }
 
-    case OP_GEU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
+    case OP_GEU3: {
+      op_2_uint24_branch(>=);
+      DISPATCH();
+    }
 
     case OP_GEU4: {
-      opStack8 -= 8;
-      if (((unsigned)R1.int32) >= ((unsigned)R0.int32)) {
-        PC = codeBase + INT(R2.int24);
-        DISPATCH();
-      } else {
-        PC += INT_INCREMENT;
-        DISPATCH();
-      }
+      op_2_uint32_branch(>=);
+      DISPATCH();
     }
 
     case OP_GTF4: {
-      opStack8 -= 8;
-
-      if (opStackFlt[1] > opStackFlt[2]) {
-        PC = codeBase + INT(R2.int24);
-        DISPATCH();
-      } else {
-        PC += INT_INCREMENT;
-        DISPATCH();
-      }
+      op_2_float_branch(>);
+      DISPATCH();
     }
 
     case OP_GTI3: {
-      pop_2_int24();
-      log3_3(FMT_INT24 " > " FMT_INT24 "\n", INT(R1.int24), INT(R0.int24));
-      PC = (INT(R1.int24) > INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int24_branch(>);
       DISPATCH();
     }
 
     case OP_GTI4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " > " FMT_INT32 "\n", R1.int32, R0.int32);
-      PC = (R1.int32 > R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int32_branch(>);
       DISPATCH();
     }
 
-    case OP_GTU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
+    case OP_GTU3: {
+      op_2_uint24_branch(>);
+      DISPATCH();
+    }
 
     case OP_GTU4: {
-      opStack8 -= 8;
-      if (((unsigned)R1.int32) > ((unsigned)R0.int32)) {
-        PC = codeBase + INT(R2.int24);
-        DISPATCH();
-      } else {
-        PC += INT_INCREMENT;
-        DISPATCH();
-      }
+      op_2_uint32_branch(>);
+      DISPATCH();
     }
 
     case OP_JUMP: {
 #ifdef MEMORY_SAFE
-      if ((unsigned)R0.int32 >= MAX_PROGRAM_COUNTER)
-        VM_AbortError(VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_JUMP");
+      if (UINT(R0_uint24(0)) >= MAX_PROGRAM_COUNTER)
+        VM_AbortError(_vm.vm, VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_JUMP");
 #endif
 
-      PC = codeBase + R0.int32;
       opStack8 -= 4;
+      log3_2("JUMP " FMT_INT24 "\n", UINT(R0_uint24(-4)));
+      PC = _vm.codeBase + INT(R0_int24(-4));
       DISPATCH();
     }
 
@@ -1330,11 +1311,11 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
       programStack += R2.int16;
 
       /* grab the saved program counter */
-      PC = codeBase + INT(*(int24_t *)&dataBase[programStack]);
+      PC = _vm.codeBase + INT(*(int24_t *)&_vm.dataBase[programStack]);
 #ifdef DEBUG_VM
-      profileSymbol = VM_ValueToFunctionSymbol(vm, vPC);
+      profileSymbol = VM_ValueToFunctionSymbol(_vm.vm, vPC);
       if (vm_debugLevel) {
-        Com_Printf("%s%i<--- %s\n", VM_Indent(vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(vm, vPC));
+        Com_Printf("%s%i<--- %s\n", VM_Indent(_vm.vm), (int)(opStack8 - _opStack), VM_ValueToSymbol(_vm.vm, vPC));
       }
 #endif
       /* check for leaving the VM */
@@ -1343,224 +1324,227 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 
 #ifdef MEMORY_SAFE
       if (PC >= PC_end)
-        VM_AbortError(VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_LEAVE");
+        VM_AbortError(_vm.vm, VM_PC_OUT_OF_RANGE, "VM program counter out of range in OP_LEAVE");
 #endif
 
       DISPATCH();
     }
 
     case OP_LEF4: {
-      pop_2_floats();
-      log3_3(FMT_FLT " <= " FMT_FLT "\n", R1.flt, R0.flt);
-      PC = (R1.flt <= R0.flt) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_float_branch(<=);
       DISPATCH();
     }
 
     case OP_LEI3: {
-      pop_2_int24();
-      log3_3(FMT_INT24 " <= " FMT_INT24 "\n", INT(R1.int24), INT(R0.int24));
-      PC = (INT(R1.int24) <= INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int24_branch(<=);
       DISPATCH();
     }
 
     case OP_LEI4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " <= " FMT_INT32 "\n", R1.int32, R0.int32);
-      PC = (R1.int32 <= R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int32_branch(<=);
       DISPATCH();
     }
 
-    case OP_LEU: {
-      opStack8 -= 8;
-      if (((unsigned)R1.int32) <= ((unsigned)R0.int32)) {
-        PC = codeBase + INT(R2.int24);
-        DISPATCH();
-      } else {
-        PC += INT_INCREMENT;
-        DISPATCH();
-      }
+    case OP_LEU3: {
+      op_2_uint24_branch(<=);
+      DISPATCH();
     }
 
-    case OP_LEU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
+    case OP_LEU4: {
+      op_2_uint32_branch(<=);
+      DISPATCH();
+    }
 
     case OP_LOAD1: {
-      pop_1_uint24(R0);
-      log3_2("R0: " FMT_INT24 "", UINT(R0.uint24));
-      VM_ReadAddrByte((vm_operand_t)UINT(R0.uint24), push_1_uint8);
+      log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+        R_uint8 = 0;
+      else {
+        if (UINT(R0_uint24(0)) < _vm.litLength)
+          R_uint8 = *(uint8_t *)&_vm.litBase[UINT(R0_uint24(0))];
+        else
+          R_uint8 = *(uint8_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+      }
+      log3_2(FMT_INT8 " PUSHED uint8\n", R_uint16 & 0xFF);
       DISPATCH();
     }
 
     case OP_LOAD2: {
-      pop_1_uint24(R0);
-      log3_2("R0: " FMT_INT24 "", UINT(R0.uint24));
-      push_1_uint16(*((uint16_t *)VM_GetReadAddr(UINT(R0.uint24), 2)));
+      log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+        R_uint16 = 0;
+      else {
+        if (UINT(R0_uint24(0)) < _vm.litLength)
+          R_uint16 = *(uint16_t *)&_vm.litBase[UINT(R0_uint24(0))];
+        else
+          R_uint16 = *(uint16_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+      }
+      log3_2(FMT_INT16 " PUSHED uint16\n", R_uint16 & 0xFFFF);
       DISPATCH();
     }
 
     case OP_LOAD3: {
-      pop_1_uint24(R0);
-      log3_2("RO: " FMT_INT24 "", UINT(R0.uint24));
-      push_1_uint24(*((uint24_t *)VM_GetReadAddr(UINT(R0.uint24), 3)));
+      log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+        R_uint24 = UINT24(0);
+      else {
+        if (UINT(R0_uint24(0)) < _vm.litLength)
+          R_uint24 = *(uint24_t *)&_vm.litBase[UINT(R0_uint24(0))];
+        else
+          R_uint24 = *(uint24_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+      }
+      log3_2(FMT_INT24 " PUSHED uint24\n", UINT(R_uint24));
       DISPATCH();
     }
 
     case OP_LOAD4: {
-      pop_1_uint24(R0);
-      log3_2("R0: " FMT_INT24 "", UINT(R0.uint24));
-      push_1_uint32(*((uint32_t *)VM_GetReadAddr(UINT(R0.uint24), 4)));
+      log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+        R_uint32 = 0;
+      else {
+        if (UINT(R0_uint24(0)) < _vm.litLength)
+          R_uint32 = *(uint32_t *)&_vm.litBase[UINT(R0_uint24(0))];
+        else
+          R_uint32 = *(uint32_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+      }
+      log3_2(FMT_INT32 " PUSHED uint32\n", R_uint32);
       DISPATCH();
     }
 
-    case OP_LOADF4: /* OP_LOAD3 will work */
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
-
     case OP_LOCAL: {
-      log3_2("&PS[" FMT_INT16 "]", R2.uint16);
-      push_1_uint24(UINT24(R2.uint16 + programStack));
-      PC += INT16_INCREMENT;
+      log3_2("&PS[" FMT_INT8 "]", R2.uint8);
+      push_1_uint24(UINT24(R2.uint8 + programStack));
+      PC += INT8_INCREMENT;
       DISPATCH();
     }
 
     case OP_LSH3: {
-      pop_2_uint24();
-      log3_3(FMT_INT32 " << " FMT_INT32 " = ", UINT(R1.uint24), UINT(R0.uint24));
-      push_1_uint24(UINT24(UINT(R1.uint24) << UINT(R0.uint24)));
+      op_2_uint24_to_1_uint24(<<);
       DISPATCH();
     }
 
     case OP_LSH4: {
-      pop_2_uint32();
-      log3_3(FMT_INT32 " << " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_uint32(R1.int32 << R0.int32);
+      op_2_uint32_to_1_uint32(<<);
       DISPATCH();
     }
 
-    case OP_LTF: {
-      pop_2_floats();
-      log3_3(FMT_FLT " < " FMT_FLT "\n", R1.flt, R0.flt);
-      PC = (R1.flt < R0.flt) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+    case OP_LTF4: {
+      op_2_float_branch(<);
       DISPATCH();
     }
 
     case OP_LTI3: {
-      pop_2_int24();
-      log3_4(FMT_INT24 " < " FMT_INT24 " = %d\n", INT(R1.int24), INT(R0.int24), (INT(R1.int24) < INT(R0.int24)));
-      PC = (INT(R1.int24) < INT(R0.int24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int24_branch(<);
       DISPATCH();
     }
 
     case OP_LTI4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " < " FMT_INT32 "\n", R1.int32, R0.int32);
-      PC = (R1.int32 < R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_int32_branch(<);
       DISPATCH();
     }
 
-    case OP_LTU: {
-      opStack8 -= 8;
-      if (((unsigned)R1.int32) < ((unsigned)R0.int32)) {
-        PC = codeBase + INT(R2.int24);
-        DISPATCH();
-      } else {
-        PC += INT_INCREMENT;
-        DISPATCH();
-      }
+    case OP_LTU3: {
+      op_2_uint24_branch(<);
+      DISPATCH();
     }
 
-    case OP_LTU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
+    case OP_LTU4: {
+      op_2_uint32_branch(<);
+      DISPATCH();
+    }
 
     case OP_MODI3: {
-      pop_2_int24();
-      log3_3(FMT_INT32 " %% " FMT_INT32 " = ", INT(R1.int24), INT(R0.int24));
-      push_1_int24(INT24(INT(R1.int24) % INT(R0.int24)));
-      DISPATCH();
-    }
-    case OP_MODI4: {
+      /* op_2_int24_to_1_int24(%); */
+      log3_3(FMT_INT24 " " FMT_INT24 " POP int24\n", INT(R1_int24(0)), INT(R0_int24(0)));
       opStack8 -= 4;
-      *opStack32 = R1.int32 % R0.int32;
+      log3_3(FMT_INT24 " %% " FMT_INT24 " ", INT(R1_int24(-4)), INT(R0_int24(-4)));
+      R_int24 = INT24(INT(R1_int24(-4)) % INT(R0_int24(-4)));
+      log3_2(FMT_INT24 " PUSHED int24\n", INT(R_int24));
       DISPATCH();
     }
 
-    case OP_MODU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
+    case OP_MODI4: {
+      /* op_2_int32_to_1_int32(%); */
+      log3_3(FMT_INT32 " " FMT_INT32 " POP int32\n", R1_int32(0), R0_int32(0));
+      opStack8 -= 4;
+      log3_3(FMT_INT32 " %% " FMT_INT32 " =", R1_int32(-4), R0_int32(-4));
+      R_int32 = R1_int32(-4) % R0_int32(-4);
+      log3_2(FMT_INT32 " PUSHED int32\n", R_int32);
+      DISPATCH();
+    }
+
+    case OP_MODU3: {
+      /* op_2_uint24_to_1_uint24(%); */
+      log3_3(FMT_INT24 " " FMT_INT24 " POP uint24\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));
+      opStack8 -= 4;
+      log3_3(FMT_INT24 " %% " FMT_INT24 " ", UINT(R1_uint24(-4)), UINT(R0_uint24(-4)));
+      R_uint24 = UINT24(UINT(R1_uint24(-4)) % UINT(R0_uint24(-4)));
+      log3_2(FMT_INT24 " PUSHED uint24\n", UINT(R_uint24));
+      DISPATCH();
+    }
 
     case OP_MODU4: {
+      /* op_2_uint32_to_1_uint32(%); */
+      log3_3(FMT_INT32 " " FMT_INT32 " POP uint32\n", R1_uint32(0), R0_uint32(0));
       opStack8 -= 4;
-      *opStack32 = ((unsigned)R1.int32) % ((unsigned)R0.int32);
+      log3_3(FMT_INT32 " %% " FMT_INT32 " =", R1_uint32(-4), R0_uint32(-4));
+      R_uint32 = R1_uint32(-4) % R0_uint32(-4);
+      log3_2(FMT_INT32 " PUSHED uint32\n", R_uint32);
       DISPATCH();
     }
 
     case OP_MULF4: {
-      opStack8 -= 4;
-      opStackFlt[0] = opStackFlt[0] * opStackFlt[1];
+      op_2_float_to_1_float(*);
       DISPATCH();
     }
 
     case OP_MULI3: {
-      pop_2_int24();
-      log3_3(FMT_INT32 " * " FMT_INT32 " = ", INT(R1.int24), INT(R0.int24));
-      push_1_int24(INT24(INT(R1.int24) * INT(R0.int24)));
+      op_2_int24_to_1_int24(*);
       DISPATCH();
     }
 
     case OP_MULI4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " * " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_int32(R1.int32 * R0.int32);
+      op_2_int32_to_1_int32(*);
       DISPATCH();
     }
 
-    case OP_MULU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
+    case OP_MULU3: {
+      op_2_uint24_to_1_uint24(*);
+      DISPATCH();
+    }
 
     case OP_MULU4: {
-      opStack8 -= 4;
-      *opStack32 = ((unsigned)R1.int32) * ((unsigned)R0.int32);
+      op_2_uint32_to_1_uint32(*);
       DISPATCH();
     }
 
     case OP_NE3: {
-      pop_2_uint24();
-      log3_3(FMT_INT24 " != " FMT_INT24 "\n", UINT(R1.uint24), UINT(R0.uint24));
-      PC = (UINT(R1.uint24) != UINT(R0.uint24)) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_uint24_branch(!=);
       DISPATCH();
     }
 
     case OP_NE4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " != " FMT_INT32 "\n", R1.int32, R0.int32);
-      PC = (R1.int32 != R0.int32) ? codeBase + UINT(R2.uint24) : PC + INT24_INCREMENT;
+      op_2_uint32_branch(!=);
       DISPATCH();
     }
 
-    case OP_NEF: {
-      opStack8 -= 8;
-
-      if (opStackFlt[1] != opStackFlt[2]) {
-        PC = codeBase + INT(R2.int24);
-        DISPATCH();
-      } else {
-        PC += INT_INCREMENT;
-        DISPATCH();
-      }
+    case OP_NEF4: {
+      op_2_float_branch(!=);
+      DISPATCH();
     }
 
     case OP_NEGF4: {
-      opStackFlt[0] = -opStackFlt[0];
+      op_1_float_to_1_float(-);
       DISPATCH();
     }
 
     case OP_NEGI3: {
-      pop_1_int24(R0);
-      push_1_int24(INT24(-INT(R0.int24)));
+      op_1_int24_to_1_int24(-);
       DISPATCH();
     }
 
     case OP_NEGI4: {
-      pop_1_int32(R0);
-      push_1_int32(-R0.int32);
+      op_1_int32_to_1_int32(-);
       DISPATCH();
     }
 
@@ -1575,78 +1559,67 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
     }
 
     case OP_RSHI3: {
-      pop_2_int24();
-      log3_3(FMT_INT32 " >> " FMT_INT32 " = ", INT(R1.int24), INT(R0.int24));
-      push_1_int24(INT24(INT(R1.int24) >> INT(R0.int24)));
+      op_2_int24_to_1_int24(>>);
       DISPATCH();
     }
 
     case OP_RSHI4: {
-      pop_2_int32();
-      log3_3(FMT_INT32 " >> " FMT_INT32 " =", R1.int32, R0.int32);
-      push_1_int32(R1.int32 >> R0.int32);
+      op_2_int32_to_1_int32(>>);
       DISPATCH();
     }
 
-    case OP_RSHU3:
-      VM_AbortError(VM_BAD_INSTRUCTION, "Not implemented Yet");
+    case OP_RSHU3: {
+      op_2_uint24_to_1_uint24(>>);
+      DISPATCH();
+    }
 
     case OP_RSHU4: {
-      opStack8 -= 4;
-      *opStack32 = ((unsigned)R1.int32) >> R0.int32;
+      op_2_uint32_to_1_uint32(>>);
       DISPATCH();
     }
 
     case OP_STORE1: {
-      pop_1_uint8(R0);
-      pop_1_uint24(R1);
-      VM_WriteAddrByte((vm_operand_t)UINT(R1.uint24), R0.uint8);
-      log3_3("*(" FMT_INT24 ") = " FMT_INT8 "  MOVE\n", UINT(R1.uint24), R0.uint8);
+      VM_WriteAddrByte((vm_operand_t)UINT(R1_uint24(0)), R0_uint8(0));
+      log3_3("*(" FMT_INT24 ") = " FMT_INT8 "  MOVE\n", UINT(R1_uint24(0)), R0_uint8(0));
+      opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_STORE2: {
-      pop_1_uint16(R0);
-      pop_1_uint24(R1);
-      *((uint16_t *)VM_GetWriteAddr(UINT(R1.uint24), 2)) = R0.uint16;
-      log3_3("*(" FMT_INT24 ") = " FMT_INT16 "  MOVE\n", UINT(R1.uint24), R0.uint16);
+      VM_WriteAddrUint16((vm_operand_t)UINT(R1_uint24(0)), R0_uint16(0));
+      log3_3("*(" FMT_INT24 ") = " FMT_INT16 "  MOVE\n", UINT(R1_uint24(0)), R0_uint16(0));
+      opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_STORE3: {
-      pop_2_uint24();
-      *((uint24_t *)VM_GetWriteAddr(UINT(R1.uint24), 3)) = R0.uint24;
-      log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE (3 bytes)\n", UINT(R1.uint24), UINT(R0.uint24));
+      R0.uint24 = R0_uint24(0);
+      VM_WriteAddrUint24((vm_operand_t)UINT(R1_uint24(0)), R0.uint24);
+      log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE (3 bytes)\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));
+      opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_STORE4: {
-      pop_1_uint32(R0);
-      pop_1_uint24(R1);
-      *((uint32_t *)VM_GetWriteAddr(UINT(R1.uint24), 4)) = R0.uint32;
-      log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE\n", UINT(R1.uint24), R0.uint32);
+      R0.uint32 = R0_uint32(0);
+      VM_WriteAddrUint32((vm_operand_t)UINT(R1_uint24(0)), R0.uint32);
+      log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE\n", UINT(R1_uint24(0)), R0.uint32);
+      opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_SUB3: {
-      pop_2_int24();
-      log3_3(FMT_INT32 " - " FMT_INT32 " = ", INT(R1.int24), INT(R0.int24));
-      push_1_int24(INT24(INT(R1.int24) - INT(R0.int24)));
+      op_2_int24_to_1_int24(-);
       DISPATCH();
     }
 
     case OP_SUB4: {
-      log3_4(FMT_INT32 " - " FMT_INT32 " = " FMT_INT32 " PUSHED\n", R1.int32, R0.int32, R1.int32 - R0.int32);
-      opStack8 -= 4;
-      *opStack32 = R1.int32 - R0.int32;
+      op_2_int32_to_1_int32(-);
       DISPATCH();
     }
 
     case OP_SUBF4: {
-      pop_2_floats();
-      log3_3(FMT_FLT " - " FMT_FLT " = ", R1.flt, R0.flt);
-      R1.flt -= R0.flt;
-      push_1_float(R1.flt);
+      op_2_float_to_1_float(-);
       DISPATCH();
     }
     }
@@ -1655,9 +1628,9 @@ static ustdint_t VM_CallInterpreted(vm_t *vm, int24_t *args) {
 done:
 #ifdef MEMORY_SAFE
   if (opStack32[-1] != 0x0000BEEF)
-    VM_AbortError(VM_STACK_ERROR, "Operation stack error");
+    VM_AbortError(_vm.vm, VM_STACK_ERROR, "Operation stack error");
 #endif
-  vm->programStack = stackOnEntry;
+  _vm.vm->programStack = stackOnEntry;
 
   /* return the result of the bytecode computations */
 
