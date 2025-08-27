@@ -5,7 +5,7 @@
 vm_t vm;
 
 uint32_t systemCalls(vm_t *vm, uint8_t *args);
-void print_string(const char *str);
+void     print_string(const char *str);
 
 void vdu_init() {
   if (VM_Create(&vm, vdu_vm_bytecode, VDU_VM_BYTECODE_SIZE, vdu_vm_bytecode_ram, VDU_VM_BYTECODE_RAM_SIZE, systemCalls)) {

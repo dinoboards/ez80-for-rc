@@ -64,9 +64,44 @@ _spike:
 	LD	A, 8
 	LD	B, 0
 	LD	C, 65
-	RST.L	%10
+	RST	%10
+
+	LD	C, 65
+	RST	%10
+
+	LD	C, 65
+	RST	%10
+
+	LD	C, 65
+	RST	%10
+
+	LD	C, 65
+	RST	%10
+
+	LD	C, 25	; plot
+	RST	%10
+
+	LD	C, 85	; triangle
+	RST	%10
+
+	LD	C, %11
+	RST	%10
+
+	LD	C, %22
+	RST	%10
+
+	LD	C, %33
+	RST	%10
+
+	LD	C, %44
+	RST	%10
+
+
 	nop
 	nop
+
+
+
 	ret
 
 	di

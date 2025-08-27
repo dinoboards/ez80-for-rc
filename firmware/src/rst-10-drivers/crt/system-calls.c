@@ -4,7 +4,8 @@
 
 // HOST ONLY
 
-void     print_string(const char *str);
+void print_string(const char *str);
+int  putchar(int ch);
 
 extern vm_t vm;
 
@@ -34,21 +35,22 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return 0;
 
   case -3: /* MEMSET */
-    // if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
-      {memset(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9));
-    }
+           // if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
+    { memset(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9)); }
     return VMA_UINT24(3);
 
   case -4: /* MEMCPY */
-    // if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0 &&
-    //     VM_MemoryRangeValid(VMA_UINT24(6) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
-      {memcpy(VMA_PTR(3, vm), VMA_PTR(6, vm), VMA_UINT24(9));
-    }
+           // if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0 &&
+           //     VM_MemoryRangeValid(VMA_UINT24(6) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
+    { memcpy(VMA_PTR(3, vm), VMA_PTR(6, vm), VMA_UINT24(9)); }
     return VMA_UINT24(3);
+
+  case -5: /* put_char */
+    putchar(VMA_UINT24(3));
+    return 0;
 
   default:
     return -1;
   }
   return 0;
 }
-

@@ -1,18 +1,16 @@
+#include "vm.h"
+#include "vm_bytecode.h"
 #include <ez80.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "vm.h"
-#include "vm_bytecode.h"
-
 
 /* Reservice 16K for main stack */
 #define RESERVE_SPL_SIZE 16386
 
 uint32_t systemCalls(vm_t *vm, uint8_t *args);
-void *VM_ArgPtr(intptr_t vmAddr, vm_t *vm);
+void    *VM_ArgPtr(intptr_t vmAddr, vm_t *vm);
 
 extern uint8_t end_of_bss[];
-
 
 /*
 Options
@@ -28,11 +26,11 @@ int main(/*const int argc, const char *argv[]*/) {
     return -1;
   }
 
-  uint8_t * const bytecode_start = end_of_bss+4;
+  uint8_t *const bytecode_start = end_of_bss + 4;
 
-  uint8_t* bytecode_read_ptr = bytecode_start;
-  uint24_t bytecode_length = 0;
-  size_t n;
+  uint8_t *bytecode_read_ptr = bytecode_start;
+  uint24_t bytecode_length   = 0;
+  size_t   n;
 
   do {
     n = fread(bytecode_read_ptr, 1, 128, f);
@@ -42,10 +40,10 @@ int main(/*const int argc, const char *argv[]*/) {
 
   fclose(f);
 
-  uint8_t * const RAM_start = bytecode_start + n;
+  uint8_t *const RAM_start  = bytecode_start + n;
   const uint24_t RAM_length = get_memory_end() - RAM_start - RESERVE_SPL_SIZE;
 
-  vm_t  vm;
+  vm_t vm;
   printf("             VM: %06X\n", (uint24_t)&vm);
   printf(" bytecode_start: %06X\n", (uint24_t)bytecode_start);
   printf("bytecode_length: %06X\n", bytecode_length);

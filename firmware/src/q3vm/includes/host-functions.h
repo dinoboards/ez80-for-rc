@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-extern void trap_Printf(const char *const str);
 extern void print_string(const char *const str);
+extern int  putchar(int ch);
 
 #endif

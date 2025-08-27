@@ -10,7 +10,7 @@ typedef int size_t;
 
 typedef char *va_list;
 #define _INTSIZEOF(n)   (sizeof(n))
-#define va_start(ap, v) (ap = (va_list) & v + _INTSIZEOF(v))
+#define va_start(ap, v) (ap = (va_list)&v + _INTSIZEOF(v))
 #define va_arg(ap, t)   (*(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)))
 #define va_end(ap)      (ap = (va_list)0)
 
@@ -59,7 +59,7 @@ void *memset(void *dest, int c, size_t count);
 void *memcpy(void *dest, const void *src, size_t count);
 
 // Math functions
-int    abs(int n);
+// int    abs(int n);
 double fabs(double x);
 
 #endif

@@ -34,12 +34,13 @@ IFDEF	ZEXALL
 	xref	Z80test
 	call	Z80test
 ENDIF
+	di
+
 	XREF	_vdu_init
 	CALL	_vdu_init
 
 	xref	_spike
 	call	_spike
-	; di
 	jp	z80_invoke
 
 	global	remove_usb_tick_hook

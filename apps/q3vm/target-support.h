@@ -24,7 +24,6 @@ typedef uint24_t vm_size_t; /* type to represent size of a vm image (32bits or 2
 #define to_uint24(x) (x)
 #define to_int24(x)  (x)
 
-
 #define UINT   to_ustdint
 #define INT    to_stdint
 #define UINT24 to_uint24

@@ -1,20 +1,20 @@
+#include "verifications-byte-code.h"
+#include "vm.h"
 #include <stdint.h>
 #include <stdio.h>
-#include "vm.h"
-#include "verifications-byte-code.h"
 
-vm_t  vm;
+vm_t vm;
 
 #define STACK_SIZE 4096
 
 uint32_t systemCalls(vm_t *vm, uint8_t *args);
-void *VM_ArgPtr(intptr_t vmAddr, vm_t *vm);
+void    *VM_ArgPtr(intptr_t vmAddr, vm_t *vm);
 
 uint8_t ram[2048];
 
 int main(/*const int argc, const char *argv[]*/) {
 
-  for(int i = 0; i < Q3VM_VERIFICATION_SIZE; i++) {
+  for (int i = 0; i < Q3VM_VERIFICATION_SIZE; i++) {
 
     if (VM_Create(&vm, q3vm_verification[i].image, q3vm_verification[i].size, ram, 2048 + STACK_SIZE, systemCalls) != 0) {
       printf("VM %s Create failed\n", q3vm_verification[i].name);

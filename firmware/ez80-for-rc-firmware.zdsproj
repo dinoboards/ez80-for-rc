@@ -500,6 +500,10 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <!-- watch information -->
 <watch-elements>
 <watch-element expression="vm" />
+<watch-element expression="_vm" />
+<watch-element expression="*PC" />
+<watch-element expression="PC" />
+<watch-element expression="args" />
 </watch-elements>
 
 <!-- breakpoint information -->

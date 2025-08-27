@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define VDU_VM_BYTECODE_SIZE     6921
-#define VDU_VM_BYTECODE_RAM_SIZE 516
+#define VDU_VM_BYTECODE_SIZE     11761
+#define VDU_VM_BYTECODE_RAM_SIZE 736
 
 extern const uint8_t vdu_vm_bytecode[VDU_VM_BYTECODE_SIZE];
 

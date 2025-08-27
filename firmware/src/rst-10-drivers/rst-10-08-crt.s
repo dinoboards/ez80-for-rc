@@ -11,7 +11,7 @@
 	.assume adl=1
 ;
 ; CRT DISPATCH
-; Dispatcher for the RST.L %10 trap functions
+; Dispatcher for the RST %10 trap functions
 ;
 ; Inputs:
 ;   B      = CRT sub function index
@@ -35,7 +35,7 @@ _crt_dispatch:
 
 	LD	A, 1					; UNKNOWN SUB FUnCTION
 	OR	A
-	RET.L
+	RET
 
 	; C is char to be sent
 	; spare h, l, d, e
@@ -46,7 +46,7 @@ crt_vdu:
 	CALL	_vdu
 	LD	A, 8					; restore A and BC
 	POP	BC
-	RET.L
+	RET
 
 ; // example of sending to vdu stream
 ; 	;VDU 24,x1;y1;x2;y2
@@ -66,4 +66,4 @@ crt_vdu:
 crt_ansi:
 crt_key_event:
 crt_vdp_fn:
-	RET.L
+	RET

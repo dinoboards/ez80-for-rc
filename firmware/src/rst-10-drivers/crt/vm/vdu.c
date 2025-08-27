@@ -1,7 +1,49 @@
-#include "bg_lib.h"
+#include "vdu.h"
+#include "stddef.h"
 #include <host-functions.h>
-#include <stdint.h>
+// #include <stdint.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #include <v99x8-super.h>
 
-void vdu(uint24_t code) {
-  printf("Char is %d\n\r", code);
+// Y co-ord to store font data
+// need enough room to allow 2 pages for all modes
+#define FONT_Y_OFFSET (current_display_mode >= 16 ? 256 : (576 * 2))
+
+static void graphic_print_char(uint8_t ch);
+
+// Must be first function in file for vm
+int24_t vdu(uint8_t ch) {
+  if (vdu_required_length) {
+    data[vdu_index++] = ch;
+    if (vdu_index == vdu_required_length) {
+      mos_vdu_handler fn  = current_fn;
+      current_fn          = NULL;
+      vdu_index           = 0;
+      vdu_required_length = 0;
+
+      fn(); // may error and not return
+    }
+    return -1;
+  }
+
+  if (ch == 25) { // plot
+    current_fn          = vdu_plot;
+    vdu_required_length = 5;
+    return -1;
+  }
+
+  graphic_print_char(ch);
+  // print to graphic screen at current text post
+
+  // for the time, lets dual output to serial and graphic
+  if (ch <= 127)
+    return ch;
+
+  return -1;
+}
+
+static void graphic_print_char(uint8_t ch) {
+  if (ch >= ' ' && ch < 126)
+    putchar(ch);
 }
