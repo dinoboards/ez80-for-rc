@@ -31,8 +31,6 @@
 #endif
 
 #if 0
-extern size_t strlcpy(char *dst, const char *src, size_t size);
-
 #define DEBUG_VM /**< ifdef: enable debug functions and additional checks */
 #endif
 
@@ -176,12 +174,12 @@ typedef struct vm_s {
   vmSymbol_t *symbols;       /**< By VM_LoadSymbols: names for debugging */
   std_int     breakFunction; /**< For debugging: break at this function */
   std_int     breakCount;    /**< Used for breakpoints, triggered by OP_BREAK */
+  ustdint_t   callLevel;     /**< Counts recursive VM_Call */
 #endif
 
-  /* TODO: this probably can be changed to a uint16_t */
-  ustdint_t callLevel; /**< Counts recursive VM_Call */
-
   vmErrorCode_t lastError; /**< Last known error */
+
+  struct vm_s *vm;
 } vm_t;
 
 /******************************************************************************
@@ -277,7 +275,7 @@ void VM_Debug(uint8_t level);
  * @param[in] level Error identifier, see vmErrorCode_t.
  * @param[in] error Human readable error text. */
 void Com_Error(vmErrorCode_t level, const char *error);
-#define VM_AbortError(a, description)                                                                                              \
+#define VM_AbortError(vm, a, description)                                                                                          \
   {                                                                                                                                \
     vm->lastError = a;                                                                                                             \
     Com_Error(a, description);                                                                                                     \
@@ -294,13 +292,13 @@ void Com_Error(vmErrorCode_t level, const char *error);
 #define VM_Debug(a)
 #define Com_Error(level, error)
 
-#define VM_AbortError(a, description)                                                                                              \
+#define VM_AbortError(vm, a, description)                                                                                          \
   {                                                                                                                                \
     vm->lastError = a;                                                                                                             \
     return a;                                                                                                                      \
   }
 
-#define VM_Error(a, description) vm->lastError = a;
+#define VM_Error(a, description)
 
 #endif
 

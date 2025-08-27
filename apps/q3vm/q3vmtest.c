@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "vm.h"
-#include "tests-byte-code.h"
+#include "verifications-byte-code.h"
 
 vm_t  vm;
 
