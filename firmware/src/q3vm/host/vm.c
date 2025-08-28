@@ -796,41 +796,41 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 #define op_2_int24_branch(operation)                                                                                               \
   log3_3(FMT_INT24 " " #operation " " FMT_INT24 "\n", INT(R1_int24(0)), INT(R0_int24(0)));                                         \
   if ((INT(R1_int24(0)) operation INT(R0_int24(0))))                                                                               \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                           \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_uint24_branch(operation)                                                                                              \
   log3_3(FMT_INT24 " " #operation " " FMT_INT24 "\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));                                     \
   if ((UINT(R1_uint24(0)) operation UINT(R0_uint24(0))))                                                                           \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                           \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_int32_branch(operation)                                                                                               \
   log3_3(FMT_INT32 " " #operation " " FMT_INT32 "\n", R1_int32(0), R0_int32(0));                                                   \
   if ((R1_int32(0) operation R0_int32(0)))                                                                                         \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                           \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_uint32_branch(operation)                                                                                              \
   log3_3(FMT_INT32 " " #operation " " FMT_INT32 "\n", R1_uint32(0), R0_uint32(0));                                                 \
   if ((R1_uint32(0) operation R0_uint32(0)))                                                                                       \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                           \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_float_branch(operation)                                                                                               \
   log3_3(FMT_FLT " " #operation " " FMT_FLT "\n", R1_float(0), R0_float(0));                                                       \
   if ((R1_float(0) operation R0_float(0)))                                                                                         \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                           \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 typedef union stack_entry_u {

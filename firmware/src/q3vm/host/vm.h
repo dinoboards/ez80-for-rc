@@ -283,7 +283,9 @@ void Com_Error(vmErrorCode_t level, const char *error);
   }
 
 #define VM_Error(a, description)                                                                                                   \
-  { Com_Error(a, description); }
+  {                                                                                                                                \
+    Com_Error(a, description);                                                                                                     \
+  }
 
 #else
 #define VM_VmProfile_f(a)
