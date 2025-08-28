@@ -1,8 +1,8 @@
+#include "../../q3vm/includes/host-functions.h"
 #include "../../q3vm/host/target-support.h"
 #include "../../q3vm/host/vm.h"
 #include "vdu_vm_bytecode.h"
-
-// HOST ONLY
+#include "vm-promoted-fn.h"
 
 void print_string(const char *str);
 int  putchar(int ch);
@@ -49,8 +49,9 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     putchar(VMA_UINT24(3));
     return 0;
 
+
   default:
-    return -1;
+    return dispatch_hosted_fn(vm, args);
   }
   return 0;
 }

@@ -1,6 +1,8 @@
+#include "../../q3vm/includes/host-functions.h"
 #include "../../q3vm/host/target-support.h"
 #include "../../q3vm/host/vm.h"
 #include "vdu_vm_bytecode.h"
+#include "vm-promoted-fn.h"
 
 vm_t vm;
 
@@ -12,6 +14,8 @@ void vdu_init() {
     print_string("VM Create failed.\n\r");
     return;
   }
+
+  link_vm_globals(&vm);
 
   VM_Call(&vm, 255);
 }

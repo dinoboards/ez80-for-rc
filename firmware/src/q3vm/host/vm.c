@@ -437,8 +437,7 @@ uint8_t mock_io[4] = {1, 2, 3, 4};
 
 bool VM_VerifyReadOK(vm_t *vm, vm_size_t vaddr, int size) {
   if (vaddr > 0xFF0000 && size == 1) {
-    printf("mocking I/O Access\n");
-    return true;
+    return true; /* mem and i/o mapping via host */
   }
 
   if (vaddr < vm->litLength) {
@@ -1346,7 +1345,7 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
 
     case OP_LOAD1: {
       log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
-      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 1))
         R_uint8 = 0;
       else {
         if (UINT(R0_uint24(0)) < _vm.litLength)
@@ -1360,7 +1359,7 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
 
     case OP_LOAD2: {
       log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
-      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 2))
         R_uint16 = 0;
       else {
         if (UINT(R0_uint24(0)) < _vm.litLength)
@@ -1374,7 +1373,7 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
 
     case OP_LOAD3: {
       log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
-      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 3))
         R_uint24 = UINT24(0);
       else {
         if (UINT(R0_uint24(0)) < _vm.litLength)

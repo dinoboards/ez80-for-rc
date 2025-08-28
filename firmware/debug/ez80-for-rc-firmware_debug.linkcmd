@@ -6,8 +6,9 @@
 
 /* compiler options */
 /* -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
-/* -define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list */
-/* -listinc -NOmodsect -optspeed -promote -NOreduceopt */
+/* -define:RC2014_FIRMWARE -define:__ZDS__ -genprintf -keepasm */
+/* -keeplst -list -listinc -NOmodsect -optspeed -promote */
+/* -NOreduceopt */
 /* -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92 */
 /*-asmsw:"  */
@@ -97,83 +98,85 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
 
 "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug"= \
- ".\base-drv.obj", \
- ".\boot_prompt.obj", \
- ".\build-date.obj", \
- ".\ch376.obj", \
- ".\ch376asm.obj", \
- ".\class_hid.obj", \
- ".\class_hid_keyboard.obj", \
- ".\class_hub.obj", \
- ".\class_scsi.obj", \
- ".\class_ufi.obj", \
- ".\clib.obj", \
- ".\cpu-freq-calculator.obj", \
- ".\critical-section.obj", \
- ".\cstartup.obj", \
- ".\delay.obj", \
- ".\dev_transfers.obj", \
- ".\enumerate.obj", \
- ".\enumerate_hub.obj", \
- ".\enumerate_storage.obj", \
- ".\gpio-b4-isr-marshaller.obj", \
- ".\i2c-calculate.obj", \
- ".\init-clocks.obj", \
- ".\init-f92.obj", \
- ".\internal-hiram.obj", \
- ".\kyb_driver.obj", \
- ".\kyb_driver_event.obj", \
- ".\kyb_driver_eventasm.obj", \
- ".\kyb_driverasm.obj", \
- ".\main.obj", \
- ".\mse_driver.obj", \
- ".\protocol.obj", \
- ".\rom-flashing-calculator.obj", \
- ".\rst-08-io.obj", \
- ".\rst-10-00-system-utils-functions.obj", \
- ".\rst-10-01-rtc-functions.obj", \
- ".\rst-10-02-system-timer-functions.obj", \
- ".\rst-10-03-uart-functions.obj", \
- ".\rst-10-04-i2c-functions.obj", \
- ".\rst-10-06-usb-functions.obj", \
- ".\rst-10-07-emulator-function.obj", \
- ".\rst-10-08-crt.obj", \
- ".\rst-10-functions.obj", \
- ".\rst-18-function.obj", \
- ".\scsi_driver.obj", \
- ".\system-vars.obj", \
- ".\test.obj", \
- ".\transfers.obj", \
- ".\uart-calculate.obj", \
- ".\uart-rx-buffer-add-to.obj", \
- ".\uart-rx-buffer-empty.obj", \
- ".\uart-rx-buffer-full.obj", \
- ".\uart-rx-buffer-get-length.obj", \
- ".\uart-rx-buffer-get.obj", \
- ".\uart-rx-buffer-init.obj", \
- ".\uart-rx-variables.obj", \
- ".\ufi_driver.obj", \
- ".\usb-base-drv.obj", \
- ".\usb-tick-sr.obj", \
- ".\usb_cbi.obj", \
- ".\usb_state.obj", \
- ".\vdu.obj", \
- ".\vdu_vm_bytecode.obj", \
- ".\vectors16.obj", \
- ".\vm.obj", \
- ".\work-area.obj", \
- ".\z80-emulator-critical.obj", \
- ".\z80-emulator-ix.obj", \
- ".\z80-emulator-iy.obj", \
- ".\z80-emulator-lil.obj", \
- ".\z80-emulator-lis.obj", \
- ".\z80-emulator-logging.obj", \
- ".\z80-emulator-sil.obj", \
- ".\z80-emulator.obj", \
- ".\z80-test.obj", \
  ".\zexall.obj", \
- ".\system-calls.obj", \
+ ".\z80-test.obj", \
+ ".\z80-emulator.obj", \
+ ".\z80-emulator-sil.obj", \
+ ".\z80-emulator-logging.obj", \
+ ".\z80-emulator-lis.obj", \
+ ".\z80-emulator-lil.obj", \
+ ".\z80-emulator-iy.obj", \
+ ".\z80-emulator-ix.obj", \
+ ".\z80-emulator-critical.obj", \
+ ".\work-area.obj", \
+ ".\vm.obj", \
+ ".\vm-promoted-fn.obj", \
+ ".\vectors16.obj", \
+ ".\vdu_vm_bytecode.obj", \
  ".\vdu_init.obj", \
+ ".\vdu.obj", \
+ ".\usb_state.obj", \
+ ".\usb_cbi.obj", \
+ ".\usb-tick-sr.obj", \
+ ".\usb-base-drv.obj", \
+ ".\ufi_driver.obj", \
+ ".\uart-rx-variables.obj", \
+ ".\uart-rx-buffer-init.obj", \
+ ".\uart-rx-buffer-get.obj", \
+ ".\uart-rx-buffer-get-length.obj", \
+ ".\uart-rx-buffer-full.obj", \
+ ".\uart-rx-buffer-empty.obj", \
+ ".\uart-rx-buffer-add-to.obj", \
+ ".\uart-calculate.obj", \
+ ".\transfers.obj", \
+ ".\test.obj", \
+ ".\system-vars.obj", \
+ ".\system-calls.obj", \
+ ".\scsi_driver.obj", \
+ ".\rst-18-function.obj", \
+ ".\rst-10-functions.obj", \
+ ".\rst-10-08-crt.obj", \
+ ".\rst-10-07-emulator-function.obj", \
+ ".\rst-10-06-usb-functions.obj", \
+ ".\rst-10-04-i2c-functions.obj", \
+ ".\rst-10-03-uart-functions.obj", \
+ ".\rst-10-02-system-timer-functions.obj", \
+ ".\rst-10-01-rtc-functions.obj", \
+ ".\rst-10-00-system-utils-functions.obj", \
+ ".\rst-08-io.obj", \
+ ".\rom-flashing-calculator.obj", \
+ ".\protocol.obj", \
+ ".\mse_driver.obj", \
+ ".\main.obj", \
+ ".\kyb_driverasm.obj", \
+ ".\kyb_driver_eventasm.obj", \
+ ".\kyb_driver_event.obj", \
+ ".\kyb_driver.obj", \
+ ".\internal-hiram.obj", \
+ ".\init-f92.obj", \
+ ".\init-clocks.obj", \
+ ".\i2c-calculate.obj", \
+ ".\graphic_print_char.obj", \
+ ".\gpio-b4-isr-marshaller.obj", \
+ ".\enumerate_storage.obj", \
+ ".\enumerate_hub.obj", \
+ ".\enumerate.obj", \
+ ".\dev_transfers.obj", \
+ ".\delay.obj", \
+ ".\cstartup.obj", \
+ ".\critical-section.obj", \
+ ".\cpu-freq-calculator.obj", \
+ ".\clib.obj", \
+ ".\class_ufi.obj", \
+ ".\class_scsi.obj", \
+ ".\class_hub.obj", \
+ ".\class_hid_keyboard.obj", \
+ ".\class_hid.obj", \
+ ".\ch376asm.obj", \
+ ".\ch376.obj", \
+ ".\build-date.obj", \
+ ".\boot_prompt.obj", \
+ ".\base-drv.obj", \
  "C:\ZDS\lib\std\chelpD.lib", \
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \

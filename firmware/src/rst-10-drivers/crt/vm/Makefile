@@ -33,8 +33,8 @@ dispatch.vmasm: dispatch.c $(INCLUDES)  $(VM_C_SOURCE)
 vdu/variables.vmasm: vdu/variables.c $(INCLUDES)  $(VM_C_SOURCE)
 
 bytecode.qvm: $(VDU_ASM_FILES) $(wildcard ./vdu/vdu_25/*.c)
-	@$(Q3ASM) -v -l -m -o "bytecode"  dispatch.vmasm bg_lib.vmasm vdu_init.vmasm vdu.vmasm g_syscalls vdu/variables.vmasm vdu/vdu_25.vmasm vdu/logic_to_physical_coords.vmasm vdu/point.vmasm vdu/vdu_not_implemented.vmasm vdp/vdp_draw_line.vmasm \
-	vdp/vdp_get_screen_width.vmasm vdp/vdp_get_screen_height.vmasm vdp/v99x8.vmasm
+	@$(Q3ASM) -l -m -o "bytecode"  dispatch.vmasm bg_lib.vmasm vdu_init.vmasm vdu.vmasm g_syscalls vdu/variables.vmasm vdu/vdu_25.vmasm vdu/logic_to_physical_coords.vmasm vdu/point.vmasm vdu/vdu_not_implemented.vmasm vdp/vdp_draw_line.vmasm \
+	vdp/vdp_get_screen_width.vmasm vdp/vdp_get_screen_height.vmasm vdp/v99x8.vmasm graphic_print_char.vmasm
 	@echo "Assembled vdu/bytecode.qvm"
 
 ../vdu_vm_bytecode.c ../vdu_vm_bytecode.h: bytecode.qvm

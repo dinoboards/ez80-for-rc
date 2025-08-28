@@ -45,3 +45,5 @@ uint8_t vdu_index           = 0;
 uint8_t vdu_required_length = 0;
 
 mos_vdu_handler current_fn = NULL;
+
+uint8_t counter = 8;

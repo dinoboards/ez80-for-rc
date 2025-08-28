@@ -46,8 +46,9 @@ WEBTOC = @"$(BIN)\mkwebpage"
 
 CFLAGS =  \
 -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM!  \
--define:RC2014_FIRMWARE -genprintf -keepasm -keeplst -list  \
--listinc -NOmodsect -optspeed -promote -NOreduceopt  \
+-define:RC2014_FIRMWARE -define:__ZDS__ -genprintf -keepasm  \
+-keeplst -list -listinc -NOmodsect -optspeed -promote  \
+-NOreduceopt  \
 -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\""  \
 -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92  \
 -asmsw:"   \
@@ -84,490 +85,30 @@ clean:
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.hex"
 	@if exist "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"  \
             $(RM) "Z:\ez80-for-rc\firmware\bin\ez80-rc-firmware-debug.map"
-	@if exist "$(WORKDIR)\base-drv.obj"  \
-            $(RM) "$(WORKDIR)\base-drv.obj"
-	@if exist "$(WORKDIR)\base-drv.lis"  \
-            $(RM) "$(WORKDIR)\base-drv.lis"
-	@if exist "$(WORKDIR)\base-drv.lst"  \
-            $(RM) "$(WORKDIR)\base-drv.lst"
-	@if exist "$(WORKDIR)\boot_prompt.obj"  \
-            $(RM) "$(WORKDIR)\boot_prompt.obj"
-	@if exist "$(WORKDIR)\boot_prompt.lis"  \
-            $(RM) "$(WORKDIR)\boot_prompt.lis"
-	@if exist "$(WORKDIR)\boot_prompt.lst"  \
-            $(RM) "$(WORKDIR)\boot_prompt.lst"
-	@if exist "$(WORKDIR)\boot_prompt.src"  \
-            $(RM) "$(WORKDIR)\boot_prompt.src"
-	@if exist "$(WORKDIR)\build-date.obj"  \
-            $(RM) "$(WORKDIR)\build-date.obj"
-	@if exist "$(WORKDIR)\build-date.lis"  \
-            $(RM) "$(WORKDIR)\build-date.lis"
-	@if exist "$(WORKDIR)\build-date.lst"  \
-            $(RM) "$(WORKDIR)\build-date.lst"
-	@if exist "$(WORKDIR)\build-date.src"  \
-            $(RM) "$(WORKDIR)\build-date.src"
-	@if exist "$(WORKDIR)\ch376.obj"  \
-            $(RM) "$(WORKDIR)\ch376.obj"
-	@if exist "$(WORKDIR)\ch376.lis"  \
-            $(RM) "$(WORKDIR)\ch376.lis"
-	@if exist "$(WORKDIR)\ch376.lst"  \
-            $(RM) "$(WORKDIR)\ch376.lst"
-	@if exist "$(WORKDIR)\ch376.src"  \
-            $(RM) "$(WORKDIR)\ch376.src"
-	@if exist "$(WORKDIR)\ch376asm.obj"  \
-            $(RM) "$(WORKDIR)\ch376asm.obj"
-	@if exist "$(WORKDIR)\ch376asm.lis"  \
-            $(RM) "$(WORKDIR)\ch376asm.lis"
-	@if exist "$(WORKDIR)\ch376asm.lst"  \
-            $(RM) "$(WORKDIR)\ch376asm.lst"
-	@if exist "$(WORKDIR)\class_hid.obj"  \
-            $(RM) "$(WORKDIR)\class_hid.obj"
-	@if exist "$(WORKDIR)\class_hid.lis"  \
-            $(RM) "$(WORKDIR)\class_hid.lis"
-	@if exist "$(WORKDIR)\class_hid.lst"  \
-            $(RM) "$(WORKDIR)\class_hid.lst"
-	@if exist "$(WORKDIR)\class_hid.src"  \
-            $(RM) "$(WORKDIR)\class_hid.src"
-	@if exist "$(WORKDIR)\class_hid_keyboard.obj"  \
-            $(RM) "$(WORKDIR)\class_hid_keyboard.obj"
-	@if exist "$(WORKDIR)\class_hid_keyboard.lis"  \
-            $(RM) "$(WORKDIR)\class_hid_keyboard.lis"
-	@if exist "$(WORKDIR)\class_hid_keyboard.lst"  \
-            $(RM) "$(WORKDIR)\class_hid_keyboard.lst"
-	@if exist "$(WORKDIR)\class_hid_keyboard.src"  \
-            $(RM) "$(WORKDIR)\class_hid_keyboard.src"
-	@if exist "$(WORKDIR)\class_hub.obj"  \
-            $(RM) "$(WORKDIR)\class_hub.obj"
-	@if exist "$(WORKDIR)\class_hub.lis"  \
-            $(RM) "$(WORKDIR)\class_hub.lis"
-	@if exist "$(WORKDIR)\class_hub.lst"  \
-            $(RM) "$(WORKDIR)\class_hub.lst"
-	@if exist "$(WORKDIR)\class_hub.src"  \
-            $(RM) "$(WORKDIR)\class_hub.src"
-	@if exist "$(WORKDIR)\class_scsi.obj"  \
-            $(RM) "$(WORKDIR)\class_scsi.obj"
-	@if exist "$(WORKDIR)\class_scsi.lis"  \
-            $(RM) "$(WORKDIR)\class_scsi.lis"
-	@if exist "$(WORKDIR)\class_scsi.lst"  \
-            $(RM) "$(WORKDIR)\class_scsi.lst"
-	@if exist "$(WORKDIR)\class_scsi.src"  \
-            $(RM) "$(WORKDIR)\class_scsi.src"
-	@if exist "$(WORKDIR)\class_ufi.obj"  \
-            $(RM) "$(WORKDIR)\class_ufi.obj"
-	@if exist "$(WORKDIR)\class_ufi.lis"  \
-            $(RM) "$(WORKDIR)\class_ufi.lis"
-	@if exist "$(WORKDIR)\class_ufi.lst"  \
-            $(RM) "$(WORKDIR)\class_ufi.lst"
-	@if exist "$(WORKDIR)\class_ufi.src"  \
-            $(RM) "$(WORKDIR)\class_ufi.src"
-	@if exist "$(WORKDIR)\clib.obj"  \
-            $(RM) "$(WORKDIR)\clib.obj"
-	@if exist "$(WORKDIR)\clib.lis"  \
-            $(RM) "$(WORKDIR)\clib.lis"
-	@if exist "$(WORKDIR)\clib.lst"  \
-            $(RM) "$(WORKDIR)\clib.lst"
-	@if exist "$(WORKDIR)\clib.src"  \
-            $(RM) "$(WORKDIR)\clib.src"
-	@if exist "$(WORKDIR)\cpu-freq-calculator.obj"  \
-            $(RM) "$(WORKDIR)\cpu-freq-calculator.obj"
-	@if exist "$(WORKDIR)\cpu-freq-calculator.lis"  \
-            $(RM) "$(WORKDIR)\cpu-freq-calculator.lis"
-	@if exist "$(WORKDIR)\cpu-freq-calculator.lst"  \
-            $(RM) "$(WORKDIR)\cpu-freq-calculator.lst"
-	@if exist "$(WORKDIR)\cpu-freq-calculator.src"  \
-            $(RM) "$(WORKDIR)\cpu-freq-calculator.src"
-	@if exist "$(WORKDIR)\critical-section.obj"  \
-            $(RM) "$(WORKDIR)\critical-section.obj"
-	@if exist "$(WORKDIR)\critical-section.lis"  \
-            $(RM) "$(WORKDIR)\critical-section.lis"
-	@if exist "$(WORKDIR)\critical-section.lst"  \
-            $(RM) "$(WORKDIR)\critical-section.lst"
-	@if exist "$(WORKDIR)\critical-section.src"  \
-            $(RM) "$(WORKDIR)\critical-section.src"
-	@if exist "$(WORKDIR)\cstartup.obj"  \
-            $(RM) "$(WORKDIR)\cstartup.obj"
-	@if exist "$(WORKDIR)\cstartup.lis"  \
-            $(RM) "$(WORKDIR)\cstartup.lis"
-	@if exist "$(WORKDIR)\cstartup.lst"  \
-            $(RM) "$(WORKDIR)\cstartup.lst"
-	@if exist "$(WORKDIR)\delay.obj"  \
-            $(RM) "$(WORKDIR)\delay.obj"
-	@if exist "$(WORKDIR)\delay.lis"  \
-            $(RM) "$(WORKDIR)\delay.lis"
-	@if exist "$(WORKDIR)\delay.lst"  \
-            $(RM) "$(WORKDIR)\delay.lst"
-	@if exist "$(WORKDIR)\dev_transfers.obj"  \
-            $(RM) "$(WORKDIR)\dev_transfers.obj"
-	@if exist "$(WORKDIR)\dev_transfers.lis"  \
-            $(RM) "$(WORKDIR)\dev_transfers.lis"
-	@if exist "$(WORKDIR)\dev_transfers.lst"  \
-            $(RM) "$(WORKDIR)\dev_transfers.lst"
-	@if exist "$(WORKDIR)\dev_transfers.src"  \
-            $(RM) "$(WORKDIR)\dev_transfers.src"
-	@if exist "$(WORKDIR)\enumerate.obj"  \
-            $(RM) "$(WORKDIR)\enumerate.obj"
-	@if exist "$(WORKDIR)\enumerate.lis"  \
-            $(RM) "$(WORKDIR)\enumerate.lis"
-	@if exist "$(WORKDIR)\enumerate.lst"  \
-            $(RM) "$(WORKDIR)\enumerate.lst"
-	@if exist "$(WORKDIR)\enumerate.src"  \
-            $(RM) "$(WORKDIR)\enumerate.src"
-	@if exist "$(WORKDIR)\enumerate_hub.obj"  \
-            $(RM) "$(WORKDIR)\enumerate_hub.obj"
-	@if exist "$(WORKDIR)\enumerate_hub.lis"  \
-            $(RM) "$(WORKDIR)\enumerate_hub.lis"
-	@if exist "$(WORKDIR)\enumerate_hub.lst"  \
-            $(RM) "$(WORKDIR)\enumerate_hub.lst"
-	@if exist "$(WORKDIR)\enumerate_hub.src"  \
-            $(RM) "$(WORKDIR)\enumerate_hub.src"
-	@if exist "$(WORKDIR)\enumerate_storage.obj"  \
-            $(RM) "$(WORKDIR)\enumerate_storage.obj"
-	@if exist "$(WORKDIR)\enumerate_storage.lis"  \
-            $(RM) "$(WORKDIR)\enumerate_storage.lis"
-	@if exist "$(WORKDIR)\enumerate_storage.lst"  \
-            $(RM) "$(WORKDIR)\enumerate_storage.lst"
-	@if exist "$(WORKDIR)\enumerate_storage.src"  \
-            $(RM) "$(WORKDIR)\enumerate_storage.src"
-	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.obj"  \
-            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.obj"
-	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lis"  \
-            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lis"
-	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lst"  \
-            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lst"
-	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
-            $(RM) "$(WORKDIR)\i2c-calculate.obj"
-	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
-            $(RM) "$(WORKDIR)\i2c-calculate.lis"
-	@if exist "$(WORKDIR)\i2c-calculate.lst"  \
-            $(RM) "$(WORKDIR)\i2c-calculate.lst"
-	@if exist "$(WORKDIR)\i2c-calculate.src"  \
-            $(RM) "$(WORKDIR)\i2c-calculate.src"
-	@if exist "$(WORKDIR)\init-clocks.obj"  \
-            $(RM) "$(WORKDIR)\init-clocks.obj"
-	@if exist "$(WORKDIR)\init-clocks.lis"  \
-            $(RM) "$(WORKDIR)\init-clocks.lis"
-	@if exist "$(WORKDIR)\init-clocks.lst"  \
-            $(RM) "$(WORKDIR)\init-clocks.lst"
-	@if exist "$(WORKDIR)\init-f92.obj"  \
-            $(RM) "$(WORKDIR)\init-f92.obj"
-	@if exist "$(WORKDIR)\init-f92.lis"  \
-            $(RM) "$(WORKDIR)\init-f92.lis"
-	@if exist "$(WORKDIR)\init-f92.lst"  \
-            $(RM) "$(WORKDIR)\init-f92.lst"
-	@if exist "$(WORKDIR)\internal-hiram.obj"  \
-            $(RM) "$(WORKDIR)\internal-hiram.obj"
-	@if exist "$(WORKDIR)\internal-hiram.lis"  \
-            $(RM) "$(WORKDIR)\internal-hiram.lis"
-	@if exist "$(WORKDIR)\internal-hiram.lst"  \
-            $(RM) "$(WORKDIR)\internal-hiram.lst"
-	@if exist "$(WORKDIR)\kyb_driver.obj"  \
-            $(RM) "$(WORKDIR)\kyb_driver.obj"
-	@if exist "$(WORKDIR)\kyb_driver.lis"  \
-            $(RM) "$(WORKDIR)\kyb_driver.lis"
-	@if exist "$(WORKDIR)\kyb_driver.lst"  \
-            $(RM) "$(WORKDIR)\kyb_driver.lst"
-	@if exist "$(WORKDIR)\kyb_driver.src"  \
-            $(RM) "$(WORKDIR)\kyb_driver.src"
-	@if exist "$(WORKDIR)\kyb_driver_event.obj"  \
-            $(RM) "$(WORKDIR)\kyb_driver_event.obj"
-	@if exist "$(WORKDIR)\kyb_driver_event.lis"  \
-            $(RM) "$(WORKDIR)\kyb_driver_event.lis"
-	@if exist "$(WORKDIR)\kyb_driver_event.lst"  \
-            $(RM) "$(WORKDIR)\kyb_driver_event.lst"
-	@if exist "$(WORKDIR)\kyb_driver_event.src"  \
-            $(RM) "$(WORKDIR)\kyb_driver_event.src"
-	@if exist "$(WORKDIR)\kyb_driver_eventasm.obj"  \
-            $(RM) "$(WORKDIR)\kyb_driver_eventasm.obj"
-	@if exist "$(WORKDIR)\kyb_driver_eventasm.lis"  \
-            $(RM) "$(WORKDIR)\kyb_driver_eventasm.lis"
-	@if exist "$(WORKDIR)\kyb_driver_eventasm.lst"  \
-            $(RM) "$(WORKDIR)\kyb_driver_eventasm.lst"
-	@if exist "$(WORKDIR)\kyb_driverasm.obj"  \
-            $(RM) "$(WORKDIR)\kyb_driverasm.obj"
-	@if exist "$(WORKDIR)\kyb_driverasm.lis"  \
-            $(RM) "$(WORKDIR)\kyb_driverasm.lis"
-	@if exist "$(WORKDIR)\kyb_driverasm.lst"  \
-            $(RM) "$(WORKDIR)\kyb_driverasm.lst"
-	@if exist "$(WORKDIR)\main.obj"  \
-            $(RM) "$(WORKDIR)\main.obj"
-	@if exist "$(WORKDIR)\main.lis"  \
-            $(RM) "$(WORKDIR)\main.lis"
-	@if exist "$(WORKDIR)\main.lst"  \
-            $(RM) "$(WORKDIR)\main.lst"
-	@if exist "$(WORKDIR)\mse_driver.obj"  \
-            $(RM) "$(WORKDIR)\mse_driver.obj"
-	@if exist "$(WORKDIR)\mse_driver.lis"  \
-            $(RM) "$(WORKDIR)\mse_driver.lis"
-	@if exist "$(WORKDIR)\mse_driver.lst"  \
-            $(RM) "$(WORKDIR)\mse_driver.lst"
-	@if exist "$(WORKDIR)\mse_driver.src"  \
-            $(RM) "$(WORKDIR)\mse_driver.src"
-	@if exist "$(WORKDIR)\protocol.obj"  \
-            $(RM) "$(WORKDIR)\protocol.obj"
-	@if exist "$(WORKDIR)\protocol.lis"  \
-            $(RM) "$(WORKDIR)\protocol.lis"
-	@if exist "$(WORKDIR)\protocol.lst"  \
-            $(RM) "$(WORKDIR)\protocol.lst"
-	@if exist "$(WORKDIR)\protocol.src"  \
-            $(RM) "$(WORKDIR)\protocol.src"
-	@if exist "$(WORKDIR)\rom-flashing-calculator.obj"  \
-            $(RM) "$(WORKDIR)\rom-flashing-calculator.obj"
-	@if exist "$(WORKDIR)\rom-flashing-calculator.lis"  \
-            $(RM) "$(WORKDIR)\rom-flashing-calculator.lis"
-	@if exist "$(WORKDIR)\rom-flashing-calculator.lst"  \
-            $(RM) "$(WORKDIR)\rom-flashing-calculator.lst"
-	@if exist "$(WORKDIR)\rom-flashing-calculator.src"  \
-            $(RM) "$(WORKDIR)\rom-flashing-calculator.src"
-	@if exist "$(WORKDIR)\rst-08-io.obj"  \
-            $(RM) "$(WORKDIR)\rst-08-io.obj"
-	@if exist "$(WORKDIR)\rst-08-io.lis"  \
-            $(RM) "$(WORKDIR)\rst-08-io.lis"
-	@if exist "$(WORKDIR)\rst-08-io.lst"  \
-            $(RM) "$(WORKDIR)\rst-08-io.lst"
-	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.obj"
-	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.lis"
-	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.lst"
-	@if exist "$(WORKDIR)\rst-10-01-rtc-functions.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-01-rtc-functions.obj"
-	@if exist "$(WORKDIR)\rst-10-01-rtc-functions.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-01-rtc-functions.lis"
-	@if exist "$(WORKDIR)\rst-10-01-rtc-functions.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-01-rtc-functions.lst"
-	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.obj"
-	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.lis"
-	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.lst"
-	@if exist "$(WORKDIR)\rst-10-03-uart-functions.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-03-uart-functions.obj"
-	@if exist "$(WORKDIR)\rst-10-03-uart-functions.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-03-uart-functions.lis"
-	@if exist "$(WORKDIR)\rst-10-03-uart-functions.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-03-uart-functions.lst"
-	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.obj"
-	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lis"
-	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lst"
-	@if exist "$(WORKDIR)\rst-10-06-usb-functions.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-06-usb-functions.obj"
-	@if exist "$(WORKDIR)\rst-10-06-usb-functions.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-06-usb-functions.lis"
-	@if exist "$(WORKDIR)\rst-10-06-usb-functions.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-06-usb-functions.lst"
-	@if exist "$(WORKDIR)\rst-10-07-emulator-function.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.obj"
-	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lis"
-	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lst"
-	@if exist "$(WORKDIR)\rst-10-08-crt.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-08-crt.obj"
-	@if exist "$(WORKDIR)\rst-10-08-crt.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-08-crt.lis"
-	@if exist "$(WORKDIR)\rst-10-08-crt.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-08-crt.lst"
-	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-functions.obj"
-	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-functions.lis"
-	@if exist "$(WORKDIR)\rst-10-functions.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-functions.lst"
-	@if exist "$(WORKDIR)\rst-18-function.obj"  \
-            $(RM) "$(WORKDIR)\rst-18-function.obj"
-	@if exist "$(WORKDIR)\rst-18-function.lis"  \
-            $(RM) "$(WORKDIR)\rst-18-function.lis"
-	@if exist "$(WORKDIR)\rst-18-function.lst"  \
-            $(RM) "$(WORKDIR)\rst-18-function.lst"
-	@if exist "$(WORKDIR)\scsi_driver.obj"  \
-            $(RM) "$(WORKDIR)\scsi_driver.obj"
-	@if exist "$(WORKDIR)\scsi_driver.lis"  \
-            $(RM) "$(WORKDIR)\scsi_driver.lis"
-	@if exist "$(WORKDIR)\scsi_driver.lst"  \
-            $(RM) "$(WORKDIR)\scsi_driver.lst"
-	@if exist "$(WORKDIR)\scsi_driver.src"  \
-            $(RM) "$(WORKDIR)\scsi_driver.src"
-	@if exist "$(WORKDIR)\system-vars.obj"  \
-            $(RM) "$(WORKDIR)\system-vars.obj"
-	@if exist "$(WORKDIR)\system-vars.lis"  \
-            $(RM) "$(WORKDIR)\system-vars.lis"
-	@if exist "$(WORKDIR)\system-vars.lst"  \
-            $(RM) "$(WORKDIR)\system-vars.lst"
-	@if exist "$(WORKDIR)\test.obj"  \
-            $(RM) "$(WORKDIR)\test.obj"
-	@if exist "$(WORKDIR)\test.lis"  \
-            $(RM) "$(WORKDIR)\test.lis"
-	@if exist "$(WORKDIR)\test.lst"  \
-            $(RM) "$(WORKDIR)\test.lst"
-	@if exist "$(WORKDIR)\transfers.obj"  \
-            $(RM) "$(WORKDIR)\transfers.obj"
-	@if exist "$(WORKDIR)\transfers.lis"  \
-            $(RM) "$(WORKDIR)\transfers.lis"
-	@if exist "$(WORKDIR)\transfers.lst"  \
-            $(RM) "$(WORKDIR)\transfers.lst"
-	@if exist "$(WORKDIR)\transfers.src"  \
-            $(RM) "$(WORKDIR)\transfers.src"
-	@if exist "$(WORKDIR)\uart-calculate.obj"  \
-            $(RM) "$(WORKDIR)\uart-calculate.obj"
-	@if exist "$(WORKDIR)\uart-calculate.lis"  \
-            $(RM) "$(WORKDIR)\uart-calculate.lis"
-	@if exist "$(WORKDIR)\uart-calculate.lst"  \
-            $(RM) "$(WORKDIR)\uart-calculate.lst"
-	@if exist "$(WORKDIR)\uart-calculate.src"  \
-            $(RM) "$(WORKDIR)\uart-calculate.src"
-	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.obj"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-add-to.obj"
-	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.lis"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-add-to.lis"
-	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.lst"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-add-to.lst"
-	@if exist "$(WORKDIR)\uart-rx-buffer-empty.obj"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-empty.obj"
-	@if exist "$(WORKDIR)\uart-rx-buffer-empty.lis"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-empty.lis"
-	@if exist "$(WORKDIR)\uart-rx-buffer-empty.lst"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-empty.lst"
-	@if exist "$(WORKDIR)\uart-rx-buffer-full.obj"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-full.obj"
-	@if exist "$(WORKDIR)\uart-rx-buffer-full.lis"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-full.lis"
-	@if exist "$(WORKDIR)\uart-rx-buffer-full.lst"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-full.lst"
-	@if exist "$(WORKDIR)\uart-rx-buffer-get-length.obj"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-get-length.obj"
-	@if exist "$(WORKDIR)\uart-rx-buffer-get-length.lis"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-get-length.lis"
-	@if exist "$(WORKDIR)\uart-rx-buffer-get-length.lst"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-get-length.lst"
-	@if exist "$(WORKDIR)\uart-rx-buffer-get.obj"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-get.obj"
-	@if exist "$(WORKDIR)\uart-rx-buffer-get.lis"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-get.lis"
-	@if exist "$(WORKDIR)\uart-rx-buffer-get.lst"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-get.lst"
-	@if exist "$(WORKDIR)\uart-rx-buffer-init.obj"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-init.obj"
-	@if exist "$(WORKDIR)\uart-rx-buffer-init.lis"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-init.lis"
-	@if exist "$(WORKDIR)\uart-rx-buffer-init.lst"  \
-            $(RM) "$(WORKDIR)\uart-rx-buffer-init.lst"
-	@if exist "$(WORKDIR)\uart-rx-variables.obj"  \
-            $(RM) "$(WORKDIR)\uart-rx-variables.obj"
-	@if exist "$(WORKDIR)\uart-rx-variables.lis"  \
-            $(RM) "$(WORKDIR)\uart-rx-variables.lis"
-	@if exist "$(WORKDIR)\uart-rx-variables.lst"  \
-            $(RM) "$(WORKDIR)\uart-rx-variables.lst"
-	@if exist "$(WORKDIR)\ufi_driver.obj"  \
-            $(RM) "$(WORKDIR)\ufi_driver.obj"
-	@if exist "$(WORKDIR)\ufi_driver.lis"  \
-            $(RM) "$(WORKDIR)\ufi_driver.lis"
-	@if exist "$(WORKDIR)\ufi_driver.lst"  \
-            $(RM) "$(WORKDIR)\ufi_driver.lst"
-	@if exist "$(WORKDIR)\ufi_driver.src"  \
-            $(RM) "$(WORKDIR)\ufi_driver.src"
-	@if exist "$(WORKDIR)\usb-base-drv.obj"  \
-            $(RM) "$(WORKDIR)\usb-base-drv.obj"
-	@if exist "$(WORKDIR)\usb-base-drv.lis"  \
-            $(RM) "$(WORKDIR)\usb-base-drv.lis"
-	@if exist "$(WORKDIR)\usb-base-drv.lst"  \
-            $(RM) "$(WORKDIR)\usb-base-drv.lst"
-	@if exist "$(WORKDIR)\usb-base-drv.src"  \
-            $(RM) "$(WORKDIR)\usb-base-drv.src"
-	@if exist "$(WORKDIR)\usb-tick-sr.obj"  \
-            $(RM) "$(WORKDIR)\usb-tick-sr.obj"
-	@if exist "$(WORKDIR)\usb-tick-sr.lis"  \
-            $(RM) "$(WORKDIR)\usb-tick-sr.lis"
-	@if exist "$(WORKDIR)\usb-tick-sr.lst"  \
-            $(RM) "$(WORKDIR)\usb-tick-sr.lst"
-	@if exist "$(WORKDIR)\usb_cbi.obj"  \
-            $(RM) "$(WORKDIR)\usb_cbi.obj"
-	@if exist "$(WORKDIR)\usb_cbi.lis"  \
-            $(RM) "$(WORKDIR)\usb_cbi.lis"
-	@if exist "$(WORKDIR)\usb_cbi.lst"  \
-            $(RM) "$(WORKDIR)\usb_cbi.lst"
-	@if exist "$(WORKDIR)\usb_cbi.src"  \
-            $(RM) "$(WORKDIR)\usb_cbi.src"
-	@if exist "$(WORKDIR)\usb_state.obj"  \
-            $(RM) "$(WORKDIR)\usb_state.obj"
-	@if exist "$(WORKDIR)\usb_state.lis"  \
-            $(RM) "$(WORKDIR)\usb_state.lis"
-	@if exist "$(WORKDIR)\usb_state.lst"  \
-            $(RM) "$(WORKDIR)\usb_state.lst"
-	@if exist "$(WORKDIR)\usb_state.src"  \
-            $(RM) "$(WORKDIR)\usb_state.src"
-	@if exist "$(WORKDIR)\vdu.obj"  \
-            $(RM) "$(WORKDIR)\vdu.obj"
-	@if exist "$(WORKDIR)\vdu.lis"  \
-            $(RM) "$(WORKDIR)\vdu.lis"
-	@if exist "$(WORKDIR)\vdu.lst"  \
-            $(RM) "$(WORKDIR)\vdu.lst"
-	@if exist "$(WORKDIR)\vdu.src"  \
-            $(RM) "$(WORKDIR)\vdu.src"
-	@if exist "$(WORKDIR)\vdu_vm_bytecode.obj"  \
-            $(RM) "$(WORKDIR)\vdu_vm_bytecode.obj"
-	@if exist "$(WORKDIR)\vdu_vm_bytecode.lis"  \
-            $(RM) "$(WORKDIR)\vdu_vm_bytecode.lis"
-	@if exist "$(WORKDIR)\vdu_vm_bytecode.lst"  \
-            $(RM) "$(WORKDIR)\vdu_vm_bytecode.lst"
-	@if exist "$(WORKDIR)\vdu_vm_bytecode.src"  \
-            $(RM) "$(WORKDIR)\vdu_vm_bytecode.src"
-	@if exist "$(WORKDIR)\vectors16.obj"  \
-            $(RM) "$(WORKDIR)\vectors16.obj"
-	@if exist "$(WORKDIR)\vectors16.lis"  \
-            $(RM) "$(WORKDIR)\vectors16.lis"
-	@if exist "$(WORKDIR)\vectors16.lst"  \
-            $(RM) "$(WORKDIR)\vectors16.lst"
-	@if exist "$(WORKDIR)\vm.obj"  \
-            $(RM) "$(WORKDIR)\vm.obj"
-	@if exist "$(WORKDIR)\vm.lis"  \
-            $(RM) "$(WORKDIR)\vm.lis"
-	@if exist "$(WORKDIR)\vm.lst"  \
-            $(RM) "$(WORKDIR)\vm.lst"
-	@if exist "$(WORKDIR)\vm.src"  \
-            $(RM) "$(WORKDIR)\vm.src"
-	@if exist "$(WORKDIR)\work-area.obj"  \
-            $(RM) "$(WORKDIR)\work-area.obj"
-	@if exist "$(WORKDIR)\work-area.lis"  \
-            $(RM) "$(WORKDIR)\work-area.lis"
-	@if exist "$(WORKDIR)\work-area.lst"  \
-            $(RM) "$(WORKDIR)\work-area.lst"
-	@if exist "$(WORKDIR)\work-area.src"  \
-            $(RM) "$(WORKDIR)\work-area.src"
-	@if exist "$(WORKDIR)\z80-emulator-critical.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-critical.obj"
-	@if exist "$(WORKDIR)\z80-emulator-critical.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-critical.lis"
-	@if exist "$(WORKDIR)\z80-emulator-critical.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-critical.lst"
-	@if exist "$(WORKDIR)\z80-emulator-ix.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-ix.obj"
-	@if exist "$(WORKDIR)\z80-emulator-ix.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-ix.lis"
-	@if exist "$(WORKDIR)\z80-emulator-ix.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-ix.lst"
-	@if exist "$(WORKDIR)\z80-emulator-iy.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-iy.obj"
-	@if exist "$(WORKDIR)\z80-emulator-iy.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-iy.lis"
-	@if exist "$(WORKDIR)\z80-emulator-iy.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-iy.lst"
-	@if exist "$(WORKDIR)\z80-emulator-lil.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-lil.obj"
-	@if exist "$(WORKDIR)\z80-emulator-lil.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-lil.lis"
-	@if exist "$(WORKDIR)\z80-emulator-lil.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-lil.lst"
-	@if exist "$(WORKDIR)\z80-emulator-lis.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-lis.obj"
-	@if exist "$(WORKDIR)\z80-emulator-lis.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-lis.lis"
-	@if exist "$(WORKDIR)\z80-emulator-lis.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-lis.lst"
+	@if exist "$(WORKDIR)\zexall.obj"  \
+            $(RM) "$(WORKDIR)\zexall.obj"
+	@if exist "$(WORKDIR)\zexall.lis"  \
+            $(RM) "$(WORKDIR)\zexall.lis"
+	@if exist "$(WORKDIR)\zexall.lst"  \
+            $(RM) "$(WORKDIR)\zexall.lst"
+	@if exist "$(WORKDIR)\z80-test.obj"  \
+            $(RM) "$(WORKDIR)\z80-test.obj"
+	@if exist "$(WORKDIR)\z80-test.lis"  \
+            $(RM) "$(WORKDIR)\z80-test.lis"
+	@if exist "$(WORKDIR)\z80-test.lst"  \
+            $(RM) "$(WORKDIR)\z80-test.lst"
+	@if exist "$(WORKDIR)\z80-emulator.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator.obj"
+	@if exist "$(WORKDIR)\z80-emulator.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator.lis"
+	@if exist "$(WORKDIR)\z80-emulator.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator.lst"
+	@if exist "$(WORKDIR)\z80-emulator-sil.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-sil.obj"
+	@if exist "$(WORKDIR)\z80-emulator-sil.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-sil.lis"
+	@if exist "$(WORKDIR)\z80-emulator-sil.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-sil.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.obj"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.obj"
 	@if exist "$(WORKDIR)\z80-emulator-logging.lis"  \
@@ -576,38 +117,74 @@ clean:
             $(RM) "$(WORKDIR)\z80-emulator-logging.lst"
 	@if exist "$(WORKDIR)\z80-emulator-logging.src"  \
             $(RM) "$(WORKDIR)\z80-emulator-logging.src"
-	@if exist "$(WORKDIR)\z80-emulator-sil.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator-sil.obj"
-	@if exist "$(WORKDIR)\z80-emulator-sil.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator-sil.lis"
-	@if exist "$(WORKDIR)\z80-emulator-sil.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator-sil.lst"
-	@if exist "$(WORKDIR)\z80-emulator.obj"  \
-            $(RM) "$(WORKDIR)\z80-emulator.obj"
-	@if exist "$(WORKDIR)\z80-emulator.lis"  \
-            $(RM) "$(WORKDIR)\z80-emulator.lis"
-	@if exist "$(WORKDIR)\z80-emulator.lst"  \
-            $(RM) "$(WORKDIR)\z80-emulator.lst"
-	@if exist "$(WORKDIR)\z80-test.obj"  \
-            $(RM) "$(WORKDIR)\z80-test.obj"
-	@if exist "$(WORKDIR)\z80-test.lis"  \
-            $(RM) "$(WORKDIR)\z80-test.lis"
-	@if exist "$(WORKDIR)\z80-test.lst"  \
-            $(RM) "$(WORKDIR)\z80-test.lst"
-	@if exist "$(WORKDIR)\zexall.obj"  \
-            $(RM) "$(WORKDIR)\zexall.obj"
-	@if exist "$(WORKDIR)\zexall.lis"  \
-            $(RM) "$(WORKDIR)\zexall.lis"
-	@if exist "$(WORKDIR)\zexall.lst"  \
-            $(RM) "$(WORKDIR)\zexall.lst"
-	@if exist "$(WORKDIR)\system-calls.obj"  \
-            $(RM) "$(WORKDIR)\system-calls.obj"
-	@if exist "$(WORKDIR)\system-calls.lis"  \
-            $(RM) "$(WORKDIR)\system-calls.lis"
-	@if exist "$(WORKDIR)\system-calls.lst"  \
-            $(RM) "$(WORKDIR)\system-calls.lst"
-	@if exist "$(WORKDIR)\system-calls.src"  \
-            $(RM) "$(WORKDIR)\system-calls.src"
+	@if exist "$(WORKDIR)\z80-emulator-lis.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lis.obj"
+	@if exist "$(WORKDIR)\z80-emulator-lis.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lis.lis"
+	@if exist "$(WORKDIR)\z80-emulator-lis.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lis.lst"
+	@if exist "$(WORKDIR)\z80-emulator-lil.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lil.obj"
+	@if exist "$(WORKDIR)\z80-emulator-lil.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lil.lis"
+	@if exist "$(WORKDIR)\z80-emulator-lil.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-lil.lst"
+	@if exist "$(WORKDIR)\z80-emulator-iy.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-iy.obj"
+	@if exist "$(WORKDIR)\z80-emulator-iy.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-iy.lis"
+	@if exist "$(WORKDIR)\z80-emulator-iy.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-iy.lst"
+	@if exist "$(WORKDIR)\z80-emulator-ix.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-ix.obj"
+	@if exist "$(WORKDIR)\z80-emulator-ix.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-ix.lis"
+	@if exist "$(WORKDIR)\z80-emulator-ix.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-ix.lst"
+	@if exist "$(WORKDIR)\z80-emulator-critical.obj"  \
+            $(RM) "$(WORKDIR)\z80-emulator-critical.obj"
+	@if exist "$(WORKDIR)\z80-emulator-critical.lis"  \
+            $(RM) "$(WORKDIR)\z80-emulator-critical.lis"
+	@if exist "$(WORKDIR)\z80-emulator-critical.lst"  \
+            $(RM) "$(WORKDIR)\z80-emulator-critical.lst"
+	@if exist "$(WORKDIR)\work-area.obj"  \
+            $(RM) "$(WORKDIR)\work-area.obj"
+	@if exist "$(WORKDIR)\work-area.lis"  \
+            $(RM) "$(WORKDIR)\work-area.lis"
+	@if exist "$(WORKDIR)\work-area.lst"  \
+            $(RM) "$(WORKDIR)\work-area.lst"
+	@if exist "$(WORKDIR)\work-area.src"  \
+            $(RM) "$(WORKDIR)\work-area.src"
+	@if exist "$(WORKDIR)\vm.obj"  \
+            $(RM) "$(WORKDIR)\vm.obj"
+	@if exist "$(WORKDIR)\vm.lis"  \
+            $(RM) "$(WORKDIR)\vm.lis"
+	@if exist "$(WORKDIR)\vm.lst"  \
+            $(RM) "$(WORKDIR)\vm.lst"
+	@if exist "$(WORKDIR)\vm.src"  \
+            $(RM) "$(WORKDIR)\vm.src"
+	@if exist "$(WORKDIR)\vm-promoted-fn.obj"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.obj"
+	@if exist "$(WORKDIR)\vm-promoted-fn.lis"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.lis"
+	@if exist "$(WORKDIR)\vm-promoted-fn.lst"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.lst"
+	@if exist "$(WORKDIR)\vm-promoted-fn.src"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.src"
+	@if exist "$(WORKDIR)\vectors16.obj"  \
+            $(RM) "$(WORKDIR)\vectors16.obj"
+	@if exist "$(WORKDIR)\vectors16.lis"  \
+            $(RM) "$(WORKDIR)\vectors16.lis"
+	@if exist "$(WORKDIR)\vectors16.lst"  \
+            $(RM) "$(WORKDIR)\vectors16.lst"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.obj"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.obj"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.lis"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.lis"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.lst"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.lst"
+	@if exist "$(WORKDIR)\vdu_vm_bytecode.src"  \
+            $(RM) "$(WORKDIR)\vdu_vm_bytecode.src"
 	@if exist "$(WORKDIR)\vdu_init.obj"  \
             $(RM) "$(WORKDIR)\vdu_init.obj"
 	@if exist "$(WORKDIR)\vdu_init.lis"  \
@@ -616,6 +193,446 @@ clean:
             $(RM) "$(WORKDIR)\vdu_init.lst"
 	@if exist "$(WORKDIR)\vdu_init.src"  \
             $(RM) "$(WORKDIR)\vdu_init.src"
+	@if exist "$(WORKDIR)\vdu.obj"  \
+            $(RM) "$(WORKDIR)\vdu.obj"
+	@if exist "$(WORKDIR)\vdu.lis"  \
+            $(RM) "$(WORKDIR)\vdu.lis"
+	@if exist "$(WORKDIR)\vdu.lst"  \
+            $(RM) "$(WORKDIR)\vdu.lst"
+	@if exist "$(WORKDIR)\vdu.src"  \
+            $(RM) "$(WORKDIR)\vdu.src"
+	@if exist "$(WORKDIR)\usb_state.obj"  \
+            $(RM) "$(WORKDIR)\usb_state.obj"
+	@if exist "$(WORKDIR)\usb_state.lis"  \
+            $(RM) "$(WORKDIR)\usb_state.lis"
+	@if exist "$(WORKDIR)\usb_state.lst"  \
+            $(RM) "$(WORKDIR)\usb_state.lst"
+	@if exist "$(WORKDIR)\usb_state.src"  \
+            $(RM) "$(WORKDIR)\usb_state.src"
+	@if exist "$(WORKDIR)\usb_cbi.obj"  \
+            $(RM) "$(WORKDIR)\usb_cbi.obj"
+	@if exist "$(WORKDIR)\usb_cbi.lis"  \
+            $(RM) "$(WORKDIR)\usb_cbi.lis"
+	@if exist "$(WORKDIR)\usb_cbi.lst"  \
+            $(RM) "$(WORKDIR)\usb_cbi.lst"
+	@if exist "$(WORKDIR)\usb_cbi.src"  \
+            $(RM) "$(WORKDIR)\usb_cbi.src"
+	@if exist "$(WORKDIR)\usb-tick-sr.obj"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.obj"
+	@if exist "$(WORKDIR)\usb-tick-sr.lis"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.lis"
+	@if exist "$(WORKDIR)\usb-tick-sr.lst"  \
+            $(RM) "$(WORKDIR)\usb-tick-sr.lst"
+	@if exist "$(WORKDIR)\usb-base-drv.obj"  \
+            $(RM) "$(WORKDIR)\usb-base-drv.obj"
+	@if exist "$(WORKDIR)\usb-base-drv.lis"  \
+            $(RM) "$(WORKDIR)\usb-base-drv.lis"
+	@if exist "$(WORKDIR)\usb-base-drv.lst"  \
+            $(RM) "$(WORKDIR)\usb-base-drv.lst"
+	@if exist "$(WORKDIR)\usb-base-drv.src"  \
+            $(RM) "$(WORKDIR)\usb-base-drv.src"
+	@if exist "$(WORKDIR)\ufi_driver.obj"  \
+            $(RM) "$(WORKDIR)\ufi_driver.obj"
+	@if exist "$(WORKDIR)\ufi_driver.lis"  \
+            $(RM) "$(WORKDIR)\ufi_driver.lis"
+	@if exist "$(WORKDIR)\ufi_driver.lst"  \
+            $(RM) "$(WORKDIR)\ufi_driver.lst"
+	@if exist "$(WORKDIR)\ufi_driver.src"  \
+            $(RM) "$(WORKDIR)\ufi_driver.src"
+	@if exist "$(WORKDIR)\uart-rx-variables.obj"  \
+            $(RM) "$(WORKDIR)\uart-rx-variables.obj"
+	@if exist "$(WORKDIR)\uart-rx-variables.lis"  \
+            $(RM) "$(WORKDIR)\uart-rx-variables.lis"
+	@if exist "$(WORKDIR)\uart-rx-variables.lst"  \
+            $(RM) "$(WORKDIR)\uart-rx-variables.lst"
+	@if exist "$(WORKDIR)\uart-rx-buffer-init.obj"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-init.obj"
+	@if exist "$(WORKDIR)\uart-rx-buffer-init.lis"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-init.lis"
+	@if exist "$(WORKDIR)\uart-rx-buffer-init.lst"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-init.lst"
+	@if exist "$(WORKDIR)\uart-rx-buffer-get.obj"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-get.obj"
+	@if exist "$(WORKDIR)\uart-rx-buffer-get.lis"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-get.lis"
+	@if exist "$(WORKDIR)\uart-rx-buffer-get.lst"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-get.lst"
+	@if exist "$(WORKDIR)\uart-rx-buffer-get-length.obj"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-get-length.obj"
+	@if exist "$(WORKDIR)\uart-rx-buffer-get-length.lis"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-get-length.lis"
+	@if exist "$(WORKDIR)\uart-rx-buffer-get-length.lst"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-get-length.lst"
+	@if exist "$(WORKDIR)\uart-rx-buffer-full.obj"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-full.obj"
+	@if exist "$(WORKDIR)\uart-rx-buffer-full.lis"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-full.lis"
+	@if exist "$(WORKDIR)\uart-rx-buffer-full.lst"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-full.lst"
+	@if exist "$(WORKDIR)\uart-rx-buffer-empty.obj"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-empty.obj"
+	@if exist "$(WORKDIR)\uart-rx-buffer-empty.lis"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-empty.lis"
+	@if exist "$(WORKDIR)\uart-rx-buffer-empty.lst"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-empty.lst"
+	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.obj"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-add-to.obj"
+	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.lis"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-add-to.lis"
+	@if exist "$(WORKDIR)\uart-rx-buffer-add-to.lst"  \
+            $(RM) "$(WORKDIR)\uart-rx-buffer-add-to.lst"
+	@if exist "$(WORKDIR)\uart-calculate.obj"  \
+            $(RM) "$(WORKDIR)\uart-calculate.obj"
+	@if exist "$(WORKDIR)\uart-calculate.lis"  \
+            $(RM) "$(WORKDIR)\uart-calculate.lis"
+	@if exist "$(WORKDIR)\uart-calculate.lst"  \
+            $(RM) "$(WORKDIR)\uart-calculate.lst"
+	@if exist "$(WORKDIR)\uart-calculate.src"  \
+            $(RM) "$(WORKDIR)\uart-calculate.src"
+	@if exist "$(WORKDIR)\transfers.obj"  \
+            $(RM) "$(WORKDIR)\transfers.obj"
+	@if exist "$(WORKDIR)\transfers.lis"  \
+            $(RM) "$(WORKDIR)\transfers.lis"
+	@if exist "$(WORKDIR)\transfers.lst"  \
+            $(RM) "$(WORKDIR)\transfers.lst"
+	@if exist "$(WORKDIR)\transfers.src"  \
+            $(RM) "$(WORKDIR)\transfers.src"
+	@if exist "$(WORKDIR)\test.obj"  \
+            $(RM) "$(WORKDIR)\test.obj"
+	@if exist "$(WORKDIR)\test.lis"  \
+            $(RM) "$(WORKDIR)\test.lis"
+	@if exist "$(WORKDIR)\test.lst"  \
+            $(RM) "$(WORKDIR)\test.lst"
+	@if exist "$(WORKDIR)\system-vars.obj"  \
+            $(RM) "$(WORKDIR)\system-vars.obj"
+	@if exist "$(WORKDIR)\system-vars.lis"  \
+            $(RM) "$(WORKDIR)\system-vars.lis"
+	@if exist "$(WORKDIR)\system-vars.lst"  \
+            $(RM) "$(WORKDIR)\system-vars.lst"
+	@if exist "$(WORKDIR)\system-calls.obj"  \
+            $(RM) "$(WORKDIR)\system-calls.obj"
+	@if exist "$(WORKDIR)\system-calls.lis"  \
+            $(RM) "$(WORKDIR)\system-calls.lis"
+	@if exist "$(WORKDIR)\system-calls.lst"  \
+            $(RM) "$(WORKDIR)\system-calls.lst"
+	@if exist "$(WORKDIR)\system-calls.src"  \
+            $(RM) "$(WORKDIR)\system-calls.src"
+	@if exist "$(WORKDIR)\scsi_driver.obj"  \
+            $(RM) "$(WORKDIR)\scsi_driver.obj"
+	@if exist "$(WORKDIR)\scsi_driver.lis"  \
+            $(RM) "$(WORKDIR)\scsi_driver.lis"
+	@if exist "$(WORKDIR)\scsi_driver.lst"  \
+            $(RM) "$(WORKDIR)\scsi_driver.lst"
+	@if exist "$(WORKDIR)\scsi_driver.src"  \
+            $(RM) "$(WORKDIR)\scsi_driver.src"
+	@if exist "$(WORKDIR)\rst-18-function.obj"  \
+            $(RM) "$(WORKDIR)\rst-18-function.obj"
+	@if exist "$(WORKDIR)\rst-18-function.lis"  \
+            $(RM) "$(WORKDIR)\rst-18-function.lis"
+	@if exist "$(WORKDIR)\rst-18-function.lst"  \
+            $(RM) "$(WORKDIR)\rst-18-function.lst"
+	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-08-crt.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.obj"
+	@if exist "$(WORKDIR)\rst-10-08-crt.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.lis"
+	@if exist "$(WORKDIR)\rst-10-08-crt.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-08-crt.lst"
+	@if exist "$(WORKDIR)\rst-10-07-emulator-function.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.obj"
+	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lis"
+	@if exist "$(WORKDIR)\rst-10-07-emulator-function.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-07-emulator-function.lst"
+	@if exist "$(WORKDIR)\rst-10-06-usb-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-06-usb-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-06-usb-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-06-usb-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-06-usb-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-06-usb-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-04-i2c-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-04-i2c-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-03-uart-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-03-uart-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-03-uart-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-03-uart-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-03-uart-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-03-uart-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-02-system-timer-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-02-system-timer-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-01-rtc-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-01-rtc-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-01-rtc-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-01-rtc-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-01-rtc-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-01-rtc-functions.lst"
+	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.obj"
+	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.lis"
+	@if exist "$(WORKDIR)\rst-10-00-system-utils-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-00-system-utils-functions.lst"
+	@if exist "$(WORKDIR)\rst-08-io.obj"  \
+            $(RM) "$(WORKDIR)\rst-08-io.obj"
+	@if exist "$(WORKDIR)\rst-08-io.lis"  \
+            $(RM) "$(WORKDIR)\rst-08-io.lis"
+	@if exist "$(WORKDIR)\rst-08-io.lst"  \
+            $(RM) "$(WORKDIR)\rst-08-io.lst"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.obj"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.obj"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.lis"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.lis"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.lst"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.lst"
+	@if exist "$(WORKDIR)\rom-flashing-calculator.src"  \
+            $(RM) "$(WORKDIR)\rom-flashing-calculator.src"
+	@if exist "$(WORKDIR)\protocol.obj"  \
+            $(RM) "$(WORKDIR)\protocol.obj"
+	@if exist "$(WORKDIR)\protocol.lis"  \
+            $(RM) "$(WORKDIR)\protocol.lis"
+	@if exist "$(WORKDIR)\protocol.lst"  \
+            $(RM) "$(WORKDIR)\protocol.lst"
+	@if exist "$(WORKDIR)\protocol.src"  \
+            $(RM) "$(WORKDIR)\protocol.src"
+	@if exist "$(WORKDIR)\mse_driver.obj"  \
+            $(RM) "$(WORKDIR)\mse_driver.obj"
+	@if exist "$(WORKDIR)\mse_driver.lis"  \
+            $(RM) "$(WORKDIR)\mse_driver.lis"
+	@if exist "$(WORKDIR)\mse_driver.lst"  \
+            $(RM) "$(WORKDIR)\mse_driver.lst"
+	@if exist "$(WORKDIR)\mse_driver.src"  \
+            $(RM) "$(WORKDIR)\mse_driver.src"
+	@if exist "$(WORKDIR)\main.obj"  \
+            $(RM) "$(WORKDIR)\main.obj"
+	@if exist "$(WORKDIR)\main.lis"  \
+            $(RM) "$(WORKDIR)\main.lis"
+	@if exist "$(WORKDIR)\main.lst"  \
+            $(RM) "$(WORKDIR)\main.lst"
+	@if exist "$(WORKDIR)\kyb_driverasm.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driverasm.obj"
+	@if exist "$(WORKDIR)\kyb_driverasm.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driverasm.lis"
+	@if exist "$(WORKDIR)\kyb_driverasm.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driverasm.lst"
+	@if exist "$(WORKDIR)\kyb_driver_eventasm.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driver_eventasm.obj"
+	@if exist "$(WORKDIR)\kyb_driver_eventasm.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driver_eventasm.lis"
+	@if exist "$(WORKDIR)\kyb_driver_eventasm.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driver_eventasm.lst"
+	@if exist "$(WORKDIR)\kyb_driver_event.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.obj"
+	@if exist "$(WORKDIR)\kyb_driver_event.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.lis"
+	@if exist "$(WORKDIR)\kyb_driver_event.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.lst"
+	@if exist "$(WORKDIR)\kyb_driver_event.src"  \
+            $(RM) "$(WORKDIR)\kyb_driver_event.src"
+	@if exist "$(WORKDIR)\kyb_driver.obj"  \
+            $(RM) "$(WORKDIR)\kyb_driver.obj"
+	@if exist "$(WORKDIR)\kyb_driver.lis"  \
+            $(RM) "$(WORKDIR)\kyb_driver.lis"
+	@if exist "$(WORKDIR)\kyb_driver.lst"  \
+            $(RM) "$(WORKDIR)\kyb_driver.lst"
+	@if exist "$(WORKDIR)\kyb_driver.src"  \
+            $(RM) "$(WORKDIR)\kyb_driver.src"
+	@if exist "$(WORKDIR)\internal-hiram.obj"  \
+            $(RM) "$(WORKDIR)\internal-hiram.obj"
+	@if exist "$(WORKDIR)\internal-hiram.lis"  \
+            $(RM) "$(WORKDIR)\internal-hiram.lis"
+	@if exist "$(WORKDIR)\internal-hiram.lst"  \
+            $(RM) "$(WORKDIR)\internal-hiram.lst"
+	@if exist "$(WORKDIR)\init-f92.obj"  \
+            $(RM) "$(WORKDIR)\init-f92.obj"
+	@if exist "$(WORKDIR)\init-f92.lis"  \
+            $(RM) "$(WORKDIR)\init-f92.lis"
+	@if exist "$(WORKDIR)\init-f92.lst"  \
+            $(RM) "$(WORKDIR)\init-f92.lst"
+	@if exist "$(WORKDIR)\init-clocks.obj"  \
+            $(RM) "$(WORKDIR)\init-clocks.obj"
+	@if exist "$(WORKDIR)\init-clocks.lis"  \
+            $(RM) "$(WORKDIR)\init-clocks.lis"
+	@if exist "$(WORKDIR)\init-clocks.lst"  \
+            $(RM) "$(WORKDIR)\init-clocks.lst"
+	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.obj"
+	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.lis"
+	@if exist "$(WORKDIR)\i2c-calculate.lst"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.lst"
+	@if exist "$(WORKDIR)\i2c-calculate.src"  \
+            $(RM) "$(WORKDIR)\i2c-calculate.src"
+	@if exist "$(WORKDIR)\graphic_print_char.obj"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.obj"
+	@if exist "$(WORKDIR)\graphic_print_char.lis"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.lis"
+	@if exist "$(WORKDIR)\graphic_print_char.lst"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.lst"
+	@if exist "$(WORKDIR)\graphic_print_char.src"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.src"
+	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.obj"  \
+            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.obj"
+	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lis"  \
+            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lis"
+	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lst"  \
+            $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lst"
+	@if exist "$(WORKDIR)\enumerate_storage.obj"  \
+            $(RM) "$(WORKDIR)\enumerate_storage.obj"
+	@if exist "$(WORKDIR)\enumerate_storage.lis"  \
+            $(RM) "$(WORKDIR)\enumerate_storage.lis"
+	@if exist "$(WORKDIR)\enumerate_storage.lst"  \
+            $(RM) "$(WORKDIR)\enumerate_storage.lst"
+	@if exist "$(WORKDIR)\enumerate_storage.src"  \
+            $(RM) "$(WORKDIR)\enumerate_storage.src"
+	@if exist "$(WORKDIR)\enumerate_hub.obj"  \
+            $(RM) "$(WORKDIR)\enumerate_hub.obj"
+	@if exist "$(WORKDIR)\enumerate_hub.lis"  \
+            $(RM) "$(WORKDIR)\enumerate_hub.lis"
+	@if exist "$(WORKDIR)\enumerate_hub.lst"  \
+            $(RM) "$(WORKDIR)\enumerate_hub.lst"
+	@if exist "$(WORKDIR)\enumerate_hub.src"  \
+            $(RM) "$(WORKDIR)\enumerate_hub.src"
+	@if exist "$(WORKDIR)\enumerate.obj"  \
+            $(RM) "$(WORKDIR)\enumerate.obj"
+	@if exist "$(WORKDIR)\enumerate.lis"  \
+            $(RM) "$(WORKDIR)\enumerate.lis"
+	@if exist "$(WORKDIR)\enumerate.lst"  \
+            $(RM) "$(WORKDIR)\enumerate.lst"
+	@if exist "$(WORKDIR)\enumerate.src"  \
+            $(RM) "$(WORKDIR)\enumerate.src"
+	@if exist "$(WORKDIR)\dev_transfers.obj"  \
+            $(RM) "$(WORKDIR)\dev_transfers.obj"
+	@if exist "$(WORKDIR)\dev_transfers.lis"  \
+            $(RM) "$(WORKDIR)\dev_transfers.lis"
+	@if exist "$(WORKDIR)\dev_transfers.lst"  \
+            $(RM) "$(WORKDIR)\dev_transfers.lst"
+	@if exist "$(WORKDIR)\dev_transfers.src"  \
+            $(RM) "$(WORKDIR)\dev_transfers.src"
+	@if exist "$(WORKDIR)\delay.obj"  \
+            $(RM) "$(WORKDIR)\delay.obj"
+	@if exist "$(WORKDIR)\delay.lis"  \
+            $(RM) "$(WORKDIR)\delay.lis"
+	@if exist "$(WORKDIR)\delay.lst"  \
+            $(RM) "$(WORKDIR)\delay.lst"
+	@if exist "$(WORKDIR)\cstartup.obj"  \
+            $(RM) "$(WORKDIR)\cstartup.obj"
+	@if exist "$(WORKDIR)\cstartup.lis"  \
+            $(RM) "$(WORKDIR)\cstartup.lis"
+	@if exist "$(WORKDIR)\cstartup.lst"  \
+            $(RM) "$(WORKDIR)\cstartup.lst"
+	@if exist "$(WORKDIR)\critical-section.obj"  \
+            $(RM) "$(WORKDIR)\critical-section.obj"
+	@if exist "$(WORKDIR)\critical-section.lis"  \
+            $(RM) "$(WORKDIR)\critical-section.lis"
+	@if exist "$(WORKDIR)\critical-section.lst"  \
+            $(RM) "$(WORKDIR)\critical-section.lst"
+	@if exist "$(WORKDIR)\critical-section.src"  \
+            $(RM) "$(WORKDIR)\critical-section.src"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.obj"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.obj"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.lis"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.lis"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.lst"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.lst"
+	@if exist "$(WORKDIR)\cpu-freq-calculator.src"  \
+            $(RM) "$(WORKDIR)\cpu-freq-calculator.src"
+	@if exist "$(WORKDIR)\clib.obj"  \
+            $(RM) "$(WORKDIR)\clib.obj"
+	@if exist "$(WORKDIR)\clib.lis"  \
+            $(RM) "$(WORKDIR)\clib.lis"
+	@if exist "$(WORKDIR)\clib.lst"  \
+            $(RM) "$(WORKDIR)\clib.lst"
+	@if exist "$(WORKDIR)\clib.src"  \
+            $(RM) "$(WORKDIR)\clib.src"
+	@if exist "$(WORKDIR)\class_ufi.obj"  \
+            $(RM) "$(WORKDIR)\class_ufi.obj"
+	@if exist "$(WORKDIR)\class_ufi.lis"  \
+            $(RM) "$(WORKDIR)\class_ufi.lis"
+	@if exist "$(WORKDIR)\class_ufi.lst"  \
+            $(RM) "$(WORKDIR)\class_ufi.lst"
+	@if exist "$(WORKDIR)\class_ufi.src"  \
+            $(RM) "$(WORKDIR)\class_ufi.src"
+	@if exist "$(WORKDIR)\class_scsi.obj"  \
+            $(RM) "$(WORKDIR)\class_scsi.obj"
+	@if exist "$(WORKDIR)\class_scsi.lis"  \
+            $(RM) "$(WORKDIR)\class_scsi.lis"
+	@if exist "$(WORKDIR)\class_scsi.lst"  \
+            $(RM) "$(WORKDIR)\class_scsi.lst"
+	@if exist "$(WORKDIR)\class_scsi.src"  \
+            $(RM) "$(WORKDIR)\class_scsi.src"
+	@if exist "$(WORKDIR)\class_hub.obj"  \
+            $(RM) "$(WORKDIR)\class_hub.obj"
+	@if exist "$(WORKDIR)\class_hub.lis"  \
+            $(RM) "$(WORKDIR)\class_hub.lis"
+	@if exist "$(WORKDIR)\class_hub.lst"  \
+            $(RM) "$(WORKDIR)\class_hub.lst"
+	@if exist "$(WORKDIR)\class_hub.src"  \
+            $(RM) "$(WORKDIR)\class_hub.src"
+	@if exist "$(WORKDIR)\class_hid_keyboard.obj"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.obj"
+	@if exist "$(WORKDIR)\class_hid_keyboard.lis"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.lis"
+	@if exist "$(WORKDIR)\class_hid_keyboard.lst"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.lst"
+	@if exist "$(WORKDIR)\class_hid_keyboard.src"  \
+            $(RM) "$(WORKDIR)\class_hid_keyboard.src"
+	@if exist "$(WORKDIR)\class_hid.obj"  \
+            $(RM) "$(WORKDIR)\class_hid.obj"
+	@if exist "$(WORKDIR)\class_hid.lis"  \
+            $(RM) "$(WORKDIR)\class_hid.lis"
+	@if exist "$(WORKDIR)\class_hid.lst"  \
+            $(RM) "$(WORKDIR)\class_hid.lst"
+	@if exist "$(WORKDIR)\class_hid.src"  \
+            $(RM) "$(WORKDIR)\class_hid.src"
+	@if exist "$(WORKDIR)\ch376asm.obj"  \
+            $(RM) "$(WORKDIR)\ch376asm.obj"
+	@if exist "$(WORKDIR)\ch376asm.lis"  \
+            $(RM) "$(WORKDIR)\ch376asm.lis"
+	@if exist "$(WORKDIR)\ch376asm.lst"  \
+            $(RM) "$(WORKDIR)\ch376asm.lst"
+	@if exist "$(WORKDIR)\ch376.obj"  \
+            $(RM) "$(WORKDIR)\ch376.obj"
+	@if exist "$(WORKDIR)\ch376.lis"  \
+            $(RM) "$(WORKDIR)\ch376.lis"
+	@if exist "$(WORKDIR)\ch376.lst"  \
+            $(RM) "$(WORKDIR)\ch376.lst"
+	@if exist "$(WORKDIR)\ch376.src"  \
+            $(RM) "$(WORKDIR)\ch376.src"
+	@if exist "$(WORKDIR)\build-date.obj"  \
+            $(RM) "$(WORKDIR)\build-date.obj"
+	@if exist "$(WORKDIR)\build-date.lis"  \
+            $(RM) "$(WORKDIR)\build-date.lis"
+	@if exist "$(WORKDIR)\build-date.lst"  \
+            $(RM) "$(WORKDIR)\build-date.lst"
+	@if exist "$(WORKDIR)\build-date.src"  \
+            $(RM) "$(WORKDIR)\build-date.src"
+	@if exist "$(WORKDIR)\boot_prompt.obj"  \
+            $(RM) "$(WORKDIR)\boot_prompt.obj"
+	@if exist "$(WORKDIR)\boot_prompt.lis"  \
+            $(RM) "$(WORKDIR)\boot_prompt.lis"
+	@if exist "$(WORKDIR)\boot_prompt.lst"  \
+            $(RM) "$(WORKDIR)\boot_prompt.lst"
+	@if exist "$(WORKDIR)\boot_prompt.src"  \
+            $(RM) "$(WORKDIR)\boot_prompt.src"
+	@if exist "$(WORKDIR)\base-drv.obj"  \
+            $(RM) "$(WORKDIR)\base-drv.obj"
+	@if exist "$(WORKDIR)\base-drv.lis"  \
+            $(RM) "$(WORKDIR)\base-drv.lis"
+	@if exist "$(WORKDIR)\base-drv.lst"  \
+            $(RM) "$(WORKDIR)\base-drv.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -623,653 +640,260 @@ rebuildall: buildall
 LIBS = 
 
 OBJS =  \
-            $(WORKDIR_ESCSPACE)\base-drv.obj  \
-            $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
-            $(WORKDIR_ESCSPACE)\build-date.obj  \
-            $(WORKDIR_ESCSPACE)\ch376.obj  \
-            $(WORKDIR_ESCSPACE)\ch376asm.obj  \
-            $(WORKDIR_ESCSPACE)\class_hid.obj  \
-            $(WORKDIR_ESCSPACE)\class_hid_keyboard.obj  \
-            $(WORKDIR_ESCSPACE)\class_hub.obj  \
-            $(WORKDIR_ESCSPACE)\class_scsi.obj  \
-            $(WORKDIR_ESCSPACE)\class_ufi.obj  \
-            $(WORKDIR_ESCSPACE)\clib.obj  \
-            $(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj  \
-            $(WORKDIR_ESCSPACE)\critical-section.obj  \
-            $(WORKDIR_ESCSPACE)\cstartup.obj  \
-            $(WORKDIR_ESCSPACE)\delay.obj  \
-            $(WORKDIR_ESCSPACE)\dev_transfers.obj  \
-            $(WORKDIR_ESCSPACE)\enumerate.obj  \
-            $(WORKDIR_ESCSPACE)\enumerate_hub.obj  \
-            $(WORKDIR_ESCSPACE)\enumerate_storage.obj  \
-            $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj  \
-            $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
-            $(WORKDIR_ESCSPACE)\init-clocks.obj  \
-            $(WORKDIR_ESCSPACE)\init-f92.obj  \
-            $(WORKDIR_ESCSPACE)\internal-hiram.obj  \
-            $(WORKDIR_ESCSPACE)\kyb_driver.obj  \
-            $(WORKDIR_ESCSPACE)\kyb_driver_event.obj  \
-            $(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj  \
-            $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
-            $(WORKDIR_ESCSPACE)\main.obj  \
-            $(WORKDIR_ESCSPACE)\mse_driver.obj  \
-            $(WORKDIR_ESCSPACE)\protocol.obj  \
-            $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
-            $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-08-crt.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
-            $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
-            $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
-            $(WORKDIR_ESCSPACE)\system-vars.obj  \
-            $(WORKDIR_ESCSPACE)\test.obj  \
-            $(WORKDIR_ESCSPACE)\transfers.obj  \
-            $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
-            $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj  \
-            $(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj  \
-            $(WORKDIR_ESCSPACE)\uart-rx-buffer-full.obj  \
-            $(WORKDIR_ESCSPACE)\uart-rx-buffer-get-length.obj  \
-            $(WORKDIR_ESCSPACE)\uart-rx-buffer-get.obj  \
-            $(WORKDIR_ESCSPACE)\uart-rx-buffer-init.obj  \
-            $(WORKDIR_ESCSPACE)\uart-rx-variables.obj  \
-            $(WORKDIR_ESCSPACE)\ufi_driver.obj  \
-            $(WORKDIR_ESCSPACE)\usb-base-drv.obj  \
-            $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
-            $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
-            $(WORKDIR_ESCSPACE)\usb_state.obj  \
-            $(WORKDIR_ESCSPACE)\vdu.obj  \
-            $(WORKDIR_ESCSPACE)\vdu_vm_bytecode.obj  \
-            $(WORKDIR_ESCSPACE)\vectors16.obj  \
-            $(WORKDIR_ESCSPACE)\vm.obj  \
-            $(WORKDIR_ESCSPACE)\work-area.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-lil.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-lis.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
-            $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
-            $(WORKDIR_ESCSPACE)\z80-test.obj  \
             $(WORKDIR_ESCSPACE)\zexall.obj  \
+            $(WORKDIR_ESCSPACE)\z80-test.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-lis.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-lil.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-iy.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
+            $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
+            $(WORKDIR_ESCSPACE)\work-area.obj  \
+            $(WORKDIR_ESCSPACE)\vm.obj  \
+            $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj  \
+            $(WORKDIR_ESCSPACE)\vectors16.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_vm_bytecode.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_init.obj  \
+            $(WORKDIR_ESCSPACE)\vdu.obj  \
+            $(WORKDIR_ESCSPACE)\usb_state.obj  \
+            $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
+            $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
+            $(WORKDIR_ESCSPACE)\usb-base-drv.obj  \
+            $(WORKDIR_ESCSPACE)\ufi_driver.obj  \
+            $(WORKDIR_ESCSPACE)\uart-rx-variables.obj  \
+            $(WORKDIR_ESCSPACE)\uart-rx-buffer-init.obj  \
+            $(WORKDIR_ESCSPACE)\uart-rx-buffer-get.obj  \
+            $(WORKDIR_ESCSPACE)\uart-rx-buffer-get-length.obj  \
+            $(WORKDIR_ESCSPACE)\uart-rx-buffer-full.obj  \
+            $(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj  \
+            $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj  \
+            $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
+            $(WORKDIR_ESCSPACE)\transfers.obj  \
+            $(WORKDIR_ESCSPACE)\test.obj  \
+            $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\system-calls.obj  \
-            $(WORKDIR_ESCSPACE)\vdu_init.obj
+            $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
+            $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-08-crt.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
+            $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
+            $(WORKDIR_ESCSPACE)\protocol.obj  \
+            $(WORKDIR_ESCSPACE)\mse_driver.obj  \
+            $(WORKDIR_ESCSPACE)\main.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driver_event.obj  \
+            $(WORKDIR_ESCSPACE)\kyb_driver.obj  \
+            $(WORKDIR_ESCSPACE)\internal-hiram.obj  \
+            $(WORKDIR_ESCSPACE)\init-f92.obj  \
+            $(WORKDIR_ESCSPACE)\init-clocks.obj  \
+            $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
+            $(WORKDIR_ESCSPACE)\graphic_print_char.obj  \
+            $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj  \
+            $(WORKDIR_ESCSPACE)\enumerate_storage.obj  \
+            $(WORKDIR_ESCSPACE)\enumerate_hub.obj  \
+            $(WORKDIR_ESCSPACE)\enumerate.obj  \
+            $(WORKDIR_ESCSPACE)\dev_transfers.obj  \
+            $(WORKDIR_ESCSPACE)\delay.obj  \
+            $(WORKDIR_ESCSPACE)\cstartup.obj  \
+            $(WORKDIR_ESCSPACE)\critical-section.obj  \
+            $(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj  \
+            $(WORKDIR_ESCSPACE)\clib.obj  \
+            $(WORKDIR_ESCSPACE)\class_ufi.obj  \
+            $(WORKDIR_ESCSPACE)\class_scsi.obj  \
+            $(WORKDIR_ESCSPACE)\class_hub.obj  \
+            $(WORKDIR_ESCSPACE)\class_hid_keyboard.obj  \
+            $(WORKDIR_ESCSPACE)\class_hid.obj  \
+            $(WORKDIR_ESCSPACE)\ch376asm.obj  \
+            $(WORKDIR_ESCSPACE)\ch376.obj  \
+            $(WORKDIR_ESCSPACE)\build-date.obj  \
+            $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
+            $(WORKDIR_ESCSPACE)\base-drv.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
 
-$(WORKDIR_ESCSPACE)\base-drv.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv.s"
+$(WORKDIR_ESCSPACE)\zexall.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
 
-$(WORKDIR_ESCSPACE)\boot_prompt.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\boot_prompt.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\boot_prompt.c"
-
-$(WORKDIR_ESCSPACE)\build-date.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\build-date.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
-
-$(WORKDIR_ESCSPACE)\ch376.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376.c"
-
-$(WORKDIR_ESCSPACE)\ch376asm.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376asm.s"
-
-$(WORKDIR_ESCSPACE)\class_hid.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\class_hid.c"
-
-$(WORKDIR_ESCSPACE)\class_hid_keyboard.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c"
-
-$(WORKDIR_ESCSPACE)\class_hub.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hub.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hub.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\class_hub.c"
-
-$(WORKDIR_ESCSPACE)\class_scsi.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\class_scsi.c"
-
-$(WORKDIR_ESCSPACE)\class_ufi.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\ufi-drv\class_ufi.c"
-
-$(WORKDIR_ESCSPACE)\clib.obj :  \
-            $(PRJDIR_ESCSPACE)\src\clib.c  \
-            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
-            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
-            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
-            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\clib.c"
-
-$(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\cpu-freq-calculator.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\cpu-freq-calculator.c"
-
-$(WORKDIR_ESCSPACE)\critical-section.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\critical-section.c"
-
-$(WORKDIR_ESCSPACE)\cstartup.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
-
-$(WORKDIR_ESCSPACE)\delay.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\delay.s  \
+$(WORKDIR_ESCSPACE)\z80-test.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-test.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\delay.s"
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-test.s"
 
-$(WORKDIR_ESCSPACE)\dev_transfers.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\dev_transfers.c"
-
-$(WORKDIR_ESCSPACE)\enumerate.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\enumerate.c"
-
-$(WORKDIR_ESCSPACE)\enumerate_hub.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hub.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\enumerate_hub.c"
-
-$(WORKDIR_ESCSPACE)\enumerate_storage.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\enumerate_storage.c"
-
-$(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
-            $(PRJDIR_ESCSPACE)\src\gpio-b4-isr-marshaller.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\gpio-b4-isr-marshaller.s"
-
-$(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\i2c\i2c-calculate.c"
-
-$(WORKDIR_ESCSPACE)\init-clocks.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\init-clocks.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-clocks.s"
-
-$(WORKDIR_ESCSPACE)\init-f92.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\init-f92.asm  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-f92.asm"
-
-$(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
-            $(PRJDIR_ESCSPACE)\src\internal-hiram.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\internal-hiram.s"
-
-$(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c"
-
-$(WORKDIR_ESCSPACE)\kyb_driver_event.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c"
-
-$(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s"
-
-$(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s"
-
-$(WORKDIR_ESCSPACE)\main.obj :  \
-            $(PRJDIR_ESCSPACE)\src\main.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
-
-$(WORKDIR_ESCSPACE)\mse_driver.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\mse-drv\mse_driver.c"
-
-$(WORKDIR_ESCSPACE)\protocol.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\protocol.c"
-
-$(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c"
-
-$(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-08-io.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
-
-$(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-00-system-utils-functions.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\version.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-00-system-utils-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-01-rtc-functions.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-01-rtc-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-02-system-timer-functions.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-02-system-timer-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-03-uart-functions.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-03-uart-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-04-i2c-functions.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-04-i2c-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-06-usb-functions.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-06-usb-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-07-emulator-function.s  \
+$(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-07-emulator-function.s"
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator.s"
 
-$(WORKDIR_ESCSPACE)\rst-10-08-crt.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-08-crt.s  \
+$(WORKDIR_ESCSPACE)\z80-emulator-sil.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-sil.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-08-crt.s"
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-sil.s"
 
-$(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-functions.s"
-
-$(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-18-function.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-function.s"
-
-$(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c"
-
-$(WORKDIR_ESCSPACE)\system-vars.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system-vars.s"
-
-$(WORKDIR_ESCSPACE)\test.obj :  \
-            $(PRJDIR_ESCSPACE)\src\test.s  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
-
-$(WORKDIR_ESCSPACE)\transfers.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.c  \
-            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\transfers.c"
-
-$(WORKDIR_ESCSPACE)\uart-calculate.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c  \
+$(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c"
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
 
-$(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s  \
+$(WORKDIR_ESCSPACE)\z80-emulator-lis.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-lis.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s"
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-lis.s"
 
-$(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s  \
+$(WORKDIR_ESCSPACE)\z80-emulator-lil.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-lil.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s"
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-lil.s"
 
-$(WORKDIR_ESCSPACE)\uart-rx-buffer-full.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s  \
+$(WORKDIR_ESCSPACE)\z80-emulator-iy.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-iy.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s"
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-iy.s"
 
-$(WORKDIR_ESCSPACE)\uart-rx-buffer-get-length.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s  \
+$(WORKDIR_ESCSPACE)\z80-emulator-ix.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-ix.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s"
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-ix.s"
 
-$(WORKDIR_ESCSPACE)\uart-rx-buffer-get.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s  \
+$(WORKDIR_ESCSPACE)\z80-emulator-critical.obj :  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-critical.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s"
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-critical.s"
 
-$(WORKDIR_ESCSPACE)\uart-rx-buffer-init.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s"
+$(WORKDIR_ESCSPACE)\work-area.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\work-area.c"
 
-$(WORKDIR_ESCSPACE)\uart-rx-variables.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s"
-
-$(WORKDIR_ESCSPACE)\ufi_driver.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\ufi_driver.c  \
+$(WORKDIR_ESCSPACE)\vm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.c.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm.c"
+
+$(WORKDIR_ESCSPACE)\vm-promoted-fn.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vm-promoted-fn.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vm-promoted-fn.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vm-promoted-fn.c"
+
+$(WORKDIR_ESCSPACE)\vectors16.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
+
+$(WORKDIR_ESCSPACE)\vdu_vm_bytecode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_vm_bytecode.c"
+
+$(WORKDIR_ESCSPACE)\vdu_init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vm-promoted-fn.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_init.c"
+
+$(WORKDIR_ESCSPACE)\vdu.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu.c"
+
+$(WORKDIR_ESCSPACE)\usb_state.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
@@ -1278,10 +902,37 @@ $(WORKDIR_ESCSPACE)\ufi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\ufi_driver.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
+
+$(WORKDIR_ESCSPACE)\usb_cbi.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\ufi-drv\ufi_driver.c"
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.c"
+
+$(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb-interrupt.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse-interrupt.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s"
 
 $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c  \
@@ -1306,21 +957,131 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c"
 
-$(WORKDIR_ESCSPACE)\usb-tick-sr.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s  \
+$(WORKDIR_ESCSPACE)\ufi_driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\ufi_driver.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\ufi_driver.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\ufi-drv\ufi_driver.c"
+
+$(WORKDIR_ESCSPACE)\uart-rx-variables.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb-interrupt.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse-interrupt.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb-tick-sr.s"
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s"
 
-$(WORKDIR_ESCSPACE)\usb_cbi.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.c  \
+$(WORKDIR_ESCSPACE)\uart-rx-buffer-init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s"
+
+$(WORKDIR_ESCSPACE)\uart-rx-buffer-get.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s"
+
+$(WORKDIR_ESCSPACE)\uart-rx-buffer-get-length.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s"
+
+$(WORKDIR_ESCSPACE)\uart-rx-buffer-full.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s"
+
+$(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s"
+
+$(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s"
+
+$(WORKDIR_ESCSPACE)\uart-calculate.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c"
+
+$(WORKDIR_ESCSPACE)\transfers.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\transfers.c"
+
+$(WORKDIR_ESCSPACE)\test.obj :  \
+            $(PRJDIR_ESCSPACE)\src\test.s  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\test.s"
+
+$(WORKDIR_ESCSPACE)\system-vars.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\system-vars.s"
+
+$(WORKDIR_ESCSPACE)\system-calls.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\system-calls.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vm-promoted-fn.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\system-calls.c"
+
+$(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -1332,14 +1093,366 @@ $(WORKDIR_ESCSPACE)\usb_cbi.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.c"
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c"
 
-$(WORKDIR_ESCSPACE)\usb_state.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.c  \
+$(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-18-function.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-function.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-08-crt.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-08-crt.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-08-crt.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-07-emulator-function.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-07-emulator-function.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-06-usb-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-06-usb-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-04-i2c-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-04-i2c-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-04-i2c-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-03-uart-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-03-uart-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-03-uart-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-02-system-timer-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-02-system-timer-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-02-system-timer-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-01-rtc-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-01-rtc-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-01-rtc-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-10-00-system-utils-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-00-system-utils-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
+            $(PRJDIR_ESCSPACE)\src\version.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-00-system-utils-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-08-io.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-08-io.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-08-io.s"
+
+$(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c"
+
+$(WORKDIR_ESCSPACE)\protocol.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\protocol.c"
+
+$(WORKDIR_ESCSPACE)\mse_driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\mse-drv\mse_driver.c"
+
+$(WORKDIR_ESCSPACE)\main.obj :  \
+            $(PRJDIR_ESCSPACE)\src\main.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\main.s"
+
+$(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s"
+
+$(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s"
+
+$(WORKDIR_ESCSPACE)\kyb_driver_event.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c"
+
+$(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c"
+
+$(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\internal-hiram.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\internal-hiram.s"
+
+$(WORKDIR_ESCSPACE)\init-f92.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\init-f92.asm  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-f92.asm"
+
+$(WORKDIR_ESCSPACE)\init-clocks.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\init-clocks.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-clocks.s"
+
+$(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\i2c\i2c-calculate.c"
+
+$(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vm\graphic_print_char.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vm-promoted-fn.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vm\vdu\variables.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vm\graphic_print_char.c"
+
+$(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
+            $(PRJDIR_ESCSPACE)\src\gpio-b4-isr-marshaller.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\gpio-b4-isr-marshaller.s"
+
+$(WORKDIR_ESCSPACE)\enumerate_storage.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\enumerate_storage.c"
+
+$(WORKDIR_ESCSPACE)\enumerate_hub.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hub.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\enumerate_hub.c"
+
+$(WORKDIR_ESCSPACE)\enumerate.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\enumerate.c"
+
+$(WORKDIR_ESCSPACE)\dev_transfers.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\dev_transfers.c"
+
+$(WORKDIR_ESCSPACE)\delay.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\delay.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\delay.s"
+
+$(WORKDIR_ESCSPACE)\cstartup.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\cstartup.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\cstartup.asm"
+
+$(WORKDIR_ESCSPACE)\critical-section.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\critical-section.c"
+
+$(WORKDIR_ESCSPACE)\cpu-freq-calculator.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\cpu-freq-calculator.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\cpu-freq-calculator.c"
+
+$(WORKDIR_ESCSPACE)\clib.obj :  \
+            $(PRJDIR_ESCSPACE)\src\clib.c  \
+            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
+            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\clib.c"
+
+$(WORKDIR_ESCSPACE)\class_ufi.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
@@ -1348,153 +1461,106 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\ufi-drv\class_ufi.c"
 
-$(WORKDIR_ESCSPACE)\vdu.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu.c"
-
-$(WORKDIR_ESCSPACE)\vdu_vm_bytecode.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_vm_bytecode.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_vm_bytecode.c"
-
-$(WORKDIR_ESCSPACE)\vectors16.obj :  \
-            $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
-
-$(WORKDIR_ESCSPACE)\vm.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+$(WORKDIR_ESCSPACE)\class_scsi.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.c.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm.c"
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\critical-section.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\class_scsi.c"
 
-$(WORKDIR_ESCSPACE)\work-area.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.c  \
+$(WORKDIR_ESCSPACE)\class_hub.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hub.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hub.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\work-area.c"
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\class_hub.c"
 
-$(WORKDIR_ESCSPACE)\z80-emulator-critical.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-critical.s  \
+$(WORKDIR_ESCSPACE)\class_hid_keyboard.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c"
+
+$(WORKDIR_ESCSPACE)\class_hid.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\class_hid.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\class_hid.c"
+
+$(WORKDIR_ESCSPACE)\ch376asm.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-critical.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-ix.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-ix.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-ix.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-iy.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-iy.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-iy.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-lil.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-lil.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-lil.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-lis.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-lis.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-lis.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
-
-$(WORKDIR_ESCSPACE)\z80-emulator-sil.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-sil.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-sil.s"
-
-$(WORKDIR_ESCSPACE)\z80-emulator.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
-            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-macros.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator.s"
-
-$(WORKDIR_ESCSPACE)\z80-test.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-test.s  \
-            $(PRJDIR_ESCSPACE)\src\config.inc  \
-            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\z80-test.s"
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376asm.s"
 
-$(WORKDIR_ESCSPACE)\zexall.obj :  \
-            $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
+$(WORKDIR_ESCSPACE)\ch376.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\ch376.c"
 
-$(WORKDIR_ESCSPACE)\system-calls.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\system-calls.c
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\system-calls.c"
+$(WORKDIR_ESCSPACE)\build-date.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\build-date.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
 
-$(WORKDIR_ESCSPACE)\vdu_init.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_init.c"
+$(WORKDIR_ESCSPACE)\boot_prompt.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\boot_prompt.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\boot_prompt.c"
+
+$(WORKDIR_ESCSPACE)\base-drv.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376asm.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\usb-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv.s"
 

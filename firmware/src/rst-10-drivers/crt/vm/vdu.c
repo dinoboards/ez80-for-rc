@@ -1,16 +1,12 @@
 #include "vdu.h"
 #include "stddef.h"
 #include <host-functions.h>
-// #include <stdint.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <v99x8-super.h>
 
 // Y co-ord to store font data
 // need enough room to allow 2 pages for all modes
 #define FONT_Y_OFFSET (current_display_mode >= 16 ? 256 : (576 * 2))
 
-static void graphic_print_char(uint8_t ch);
+void graphic_print_char(uint8_t ch);
 
 // Must be first function in file for vm
 int24_t vdu(uint8_t ch) {
@@ -41,9 +37,4 @@ int24_t vdu(uint8_t ch) {
     return ch;
 
   return -1;
-}
-
-static void graphic_print_char(uint8_t ch) {
-  if (ch >= ' ' && ch < 126)
-    putchar(ch);
 }

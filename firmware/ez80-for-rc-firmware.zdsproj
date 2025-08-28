@@ -3,83 +3,85 @@
 
 <!-- file information -->
 <files>
-<file filter-key="">src\rst-10-drivers\usb\base-drv.s</file>
-<file filter-key="">src\startup\boot_prompt.c</file>
-<file filter-key="">src\rst-10-drivers\build-date.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\ch376asm.s</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\class_hid.c</file>
-<file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\class_hub.c</file>
-<file filter-key="">src\rst-10-drivers\usb\scsi-drv\class_scsi.c</file>
-<file filter-key="">src\rst-10-drivers\usb\ufi-drv\class_ufi.c</file>
-<file filter-key="">src\clib.c</file>
-<file filter-key="">src\startup\cpu-freq-calculator.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\critical-section.c</file>
-<file filter-key="">src\startup\cstartup.asm</file>
-<file filter-key="">src\rst-10-drivers\usb\delay.s</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\dev_transfers.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_hub.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_storage.c</file>
-<file filter-key="">src\gpio-b4-isr-marshaller.s</file>
-<file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
-<file filter-key="">src\startup\init-clocks.s</file>
-<file filter-key="">src\startup\init-f92.asm</file>
-<file filter-key="">src\internal-hiram.s</file>
-<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver.c</file>
-<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c</file>
-<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s</file>
-<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
-<file filter-key="">src\main.s</file>
-<file filter-key="">src\rst-10-drivers\usb\mse-drv\mse_driver.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
-<file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
-<file filter-key="">src\rst-08-io.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-00-system-utils-functions.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-01-rtc-functions.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-02-system-timer-functions.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-03-uart-functions.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-06-usb-functions.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-07-emulator-function.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-08-crt.s</file>
-<file filter-key="">src\rst-10-functions.s</file>
-<file filter-key="">src\rst-18-function.s</file>
-<file filter-key="">src\rst-10-drivers\usb\scsi-drv\scsi_driver.c</file>
-<file filter-key="">src\startup\system-vars.s</file>
-<file filter-key="">src\test.s</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\transfers.c</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-calculate.c</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s</file>
-<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s</file>
-<file filter-key="">src\rst-10-drivers\usb\ufi-drv\ufi_driver.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\usb-base-drv.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\usb-tick-sr.s</file>
-<file filter-key="">src\rst-10-drivers\usb\ufi-drv\usb_cbi.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
-<file filter-key="">src\rst-10-drivers\crt\vdu.c</file>
-<file filter-key="">src\rst-10-drivers\crt\vdu_vm_bytecode.c</file>
-<file filter-key="">src\startup\vectors16.asm</file>
-<file filter-key="">src\q3vm\host\vm.c</file>
-<file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>
-<file filter-key="">src\z80-emulator\z80-emulator-critical.s</file>
-<file filter-key="">src\z80-emulator\z80-emulator-ix.s</file>
-<file filter-key="">src\z80-emulator\z80-emulator-iy.s</file>
-<file filter-key="">src\z80-emulator\z80-emulator-lil.s</file>
-<file filter-key="">src\z80-emulator\z80-emulator-lis.s</file>
-<file filter-key="">src\z80-emulator\z80-emulator-logging.c</file>
-<file filter-key="">src\z80-emulator\z80-emulator-sil.s</file>
-<file filter-key="">src\z80-emulator\z80-emulator.s</file>
-<file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
-<file filter-key="">src\rst-10-drivers\crt\system-calls.c</file>
+<file filter-key="">src\z80-emulator\z80-test.s</file>
+<file filter-key="">src\z80-emulator\z80-emulator.s</file>
+<file filter-key="">src\z80-emulator\z80-emulator-sil.s</file>
+<file filter-key="">src\z80-emulator\z80-emulator-logging.c</file>
+<file filter-key="">src\z80-emulator\z80-emulator-lis.s</file>
+<file filter-key="">src\z80-emulator\z80-emulator-lil.s</file>
+<file filter-key="">src\z80-emulator\z80-emulator-iy.s</file>
+<file filter-key="">src\z80-emulator\z80-emulator-ix.s</file>
+<file filter-key="">src\z80-emulator\z80-emulator-critical.s</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>
+<file filter-key="">src\q3vm\host\vm.c</file>
+<file filter-key="">src\rst-10-drivers\crt\vm-promoted-fn.c</file>
+<file filter-key="">src\startup\vectors16.asm</file>
+<file filter-key="">src\rst-10-drivers\crt\vdu_vm_bytecode.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu_init.c</file>
+<file filter-key="">src\rst-10-drivers\crt\vdu.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
+<file filter-key="">src\rst-10-drivers\usb\ufi-drv\usb_cbi.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\usb-tick-sr.s</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\usb-base-drv.c</file>
+<file filter-key="">src\rst-10-drivers\usb\ufi-drv\ufi_driver.c</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-variables.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-init.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-get-length.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-full.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-empty.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-rx-buffer-add-to.s</file>
+<file filter-key="">src\rst-10-drivers\uart-rx-buffer\uart-calculate.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\transfers.c</file>
+<file filter-key="">src\test.s</file>
+<file filter-key="">src\startup\system-vars.s</file>
+<file filter-key="">src\rst-10-drivers\crt\system-calls.c</file>
+<file filter-key="">src\rst-10-drivers\usb\scsi-drv\scsi_driver.c</file>
+<file filter-key="">src\rst-18-function.s</file>
+<file filter-key="">src\rst-10-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-08-crt.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-07-emulator-function.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-06-usb-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-03-uart-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-02-system-timer-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-01-rtc-functions.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-00-system-utils-functions.s</file>
+<file filter-key="">src\rst-08-io.s</file>
+<file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
+<file filter-key="">src\rst-10-drivers\usb\mse-drv\mse_driver.c</file>
+<file filter-key="">src\main.s</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver_eventasm.s</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver_event.c</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driver.c</file>
+<file filter-key="">src\internal-hiram.s</file>
+<file filter-key="">src\startup\init-f92.asm</file>
+<file filter-key="">src\startup\init-clocks.s</file>
+<file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
+<file filter-key="">src\rst-10-drivers\crt\vm\graphic_print_char.c</file>
+<file filter-key="">src\gpio-b4-isr-marshaller.s</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_storage.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_hub.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\dev_transfers.c</file>
+<file filter-key="">src\rst-10-drivers\usb\delay.s</file>
+<file filter-key="">src\startup\cstartup.asm</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\critical-section.c</file>
+<file filter-key="">src\startup\cpu-freq-calculator.c</file>
+<file filter-key="">src\clib.c</file>
+<file filter-key="">src\rst-10-drivers\usb\ufi-drv\class_ufi.c</file>
+<file filter-key="">src\rst-10-drivers\usb\scsi-drv\class_scsi.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\class_hub.c</file>
+<file filter-key="">src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\class_hid.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\ch376asm.s</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
+<file filter-key="">src\rst-10-drivers\build-date.c</file>
+<file filter-key="">src\startup\boot_prompt.c</file>
+<file filter-key="">src\rst-10-drivers\usb\base-drv.s</file>
 </files>
 
 <!-- configuration information -->
@@ -239,7 +241,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <tool name="Compiler">
 <options>
 <option name="padbranch" type="string" change-action="compile">Off</option>
-<option name="define" type="string" change-action="compile">_DEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE</option>
+<option name="define" type="string" change-action="compile">_DEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE,__ZDS__</option>
 <option name="genprintf" type="boolean" change-action="compile">true</option>
 <option name="keepasm" type="boolean" change-action="none">true</option>
 <option name="keeplst" type="boolean" change-action="none">true</option>
@@ -499,11 +501,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="vm" />
-<watch-element expression="_vm" />
-<watch-element expression="*PC" />
-<watch-element expression="PC" />
-<watch-element expression="args" />
+<watch-element expression="_counter" />
+<watch-element expression="counter" />
+<watch-element expression="*_counter" />
 </watch-elements>
 
 <!-- breakpoint information -->
