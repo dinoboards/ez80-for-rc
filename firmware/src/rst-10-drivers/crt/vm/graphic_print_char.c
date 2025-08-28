@@ -1,13 +1,15 @@
 #ifdef Q3_VM
+#include "../vm-promoted-fn.h"
 #include "vdu/variables.h"
 #include <host-functions.h>
 #include <stdint.h>
-#include "../vm-promoted-fn.h"
+#include <stdio.h>
 
 #else
 #include "../../../q3vm/includes/host-functions.h"
-#include <stdint.h>
 #include "../vm-promoted-fn.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #endif
 
@@ -20,6 +22,4 @@ void graphic_print_char(uint8_t ch) {
   printf("\n%d\n", counter++);
 }
 
-
 #endif
-

@@ -1,9 +1,9 @@
 #include "../vdu.h"
 #include "vdu_25/line_clip.c"
 #include "vdu_25/triangle.c"
+#include <stdio.h>
 #include <v99x8.h>
 
-#include "bg_lib.h"
 // VDU: 25 (5 bytes)
 
 /*
@@ -40,7 +40,7 @@ modes:
 
 */
 
-void vdu_plot() {
+void vdu_plot(void) {
 
   switch (data[0]) { // mode
   case 85: {         // triangle

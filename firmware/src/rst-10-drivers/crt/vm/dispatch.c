@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 extern void vdu(int24_t);
-extern void vdu_init();
+extern void vdu_init(void);
 
 int32_t vmMain(int24_t command, int24_t arg0, int24_t arg1, int24_t arg2) {
   switch (command) {

@@ -79,25 +79,25 @@ typedef struct text_colours {
 #define RGB_FLASHING_WHITE_BLACK                                                                                                   \
   { 3, 3, 3 }
 
-typedef void (*mos_vdu_handler)();
+typedef void (*mos_vdu_handler)(void);
 
-extern void vdu_bs();
-extern void vdu_lf();
-extern void vdu_cls();
-extern void vdu_cr();
-extern void vdu_clg();
-extern void vdu_colour();
-extern void vdu_gcol();
-extern void vdu_colour_define();
-extern void vdu_mode();
-extern void vdu_multi_purpose();
-extern void vdu_set_gviewport();
-extern void vdu_plot();
-extern void vdu_set_tviewport();
-extern void vdu_set_origin();
-extern void vdu_tab();
+extern void vdu_bs(void);
+extern void vdu_lf(void);
+extern void vdu_cls(void);
+extern void vdu_cr(void);
+extern void vdu_clg(void);
+extern void vdu_colour(void);
+extern void vdu_gcol(void);
+extern void vdu_colour_define(void);
+extern void vdu_mode(void);
+extern void vdu_multi_purpose(void);
+extern void vdu_set_gviewport(void);
+extern void vdu_plot(void);
+extern void vdu_set_tviewport(void);
+extern void vdu_set_origin(void);
+extern void vdu_tab(void);
 
-extern void init_font_patterns();
+extern void init_font_patterns(void);
 void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);
 
 extern int16_t convert_x(int16_t logical_x);
@@ -143,6 +143,6 @@ extern mos_vdu_handler current_fn;
 #define scale_width  ((int16_t)1280)
 #define scale_height ((int16_t)1024)
 
-extern void vdu_not_implemented();
+extern void vdu_not_implemented(void);
 
 #endif
