@@ -3,17 +3,17 @@ BIN=./bin/
 MAKEFLAGS += --no-print-directory
 .DELETE_ON_ERROR:
 
-$(shell cd ../../../q3vm/host && ./import-vm.sh)
+$(shell cd ../host && ./import-vm.sh)
 
 LCC := lcc
 Q3ASM := q3asm
 
-INCLUDES :=  $(wildcard ../../../q3vm/includes/*.h) $(wildcard ./*.h) $(wildcard ./vdu/*.h) $(wildcard ./vdp/*.h)
+INCLUDES :=  $(wildcard ../includes/*.h) $(wildcard ./*.h) $(wildcard ./vdu/*.h) $(wildcard ./vdp/*.h)
 VDU_C_SOURCE := $(filter-out ./dispatch.c,$(wildcard ./*.c) $(wildcard ./vdu/*.c) $(wildcard ./vdp/*.c))
-VM_C_SOURCE := $(wildcard ../../../a3vm/host/*)
+VM_C_SOURCE := $(wildcard ../host/*)
 VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
-INCLUDE_PATH := ../../../../../../../../../../../../../../../../../../../../$(shell realpath ../../../q3vm/includes/)
+INCLUDE_PATH := ../../../../../../../../../../../../../../../../../../../../$(shell realpath ../includes/)
 
 all: ../vdu_vm_bytecode.c
 	@echo > /dev/null

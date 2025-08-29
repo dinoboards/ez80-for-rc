@@ -12,7 +12,7 @@
 #if defined(__FN_ON_HOST__)
 
 #ifdef __ZDS__
-#include "../../q3vm/host/vm.h"
+#include "host/vm.h"
 #include <stdint.h>
 extern uint32_t dispatch_hosted_fn(vm_t *vm, uint8_t *args);
 extern void     link_vm_globals(vm_t *vm);

@@ -1,5 +1,5 @@
 #include "vm-promoted-fn.h"
-#include "../../q3vm/includes/host-functions.h"
+#include "includes/host-functions.h"
 #include <stdint.h>
 
 /*
@@ -44,6 +44,6 @@ uint32_t dispatch_hosted_fn(vm_t *vm, uint8_t *args) {
 
 uint8_t *_counter;
 
-void link_vm_globals(vm_t *vm) { _counter = &vm->dataBase[0x1e4]; }
+void link_vm_globals(vm_t *vm) { _counter = &vm->dataBase[0x191]; }
 
 #endif

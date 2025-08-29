@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #else
-#include "../../../q3vm/includes/host-functions.h"
+#include "../includes/host-functions.h"
 #include "../vm-promoted-fn.h"
 #include <stdint.h>
 #include <stdio.h>

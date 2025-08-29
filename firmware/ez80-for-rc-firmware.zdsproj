@@ -23,7 +23,6 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_hub.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_storage.c</file>
 <file filter-key="">src\gpio-b4-isr-marshaller.s</file>
-<file filter-key="">src\rst-10-drivers\crt\vm\graphic_print_char.c</file>
 <file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
 <file filter-key="">src\startup\init-clocks.s</file>
 <file filter-key="">src\startup\init-f92.asm</file>
@@ -48,7 +47,6 @@
 <file filter-key="">src\rst-10-functions.s</file>
 <file filter-key="">src\rst-18-function.s</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\scsi_driver.c</file>
-<file filter-key="">src\rst-10-drivers\crt\system-calls.c</file>
 <file filter-key="">src\startup\system-vars.s</file>
 <file filter-key="">src\test.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\transfers.c</file>
@@ -67,9 +65,7 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu_init.c</file>
-<file filter-key="">src\rst-10-drivers\crt\vdu_vm_bytecode.c</file>
 <file filter-key="">src\startup\vectors16.asm</file>
-<file filter-key="">src\rst-10-drivers\crt\vm-promoted-fn.c</file>
 <file filter-key="">src\q3vm\host\vm.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>
 <file filter-key="">src\z80-emulator\z80-emulator-critical.s</file>
@@ -82,6 +78,11 @@
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
+<file filter-key="">src\q3vm\system-calls.c</file>
+<file filter-key="">src\q3vm\vm_bytecode.c</file>
+<file filter-key="">src\q3vm\vm-init.c</file>
+<file filter-key="">src\q3vm\vm-promoted-fn.c</file>
+<file filter-key="">src\q3vm\src\graphic_print_char.c</file>
 </files>
 
 <!-- configuration information -->
@@ -501,20 +502,11 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="_counter" />
-<watch-element expression="counter" />
-<watch-element expression="*_counter" />
+<watch-element expression="fmt" />
 </watch-elements>
 
 <!-- breakpoint information -->
 <breakpoints>
-<breakpoint temporary="false" enabled="true" >
-<line-number>55</line-number>
-<pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\crt\system-calls.c</pathname>
-<address>0</address>
-<command></command>
-<preserve-type>0</preserve-type>
-</breakpoint>
 </breakpoints>
 
 </project>

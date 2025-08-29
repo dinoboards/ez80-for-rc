@@ -1,7 +1,7 @@
-#include "../../q3vm/host/target-support.h"
-#include "../../q3vm/host/vm.h"
-#include "../../q3vm/includes/host-functions.h"
-#include "vdu_vm_bytecode.h"
+#include "host/target-support.h"
+#include "host/vm.h"
+#include "includes/host-functions.h"
+#include "vm_bytecode.h"
 #include "vm-promoted-fn.h"
 #include <stdarg.h>
 #include <stdio.h>

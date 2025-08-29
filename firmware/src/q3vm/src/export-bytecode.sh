@@ -27,8 +27,8 @@ bssLength="${bssLengthH}${bssLengthM}${bssLengthL}"
 STACK_SIZE=512
 ramRequired=$((0x$dataLength+0x$bssLength+$STACK_SIZE))
 
-IMAGE_NAME=vdu_vm_bytecode
-IMAGE_NAME_UPCASE=VDU_VM_BYTECODE
+IMAGE_NAME=vm_bytecode
+IMAGE_NAME_UPCASE=VM_BYTECODE
 OUTPUT_FILE="../${IMAGE_NAME}"
 
 cat <<EOT > "${OUTPUT_FILE}.h"
