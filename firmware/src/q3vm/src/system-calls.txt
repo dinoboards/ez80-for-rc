@@ -1,0 +1,15 @@
+memcpy
+memset
+print_string
+putchar
+trap_Error
+vdp_cmd_line
+vdp_cmd_wait_completion
+vdp_set_graphic_4
+vdp_set_lines
+vdp_set_palette
+vdp_set_refresh
+vdp_set_super_graphic_2
+vdp_set_super_graphic_21
+vdp_set_super_graphic_26
+vdu_cls

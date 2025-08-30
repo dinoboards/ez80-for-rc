@@ -1,6 +1,7 @@
 #include "host/target-support.h"
 #include "host/vm.h"
 #include "includes/host-functions.h"
+#include "src/system-calls-ids.h"
 #include "vm-promoted-fn.h"
 #include "vm_bytecode.h"
 
@@ -26,28 +27,28 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   const int id = -1 - args[0];
 
   switch (id) {
-  case -1: /* PRINTF */
+  case SC_PRINT_STRING:
     print_string((const char *)VMA_PTR(3, vm));
     return 0;
 
-  case -2: /* ERROR */
+  case SC_TRAP_ERROR:
     print_string((const char *)VMA_PTR(3, vm));
     return 0;
 
-  case -3: /* MEMSET */
-           // if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
-    { memset(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9)); }
+  case SC_MEMSET: {
+    memset(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9));
     return VMA_UINT24(3);
+  }
 
-  case -4: /* MEMCPY */
-           // if (VM_MemoryRangeValid(VMA_UINT24(3) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0 &&
-           //     VM_MemoryRangeValid(VMA_UINT24(6) /*addr*/, VMA_UINT24(9) /*len*/, vm) == 0) {
-    { memcpy(VMA_PTR(3, vm), VMA_PTR(6, vm), VMA_UINT24(9)); }
+  case SC_MEMCPY: {
+    memcpy(VMA_PTR(3, vm), VMA_PTR(6, vm), VMA_UINT24(9));
     return VMA_UINT24(3);
+  }
 
-  case -5: /* put_char */
+  case SC_PUTCHAR: {
     putchar(VMA_UINT24(3));
     return 0;
+  }
 
   default:
     return dispatch_hosted_fn(vm, args);

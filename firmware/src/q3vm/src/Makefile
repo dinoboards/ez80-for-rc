@@ -13,7 +13,7 @@ VDU_C_SOURCE := $(filter-out ./dispatch.c,$(wildcard ./*.c) $(wildcard ./vdu/*.c
 VM_C_SOURCE := $(wildcard ../host/*)
 VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
-INCLUDE_PATH := ../../../../../../../../../../../../../../../../../../../../$(shell realpath ../includes/)
+INCLUDE_PATH := ../../../../../../../../../../../../..$(shell realpath ../includes/)
 
 all: ../vdu_vm_bytecode.c
 	@echo > /dev/null
@@ -24,7 +24,7 @@ all: ../vdu_vm_bytecode.c
 
 
 bytecode.qvm: $(VDU_ASM_FILES) $(wildcard ./vdu/vdu_25/*.c)
-	@$(Q3ASM) -v -l -m -o "bytecode"  dispatch.vmasm $(VDU_ASM_FILES) g_syscalls.asm
+	@$(Q3ASM) -v -l -m -o "bytecode"  dispatch.vmasm $(VDU_ASM_FILES) system-calls-ids.asm
 	@echo "Assembled vdu/bytecode.qvm"
 
 ../vdu_vm_bytecode.c ../vdu_vm_bytecode.h: bytecode.qvm
