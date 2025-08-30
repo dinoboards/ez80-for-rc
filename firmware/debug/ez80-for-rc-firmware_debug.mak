@@ -1394,9 +1394,7 @@ $(WORKDIR_ESCSPACE)\vdu_init.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_init.c"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
@@ -1522,22 +1520,65 @@ $(WORKDIR_ESCSPACE)\zexall.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
 
 $(WORKDIR_ESCSPACE)\system-calls.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c
+            $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\system-calls.c"
 
 $(WORKDIR_ESCSPACE)\vm_bytecode.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.c
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm_bytecode.c"
 
 $(WORKDIR_ESCSPACE)\vm-init.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-init.c"
 
 $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.c
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-promoted-fn.c"
 
 $(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\src\graphic_print_char.c
+            $(PRJDIR_ESCSPACE)\src\q3vm\src\graphic_print_char.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\src\vdu\variables.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\src\graphic_print_char.c"
 

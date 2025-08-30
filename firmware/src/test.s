@@ -61,6 +61,7 @@ longspike:
 	ret.l		; this should return to the emulator
 
 _spike:
+
 	LD	A, 8
 	LD	B, 0
 	LD	C, 65
@@ -84,16 +85,16 @@ _spike:
 	LD	C, 85	; triangle
 	RST	%10
 
-	LD	C, %11
+	LD	C, 11
 	RST	%10
 
-	LD	C, %22
+	LD	C, 22
 	RST	%10
 
-	LD	C, %33
+	LD	C, 33
 	RST	%10
 
-	LD	C, %44
+	LD	C, 44
 	RST	%10
 
 

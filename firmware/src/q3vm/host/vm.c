@@ -1,12 +1,11 @@
 /*
-      ___   _______     ____  __
-     / _ \ |___ /\ \   / /  \/  |
-    | | | |  |_ \ \ \ / /| |\/| |
-    | |_| |____) | \ V / | |  | |
-     \__\_______/   \_/  |_|  |_|
+ __    _  ___  _____    ___   _______     ____  __
+|  \  | |/ _ \|_   _|  / _ \ |___ /\ \   / /  \/  |
+| | \ | | | | | | |   | | | |  |_ \ \ \ / /| |\/| |
+| |\ \| | |_| | | |   | |_| |____) | \ V / | |  | |
+|_| \___|\___/  |_|    \__\_______/   \_/  |_|  |_|
 
-
-   Quake III Arena Virtual Machine
+   NOT Quake III Arena Virtual Machine
 */
 
 /******************************************************************************
@@ -178,7 +177,7 @@ int VM_Create(vm_t                      *vm,
     vm->dataLength       = UINT(header->dataLength);
     vm->bssBase          = vm->dataBase + UINT(header->dataLength);
     vm->bssLength        = UINT(header->bssLength);
-    vm->programStack     = workingRAMLength - 3;
+    vm->programStack     = workingRAMLength + vm->litLength - 3;
     vm->workingRAMLength = workingRAMLength;
     vm->vm               = vm;
 
@@ -197,7 +196,8 @@ int VM_Create(vm_t                      *vm,
 
     /* the stack is implicitly at the end of the image */
 #ifdef MEMORY_SAFE
-    vm->stackBottom = (vm->dataLength + vm->bssLength);
+    vm->stackBottom = (vm->litLength + vm->dataLength + vm->bssLength + 3);
+    vm->stackTop    = vm->programStack;
 #endif
 
 #ifdef DEBUG_VM
@@ -210,14 +210,18 @@ int VM_Create(vm_t                      *vm,
 
     printf("  RAM Length:     " FMT_INT24 "\n", vm->workingRAMLength);
     printf("  Code Length:    " FMT_INT24 "\n", vm->codeLength);
+    printf("  vData Length:   " FMT_INT24 "\n", vm->litLength + vm->workingRAMLength);
     printf("  Lit Length:     " FMT_INT24 "\n", vm->litLength);
-    printf("  Data Length:    " FMT_INT24 "\n", vm->dataLength);
+    printf("  Data SEG Start  " FMT_INT24 "\n", vm->litLength);
+    printf("  Data SEG Length:" FMT_INT24 "\n", vm->dataLength);
+    printf("  Data SEG End:   " FMT_INT24 "\n", vm->litLength + vm->dataLength);
+    printf("  BSS Start       " FMT_INT24 "\n", vm->litLength + vm->dataLength);
     printf("  BSS Length:     " FMT_INT24 "\n", vm->bssLength);
-    printf("  BSS End:        " FMT_INT24 "\n", vm->dataLength + vm->bssLength);
-    printf("  PS Top:         " FMT_INT24 "\n", vm->programStack);
+    printf("  BSS End:        " FMT_INT24 "\n", vm->litLength + vm->dataLength + vm->bssLength);
 #ifdef MEMORY_SAFE
     printf("  PS Bottom:      " FMT_INT24 "\n", vm->stackBottom);
 #endif
+    printf("  PS Top:         " FMT_INT24 "\n", vm->programStack);
 #endif
   }
   return 0;
@@ -833,6 +837,22 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
     PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
+#ifdef MEMORY_SAFE
+#define check_stack_overflow()                                                                                                     \
+  if (programStack <= _vm.vm->stackBottom || programStack > _vm.vm->stackTop)                                                      \
+    VM_AbortError(_vm.vm, VM_STACK_OVERFLOW, "VM stack overflow");
+#else
+#define check_stack_overflow()
+#endif
+
+#ifdef MEMORY_SAFE
+#define check_pc_overflow()                                                                                                        \
+  if (PC >= PC_end)                                                                                                                \
+    VM_AbortError(_vm.vm, VM_PC_OUT_OF_RANGE, "VM pc out of range");
+#else
+#define check_pc_overflow()
+#endif
+
 typedef union stack_entry_u {
   int8_t   int8;
   uint8_t  uint8;
@@ -902,13 +922,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
     }
 #endif
 
-#ifdef MEMORY_SAFE
-    if (PC >= PC_end)
-      VM_AbortError(_vm.vm, VM_PC_OUT_OF_RANGE, "VM pc out of range");
-
-    if (programStack <= _vm.vm->stackBottom)
-      VM_AbortError(_vm.vm, VM_STACK_OVERFLOW, "VM stack overflow");
-#endif
+    check_pc_overflow();
+    check_stack_overflow();
 
 #ifdef DEBUG_VM
     if (vm_debugLevel > 1) {
@@ -1201,6 +1216,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
 #endif
       programStack -= R2.int16;
       log3_4("FRAME SIZE: " FMT_INT16 " (from " FMT_INT24 " to " FMT_INT24 ")\n", R2.int16, programStack + R2.int16, programStack);
+
+      check_stack_overflow();
 
       PC += INT16_INCREMENT;
 

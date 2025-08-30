@@ -2,6 +2,4 @@
 
 extern vm_t vm;
 
-void vdu_init() {
-  VM_Call(&vm, 255);
-}
+void vdu_init() { VM_Call(&vm, 255); }

@@ -437,8 +437,7 @@ uint8_t mock_io[4] = {1, 2, 3, 4};
 
 bool VM_VerifyReadOK(vm_t *vm, vm_size_t vaddr, int size) {
   if (vaddr > 0xFF0000 && size == 1) {
-    printf("mocking I/O Access\n");
-    return true;
+    return true; /* mem and i/o mapping via host */
   }
 
   if (vaddr < vm->litLength) {
@@ -797,41 +796,41 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 #define op_2_int24_branch(operation)                                                                                               \
   log3_3(FMT_INT24 " " #operation " " FMT_INT24 "\n", INT(R1_int24(0)), INT(R0_int24(0)));                                         \
   if ((INT(R1_int24(0)) operation INT(R0_int24(0))))                                                                               \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                                                \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_uint24_branch(operation)                                                                                              \
   log3_3(FMT_INT24 " " #operation " " FMT_INT24 "\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));                                     \
   if ((UINT(R1_uint24(0)) operation UINT(R0_uint24(0))))                                                                           \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                                                \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_int32_branch(operation)                                                                                               \
   log3_3(FMT_INT32 " " #operation " " FMT_INT32 "\n", R1_int32(0), R0_int32(0));                                                   \
   if ((R1_int32(0) operation R0_int32(0)))                                                                                         \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                                                \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_uint32_branch(operation)                                                                                              \
   log3_3(FMT_INT32 " " #operation " " FMT_INT32 "\n", R1_uint32(0), R0_uint32(0));                                                 \
   if ((R1_uint32(0) operation R0_uint32(0)))                                                                                       \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                                                \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 #define op_2_float_branch(operation)                                                                                               \
   log3_3(FMT_FLT " " #operation " " FMT_FLT "\n", R1_float(0), R0_float(0));                                                       \
   if ((R1_float(0) operation R0_float(0)))                                                                                         \
-    PC = _vm.codeBase + UINT(R2.uint24);                                                                                           \
+    PC += R2.int16;                                                                                                                \
   else                                                                                                                             \
-    PC += INT24_INCREMENT;                                                                                                         \
+    PC += INT16_INCREMENT;                                                                                                         \
   opStack8 -= 8;
 
 typedef union stack_entry_u {
@@ -1346,7 +1345,7 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
 
     case OP_LOAD1: {
       log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
-      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 1))
         R_uint8 = 0;
       else {
         if (UINT(R0_uint24(0)) < _vm.litLength)
@@ -1360,7 +1359,7 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
 
     case OP_LOAD2: {
       log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
-      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 2))
         R_uint16 = 0;
       else {
         if (UINT(R0_uint24(0)) < _vm.litLength)
@@ -1374,7 +1373,7 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, int24_t *args, uint8_t *_opS
 
     case OP_LOAD3: {
       log3_2("*(" FMT_INT24 ") = ", UINT(R0_uint24(0)));
-      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
+      if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 3))
         R_uint24 = UINT24(0);
       else {
         if (UINT(R0_uint24(0)) < _vm.litLength)

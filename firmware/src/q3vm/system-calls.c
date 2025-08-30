@@ -1,10 +1,8 @@
 #include "host/target-support.h"
 #include "host/vm.h"
 #include "includes/host-functions.h"
-#include "vm_bytecode.h"
 #include "vm-promoted-fn.h"
-#include <stdarg.h>
-#include <stdio.h>
+#include "vm_bytecode.h"
 
 void print_string(const char *str);
 int  putchar(int ch);
@@ -50,12 +48,6 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   case -5: /* put_char */
     putchar(VMA_UINT24(3));
     return 0;
-
-  case -6: { // printf - this will not work %s references, only immediate values
-    __print_xputch = __print_uputch;
-    _u_print((void *)NULL, (const char *)VMA_PTR(3, vm), (char *)&args[3]);
-    __print_xputch = __print_sputch;
-  }
 
   default:
     return dispatch_hosted_fn(vm, args);

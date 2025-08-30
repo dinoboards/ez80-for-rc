@@ -9,7 +9,7 @@ LCC := lcc
 Q3ASM := q3asm
 
 INCLUDES :=  $(wildcard ../includes/*.h) $(wildcard ./*.h) $(wildcard ./vdu/*.h) $(wildcard ./vdp/*.h)
-VDU_C_SOURCE := $(filter-out ./dispatch.c,$(wildcard ./*.c) $(wildcard ./vdu/*.c) $(wildcard ./vdp/*.c))
+VDU_C_SOURCE := $(filter-out ./dispatch.c,$(wildcard ./*.c) $(wildcard ./vdu/*.c) $(wildcard ./vdp/*.c)) $(wildcard ./stdlib/*.c)
 VM_C_SOURCE := $(wildcard ../host/*)
 VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
@@ -24,7 +24,7 @@ all: ../vdu_vm_bytecode.c
 
 
 bytecode.qvm: $(VDU_ASM_FILES) $(wildcard ./vdu/vdu_25/*.c)
-	@$(Q3ASM) -l -m -o "bytecode"  dispatch.vmasm $(VDU_ASM_FILES) g_syscalls.asm
+	@$(Q3ASM) -v -l -m -o "bytecode"  dispatch.vmasm $(VDU_ASM_FILES) g_syscalls.asm
 	@echo "Assembled vdu/bytecode.qvm"
 
 ../vdu_vm_bytecode.c ../vdu_vm_bytecode.h: bytecode.qvm

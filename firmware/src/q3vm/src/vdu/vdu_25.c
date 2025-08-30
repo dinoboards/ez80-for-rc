@@ -45,7 +45,7 @@ void vdu_plot(void) {
   switch (data[0]) { // mode
   case 85: {         // triangle
 
-    printf("plot 85, %d, %d\n", data[1], data[2], data[3], data[4]);
+    printf("plot 85, %d, %d, %d, %d\n", data[1], data[2], data[3], data[4]);
 
     // const point_t p1 = convert_point(previous_gpos);
     // const point_t p2 = convert_point(current_gpos);

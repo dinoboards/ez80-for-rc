@@ -29,6 +29,8 @@ typedef uint24_t vm_size_t; /* type to represent size of a vm image (32bits or 2
 #define UINT24 to_uint24
 #define INT24  to_int24
 
-#define DEBUG_VM
+#define MEMORY_SAFE
+
+// #define DEBUG_VM
 
 #endif
