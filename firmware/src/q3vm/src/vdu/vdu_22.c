@@ -56,7 +56,7 @@
 // VDU 22 This VDU code is used to change MODE. It is followed by one number
 // which is the new mode. Thus VDU 22,7 is exactly equivalent to MODE 7.
 
-void vdu_mode() {
+void vdu_mode(void) {
   current_display_mode = data[0];
   tviewport.left       = 0;
   last_text_row        = 26;

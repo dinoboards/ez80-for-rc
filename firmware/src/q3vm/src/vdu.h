@@ -9,12 +9,14 @@ typedef struct point_s {
   int16_t y;
 } point_t;
 
-extern point_t point(const int16_t x, const int16_t y);
+extern point_t point_new(const int16_t x, const int16_t y);
 
 typedef struct line {
   point_t a;
   point_t b;
 } line_t;
+
+line_t line_new(const point_t x, const point_t y);
 
 typedef struct rectangle {
   int16_t left;

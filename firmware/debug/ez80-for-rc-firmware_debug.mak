@@ -235,6 +235,14 @@ clean:
             $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lis"
 	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lst"  \
             $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lst"
+	@if exist "$(WORKDIR)\graphic_print_char.obj"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.obj"
+	@if exist "$(WORKDIR)\graphic_print_char.lis"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.lis"
+	@if exist "$(WORKDIR)\graphic_print_char.lst"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.lst"
+	@if exist "$(WORKDIR)\graphic_print_char.src"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.src"
 	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
             $(RM) "$(WORKDIR)\i2c-calculate.obj"
 	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
@@ -393,6 +401,14 @@ clean:
             $(RM) "$(WORKDIR)\scsi_driver.lst"
 	@if exist "$(WORKDIR)\scsi_driver.src"  \
             $(RM) "$(WORKDIR)\scsi_driver.src"
+	@if exist "$(WORKDIR)\system-calls.obj"  \
+            $(RM) "$(WORKDIR)\system-calls.obj"
+	@if exist "$(WORKDIR)\system-calls.lis"  \
+            $(RM) "$(WORKDIR)\system-calls.lis"
+	@if exist "$(WORKDIR)\system-calls.lst"  \
+            $(RM) "$(WORKDIR)\system-calls.lst"
+	@if exist "$(WORKDIR)\system-calls.src"  \
+            $(RM) "$(WORKDIR)\system-calls.src"
 	@if exist "$(WORKDIR)\system-vars.obj"  \
             $(RM) "$(WORKDIR)\system-vars.obj"
 	@if exist "$(WORKDIR)\system-vars.lis"  \
@@ -501,6 +517,30 @@ clean:
             $(RM) "$(WORKDIR)\usb_state.lst"
 	@if exist "$(WORKDIR)\usb_state.src"  \
             $(RM) "$(WORKDIR)\usb_state.src"
+	@if exist "$(WORKDIR)\vdp_cmd_line.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_line.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_line.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_line.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_line.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_line.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_pset.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_pset.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_pset.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_pset.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_pset.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_pset.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lst"
 	@if exist "$(WORKDIR)\vdu.obj"  \
             $(RM) "$(WORKDIR)\vdu.obj"
 	@if exist "$(WORKDIR)\vdu.lis"  \
@@ -523,6 +563,22 @@ clean:
             $(RM) "$(WORKDIR)\vectors16.lis"
 	@if exist "$(WORKDIR)\vectors16.lst"  \
             $(RM) "$(WORKDIR)\vectors16.lst"
+	@if exist "$(WORKDIR)\vm-init.obj"  \
+            $(RM) "$(WORKDIR)\vm-init.obj"
+	@if exist "$(WORKDIR)\vm-init.lis"  \
+            $(RM) "$(WORKDIR)\vm-init.lis"
+	@if exist "$(WORKDIR)\vm-init.lst"  \
+            $(RM) "$(WORKDIR)\vm-init.lst"
+	@if exist "$(WORKDIR)\vm-init.src"  \
+            $(RM) "$(WORKDIR)\vm-init.src"
+	@if exist "$(WORKDIR)\vm-promoted-fn.obj"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.obj"
+	@if exist "$(WORKDIR)\vm-promoted-fn.lis"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.lis"
+	@if exist "$(WORKDIR)\vm-promoted-fn.lst"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.lst"
+	@if exist "$(WORKDIR)\vm-promoted-fn.src"  \
+            $(RM) "$(WORKDIR)\vm-promoted-fn.src"
 	@if exist "$(WORKDIR)\vm.obj"  \
             $(RM) "$(WORKDIR)\vm.obj"
 	@if exist "$(WORKDIR)\vm.lis"  \
@@ -531,6 +587,14 @@ clean:
             $(RM) "$(WORKDIR)\vm.lst"
 	@if exist "$(WORKDIR)\vm.src"  \
             $(RM) "$(WORKDIR)\vm.src"
+	@if exist "$(WORKDIR)\vm_bytecode.obj"  \
+            $(RM) "$(WORKDIR)\vm_bytecode.obj"
+	@if exist "$(WORKDIR)\vm_bytecode.lis"  \
+            $(RM) "$(WORKDIR)\vm_bytecode.lis"
+	@if exist "$(WORKDIR)\vm_bytecode.lst"  \
+            $(RM) "$(WORKDIR)\vm_bytecode.lst"
+	@if exist "$(WORKDIR)\vm_bytecode.src"  \
+            $(RM) "$(WORKDIR)\vm_bytecode.src"
 	@if exist "$(WORKDIR)\work-area.obj"  \
             $(RM) "$(WORKDIR)\work-area.obj"
 	@if exist "$(WORKDIR)\work-area.lis"  \
@@ -601,46 +665,6 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
-	@if exist "$(WORKDIR)\system-calls.obj"  \
-            $(RM) "$(WORKDIR)\system-calls.obj"
-	@if exist "$(WORKDIR)\system-calls.lis"  \
-            $(RM) "$(WORKDIR)\system-calls.lis"
-	@if exist "$(WORKDIR)\system-calls.lst"  \
-            $(RM) "$(WORKDIR)\system-calls.lst"
-	@if exist "$(WORKDIR)\system-calls.src"  \
-            $(RM) "$(WORKDIR)\system-calls.src"
-	@if exist "$(WORKDIR)\vm_bytecode.obj"  \
-            $(RM) "$(WORKDIR)\vm_bytecode.obj"
-	@if exist "$(WORKDIR)\vm_bytecode.lis"  \
-            $(RM) "$(WORKDIR)\vm_bytecode.lis"
-	@if exist "$(WORKDIR)\vm_bytecode.lst"  \
-            $(RM) "$(WORKDIR)\vm_bytecode.lst"
-	@if exist "$(WORKDIR)\vm_bytecode.src"  \
-            $(RM) "$(WORKDIR)\vm_bytecode.src"
-	@if exist "$(WORKDIR)\vm-init.obj"  \
-            $(RM) "$(WORKDIR)\vm-init.obj"
-	@if exist "$(WORKDIR)\vm-init.lis"  \
-            $(RM) "$(WORKDIR)\vm-init.lis"
-	@if exist "$(WORKDIR)\vm-init.lst"  \
-            $(RM) "$(WORKDIR)\vm-init.lst"
-	@if exist "$(WORKDIR)\vm-init.src"  \
-            $(RM) "$(WORKDIR)\vm-init.src"
-	@if exist "$(WORKDIR)\vm-promoted-fn.obj"  \
-            $(RM) "$(WORKDIR)\vm-promoted-fn.obj"
-	@if exist "$(WORKDIR)\vm-promoted-fn.lis"  \
-            $(RM) "$(WORKDIR)\vm-promoted-fn.lis"
-	@if exist "$(WORKDIR)\vm-promoted-fn.lst"  \
-            $(RM) "$(WORKDIR)\vm-promoted-fn.lst"
-	@if exist "$(WORKDIR)\vm-promoted-fn.src"  \
-            $(RM) "$(WORKDIR)\vm-promoted-fn.src"
-	@if exist "$(WORKDIR)\graphic_print_char.obj"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.obj"
-	@if exist "$(WORKDIR)\graphic_print_char.lis"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.lis"
-	@if exist "$(WORKDIR)\graphic_print_char.lst"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.lst"
-	@if exist "$(WORKDIR)\graphic_print_char.src"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.src"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -668,6 +692,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\enumerate_hub.obj  \
             $(WORKDIR_ESCSPACE)\enumerate_storage.obj  \
             $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj  \
+            $(WORKDIR_ESCSPACE)\graphic_print_char.obj  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
             $(WORKDIR_ESCSPACE)\init-clocks.obj  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
@@ -692,6 +717,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
+            $(WORKDIR_ESCSPACE)\system-calls.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\transfers.obj  \
@@ -708,10 +734,17 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vdu_init.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
+            $(WORKDIR_ESCSPACE)\vm-init.obj  \
+            $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj  \
             $(WORKDIR_ESCSPACE)\vm.obj  \
+            $(WORKDIR_ESCSPACE)\vm_bytecode.obj  \
             $(WORKDIR_ESCSPACE)\work-area.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-critical.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator-ix.obj  \
@@ -722,12 +755,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj  \
-            $(WORKDIR_ESCSPACE)\system-calls.obj  \
-            $(WORKDIR_ESCSPACE)\vm_bytecode.obj  \
-            $(WORKDIR_ESCSPACE)\vm-init.obj  \
-            $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj  \
-            $(WORKDIR_ESCSPACE)\graphic_print_char.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -965,6 +993,22 @@ $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\gpio-b4-isr-marshaller.s"
+
+$(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\src\graphic_print_char.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\src\vdu\variables.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\src\graphic_print_char.c"
 
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \
@@ -1204,6 +1248,20 @@ $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c"
 
+$(WORKDIR_ESCSPACE)\system-calls.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\system-calls.c"
+
 $(WORKDIR_ESCSPACE)\system-vars.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\system-vars.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1379,6 +1437,22 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
 
+$(WORKDIR_ESCSPACE)\vdp_cmd_line.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_line.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_line.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm"
+
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
@@ -1405,6 +1479,33 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
 
+$(WORKDIR_ESCSPACE)\vm-init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-init.c"
+
+$(WORKDIR_ESCSPACE)\vm-promoted-fn.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-promoted-fn.c"
+
 $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
@@ -1421,6 +1522,12 @@ $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm.c"
+
+$(WORKDIR_ESCSPACE)\vm_bytecode.obj :  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm_bytecode.c"
 
 $(WORKDIR_ESCSPACE)\work-area.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.c  \
@@ -1518,67 +1625,4 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
-
-$(WORKDIR_ESCSPACE)\system-calls.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\system-calls.c"
-
-$(WORKDIR_ESCSPACE)\vm_bytecode.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm_bytecode.c"
-
-$(WORKDIR_ESCSPACE)\vm-init.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-init.c"
-
-$(WORKDIR_ESCSPACE)\vm-promoted-fn.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-promoted-fn.c"
-
-$(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\src\graphic_print_char.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\src\vdu\variables.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\src\graphic_print_char.c"
 

@@ -1,6 +1,7 @@
 #include "host/target-support.h"
 #include "host/vm.h"
 #include "includes/host-functions.h"
+#include "includes/v99x8.h"
 #include "src/system-calls-ids.h"
 #include "vm-promoted-fn.h"
 #include "vm_bytecode.h"
@@ -47,6 +48,33 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
 
   case SC_PUTCHAR: {
     putchar(VMA_UINT24(3));
+    return 0;
+  }
+
+  case SC_VDP_CMD_LINE: {
+    // OR can we do this?
+    // POP retrun address
+    // pop vm
+    // pop first arg
+    // push return address
+    // jp vdp_cmd_line
+    vdp_cmd_line(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18), VMA_UINT24(21));
+    return 0;
+  }
+
+  case SC_VDP_CMD_WAIT_COMPLETION: {
+    vdp_cmd_wait_completion();
+    return 0;
+  }
+
+  case SC_VDP_CMD_LOGICAL_MOVE_VDP_TO_VRAM: {
+    vdp_cmd_logical_move_vdp_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
+                                     VMA_UINT24(21));
+    return 0;
+  }
+
+  case SC_VDP_CMD_PSET: {
+    vdp_cmd_pset(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12));
     return 0;
   }
 

@@ -66,8 +66,8 @@ static void fill_flat_sided_triangle(const point_t *const v1, const point_t *con
   int8_t signy1 = (int)signum(v2->y - v1->y);
   int8_t signy2 = (int)signum(v3->y - v1->y);
 
-  vTmp1 = point(v1->x, v1->y);
-  vTmp2 = point(v1->x, v1->y);
+  vTmp1 = point_new(v1->x, v1->y);
+  vTmp2 = point_new(v1->x, v1->y);
 
   if (dy1 > dx1) {
     uint16_t tmp = dx1;
@@ -128,9 +128,9 @@ static void fill_flat_sided_triangle(const point_t *const v1, const point_t *con
 
 static void fill_general_triangle(const point_t *const vt1, const point_t *const vt2, const point_t *const vt3) {
   const point_t vTmp =
-      point((int16_t)((int24_t)vt1->x + (((int24_t)vt3->x - (int24_t)vt1->x) * ((int24_t)vt2->y - (int24_t)vt1->y) /
-                                         ((int24_t)vt3->y - (int24_t)vt1->y))),
-            vt2->y);
+      point_new((int16_t)((int24_t)vt1->x + (((int24_t)vt3->x - (int24_t)vt1->x) * ((int24_t)vt2->y - (int24_t)vt1->y) /
+                                             ((int24_t)vt3->y - (int24_t)vt1->y))),
+                vt2->y);
   fill_flat_sided_triangle(vt1, vt2, &vTmp);
   fill_flat_sided_triangle(vt3, vt2, &vTmp);
 }

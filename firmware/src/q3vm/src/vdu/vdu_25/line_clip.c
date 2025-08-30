@@ -16,11 +16,11 @@ static uint8_t bit_code(point_t p) {
 }
 
 static point_t intersect(line_t l, uint8_t edge) {
-  return edge & 8   ? point(l.a.x + (l.b.x - l.a.x) * (gviewport.top - l.a.y) / (l.b.y - l.a.y), gviewport.top)
-         : edge & 4 ? point(l.a.x + (l.b.x - l.a.x) * (gviewport.bottom - l.a.y) / (l.b.y - l.a.y), gviewport.bottom)
-         : edge & 2 ? point(gviewport.right, l.a.y + (l.b.y - l.a.y) * (gviewport.right - l.a.x) / (l.b.x - l.a.x))
-         : edge & 1 ? point(gviewport.left, l.a.y + (l.b.y - l.a.y) * (gviewport.left - l.a.x) / (l.b.x - l.a.x))
-                    : point(-1, -1); // will this happen?
+  return edge & 8   ? point_new(l.a.x + (l.b.x - l.a.x) * (gviewport.top - l.a.y) / (l.b.y - l.a.y), gviewport.top)
+         : edge & 4 ? point_new(l.a.x + (l.b.x - l.a.x) * (gviewport.bottom - l.a.y) / (l.b.y - l.a.y), gviewport.bottom)
+         : edge & 2 ? point_new(gviewport.right, l.a.y + (l.b.y - l.a.y) * (gviewport.right - l.a.x) / (l.b.x - l.a.x))
+         : edge & 1 ? point_new(gviewport.left, l.a.y + (l.b.y - l.a.y) * (gviewport.left - l.a.x) / (l.b.x - l.a.x))
+                    : point_new(-1, -1); // will this happen?
 }
 
 static bool line_clip(line_t *l) {

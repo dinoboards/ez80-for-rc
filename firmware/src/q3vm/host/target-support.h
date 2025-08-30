@@ -50,7 +50,7 @@ typedef uint24_t vm_size_t; /* type to represent size of a vm image (32bits or 2
 void                   _u_ultoa(unsigned long n);
 extern struct fmt_type __print_fmt;
 
-#define MEMORY_SAFE
+// #define MEMORY_SAFE
 // #define DEBUG_VM
 
 #endif

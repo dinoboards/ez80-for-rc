@@ -118,6 +118,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\enumerate_hub.obj", \
  ".\enumerate_storage.obj", \
  ".\gpio-b4-isr-marshaller.obj", \
+ ".\graphic_print_char.obj", \
  ".\i2c-calculate.obj", \
  ".\init-clocks.obj", \
  ".\init-f92.obj", \
@@ -142,6 +143,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-functions.obj", \
  ".\rst-18-function.obj", \
  ".\scsi_driver.obj", \
+ ".\system-calls.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
  ".\transfers.obj", \
@@ -158,10 +160,17 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb-tick-sr.obj", \
  ".\usb_cbi.obj", \
  ".\usb_state.obj", \
+ ".\vdp_cmd_line.obj", \
+ ".\vdp_cmd_logical_move_vdp_to_vram.obj", \
+ ".\vdp_cmd_pset.obj", \
+ ".\vdp_cmd_wait_completion.obj", \
  ".\vdu.obj", \
  ".\vdu_init.obj", \
  ".\vectors16.obj", \
+ ".\vm-init.obj", \
+ ".\vm-promoted-fn.obj", \
  ".\vm.obj", \
+ ".\vm_bytecode.obj", \
  ".\work-area.obj", \
  ".\z80-emulator-critical.obj", \
  ".\z80-emulator-ix.obj", \
@@ -173,11 +182,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
- ".\system-calls.obj", \
- ".\vm_bytecode.obj", \
- ".\vm-init.obj", \
- ".\vm-promoted-fn.obj", \
- ".\graphic_print_char.obj", \
  "C:\ZDS\lib\std\chelpD.lib", \
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \

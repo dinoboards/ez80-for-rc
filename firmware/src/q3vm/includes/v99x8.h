@@ -53,10 +53,10 @@ extern uint16_t VDP_IO_REGS;
 #define VDP_REGS PORT_IO(VDP_IO_REGS)
 #else
 
-#define VDP_IO_DATA 0xFFFF98
-#define VDP_IO_ADDR 0xFFFF99
-#define VDP_IO_PALT 0xFFFF9A
-#define VDP_IO_REGS 0xFFFF9B
+#define VDP_IO_DATA ((uint24_t)0xFFFF98)
+#define VDP_IO_ADDR ((uint24_t)0xFFFF99)
+#define VDP_IO_PALT ((uint24_t)0xFFFF9A)
+#define VDP_IO_REGS ((uint24_t)0xFFFF9B)
 
 #define VDP_DATA (*((uint8_t *)VDP_IO_DATA))
 #define VDP_ADDR (*((uint8_t *)VDP_IO_ADDR))
