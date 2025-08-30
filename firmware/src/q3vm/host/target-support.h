@@ -42,6 +42,7 @@ typedef uint24_t vm_size_t; /* type to represent size of a vm image (32bits or 2
 #define FMT_INT8  "%02X"
 #define FMT_FLT   "%f"
 
+#include <defines.h>
 #include <Format.h>
 #include <stdarg.h>
 #include <stdbool.h>

@@ -1,12 +1,11 @@
 /*
-      ___   _______     ____  __
-     / _ \ |___ /\ \   / /  \/  |
-    | | | |  |_ \ \ \ / /| |\/| |
-    | |_| |____) | \ V / | |  | |
-     \__\_______/   \_/  |_|  |_|
+ __    _  ___  _____    ___   _______     ____  __
+|  \  | |/ _ \|_   _|  / _ \ |___ /\ \   / /  \/  |
+| | \ | | | | | | |   | | | |  |_ \ \ \ / /| |\/| |
+| |\ \| | |_| | | |   | |_| |____) | \ V / | |  | |
+|_| \___|\___/  |_|    \__\_______/   \_/  |_|  |_|
 
-
-   Quake III Arena Virtual Machine
+   NOT Quake III Arena Virtual Machine
 */
 
 #ifndef __Q3VM_H
@@ -164,6 +163,7 @@ typedef struct vm_s {
 #endif
 
 #ifdef MEMORY_SAFE
+  vm_size_t stackTop;    /**< If programStack < stackBottom, error */
   vm_size_t stackBottom; /**< If programStack < stackBottom, error */
 #endif
 

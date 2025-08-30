@@ -15,7 +15,7 @@ VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
 INCLUDE_PATH := ../../../../../../../../../../../../..$(shell realpath ../includes/)
 
-all: ../vdu_vm_bytecode.c
+all: ../vm_bytecode.c
 	@echo > /dev/null
 
 %.vmasm: %.c $(INCLUDES)
@@ -23,9 +23,10 @@ all: ../vdu_vm_bytecode.c
 	@echo "Compiled $<"
 
 
-bytecode.qvm: $(VDU_ASM_FILES) $(wildcard ./vdu/vdu_25/*.c)
+bytecode.qvm: $(VDU_ASM_FILES)
 	@$(Q3ASM) -v -l -m -o "bytecode"  dispatch.vmasm $(VDU_ASM_FILES) system-calls-ids.asm
 	@echo "Assembled vdu/bytecode.qvm"
 
-../vdu_vm_bytecode.c ../vdu_vm_bytecode.h: bytecode.qvm
+../vm_bytecode.c ../vm_bytecode.h: ./bytecode.qvm
+	@echo "recreating bytecode"
 	@./export-bytecode.sh
