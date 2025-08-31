@@ -1,6 +1,6 @@
 #ifndef __STDLIB__
 #define __STDLIB__
 
-#define abs(n) ((n) < 0 ? (-n) : (n))
+#define abs(n) (((int)(n)) < 0 ? (-(int)(n)) : ((int)(n)))
 
 #endif

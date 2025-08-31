@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define VM_BYTECODE_SIZE     9326
-#define VM_BYTECODE_RAM_SIZE 734
+#define VM_BYTECODE_SIZE     9296
+#define VM_BYTECODE_RAM_SIZE 990
 
 extern const uint8_t vm_bytecode[VM_BYTECODE_SIZE];
 

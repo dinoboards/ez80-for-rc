@@ -45,44 +45,27 @@ void vdu_plot(void) {
   switch (data[0]) { // mode
   case 4: {          // MOVE
     previous_gpos = current_gpos;
-
-    {
-      uint8_t *const bptr_x = (uint8_t *)&current_gpos.x;
-      bptr_x[0]             = data[1];
-      bptr_x[1]             = data[2];
-
-      {
-        uint8_t *const bptr_y = (uint8_t *)&current_gpos.y;
-        bptr_y[0]             = data[3];
-        bptr_y[1]             = data[4];
-        return;
-      }
-    }
+    current_gpos  = *((point_t *)&data[1]);
+    return;
   }
 
   case 5: {
     previous_gpos = current_gpos;
 
+    (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
+
     {
-      uint8_t *const bptr_x = (uint8_t *)&current_gpos.x;
-      bptr_x[0]             = data[1];
-      bptr_x[1]             = data[2];
+      line_t  l          = line_new(previous_gpos, current_gpos);
+      uint8_t intersects = line_clip(&l);
 
-      {
-        uint8_t *const bptr_y = (uint8_t *)&current_gpos.y;
-        bptr_y[0]             = data[3];
-        bptr_y[1]             = data[4];
+      uint16_t x  = convert_x(l.a.x);
+      uint16_t y  = convert_y(l.a.y);
+      uint16_t x2 = convert_x(l.b.x);
+      uint16_t y2 = convert_y(l.b.y);
 
-        {
-          line_t  l          = line_new(previous_gpos, current_gpos);
-          uint8_t intersects = line_clip(&l);
-
-          if (intersects)
-            vdp_draw_line(convert_x(l.a.x), convert_y(l.a.y), convert_x(l.b.x), convert_y(l.b.y), current_gfg_colour,
-                          current_operation_mode);
-          return;
-        }
-      }
+      if (intersects)
+        vdp_draw_line(x, y, x2, y2, current_gfg_colour, current_operation_mode);
+      return;
     }
   }
 
@@ -90,51 +73,27 @@ void vdu_plot(void) {
     previous_gpos = current_gpos;
 
     {
-      uint8_t *const bptr_x = (uint8_t *)&current_gpos.x;
-      bptr_x[0]             = data[1];
-      bptr_x[1]             = data[2];
+      (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
 
-      {
-        uint8_t *const bptr_y = (uint8_t *)&current_gpos.y;
-        bptr_y[0]             = data[3];
-        bptr_y[1]             = data[4];
-
-        vdp_cmd_wait_completion();
-        vdp_cmd_pset(convert_x(current_gpos.x), convert_y(current_gpos.y), current_gfg_colour, current_operation_mode);
-        return;
-      }
+      vdp_cmd_wait_completion();
+      vdp_cmd_pset(convert_x(current_gpos.x), convert_y(current_gpos.y), current_gfg_colour, current_operation_mode);
+      return;
     }
   }
 
   case 85: { // triangle
-    printf("plot 85, %d, %d, %d, %d\n", data[1], data[2], data[3], data[4]);
-#if 0
     const point_t p1 = convert_point(previous_gpos);
     const point_t p2 = convert_point(current_gpos);
     previous_gpos    = current_gpos;
 
+    (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
+
     {
-      uint8_t *const bptr_x = (uint8_t *)&current_gpos.x;
-      bptr_x[0]             = data[1];
-      bptr_x[1]             = data[2];
+      const point_t p3 = convert_point(current_gpos);
 
-      {
-        uint8_t *const bptr_y = (uint8_t *)&current_gpos.y;
-        bptr_y[0]             = data[3];
-        bptr_y[1]             = data[4];
-
-        {
-          const point_t p3 = convert_point(current_gpos);
-
-          fill_triangle(&p1, &p2, &p3);
-          // draw line from p1 to p2
-          // then to p2, then back to p1
-
-          return;
-        }
-      }
+      fill_triangle(&p1, &p2, &p3);
+      return;
     }
-#endif
   }
 
   default:

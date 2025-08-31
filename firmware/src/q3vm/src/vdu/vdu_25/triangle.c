@@ -12,22 +12,27 @@ static int8_t signum(const int a) {
 static void draw_clipped_line(uint16_t x1, uint16_t y1, uint16_t x2) {
   if (y1 > gsviewport.bottom)
     return;
+
   if (y1 < gsviewport.top)
     return;
 
   if (x1 < gsviewport.left) {
     if (x2 < gsviewport.left)
       return;
+
     x1 = gsviewport.left;
   }
+
   if (x1 > gsviewport.right) {
     if (x2 > gsviewport.right)
       return;
+
     x1 = gsviewport.right;
   }
 
   if (x2 < gsviewport.left)
     x2 = gsviewport.left;
+
   if (x2 > gsviewport.right)
     x2 = gsviewport.right;
 
@@ -131,6 +136,7 @@ static void fill_general_triangle(const point_t *const vt1, const point_t *const
       point_new((int16_t)((int24_t)vt1->x + (((int24_t)vt3->x - (int24_t)vt1->x) * ((int24_t)vt2->y - (int24_t)vt1->y) /
                                              ((int24_t)vt3->y - (int24_t)vt1->y))),
                 vt2->y);
+
   fill_flat_sided_triangle(vt1, vt2, &vTmp);
   fill_flat_sided_triangle(vt3, vt2, &vTmp);
 }

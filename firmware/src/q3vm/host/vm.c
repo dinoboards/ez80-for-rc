@@ -460,10 +460,8 @@ bool VM_VerifyReadOK(vm_t *vm, vm_size_t vaddr, int size) {
 }
 
 bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
-  if (vaddr > 0xFF0000 && size == 1) {
-    Com_Printf_1("mocking I/O Access\n");
+  if (vaddr > 0xFF0000 && size == 1)
     return true;
-  }
 
   if (vaddr < vm->litLength) {
     Com_Printf_4("Attempted to write at " FMT_INT24 " -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, vm->workingRAMLength,
@@ -850,12 +848,17 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 
 #ifdef MEMORY_SAFE
 #define check_stack_overflow()                                                                                                     \
-  if (programStack <= _vm.vm->stackBottom || programStack > _vm.vm->stackTop) {                                                    \
+  if (programStack <= _vm.vm->stackBottom) {                                                                                       \
     Com_Printf_1("VM stack overflow\n");                                                                                           \
     _vm.vm->lastError = VM_STACK_OVERFLOW;                                                                                         \
     goto done;                                                                                                                     \
+  }                                                                                                                                \
+                                                                                                                                   \
+  if (programStack > _vm.vm->stackTop) {                                                                                           \
+    Com_Printf_1("VM stack underflow\n");                                                                                          \
+    _vm.vm->lastError = VM_STACK_OVERFLOW;                                                                                         \
+    goto done;                                                                                                                     \
   }
-
 #else
 #define check_stack_overflow()
 #endif

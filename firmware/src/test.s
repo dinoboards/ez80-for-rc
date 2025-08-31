@@ -73,24 +73,49 @@ _spike:
 	LD	C, 0 ; BBC Mode 0
 	RST	%10
 
+	LD	C, 25	; plot
+	RST	%10
+	LD	C, 4	; move line
+	RST	%10
+
+	LD	C, 0	; x low
+	RST	%10
+	LD	C, 0	; x high
+	RST	%10
+	LD	C, 0	; y low
+	RST	%10
+	LD	C, 0	; y high
+	RST	%10
 
 
 	LD	C, 25	; plot
 	RST	%10
+	LD	C, 5	; move line
+	RST	%10
 
+	LD	C, 255	; x low
+	RST	%10
+	LD	C, 4	; x high
+	RST	%10
+	LD	C, 255	; y low
+	RST	%10
+	LD	C, 3	; y high
+	RST	%10
+
+
+	LD	C, 25	; plot
+	RST	%10
 	LD	C, 85	; triangle
 	RST	%10
 
-	LD	C, 11
+	LD	C, %FF	; xlow
+	RST	%10
+	LD	C, 4	;x high
 	RST	%10
 
-	LD	C, 22
+	LD	C, 0	; y load
 	RST	%10
-
-	LD	C, 33
-	RST	%10
-
-	LD	C, 44
+	LD	C, 0	; y high
 	RST	%10
 
 

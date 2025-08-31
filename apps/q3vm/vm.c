@@ -461,7 +461,6 @@ bool VM_VerifyReadOK(vm_t *vm, vm_size_t vaddr, int size) {
 
 bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   if (vaddr > 0xFF0000 && size == 1) {
-    Com_Printf_1("mocking I/O Access\n");
     return true;
   }
 

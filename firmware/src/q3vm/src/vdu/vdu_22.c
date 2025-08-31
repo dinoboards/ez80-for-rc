@@ -1,8 +1,6 @@
 #include "../vdu.h"
 #include <v99x8-super.h>
 
-#include <stdio.h>
-
 // VDU: 22 (1 byte)
 
 // MODE 0: 640x256 graphics, 80x32 characters, 2 colours, 20kB RAM
@@ -67,6 +65,7 @@ void vdu_mode(void) {
   case 0:
     vdp_set_palette(default_2_colour_palette);
     current_tfg_colour       = 1;
+    current_gfg_colour       = 1;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 1;
     last_text_column         = 79;
@@ -79,6 +78,7 @@ void vdu_mode(void) {
   case 1:
     vdp_set_palette(default_4_colour_palette);
     current_tfg_colour       = 3;
+    current_gfg_colour       = 3;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 3;
     last_text_column         = 39;
@@ -91,6 +91,7 @@ void vdu_mode(void) {
   case 2:
     vdp_set_palette(default_16_colour_palette);
     current_tfg_colour       = 7;
+    current_gfg_colour       = 7;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 15;
     last_text_column         = 39;
@@ -103,6 +104,7 @@ void vdu_mode(void) {
   case 3:
     vdp_set_palette(default_2_colour_palette);
     current_tfg_colour       = 1;
+    current_gfg_colour       = 1;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 1;
     last_text_column         = 79;
@@ -115,6 +117,7 @@ void vdu_mode(void) {
   case 4:
     vdp_set_palette(default_2_colour_palette);
     current_tfg_colour       = 1;
+    current_gfg_colour       = 1;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 1;
     last_text_column         = 39;
@@ -127,6 +130,7 @@ void vdu_mode(void) {
   case 5:
     vdp_set_palette(default_4_colour_palette);
     current_tfg_colour       = 3;
+    current_gfg_colour       = 3;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 3;
     last_text_column         = 39;
@@ -139,6 +143,7 @@ void vdu_mode(void) {
   case 16:
     vdp_set_palette(default_4_colour_palette);
     current_tfg_colour       = 3;
+    current_gfg_colour       = 3;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 3;
     last_text_column         = 31;

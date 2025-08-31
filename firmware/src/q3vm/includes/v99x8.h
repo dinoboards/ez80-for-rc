@@ -20,7 +20,7 @@
 #define PAL  1
 #define NTSC 2
 
-#ifdef _EZ80_CLANG
+#if defined(_EZ80_CLANG) || defined(__ZDS__)
 typedef uint24_t screen_size_t;
 typedef uint24_t screen_addr_t;
 #define MAX_SCREEN_BYTES 0x20000
