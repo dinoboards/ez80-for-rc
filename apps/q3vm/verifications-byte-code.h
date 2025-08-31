@@ -364,7 +364,7 @@ extern const uint8_t chapter_5_valid_assign[CHAPTER_5_VALID_ASSIGN_SIZE];
 
 extern const uint8_t chapter_5_valid_null_then_return[CHAPTER_5_VALID_NULL_THEN_RETURN_SIZE];
 
-#define CHAPTER_5_VALID_ALLOCATE_TEMPS_AND_VARS_SIZE 110
+#define CHAPTER_5_VALID_ALLOCATE_TEMPS_AND_VARS_SIZE 108
 
 extern const uint8_t chapter_5_valid_allocate_temps_and_vars[CHAPTER_5_VALID_ALLOCATE_TEMPS_AND_VARS_SIZE];
 
@@ -416,7 +416,7 @@ extern const uint8_t chapter_5_valid_assign_val_in_initializer[CHAPTER_5_VALID_A
 
 extern const uint8_t chapter_5_valid_assignment_in_initializer[CHAPTER_5_VALID_ASSIGNMENT_IN_INITIALIZER_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_ASSIGNMENT_LOWEST_PRECEDENCE_SIZE 320
+#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_ASSIGNMENT_LOWEST_PRECEDENCE_SIZE 307
 
 extern const uint8_t chapter_5_valid_extra_credit_compound_bitwise_assignment_lowest_precedence
     [CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_ASSIGNMENT_LOWEST_PRECEDENCE_SIZE];
@@ -443,11 +443,11 @@ extern const uint8_t chapter_5_valid_extra_credit_compound_bitwise_or[CHAPTER_5_
 extern const uint8_t
     chapter_5_valid_extra_credit_compound_bitwise_shiftl[CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_SHIFTL_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_POSTFIX_PRECEDENCE_SIZE 110
+#define CHAPTER_5_VALID_EXTRA_CREDIT_POSTFIX_PRECEDENCE_SIZE 107
 
 extern const uint8_t chapter_5_valid_extra_credit_postfix_precedence[CHAPTER_5_VALID_EXTRA_CREDIT_POSTFIX_PRECEDENCE_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_LOWEST_PRECEDENCE_SIZE 264
+#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_LOWEST_PRECEDENCE_SIZE 254
 
 extern const uint8_t chapter_5_valid_extra_credit_compound_assignment_lowest_precedence
     [CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_LOWEST_PRECEDENCE_SIZE];
@@ -460,7 +460,7 @@ extern const uint8_t chapter_5_valid_extra_credit_compound_plus[CHAPTER_5_VALID_
 
 extern const uint8_t chapter_5_valid_extra_credit_compound_mod[CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_MOD_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_INCR_EXPRESSION_STATEMENT_SIZE 126
+#define CHAPTER_5_VALID_EXTRA_CREDIT_INCR_EXPRESSION_STATEMENT_SIZE 124
 
 extern const uint8_t
     chapter_5_valid_extra_credit_incr_expression_statement[CHAPTER_5_VALID_EXTRA_CREDIT_INCR_EXPRESSION_STATEMENT_SIZE];
@@ -469,7 +469,7 @@ extern const uint8_t
 
 extern const uint8_t chapter_5_valid_extra_credit_bitwise_ops_vars[CHAPTER_5_VALID_EXTRA_CREDIT_BITWISE_OPS_VARS_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_POSTFIX_INCR_AND_DECR_SIZE 143
+#define CHAPTER_5_VALID_EXTRA_CREDIT_POSTFIX_INCR_AND_DECR_SIZE 139
 
 extern const uint8_t chapter_5_valid_extra_credit_postfix_incr_and_decr[CHAPTER_5_VALID_EXTRA_CREDIT_POSTFIX_INCR_AND_DECR_SIZE];
 
@@ -478,21 +478,21 @@ extern const uint8_t chapter_5_valid_extra_credit_postfix_incr_and_decr[CHAPTER_
 extern const uint8_t
     chapter_5_valid_extra_credit_bitwise_shiftl_variable[CHAPTER_5_VALID_EXTRA_CREDIT_BITWISE_SHIFTL_VARIABLE_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_INCR_IN_BINARY_EXPR_SIZE 122
+#define CHAPTER_5_VALID_EXTRA_CREDIT_INCR_IN_BINARY_EXPR_SIZE 119
 
 extern const uint8_t chapter_5_valid_extra_credit_incr_in_binary_expr[CHAPTER_5_VALID_EXTRA_CREDIT_INCR_IN_BINARY_EXPR_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_CHAINED_SIZE 334
+#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_CHAINED_SIZE 324
 
 extern const uint8_t
     chapter_5_valid_extra_credit_compound_bitwise_chained[CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_CHAINED_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_USE_RESULT_SIZE 94
+#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_USE_RESULT_SIZE 92
 
 extern const uint8_t
     chapter_5_valid_extra_credit_compound_assignment_use_result[CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_USE_RESULT_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_PREFIX_INCR_AND_DECR_SIZE 143
+#define CHAPTER_5_VALID_EXTRA_CREDIT_PREFIX_INCR_AND_DECR_SIZE 139
 
 extern const uint8_t chapter_5_valid_extra_credit_prefix_incr_and_decr[CHAPTER_5_VALID_EXTRA_CREDIT_PREFIX_INCR_AND_DECR_SIZE];
 
@@ -500,7 +500,7 @@ extern const uint8_t chapter_5_valid_extra_credit_prefix_incr_and_decr[CHAPTER_5
 
 extern const uint8_t chapter_5_valid_extra_credit_bitwise_in_initializer[CHAPTER_5_VALID_EXTRA_CREDIT_BITWISE_IN_INITIALIZER_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_CHAINED_SIZE 245
+#define CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_CHAINED_SIZE 238
 
 extern const uint8_t
     chapter_5_valid_extra_credit_compound_assignment_chained[CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_CHAINED_SIZE];
@@ -521,7 +521,7 @@ extern const uint8_t chapter_5_valid_extra_credit_compound_minus[CHAPTER_5_VALID
 
 extern const uint8_t chapter_5_valid_extra_credit_compound_bitwise_xor[CHAPTER_5_VALID_EXTRA_CREDIT_COMPOUND_BITWISE_XOR_SIZE];
 
-#define CHAPTER_5_VALID_EXTRA_CREDIT_INCR_PARENTHESIZED_SIZE 153
+#define CHAPTER_5_VALID_EXTRA_CREDIT_INCR_PARENTHESIZED_SIZE 148
 
 extern const uint8_t chapter_5_valid_extra_credit_incr_parenthesized[CHAPTER_5_VALID_EXTRA_CREDIT_INCR_PARENTHESIZED_SIZE];
 
@@ -529,27 +529,27 @@ extern const uint8_t chapter_5_valid_extra_credit_incr_parenthesized[CHAPTER_5_V
 
 extern const uint8_t chapter_5_valid_local_var_missing_return[CHAPTER_5_VALID_LOCAL_VAR_MISSING_RETURN_SIZE];
 
-#define CHAPTER_6_VALID_IF_NESTED_4_SIZE 63
+#define CHAPTER_6_VALID_IF_NESTED_4_SIZE 62
 
 extern const uint8_t chapter_6_valid_if_nested_4[CHAPTER_6_VALID_IF_NESTED_4_SIZE];
 
-#define CHAPTER_6_VALID_ELSE_SIZE 52
+#define CHAPTER_6_VALID_ELSE_SIZE 51
 
 extern const uint8_t chapter_6_valid_else[CHAPTER_6_VALID_ELSE_SIZE];
 
-#define CHAPTER_6_VALID_TERNARY_PRECEDENCE_SIZE 63
+#define CHAPTER_6_VALID_TERNARY_PRECEDENCE_SIZE 62
 
 extern const uint8_t chapter_6_valid_ternary_precedence[CHAPTER_6_VALID_TERNARY_PRECEDENCE_SIZE];
 
-#define CHAPTER_6_VALID_NESTED_TERNARY_SIZE 93
+#define CHAPTER_6_VALID_NESTED_TERNARY_SIZE 91
 
 extern const uint8_t chapter_6_valid_nested_ternary[CHAPTER_6_VALID_NESTED_TERNARY_SIZE];
 
-#define CHAPTER_6_VALID_TERNARY_SHORT_CIRCUIT_2_SIZE 63
+#define CHAPTER_6_VALID_TERNARY_SHORT_CIRCUIT_2_SIZE 62
 
 extern const uint8_t chapter_6_valid_ternary_short_circuit_2[CHAPTER_6_VALID_TERNARY_SHORT_CIRCUIT_2_SIZE];
 
-#define CHAPTER_6_VALID_RH_ASSIGNMENT_SIZE 63
+#define CHAPTER_6_VALID_RH_ASSIGNMENT_SIZE 62
 
 extern const uint8_t chapter_6_valid_rh_assignment[CHAPTER_6_VALID_RH_ASSIGNMENT_SIZE];
 
@@ -565,11 +565,11 @@ extern const uint8_t chapter_6_valid_binary_false_condition[CHAPTER_6_VALID_BINA
 
 extern const uint8_t chapter_6_valid_if_null_body[CHAPTER_6_VALID_IF_NULL_BODY_SIZE];
 
-#define CHAPTER_6_VALID_IF_NOT_TAKEN_SIZE 53
+#define CHAPTER_6_VALID_IF_NOT_TAKEN_SIZE 52
 
 extern const uint8_t chapter_6_valid_if_not_taken[CHAPTER_6_VALID_IF_NOT_TAKEN_SIZE];
 
-#define CHAPTER_6_VALID_TERNARY_SHORT_CIRCUIT_SIZE 63
+#define CHAPTER_6_VALID_TERNARY_SHORT_CIRCUIT_SIZE 62
 
 extern const uint8_t chapter_6_valid_ternary_short_circuit[CHAPTER_6_VALID_TERNARY_SHORT_CIRCUIT_SIZE];
 
@@ -577,7 +577,7 @@ extern const uint8_t chapter_6_valid_ternary_short_circuit[CHAPTER_6_VALID_TERNA
 
 extern const uint8_t chapter_6_valid_binary_condition[CHAPTER_6_VALID_BINARY_CONDITION_SIZE];
 
-#define CHAPTER_6_VALID_MULTIPLE_IF_SIZE 90
+#define CHAPTER_6_VALID_MULTIPLE_IF_SIZE 88
 
 extern const uint8_t chapter_6_valid_multiple_if[CHAPTER_6_VALID_MULTIPLE_IF_SIZE];
 
@@ -585,11 +585,11 @@ extern const uint8_t chapter_6_valid_multiple_if[CHAPTER_6_VALID_MULTIPLE_IF_SIZ
 
 extern const uint8_t chapter_6_valid_assign_ternary[CHAPTER_6_VALID_ASSIGN_TERNARY_SIZE];
 
-#define CHAPTER_6_VALID_TERNARY_SIZE 58
+#define CHAPTER_6_VALID_TERNARY_SIZE 57
 
 extern const uint8_t chapter_6_valid_ternary[CHAPTER_6_VALID_TERNARY_SIZE];
 
-#define CHAPTER_6_VALID_IF_NESTED_SIZE 71
+#define CHAPTER_6_VALID_IF_NESTED_SIZE 69
 
 extern const uint8_t chapter_6_valid_if_nested[CHAPTER_6_VALID_IF_NESTED_SIZE];
 
@@ -597,11 +597,11 @@ extern const uint8_t chapter_6_valid_if_nested[CHAPTER_6_VALID_IF_NESTED_SIZE];
 
 extern const uint8_t chapter_6_valid_nested_ternary_2[CHAPTER_6_VALID_NESTED_TERNARY_2_SIZE];
 
-#define CHAPTER_6_VALID_IF_NESTED_3_SIZE 77
+#define CHAPTER_6_VALID_IF_NESTED_3_SIZE 75
 
 extern const uint8_t chapter_6_valid_if_nested_3[CHAPTER_6_VALID_IF_NESTED_3_SIZE];
 
-#define CHAPTER_6_VALID_IF_TAKEN_SIZE 53
+#define CHAPTER_6_VALID_IF_TAKEN_SIZE 52
 
 extern const uint8_t chapter_6_valid_if_taken[CHAPTER_6_VALID_IF_TAKEN_SIZE];
 
@@ -609,15 +609,15 @@ extern const uint8_t chapter_6_valid_if_taken[CHAPTER_6_VALID_IF_TAKEN_SIZE];
 
 extern const uint8_t chapter_6_valid_ternary_middle_binop[CHAPTER_6_VALID_TERNARY_MIDDLE_BINOP_SIZE];
 
-#define CHAPTER_6_VALID_LH_ASSIGNMENT_SIZE 119
+#define CHAPTER_6_VALID_LH_ASSIGNMENT_SIZE 116
 
 extern const uint8_t chapter_6_valid_lh_assignment[CHAPTER_6_VALID_LH_ASSIGNMENT_SIZE];
 
-#define CHAPTER_6_VALID_IF_NESTED_2_SIZE 72
+#define CHAPTER_6_VALID_IF_NESTED_2_SIZE 70
 
 extern const uint8_t chapter_6_valid_if_nested_2[CHAPTER_6_VALID_IF_NESTED_2_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_POSTFIX_IF_SIZE 100
+#define CHAPTER_6_VALID_EXTRA_CREDIT_POSTFIX_IF_SIZE 98
 
 extern const uint8_t chapter_6_valid_extra_credit_postfix_if[CHAPTER_6_VALID_EXTRA_CREDIT_POSTFIX_IF_SIZE];
 
@@ -625,11 +625,11 @@ extern const uint8_t chapter_6_valid_extra_credit_postfix_if[CHAPTER_6_VALID_EXT
 
 extern const uint8_t chapter_6_valid_extra_credit_goto_label_main_2[CHAPTER_6_VALID_EXTRA_CREDIT_GOTO_LABEL_MAIN_2_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_PREFIX_IN_TERNARY_SIZE 89
+#define CHAPTER_6_VALID_EXTRA_CREDIT_PREFIX_IN_TERNARY_SIZE 88
 
 extern const uint8_t chapter_6_valid_extra_credit_prefix_in_ternary[CHAPTER_6_VALID_EXTRA_CREDIT_PREFIX_IN_TERNARY_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_COMPOUND_IF_EXPRESSION_SIZE 68
+#define CHAPTER_6_VALID_EXTRA_CREDIT_COMPOUND_IF_EXPRESSION_SIZE 67
 
 extern const uint8_t chapter_6_valid_extra_credit_compound_if_expression[CHAPTER_6_VALID_EXTRA_CREDIT_COMPOUND_IF_EXPRESSION_SIZE];
 
@@ -641,7 +641,7 @@ extern const uint8_t chapter_6_valid_extra_credit_goto_label_and_var[CHAPTER_6_V
 
 extern const uint8_t chapter_6_valid_extra_credit_goto_backwards[CHAPTER_6_VALID_EXTRA_CREDIT_GOTO_BACKWARDS_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_LH_COMPOUND_ASSIGNMENT_SIZE 95
+#define CHAPTER_6_VALID_EXTRA_CREDIT_LH_COMPOUND_ASSIGNMENT_SIZE 93
 
 extern const uint8_t chapter_6_valid_extra_credit_lh_compound_assignment[CHAPTER_6_VALID_EXTRA_CREDIT_LH_COMPOUND_ASSIGNMENT_SIZE];
 
@@ -653,15 +653,15 @@ extern const uint8_t chapter_6_valid_extra_credit_goto_label[CHAPTER_6_VALID_EXT
 
 extern const uint8_t chapter_6_valid_extra_credit_bitwise_ternary[CHAPTER_6_VALID_EXTRA_CREDIT_BITWISE_TERNARY_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_POSTFIX_IN_TERNARY_SIZE 60
+#define CHAPTER_6_VALID_EXTRA_CREDIT_POSTFIX_IN_TERNARY_SIZE 59
 
 extern const uint8_t chapter_6_valid_extra_credit_postfix_in_ternary[CHAPTER_6_VALID_EXTRA_CREDIT_POSTFIX_IN_TERNARY_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_LABEL_ALL_STATEMENTS_SIZE 78
+#define CHAPTER_6_VALID_EXTRA_CREDIT_LABEL_ALL_STATEMENTS_SIZE 77
 
 extern const uint8_t chapter_6_valid_extra_credit_label_all_statements[CHAPTER_6_VALID_EXTRA_CREDIT_LABEL_ALL_STATEMENTS_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_PREFIX_IF_SIZE 100
+#define CHAPTER_6_VALID_EXTRA_CREDIT_PREFIX_IF_SIZE 98
 
 extern const uint8_t chapter_6_valid_extra_credit_prefix_if[CHAPTER_6_VALID_EXTRA_CREDIT_PREFIX_IF_SIZE];
 
@@ -682,7 +682,7 @@ extern const uint8_t chapter_6_valid_extra_credit_unused_label[CHAPTER_6_VALID_E
 
 extern const uint8_t chapter_6_valid_extra_credit_goto_nested_label[CHAPTER_6_VALID_EXTRA_CREDIT_GOTO_NESTED_LABEL_SIZE];
 
-#define CHAPTER_6_VALID_EXTRA_CREDIT_GOTO_AFTER_DECLARATION_SIZE 93
+#define CHAPTER_6_VALID_EXTRA_CREDIT_GOTO_AFTER_DECLARATION_SIZE 91
 
 extern const uint8_t chapter_6_valid_extra_credit_goto_after_declaration[CHAPTER_6_VALID_EXTRA_CREDIT_GOTO_AFTER_DECLARATION_SIZE];
 
@@ -694,7 +694,7 @@ extern const uint8_t chapter_6_valid_extra_credit_goto_label_main[CHAPTER_6_VALI
 
 extern const uint8_t chapter_6_valid_extra_credit_whitespace_after_label[CHAPTER_6_VALID_EXTRA_CREDIT_WHITESPACE_AFTER_LABEL_SIZE];
 
-#define CHAPTER_6_VALID_TERNARY_MIDDLE_ASSIGNMENT_SIZE 53
+#define CHAPTER_6_VALID_TERNARY_MIDDLE_ASSIGNMENT_SIZE 52
 
 extern const uint8_t chapter_6_valid_ternary_middle_assignment[CHAPTER_6_VALID_TERNARY_MIDDLE_ASSIGNMENT_SIZE];
 
@@ -710,7 +710,7 @@ extern const uint8_t chapter_7_valid_similar_var_names[CHAPTER_7_VALID_SIMILAR_V
 
 extern const uint8_t chapter_7_valid_declaration_only[CHAPTER_7_VALID_DECLARATION_ONLY_SIZE];
 
-#define CHAPTER_7_VALID_HIDDEN_THEN_VISIBLE_SIZE 85
+#define CHAPTER_7_VALID_HIDDEN_THEN_VISIBLE_SIZE 83
 
 extern const uint8_t chapter_7_valid_hidden_then_visible[CHAPTER_7_VALID_HIDDEN_THEN_VISIBLE_SIZE];
 
@@ -726,7 +726,7 @@ extern const uint8_t chapter_7_valid_use_in_inner_scope[CHAPTER_7_VALID_USE_IN_I
 
 extern const uint8_t chapter_7_valid_hidden_variable[CHAPTER_7_VALID_HIDDEN_VARIABLE_SIZE];
 
-#define CHAPTER_7_VALID_NESTED_IF_SIZE 117
+#define CHAPTER_7_VALID_NESTED_IF_SIZE 114
 
 extern const uint8_t chapter_7_valid_nested_if[CHAPTER_7_VALID_NESTED_IF_SIZE];
 
@@ -750,77 +750,77 @@ extern const uint8_t chapter_7_valid_assign_to_self_2[CHAPTER_7_VALID_ASSIGN_TO_
 
 extern const uint8_t chapter_7_valid_extra_credit_goto_inner_scope[CHAPTER_7_VALID_EXTRA_CREDIT_GOTO_INNER_SCOPE_SIZE];
 
-#define CHAPTER_7_VALID_EXTRA_CREDIT_COMPOUND_SUBTRACT_IN_BLOCK_SIZE 84
+#define CHAPTER_7_VALID_EXTRA_CREDIT_COMPOUND_SUBTRACT_IN_BLOCK_SIZE 82
 
 extern const uint8_t
     chapter_7_valid_extra_credit_compound_subtract_in_block[CHAPTER_7_VALID_EXTRA_CREDIT_COMPOUND_SUBTRACT_IN_BLOCK_SIZE];
 
-#define CHAPTER_7_VALID_EXTRA_CREDIT_GOTO_BEFORE_DECLARATION_SIZE 58
+#define CHAPTER_7_VALID_EXTRA_CREDIT_GOTO_BEFORE_DECLARATION_SIZE 57
 
 extern const uint8_t
     chapter_7_valid_extra_credit_goto_before_declaration[CHAPTER_7_VALID_EXTRA_CREDIT_GOTO_BEFORE_DECLARATION_SIZE];
 
-#define CHAPTER_7_VALID_EXTRA_CREDIT_GOTO_OUTER_SCOPE_SIZE 100
+#define CHAPTER_7_VALID_EXTRA_CREDIT_GOTO_OUTER_SCOPE_SIZE 97
 
 extern const uint8_t chapter_7_valid_extra_credit_goto_outer_scope[CHAPTER_7_VALID_EXTRA_CREDIT_GOTO_OUTER_SCOPE_SIZE];
 
-#define CHAPTER_8_VALID_MULTI_BREAK_SIZE 141
+#define CHAPTER_8_VALID_MULTI_BREAK_SIZE 137
 
 extern const uint8_t chapter_8_valid_multi_break[CHAPTER_8_VALID_MULTI_BREAK_SIZE];
 
-#define CHAPTER_8_VALID_EMPTY_LOOP_BODY_SIZE 60
+#define CHAPTER_8_VALID_EMPTY_LOOP_BODY_SIZE 59
 
 extern const uint8_t chapter_8_valid_empty_loop_body[CHAPTER_8_VALID_EMPTY_LOOP_BODY_SIZE];
 
-#define CHAPTER_8_VALID_NESTED_CONTINUE_SIZE 115
+#define CHAPTER_8_VALID_NESTED_CONTINUE_SIZE 112
 
 extern const uint8_t chapter_8_valid_nested_continue[CHAPTER_8_VALID_NESTED_CONTINUE_SIZE];
 
-#define CHAPTER_8_VALID_NESTED_LOOP_SIZE 137
+#define CHAPTER_8_VALID_NESTED_LOOP_SIZE 133
 
 extern const uint8_t chapter_8_valid_nested_loop[CHAPTER_8_VALID_NESTED_LOOP_SIZE];
 
-#define CHAPTER_8_VALID_NESTED_BREAK_SIZE 109
+#define CHAPTER_8_VALID_NESTED_BREAK_SIZE 106
 
 extern const uint8_t chapter_8_valid_nested_break[CHAPTER_8_VALID_NESTED_BREAK_SIZE];
 
-#define CHAPTER_8_VALID_CONTINUE_SIZE 119
+#define CHAPTER_8_VALID_CONTINUE_SIZE 115
 
 extern const uint8_t chapter_8_valid_continue[CHAPTER_8_VALID_CONTINUE_SIZE];
 
-#define CHAPTER_8_VALID_FOR_ABSENT_CONDITION_SIZE 62
+#define CHAPTER_8_VALID_FOR_ABSENT_CONDITION_SIZE 61
 
 extern const uint8_t chapter_8_valid_for_absent_condition[CHAPTER_8_VALID_FOR_ABSENT_CONDITION_SIZE];
 
-#define CHAPTER_8_VALID_CONTINUE_EMPTY_POST_SIZE 83
+#define CHAPTER_8_VALID_CONTINUE_EMPTY_POST_SIZE 81
 
 extern const uint8_t chapter_8_valid_continue_empty_post[CHAPTER_8_VALID_CONTINUE_EMPTY_POST_SIZE];
 
-#define CHAPTER_8_VALID_FOR_ABSENT_POST_SIZE 104
+#define CHAPTER_8_VALID_FOR_ABSENT_POST_SIZE 101
 
 extern const uint8_t chapter_8_valid_for_absent_post[CHAPTER_8_VALID_FOR_ABSENT_POST_SIZE];
 
-#define CHAPTER_8_VALID_MULTI_CONTINUE_SAME_LOOP_SIZE 145
+#define CHAPTER_8_VALID_MULTI_CONTINUE_SAME_LOOP_SIZE 139
 
 extern const uint8_t chapter_8_valid_multi_continue_same_loop[CHAPTER_8_VALID_MULTI_CONTINUE_SAME_LOOP_SIZE];
 
-#define CHAPTER_8_VALID_WHILE_SIZE 57
+#define CHAPTER_8_VALID_WHILE_SIZE 56
 
 extern const uint8_t chapter_8_valid_while[CHAPTER_8_VALID_WHILE_SIZE];
 
-#define CHAPTER_8_VALID_BREAK_SIZE 115
+#define CHAPTER_8_VALID_BREAK_SIZE 111
 
 extern const uint8_t chapter_8_valid_break[CHAPTER_8_VALID_BREAK_SIZE];
 
-#define CHAPTER_8_VALID_DO_WHILE_BREAK_IMMEDIATE_SIZE 59
+#define CHAPTER_8_VALID_DO_WHILE_BREAK_IMMEDIATE_SIZE 58
 
 extern const uint8_t chapter_8_valid_do_while_break_immediate[CHAPTER_8_VALID_DO_WHILE_BREAK_IMMEDIATE_SIZE];
 
-#define CHAPTER_8_VALID_FOR_SHADOW_SIZE 103
+#define CHAPTER_8_VALID_FOR_SHADOW_SIZE 100
 
 extern const uint8_t chapter_8_valid_for_shadow[CHAPTER_8_VALID_FOR_SHADOW_SIZE];
 
-#define CHAPTER_8_VALID_FOR_SIZE 67
+#define CHAPTER_8_VALID_FOR_SIZE 66
 
 extern const uint8_t chapter_8_valid_for[CHAPTER_8_VALID_FOR_SIZE];
 
@@ -828,23 +828,23 @@ extern const uint8_t chapter_8_valid_for[CHAPTER_8_VALID_FOR_SIZE];
 
 extern const uint8_t chapter_8_valid_empty_expression[CHAPTER_8_VALID_EMPTY_EXPRESSION_SIZE];
 
-#define CHAPTER_8_VALID_DO_WHILE_SIZE 52
+#define CHAPTER_8_VALID_DO_WHILE_SIZE 51
 
 extern const uint8_t chapter_8_valid_do_while[CHAPTER_8_VALID_DO_WHILE_SIZE];
 
-#define CHAPTER_8_VALID_FOR_DECL_SIZE 66
+#define CHAPTER_8_VALID_FOR_DECL_SIZE 65
 
 extern const uint8_t chapter_8_valid_for_decl[CHAPTER_8_VALID_FOR_DECL_SIZE];
 
-#define CHAPTER_8_VALID_BREAK_IMMEDIATE_SIZE 54
+#define CHAPTER_8_VALID_BREAK_IMMEDIATE_SIZE 53
 
 extern const uint8_t chapter_8_valid_break_immediate[CHAPTER_8_VALID_BREAK_IMMEDIATE_SIZE];
 
-#define CHAPTER_8_VALID_NULL_FOR_HEADER_SIZE 52
+#define CHAPTER_8_VALID_NULL_FOR_HEADER_SIZE 51
 
 extern const uint8_t chapter_8_valid_null_for_header[CHAPTER_8_VALID_NULL_FOR_HEADER_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_SINGLE_CASE_SIZE 57
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_SINGLE_CASE_SIZE 56
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_single_case[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_SINGLE_CASE_SIZE];
 
@@ -852,21 +852,21 @@ extern const uint8_t chapter_8_valid_extra_credit_switch_single_case[CHAPTER_8_V
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_empty[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_EMPTY_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_FALLTHROUGH_SIZE 72
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_FALLTHROUGH_SIZE 71
 
 extern const uint8_t
     chapter_8_valid_extra_credit_switch_default_fallthrough[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_FALLTHROUGH_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_NOT_TAKEN_SIZE 86
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_NOT_TAKEN_SIZE 84
 
 extern const uint8_t
     chapter_8_valid_extra_credit_switch_nested_not_taken[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_NOT_TAKEN_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_WITH_CONTINUE_SIZE 143
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_WITH_CONTINUE_SIZE 138
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_with_continue[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_WITH_CONTINUE_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_ASSIGN_IN_CONDITION_SIZE 102
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_ASSIGN_IN_CONDITION_SIZE 100
 
 extern const uint8_t
     chapter_8_valid_extra_credit_switch_assign_in_condition[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_ASSIGN_IN_CONDITION_SIZE];
@@ -875,20 +875,20 @@ extern const uint8_t
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_no_case[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NO_CASE_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_IN_LOOP_SIZE 178
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_IN_LOOP_SIZE 172
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_in_loop[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_IN_LOOP_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_POST_EXP_INCR_SIZE 66
+#define CHAPTER_8_VALID_EXTRA_CREDIT_POST_EXP_INCR_SIZE 65
 
 extern const uint8_t chapter_8_valid_extra_credit_post_exp_incr[CHAPTER_8_VALID_EXTRA_CREDIT_POST_EXP_INCR_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_NOT_LAST_SIZE 79
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_NOT_LAST_SIZE 78
 
 extern const uint8_t
     chapter_8_valid_extra_credit_switch_default_not_last[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_NOT_LAST_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_POST_EXP_SIZE 88
+#define CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_POST_EXP_SIZE 87
 
 extern const uint8_t chapter_8_valid_extra_credit_goto_bypass_post_exp[CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_POST_EXP_SIZE];
 
@@ -896,45 +896,45 @@ extern const uint8_t chapter_8_valid_extra_credit_goto_bypass_post_exp[CHAPTER_8
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_default_only[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_ONLY_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_GOTO_MID_CASE_SIZE 82
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_GOTO_MID_CASE_SIZE 81
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_goto_mid_case[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_GOTO_MID_CASE_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_BREAK_SIZE 71
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_BREAK_SIZE 69
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_break[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_BREAK_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_CASES_SIZE 307
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_CASES_SIZE 296
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_nested_cases[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_CASES_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DECL_SIZE 116
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DECL_SIZE 113
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_decl[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DECL_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_SIZE 121
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_SIZE 119
 
 extern const uint8_t chapter_8_valid_extra_credit_switch[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_DUFFS_DEVICE_SIZE 206
+#define CHAPTER_8_VALID_EXTRA_CREDIT_DUFFS_DEVICE_SIZE 201
 
 extern const uint8_t chapter_8_valid_extra_credit_duffs_device[CHAPTER_8_VALID_EXTRA_CREDIT_DUFFS_DEVICE_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_CONTROLLING_EXPRESSION_SIZE 104
+#define CHAPTER_8_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_CONTROLLING_EXPRESSION_SIZE 101
 
 extern const uint8_t chapter_8_valid_extra_credit_compound_assignment_controlling_expression
     [CHAPTER_8_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_CONTROLLING_EXPRESSION_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_LABEL_LOOPS_BREAKS_AND_CONTINUES_SIZE 170
+#define CHAPTER_8_VALID_EXTRA_CREDIT_LABEL_LOOPS_BREAKS_AND_CONTINUES_SIZE 169
 
 extern const uint8_t chapter_8_valid_extra_credit_label_loops_breaks_and_continues
     [CHAPTER_8_VALID_EXTRA_CREDIT_LABEL_LOOPS_BREAKS_AND_CONTINUES_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NOT_TAKEN_SIZE 99
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NOT_TAKEN_SIZE 96
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_not_taken[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NOT_TAKEN_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_CONDITION_SIZE 57
+#define CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_CONDITION_SIZE 56
 
 extern const uint8_t chapter_8_valid_extra_credit_goto_bypass_condition[CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_CONDITION_SIZE];
 
@@ -942,67 +942,67 @@ extern const uint8_t chapter_8_valid_extra_credit_goto_bypass_condition[CHAPTER_
 
 extern const uint8_t chapter_8_valid_extra_credit_label_loop_body[CHAPTER_8_VALID_EXTRA_CREDIT_LABEL_LOOP_BODY_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_SWITCH_SIZE 139
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_SWITCH_SIZE 134
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_nested_switch[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_NESTED_SWITCH_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_FOR_LOOP_SIZE 89
+#define CHAPTER_8_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_FOR_LOOP_SIZE 87
 
 extern const uint8_t
     chapter_8_valid_extra_credit_compound_assignment_for_loop[CHAPTER_8_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_FOR_LOOP_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_SIZE 99
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_SIZE 96
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_default[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_DEFAULT_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_WITH_CONTINUE_2_SIZE 88
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_WITH_CONTINUE_2_SIZE 86
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_with_continue_2[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_WITH_CONTINUE_2_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_LOOP_HEADER_POSTFIX_AND_PREFIX_SIZE 159
+#define CHAPTER_8_VALID_EXTRA_CREDIT_LOOP_HEADER_POSTFIX_AND_PREFIX_SIZE 155
 
 extern const uint8_t
     chapter_8_valid_extra_credit_loop_header_postfix_and_prefix[CHAPTER_8_VALID_EXTRA_CREDIT_LOOP_HEADER_POSTFIX_AND_PREFIX_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_CASE_BLOCK_SIZE 100
+#define CHAPTER_8_VALID_EXTRA_CREDIT_CASE_BLOCK_SIZE 97
 
 extern const uint8_t chapter_8_valid_extra_credit_case_block[CHAPTER_8_VALID_EXTRA_CREDIT_CASE_BLOCK_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_INIT_EXP_SIZE 79
+#define CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_INIT_EXP_SIZE 77
 
 extern const uint8_t chapter_8_valid_extra_credit_goto_bypass_init_exp[CHAPTER_8_VALID_EXTRA_CREDIT_GOTO_BYPASS_INIT_EXP_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_FALLTHROUGH_SIZE 156
+#define CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_FALLTHROUGH_SIZE 150
 
 extern const uint8_t chapter_8_valid_extra_credit_switch_fallthrough[CHAPTER_8_VALID_EXTRA_CREDIT_SWITCH_FALLTHROUGH_SIZE];
 
-#define CHAPTER_8_VALID_EXTRA_CREDIT_LOOP_IN_SWITCH_SIZE 144
+#define CHAPTER_8_VALID_EXTRA_CREDIT_LOOP_IN_SWITCH_SIZE 139
 
 extern const uint8_t chapter_8_valid_extra_credit_loop_in_switch[CHAPTER_8_VALID_EXTRA_CREDIT_LOOP_IN_SWITCH_SIZE];
 
-#define CHAPTER_8_VALID_FOR_NESTED_SHADOW_SIZE 134
+#define CHAPTER_8_VALID_FOR_NESTED_SHADOW_SIZE 130
 
 extern const uint8_t chapter_8_valid_for_nested_shadow[CHAPTER_8_VALID_FOR_NESTED_SHADOW_SIZE];
 
-#define CHAPTER_9_VALID_STACK_ARGUMENTS_TEST_FOR_MEMORY_LEAKS_SIZE 173
+#define CHAPTER_9_VALID_STACK_ARGUMENTS_TEST_FOR_MEMORY_LEAKS_SIZE 171
 
 extern const uint8_t
     chapter_9_valid_stack_arguments_test_for_memory_leaks[CHAPTER_9_VALID_STACK_ARGUMENTS_TEST_FOR_MEMORY_LEAKS_SIZE];
 
-#define CHAPTER_9_VALID_STACK_ARGUMENTS_LOTS_OF_ARGUMENTS_SIZE 162
+#define CHAPTER_9_VALID_STACK_ARGUMENTS_LOTS_OF_ARGUMENTS_SIZE 154
 
 extern const uint8_t chapter_9_valid_stack_arguments_lots_of_arguments[CHAPTER_9_VALID_STACK_ARGUMENTS_LOTS_OF_ARGUMENTS_SIZE];
 
-#define CHAPTER_9_VALID_NO_ARGUMENTS_VARIABLE_SHADOWS_FUNCTION_SIZE 79
+#define CHAPTER_9_VALID_NO_ARGUMENTS_VARIABLE_SHADOWS_FUNCTION_SIZE 78
 
 extern const uint8_t
     chapter_9_valid_no_arguments_variable_shadows_function[CHAPTER_9_VALID_NO_ARGUMENTS_VARIABLE_SHADOWS_FUNCTION_SIZE];
 
-#define CHAPTER_9_VALID_NO_ARGUMENTS_PRECEDENCE_SIZE 73
+#define CHAPTER_9_VALID_NO_ARGUMENTS_PRECEDENCE_SIZE 72
 
 extern const uint8_t chapter_9_valid_no_arguments_precedence[CHAPTER_9_VALID_NO_ARGUMENTS_PRECEDENCE_SIZE];
 
-#define CHAPTER_9_VALID_NO_ARGUMENTS_FUNCTION_SHADOWS_VARIABLE_SIZE 82
+#define CHAPTER_9_VALID_NO_ARGUMENTS_FUNCTION_SHADOWS_VARIABLE_SIZE 81
 
 extern const uint8_t
     chapter_9_valid_no_arguments_function_shadows_variable[CHAPTER_9_VALID_NO_ARGUMENTS_FUNCTION_SHADOWS_VARIABLE_SIZE];
@@ -1038,7 +1038,7 @@ extern const uint8_t
 
 extern const uint8_t chapter_9_valid_extra_credit_goto_shared_name[CHAPTER_9_VALID_EXTRA_CREDIT_GOTO_SHARED_NAME_SIZE];
 
-#define CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_FIBONACCI_SIZE 130
+#define CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_FIBONACCI_SIZE 128
 
 extern const uint8_t chapter_9_valid_arguments_in_registers_fibonacci[CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_FIBONACCI_SIZE];
 
@@ -1056,7 +1056,7 @@ extern const uint8_t chapter_9_valid_arguments_in_registers_single_arg[CHAPTER_9
 extern const uint8_t chapter_9_valid_arguments_in_registers_parameter_shadows_own_function
     [CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_PARAMETER_SHADOWS_OWN_FUNCTION_SIZE];
 
-#define CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_PARAMETERS_ARE_PRESERVED_SIZE 238
+#define CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_PARAMETERS_ARE_PRESERVED_SIZE 229
 
 extern const uint8_t chapter_9_valid_arguments_in_registers_parameters_are_preserved
     [CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_PARAMETERS_ARE_PRESERVED_SIZE];
@@ -1071,7 +1071,7 @@ extern const uint8_t chapter_9_valid_arguments_in_registers_parameter_shadows_fu
 extern const uint8_t
     chapter_9_valid_arguments_in_registers_expression_args[CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_EXPRESSION_ARGS_SIZE];
 
-#define CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_FIBONACCI2_SIZE 140
+#define CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_FIBONACCI2_SIZE 138
 
 extern const uint8_t chapter_9_valid_arguments_in_registers_fibonacci2[CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_FIBONACCI2_SIZE];
 
@@ -1080,11 +1080,11 @@ extern const uint8_t chapter_9_valid_arguments_in_registers_fibonacci2[CHAPTER_9
 extern const uint8_t chapter_9_valid_arguments_in_registers_forward_decl_multi_arg
     [CHAPTER_9_VALID_ARGUMENTS_IN_REGISTERS_FORWARD_DECL_MULTI_ARG_SIZE];
 
-#define CHAPTER_10_VALID_DISTINCT_LOCAL_AND_EXTERN_SIZE 92
+#define CHAPTER_10_VALID_DISTINCT_LOCAL_AND_EXTERN_SIZE 91
 
 extern const uint8_t chapter_10_valid_distinct_local_and_extern[CHAPTER_10_VALID_DISTINCT_LOCAL_AND_EXTERN_SIZE];
 
-#define CHAPTER_10_VALID_EXTERN_BLOCK_SCOPE_VARIABLE_SIZE 63
+#define CHAPTER_10_VALID_EXTERN_BLOCK_SCOPE_VARIABLE_SIZE 62
 
 extern const uint8_t chapter_10_valid_extern_block_scope_variable[CHAPTER_10_VALID_EXTERN_BLOCK_SCOPE_VARIABLE_SIZE];
 
@@ -1096,15 +1096,15 @@ extern const uint8_t chapter_10_valid_multiple_static_file_scope_vars[CHAPTER_10
 
 extern const uint8_t chapter_10_valid_type_before_storage_class[CHAPTER_10_VALID_TYPE_BEFORE_STORAGE_CLASS_SIZE];
 
-#define CHAPTER_10_VALID_SHADOW_STATIC_LOCAL_VAR_SIZE 273
+#define CHAPTER_10_VALID_SHADOW_STATIC_LOCAL_VAR_SIZE 265
 
 extern const uint8_t chapter_10_valid_shadow_static_local_var[CHAPTER_10_VALID_SHADOW_STATIC_LOCAL_VAR_SIZE];
 
-#define CHAPTER_10_VALID_STATIC_LOCAL_UNINITIALIZED_SIZE 98
+#define CHAPTER_10_VALID_STATIC_LOCAL_UNINITIALIZED_SIZE 97
 
 extern const uint8_t chapter_10_valid_static_local_uninitialized[CHAPTER_10_VALID_STATIC_LOCAL_UNINITIALIZED_SIZE];
 
-#define CHAPTER_10_VALID_STATIC_VARIABLES_IN_EXPRESSIONS_SIZE 87
+#define CHAPTER_10_VALID_STATIC_VARIABLES_IN_EXPRESSIONS_SIZE 85
 
 extern const uint8_t chapter_10_valid_static_variables_in_expressions[CHAPTER_10_VALID_STATIC_VARIABLES_IN_EXPRESSIONS_SIZE];
 
@@ -1112,7 +1112,7 @@ extern const uint8_t chapter_10_valid_static_variables_in_expressions[CHAPTER_10
 
 extern const uint8_t chapter_10_valid_static_then_extern[CHAPTER_10_VALID_STATIC_THEN_EXTERN_SIZE];
 
-#define CHAPTER_10_VALID_TENTATIVE_DEFINITION_SIZE 72
+#define CHAPTER_10_VALID_TENTATIVE_DEFINITION_SIZE 71
 
 extern const uint8_t chapter_10_valid_tentative_definition[CHAPTER_10_VALID_TENTATIVE_DEFINITION_SIZE];
 
@@ -1120,20 +1120,20 @@ extern const uint8_t chapter_10_valid_tentative_definition[CHAPTER_10_VALID_TENT
 
 extern const uint8_t chapter_10_valid_multiple_static_local[CHAPTER_10_VALID_MULTIPLE_STATIC_LOCAL_SIZE];
 
-#define CHAPTER_10_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_STATIC_VAR_SIZE 234
+#define CHAPTER_10_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_STATIC_VAR_SIZE 230
 
 extern const uint8_t
     chapter_10_valid_extra_credit_compound_assignment_static_var[CHAPTER_10_VALID_EXTRA_CREDIT_COMPOUND_ASSIGNMENT_STATIC_VAR_SIZE];
 
-#define CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_ON_EXTERN_SIZE 121
+#define CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_ON_EXTERN_SIZE 118
 
 extern const uint8_t chapter_10_valid_extra_credit_switch_on_extern[CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_ON_EXTERN_SIZE];
 
-#define CHAPTER_10_VALID_EXTRA_CREDIT_INCREMENT_GLOBAL_VARS_SIZE 259
+#define CHAPTER_10_VALID_EXTRA_CREDIT_INCREMENT_GLOBAL_VARS_SIZE 253
 
 extern const uint8_t chapter_10_valid_extra_credit_increment_global_vars[CHAPTER_10_VALID_EXTRA_CREDIT_INCREMENT_GLOBAL_VARS_SIZE];
 
-#define CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_SKIP_EXTERN_DECL_SIZE 140
+#define CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_SKIP_EXTERN_DECL_SIZE 135
 
 extern const uint8_t
     chapter_10_valid_extra_credit_switch_skip_extern_decl[CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_SKIP_EXTERN_DECL_SIZE];
@@ -1153,26 +1153,26 @@ extern const uint8_t
 extern const uint8_t
     chapter_10_valid_extra_credit_goto_skip_static_initializer[CHAPTER_10_VALID_EXTRA_CREDIT_GOTO_SKIP_STATIC_INITIALIZER_SIZE];
 
-#define CHAPTER_10_VALID_EXTRA_CREDIT_BITWISE_OPS_FILE_SCOPE_VARS_SIZE 132
+#define CHAPTER_10_VALID_EXTRA_CREDIT_BITWISE_OPS_FILE_SCOPE_VARS_SIZE 130
 
 extern const uint8_t
     chapter_10_valid_extra_credit_bitwise_ops_file_scope_vars[CHAPTER_10_VALID_EXTRA_CREDIT_BITWISE_OPS_FILE_SCOPE_VARS_SIZE];
 
-#define CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_SKIP_STATIC_INITIALIZER_SIZE 84
+#define CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_SKIP_STATIC_INITIALIZER_SIZE 82
 
 extern const uint8_t
     chapter_10_valid_extra_credit_switch_skip_static_initializer[CHAPTER_10_VALID_EXTRA_CREDIT_SWITCH_SKIP_STATIC_INITIALIZER_SIZE];
 
-#define CHAPTER_11_VALID_IMPLICIT_CASTS_COMMON_TYPE_SIZE 392
+#define CHAPTER_11_VALID_IMPLICIT_CASTS_COMMON_TYPE_SIZE 388
 
 extern const uint8_t chapter_11_valid_implicit_casts_common_type[CHAPTER_11_VALID_IMPLICIT_CASTS_COMMON_TYPE_SIZE];
 
-#define CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_FUNCTION_ARGUMENTS_SIZE 302
+#define CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_FUNCTION_ARGUMENTS_SIZE 297
 
 extern const uint8_t
     chapter_11_valid_implicit_casts_convert_function_arguments[CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_FUNCTION_ARGUMENTS_SIZE];
 
-#define CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_STATIC_INITIALIZER_SIZE 79
+#define CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_STATIC_INITIALIZER_SIZE 78
 
 extern const uint8_t
     chapter_11_valid_implicit_casts_convert_static_initializer[CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_STATIC_INITIALIZER_SIZE];
@@ -1181,7 +1181,7 @@ extern const uint8_t
 
 extern const uint8_t chapter_11_valid_implicit_casts_long_constants[CHAPTER_11_VALID_IMPLICIT_CASTS_LONG_CONSTANTS_SIZE];
 
-#define CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_BY_ASSIGNMENT_SIZE 244
+#define CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_BY_ASSIGNMENT_SIZE 241
 
 extern const uint8_t
     chapter_11_valid_implicit_casts_convert_by_assignment[CHAPTER_11_VALID_IMPLICIT_CASTS_CONVERT_BY_ASSIGNMENT_SIZE];
@@ -1194,24 +1194,24 @@ extern const uint8_t chapter_11_valid_long_expressions_assign[CHAPTER_11_VALID_L
 
 extern const uint8_t chapter_11_valid_long_expressions_return_long[CHAPTER_11_VALID_LONG_EXPRESSIONS_RETURN_LONG_SIZE];
 
-#define CHAPTER_11_VALID_LONG_EXPRESSIONS_LONG_AND_INT_LOCALS_SIZE 248
+#define CHAPTER_11_VALID_LONG_EXPRESSIONS_LONG_AND_INT_LOCALS_SIZE 244
 
 extern const uint8_t
     chapter_11_valid_long_expressions_long_and_int_locals[CHAPTER_11_VALID_LONG_EXPRESSIONS_LONG_AND_INT_LOCALS_SIZE];
 
-#define CHAPTER_11_VALID_LONG_EXPRESSIONS_COMPARISONS_SIZE 388
+#define CHAPTER_11_VALID_LONG_EXPRESSIONS_COMPARISONS_SIZE 381
 
 extern const uint8_t chapter_11_valid_long_expressions_comparisons[CHAPTER_11_VALID_LONG_EXPRESSIONS_COMPARISONS_SIZE];
 
-#define CHAPTER_11_VALID_LONG_EXPRESSIONS_ARITHMETIC_OPS_SIZE 570
+#define CHAPTER_11_VALID_LONG_EXPRESSIONS_ARITHMETIC_OPS_SIZE 564
 
 extern const uint8_t chapter_11_valid_long_expressions_arithmetic_ops[CHAPTER_11_VALID_LONG_EXPRESSIONS_ARITHMETIC_OPS_SIZE];
 
-#define CHAPTER_11_VALID_LONG_EXPRESSIONS_TYPE_SPECIFIERS_SIZE 253
+#define CHAPTER_11_VALID_LONG_EXPRESSIONS_TYPE_SPECIFIERS_SIZE 251
 
 extern const uint8_t chapter_11_valid_long_expressions_type_specifiers[CHAPTER_11_VALID_LONG_EXPRESSIONS_TYPE_SPECIFIERS_SIZE];
 
-#define CHAPTER_11_VALID_LONG_EXPRESSIONS_LOGICAL_SIZE 405
+#define CHAPTER_11_VALID_LONG_EXPRESSIONS_LOGICAL_SIZE 397
 
 extern const uint8_t chapter_11_valid_long_expressions_logical[CHAPTER_11_VALID_LONG_EXPRESSIONS_LOGICAL_SIZE];
 
@@ -1227,7 +1227,7 @@ extern const uint8_t chapter_11_valid_long_expressions_multi_op[CHAPTER_11_VALID
 
 extern const uint8_t chapter_11_valid_long_expressions_static_long[CHAPTER_11_VALID_LONG_EXPRESSIONS_STATIC_LONG_SIZE];
 
-#define CHAPTER_11_VALID_LONG_EXPRESSIONS_LARGE_CONSTANTS_SIZE 294
+#define CHAPTER_11_VALID_LONG_EXPRESSIONS_LARGE_CONSTANTS_SIZE 291
 
 extern const uint8_t chapter_11_valid_long_expressions_large_constants[CHAPTER_11_VALID_LONG_EXPRESSIONS_LARGE_CONSTANTS_SIZE];
 
@@ -1235,11 +1235,11 @@ extern const uint8_t chapter_11_valid_long_expressions_large_constants[CHAPTER_1
 
 extern const uint8_t chapter_11_valid_explicit_casts_sign_extend[CHAPTER_11_VALID_EXPLICIT_CASTS_SIGN_EXTEND_SIZE];
 
-#define CHAPTER_11_VALID_EXPLICIT_CASTS_TRUNCATE_SIZE 246
+#define CHAPTER_11_VALID_EXPLICIT_CASTS_TRUNCATE_SIZE 240
 
 extern const uint8_t chapter_11_valid_explicit_casts_truncate[CHAPTER_11_VALID_EXPLICIT_CASTS_TRUNCATE_SIZE];
 
-#define CHAPTER_12_VALID_EXPLICIT_CASTS_EXTENSION_SIZE 321
+#define CHAPTER_12_VALID_EXPLICIT_CASTS_EXTENSION_SIZE 317
 
 extern const uint8_t chapter_12_valid_explicit_casts_extension[CHAPTER_12_VALID_EXPLICIT_CASTS_EXTENSION_SIZE];
 
@@ -1251,16 +1251,16 @@ extern const uint8_t chapter_12_valid_explicit_casts_round_trip_casts[CHAPTER_12
 
 extern const uint8_t chapter_12_valid_explicit_casts_chained_casts[CHAPTER_12_VALID_EXPLICIT_CASTS_CHAINED_CASTS_SIZE];
 
-#define CHAPTER_12_VALID_EXPLICIT_CASTS_REWRITE_MOVZ_REGRESSION_SIZE 800
+#define CHAPTER_12_VALID_EXPLICIT_CASTS_REWRITE_MOVZ_REGRESSION_SIZE 788
 
 extern const uint8_t
     chapter_12_valid_explicit_casts_rewrite_movz_regression[CHAPTER_12_VALID_EXPLICIT_CASTS_REWRITE_MOVZ_REGRESSION_SIZE];
 
-#define CHAPTER_12_VALID_EXPLICIT_CASTS_TRUNCATE_SIZE 401
+#define CHAPTER_12_VALID_EXPLICIT_CASTS_TRUNCATE_SIZE 391
 
 extern const uint8_t chapter_12_valid_explicit_casts_truncate[CHAPTER_12_VALID_EXPLICIT_CASTS_TRUNCATE_SIZE];
 
-#define CHAPTER_99_VALID_GENERAL_ARTH_SIZE 7093
+#define CHAPTER_99_VALID_GENERAL_ARTH_SIZE 6929
 
 extern const uint8_t chapter_99_valid_general_arth[CHAPTER_99_VALID_GENERAL_ARTH_SIZE];
 
