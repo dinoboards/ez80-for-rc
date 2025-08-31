@@ -67,17 +67,13 @@ _spike:
 	LD	C, 65
 	RST	%10
 
-	LD	C, 65
+
+	LD	C, 22	; mode
+	RST	%10
+	LD	C, 0 ; BBC Mode 0
 	RST	%10
 
-	LD	C, 65
-	RST	%10
 
-	LD	C, 65
-	RST	%10
-
-	LD	C, 65
-	RST	%10
 
 	LD	C, 25	; plot
 	RST	%10
