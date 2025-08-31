@@ -17,9 +17,9 @@ extern vm_t vm;
 /* Callback from the VM that something went wrong
  * @param[in] level Error id, see vmErrorCode_t definition.
  * @param[in] error Human readable error text. */
-void Com_Error(vmErrorCode_t level, const char *error) {
+void Com_Error(vmErrorCode_t level) {
   // what to do if we have an error!
-  //  fprintf(stderr, "Err (%i): %s\n", level, error);
+  //  fprintf(stderr, "Err (%i)\n", level);
   //  exit(level);
 }
 #endif
