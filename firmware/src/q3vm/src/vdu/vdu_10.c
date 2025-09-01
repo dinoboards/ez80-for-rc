@@ -22,7 +22,7 @@ void vdu_lf(void) {
       vdp_cmd_wait_completion();
       vdp_cmd_move_vram_to_vram(left, top + 8, left, top, width, height, 0);
       vdp_cmd_wait_completion();
-      vdp_cmd_vdp_to_vram(left, bottom - 8, width, 8, current_tbg_colour, 0);
+      vdp_cmd_vdp_to_vram(left, bottom, width, 8, current_tbg_colour, 0);
     }
   }
 }

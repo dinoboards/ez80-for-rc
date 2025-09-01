@@ -135,7 +135,7 @@ _spike:
 	RST	%10
 
 	exx
-	ld	b, 180
+	ld	b, 200
 
 loopl:
 	exx
