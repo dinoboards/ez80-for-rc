@@ -28,13 +28,13 @@ int24_t vdu(uint8_t ch) {
     return -1;
   }
 
-    if (ch == 17) { // vdu_colour
+  if (ch == 17) { // vdu_colour
     current_fn          = vdu_colour;
     vdu_required_length = 1;
     return -1;
   }
 
-    if (ch == 18) { // gcol mode, colour
+  if (ch == 18) { // gcol mode, colour
     current_fn          = vdu_gcol;
     vdu_required_length = 2;
     return -1;

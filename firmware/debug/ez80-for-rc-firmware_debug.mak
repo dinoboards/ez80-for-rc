@@ -541,6 +541,12 @@ clean:
             $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lis"
 	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lst"  \
             $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lst"
+	@if exist "$(WORKDIR)\vdp_cpu_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cpu_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cpu_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cpu_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cpu_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cpu_to_vram.lst"
 	@if exist "$(WORKDIR)\vdp_draw_line.obj"  \
             $(RM) "$(WORKDIR)\vdp_draw_line.obj"
 	@if exist "$(WORKDIR)\vdp_draw_line.lis"  \
@@ -746,6 +752,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cpu_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_draw_line.obj  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vdu_init.obj  \
@@ -1474,6 +1481,10 @@ $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cpu_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cpu_to_vram.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cpu_to_vram.asm"
 
 $(WORKDIR_ESCSPACE)\vdp_draw_line.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c

@@ -164,6 +164,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_cmd_logical_move_vdp_to_vram.obj", \
  ".\vdp_cmd_pset.obj", \
  ".\vdp_cmd_wait_completion.obj", \
+ ".\vdp_cpu_to_vram.obj", \
  ".\vdp_draw_line.obj", \
  ".\vdu.obj", \
  ".\vdu_init.obj", \

@@ -11,5 +11,6 @@
 #define SC_VDP_CMD_PSET                     -8
 #define SC_VDP_CMD_WAIT_COMPLETION          -9
 #define SC_VDP_DRAW_LINE                    -10
+#define SC_VDP_CPU_TO_VRAM                  -11
 
 #endif

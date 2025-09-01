@@ -83,6 +83,13 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return 0;
   }
 
+    // extern void vdp_cpu_to_vram(const uint8_t *const source, screen_addr_t vdp_address, uint16_t length);
+
+  case SC_VDP_CPU_TO_VRAM: {
+    vdp_cpu_to_vram(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9));
+    return 0;
+  }
+
   default:
     return dispatch_hosted_fn(vm, args);
   }
