@@ -70,8 +70,16 @@ _spike:
 
 	LD	C, 22	; mode
 	RST	%10
-	LD	C, 0 ; BBC Mode 0
+	LD	C, 1 ; BBC Mode 0
 	RST	%10
+
+	LD	C,18 ; gcol
+	RST	%10
+	LD	C, 0
+	RST	%10
+	LD	C, 2
+	RST	%10
+
 
 	LD	C, 25	; plot
 	RST	%10
@@ -119,8 +127,8 @@ _spike:
 	RST	%10
 
 
-	LD	C,12	; cls
-	RST	%10
+	; LD	C,12	; cls
+	; RST	%10
 
 	nop
 	nop
