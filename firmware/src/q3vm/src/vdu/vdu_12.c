@@ -1,5 +1,4 @@
 #include "../vdu.h"
-#include <stdint.h>
 #include <v99x8.h>
 
 /*
@@ -10,24 +9,22 @@ text or graphics background colour respectively. In addition the text or
 graphics cursor is moved to its home position (see VDU 3)
 */
 
-void vdu_cls(void) {
+void vdu_cls() {
   // for moment lets just erase to black
   // TODO constrain to text view port
   // apply correct back colour
+
+  const uint24_t left   = (uint24_t)tviewport.left * 8;
+  const uint24_t bottom = (uint24_t)tviewport.bottom * 8;
+  const uint24_t right  = (uint24_t)tviewport.right * 8;
+  const uint24_t top    = (uint24_t)tviewport.top * 8;
+
+  const uint24_t width  = right - left + 8;
+  const uint24_t height = bottom - top + 8;
+
   vdp_cmd_wait_completion();
+  vdp_cmd_logical_move_vdp_to_vram(left, top, width, height, current_tbg_colour, 0, 0);
 
-  {
-    const uint16_t left   = (uint16_t)tviewport.left * 8;
-    const uint16_t bottom = (uint16_t)tviewport.bottom * 8;
-    const uint16_t right  = (uint16_t)tviewport.right * 8;
-    const uint16_t top    = (uint16_t)tviewport.top * 8;
-
-    const uint16_t width  = right - left + 8;
-    const uint16_t height = bottom - top + 8;
-
-    vdp_cmd_logical_move_vdp_to_vram(left, top, width, height, current_tbg_colour, 0, 0);
-
-    current_tpos.x = tviewport.left;
-    current_tpos.y = tviewport.top;
-  }
+  current_tpos.x = tviewport.left;
+  current_tpos.y = tviewport.top;
 }

@@ -119,6 +119,9 @@ _spike:
 	RST	%10
 
 
+	LD	C,12	; cls
+	RST	%10
+
 	nop
 	nop
 

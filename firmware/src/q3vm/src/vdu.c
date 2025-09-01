@@ -23,6 +23,11 @@ int24_t vdu(uint8_t ch) {
     return -1;
   }
 
+  if (ch == 12) { // cls
+    vdu_cls();
+    return -1;
+  }
+
   if (ch == 22) { // MODE
     current_fn          = vdu_mode;
     vdu_required_length = 1;
