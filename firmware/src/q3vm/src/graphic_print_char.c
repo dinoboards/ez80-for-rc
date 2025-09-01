@@ -17,8 +17,8 @@ void graphic_print_char(uint8_t ch) {
 
     current_tpos.x++;
     if (current_tpos.x > tviewport.right) {
-      // vdu_cr();
-      // vdu_lf();
+      vdu_cr();
+      vdu_lf();
     }
   }
 }

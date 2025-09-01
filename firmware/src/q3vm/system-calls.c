@@ -97,6 +97,21 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
                               VMA_UINT24(21));
     return 0;
   }
+
+  // extern void vdp_cmd_move_vram_to_vram(uint16_t x, uint16_t y, uint16_t to_x, uint16_t to_y, uint16_t width, uint16_t height,
+  // uint8_t direction);
+  case SC_VDP_CMD_MOVE_VRAM_TO_VRAM: {
+    vdp_cmd_move_vram_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
+                              VMA_UINT24(21));
+    return 0;
+  }
+
+  // extern void vdp_cmd_vdp_to_vram(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t colour, uint8_t direction);
+  case SC_VDP_CMD_VDP_TO_VRAM: {
+    vdp_cmd_vdp_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18));
+    return 0;
+  }
+
   default:
     return dispatch_hosted_fn(vm, args);
   }

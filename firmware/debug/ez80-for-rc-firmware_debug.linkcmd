@@ -161,7 +161,10 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb_state.obj", \
  ".\vdp_cmd_line.obj", \
  ".\vdp_cmd_logical_move_vdp_to_vram.obj", \
+ ".\vdp_cmd_move_linear_to_xy.obj", \
+ ".\vdp_cmd_move_vram_to_vram.obj", \
  ".\vdp_cmd_pset.obj", \
+ ".\vdp_cmd_vdp_to_vram.obj", \
  ".\vdp_cmd_wait_completion.obj", \
  ".\vdp_cpu_to_vram.obj", \
  ".\vdp_draw_line.obj", \
@@ -183,7 +186,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
- ".\vdp_cmd_move_linear_to_xy.obj", \
  "C:\ZDS\lib\std\chelpD.lib", \
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \

@@ -1,0 +1,28 @@
+#include "../vdu.h"
+#include <stdint.h>
+#include <v99x8.h>
+
+void vdu_lf(void) {
+  current_tpos.y++;
+
+  if (current_tpos.y >= tviewport.bottom) {
+    current_tpos.y--;
+
+    {
+      uint24_t left   = tviewport.left * 8;
+      uint24_t top    = tviewport.top * 8;
+      uint24_t right  = tviewport.right * 8;
+      uint24_t bottom = tviewport.bottom * 8;
+
+      uint24_t width  = right - left + 8;
+      uint24_t height = bottom - top;
+
+      // TODO: ONLY SCROLL IF TEXT CURSOR IS ACTIVE
+
+      vdp_cmd_wait_completion();
+      vdp_cmd_move_vram_to_vram(left, top + 8, left, top, width, height, 0);
+      vdp_cmd_wait_completion();
+      vdp_cmd_vdp_to_vram(left, bottom - 8, width, 8, current_tbg_colour, 0);
+    }
+  }
+}

@@ -66,7 +66,10 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
 <file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_line.asm</file>
 <file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm</file>
+<file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm</file>
+<file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_move_vram_to_vram.asm</file>
 <file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm</file>
+<file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_vdp_to_vram.asm</file>
 <file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm</file>
 <file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cpu_to_vram.asm</file>
 <file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_draw_line.c</file>
@@ -88,7 +91,6 @@
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
-<file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm</file>
 </files>
 
 <!-- configuration information -->

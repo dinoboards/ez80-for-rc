@@ -521,12 +521,30 @@ clean:
             $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lis"
 	@if exist "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"  \
             $(RM) "$(WORKDIR)\vdp_cmd_logical_move_vdp_to_vram.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_move_vram_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_vram_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_vram_to_vram.lst"
 	@if exist "$(WORKDIR)\vdp_cmd_pset.obj"  \
             $(RM) "$(WORKDIR)\vdp_cmd_pset.obj"
 	@if exist "$(WORKDIR)\vdp_cmd_pset.lis"  \
             $(RM) "$(WORKDIR)\vdp_cmd_pset.lis"
 	@if exist "$(WORKDIR)\vdp_cmd_pset.lst"  \
             $(RM) "$(WORKDIR)\vdp_cmd_pset.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_vdp_to_vram.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_vdp_to_vram.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_vdp_to_vram.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_vdp_to_vram.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_vdp_to_vram.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_vdp_to_vram.lst"
 	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.obj"  \
             $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.obj"
 	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lis"  \
@@ -671,12 +689,6 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
-	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.obj"  \
-            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.obj"
-	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lis"  \
-            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lis"
-	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lst"  \
-            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -747,7 +759,10 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_move_vram_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_vdp_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cpu_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_draw_line.obj  \
@@ -768,8 +783,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj  \
-            $(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -1447,11 +1461,23 @@ $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm"
 
+$(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_move_vram_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_vram_to_vram.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_vram_to_vram.asm"
+
 $(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_vdp_to_vram.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_vdp_to_vram.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_vdp_to_vram.asm"
 
 $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm  \
@@ -1635,8 +1661,4 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
-
-$(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm"
 

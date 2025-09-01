@@ -66,7 +66,7 @@ _spike:
 	LD	B, 0
 	LD	C, 22	; mode
 	RST	%10
-	LD	C, 1 ; BBC Mode 0
+	LD	C, 0 ; BBC Mode 0
 	RST	%10
 
 	LD	C, 65
@@ -85,7 +85,7 @@ _spike:
 	RST	%10
 	LD	C, 0
 	RST	%10
-	LD	C, 2
+	LD	C, 1
 	RST	%10
 
 
@@ -134,9 +134,26 @@ _spike:
 	LD	C, 0	; y high
 	RST	%10
 
+	exx
+	ld	b, 180
 
-	; LD	C,12	; cls
-	; RST	%10
+loopl:
+	exx
+	LD	C,13
+	RST	%10
+	LD	C,10
+	RST	%10
+	LD	C,'X'
+	RST	%10
+	LD	C,'X'
+	RST	%10
+	LD	C,'X'
+	RST	%10
+	LD	C,'X'
+	RST	%10
+
+	exx
+	djnz	loopl
 
 	nop
 	nop

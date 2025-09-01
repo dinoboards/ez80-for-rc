@@ -57,8 +57,8 @@
 void vdu_mode(void) {
   current_display_mode = data[0];
   tviewport.left       = 0;
-  last_text_row        = 26;
-  tviewport.bottom     = 26;
+  last_text_row        = 31;
+  tviewport.bottom     = 31;
   tviewport.top        = 0;
 
   switch (data[0]) {
@@ -83,8 +83,8 @@ void vdu_mode(void) {
     current_mode_colour_mask = 3;
     last_text_column         = 39;
     tviewport.right          = 39;
-    last_text_row            = 29;
-    tviewport.bottom         = 29;
+    last_text_row            = 31;
+    tviewport.bottom         = 31;
     vdp_set_super_graphic_2();
     break;
 

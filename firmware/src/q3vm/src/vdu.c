@@ -23,9 +23,19 @@ int24_t vdu(uint8_t ch) {
     return -1;
   }
 
+  if (ch == '\n') {
+    vdu_lf();
+    return ch;
+  }
+
   if (ch == 12) { // cls
     vdu_cls();
     return -1;
+  }
+
+  if (ch == '\r') {
+    vdu_cr();
+    return ch;
   }
 
   if (ch == 17) { // vdu_colour
