@@ -9,7 +9,7 @@ static int8_t signum(const int a) {
   return 0;
 }
 
-static void draw_clipped_line(uint16_t x1, uint16_t y1, uint16_t x2) {
+static void draw_clipped_line(uint24_t x1, uint24_t y1, uint24_t x2) {
   if (y1 > gsviewport.bottom)
     return;
 
@@ -59,11 +59,11 @@ static void fill_flat_sided_triangle(const point_t *const v1, const point_t *con
   bool changed1 = false;
   bool changed2 = false;
 
-  uint16_t dx1 = abs(v2->x - v1->x);
-  uint16_t dy1 = abs(v2->y - v1->y);
+  uint24_t dx1 = abs(v2->x - v1->x);
+  uint24_t dy1 = abs(v2->y - v1->y);
 
-  uint16_t dx2 = abs(v3->x - v1->x);
-  uint16_t dy2 = abs(v3->y - v1->y);
+  uint24_t dx2 = abs(v3->x - v1->x);
+  uint24_t dy2 = abs(v3->y - v1->y);
 
   int8_t signx1 = (int)signum(v2->x - v1->x);
   int8_t signx2 = (int)signum(v3->x - v1->x);
@@ -75,23 +75,23 @@ static void fill_flat_sided_triangle(const point_t *const v1, const point_t *con
   vTmp2 = point_new(v1->x, v1->y);
 
   if (dy1 > dx1) {
-    uint16_t tmp = dx1;
+    uint24_t tmp = dx1;
     dx1          = dy1;
     dy1          = tmp;
     changed1     = true;
   }
 
   if (dy2 > dx2) {
-    uint16_t tmp = dx2;
+    uint24_t tmp = dx2;
     dx2          = dy2;
     dy2          = tmp;
     changed2     = true;
   }
 
   {
-    int16_t  e1 = 2 * dy1 - dx1;
-    int16_t  e2 = 2 * dy2 - dx2;
-    uint16_t i;
+    int24_t  e1 = 2 * dy1 - dx1;
+    int24_t  e2 = 2 * dy2 - dx2;
+    uint24_t i;
 
     for (i = 0; i <= dx1; i++) {
       draw_clipped_line(vTmp1.x, vTmp1.y, vTmp2.x);

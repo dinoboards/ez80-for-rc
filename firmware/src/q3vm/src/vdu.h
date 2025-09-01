@@ -102,8 +102,8 @@ extern void vdu_tab(void);
 extern void init_font_patterns(void);
 void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);
 
-extern int16_t convert_x(int16_t logical_x);
-extern int16_t convert_y(int16_t logical_y);
+extern int24_t convert_x(int24_t logical_x);
+extern int24_t convert_y(int24_t logical_y);
 extern point_t convert_point(const point_t p);
 
 // vdu variables

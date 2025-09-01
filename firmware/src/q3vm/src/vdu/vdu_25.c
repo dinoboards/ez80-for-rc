@@ -58,10 +58,10 @@ void vdu_plot(void) {
       line_t  l          = line_new(previous_gpos, current_gpos);
       uint8_t intersects = line_clip(&l);
 
-      uint16_t x  = convert_x(l.a.x);
-      uint16_t y  = convert_y(l.a.y);
-      uint16_t x2 = convert_x(l.b.x);
-      uint16_t y2 = convert_y(l.b.y);
+      uint24_t x  = convert_x(l.a.x);
+      uint24_t y  = convert_y(l.a.y);
+      uint24_t x2 = convert_x(l.b.x);
+      uint24_t y2 = convert_y(l.b.y);
 
       if (intersects)
         vdp_draw_line(x, y, x2, y2, current_gfg_colour, current_operation_mode);
