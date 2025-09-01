@@ -56,8 +56,8 @@ static void fill_flat_sided_triangle(const point_t *const v1, const point_t *con
   point_t vTmp1;
   point_t vTmp2;
 
-  bool changed1 = false;
-  bool changed2 = false;
+  int24_t changed1 = false;
+  int24_t changed2 = false;
 
   uint24_t dx1 = abs(v2->x - v1->x);
   uint24_t dy1 = abs(v2->y - v1->y);
