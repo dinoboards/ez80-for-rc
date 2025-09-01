@@ -11,4 +11,5 @@ equ	vdp_cmd_pset                           -8
 equ	vdp_cmd_wait_completion                -9
 equ	vdp_draw_line                         -10
 equ	vdp_cpu_to_vram                       -11
+equ	vdp_cmd_move_linear_to_xy             -12
 

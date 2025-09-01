@@ -235,14 +235,6 @@ clean:
             $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lis"
 	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lst"  \
             $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lst"
-	@if exist "$(WORKDIR)\graphic_print_char.obj"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.obj"
-	@if exist "$(WORKDIR)\graphic_print_char.lis"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.lis"
-	@if exist "$(WORKDIR)\graphic_print_char.lst"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.lst"
-	@if exist "$(WORKDIR)\graphic_print_char.src"  \
-            $(RM) "$(WORKDIR)\graphic_print_char.src"
 	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
             $(RM) "$(WORKDIR)\i2c-calculate.obj"
 	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
@@ -679,6 +671,12 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
+	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.obj"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.obj"
+	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lis"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lis"
+	@if exist "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lst"  \
+            $(RM) "$(WORKDIR)\vdp_cmd_move_linear_to_xy.lst"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -706,7 +704,6 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\enumerate_hub.obj  \
             $(WORKDIR_ESCSPACE)\enumerate_storage.obj  \
             $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj  \
-            $(WORKDIR_ESCSPACE)\graphic_print_char.obj  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
             $(WORKDIR_ESCSPACE)\init-clocks.obj  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
@@ -771,7 +768,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -793,7 +791,7 @@ $(WORKDIR_ESCSPACE)\boot_prompt.obj :  \
 
 $(WORKDIR_ESCSPACE)\build-date.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\build-date.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
 
@@ -859,7 +857,7 @@ $(WORKDIR_ESCSPACE)\class_hub.obj :  \
 $(WORKDIR_ESCSPACE)\class_scsi.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -878,7 +876,7 @@ $(WORKDIR_ESCSPACE)\class_scsi.obj :  \
 $(WORKDIR_ESCSPACE)\class_ufi.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -950,7 +948,7 @@ $(WORKDIR_ESCSPACE)\dev_transfers.obj :  \
 $(WORKDIR_ESCSPACE)\enumerate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
@@ -970,7 +968,7 @@ $(WORKDIR_ESCSPACE)\enumerate.obj :  \
 $(WORKDIR_ESCSPACE)\enumerate_hub.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_hub.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
@@ -989,7 +987,7 @@ $(WORKDIR_ESCSPACE)\enumerate_hub.obj :  \
 $(WORKDIR_ESCSPACE)\enumerate_storage.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate_storage.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
@@ -1009,23 +1007,6 @@ $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\gpio-b4-isr-marshaller.s"
-
-$(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\src\graphic_print_char.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\src\vdu\variables.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\src\graphic_print_char.c"
 
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \
@@ -1060,7 +1041,7 @@ $(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
 $(WORKDIR_ESCSPACE)\kyb_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\kyb_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
@@ -1248,7 +1229,7 @@ $(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
 $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -1267,19 +1248,15 @@ $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
 
 $(WORKDIR_ESCSPACE)\system-calls.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\host\target-support.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\host\vm.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\includes\host-functions.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\src\system-calls-ids.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\vm-promoted-fn.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\system-calls.c"
 
@@ -1373,7 +1350,7 @@ $(WORKDIR_ESCSPACE)\uart-rx-variables.obj :  \
 $(WORKDIR_ESCSPACE)\ufi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\ufi_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -1393,7 +1370,7 @@ $(WORKDIR_ESCSPACE)\ufi_driver.obj :  \
 $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-base-drv.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
+            C:\ZDS\include\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
@@ -1483,31 +1460,41 @@ $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm"
 
 $(WORKDIR_ESCSPACE)\vdp_cpu_to_vram.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cpu_to_vram.asm
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cpu_to_vram.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cpu_to_vram.asm"
 
 $(WORKDIR_ESCSPACE)\vdp_draw_line.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
+            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c"
 
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
+            Z:\ez80-for-rc\firmware\src\q3vm\host\target-support.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu.c"
 
 $(WORKDIR_ESCSPACE)\vdu_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
+            Z:\ez80-for-rc\firmware\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_init.c"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
@@ -1520,49 +1507,31 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
 
 $(WORKDIR_ESCSPACE)\vm-init.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\host\target-support.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\host\vm.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\includes\host-functions.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\vm-promoted-fn.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-init.c"
 
 $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h
+            Z:\ez80-for-rc\firmware\src\q3vm\includes\host-functions.h  \
+            Z:\ez80-for-rc\firmware\src\q3vm\vm-promoted-fn.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-promoted-fn.c"
 
 $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
             $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            C:\ZDS\include\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.c.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\opcodes.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
+            Z:\ez80-for-rc\firmware\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\host\vm.c"
 
 $(WORKDIR_ESCSPACE)\vm_bytecode.obj :  \
@@ -1633,8 +1602,7 @@ $(WORKDIR_ESCSPACE)\z80-emulator-lis.obj :  \
 
 $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            C:\ZDS\include\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
 
@@ -1667,4 +1635,8 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
+
+$(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm"
 

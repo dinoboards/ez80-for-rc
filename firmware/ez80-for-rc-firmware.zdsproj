@@ -23,7 +23,6 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_hub.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_storage.c</file>
 <file filter-key="">src\gpio-b4-isr-marshaller.s</file>
-<file filter-key="">src\q3vm\src\graphic_print_char.c</file>
 <file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
 <file filter-key="">src\startup\init-clocks.s</file>
 <file filter-key="">src\startup\init-f92.asm</file>
@@ -89,6 +88,7 @@
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
+<file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_cmd_move_linear_to_xy.asm</file>
 </files>
 
 <!-- configuration information -->

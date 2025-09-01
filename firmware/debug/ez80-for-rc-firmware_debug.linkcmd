@@ -118,7 +118,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\enumerate_hub.obj", \
  ".\enumerate_storage.obj", \
  ".\gpio-b4-isr-marshaller.obj", \
- ".\graphic_print_char.obj", \
  ".\i2c-calculate.obj", \
  ".\init-clocks.obj", \
  ".\init-f92.obj", \
@@ -184,6 +183,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
+ ".\vdp_cmd_move_linear_to_xy.obj", \
  "C:\ZDS\lib\std\chelpD.lib", \
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \

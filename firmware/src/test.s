@@ -64,13 +64,21 @@ _spike:
 
 	LD	A, 8
 	LD	B, 0
-	LD	C, 65
-	RST	%10
-
-
 	LD	C, 22	; mode
 	RST	%10
 	LD	C, 1 ; BBC Mode 0
+	RST	%10
+
+	LD	C, 65
+	RST	%10
+
+	LD	C, 1
+	RST	%10
+
+	LD	C, 66
+	RST	%10
+
+	LD	C, 67
 	RST	%10
 
 	LD	C,18 ; gcol

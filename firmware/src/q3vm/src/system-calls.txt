@@ -9,3 +9,4 @@ vdp_cmd_pset
 vdp_cmd_wait_completion
 vdp_draw_line
 vdp_cpu_to_vram
+vdp_cmd_move_linear_to_xy

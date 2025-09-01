@@ -1,6 +1,7 @@
 #include "host/target-support.h"
 #include "host/vm.h"
 #include "includes/host-functions.h"
+#include "includes/v99x8-super.h"
 #include "includes/v99x8.h"
 #include "src/system-calls-ids.h"
 #include "vm-promoted-fn.h"
@@ -83,13 +84,19 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return 0;
   }
 
-    // extern void vdp_cpu_to_vram(const uint8_t *const source, screen_addr_t vdp_address, uint16_t length);
-
+  // extern void vdp_cpu_to_vram(const uint8_t *const source, screen_addr_t vdp_address, uint16_t length);
   case SC_VDP_CPU_TO_VRAM: {
     vdp_cpu_to_vram(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9));
     return 0;
   }
 
+  // extern void vdp_cmd_move_linear_to_xy(
+  //   screen_addr_t src_addr, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t direction, uint8_t operation);
+  case SC_VDP_CMD_MOVE_LINEAR_TO_XY: {
+    vdp_cmd_move_linear_to_xy(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
+                              VMA_UINT24(21));
+    return 0;
+  }
   default:
     return dispatch_hosted_fn(vm, args);
   }

@@ -12,5 +12,6 @@
 #define SC_VDP_CMD_WAIT_COMPLETION          -9
 #define SC_VDP_DRAW_LINE                    -10
 #define SC_VDP_CPU_TO_VRAM                  -11
+#define SC_VDP_CMD_MOVE_LINEAR_TO_XY        -12
 
 #endif

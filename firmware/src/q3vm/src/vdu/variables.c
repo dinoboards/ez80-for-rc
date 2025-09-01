@@ -1,5 +1,6 @@
 #include "../vdu.h"
-#include "stddef.h"
+#include <stddef.h>
+#include <stdint.h>
 
 point_t origin                        = {0, 0};
 RGB     default_2_colour_palette[16]  = {RGB_BLACK, RGB_WHITE};
