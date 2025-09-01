@@ -65,11 +65,11 @@ static void fill_flat_sided_triangle(const point_t *const v1, const point_t *con
   uint24_t dx2 = abs(v3->x - v1->x);
   uint24_t dy2 = abs(v3->y - v1->y);
 
-  int8_t signx1 = (int)signum(v2->x - v1->x);
-  int8_t signx2 = (int)signum(v3->x - v1->x);
+  int24_t signx1 = (int)signum(v2->x - v1->x);
+  int24_t signx2 = (int)signum(v3->x - v1->x);
 
-  int8_t signy1 = (int)signum(v2->y - v1->y);
-  int8_t signy2 = (int)signum(v3->y - v1->y);
+  int24_t signy1 = (int)signum(v2->y - v1->y);
+  int24_t signy2 = (int)signum(v3->y - v1->y);
 
   vTmp1 = point_new(v1->x, v1->y);
   vTmp2 = point_new(v1->x, v1->y);
