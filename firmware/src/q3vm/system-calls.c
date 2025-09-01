@@ -78,6 +78,11 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return 0;
   }
 
+  case SC_VDP_DRAW_LINE: {
+    vdp_draw_line(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18));
+    return;
+  }
+
   default:
     return dispatch_hosted_fn(vm, args);
   }

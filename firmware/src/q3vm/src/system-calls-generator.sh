@@ -12,7 +12,7 @@ echo "" >> ./system-calls-ids.h
 
 count=-1
 while IFS= read -r name; do
-  printf "equ\t%-30s %5d\n" ${name} ${count} >> ./system-calls-ids.asm
+  printf "equ\t%-35s %5d\n" ${name} ${count} >> ./system-calls-ids.asm
   printf "#define SC_${name^^} ${count}\n" >> ./system-calls-ids.h
   count=$((count - 1))
 

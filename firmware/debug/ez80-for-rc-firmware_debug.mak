@@ -541,6 +541,14 @@ clean:
             $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lis"
 	@if exist "$(WORKDIR)\vdp_cmd_wait_completion.lst"  \
             $(RM) "$(WORKDIR)\vdp_cmd_wait_completion.lst"
+	@if exist "$(WORKDIR)\vdp_draw_line.obj"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.obj"
+	@if exist "$(WORKDIR)\vdp_draw_line.lis"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.lis"
+	@if exist "$(WORKDIR)\vdp_draw_line.lst"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.lst"
+	@if exist "$(WORKDIR)\vdp_draw_line.src"  \
+            $(RM) "$(WORKDIR)\vdp_draw_line.src"
 	@if exist "$(WORKDIR)\vdu.obj"  \
             $(RM) "$(WORKDIR)\vdu.obj"
 	@if exist "$(WORKDIR)\vdu.lis"  \
@@ -738,6 +746,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_draw_line.obj  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vdu_init.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
@@ -999,6 +1008,7 @@ $(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
@@ -1251,13 +1261,17 @@ $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
 $(WORKDIR_ESCSPACE)\system-calls.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\src\system-calls-ids.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\system-calls.c"
@@ -1438,24 +1452,37 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
 
 $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_line.asm
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_line.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_line.asm"
 
 $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm"
 
 $(WORKDIR_ESCSPACE)\vdp_cmd_pset.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_pset.asm"
 
 $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_cmd_wait_completion.asm"
+
+$(WORKDIR_ESCSPACE)\vdp_draw_line.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c"
 
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
@@ -1465,6 +1492,7 @@ $(WORKDIR_ESCSPACE)\vdu.obj :  \
 $(WORKDIR_ESCSPACE)\vdu_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
@@ -1482,6 +1510,7 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
 $(WORKDIR_ESCSPACE)\vm-init.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
@@ -1496,6 +1525,7 @@ $(WORKDIR_ESCSPACE)\vm-init.obj :  \
 $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
@@ -1513,6 +1543,7 @@ $(WORKDIR_ESCSPACE)\vm.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \

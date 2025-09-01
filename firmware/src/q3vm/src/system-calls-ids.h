@@ -10,5 +10,6 @@
 #define SC_VDP_CMD_LOGICAL_MOVE_VDP_TO_VRAM -7
 #define SC_VDP_CMD_PSET                     -8
 #define SC_VDP_CMD_WAIT_COMPLETION          -9
+#define SC_VDP_DRAW_LINE                    -10
 
 #endif
