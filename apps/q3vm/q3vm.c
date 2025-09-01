@@ -18,6 +18,8 @@ Options
 q3vm file.qvm
 */
 
+uint8_t stack[2048];
+
 int main(/*const int argc, const char *argv[]*/) {
   FILE *f = fopen("bytecode.qvm", "r");
   printf("fopen: %p\n", f);

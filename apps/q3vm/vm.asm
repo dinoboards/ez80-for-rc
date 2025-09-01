@@ -13,3 +13,9 @@ _VM_Call:
 	xor	a
 	ld	b, 21
 	JP	$000010
+
+	.global	_VM_SetStackStore
+_VM_SetStackStore:
+	xor	a
+	ld	b, 22
+	JP	$000010

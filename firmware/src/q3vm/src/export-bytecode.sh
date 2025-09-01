@@ -24,8 +24,7 @@ bssLengthM=$(xxd -s 14 -g 1 -e -l 1 -R never ./bytecode.qvm | cut -d' ' -f2)
 bssLengthH=$(xxd -s 15 -g 1 -e -l 1 -R never ./bytecode.qvm | cut -d' ' -f2)
 bssLength="${bssLengthH}${bssLengthM}${bssLengthL}"
 
-STACK_SIZE=768
-ramRequired=$((0x$dataLength+0x$bssLength+$STACK_SIZE))
+ramRequired=$((0x$dataLength+0x$bssLength))
 
 IMAGE_NAME=vm_bytecode
 IMAGE_NAME_UPCASE=VM_BYTECODE

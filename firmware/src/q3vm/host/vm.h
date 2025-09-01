@@ -91,7 +91,8 @@ typedef enum {
   VM_MALFORMED_HEADER            = -17,
   VM_ILLEGAL_OPCODE              = -18,
   VM_LIT_ACCESS_ERROR            = -19,
-  VM_RAM_ACCESS_ERROR            = -20
+  VM_RAM_ACCESS_ERROR            = -20,
+  VM_NO_STACK_ASSIGNED           = -21
 } vmErrorCode_t;
 
 /** File header of a bytecode .qvm file. Can be directly mapped to the start of
@@ -150,6 +151,8 @@ typedef struct vm_s {
   vm_size_t bssLength;
 
   vm_size_t programStack; /* Index of current stack in RAM - initialised at top of RAM */
+  uint8_t  *stackBase;    /* relative offset into stack */
+  uint8_t  *stack;        /* actual pointer to stack store */
 
   vm_size_t workingRAMLength; /**< Number of bytes allocated for dataBase */
 
@@ -207,6 +210,8 @@ int VM_Create(vm_t                *vm,
 #ifdef DEBUG_VM
 int VM_LoadDebugInfo(vm_t *vm, char *mapfileImage, uint8_t *debugStorage, int debugStorageLength);
 #endif
+
+void VM_SetStackStore(vm_t *const vm, uint8_t *const stack, const vm_size_t stack_size);
 
 /** Run a function from the virtual machine.
  * Use the command argument to tell the VM what to do.

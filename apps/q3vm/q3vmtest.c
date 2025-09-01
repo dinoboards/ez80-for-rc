@@ -12,6 +12,8 @@ void    *VM_ArgPtr(intptr_t vmAddr, vm_t *vm);
 
 uint8_t ram[2048];
 
+uint8_t stack[2048];
+
 int main(/*const int argc, const char *argv[]*/) {
 
   for (int i = 0; i < Q3VM_VERIFICATION_SIZE; i++) {
@@ -21,6 +23,7 @@ int main(/*const int argc, const char *argv[]*/) {
       return -1;
     }
 
+    VM_SetStackStore(&vm, stack, sizeof(stack));
     const uint8_t retVal = VM_Call(&vm, 0);
     if (retVal == q3vm_verification[i].expected)
       printf("Passed: %s\n", q3vm_verification[i].name);

@@ -134,7 +134,9 @@ _system_utils_dispatch:
 	DEC	A
 	JR	Z, q3vm_create				; B = 20, SYSUTL_Q3VM_CREATE
 	DEC	A
-	JR	Z, q3vm_call				; B = 20, SYSUTL_Q3VM_CALL1
+	JR	Z, q3vm_call				; B = 20, SYSUTL_Q3VM_CALL
+	DEC	A
+	JR	Z, q3vm_set_stack			; B = 21, SYSUTL_Q3VM_SET_STACK
 
 not_supported:
 	LD	A, %FF					; UNKNOWN FUNCTION
@@ -716,3 +718,6 @@ q3vm_create:
 q3vm_call:
 	JP	_VM_Call
 
+	XREF	_VM_SetStackStore
+q3vm_set_stack:
+	JP	_VM_SetStackStore
