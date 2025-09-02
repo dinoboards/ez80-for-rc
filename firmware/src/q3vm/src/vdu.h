@@ -19,22 +19,22 @@ typedef struct line {
 line_t line_new(const point_t x, const point_t y);
 
 typedef struct rectangle {
-  int16_t left;
-  int16_t bottom;
-  int16_t right;
-  int16_t top;
+  int24_t left;
+  int24_t bottom;
+  int24_t right;
+  int24_t top;
 } rectangle_t;
 
 typedef struct tpoint {
-  uint8_t x;
-  uint8_t y;
+  uint24_t x;
+  uint24_t y;
 } tpoint_t;
 
 typedef struct trectangle {
-  uint8_t left;
-  uint8_t bottom;
-  uint8_t right;
-  uint8_t top;
+  uint24_t left;
+  uint24_t bottom;
+  uint24_t right;
+  uint24_t top;
 } trectangle_t;
 
 typedef struct triangle {
@@ -113,8 +113,6 @@ extern RGB     default_2_colour_palette[16];
 extern RGB     default_4_colour_palette[16];
 extern RGB     default_16_colour_palette[16];
 
-extern const int16_t scale_width;
-extern const int16_t scale_height;
 
 extern rectangle_t    gviewport;
 extern rectangle_t    gsviewport;
@@ -129,8 +127,8 @@ extern text_colours_t font_color[256];
 
 extern tpoint_t     current_tpos;
 extern trectangle_t tviewport;
-extern uint8_t      last_text_column;
-extern uint8_t      last_text_row;
+extern uint24_t      last_text_column;
+extern uint24_t      last_text_row;
 extern uint8_t      current_tbg_colour;
 extern uint8_t      current_tfg_colour;
 extern uint8_t      current_mode_colour_mask;
@@ -142,8 +140,8 @@ extern uint8_t vdu_required_length;
 
 extern mos_vdu_handler current_fn;
 
-#define scale_width  ((int16_t)1280)
-#define scale_height ((int16_t)1024)
+#define scale_width  ((int24_t)1280)
+#define scale_height ((int24_t)1024)
 
 extern void vdu_not_implemented(void);
 

@@ -14,10 +14,10 @@ void vdu_cls() {
   // TODO constrain to text view port
   // apply correct back colour
 
-  const uint24_t left   = (uint24_t)tviewport.left * 8;
-  const uint24_t bottom = (uint24_t)tviewport.bottom * 8;
-  const uint24_t right  = (uint24_t)tviewport.right * 8;
-  const uint24_t top    = (uint24_t)tviewport.top * 8;
+  const uint24_t left   = tviewport.left;
+  const uint24_t bottom = tviewport.bottom ;
+  const uint24_t right  = tviewport.right ;
+  const uint24_t top    = tviewport.top ;
 
   const uint24_t width  = right - left + 8;
   const uint24_t height = bottom - top + 8;

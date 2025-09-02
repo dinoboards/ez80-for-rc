@@ -33,9 +33,9 @@ uint8_t     current_display_mode   = 255;
 // text_colours_t font_color[256];
 
 tpoint_t     current_tpos             = {0, 0};
-trectangle_t tviewport                = {0, 26, 63, 0};
-uint8_t      last_text_column         = 63;
-uint8_t      last_text_row            = 26;
+trectangle_t tviewport                = {0, 26*8, 63*8, 0};
+uint24_t      last_text_column         = 63*8;
+uint24_t      last_text_row            = 26*8;
 uint8_t      current_tbg_colour       = 0;
 uint8_t      current_tfg_colour       = 1;
 uint8_t      current_mode_colour_mask = 1;

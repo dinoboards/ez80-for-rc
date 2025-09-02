@@ -3,16 +3,16 @@
 #include <v99x8.h>
 
 void vdu_lf(void) {
-  current_tpos.y++;
+  current_tpos.y += 8;
 
   if (current_tpos.y >= tviewport.bottom) {
-    current_tpos.y--;
+    current_tpos.y -= 8;
 
     {
-      uint24_t left   = tviewport.left * 8;
-      uint24_t top    = tviewport.top * 8;
-      uint24_t right  = tviewport.right * 8;
-      uint24_t bottom = tviewport.bottom * 8;
+      uint24_t left   = tviewport.left;
+      uint24_t top    = tviewport.top ;
+      uint24_t right  = tviewport.right;
+      uint24_t bottom = tviewport.bottom ;
 
       uint24_t width  = right - left + 8;
       uint24_t height = bottom - top;
