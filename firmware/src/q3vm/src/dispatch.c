@@ -1,7 +1,7 @@
 #include <host-functions.h>
 #include <stdint.h>
 
-extern uint24_t vdu(uint8_t);
+extern uint24_t vdu(uint24_t);
 extern void     vdu_init(void);
 
 int32_t vmMain(int24_t command, int24_t arg0, int24_t arg1, int24_t arg2) {

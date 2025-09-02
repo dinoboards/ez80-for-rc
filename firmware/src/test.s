@@ -62,95 +62,95 @@ longspike:
 
 _spike:
 
-	LD	A, 8
+	LD	A, 9
 	LD	B, 0
 	LD	C, 22	; mode
-	RST	%10
-	LD	C, 0 ; BBC Mode 0
-	RST	%10
+	RST.L	%10
+	LD	C, 1 ; BBC Mode 0
+	RST.L	%10
 
 	LD	C, 65
-	RST	%10
+	RST.L	%10
 
 	LD	C, 1
-	RST	%10
+	RST.L	%10
 
 	LD	C, 66
-	RST	%10
+	RST.L	%10
 
 	LD	C, 67
-	RST	%10
+	RST.L	%10
 
 	LD	C,18 ; gcol
-	RST	%10
+	RST.L	%10
 	LD	C, 0
-	RST	%10
+	RST.L	%10
 	LD	C, 1
-	RST	%10
+	RST.L	%10
 
 
 	LD	C, 25	; plot
-	RST	%10
+	RST.L	%10
 	LD	C, 4	; move line
-	RST	%10
+	RST.L	%10
 
 	LD	C, 0	; x low
-	RST	%10
+	RST.L	%10
 	LD	C, 0	; x high
-	RST	%10
+	RST.L	%10
 	LD	C, 0	; y low
-	RST	%10
+	RST.L	%10
 	LD	C, 0	; y high
-	RST	%10
+	RST.L	%10
 
 
 	LD	C, 25	; plot
-	RST	%10
+	RST.L	%10
 	LD	C, 5	; move line
-	RST	%10
+	RST.L	%10
 
 	LD	C, 255	; x low
-	RST	%10
+	RST.L	%10
 	LD	C, 4	; x high
-	RST	%10
+	RST.L	%10
 	LD	C, 255	; y low
-	RST	%10
+	RST.L	%10
 	LD	C, 3	; y high
-	RST	%10
+	RST.L	%10
 
 
 	LD	C, 25	; plot
-	RST	%10
+	RST.L	%10
 	LD	C, 85	; triangle
-	RST	%10
+	RST.L	%10
 
 	LD	C, %FF	; xlow
-	RST	%10
+	RST.L	%10
 	LD	C, 4	;x high
-	RST	%10
+	RST.L	%10
 
 	LD	C, 0	; y load
-	RST	%10
+	RST.L	%10
 	LD	C, 0	; y high
-	RST	%10
+	RST.L	%10
 
 	exx
-	ld	b, 200
+	ld	b, 0
 
 loopl:
 	exx
-	LD	C,13
-	RST	%10
-	LD	C,10
-	RST	%10
+	; LD	C,13
+	; RST.L	%10
+	; LD	C,10
+	; RST.L	%10
 	LD	C,'X'
-	RST	%10
+	RST.L	%10
 	LD	C,'X'
-	RST	%10
+	RST.L	%10
 	LD	C,'X'
-	RST	%10
+	RST.L	%10
 	LD	C,'X'
-	RST	%10
+	RST.L	%10
 
 	exx
 	djnz	loopl

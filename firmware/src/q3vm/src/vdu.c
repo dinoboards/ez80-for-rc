@@ -9,7 +9,7 @@
 void graphic_print_char(uint8_t ch);
 
 // Must be first function in file for vm
-int24_t vdu(uint8_t ch) {
+int24_t vdu(uint24_t ch) {
   if (vdu_required_length) {
     data[vdu_index++] = ch;
     if (vdu_index == vdu_required_length) {

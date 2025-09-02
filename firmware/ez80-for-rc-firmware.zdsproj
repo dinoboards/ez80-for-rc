@@ -43,6 +43,7 @@
 <file filter-key="">src\rst-10-drivers\rst-10-04-i2c-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-06-usb-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-07-emulator-function.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-08-crt-adl.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-08-crt.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
 <file filter-key="">src\rst-18-function.s</file>
@@ -189,7 +190,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0=700)
 LOCATE DATA at (BASE OF BSS - $0200)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0583
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -326,7 +327,7 @@ DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
 LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0D00)
 LOCATE DATA at (BASE OF BSS - $0200)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0583
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
