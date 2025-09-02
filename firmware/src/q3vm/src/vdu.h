@@ -113,7 +113,6 @@ extern RGB     default_2_colour_palette[16];
 extern RGB     default_4_colour_palette[16];
 extern RGB     default_16_colour_palette[16];
 
-
 extern rectangle_t    gviewport;
 extern rectangle_t    gsviewport;
 extern point_t        current_gpos;
@@ -127,8 +126,8 @@ extern text_colours_t font_color[256];
 
 extern tpoint_t     current_tpos;
 extern trectangle_t tviewport;
-extern uint24_t      last_text_column;
-extern uint24_t      last_text_row;
+extern uint24_t     last_text_column;
+extern uint24_t     last_text_row;
 extern uint8_t      current_tbg_colour;
 extern uint8_t      current_tfg_colour;
 extern uint8_t      current_mode_colour_mask;
@@ -136,7 +135,7 @@ extern uint8_t      current_mode_colour_mask;
 #define MAX_VDP_BYTES 16
 extern uint8_t data[MAX_VDP_BYTES];
 extern uint8_t vdu_index;
-extern uint8_t vdu_required_length;
+extern uint24_t vdu_required_length;
 
 extern mos_vdu_handler current_fn;
 

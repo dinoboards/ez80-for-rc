@@ -1,5 +1,5 @@
-#include "../../q3vm/host/vm.h"
 #include "../../q3vm/bytecode.h"
+#include "../../q3vm/host/vm.h"
 
 extern vm_t vm;
 

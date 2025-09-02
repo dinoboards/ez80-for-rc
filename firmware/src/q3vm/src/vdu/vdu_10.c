@@ -10,9 +10,9 @@ void vdu_lf(void) {
 
     {
       uint24_t left   = tviewport.left;
-      uint24_t top    = tviewport.top ;
+      uint24_t top    = tviewport.top;
       uint24_t right  = tviewport.right;
-      uint24_t bottom = tviewport.bottom ;
+      uint24_t bottom = tviewport.bottom;
 
       uint24_t width  = right - left + 8;
       uint24_t height = bottom - top;

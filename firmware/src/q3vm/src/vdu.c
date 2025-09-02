@@ -18,7 +18,12 @@ void vdu(uint24_t ch) {
     return;
   }
 
-  switch(ch) {
+  if (ch >= ' ') {
+    graphic_print_char(ch);
+    return;
+  }
+
+  switch (ch) {
   case '\n': {
     vdu_lf();
     return;
@@ -57,8 +62,5 @@ void vdu(uint24_t ch) {
     vdu_required_length = 5;
     return;
   }
-
-  default:
-    graphic_print_char(ch);
   }
 }

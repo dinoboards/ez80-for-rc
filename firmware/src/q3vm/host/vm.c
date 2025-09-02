@@ -419,7 +419,6 @@ intptr_t VM_Call(vm_t *vm, ustdint_t command, ...) {
   return r;
 }
 
-
 intptr_t VM_Call2(vm_t *vm, ustdint_t pc, ustdint_t command, ...) {
   intptr_t r;
 #ifdef MEMORY_SAFE

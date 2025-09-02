@@ -1,6 +1,6 @@
+#include "../../q3vm/bytecode.h"
 #include "../../q3vm/host/target-support.h"
 #include "../../q3vm/host/vm.h"
-#include "../../q3vm/bytecode.h"
 
 extern vm_t vm;
 

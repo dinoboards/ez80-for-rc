@@ -15,9 +15,9 @@ void vdu_cls() {
   // apply correct back colour
 
   const uint24_t left   = tviewport.left;
-  const uint24_t bottom = tviewport.bottom ;
-  const uint24_t right  = tviewport.right ;
-  const uint24_t top    = tviewport.top ;
+  const uint24_t bottom = tviewport.bottom;
+  const uint24_t right  = tviewport.right;
+  const uint24_t top    = tviewport.top;
 
   const uint24_t width  = right - left + 8;
   const uint24_t height = bottom - top + 8;

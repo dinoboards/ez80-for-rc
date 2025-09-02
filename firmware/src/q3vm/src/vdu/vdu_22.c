@@ -57,8 +57,8 @@
 void vdu_mode(void) {
   current_display_mode = data[0];
   tviewport.left       = 0;
-  last_text_row        = 31*8;
-  tviewport.bottom     = 31*8;
+  last_text_row        = 31 * 8;
+  tviewport.bottom     = 31 * 8;
   tviewport.top        = 0;
 
   switch (data[0]) {
@@ -68,10 +68,10 @@ void vdu_mode(void) {
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 1;
-    last_text_column         = 79*8;
-    tviewport.right          = 79*8;
-    last_text_row            = 31*8;
-    tviewport.bottom         = 31*8;
+    last_text_column         = 79 * 8;
+    tviewport.right          = 79 * 8;
+    last_text_row            = 31 * 8;
+    tviewport.bottom         = 31 * 8;
     vdp_set_super_graphic_26();
     break;
 
@@ -81,10 +81,10 @@ void vdu_mode(void) {
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 3;
-    last_text_column         = 39*8;
-    tviewport.right          = 39*8;
-    last_text_row            = 31*8;
-    tviewport.bottom         = 31*8;
+    last_text_column         = 39 * 8;
+    tviewport.right          = 39 * 8;
+    last_text_row            = 31 * 8;
+    tviewport.bottom         = 31 * 8;
     vdp_set_super_graphic_2();
     break;
 
@@ -94,10 +94,10 @@ void vdu_mode(void) {
     current_gfg_colour       = 7;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 15;
-    last_text_column         = 39*8;
-    tviewport.right          = 39*8;
-    last_text_row            = 29*8;
-    tviewport.bottom         = 29*8;
+    last_text_column         = 39 * 8;
+    tviewport.right          = 39 * 8;
+    last_text_row            = 29 * 8;
+    tviewport.bottom         = 29 * 8;
     vdp_set_super_graphic_2();
     break;
 
@@ -107,10 +107,10 @@ void vdu_mode(void) {
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 1;
-    last_text_column         = 79*8;
-    tviewport.right          = 79*8;
-    last_text_row            = 49*8;
-    tviewport.bottom         = 49*8;
+    last_text_column         = 79 * 8;
+    tviewport.right          = 79 * 8;
+    last_text_row            = 49 * 8;
+    tviewport.bottom         = 49 * 8;
     vdp_set_super_graphic_21();
     break;
 
@@ -120,10 +120,10 @@ void vdu_mode(void) {
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 1;
-    last_text_column         = 39*8;
-    tviewport.right          = 39*8;
-    last_text_row            = 29*8;
-    tviewport.bottom         = 29*8;
+    last_text_column         = 39 * 8;
+    tviewport.right          = 39 * 8;
+    last_text_row            = 29 * 8;
+    tviewport.bottom         = 29 * 8;
     vdp_set_super_graphic_2();
     break;
 
@@ -133,10 +133,10 @@ void vdu_mode(void) {
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 3;
-    last_text_column         = 39*8;
-    tviewport.right          = 39*8;
-    last_text_row            = 29*8;
-    tviewport.bottom         = 29*8;
+    last_text_column         = 39 * 8;
+    tviewport.right          = 39 * 8;
+    last_text_row            = 29 * 8;
+    tviewport.bottom         = 29 * 8;
     vdp_set_super_graphic_2();
     break;
 
@@ -146,10 +146,10 @@ void vdu_mode(void) {
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
     current_mode_colour_mask = 3;
-    last_text_column         = 31*8;
-    tviewport.right          = 31*8;
-    last_text_row            = 23*8;
-    tviewport.bottom         = 23*8;
+    last_text_column         = 31 * 8;
+    tviewport.right          = 31 * 8;
+    last_text_row            = 23 * 8;
+    tviewport.bottom         = 23 * 8;
     vdp_set_lines(192);
     vdp_set_refresh(50);
     vdp_set_graphic_4();
