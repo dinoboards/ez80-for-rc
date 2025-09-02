@@ -133,8 +133,8 @@ extern uint8_t      current_tfg_colour;
 extern uint8_t      current_mode_colour_mask;
 
 #define MAX_VDP_BYTES 16
-extern uint8_t data[MAX_VDP_BYTES];
-extern uint8_t vdu_index;
+extern uint8_t  data[MAX_VDP_BYTES];
+extern uint8_t  vdu_index;
 extern uint24_t vdu_required_length;
 
 extern mos_vdu_handler current_fn;

@@ -162,6 +162,8 @@ void vdu_mode(void) {
     vdu_not_implemented();
   }
 
+  vdp_set_remap(current_tbg_colour, current_tfg_colour); /* TODO: move this to where we set text colours */
+
   gsviewport.left   = convert_x(gviewport.left);
   gsviewport.top    = convert_y(gviewport.top);
   gsviewport.right  = convert_x(gviewport.right);

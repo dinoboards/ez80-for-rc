@@ -41,8 +41,8 @@ uint8_t      current_tfg_colour       = 1;
 uint8_t      current_mode_colour_mask = 1;
 
 #define MAX_VDP_BYTES 16
-uint8_t data[MAX_VDP_BYTES];
-uint8_t vdu_index           = 0;
+uint8_t  data[MAX_VDP_BYTES];
+uint8_t  vdu_index           = 0;
 uint24_t vdu_required_length = 0;
 
 mos_vdu_handler current_fn = NULL;
