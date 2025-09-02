@@ -5,7 +5,7 @@
 #define SC_MEMSET                           -2
 #define SC_VDP_CMD_LINE                     -3
 #define SC_VDP_CMD_LOGICAL_MOVE_VDP_TO_VRAM -4
-#define SC_VDP_CMD_MOVE_LINEAR_TO_XY        -5
+#define SC_VDP_DRAW_CHAR                    -5
 #define SC_VDP_CMD_MOVE_VRAM_TO_VRAM        -6
 #define SC_VDP_CMD_PSET                     -7
 #define SC_VDP_CMD_VDP_TO_VRAM              -8

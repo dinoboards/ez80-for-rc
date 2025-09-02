@@ -2,7 +2,7 @@ memcpy
 memset
 vdp_cmd_line
 vdp_cmd_logical_move_vdp_to_vram
-vdp_cmd_move_linear_to_xy
+vdp_draw_char
 vdp_cmd_move_vram_to_vram
 vdp_cmd_pset
 vdp_cmd_vdp_to_vram

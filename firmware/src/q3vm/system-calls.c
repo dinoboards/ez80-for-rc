@@ -25,6 +25,9 @@ void Com_Error(vmErrorCode_t level) {
 }
 #endif
 
+#define VRAM_SIZE         0x100000
+#define FONT_8X8_STORED_Y (VRAM_SIZE - (8 * 256))
+
 uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   const int id = -1 - args[0];
 
@@ -92,9 +95,10 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
 
   // extern void vdp_cmd_move_linear_to_xy(
   //   screen_addr_t src_addr, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t direction, uint8_t operation);
-  case SC_VDP_CMD_MOVE_LINEAR_TO_XY: {
-    vdp_cmd_move_linear_to_xy(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
-                              VMA_UINT24(21));
+  case SC_VDP_DRAW_CHAR: {
+    screen_addr_t addr = FONT_8X8_STORED_Y + (VMA_UINT24(3) * 8);
+    vdp_cmd_wait_completion();
+    vdp_cmd_move_linear_to_xy(addr, VMA_UINT24(6), VMA_UINT24(9), 8, 8, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_REMAP);
     return 0;
   }
 

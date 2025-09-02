@@ -5,10 +5,7 @@
 #include <v99x8-super.h>
 
 void graphic_print_char(uint24_t ch) {
-  screen_addr_t addr = FONT_8X8_STORED_Y + (ch * 8);
-
-  vdp_cmd_wait_completion();
-  vdp_cmd_move_linear_to_xy(addr, current_tpos.x, current_tpos.y, 8, 8, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_REMAP);
+  vdp_draw_char(ch, current_tpos.x, current_tpos.y);
 
   current_tpos.x += 8;
   if (current_tpos.x > tviewport.right) {

@@ -4,7 +4,7 @@ equ	memcpy                                 -1
 equ	memset                                 -2
 equ	vdp_cmd_line                           -3
 equ	vdp_cmd_logical_move_vdp_to_vram       -4
-equ	vdp_cmd_move_linear_to_xy              -5
+equ	vdp_draw_char                          -5
 equ	vdp_cmd_move_vram_to_vram              -6
 equ	vdp_cmd_pset                           -7
 equ	vdp_cmd_vdp_to_vram                    -8
