@@ -86,7 +86,6 @@ typedef void (*mos_vdu_handler)(void);
 extern void vdu_bs(void);
 extern void vdu_lf(void);
 extern void vdu_cls(void);
-extern void vdu_cr(void);
 extern void vdu_clg(void);
 extern void vdu_colour(void);
 extern void vdu_gcol(void);
@@ -98,6 +97,9 @@ extern void vdu_plot(void);
 extern void vdu_set_tviewport(void);
 extern void vdu_set_origin(void);
 extern void vdu_tab(void);
+
+#define vdu_cr()                                                                                                                   \
+  { current_tpos.x = tviewport.left; }
 
 extern void init_font_patterns(void);
 void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);
