@@ -26,7 +26,7 @@ address to be applied)
 
 */
 
-void graphic_print_char(uint8_t ch);
+void graphic_print_char(uint24_t ch);
 
 #if defined(__FN_ON_HOST__)
 uint32_t dispatch_hosted_fn(vm_t *vm, uint8_t *args) {

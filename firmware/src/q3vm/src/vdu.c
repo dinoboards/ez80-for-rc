@@ -2,14 +2,9 @@
 #include "stddef.h"
 #include <host-functions.h>
 
-// Y co-ord to store font data
-// need enough room to allow 2 pages for all modes
-#define FONT_Y_OFFSET (current_display_mode >= 16 ? 256 : (576 * 2))
+void graphic_print_char(uint24_t ch);
 
-void graphic_print_char(uint8_t ch);
-
-// Must be first function in file for vm
-int24_t vdu(uint24_t ch) {
+void vdu(uint24_t ch) {
   if (vdu_required_length) {
     data[vdu_index++] = ch;
     if (vdu_index == vdu_required_length) {
@@ -18,55 +13,52 @@ int24_t vdu(uint24_t ch) {
       vdu_index           = 0;
       vdu_required_length = 0;
 
-      fn(); // may error and not return
+      fn();
     }
-    return -1;
+    return;
   }
 
-  if (ch == '\n') {
+  switch(ch) {
+  case '\n': {
     vdu_lf();
-    return ch;
+    return;
   }
 
-  if (ch == 12) { // cls
+  case 12: {
     vdu_cls();
-    return -1;
+    return;
   }
 
-  if (ch == '\r') {
+  case '\r': {
     vdu_cr();
-    return ch;
+    return;
   }
 
-  if (ch == 17) { // vdu_colour
+  case 17: {
     current_fn          = vdu_colour;
     vdu_required_length = 1;
-    return -1;
+    return;
   }
 
-  if (ch == 18) { // gcol mode, colour
+  case 18: {
     current_fn          = vdu_gcol;
     vdu_required_length = 2;
-    return -1;
+    return;
   }
-  if (ch == 22) { // MODE
+
+  case 22: {
     current_fn          = vdu_mode;
     vdu_required_length = 1;
-    return -1;
+    return;
   }
 
-  if (ch == 25) { // plot
+  case 25: {
     current_fn          = vdu_plot;
     vdu_required_length = 5;
-    return -1;
+    return;
   }
 
-  graphic_print_char(ch);
-  // print to graphic screen at current text post
-
-  // for the time, lets dual output to serial and graphic
-  if (ch <= 127)
-    return ch;
-
-  return -1;
+  default:
+    graphic_print_char(ch);
+  }
 }

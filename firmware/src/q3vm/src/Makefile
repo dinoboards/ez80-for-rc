@@ -25,6 +25,7 @@ all: ../vm_bytecode.c
 
 bytecode.qvm: $(VDU_ASM_FILES) vdu/sysfont.asm
 	@$(Q3ASM) -v -l -m -o "bytecode"  dispatch.vmasm $(VDU_ASM_FILES) system-calls-ids.asm vdu/sysfont.asm
+	mv bytecode.h ../bytecode.h
 	@echo "Assembled vdu/bytecode.qvm"
 
 ../vm_bytecode.c ../vm_bytecode.h: ./bytecode.qvm
