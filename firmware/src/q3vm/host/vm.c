@@ -142,6 +142,18 @@
 /** Max. size of BSS section */
 #define VM_MAX_BSS_LENGTH 10485760
 
+/** The 64K segment that data/bss starts at */
+#define VM_VADDR_DATA_START 0x800000
+
+/** the 64K segment that lit starts at */
+#define VM_VADDR_LIT_START 0x000000
+
+/** the 64K segment that stack is mapped to */
+#define VM_ADDR_STACK_START 0xFE0000
+
+/** the 64K segment that i/o mapping starts at */
+#define VM_ADDR_IO_START 0xFF0000
+
 /******************************************************************************
  * TYPEDEFS
  ******************************************************************************/
@@ -242,9 +254,9 @@ int VM_Create(vm_t                      *vm,
     vm->vm_aborted   = vm_aborted;
     vm->codeBase     = &bytecode[sizeof(vmHeader_t)];
     vm->codeLength   = UINT(header->codeLength);
-    vm->litBase      = vm->codeBase + vm->codeLength;
+    vm->litBase      = vm->codeBase + vm->codeLength - VM_VADDR_DATA_START;
     vm->litLength    = UINT(header->litLength);
-    vm->dataBase     = workingRAM - UINT(header->litLength);
+    vm->dataBase     = workingRAM;
     vm->dataLength   = UINT(header->dataLength);
     vm->bssBase      = vm->dataBase + UINT(header->dataLength);
     vm->bssLength    = UINT(header->bssLength);
@@ -458,6 +470,27 @@ intptr_t VM_Call2(vm_t *vm, ustdint_t pc, ustdint_t command, ...) {
 
   return r;
 }
+
+#define VM_VWRaddrToAddress(vm, vaddr, dest)                                                                                       \
+  {                                                                                                                                \
+    if ((vaddr) >= VM_ADDR_STACK_START) {                                                                                          \
+      (dest) = &((vm).stackBase[(vaddr)]);                                                                                         \
+    } else {                                                                                                                       \
+      (dest) = &((vm).dataBase[(vaddr)]);                                                                                          \
+    }                                                                                                                              \
+  }
+
+#define VM_VRDaddrToAddress(vm, vaddr, src)                                                                                        \
+  {                                                                                                                                \
+    if ((vaddr) >= VM_ADDR_STACK_START) {                                                                                          \
+      (src) = &((vm).stackBase[(vaddr)]);                                                                                          \
+    } else if ((vaddr) < 0x80000) {                                                                                                \
+      (src) = &((vm).dataBase[(vaddr)]);                                                                                           \
+    } else {                                                                                                                       \
+      (src) = &((vm).litBase[(vaddr)]);                                                                                            \
+    }                                                                                                                              \
+  }
+
 void *VM_ArgPtr(intptr_t vmAddr, vm_t *const vm) {
   if (!vmAddr)
     return NULL;
@@ -468,13 +501,11 @@ void *VM_ArgPtr(intptr_t vmAddr, vm_t *const vm) {
   }
 #endif
 
-  if (vmAddr >= 0xFE0000 && vmAddr <= 0xFEFFFF)
-    return (void *)(&vm->stackBase[vmAddr]);
-
-  if (vmAddr < vm->litLength)
-    return (void *)(&vm->codeBase[vm->codeLength + vmAddr]);
-
-  return (void *)(vm->dataBase + (vmAddr));
+  {
+    const void *result = NULL;
+    VM_VRDaddrToAddress(*vm, vmAddr, result);
+    return (void *)result;
+  }
 }
 
 float VM_IntToFloat(int32_t x) {
@@ -523,57 +554,39 @@ uint8_t mock_io[4] = {1, 2, 3, 4};
 #ifdef MEMORY_SAFE
 
 bool VM_VerifyReadOK(vm_t *vm, vm_size_t vaddr, int size) {
-  if (vaddr >= 0xFF0000 && size == 1) {
-    return true; /* mem and i/o mapping via host */
+  if ((vaddr + size) <= vm->workingRAMLength)
+    return true;
+
+  if (vaddr >= VM_ADDR_IO_START && size == 1) {
+    return true; /* i/o mapping via host */
   }
 
   if (vaddr >= vm->stackBottom && vaddr <= vm->stackTop)
     return true;
 
-  if (vaddr < vm->litLength) {
-    if (vaddr + size > vm->litLength) {
-      vm->lastError = VM_LIT_ACCESS_ERROR;
-      Com_Printf_1("Memory Access Read Error - attempt read beyond LIT segment\n");
-      return false;
-    }
+  if (vaddr >= VM_VADDR_DATA_START && (vaddr + size - VM_VADDR_DATA_START) <= vm->litLength)
     return true;
-  }
 
-  if (vaddr + size > vm->workingRAMLength + vm->litLength) {
-    Com_Printf_5("Attempted to read at " FMT_INT24 "+(" FMT_INT24 ") -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, size,
-                 vm->workingRAMLength, vm->litLength);
-    vm->lastError = VM_RAM_ACCESS_ERROR;
-    return false;
-  }
-
-  return true;
+  Com_Printf_5("Attempted to read at " FMT_INT24 "+(" FMT_INT24 ") -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, size,
+               vm->workingRAMLength, vm->litLength);
+  vm->lastError = VM_RAM_ACCESS_ERROR;
+  return false;
 }
 
 bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
-  if (vaddr >= 0xFF0000 && size == 1)
+  if ((vaddr + size) <= vm->workingRAMLength)
     return true;
+
+  if (vaddr >= VM_ADDR_IO_START && size == 1)
+    return true; /* i/o mapping via host */
 
   if (vaddr >= vm->stackBottom && vaddr <= vm->stackTop)
     return true;
 
-  if (vaddr < vm->litLength) {
-    Com_Printf_4("Attempted to write at " FMT_INT24 " -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, vm->workingRAMLength,
-                 vm->litLength);
-
-    vm->lastError = VM_LIT_ACCESS_ERROR;
-    Com_Printf_1("Memory Access Write Error - attempt to write to LIT segment\n");
-    return false;
-  }
-
-  if (vaddr + size > vm->workingRAMLength + vm->litLength) {
-    Com_Printf_4("Attempted to write at " FMT_INT24 " -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, vm->workingRAMLength,
-                 vm->litLength);
-    vm->lastError = VM_RAM_ACCESS_ERROR;
-    Com_Printf_1("Memory Access Write Error - attempt to write beyond RAM\n");
-    return false;
-  }
-
-  return true;
+  Com_Printf_4("Attempted to write at " FMT_INT24 " -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, vm->workingRAMLength,
+               vm->litLength);
+  vm->lastError = VM_RAM_ACCESS_ERROR;
+  return false;
 }
 
 #else
@@ -583,68 +596,6 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
 #define VM_VerifyWriteOK(a, b, c) (1)
 
 #endif
-
-// For 8 bit access:
-// If address > FFFF00, map to Z80 I/O
-// if address > FF0000, map to a share host memory range (not yet implemented)
-// if address > FE0000, map to stack space
-#define VM_VWRaddrToAddress(vaddr) ((vaddr) >= 0xFE0000 ? &_vm.stackBase[(vaddr)] : &_vm.dataBase[(vaddr)])
-
-#define VM_VRDaddrToAddress(vaddr)                                                                                                 \
-  ((vaddr) >= 0xFE0000 ? &_vm.stackBase[(vaddr)] : (vaddr) < _vm.litLength ? &_vm.litBase[(vaddr)] : &_vm.dataBase[(vaddr)])
-
-#define VM_WriteAddrByte(vaddr, value)                                                                                             \
-  {                                                                                                                                \
-    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 1)) {                                                                                     \
-      ;                                                                                                                            \
-    } else {                                                                                                                       \
-                                                                                                                                   \
-      if (((vm_size_t)(vaddr) >= 0xFF0000)) {                                                                                      \
-        io_write(vaddr, value);                                                                                                    \
-      } else {                                                                                                                     \
-        if (vaddr >= 0xFE0000)                                                                                                     \
-          _vm.stackBase[(vm_size_t)(vaddr)] = value;                                                                               \
-        else                                                                                                                       \
-          _vm.dataBase[(vm_size_t)(vaddr)] = value;                                                                                \
-      }                                                                                                                            \
-    }                                                                                                                              \
-  }
-
-#define VM_WriteAddrUint16(vaddr, value)                                                                                           \
-  {                                                                                                                                \
-    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 2)) {                                                                                     \
-      ;                                                                                                                            \
-    } else {                                                                                                                       \
-      if (vaddr >= 0xFE0000)                                                                                                       \
-        *((uint16_t *)&_vm.stackBase[(vm_size_t)(vaddr)]) = value;                                                                 \
-      else                                                                                                                         \
-        *((uint16_t *)&_vm.dataBase[(vm_size_t)(vaddr)]) = value;                                                                  \
-    }                                                                                                                              \
-  }
-
-#define VM_WriteAddrUint24(vaddr, value)                                                                                           \
-  {                                                                                                                                \
-    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 3)) {                                                                                     \
-      ;                                                                                                                            \
-    } else {                                                                                                                       \
-      if (vaddr >= 0xFE0000)                                                                                                       \
-        *((uint24_t *)&_vm.stackBase[(vm_size_t)(vaddr)]) = value;                                                                 \
-      else                                                                                                                         \
-        *((uint24_t *)&_vm.dataBase[(vm_size_t)(vaddr)]) = value;                                                                  \
-    }                                                                                                                              \
-  }
-
-#define VM_WriteAddrUint32(vaddr, value)                                                                                           \
-  {                                                                                                                                \
-    if (!VM_VerifyWriteOK(_vm.vm, vaddr, 4)) {                                                                                     \
-      ;                                                                                                                            \
-    } else {                                                                                                                       \
-      if (vaddr >= 0xFE0000)                                                                                                       \
-        *((uint32_t *)&_vm.stackBase[(vm_size_t)(vaddr)]) = value;                                                                 \
-      else                                                                                                                         \
-        *((uint32_t *)&_vm.dataBase[(vm_size_t)(vaddr)]) = value;                                                                  \
-    }                                                                                                                              \
-  }
 
 #define opStack32  ((int32_t *)opStack8)
 #define opStackFlt ((float *)opStack8)
@@ -1187,8 +1138,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
         DISPATCH();
 #endif
 
-      dest = VM_VWRaddrToAddress(UINT(R1.uint24));
-      src  = VM_VRDaddrToAddress(UINT(R0.uint24));
+      VM_VWRaddrToAddress(_vm, UINT(R1.uint24), dest);
+      VM_VRDaddrToAddress(_vm, UINT(R0.uint24), src);
       Com_Memcpy(dest, src, UINT(R2.uint24));
 
       PC += INT24_INCREMENT;
@@ -1211,8 +1162,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
         DISPATCH();
 #endif
 
-      dest = VM_VWRaddrToAddress(UINT(R1.uint24));
-      src  = VM_VRDaddrToAddress(UINT(R0.uint24));
+      VM_VWRaddrToAddress(_vm, UINT(R1.uint24), dest);
+      VM_VRDaddrToAddress(_vm, UINT(R0.uint24), src);
       Com_Memcpy(dest, src, R2.uint8);
 
       PC += INT8_INCREMENT;
@@ -1235,8 +1186,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
         DISPATCH();
 #endif
 
-      dest = VM_VWRaddrToAddress(UINT(R1.uint24));
-      src  = VM_VRDaddrToAddress(UINT(R0.uint24));
+      VM_VWRaddrToAddress(_vm, UINT(R1.uint24), dest);
+      VM_VRDaddrToAddress(_vm, UINT(R0.uint24), src);
       Com_Memcpy(dest, src, R2.uint16);
 
       PC += INT16_INCREMENT;
@@ -1739,14 +1690,16 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 1))
         R_uint8 = 0;
       else {
-        if (UINT(R0_uint24(0)) >= 0xFF0000) {
-          R_uint8 = io_read(UINT(R0_uint24(0)));
-        } else if (UINT(R0_uint24(0)) >= 0xFE0000) {
-          R_uint8 = *(uint8_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-        } else if (UINT(R0_uint24(0)) < _vm.litLength) {
-          R_uint8 = *(uint8_t *)&_vm.litBase[UINT(R0_uint24(0))];
-        } else {
+        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
+          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
+            R_uint8 = *(uint8_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+          } else {
+            R_uint8 = io_read(UINT(R0_uint24(0)));
+          }
+        } else if (UINT(R0_uint24(0)) < 0x80000) {
           R_uint8 = *(uint8_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else {
+          R_uint8 = *(uint8_t *)&_vm.litBase[UINT(R0_uint24(0))];
         }
       }
       log3_2(FMT_INT8 " PUSHED uint8\n", R_uint16 & 0xFF);
@@ -1758,12 +1711,17 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 2))
         R_uint16 = 0;
       else {
-        if (UINT(R0_uint24(0)) >= 0xFE0000)
-          R_uint16 = *(uint16_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-        else if (UINT(R0_uint24(0)) < _vm.litLength)
-          R_uint16 = *(uint16_t *)&_vm.litBase[UINT(R0_uint24(0))];
-        else
+        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
+          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
+            R_uint16 = *(uint16_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+          } else {
+            R_uint16 = io_read(UINT(R0_uint24(0)));
+          }
+        } else if (UINT(R0_uint24(0)) < 0x80000) {
           R_uint16 = *(uint16_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else {
+          R_uint16 = *(uint16_t *)&_vm.litBase[UINT(R0_uint24(0))];
+        }
       }
       log3_2(FMT_INT16 " PUSHED uint16\n", R_uint16 & 0xFFFF);
       DISPATCH();
@@ -1774,12 +1732,17 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 3))
         R_uint24 = UINT24(0);
       else {
-        if (UINT(R0_uint24(0)) >= 0xFE0000)
-          R_uint24 = *(uint24_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-        else if (UINT(R0_uint24(0)) < _vm.litLength)
-          R_uint24 = *(uint24_t *)&_vm.litBase[UINT(R0_uint24(0))];
-        else
+        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
+          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
+            R_uint24 = *(uint24_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+          } else {
+            R_uint24 = UINT24(io_read(UINT(R0_uint24(0))));
+          }
+        } else if (UINT(R0_uint24(0)) < 0x80000) {
           R_uint24 = *(uint24_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else {
+          R_uint24 = *(uint24_t *)&_vm.litBase[UINT(R0_uint24(0))];
+        }
       }
       log3_2(FMT_INT24 " PUSHED uint24\n", UINT(R_uint24));
       DISPATCH();
@@ -1790,12 +1753,17 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
         R_uint32 = 0;
       else {
-        if (UINT(R0_uint24(0)) >= 0xFE0000)
-          R_uint32 = *(uint32_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-        else if (UINT(R0_uint24(0)) < _vm.litLength)
-          R_uint32 = *(uint32_t *)&_vm.litBase[UINT(R0_uint24(0))];
-        else
+        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
+          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
+            R_uint32 = *(uint32_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+          } else {
+            R_uint32 = io_read(UINT(R0_uint24(0)));
+          }
+        } else if (UINT(R0_uint24(0)) < 0x80000) {
           R_uint32 = *(uint32_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else {
+          R_uint32 = *(uint32_t *)&_vm.litBase[UINT(R0_uint24(0))];
+        }
       }
       log3_2(FMT_INT32 " PUSHED uint32\n", R_uint32);
       DISPATCH();
@@ -1991,31 +1959,68 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
     }
 
     case OP_STORE1: {
-      VM_WriteAddrByte((vm_operand_t)UINT(R1_uint24(0)), R0_uint8(0));
       log3_3("*(" FMT_INT24 ") = " FMT_INT8 "  MOVE\n", UINT(R1_uint24(0)), R0_uint8(0));
+      if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 1)) {
+        ;
+      } else {
+        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START) {
+          if (UINT(R1_uint24(0)) < VM_ADDR_IO_START) {
+            _vm.stackBase[UINT(R1_uint24(0))] = R0_uint8(0);
+          } else {
+            io_write(UINT(R1_uint24(0)), R0_uint8(0));
+          }
+        } else
+          _vm.dataBase[(UINT(R1_uint24(0)))] = R0_uint8(0);
+      }
       opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_STORE2: {
-      VM_WriteAddrUint16((vm_operand_t)UINT(R1_uint24(0)), R0_uint16(0));
       log3_3("*(" FMT_INT24 ") = " FMT_INT16 "  MOVE\n", UINT(R1_uint24(0)), R0_uint16(0));
+      if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 2)) {
+        ;
+      } else {
+        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START)
+          *((uint16_t *)&_vm.stackBase[UINT(R1_uint24(0))]) = R0_uint16(0);
+        else
+          *((uint16_t *)&_vm.dataBase[UINT(R1_uint24(0))]) = R0_uint16(0);
+      }
       opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_STORE3: {
       R0.uint24 = R0_uint24(0);
-      VM_WriteAddrUint24((vm_operand_t)UINT(R1_uint24(0)), R0.uint24);
-      log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE (3 bytes)\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));
+      log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE\n", UINT(R1_uint24(0)), UINT(R0_uint24(0)));
+      if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 3)) {
+        ;
+      } else {
+        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START)
+          *((uint24_t *)&_vm.stackBase[UINT(R1_uint24(0))]) = R0.uint24;
+        else
+          *((uint24_t *)&_vm.dataBase[UINT(R1_uint24(0))]) = R0.uint24;
+      }
+
       opStack8 -= 8;
       DISPATCH();
     }
 
     case OP_STORE4: {
       R0.uint32 = R0_uint32(0);
-      VM_WriteAddrUint32((vm_operand_t)UINT(R1_uint24(0)), R0.uint32);
       log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE\n", UINT(R1_uint24(0)), R0.uint32);
+
+      // VM_WriteAddrUint32((vm_operand_t)UINT(R1_uint24(0)), R0.uint32);
+
+      if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 4)) {
+        ;
+      } else {
+        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START)
+          *((uint32_t *)&_vm.stackBase[(vm_size_t)(UINT(R1_uint24(0)))]) = R0.uint32;
+        else
+          *((uint32_t *)&_vm.dataBase[(vm_size_t)(UINT(R1_uint24(0)))]) = R0.uint32;
+      }
+
       opStack8 -= 8;
       DISPATCH();
     }

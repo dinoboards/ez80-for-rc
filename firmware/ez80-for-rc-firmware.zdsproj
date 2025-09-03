@@ -532,8 +532,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="current_gpos" />
-<watch-element expression="l" />
+<watch-element expression="PC" />
+<watch-element expression="_vm" />
+<watch-element expression="*PC" />
 </watch-elements>
 
 <!-- breakpoint information -->

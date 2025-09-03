@@ -92,7 +92,8 @@ typedef enum {
   VM_ILLEGAL_OPCODE              = -18,
   VM_LIT_ACCESS_ERROR            = -19,
   VM_RAM_ACCESS_ERROR            = -20,
-  VM_NO_STACK_ASSIGNED           = -21
+  VM_NO_STACK_ASSIGNED           = -21,
+  VM_OPSTACK_OVERFLOW            = -22
 } vmErrorCode_t;
 
 /** File header of a bytecode .qvm file. Can be directly mapped to the start of
@@ -220,6 +221,7 @@ void VM_SetStackStore(vm_t *const vm, uint8_t *const stack, const vm_size_t stac
  * @param[in] command Basic parameter passed to the bytecode.
  * @return Return value of the function call by the VM. */
 intptr_t VM_Call(vm_t *vm, ustdint_t command, ...);
+intptr_t VM_Call2(vm_t *vm, ustdint_t pc, ustdint_t command, ...);
 
 /** Helper function for syscalls VMA(x) macro:
  * Translate from virtual machine memory to real machine memory.
