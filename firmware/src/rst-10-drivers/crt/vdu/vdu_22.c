@@ -1,3 +1,4 @@
+#include ".. /../../q3vm/vm-functions.h"
 #include "../vdu.h"
 #include <v99x8-super.h>
 
@@ -63,7 +64,7 @@ void vdu_mode(void) {
 
   switch (data[0]) {
   case 0:
-    vdu_set_default_palette_2();
+    vm_vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
@@ -72,11 +73,11 @@ void vdu_mode(void) {
     tviewport.right          = 79 * 8;
     last_text_row            = 31 * 8;
     tviewport.bottom         = 31 * 8;
-    vdp_set_super_graphic_26();
+    vm_vdp_set_super_graphic_26();
     break;
 
   case 1:
-    vdu_set_default_palette_16();
+    vm_vdu_set_default_palette_4();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
@@ -85,11 +86,11 @@ void vdu_mode(void) {
     tviewport.right          = 39 * 8;
     last_text_row            = 31 * 8;
     tviewport.bottom         = 31 * 8;
-    vdp_set_super_graphic_2();
+    vm_vdp_set_super_graphic_2();
     break;
 
   case 2:
-    vdu_set_default_palette_16();
+    vm_vdu_set_default_palette_16();
     current_tfg_colour       = 7;
     current_gfg_colour       = 7;
     current_tbg_colour       = 0;
@@ -98,11 +99,11 @@ void vdu_mode(void) {
     tviewport.right          = 39 * 8;
     last_text_row            = 29 * 8;
     tviewport.bottom         = 29 * 8;
-    vdp_set_super_graphic_2();
+    vm_vdp_set_super_graphic_2();
     break;
 
   case 3:
-    vdu_set_default_palette_2();
+    vm_vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
@@ -111,11 +112,11 @@ void vdu_mode(void) {
     tviewport.right          = 79 * 8;
     last_text_row            = 49 * 8;
     tviewport.bottom         = 49 * 8;
-    vdp_set_super_graphic_21();
+    vm_vdp_set_super_graphic_21();
     break;
 
   case 4:
-    vdu_set_default_palette_2();
+    vm_vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
@@ -124,11 +125,11 @@ void vdu_mode(void) {
     tviewport.right          = 39 * 8;
     last_text_row            = 29 * 8;
     tviewport.bottom         = 29 * 8;
-    vdp_set_super_graphic_2();
+    vm_vdp_set_super_graphic_2();
     break;
 
   case 5:
-    vdu_set_default_palette_16();
+    vm_vdu_set_default_palette_4();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
@@ -137,11 +138,11 @@ void vdu_mode(void) {
     tviewport.right          = 39 * 8;
     last_text_row            = 29 * 8;
     tviewport.bottom         = 29 * 8;
-    vdp_set_super_graphic_2();
+    vm_vdp_set_super_graphic_2();
     break;
 
   case 16:
-    vdu_set_default_palette_16();
+    vm_vdu_set_default_palette_16();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
@@ -150,9 +151,9 @@ void vdu_mode(void) {
     tviewport.right          = 31 * 8;
     last_text_row            = 23 * 8;
     tviewport.bottom         = 23 * 8;
-    vdp_set_lines(192);
-    vdp_set_refresh(50);
-    vdp_set_graphic_4();
+    vm_vdp_set_lines(192);
+    vm_vdp_set_refresh(50);
+    vm_vdp_set_graphic_4();
     break;
 
   case 255:

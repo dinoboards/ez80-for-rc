@@ -861,14 +861,6 @@ clean:
             $(RM) "$(WORKDIR)\vm-functions.lst"
 	@if exist "$(WORKDIR)\vm-functions.src"  \
             $(RM) "$(WORKDIR)\vm-functions.src"
-	@if exist "$(WORKDIR)\vdu_set_palette.obj"  \
-            $(RM) "$(WORKDIR)\vdu_set_palette.obj"
-	@if exist "$(WORKDIR)\vdu_set_palette.lis"  \
-            $(RM) "$(WORKDIR)\vdu_set_palette.lis"
-	@if exist "$(WORKDIR)\vdu_set_palette.lst"  \
-            $(RM) "$(WORKDIR)\vdu_set_palette.lst"
-	@if exist "$(WORKDIR)\vdu_set_palette.src"  \
-            $(RM) "$(WORKDIR)\vdu_set_palette.src"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -985,8 +977,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
             $(WORKDIR_ESCSPACE)\zexall.obj  \
-            $(WORKDIR_ESCSPACE)\vm-functions.obj  \
-            $(WORKDIR_ESCSPACE)\vdu_set_palette.obj
+            $(WORKDIR_ESCSPACE)\vm-functions.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -2180,8 +2171,4 @@ $(WORKDIR_ESCSPACE)\vm-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-functions.c"
-
-$(WORKDIR_ESCSPACE)\vdu_set_palette.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_set_palette.c
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_set_palette.c"
 

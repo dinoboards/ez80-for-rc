@@ -24,7 +24,7 @@ static const RGB default_16_colour_palette[16] = {RGB_BLACK,
                                                   RGB_FLASHING_CYAN_RED,
                                                   RGB_FLASHING_WHITE_BLACK};
 
-static void vdp_set_palette(RGB *pPalette) {
+static void _vdp_set_palette(const RGB *pPalette) {
   uint8_t c;
 #pragma asm DI
   for (c = 0; c < 16; c++) {
@@ -36,8 +36,8 @@ static void vdp_set_palette(RGB *pPalette) {
 #pragma asm EI
 }
 
-void vdu_set_default_palette_2() { vdp_set_palette(default_2_colour_palette); }
+void vdu_set_default_palette_2(void) { _vdp_set_palette(default_2_colour_palette); }
 
-void vdu_set_default_palette_4() { vdp_set_palette(default_4_colour_palette); }
+void vdu_set_default_palette_4(void) { _vdp_set_palette(default_4_colour_palette); }
 
-void vdu_set_default_palette_16() { vdp_set_palette(default_16_colour_palette); }
+void vdu_set_default_palette_16(void) { _vdp_set_palette(default_16_colour_palette); }
