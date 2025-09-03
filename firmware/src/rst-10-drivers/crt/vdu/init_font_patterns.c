@@ -1,5 +1,5 @@
 #include "../vdu.h"
-#include "../v99x8-super.h"
+#include <v99x8-super.h>
 
 void init_font_patterns(void) {
   vdp_set_super_graphic_1(); // can only access higher memory directly, when super mode is on

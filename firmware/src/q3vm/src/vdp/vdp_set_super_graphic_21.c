@@ -1,7 +1,7 @@
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../v99x8-super.h"
+#include <v99x8-super.h>
 
 void vdp_set_super_graphic_21(void) {
   vdp_set_super_graphic_5();

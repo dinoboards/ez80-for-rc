@@ -3,7 +3,7 @@ BIN=./bin/
 MAKEFLAGS += --no-print-directory
 
 .PHONY: debug
-debug: #VM_VDU src/q3vm/src/system-calls-ids.h
+debug: VM_VDU src/q3vm/src/system-calls-ids.h
 	@wine make-debug.bat
 
 .PHONY: release

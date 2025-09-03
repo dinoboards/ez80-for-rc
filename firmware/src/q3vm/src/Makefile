@@ -14,17 +14,18 @@ VM_C_SOURCE := $(wildcard ../host/*)
 VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
 INCLUDE_PATH := ../../../../../../../../../../../../..$(shell realpath ../includes/)
+HOST_INCLUDE_PATH := ../../../../../../../../../../../home/dean/dinoboards/ez80-for-rc/firmware/src/includes/
 
 all: ../vm_bytecode.c
 	@echo > /dev/null
 
 %.vmasm: %.c $(INCLUDES)
-	@$(LCC) -A -I$(INCLUDE_PATH) -DQ3_VM -S -Wf-target=bytecode -Wf-g -o $@ $<
+	@$(LCC) -A  -I$(INCLUDE_PATH) -I$(HOST_INCLUDE_PATH) -DQ3_VM -S -Wf-target=bytecode -Wf-g -o $@ $<
 	@echo "Compiled $<"
 
 
-bytecode.qvm: $(VDU_ASM_FILES) vdu/sysfont.asm
-	@$(Q3ASM) -v -l -m -o "bytecode"  dispatch.vmasm $(VDU_ASM_FILES) system-calls-ids.asm vdu/sysfont.asm
+bytecode.qvm: $(VDU_ASM_FILES) #vdu/sysfont.asm
+	@$(Q3ASM) -v -l -m -o "bytecode"  $(VDU_ASM_FILES) system-calls-ids.asm host-data.asm #vdu/sysfont.asm
 	mv bytecode.h ../bytecode.h
 	@echo "Assembled vdu/bytecode.qvm"
 

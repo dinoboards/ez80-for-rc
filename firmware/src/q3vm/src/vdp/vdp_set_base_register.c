@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "../v99x8.h"
+#include <v99x8.h>
 #include <ez80.h>
 
 void set_base_registers(void) {

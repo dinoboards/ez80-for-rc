@@ -1,7 +1,7 @@
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../v99x8.h"
+#include <v99x8.h>
 
 void vdp_set_refresh(const uint8_t refresh_rate) {
   switch (refresh_rate) {

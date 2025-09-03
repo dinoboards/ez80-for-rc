@@ -1,7 +1,7 @@
 // #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../v99x8.h"
+#include <v99x8.h>
 
 screen_size_t vdp_get_screen_height(void) {
   switch (vdp_current_mode) {

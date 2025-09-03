@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "../v99x8.h"
+#include <v99x8.h>
 
 void vdp_set_palette(RGB *pPalette) {
   uint8_t c;

@@ -1,9 +1,9 @@
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../v99x8.h"
+#include <v99x8.h>
 #ifdef VDP_SUPER_HDMI
-#include "../v99x8-super.h"
+#include <v99x8-super.h>
 #endif
 
 void vdp_set_graphic_7(void) {

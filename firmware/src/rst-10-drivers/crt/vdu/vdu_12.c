@@ -1,5 +1,5 @@
 #include "../vdu.h"
-#include "../v99x8.h"
+#include <v99x8.h>
 
 /*
 // VDU 12

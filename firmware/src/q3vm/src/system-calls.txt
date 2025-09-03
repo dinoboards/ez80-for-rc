@@ -1,14 +1,5 @@
 memcpy
 memset
-vdp_cmd_line
-vdp_cmd_logical_move_vdp_to_vram
-vdp_draw_char
-vdp_cmd_move_vram_to_vram
-vdp_cmd_pset
-vdp_cmd_vdp_to_vram
-vdp_cmd_wait_completion
-vdp_cpu_to_vram
-vdp_draw_line
 print_string
-putchar
-trap_Error
+set_host_var_vdp_current_mode
+get_host_var_data

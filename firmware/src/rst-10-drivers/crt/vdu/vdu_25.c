@@ -1,6 +1,6 @@
 #include "../vdu.h"
 #include <stdint.h>
-#include "../v99x8.h"
+#include <v99x8.h>
 
 extern bool line_clip(line_t *l);
 extern void fill_triangle(const point_t *vt1, const point_t *vt2, const point_t *vt3);

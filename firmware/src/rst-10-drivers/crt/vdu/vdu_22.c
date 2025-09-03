@@ -1,5 +1,5 @@
 #include "../vdu.h"
-#include "../v99x8-super.h"
+#include <v99x8-super.h>
 
 // VDU: 22 (1 byte)
 

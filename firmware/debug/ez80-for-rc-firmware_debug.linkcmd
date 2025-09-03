@@ -181,19 +181,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_draw_line.obj", \
  ".\vdp_get_screen_height.obj", \
  ".\vdp_get_screen_width.obj", \
- ".\vdp_set_base_register.obj", \
- ".\vdp_set_graphic_4.obj", \
- ".\vdp_set_graphic_7.obj", \
- ".\vdp_set_lines.obj", \
- ".\vdp_set_palette.obj", \
- ".\vdp_set_refresh.obj", \
  ".\vdp_set_remap.obj", \
- ".\vdp_set_super_graphic_1.obj", \
- ".\vdp_set_super_graphic_10.obj", \
- ".\vdp_set_super_graphic_2.obj", \
- ".\vdp_set_super_graphic_21.obj", \
- ".\vdp_set_super_graphic_26.obj", \
- ".\vdp_set_super_graphic_5.obj", \
  ".\vdu.obj", \
  ".\vdu_10.obj", \
  ".\vdu_12.obj", \
@@ -219,6 +207,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
+ ".\vm-functions.obj", \
+ ".\vdp_set_palette.obj", \
  "C:\ZDS\lib\std\chelpD.lib", \
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \
