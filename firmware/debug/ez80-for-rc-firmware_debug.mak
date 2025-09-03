@@ -235,6 +235,14 @@ clean:
             $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lis"
 	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lst"  \
             $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.lst"
+	@if exist "$(WORKDIR)\graphic_print_char.obj"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.obj"
+	@if exist "$(WORKDIR)\graphic_print_char.lis"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.lis"
+	@if exist "$(WORKDIR)\graphic_print_char.lst"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.lst"
+	@if exist "$(WORKDIR)\graphic_print_char.src"  \
+            $(RM) "$(WORKDIR)\graphic_print_char.src"
 	@if exist "$(WORKDIR)\i2c-calculate.obj"  \
             $(RM) "$(WORKDIR)\i2c-calculate.obj"
 	@if exist "$(WORKDIR)\i2c-calculate.lis"  \
@@ -255,6 +263,14 @@ clean:
             $(RM) "$(WORKDIR)\init-f92.lis"
 	@if exist "$(WORKDIR)\init-f92.lst"  \
             $(RM) "$(WORKDIR)\init-f92.lst"
+	@if exist "$(WORKDIR)\init_font_patterns.obj"  \
+            $(RM) "$(WORKDIR)\init_font_patterns.obj"
+	@if exist "$(WORKDIR)\init_font_patterns.lis"  \
+            $(RM) "$(WORKDIR)\init_font_patterns.lis"
+	@if exist "$(WORKDIR)\init_font_patterns.lst"  \
+            $(RM) "$(WORKDIR)\init_font_patterns.lst"
+	@if exist "$(WORKDIR)\init_font_patterns.src"  \
+            $(RM) "$(WORKDIR)\init_font_patterns.src"
 	@if exist "$(WORKDIR)\internal-hiram.obj"  \
             $(RM) "$(WORKDIR)\internal-hiram.obj"
 	@if exist "$(WORKDIR)\internal-hiram.lis"  \
@@ -289,6 +305,30 @@ clean:
             $(RM) "$(WORKDIR)\kyb_driverasm.lis"
 	@if exist "$(WORKDIR)\kyb_driverasm.lst"  \
             $(RM) "$(WORKDIR)\kyb_driverasm.lst"
+	@if exist "$(WORKDIR)\line_clip.obj"  \
+            $(RM) "$(WORKDIR)\line_clip.obj"
+	@if exist "$(WORKDIR)\line_clip.lis"  \
+            $(RM) "$(WORKDIR)\line_clip.lis"
+	@if exist "$(WORKDIR)\line_clip.lst"  \
+            $(RM) "$(WORKDIR)\line_clip.lst"
+	@if exist "$(WORKDIR)\line_clip.src"  \
+            $(RM) "$(WORKDIR)\line_clip.src"
+	@if exist "$(WORKDIR)\line_new.obj"  \
+            $(RM) "$(WORKDIR)\line_new.obj"
+	@if exist "$(WORKDIR)\line_new.lis"  \
+            $(RM) "$(WORKDIR)\line_new.lis"
+	@if exist "$(WORKDIR)\line_new.lst"  \
+            $(RM) "$(WORKDIR)\line_new.lst"
+	@if exist "$(WORKDIR)\line_new.src"  \
+            $(RM) "$(WORKDIR)\line_new.src"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.obj"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.obj"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.lis"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.lis"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.lst"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.lst"
+	@if exist "$(WORKDIR)\logic_to_physical_coords.src"  \
+            $(RM) "$(WORKDIR)\logic_to_physical_coords.src"
 	@if exist "$(WORKDIR)\main.obj"  \
             $(RM) "$(WORKDIR)\main.obj"
 	@if exist "$(WORKDIR)\main.lis"  \
@@ -303,6 +343,14 @@ clean:
             $(RM) "$(WORKDIR)\mse_driver.lst"
 	@if exist "$(WORKDIR)\mse_driver.src"  \
             $(RM) "$(WORKDIR)\mse_driver.src"
+	@if exist "$(WORKDIR)\point_new.obj"  \
+            $(RM) "$(WORKDIR)\point_new.obj"
+	@if exist "$(WORKDIR)\point_new.lis"  \
+            $(RM) "$(WORKDIR)\point_new.lis"
+	@if exist "$(WORKDIR)\point_new.lst"  \
+            $(RM) "$(WORKDIR)\point_new.lst"
+	@if exist "$(WORKDIR)\point_new.src"  \
+            $(RM) "$(WORKDIR)\point_new.src"
 	@if exist "$(WORKDIR)\protocol.obj"  \
             $(RM) "$(WORKDIR)\protocol.obj"
 	@if exist "$(WORKDIR)\protocol.lis"  \
@@ -399,6 +447,12 @@ clean:
             $(RM) "$(WORKDIR)\scsi_driver.lst"
 	@if exist "$(WORKDIR)\scsi_driver.src"  \
             $(RM) "$(WORKDIR)\scsi_driver.src"
+	@if exist "$(WORKDIR)\sysfont.obj"  \
+            $(RM) "$(WORKDIR)\sysfont.obj"
+	@if exist "$(WORKDIR)\sysfont.lis"  \
+            $(RM) "$(WORKDIR)\sysfont.lis"
+	@if exist "$(WORKDIR)\sysfont.lst"  \
+            $(RM) "$(WORKDIR)\sysfont.lst"
 	@if exist "$(WORKDIR)\system-calls.obj"  \
             $(RM) "$(WORKDIR)\system-calls.obj"
 	@if exist "$(WORKDIR)\system-calls.lis"  \
@@ -427,6 +481,14 @@ clean:
             $(RM) "$(WORKDIR)\transfers.lst"
 	@if exist "$(WORKDIR)\transfers.src"  \
             $(RM) "$(WORKDIR)\transfers.src"
+	@if exist "$(WORKDIR)\triangle.obj"  \
+            $(RM) "$(WORKDIR)\triangle.obj"
+	@if exist "$(WORKDIR)\triangle.lis"  \
+            $(RM) "$(WORKDIR)\triangle.lis"
+	@if exist "$(WORKDIR)\triangle.lst"  \
+            $(RM) "$(WORKDIR)\triangle.lst"
+	@if exist "$(WORKDIR)\triangle.src"  \
+            $(RM) "$(WORKDIR)\triangle.src"
 	@if exist "$(WORKDIR)\uart-calculate.obj"  \
             $(RM) "$(WORKDIR)\uart-calculate.obj"
 	@if exist "$(WORKDIR)\uart-calculate.lis"  \
@@ -515,6 +577,22 @@ clean:
             $(RM) "$(WORKDIR)\usb_state.lst"
 	@if exist "$(WORKDIR)\usb_state.src"  \
             $(RM) "$(WORKDIR)\usb_state.src"
+	@if exist "$(WORKDIR)\v99x8.obj"  \
+            $(RM) "$(WORKDIR)\v99x8.obj"
+	@if exist "$(WORKDIR)\v99x8.lis"  \
+            $(RM) "$(WORKDIR)\v99x8.lis"
+	@if exist "$(WORKDIR)\v99x8.lst"  \
+            $(RM) "$(WORKDIR)\v99x8.lst"
+	@if exist "$(WORKDIR)\v99x8.src"  \
+            $(RM) "$(WORKDIR)\v99x8.src"
+	@if exist "$(WORKDIR)\variables.obj"  \
+            $(RM) "$(WORKDIR)\variables.obj"
+	@if exist "$(WORKDIR)\variables.lis"  \
+            $(RM) "$(WORKDIR)\variables.lis"
+	@if exist "$(WORKDIR)\variables.lst"  \
+            $(RM) "$(WORKDIR)\variables.lst"
+	@if exist "$(WORKDIR)\variables.src"  \
+            $(RM) "$(WORKDIR)\variables.src"
 	@if exist "$(WORKDIR)\vdp_cmd_line.obj"  \
             $(RM) "$(WORKDIR)\vdp_cmd_line.obj"
 	@if exist "$(WORKDIR)\vdp_cmd_line.lis"  \
@@ -571,6 +649,126 @@ clean:
             $(RM) "$(WORKDIR)\vdp_draw_line.lst"
 	@if exist "$(WORKDIR)\vdp_draw_line.src"  \
             $(RM) "$(WORKDIR)\vdp_draw_line.src"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_height.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_height.src"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.obj"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.lis"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.lst"
+	@if exist "$(WORKDIR)\vdp_get_screen_width.src"  \
+            $(RM) "$(WORKDIR)\vdp_get_screen_width.src"
+	@if exist "$(WORKDIR)\vdp_set_base_register.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_base_register.obj"
+	@if exist "$(WORKDIR)\vdp_set_base_register.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_base_register.lis"
+	@if exist "$(WORKDIR)\vdp_set_base_register.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_base_register.lst"
+	@if exist "$(WORKDIR)\vdp_set_base_register.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_base_register.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_4.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_4.src"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.obj"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.lis"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.lst"
+	@if exist "$(WORKDIR)\vdp_set_graphic_7.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_graphic_7.src"
+	@if exist "$(WORKDIR)\vdp_set_lines.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.obj"
+	@if exist "$(WORKDIR)\vdp_set_lines.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.lis"
+	@if exist "$(WORKDIR)\vdp_set_lines.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.lst"
+	@if exist "$(WORKDIR)\vdp_set_lines.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_lines.src"
+	@if exist "$(WORKDIR)\vdp_set_palette.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.obj"
+	@if exist "$(WORKDIR)\vdp_set_palette.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.lis"
+	@if exist "$(WORKDIR)\vdp_set_palette.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.lst"
+	@if exist "$(WORKDIR)\vdp_set_palette.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_palette.src"
+	@if exist "$(WORKDIR)\vdp_set_refresh.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.obj"
+	@if exist "$(WORKDIR)\vdp_set_refresh.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.lis"
+	@if exist "$(WORKDIR)\vdp_set_refresh.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.lst"
+	@if exist "$(WORKDIR)\vdp_set_refresh.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_refresh.src"
+	@if exist "$(WORKDIR)\vdp_set_remap.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.obj"
+	@if exist "$(WORKDIR)\vdp_set_remap.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.lis"
+	@if exist "$(WORKDIR)\vdp_set_remap.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.lst"
+	@if exist "$(WORKDIR)\vdp_set_remap.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_remap.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_1.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_1.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_10.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_10.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_2.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_2.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_21.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_21.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_26.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_26.src"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.obj"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.obj"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.lis"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.lis"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.lst"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.lst"
+	@if exist "$(WORKDIR)\vdp_set_super_graphic_5.src"  \
+            $(RM) "$(WORKDIR)\vdp_set_super_graphic_5.src"
 	@if exist "$(WORKDIR)\vdu.obj"  \
             $(RM) "$(WORKDIR)\vdu.obj"
 	@if exist "$(WORKDIR)\vdu.lis"  \
@@ -579,6 +777,54 @@ clean:
             $(RM) "$(WORKDIR)\vdu.lst"
 	@if exist "$(WORKDIR)\vdu.src"  \
             $(RM) "$(WORKDIR)\vdu.src"
+	@if exist "$(WORKDIR)\vdu_10.obj"  \
+            $(RM) "$(WORKDIR)\vdu_10.obj"
+	@if exist "$(WORKDIR)\vdu_10.lis"  \
+            $(RM) "$(WORKDIR)\vdu_10.lis"
+	@if exist "$(WORKDIR)\vdu_10.lst"  \
+            $(RM) "$(WORKDIR)\vdu_10.lst"
+	@if exist "$(WORKDIR)\vdu_10.src"  \
+            $(RM) "$(WORKDIR)\vdu_10.src"
+	@if exist "$(WORKDIR)\vdu_12.obj"  \
+            $(RM) "$(WORKDIR)\vdu_12.obj"
+	@if exist "$(WORKDIR)\vdu_12.lis"  \
+            $(RM) "$(WORKDIR)\vdu_12.lis"
+	@if exist "$(WORKDIR)\vdu_12.lst"  \
+            $(RM) "$(WORKDIR)\vdu_12.lst"
+	@if exist "$(WORKDIR)\vdu_12.src"  \
+            $(RM) "$(WORKDIR)\vdu_12.src"
+	@if exist "$(WORKDIR)\vdu_17.obj"  \
+            $(RM) "$(WORKDIR)\vdu_17.obj"
+	@if exist "$(WORKDIR)\vdu_17.lis"  \
+            $(RM) "$(WORKDIR)\vdu_17.lis"
+	@if exist "$(WORKDIR)\vdu_17.lst"  \
+            $(RM) "$(WORKDIR)\vdu_17.lst"
+	@if exist "$(WORKDIR)\vdu_17.src"  \
+            $(RM) "$(WORKDIR)\vdu_17.src"
+	@if exist "$(WORKDIR)\vdu_18.obj"  \
+            $(RM) "$(WORKDIR)\vdu_18.obj"
+	@if exist "$(WORKDIR)\vdu_18.lis"  \
+            $(RM) "$(WORKDIR)\vdu_18.lis"
+	@if exist "$(WORKDIR)\vdu_18.lst"  \
+            $(RM) "$(WORKDIR)\vdu_18.lst"
+	@if exist "$(WORKDIR)\vdu_18.src"  \
+            $(RM) "$(WORKDIR)\vdu_18.src"
+	@if exist "$(WORKDIR)\vdu_22.obj"  \
+            $(RM) "$(WORKDIR)\vdu_22.obj"
+	@if exist "$(WORKDIR)\vdu_22.lis"  \
+            $(RM) "$(WORKDIR)\vdu_22.lis"
+	@if exist "$(WORKDIR)\vdu_22.lst"  \
+            $(RM) "$(WORKDIR)\vdu_22.lst"
+	@if exist "$(WORKDIR)\vdu_22.src"  \
+            $(RM) "$(WORKDIR)\vdu_22.src"
+	@if exist "$(WORKDIR)\vdu_25.obj"  \
+            $(RM) "$(WORKDIR)\vdu_25.obj"
+	@if exist "$(WORKDIR)\vdu_25.lis"  \
+            $(RM) "$(WORKDIR)\vdu_25.lis"
+	@if exist "$(WORKDIR)\vdu_25.lst"  \
+            $(RM) "$(WORKDIR)\vdu_25.lst"
+	@if exist "$(WORKDIR)\vdu_25.src"  \
+            $(RM) "$(WORKDIR)\vdu_25.src"
 	@if exist "$(WORKDIR)\vdu_init.obj"  \
             $(RM) "$(WORKDIR)\vdu_init.obj"
 	@if exist "$(WORKDIR)\vdu_init.lis"  \
@@ -587,6 +833,14 @@ clean:
             $(RM) "$(WORKDIR)\vdu_init.lst"
 	@if exist "$(WORKDIR)\vdu_init.src"  \
             $(RM) "$(WORKDIR)\vdu_init.src"
+	@if exist "$(WORKDIR)\vdu_not_implemented.obj"  \
+            $(RM) "$(WORKDIR)\vdu_not_implemented.obj"
+	@if exist "$(WORKDIR)\vdu_not_implemented.lis"  \
+            $(RM) "$(WORKDIR)\vdu_not_implemented.lis"
+	@if exist "$(WORKDIR)\vdu_not_implemented.lst"  \
+            $(RM) "$(WORKDIR)\vdu_not_implemented.lst"
+	@if exist "$(WORKDIR)\vdu_not_implemented.src"  \
+            $(RM) "$(WORKDIR)\vdu_not_implemented.src"
 	@if exist "$(WORKDIR)\vectors16.obj"  \
             $(RM) "$(WORKDIR)\vectors16.obj"
 	@if exist "$(WORKDIR)\vectors16.lis"  \
@@ -722,16 +976,22 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\enumerate_hub.obj  \
             $(WORKDIR_ESCSPACE)\enumerate_storage.obj  \
             $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj  \
+            $(WORKDIR_ESCSPACE)\graphic_print_char.obj  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
             $(WORKDIR_ESCSPACE)\init-clocks.obj  \
             $(WORKDIR_ESCSPACE)\init-f92.obj  \
+            $(WORKDIR_ESCSPACE)\init_font_patterns.obj  \
             $(WORKDIR_ESCSPACE)\internal-hiram.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driver.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driver_event.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driver_eventasm.obj  \
             $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
+            $(WORKDIR_ESCSPACE)\line_clip.obj  \
+            $(WORKDIR_ESCSPACE)\line_new.obj  \
+            $(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\mse_driver.obj  \
+            $(WORKDIR_ESCSPACE)\point_new.obj  \
             $(WORKDIR_ESCSPACE)\protocol.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
@@ -747,10 +1007,12 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
+            $(WORKDIR_ESCSPACE)\sysfont.obj  \
             $(WORKDIR_ESCSPACE)\system-calls.obj  \
             $(WORKDIR_ESCSPACE)\system-vars.obj  \
             $(WORKDIR_ESCSPACE)\test.obj  \
             $(WORKDIR_ESCSPACE)\transfers.obj  \
+            $(WORKDIR_ESCSPACE)\triangle.obj  \
             $(WORKDIR_ESCSPACE)\uart-calculate.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-add-to.obj  \
             $(WORKDIR_ESCSPACE)\uart-rx-buffer-empty.obj  \
@@ -764,6 +1026,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb-tick-sr.obj  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
+            $(WORKDIR_ESCSPACE)\v99x8.obj  \
+            $(WORKDIR_ESCSPACE)\variables.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj  \
@@ -773,8 +1037,30 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_wait_completion.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cpu_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_draw_line.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_base_register.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_graphic_7.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_lines.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_palette.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_refresh.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_remap.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_10.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_2.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_21.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_26.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_10.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_12.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_17.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_18.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_22.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_25.obj  \
             $(WORKDIR_ESCSPACE)\vdu_init.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_not_implemented.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
             $(WORKDIR_ESCSPACE)\vm-init.obj  \
             $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj  \
@@ -1029,6 +1315,10 @@ $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\gpio-b4-isr-marshaller.s"
 
+$(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\graphic_print_char.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\graphic_print_char.c"
+
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\i2c\i2c-calculate.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
@@ -1050,6 +1340,10 @@ $(WORKDIR_ESCSPACE)\init-f92.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\init-f92.asm"
+
+$(WORKDIR_ESCSPACE)\init_font_patterns.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\init_font_patterns.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\init_font_patterns.c"
 
 $(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
             $(PRJDIR_ESCSPACE)\src\internal-hiram.s  \
@@ -1108,6 +1402,18 @@ $(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s"
 
+$(WORKDIR_ESCSPACE)\line_clip.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_25\line_clip.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_25\line_clip.c"
+
+$(WORKDIR_ESCSPACE)\line_new.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\line_new.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\line_new.c"
+
+$(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\logic_to_physical_coords.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\logic_to_physical_coords.c"
+
 $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\src\main.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1134,6 +1440,10 @@ $(WORKDIR_ESCSPACE)\mse_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\mse-drv\mse_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\mse-drv\mse_driver.c"
+
+$(WORKDIR_ESCSPACE)\point_new.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\point_new.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\point_new.c"
 
 $(WORKDIR_ESCSPACE)\protocol.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.c  \
@@ -1275,6 +1585,10 @@ $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c"
 
+$(WORKDIR_ESCSPACE)\sysfont.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\sysfont.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\sysfont.asm"
+
 $(WORKDIR_ESCSPACE)\system-calls.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
@@ -1285,10 +1599,7 @@ $(WORKDIR_ESCSPACE)\system-calls.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\v99x8-super.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\src\system-calls-ids.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
@@ -1319,6 +1630,10 @@ $(WORKDIR_ESCSPACE)\transfers.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\transfers.c"
+
+$(WORKDIR_ESCSPACE)\triangle.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_25\triangle.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_25\triangle.c"
 
 $(WORKDIR_ESCSPACE)\uart-calculate.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\uart-rx-buffer\uart-calculate.c  \
@@ -1469,6 +1784,14 @@ $(WORKDIR_ESCSPACE)\usb_state.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\usb_state.c"
 
+$(WORKDIR_ESCSPACE)\v99x8.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\v99x8.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\v99x8.c"
+
+$(WORKDIR_ESCSPACE)\variables.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\variables.c"
+
 $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_cmd_line.asm  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
@@ -1532,32 +1855,112 @@ $(WORKDIR_ESCSPACE)\vdp_draw_line.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uart.h  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdbool.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\v99x8.h
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_get_screen_height.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_get_screen_height.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_get_screen_width.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_get_screen_width.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_base_register.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_base_register.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_base_register.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_graphic_4.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_graphic_4.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_graphic_7.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_graphic_7.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_graphic_7.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_lines.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_lines.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_lines.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_palette.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_palette.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_palette.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_refresh.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_refresh.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_refresh.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_remap.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_remap.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_remap.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_1.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_1.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_10.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_10.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_10.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_2.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_2.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_2.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_21.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_21.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_21.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_26.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_26.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_26.c"
+
+$(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_5.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_5.c"
 
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\bytecode.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu.c"
+
+$(WORKDIR_ESCSPACE)\vdu_10.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_10.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_10.c"
+
+$(WORKDIR_ESCSPACE)\vdu_12.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_12.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_12.c"
+
+$(WORKDIR_ESCSPACE)\vdu_17.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_17.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_17.c"
+
+$(WORKDIR_ESCSPACE)\vdu_18.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_18.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_18.c"
+
+$(WORKDIR_ESCSPACE)\vdu_22.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_22.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_22.c"
+
+$(WORKDIR_ESCSPACE)\vdu_25.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_25.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_25.c"
 
 $(WORKDIR_ESCSPACE)\vdu_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\bytecode.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu_init.c"
+
+$(WORKDIR_ESCSPACE)\vdu_not_implemented.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_not_implemented.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_not_implemented.c"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\vectors16.asm  \
@@ -1568,18 +1971,7 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\vectors16.asm"
 
 $(WORKDIR_ESCSPACE)\vm-init.obj :  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c  \
-            $(INCLUDE_ESCSPACE)\std\String.h  \
-            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
-            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\host-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm-promoted-fn.h  \
-            $(PRJDIR_ESCSPACE)\src\q3vm\vm_bytecode.h
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\q3vm\vm-init.c"
 
 $(WORKDIR_ESCSPACE)\vm-promoted-fn.obj :  \

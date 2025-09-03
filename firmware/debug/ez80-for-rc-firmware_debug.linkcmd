@@ -118,16 +118,22 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\enumerate_hub.obj", \
  ".\enumerate_storage.obj", \
  ".\gpio-b4-isr-marshaller.obj", \
+ ".\graphic_print_char.obj", \
  ".\i2c-calculate.obj", \
  ".\init-clocks.obj", \
  ".\init-f92.obj", \
+ ".\init_font_patterns.obj", \
  ".\internal-hiram.obj", \
  ".\kyb_driver.obj", \
  ".\kyb_driver_event.obj", \
  ".\kyb_driver_eventasm.obj", \
  ".\kyb_driverasm.obj", \
+ ".\line_clip.obj", \
+ ".\line_new.obj", \
+ ".\logic_to_physical_coords.obj", \
  ".\main.obj", \
  ".\mse_driver.obj", \
+ ".\point_new.obj", \
  ".\protocol.obj", \
  ".\rom-flashing-calculator.obj", \
  ".\rst-08-io.obj", \
@@ -143,10 +149,12 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-functions.obj", \
  ".\rst-18-function.obj", \
  ".\scsi_driver.obj", \
+ ".\sysfont.obj", \
  ".\system-calls.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
  ".\transfers.obj", \
+ ".\triangle.obj", \
  ".\uart-calculate.obj", \
  ".\uart-rx-buffer-add-to.obj", \
  ".\uart-rx-buffer-empty.obj", \
@@ -160,6 +168,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb-tick-sr.obj", \
  ".\usb_cbi.obj", \
  ".\usb_state.obj", \
+ ".\v99x8.obj", \
+ ".\variables.obj", \
  ".\vdp_cmd_line.obj", \
  ".\vdp_cmd_logical_move_vdp_to_vram.obj", \
  ".\vdp_cmd_move_linear_to_xy.obj", \
@@ -169,8 +179,30 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_cmd_wait_completion.obj", \
  ".\vdp_cpu_to_vram.obj", \
  ".\vdp_draw_line.obj", \
+ ".\vdp_get_screen_height.obj", \
+ ".\vdp_get_screen_width.obj", \
+ ".\vdp_set_base_register.obj", \
+ ".\vdp_set_graphic_4.obj", \
+ ".\vdp_set_graphic_7.obj", \
+ ".\vdp_set_lines.obj", \
+ ".\vdp_set_palette.obj", \
+ ".\vdp_set_refresh.obj", \
+ ".\vdp_set_remap.obj", \
+ ".\vdp_set_super_graphic_1.obj", \
+ ".\vdp_set_super_graphic_10.obj", \
+ ".\vdp_set_super_graphic_2.obj", \
+ ".\vdp_set_super_graphic_21.obj", \
+ ".\vdp_set_super_graphic_26.obj", \
+ ".\vdp_set_super_graphic_5.obj", \
  ".\vdu.obj", \
+ ".\vdu_10.obj", \
+ ".\vdu_12.obj", \
+ ".\vdu_17.obj", \
+ ".\vdu_18.obj", \
+ ".\vdu_22.obj", \
+ ".\vdu_25.obj", \
  ".\vdu_init.obj", \
+ ".\vdu_not_implemented.obj", \
  ".\vectors16.obj", \
  ".\vm-init.obj", \
  ".\vm-promoted-fn.obj", \

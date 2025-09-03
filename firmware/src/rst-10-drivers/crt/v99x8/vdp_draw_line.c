@@ -1,4 +1,4 @@
-#include "../../../q3vm/includes/v99x8.h"
+#include "../v99x8.h"
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -18,5 +18,6 @@ void vdp_draw_line(uint16_t from_x, uint16_t from_y, uint16_t to_x, uint16_t to_
 
   const uint8_t direction = (major_direction_is_y ? 1 : 0) + (dix ? 4 : 0) + (diy ? 8 : 0);
 
+  vdp_cmd_wait_completion();
   vdp_cmd_line(from_x, from_y, long_length, short_length, direction, colour, operation);
 }

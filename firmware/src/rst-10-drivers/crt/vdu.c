@@ -1,13 +1,65 @@
-#include "../../q3vm/bytecode.h"
-#include "../../q3vm/host/target-support.h"
-#include "../../q3vm/host/vm.h"
+#include "vdu.h"
+#include "stddef.h"
 
-extern vm_t vm;
+void graphic_print_char(uint24_t ch);
 
-void vdu(uint8_t code) {
-  uint8_t stack[1024];
+void vdu(uint8_t ch) {
+  if (vdu_required_length) {
+    data[vdu_index++] = ch;
+    if (vdu_index == vdu_required_length) {
+      mos_vdu_handler fn  = current_fn;
+      current_fn          = NULL;
+      vdu_index           = 0;
+      vdu_required_length = 0;
 
-  VM_SetStackStore(&vm, stack, sizeof(stack));
-  VM_Call2(&vm, Q3VM_FN_VDU, code);
-  VM_SetStackStore(&vm, NULL, 0);
+      fn();
+    }
+    return;
+  }
+
+  if (ch >= ' ') {
+    graphic_print_char(ch);
+    return;
+  }
+
+  switch (ch) {
+  case '\n': {
+    vdu_lf();
+    return;
+  }
+
+  case 12: {
+    vdu_cls();
+    return;
+  }
+
+  case '\r': {
+    vdu_cr();
+    return;
+  }
+
+  case 17: {
+    current_fn          = vdu_colour;
+    vdu_required_length = 1;
+    return;
+  }
+
+  case 18: {
+    current_fn          = vdu_gcol;
+    vdu_required_length = 2;
+    return;
+  }
+
+  case 22: {
+    current_fn          = vdu_mode;
+    vdu_required_length = 1;
+    return;
+  }
+
+  case 25: {
+    current_fn          = vdu_plot;
+    vdu_required_length = 5;
+    return;
+  }
+  }
 }

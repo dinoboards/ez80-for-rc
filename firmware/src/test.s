@@ -66,7 +66,7 @@ _spike:
 	LD	B, 0
 	LD	C, 22	; mode
 	RST.L	%10
-	LD	C, 1 ; BBC Mode 0
+	LD	C, 0 ; BBC Mode 0
 	RST.L	%10
 
 	LD	C, 65
@@ -106,7 +106,7 @@ _spike:
 
 	LD	C, 25	; plot
 	RST.L	%10
-	LD	C, 5	; move line
+	LD	C, 5	; draw line
 	RST.L	%10
 
 	LD	C, 255	; x low
