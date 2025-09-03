@@ -18,9 +18,7 @@ void vdu_lf(void) {
 
     // TODO: ONLY SCROLL IF TEXT CURSOR IS ACTIVE
 
-    vdp_cmd_wait_completion();
     vdp_cmd_move_vram_to_vram(left, top + 8, left, top, width, height, 0);
-    vdp_cmd_wait_completion();
     vdp_cmd_vdp_to_vram(left, bottom, width, 8, current_tbg_colour, 0);
   }
 }

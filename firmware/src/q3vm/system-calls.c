@@ -62,6 +62,7 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     // pop first arg
     // push return address
     // jp vdp_cmd_line
+    vdp_cmd_wait_completion();
     vdp_cmd_line(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18), VMA_UINT24(21));
     return 0;
   }
@@ -72,17 +73,20 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   }
 
   case SC_VDP_CMD_LOGICAL_MOVE_VDP_TO_VRAM: {
+    vdp_cmd_wait_completion();
     vdp_cmd_logical_move_vdp_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
                                      VMA_UINT24(21));
     return 0;
   }
 
   case SC_VDP_CMD_PSET: {
+    vdp_cmd_wait_completion();
     vdp_cmd_pset(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12));
     return 0;
   }
 
   case SC_VDP_DRAW_LINE: {
+    vdp_cmd_wait_completion();
     vdp_draw_line(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18));
     return 0;
   }
@@ -105,6 +109,7 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   // extern void vdp_cmd_move_vram_to_vram(uint16_t x, uint16_t y, uint16_t to_x, uint16_t to_y, uint16_t width, uint16_t height,
   // uint8_t direction);
   case SC_VDP_CMD_MOVE_VRAM_TO_VRAM: {
+    vdp_cmd_wait_completion();
     vdp_cmd_move_vram_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
                               VMA_UINT24(21));
     return 0;
@@ -112,6 +117,7 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
 
   // extern void vdp_cmd_vdp_to_vram(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t colour, uint8_t direction);
   case SC_VDP_CMD_VDP_TO_VRAM: {
+    vdp_cmd_wait_completion();
     vdp_cmd_vdp_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18));
     return 0;
   }

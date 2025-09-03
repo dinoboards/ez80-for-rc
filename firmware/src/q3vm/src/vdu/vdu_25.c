@@ -75,7 +75,6 @@ void vdu_plot(void) {
     {
       (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
 
-      vdp_cmd_wait_completion();
       vdp_cmd_pset(convert_x(current_gpos.x), convert_y(current_gpos.y), current_gfg_colour, current_operation_mode);
       return;
     }

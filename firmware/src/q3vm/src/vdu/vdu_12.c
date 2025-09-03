@@ -22,7 +22,6 @@ void vdu_cls() {
   const uint24_t width  = right - left + 8;
   const uint24_t height = bottom - top + 8;
 
-  vdp_cmd_wait_completion();
   vdp_cmd_logical_move_vdp_to_vram(left, top, width, height, current_tbg_colour, 0, 0);
 
   current_tpos.x = tviewport.left;
