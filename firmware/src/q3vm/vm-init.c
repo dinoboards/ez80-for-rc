@@ -13,7 +13,7 @@ extern uint32_t systemCalls(vm_t *vm, uint8_t *args);
 uint8_t *registers_mirror;
 
 void vm_init() {
-  if (VM_Create(&vm, vm_bytecode, VM_BYTECODE_SIZE, vm_bytecode_ram, VM_BYTECODE_RAM_SIZE, systemCalls, NULL)) {
+  if (VM_Create(&vm, vm_bytecode, VM_BYTECODE_SIZE, vm_bytecode_ram, VM_BYTECODE_RAM_SIZE, NULL, 0, systemCalls, NULL)) {
     print_string("VM Create failed.\n\r");
     return;
   }

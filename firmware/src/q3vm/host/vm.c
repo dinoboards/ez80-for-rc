@@ -157,6 +157,9 @@
 #define VM_VADDR_IO_START 0xFF0000
 #define VM_VADDR_IO_SEG   ((uint8_t)(VM_VADDR_IO_START >> 16))
 
+#define VM_VADDR_MEMAP_START 0xFD0000
+#define VM_VADDR_MEMAP_SEG   ((uint8_t)(VM_VADDR_MEMAP_START >> 16))
+
 /******************************************************************************
  * TYPEDEFS
  ******************************************************************************/
@@ -234,6 +237,8 @@ int VM_Create(vm_t                      *vm,
               const vm_size_t UNUSED_ARG length,
               uint8_t *const             workingRAM,
               const vm_size_t            workingRAMLength,
+              uint8_t *const             sharedData,
+              const vm_size_t            sharedDataLength,
               uint32_t (*systemCalls)(vm_t *, uint8_t *),
               vm_aborted_t vm_aborted) {
 
@@ -253,17 +258,19 @@ int VM_Create(vm_t                      *vm,
     const vmHeader_t *const header = (const vmHeader_t *const)bytecode;
 
     Com_Memset(vm, 0, sizeof(vm_t));
-    vm->systemCall   = systemCalls;
-    vm->vm_aborted   = vm_aborted;
-    vm->codeBase     = &bytecode[sizeof(vmHeader_t)];
-    vm->codeLength   = UINT(header->codeLength);
-    vm->litBase      = vm->codeBase + vm->codeLength - VM_VADDR_DATA_START;
-    vm->litLength    = UINT(header->litLength);
-    vm->dataBase     = workingRAM;
-    vm->dataLength   = UINT(header->dataLength);
-    vm->bssBase      = vm->dataBase + UINT(header->dataLength);
-    vm->bssLength    = UINT(header->bssLength);
-    vm->programStack = 0xFEFFFF;
+    vm->systemCall       = systemCalls;
+    vm->vm_aborted       = vm_aborted;
+    vm->codeBase         = &bytecode[sizeof(vmHeader_t)];
+    vm->codeLength       = UINT(header->codeLength);
+    vm->litBase          = vm->codeBase + vm->codeLength - VM_VADDR_DATA_START;
+    vm->litLength        = UINT(header->litLength);
+    vm->dataBase         = workingRAM;
+    vm->dataLength       = UINT(header->dataLength);
+    vm->bssBase          = vm->dataBase + UINT(header->dataLength);
+    vm->bssLength        = UINT(header->bssLength);
+    vm->programStack     = 0xFEFFFF;
+    vm->sharedData       = sharedData - VM_VADDR_MEMAP_START;
+    vm->sharedDataLength = sharedDataLength;
 
     vm->programStack -= 3;
 
@@ -474,21 +481,25 @@ intptr_t VM_Call2(vm_t *vm, ustdint_t pc, ustdint_t command, ...) {
   return r;
 }
 
-#define VM_VWRaddrToAddress(vm, vaddr, dest)                                                                                       \
+#define VM_VWRaddrToAddress(vm, seg, vaddr, dest)                                                                                  \
   {                                                                                                                                \
-    if ((vaddr) >= VM_VADDR_STACK_START) {                                                                                         \
+    if ((seg) >= VM_VADDR_STACK_SEG) {                                                                                             \
       (dest) = &((vm).stackBase[(vaddr)]);                                                                                         \
+    } else if ((seg) == VM_VADDR_MEMAP_SEG) {                                                                                      \
+      (dest) = &((vm).sharedData[(vaddr)]);                                                                                        \
     } else {                                                                                                                       \
       (dest) = &((vm).dataBase[(vaddr)]);                                                                                          \
     }                                                                                                                              \
   }
 
-#define VM_VRDaddrToAddress(vm, vaddr, src)                                                                                        \
+#define VM_VRDaddrToAddress(vm, seg, vaddr, src)                                                                                   \
   {                                                                                                                                \
-    if ((vaddr) >= VM_VADDR_STACK_START) {                                                                                         \
+    if ((seg) >= VM_VADDR_STACK_SEG) {                                                                                             \
       (src) = &((vm).stackBase[(vaddr)]);                                                                                          \
-    } else if ((vaddr) < 0x80000) {                                                                                                \
+    } else if ((seg) < VM_VADDR_DATA_SEG) {                                                                                        \
       (src) = &((vm).dataBase[(vaddr)]);                                                                                           \
+    } else if ((seg) == VM_VADDR_MEMAP_SEG) {                                                                                      \
+      (src) = &((vm).sharedData[(vaddr)]);                                                                                         \
     } else {                                                                                                                       \
       (src) = &((vm).litBase[(vaddr)]);                                                                                            \
     }                                                                                                                              \
@@ -506,7 +517,7 @@ void *VM_ArgPtr(intptr_t vmAddr, vm_t *const vm) {
 
   {
     const void *result = NULL;
-    VM_VRDaddrToAddress(*vm, vmAddr, result);
+    VM_VRDaddrToAddress(*vm, ((uint8_t *)&vmAddr)[2], vmAddr, result);
     return (void *)result;
   }
 }
@@ -570,6 +581,9 @@ bool VM_VerifyReadOK(vm_t *vm, vm_size_t vaddr, int size) {
   if (vaddr >= VM_VADDR_DATA_START && (vaddr + size - VM_VADDR_DATA_START) <= vm->litLength)
     return true;
 
+  if (vm->sharedData && (vaddr >= VM_VADDR_MEMAP_START && (vaddr - VM_VADDR_MEMAP_START) < vm->sharedDataLength))
+    return true;
+
   Com_Printf_5("Attempted to read at " FMT_INT24 "+(" FMT_INT24 ") -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, size,
                vm->workingRAMLength, vm->litLength);
   vm->lastError = VM_RAM_ACCESS_ERROR;
@@ -584,6 +598,9 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
     return true; /* i/o mapping via host */
 
   if (vaddr >= vm->stackBottom && vaddr <= vm->stackTop)
+    return true;
+
+  if (vm->sharedData && (vaddr >= VM_VADDR_MEMAP_START && (vaddr - VM_VADDR_MEMAP_START) < vm->sharedDataLength))
     return true;
 
   Com_Printf_4("Attempted to write at " FMT_INT24 " -- (" FMT_INT24 " " FMT_INT24 ")\n", vaddr, vm->workingRAMLength,
@@ -1141,8 +1158,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
         DISPATCH();
 #endif
 
-      VM_VWRaddrToAddress(_vm, UINT(R1.uint24), dest);
-      VM_VRDaddrToAddress(_vm, UINT(R0.uint24), src);
+      VM_VWRaddrToAddress(_vm, ((uint8_t *)&R1.uint8)[2], UINT(R1.uint24), dest);
+      VM_VRDaddrToAddress(_vm, ((uint8_t *)&R0.uint8)[2], UINT(R0.uint24), src);
       Com_Memcpy(dest, src, UINT(R2.uint24));
 
       PC += INT24_INCREMENT;
@@ -1165,8 +1182,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
         DISPATCH();
 #endif
 
-      VM_VWRaddrToAddress(_vm, UINT(R1.uint24), dest);
-      VM_VRDaddrToAddress(_vm, UINT(R0.uint24), src);
+      VM_VWRaddrToAddress(_vm, ((uint8_t *)&R1.uint8)[2], UINT(R1.uint24), dest);
+      VM_VRDaddrToAddress(_vm, ((uint8_t *)&R0.uint8)[2], UINT(R0.uint24), src);
       Com_Memcpy(dest, src, R2.uint8);
 
       PC += INT8_INCREMENT;
@@ -1189,8 +1206,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
         DISPATCH();
 #endif
 
-      VM_VWRaddrToAddress(_vm, UINT(R1.uint24), dest);
-      VM_VRDaddrToAddress(_vm, UINT(R0.uint24), src);
+      VM_VWRaddrToAddress(_vm, ((uint8_t *)&R1.uint8)[2], UINT(R1.uint24), dest);
+      VM_VRDaddrToAddress(_vm, ((uint8_t *)&R0.uint8)[2], UINT(R0.uint24), src);
       Com_Memcpy(dest, src, R2.uint16);
 
       PC += INT16_INCREMENT;
@@ -1697,6 +1714,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
           R_uint8 = *(uint8_t *)&_vm.stackBase[UINT(R0_uint24(0))];
         } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint8 = *(uint8_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_MEMAP_SEG) {
+          R_uint8 = *(uint8_t *)&_vm.sharedData[UINT(R0_uint24(0))];
         } else if (opStack8[2] == VM_VADDR_IO_SEG) {
           R_uint8 = io_read(UINT(R0_uint24(0)));
         } else {
@@ -1716,6 +1735,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
           R_uint16 = *(uint16_t *)&_vm.stackBase[UINT(R0_uint24(0))];
         } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint16 = *(uint16_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_MEMAP_SEG) {
+          R_uint16 = *(uint16_t *)&_vm.sharedData[UINT(R0_uint24(0))];
         } else if (opStack8[2] == VM_VADDR_IO_SEG) {
           R_uint16 = io_read(UINT(R0_uint24(0)));
         } else {
@@ -1735,6 +1756,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
           R_uint24 = *(uint24_t *)&_vm.stackBase[UINT(R0_uint24(0))];
         } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint24 = *(uint24_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_MEMAP_SEG) {
+          R_uint24 = *(uint24_t *)&_vm.sharedData[UINT(R0_uint24(0))];
         } else if (opStack8[2] == VM_VADDR_IO_SEG) {
           R_uint24 = UINT24(io_read(UINT(R0_uint24(0))));
         } else {
@@ -1754,6 +1777,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
           R_uint32 = *(uint32_t *)&_vm.stackBase[UINT(R0_uint24(0))];
         } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint32 = *(uint32_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_MEMAP_SEG) {
+          R_uint32 = *(uint32_t *)&_vm.sharedData[UINT(R0_uint24(0))];
         } else if (opStack8[2] == VM_VADDR_IO_SEG) {
           R_uint32 = io_read(UINT(R0_uint24(0)));
         } else {
@@ -1962,6 +1987,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
           _vm.stackBase[UINT(R1_uint24(0))] = R0_uint8(0);
         } else if (opStack8[-2] < VM_VADDR_DATA_SEG) {
           _vm.dataBase[(UINT(R1_uint24(0)))] = R0_uint8(0);
+        } else if (opStack8[-2] == VM_VADDR_MEMAP_SEG) {
+          _vm.sharedData[(UINT(R1_uint24(0)))] = R0_uint8(0);
         } else {
           io_write(UINT(R1_uint24(0)), R0_uint8(0));
         }
@@ -1977,6 +2004,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       } else {
         if (opStack8[-2] == VM_VADDR_STACK_SEG) {
           *((uint16_t *)&_vm.stackBase[UINT(R1_uint24(0))]) = R0_uint16(0);
+        } else if (opStack8[-2] == VM_VADDR_MEMAP_SEG) {
+          *((uint16_t *)&_vm.sharedData[UINT(R1_uint24(0))]) = R0_uint16(0);
         } else {
           *((uint16_t *)&_vm.dataBase[UINT(R1_uint24(0))]) = R0_uint16(0);
         }
@@ -1993,6 +2022,8 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       } else {
         if (opStack8[-2] == VM_VADDR_STACK_SEG) {
           *((uint24_t *)&_vm.stackBase[UINT(R1_uint24(0))]) = R0.uint24;
+        } else if (opStack8[-2] == VM_VADDR_MEMAP_SEG) {
+          *((uint24_t *)&_vm.sharedData[UINT(R1_uint24(0))]) = R0.uint24;
         } else {
           *((uint24_t *)&_vm.dataBase[UINT(R1_uint24(0))]) = R0.uint24;
         }
@@ -2006,15 +2037,15 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       R0.uint32 = R0_uint32(0);
       log3_3("*(" FMT_INT24 ") = " FMT_INT32 "  MOVE\n", UINT(R1_uint24(0)), R0.uint32);
 
-      // VM_WriteAddrUint32((vm_operand_t)UINT(R1_uint24(0)), R0.uint32);
-
       if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 4)) {
         ;
       } else {
         if (opStack8[-2] == VM_VADDR_STACK_SEG) {
-          *((uint32_t *)&_vm.stackBase[(vm_size_t)(UINT(R1_uint24(0)))]) = R0.uint32;
+          *((uint32_t *)&_vm.stackBase[UINT(R1_uint24(0))]) = R0.uint32;
+        } else if (opStack8[-2] == VM_VADDR_MEMAP_SEG) {
+          *((uint32_t *)&_vm.sharedData[UINT(R1_uint24(0))]) = R0.uint32;
         } else {
-          *((uint32_t *)&_vm.dataBase[(vm_size_t)(UINT(R1_uint24(0)))]) = R0.uint32;
+          *((uint32_t *)&_vm.dataBase[UINT(R1_uint24(0))]) = R0.uint32;
         }
       }
 

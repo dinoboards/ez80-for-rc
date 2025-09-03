@@ -157,6 +157,9 @@ typedef struct vm_s {
 
   vm_size_t workingRAMLength; /**< Number of bytes allocated for dataBase */
 
+  uint8_t  *sharedData;
+  vm_size_t sharedDataLength;
+
   vmErrorCode_t lastError; /**< Last known error */
 
   struct vm_s *vm;
@@ -205,6 +208,8 @@ int VM_Create(vm_t                *vm,
               const vm_size_t      length,
               uint8_t *const       dataSegment,
               const vm_size_t      dataSegmentLength,
+              uint8_t *const       sharedData,
+              const vm_size_t      sharedDataLength,
               systemCalls_t        systemCalls,
               vm_aborted_t         vm_aborted);
 
