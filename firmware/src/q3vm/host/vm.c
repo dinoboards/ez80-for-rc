@@ -144,15 +144,18 @@
 
 /** The 64K segment that data/bss starts at */
 #define VM_VADDR_DATA_START 0x800000
+#define VM_VADDR_DATA_SEG   ((uint8_t)(VM_VADDR_DATA_START >> 16))
 
 /** the 64K segment that lit starts at */
 #define VM_VADDR_LIT_START 0x000000
 
 /** the 64K segment that stack is mapped to */
-#define VM_ADDR_STACK_START 0xFE0000
+#define VM_VADDR_STACK_START 0xFE0000
+#define VM_VADDR_STACK_SEG   ((uint8_t)(VM_VADDR_STACK_START >> 16))
 
 /** the 64K segment that i/o mapping starts at */
-#define VM_ADDR_IO_START 0xFF0000
+#define VM_VADDR_IO_START 0xFF0000
+#define VM_VADDR_IO_SEG   ((uint8_t)(VM_VADDR_IO_START >> 16))
 
 /******************************************************************************
  * TYPEDEFS
@@ -473,7 +476,7 @@ intptr_t VM_Call2(vm_t *vm, ustdint_t pc, ustdint_t command, ...) {
 
 #define VM_VWRaddrToAddress(vm, vaddr, dest)                                                                                       \
   {                                                                                                                                \
-    if ((vaddr) >= VM_ADDR_STACK_START) {                                                                                          \
+    if ((vaddr) >= VM_VADDR_STACK_START) {                                                                                         \
       (dest) = &((vm).stackBase[(vaddr)]);                                                                                         \
     } else {                                                                                                                       \
       (dest) = &((vm).dataBase[(vaddr)]);                                                                                          \
@@ -482,7 +485,7 @@ intptr_t VM_Call2(vm_t *vm, ustdint_t pc, ustdint_t command, ...) {
 
 #define VM_VRDaddrToAddress(vm, vaddr, src)                                                                                        \
   {                                                                                                                                \
-    if ((vaddr) >= VM_ADDR_STACK_START) {                                                                                          \
+    if ((vaddr) >= VM_VADDR_STACK_START) {                                                                                         \
       (src) = &((vm).stackBase[(vaddr)]);                                                                                          \
     } else if ((vaddr) < 0x80000) {                                                                                                \
       (src) = &((vm).dataBase[(vaddr)]);                                                                                           \
@@ -557,7 +560,7 @@ bool VM_VerifyReadOK(vm_t *vm, vm_size_t vaddr, int size) {
   if ((vaddr + size) <= vm->workingRAMLength)
     return true;
 
-  if (vaddr >= VM_ADDR_IO_START && size == 1) {
+  if (vaddr >= VM_VADDR_IO_START && size == 1) {
     return true; /* i/o mapping via host */
   }
 
@@ -577,7 +580,7 @@ bool VM_VerifyWriteOK(vm_t *vm, vm_size_t vaddr, int size) {
   if ((vaddr + size) <= vm->workingRAMLength)
     return true;
 
-  if (vaddr >= VM_ADDR_IO_START && size == 1)
+  if (vaddr >= VM_VADDR_IO_START && size == 1)
     return true; /* i/o mapping via host */
 
   if (vaddr >= vm->stackBottom && vaddr <= vm->stackTop)
@@ -1690,14 +1693,12 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 1))
         R_uint8 = 0;
       else {
-        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
-          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
-            R_uint8 = *(uint8_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-          } else {
-            R_uint8 = io_read(UINT(R0_uint24(0)));
-          }
-        } else if (UINT(R0_uint24(0)) < 0x80000) {
+        if (opStack8[2] == VM_VADDR_STACK_SEG) {
+          R_uint8 = *(uint8_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint8 = *(uint8_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_IO_SEG) {
+          R_uint8 = io_read(UINT(R0_uint24(0)));
         } else {
           R_uint8 = *(uint8_t *)&_vm.litBase[UINT(R0_uint24(0))];
         }
@@ -1711,14 +1712,12 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 2))
         R_uint16 = 0;
       else {
-        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
-          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
-            R_uint16 = *(uint16_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-          } else {
-            R_uint16 = io_read(UINT(R0_uint24(0)));
-          }
-        } else if (UINT(R0_uint24(0)) < 0x80000) {
+        if (opStack8[2] == VM_VADDR_STACK_SEG) {
+          R_uint16 = *(uint16_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint16 = *(uint16_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_IO_SEG) {
+          R_uint16 = io_read(UINT(R0_uint24(0)));
         } else {
           R_uint16 = *(uint16_t *)&_vm.litBase[UINT(R0_uint24(0))];
         }
@@ -1732,14 +1731,12 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 3))
         R_uint24 = UINT24(0);
       else {
-        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
-          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
-            R_uint24 = *(uint24_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-          } else {
-            R_uint24 = UINT24(io_read(UINT(R0_uint24(0))));
-          }
-        } else if (UINT(R0_uint24(0)) < 0x80000) {
+        if (opStack8[2] == VM_VADDR_STACK_SEG) {
+          R_uint24 = *(uint24_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint24 = *(uint24_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_IO_SEG) {
+          R_uint24 = UINT24(io_read(UINT(R0_uint24(0))));
         } else {
           R_uint24 = *(uint24_t *)&_vm.litBase[UINT(R0_uint24(0))];
         }
@@ -1753,14 +1750,12 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyReadOK(_vm.vm, UINT(R0_uint24(0)), 4))
         R_uint32 = 0;
       else {
-        if (UINT(R0_uint24(0)) >= VM_ADDR_STACK_START) {
-          if (UINT(R0_uint24(0)) < VM_ADDR_IO_START) {
-            R_uint32 = *(uint32_t *)&_vm.stackBase[UINT(R0_uint24(0))];
-          } else {
-            R_uint32 = io_read(UINT(R0_uint24(0)));
-          }
-        } else if (UINT(R0_uint24(0)) < 0x80000) {
+        if (opStack8[2] == VM_VADDR_STACK_SEG) {
+          R_uint32 = *(uint32_t *)&_vm.stackBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] < VM_VADDR_DATA_SEG) {
           R_uint32 = *(uint32_t *)&_vm.dataBase[UINT(R0_uint24(0))];
+        } else if (opStack8[2] == VM_VADDR_IO_SEG) {
+          R_uint32 = io_read(UINT(R0_uint24(0)));
         } else {
           R_uint32 = *(uint32_t *)&_vm.litBase[UINT(R0_uint24(0))];
         }
@@ -1963,14 +1958,13 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 1)) {
         ;
       } else {
-        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START) {
-          if (UINT(R1_uint24(0)) < VM_ADDR_IO_START) {
-            _vm.stackBase[UINT(R1_uint24(0))] = R0_uint8(0);
-          } else {
-            io_write(UINT(R1_uint24(0)), R0_uint8(0));
-          }
-        } else
+        if (opStack8[-2] == VM_VADDR_STACK_SEG) {
+          _vm.stackBase[UINT(R1_uint24(0))] = R0_uint8(0);
+        } else if (opStack8[-2] < VM_VADDR_DATA_SEG) {
           _vm.dataBase[(UINT(R1_uint24(0)))] = R0_uint8(0);
+        } else {
+          io_write(UINT(R1_uint24(0)), R0_uint8(0));
+        }
       }
       opStack8 -= 8;
       DISPATCH();
@@ -1981,10 +1975,11 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 2)) {
         ;
       } else {
-        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START)
+        if (opStack8[-2] == VM_VADDR_STACK_SEG) {
           *((uint16_t *)&_vm.stackBase[UINT(R1_uint24(0))]) = R0_uint16(0);
-        else
+        } else {
           *((uint16_t *)&_vm.dataBase[UINT(R1_uint24(0))]) = R0_uint16(0);
+        }
       }
       opStack8 -= 8;
       DISPATCH();
@@ -1996,10 +1991,11 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 3)) {
         ;
       } else {
-        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START)
+        if (opStack8[-2] == VM_VADDR_STACK_SEG) {
           *((uint24_t *)&_vm.stackBase[UINT(R1_uint24(0))]) = R0.uint24;
-        else
+        } else {
           *((uint24_t *)&_vm.dataBase[UINT(R1_uint24(0))]) = R0.uint24;
+        }
       }
 
       opStack8 -= 8;
@@ -2015,10 +2011,11 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       if (!VM_VerifyWriteOK(_vm.vm, UINT(R1_uint24(0)), 4)) {
         ;
       } else {
-        if (UINT(R1_uint24(0)) >= VM_ADDR_STACK_START)
+        if (opStack8[-2] == VM_VADDR_STACK_SEG) {
           *((uint32_t *)&_vm.stackBase[(vm_size_t)(UINT(R1_uint24(0)))]) = R0.uint32;
-        else
+        } else {
           *((uint32_t *)&_vm.dataBase[(vm_size_t)(UINT(R1_uint24(0)))]) = R0.uint32;
+        }
       }
 
       opStack8 -= 8;
