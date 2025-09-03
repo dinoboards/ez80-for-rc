@@ -35,9 +35,9 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     print_string((const char *)VMA_PTR(3, vm));
     return 0;
 
-  // case SC_TRAP_ERROR:
-  //   print_string((const char *)VMA_PTR(3, vm));
-  //   return 0;
+    // case SC_TRAP_ERROR:
+    //   print_string((const char *)VMA_PTR(3, vm));
+    //   return 0;
 
   case SC_MEMSET: {
     memset(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9));
@@ -53,7 +53,6 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     vdp_current_mode = VMA_UINT24(3);
     return 0;
   }
-
 
   default:
     return dispatch_hosted_fn(vm, args);

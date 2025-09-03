@@ -1,7 +1,7 @@
-#include <stdlib.h>
-#include <stdint.h>
-#include <v99x8.h>
 #include "../../vdu.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include <v99x8.h>
 
 static int8_t signum(const int a) {
   if (a < 0)

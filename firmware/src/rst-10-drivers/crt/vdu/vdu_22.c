@@ -63,7 +63,7 @@ void vdu_mode(void) {
 
   switch (data[0]) {
   case 0:
-    vdp_set_palette(default_2_colour_palette);
+    vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
@@ -76,7 +76,7 @@ void vdu_mode(void) {
     break;
 
   case 1:
-    vdp_set_palette(default_4_colour_palette);
+    vdu_set_default_palette_16();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
@@ -89,7 +89,7 @@ void vdu_mode(void) {
     break;
 
   case 2:
-    vdp_set_palette(default_16_colour_palette);
+    vdu_set_default_palette_16();
     current_tfg_colour       = 7;
     current_gfg_colour       = 7;
     current_tbg_colour       = 0;
@@ -102,7 +102,7 @@ void vdu_mode(void) {
     break;
 
   case 3:
-    vdp_set_palette(default_2_colour_palette);
+    vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
@@ -115,7 +115,7 @@ void vdu_mode(void) {
     break;
 
   case 4:
-    vdp_set_palette(default_2_colour_palette);
+    vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
     current_tbg_colour       = 0;
@@ -128,7 +128,7 @@ void vdu_mode(void) {
     break;
 
   case 5:
-    vdp_set_palette(default_4_colour_palette);
+    vdu_set_default_palette_16();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;
@@ -141,7 +141,7 @@ void vdu_mode(void) {
     break;
 
   case 16:
-    vdp_set_palette(default_4_colour_palette);
+    vdu_set_default_palette_16();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
     current_tbg_colour       = 0;

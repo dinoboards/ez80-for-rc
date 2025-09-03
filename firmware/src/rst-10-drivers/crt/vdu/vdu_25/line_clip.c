@@ -1,5 +1,5 @@
-#include <stdint.h>
 #include "../../vdu.h"
+#include <stdint.h>
 
 static uint8_t bit_code(point_t p) {
   uint8_t code = 0;
@@ -30,7 +30,7 @@ static point_t intersect(line_t l, uint8_t edge) {
   if (edge & 1)
     return point_new(gviewport.left, l.a.y + (l.b.y - l.a.y) * (gviewport.left - l.a.x) / (l.b.x - l.a.x));
 
-    return  point_new(-1, -1); // will this happen?
+  return point_new(-1, -1); // will this happen?
 }
 
 bool line_clip(line_t *l) {

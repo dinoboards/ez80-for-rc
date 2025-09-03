@@ -113,7 +113,7 @@
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
 <file filter-key="">src\q3vm\vm-functions.c</file>
-<file filter-key="">src\rst-10-drivers\crt\vdp\vdp_set_palette.c</file>
+<file filter-key="">src\rst-10-drivers\crt\vdu\vdu_set_palette.c</file>
 </files>
 
 <!-- configuration information -->

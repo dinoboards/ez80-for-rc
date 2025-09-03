@@ -1,8 +1,8 @@
 #ifndef __VDU_H
 #define __VDU_H
 
-#include <stdint.h>
 #include "v99x8.h"
+#include <stdint.h>
 
 typedef struct point_s {
   int16_t x;
@@ -48,39 +48,6 @@ typedef struct text_colours {
   uint8_t bg;
 } text_colours_t;
 
-#define RGB_BLACK                                                                                                                  \
-  { 0, 0, 0 }
-#define RGB_WHITE                                                                                                                  \
-  { 7, 7, 7 }
-#define RGB_RED                                                                                                                    \
-  { 7, 0, 0 }
-#define RGB_GREEN                                                                                                                  \
-  { 0, 7, 0 }
-#define RGB_BLUE                                                                                                                   \
-  { 0, 0, 7 }
-#define RGB_YELLOW                                                                                                                 \
-  { 7, 7, 0 }
-#define RGB_MAGENTA                                                                                                                \
-  { 7, 0, 7 }
-#define RGB_CYAN                                                                                                                   \
-  { 0, 7, 7 }
-#define RGB_FLASHING_BLACK_WHITE                                                                                                   \
-  { 3, 3, 3 }
-#define RGB_FLASHING_RED_CYAN                                                                                                      \
-  { 7, 3, 3 }
-#define RGB_FLASHING_GREEN_MAGENTA                                                                                                 \
-  { 3, 7, 3 }
-#define RGB_FLASHING_YELLOW_BLUE                                                                                                   \
-  { 3, 3, 7 }
-#define RGB_FLASHING_BLUE_YELLOW                                                                                                   \
-  { 7, 7, 3 }
-#define RGB_FLASHING_MAGENTA_GREEN                                                                                                 \
-  { 7, 3, 7 }
-#define RGB_FLASHING_CYAN_RED                                                                                                      \
-  { 3, 7, 7 }
-#define RGB_FLASHING_WHITE_BLACK                                                                                                   \
-  { 3, 3, 3 }
-
 typedef void (*mos_vdu_handler)(void);
 
 extern void vdu_bs(void);
@@ -98,6 +65,10 @@ extern void vdu_set_tviewport(void);
 extern void vdu_set_origin(void);
 extern void vdu_tab(void);
 
+void vdu_set_default_palette_2();
+void vdu_set_default_palette_4();
+void vdu_set_default_palette_16();
+
 #define vdu_cr()                                                                                                                   \
   { current_tpos.x = tviewport.left; }
 
@@ -111,9 +82,6 @@ extern point_t convert_point(const point_t p);
 // vdu variables
 
 extern point_t origin;
-extern RGB     default_2_colour_palette[16];
-extern RGB     default_4_colour_palette[16];
-extern RGB     default_16_colour_palette[16];
 
 extern rectangle_t    gviewport;
 extern rectangle_t    gsviewport;

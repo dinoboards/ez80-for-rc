@@ -2,25 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-point_t origin                        = {0, 0};
-RGB     default_2_colour_palette[16]  = {RGB_BLACK, RGB_WHITE};
-RGB     default_4_colour_palette[16]  = {RGB_BLACK, RGB_RED, RGB_YELLOW, RGB_WHITE};
-RGB     default_16_colour_palette[16] = {RGB_BLACK,
-                                         RGB_RED,
-                                         RGB_GREEN,
-                                         RGB_YELLOW,
-                                         RGB_BLUE,
-                                         RGB_MAGENTA,
-                                         RGB_CYAN,
-                                         RGB_WHITE,
-                                         RGB_FLASHING_BLACK_WHITE,
-                                         RGB_FLASHING_RED_CYAN,
-                                         RGB_FLASHING_GREEN_MAGENTA,
-                                         RGB_FLASHING_YELLOW_BLUE,
-                                         RGB_FLASHING_BLUE_YELLOW,
-                                         RGB_FLASHING_MAGENTA_GREEN,
-                                         RGB_FLASHING_CYAN_RED,
-                                         RGB_FLASHING_WHITE_BLACK};
+point_t origin = {0, 0};
 
 rectangle_t gviewport = {0, 0, scale_width - 1, scale_height - 1}; // inclusive or exclusive????
 rectangle_t gsviewport;

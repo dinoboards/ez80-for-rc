@@ -1,7 +1,7 @@
-#include <v99x8.h>
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <v99x8.h>
 
 void vdp_draw_line(uint16_t from_x, uint16_t from_y, uint16_t to_x, uint16_t to_y, uint8_t colour, uint8_t operation) {
 
