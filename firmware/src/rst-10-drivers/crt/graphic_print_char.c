@@ -10,7 +10,7 @@ void graphic_print_char(uint24_t ch) {
   vdp_cmd_move_linear_to_xy(addr, current_tpos.x, current_tpos.y, 8, 8, DIX_RIGHT | DIY_DOWN, CMD_LOGIC_REMAP);
 
   current_tpos.x += 8;
-  if (current_tpos.x > sm.tviewport.right) {
+  if (current_tpos.x > tviewport.right) {
     vdu_cr();
     vdu_lf();
   }

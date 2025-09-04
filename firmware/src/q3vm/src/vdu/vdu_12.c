@@ -11,12 +11,12 @@ graphics cursor is moved to its home position (see VDU 3)
 */
 
 void vdu_cls(void) {
-  const uint24_t width  = sm.tviewport.right - sm.tviewport.left + 8;
-  const uint24_t height = sm.tviewport.bottom - sm.tviewport.top + 8;
+  const uint24_t width  = tviewport.right - tviewport.left + 8;
+  const uint24_t height = tviewport.bottom - tviewport.top + 8;
 
   vdp_cmd_wait_completion();
-  vdp_cmd_logical_move_vdp_to_vram(sm.tviewport.left, sm.tviewport.top, width, height, sm.current_tbg_colour, 0, 0);
+  vdp_cmd_logical_move_vdp_to_vram(tviewport.left, tviewport.top, width, height, current_tbg_colour, 0, 0);
 
-  current_tpos.x = sm.tviewport.left;
-  current_tpos.y = sm.tviewport.top;
+  current_tpos.x = tviewport.left;
+  current_tpos.y = tviewport.top;
 }
