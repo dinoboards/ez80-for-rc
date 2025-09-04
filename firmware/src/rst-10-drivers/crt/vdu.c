@@ -40,7 +40,7 @@ void vdu(uint8_t ch) {
   }
 
   case 17: {
-    current_fn          = vdu_colour;
+    current_fn          = vm_vdu_colour;
     vdu_required_length = 1;
     return;
   }

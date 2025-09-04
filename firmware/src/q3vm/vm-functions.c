@@ -17,3 +17,12 @@ void vm_call_1(const uint24_t pc, uint24_t arg) {
   VM_Call2(&vm, pc, arg);
   VM_SetStackStore(&vm, NULL, 0);
 }
+
+void vm_call_2(const uint24_t pc, uint24_t arg, uint24_t arg2) {
+  uint8_t stack[200];
+  VM_SetStackStore(&vm, stack, sizeof(stack));
+  VM_Call2(&vm, pc, arg, arg2);
+  VM_SetStackStore(&vm, NULL, 0);
+}
+
+void vm_vdu_colour(void) { vm_call_void(Q3VM_FN_VDU_COLOUR); }

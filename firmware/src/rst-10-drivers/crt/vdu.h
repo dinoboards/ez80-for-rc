@@ -55,11 +55,11 @@ extern text_colours_t font_color[256];
 
 extern uint24_t last_text_column;
 extern uint24_t last_text_row;
-extern uint8_t  current_tfg_colour;
-extern uint8_t  current_mode_colour_mask;
+// extern uint8_t  current_tfg_colour;
+// extern uint8_t  current_mode_colour_mask;
 
-#define MAX_VDP_BYTES 16
-extern uint8_t  data[MAX_VDP_BYTES];
+// #define MAX_VDP_BYTES 16
+// extern uint8_t  data[MAX_VDP_BYTES];
 extern uint8_t  vdu_index;
 extern uint24_t vdu_required_length;
 

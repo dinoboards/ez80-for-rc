@@ -181,10 +181,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_draw_line.obj", \
  ".\vdp_get_screen_height.obj", \
  ".\vdp_get_screen_width.obj", \
- ".\vdp_set_remap.obj", \
  ".\vdu.obj", \
  ".\vdu_10.obj", \
- ".\vdu_17.obj", \
  ".\vdu_18.obj", \
  ".\vdu_22.obj", \
  ".\vdu_25.obj", \

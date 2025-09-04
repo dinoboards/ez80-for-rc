@@ -19,11 +19,11 @@ uint8_t     current_display_mode   = 255;
 uint24_t last_text_column = 63 * 8;
 uint24_t last_text_row    = 26 * 8;
 // uint8_t      current_tbg_colour       = 0;
-uint8_t current_tfg_colour       = 1;
-uint8_t current_mode_colour_mask = 1;
+// uint8_t current_tfg_colour       = 1;
+// uint8_t current_mode_colour_mask = 1;
 
-#define MAX_VDP_BYTES 16
-uint8_t  data[MAX_VDP_BYTES];
+// #define MAX_VDP_BYTES 16
+// uint8_t  data[MAX_VDP_BYTES];
 uint8_t  vdu_index           = 0;
 uint24_t vdu_required_length = 0;
 
