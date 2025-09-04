@@ -190,7 +190,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vectors16.obj", \
  ".\vm-functions.obj", \
  ".\vm-init.obj", \
- ".\vm-promoted-fn.obj", \
  ".\vm.obj", \
  ".\vm_bytecode.obj", \
  ".\work-area.obj", \

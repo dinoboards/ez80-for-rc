@@ -95,7 +95,6 @@
 <file filter-key="">src\startup\vectors16.asm</file>
 <file filter-key="">src\q3vm\vm-functions.c</file>
 <file filter-key="">src\q3vm\vm-init.c</file>
-<file filter-key="">src\q3vm\vm-promoted-fn.c</file>
 <file filter-key="">src\q3vm\host\vm.c</file>
 <file filter-key="">src\q3vm\vm_bytecode.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\work-area.c</file>

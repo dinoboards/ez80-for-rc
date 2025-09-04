@@ -2,7 +2,6 @@
 #include "host/vm.h"
 #include "includes/host-functions.h"
 #include "src/system-calls-ids.h"
-#include "vm-promoted-fn.h"
 #include "vm_bytecode.h"
 #include <v99x8.h>
 
@@ -61,7 +60,6 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   }
 
   default:
-    return dispatch_hosted_fn(vm, args);
+    return 0;
   }
-  return 0;
 }
