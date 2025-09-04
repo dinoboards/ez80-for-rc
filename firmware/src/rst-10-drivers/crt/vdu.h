@@ -42,16 +42,12 @@ extern point_t convert_point(const point_t p);
 
 extern point_t origin;
 
-extern rectangle_t    gviewport;
-extern rectangle_t    gsviewport;
 extern point_t        current_gpos;
 extern point_t        previous_gpos;
 extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8
 extern uint8_t        font_patterns[256 * 8];
 extern text_colours_t font_color[256];
 
-extern uint24_t last_text_column;
-extern uint24_t last_text_row;
 extern uint8_t  vdu_index;
 extern uint24_t vdu_required_length;
 
