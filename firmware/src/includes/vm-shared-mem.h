@@ -14,6 +14,7 @@
 #define current_tpos             (sm._current_tpos)
 #define data                     (sm._data)
 #define tviewport                (sm._tviewport)
+#define current_display_mode     (sm._current_display_mode)
 
 typedef struct shared_mem_s {
   tpoint_t     _current_tpos;
@@ -24,6 +25,7 @@ typedef struct shared_mem_s {
   uint8_t      _current_tbg_colour;
   uint8_t      _current_tfg_colour;
   uint8_t      _data[MAX_VDP_BYTES];
+  uint8_t      _current_display_mode;
 
   uint8_t _vdp_current_mode;
 

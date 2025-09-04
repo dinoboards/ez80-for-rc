@@ -46,7 +46,6 @@ extern rectangle_t    gviewport;
 extern rectangle_t    gsviewport;
 extern point_t        current_gpos;
 extern point_t        previous_gpos;
-extern uint8_t        current_display_mode;
 extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8
 extern uint8_t        font_patterns[256 * 8];
 extern text_colours_t font_color[256];
