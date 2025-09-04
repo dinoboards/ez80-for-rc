@@ -52,7 +52,7 @@ void vdu(uint8_t ch) {
   }
 
   case 22: {
-    current_fn          = vdu_mode;
+    current_fn          = vm_vdu_mode;
     vdu_required_length = 1;
     return;
   }

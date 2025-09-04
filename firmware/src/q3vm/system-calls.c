@@ -4,6 +4,7 @@
 #include "src/system-calls-ids.h"
 #include "vm_bytecode.h"
 #include <v99x8.h>
+#include "../rst-10-drivers/crt/vdu.h"
 
 void print_string(const char *str);
 int  putchar(int ch);
@@ -57,6 +58,14 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     vdp_cmd_logical_move_vdp_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
                                      VMA_UINT24(21));
     return 0;
+  }
+
+  case SC_CONVERT_X: {
+    return convert_x(VMA_UINT24(3));
+  }
+
+  case SC_CONVERT_Y: {
+    return convert_y(VMA_UINT24(3));
   }
 
   default:

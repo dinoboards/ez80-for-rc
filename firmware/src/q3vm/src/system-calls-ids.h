@@ -6,6 +6,7 @@
 #define SC_PRINT_STRING                     -3
 #define SC_VDP_CMD_WAIT_COMPLETION          -4
 #define SC_VDP_CMD_LOGICAL_MOVE_VDP_TO_VRAM -5
-#define SC_GET_HOST_VAR_DATA                -6
+#define SC_CONVERT_X                        -6
+#define SC_CONVERT_Y                        -7
 
 #endif

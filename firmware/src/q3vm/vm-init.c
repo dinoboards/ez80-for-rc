@@ -21,6 +21,4 @@ void vm_init() {
   }
 
   registers_mirror = &vm.dataBase[Q3VM_DATA_REGISTERS_MIRROR];
-
-  print_string("vm_init\r\n");
 }

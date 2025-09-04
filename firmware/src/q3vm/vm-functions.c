@@ -11,19 +11,20 @@ void vm_call_void(const uint24_t pc) {
   VM_SetStackStore(&vm, NULL, 0);
 }
 
-void vm_call_1(const uint24_t pc, uint24_t arg) {
-  uint8_t stack[200];
-  VM_SetStackStore(&vm, stack, sizeof(stack));
-  VM_Call2(&vm, pc, arg);
-  VM_SetStackStore(&vm, NULL, 0);
-}
+// void vm_call_1(const uint24_t pc, uint24_t arg) {
+//   uint8_t stack[200];
+//   VM_SetStackStore(&vm, stack, sizeof(stack));
+//   VM_Call2(&vm, pc, arg);
+//   VM_SetStackStore(&vm, NULL, 0);
+// }
 
-void vm_call_2(const uint24_t pc, uint24_t arg, uint24_t arg2) {
-  uint8_t stack[200];
-  VM_SetStackStore(&vm, stack, sizeof(stack));
-  VM_Call2(&vm, pc, arg, arg2);
-  VM_SetStackStore(&vm, NULL, 0);
-}
+// void vm_call_2(const uint24_t pc, uint24_t arg, uint24_t arg2) {
+//   uint8_t stack[200];
+//   VM_SetStackStore(&vm, stack, sizeof(stack));
+//   VM_Call2(&vm, pc, arg, arg2);
+//   VM_SetStackStore(&vm, NULL, 0);
+// }
 
 void vm_vdu_colour(void) { vm_call_void(Q3VM_FN_VDU_COLOUR); }
 void vm_vdu_gcol(void) { vm_call_void(Q3VM_FN_VDU_GCOL); }
+void vm_vdu_mode(void) { vm_call_void(Q3VM_FN_VDU_MODE); }
