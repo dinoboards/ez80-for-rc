@@ -15,7 +15,7 @@
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdint.h>
-// #include <stdlib.h>
+#include <vm-shared-mem.h>
 
 #define PAL  1
 #define NTSC 2
@@ -65,7 +65,7 @@ typedef struct {
 
 #endif
 
-extern uint8_t vdp_current_mode; /* private */
+#define vdp_current_mode (sm._vdp_current_mode)
 
 #define REGISTER_COUNT 12
 extern uint8_t registers_mirror[REGISTER_COUNT]; /* private */

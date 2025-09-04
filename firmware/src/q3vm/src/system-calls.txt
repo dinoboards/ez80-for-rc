@@ -1,7 +1,6 @@
 memcpy
 memset
 print_string
-set_host_var_vdp_current_mode
 vdp_cmd_wait_completion
 vdp_cmd_logical_move_vdp_to_vram
 get_host_var_data

@@ -49,11 +49,6 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return VMA_UINT24(3);
   }
 
-  case SC_SET_HOST_VAR_VDP_CURRENT_MODE: {
-    vdp_current_mode = VMA_UINT24(3);
-    return 0;
-  }
-
   case SC_VDP_CMD_WAIT_COMPLETION: {
     vdp_cmd_wait_completion();
     return 0;
