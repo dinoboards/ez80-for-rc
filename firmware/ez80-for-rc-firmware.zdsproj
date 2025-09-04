@@ -89,7 +89,6 @@
 <file filter-key="">src\rst-10-drivers\crt\vdp\vdp_set_remap.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_10.c</file>
-<file filter-key="">src\rst-10-drivers\crt\vdu\vdu_12.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_17.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_18.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_22.c</file>
@@ -97,6 +96,7 @@
 <file filter-key="">src\rst-10-drivers\crt\vdu_init.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_not_implemented.c</file>
 <file filter-key="">src\startup\vectors16.asm</file>
+<file filter-key="">src\q3vm\vm-functions.c</file>
 <file filter-key="">src\q3vm\vm-init.c</file>
 <file filter-key="">src\q3vm\vm-promoted-fn.c</file>
 <file filter-key="">src\q3vm\host\vm.c</file>
@@ -112,7 +112,6 @@
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
-<file filter-key="">src\q3vm\vm-functions.c</file>
 </files>
 
 <!-- configuration information -->

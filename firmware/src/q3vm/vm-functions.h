@@ -30,4 +30,6 @@ extern void vm_call_1(const uint24_t pc, uint24_t arg);
 #define vm_vdu_set_default_palette_16()                                                                                            \
   { vm_call_void(Q3VM_FN_VDU_SET_DEFAULT_PALETTE_16); }
 
+#define vm_vdu_cls()                                                                                                               \
+  { vm_call_void(Q3VM_FN_VDU_CLS); }
 #endif

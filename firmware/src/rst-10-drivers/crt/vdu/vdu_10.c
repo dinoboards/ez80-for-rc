@@ -4,14 +4,14 @@
 
 void vdu_lf(void) {
 
-  if (current_tpos.y < tviewport.bottom) {
-    current_tpos.y += 8;
+  if (sm.current_tpos.y < sm.tviewport.bottom) {
+    sm.current_tpos.y += 8;
   } else {
 
-    uint24_t left   = tviewport.left;
-    uint24_t top    = tviewport.top;
-    uint24_t right  = tviewport.right;
-    uint24_t bottom = tviewport.bottom;
+    uint24_t left   = sm.tviewport.left;
+    uint24_t top    = sm.tviewport.top;
+    uint24_t right  = sm.tviewport.right;
+    uint24_t bottom = sm.tviewport.bottom;
 
     uint24_t width  = right - left + 8;
     uint24_t height = bottom - top;
@@ -21,6 +21,6 @@ void vdu_lf(void) {
     vdp_cmd_wait_completion();
     vdp_cmd_move_vram_to_vram(left, top + 8, left, top, width, height, 0);
     vdp_cmd_wait_completion();
-    vdp_cmd_vdp_to_vram(left, bottom, width, 8, current_tbg_colour, 0);
+    vdp_cmd_vdp_to_vram(left, bottom, width, 8, sm.current_tbg_colour, 0);
   }
 }

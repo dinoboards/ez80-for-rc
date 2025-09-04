@@ -1,4 +1,5 @@
 #include "vdu.h"
+#include "../../q3vm/vm-functions.h"
 #include "stddef.h"
 
 void graphic_print_char(uint24_t ch);
@@ -29,7 +30,7 @@ void vdu(uint8_t ch) {
   }
 
   case 12: {
-    vdu_cls();
+    vm_vdu_cls();
     return;
   }
 

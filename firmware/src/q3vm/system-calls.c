@@ -54,6 +54,17 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return 0;
   }
 
+  case SC_VDP_CMD_WAIT_COMPLETION: {
+    vdp_cmd_wait_completion();
+    return 0;
+  }
+
+  case SC_VDP_CMD_LOGICAL_MOVE_VDP_TO_VRAM: {
+    vdp_cmd_logical_move_vdp_to_vram(VMA_UINT24(3), VMA_UINT24(6), VMA_UINT24(9), VMA_UINT24(12), VMA_UINT24(15), VMA_UINT24(18),
+                                     VMA_UINT24(21));
+    return 0;
+  }
+
   default:
     return dispatch_hosted_fn(vm, args);
   }

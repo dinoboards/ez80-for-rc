@@ -184,7 +184,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_set_remap.obj", \
  ".\vdu.obj", \
  ".\vdu_10.obj", \
- ".\vdu_12.obj", \
  ".\vdu_17.obj", \
  ".\vdu_18.obj", \
  ".\vdu_22.obj", \
@@ -192,6 +191,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdu_init.obj", \
  ".\vdu_not_implemented.obj", \
  ".\vectors16.obj", \
+ ".\vm-functions.obj", \
  ".\vm-init.obj", \
  ".\vm-promoted-fn.obj", \
  ".\vm.obj", \
@@ -207,7 +207,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
- ".\vm-functions.obj", \
  "C:\ZDS\lib\std\chelpD.lib", \
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \

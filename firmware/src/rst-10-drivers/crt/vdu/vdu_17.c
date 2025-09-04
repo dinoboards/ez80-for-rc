@@ -8,9 +8,9 @@ the value n. It is equivalent to COLOUR n
 */
 void vdu_colour() {
   if (data[0] >= 128)
-    current_tbg_colour = data[0] & current_mode_colour_mask;
+    sm.current_tbg_colour = data[0] & current_mode_colour_mask;
   else
     current_tfg_colour = data[0] & current_mode_colour_mask;
 
-  vdp_set_remap(current_tbg_colour, current_tfg_colour);
+  vdp_set_remap(sm.current_tbg_colour, current_tfg_colour);
 }

@@ -3,52 +3,11 @@
 
 #include "v99x8.h"
 #include <stdint.h>
-
-typedef struct point_s {
-  int16_t x;
-  int16_t y;
-} point_t;
+#include <vdu-types.h>
+#include <vm-shared-mem.h>
 
 extern point_t point_new(const int16_t x, const int16_t y);
-
-typedef struct line {
-  point_t a;
-  point_t b;
-} line_t;
-
-line_t line_new(const point_t x, const point_t y);
-
-typedef struct rectangle {
-  int24_t left;
-  int24_t bottom;
-  int24_t right;
-  int24_t top;
-} rectangle_t;
-
-typedef struct tpoint {
-  uint24_t x;
-  uint24_t y;
-} tpoint_t;
-
-typedef struct trectangle {
-  uint24_t left;
-  uint24_t bottom;
-  uint24_t right;
-  uint24_t top;
-} trectangle_t;
-
-typedef struct triangle {
-  point_t vt1;
-  point_t vt2;
-  point_t vt3;
-} triangle_t;
-
-typedef struct text_colours {
-  uint8_t fg;
-  uint8_t bg;
-} text_colours_t;
-
-typedef void (*mos_vdu_handler)(void);
+extern line_t  line_new(const point_t x, const point_t y);
 
 extern void vdu_bs(void);
 extern void vdu_lf(void);
@@ -70,7 +29,7 @@ void vdu_set_default_palette_4();
 void vdu_set_default_palette_16();
 
 #define vdu_cr()                                                                                                                   \
-  { current_tpos.x = tviewport.left; }
+  { sm.current_tpos.x = sm.tviewport.left; }
 
 extern void init_font_patterns(void);
 void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);
@@ -94,13 +53,13 @@ extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8
 extern uint8_t        font_patterns[256 * 8];
 extern text_colours_t font_color[256];
 
-extern tpoint_t     current_tpos;
-extern trectangle_t tviewport;
-extern uint24_t     last_text_column;
-extern uint24_t     last_text_row;
-extern uint8_t      current_tbg_colour;
-extern uint8_t      current_tfg_colour;
-extern uint8_t      current_mode_colour_mask;
+// extern tpoint_t     current_tpos;
+// extern trectangle_t tviewport;
+extern uint24_t last_text_column;
+extern uint24_t last_text_row;
+// extern uint8_t      current_tbg_colour;
+extern uint8_t current_tfg_colour;
+extern uint8_t current_mode_colour_mask;
 
 #define MAX_VDP_BYTES 16
 extern uint8_t  data[MAX_VDP_BYTES];

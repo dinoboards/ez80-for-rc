@@ -57,22 +57,22 @@
 
 void vdu_mode(void) {
   current_display_mode = data[0];
-  tviewport.left       = 0;
+  sm.tviewport.left    = 0;
   last_text_row        = 31 * 8;
-  tviewport.bottom     = 31 * 8;
-  tviewport.top        = 0;
+  sm.tviewport.bottom  = 31 * 8;
+  sm.tviewport.top     = 0;
 
   switch (data[0]) {
   case 0:
     vm_vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
-    current_tbg_colour       = 0;
+    sm.current_tbg_colour    = 0;
     current_mode_colour_mask = 1;
     last_text_column         = 79 * 8;
-    tviewport.right          = 79 * 8;
+    sm.tviewport.right       = 79 * 8;
     last_text_row            = 31 * 8;
-    tviewport.bottom         = 31 * 8;
+    sm.tviewport.bottom      = 31 * 8;
     vm_vdp_set_super_graphic_26();
     break;
 
@@ -80,12 +80,12 @@ void vdu_mode(void) {
     vm_vdu_set_default_palette_4();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
-    current_tbg_colour       = 0;
+    sm.current_tbg_colour    = 0;
     current_mode_colour_mask = 3;
     last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
+    sm.tviewport.right       = 39 * 8;
     last_text_row            = 31 * 8;
-    tviewport.bottom         = 31 * 8;
+    sm.tviewport.bottom      = 31 * 8;
     vm_vdp_set_super_graphic_2();
     break;
 
@@ -93,12 +93,12 @@ void vdu_mode(void) {
     vm_vdu_set_default_palette_16();
     current_tfg_colour       = 7;
     current_gfg_colour       = 7;
-    current_tbg_colour       = 0;
+    sm.current_tbg_colour    = 0;
     current_mode_colour_mask = 15;
     last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
+    sm.tviewport.right       = 39 * 8;
     last_text_row            = 29 * 8;
-    tviewport.bottom         = 29 * 8;
+    sm.tviewport.bottom      = 29 * 8;
     vm_vdp_set_super_graphic_2();
     break;
 
@@ -106,12 +106,12 @@ void vdu_mode(void) {
     vm_vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
-    current_tbg_colour       = 0;
+    sm.current_tbg_colour    = 0;
     current_mode_colour_mask = 1;
     last_text_column         = 79 * 8;
-    tviewport.right          = 79 * 8;
+    sm.tviewport.right       = 79 * 8;
     last_text_row            = 49 * 8;
-    tviewport.bottom         = 49 * 8;
+    sm.tviewport.bottom      = 49 * 8;
     vm_vdp_set_super_graphic_21();
     break;
 
@@ -119,12 +119,12 @@ void vdu_mode(void) {
     vm_vdu_set_default_palette_2();
     current_tfg_colour       = 1;
     current_gfg_colour       = 1;
-    current_tbg_colour       = 0;
+    sm.current_tbg_colour    = 0;
     current_mode_colour_mask = 1;
     last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
+    sm.tviewport.right       = 39 * 8;
     last_text_row            = 29 * 8;
-    tviewport.bottom         = 29 * 8;
+    sm.tviewport.bottom      = 29 * 8;
     vm_vdp_set_super_graphic_2();
     break;
 
@@ -132,12 +132,12 @@ void vdu_mode(void) {
     vm_vdu_set_default_palette_4();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
-    current_tbg_colour       = 0;
+    sm.current_tbg_colour    = 0;
     current_mode_colour_mask = 3;
     last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
+    sm.tviewport.right       = 39 * 8;
     last_text_row            = 29 * 8;
-    tviewport.bottom         = 29 * 8;
+    sm.tviewport.bottom      = 29 * 8;
     vm_vdp_set_super_graphic_2();
     break;
 
@@ -145,12 +145,12 @@ void vdu_mode(void) {
     vm_vdu_set_default_palette_16();
     current_tfg_colour       = 3;
     current_gfg_colour       = 3;
-    current_tbg_colour       = 0;
+    sm.current_tbg_colour    = 0;
     current_mode_colour_mask = 3;
     last_text_column         = 31 * 8;
-    tviewport.right          = 31 * 8;
+    sm.tviewport.right       = 31 * 8;
     last_text_row            = 23 * 8;
-    tviewport.bottom         = 23 * 8;
+    sm.tviewport.bottom      = 23 * 8;
     vm_vdp_set_lines(192);
     vm_vdp_set_refresh(50);
     vm_vdp_set_graphic_4();
@@ -163,12 +163,12 @@ void vdu_mode(void) {
     vdu_not_implemented();
   }
 
-  vdp_set_remap(current_tbg_colour, current_tfg_colour); /* TODO: move this to where we set text colours */
+  vdp_set_remap(sm.current_tbg_colour, current_tfg_colour); /* TODO: move this to where we set text colours */
 
   gsviewport.left   = convert_x(gviewport.left);
   gsviewport.top    = convert_y(gviewport.top);
   gsviewport.right  = convert_x(gviewport.right);
   gsviewport.bottom = convert_y(gviewport.bottom);
 
-  vdu_cls();
+  vm_vdu_cls();
 }
