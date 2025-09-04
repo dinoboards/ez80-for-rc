@@ -46,7 +46,7 @@ void vdu(uint8_t ch) {
   }
 
   case 18: {
-    current_fn          = vdu_gcol;
+    current_fn          = vm_vdu_gcol;
     vdu_required_length = 2;
     return;
   }

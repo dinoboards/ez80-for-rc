@@ -46,8 +46,6 @@ extern rectangle_t    gviewport;
 extern rectangle_t    gsviewport;
 extern point_t        current_gpos;
 extern point_t        previous_gpos;
-extern uint8_t        current_gfg_colour;
-extern uint8_t        current_operation_mode;
 extern uint8_t        current_display_mode;
 extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8
 extern uint8_t        font_patterns[256 * 8];
@@ -55,11 +53,6 @@ extern text_colours_t font_color[256];
 
 extern uint24_t last_text_column;
 extern uint24_t last_text_row;
-// extern uint8_t  current_tfg_colour;
-// extern uint8_t  current_mode_colour_mask;
-
-// #define MAX_VDP_BYTES 16
-// extern uint8_t  data[MAX_VDP_BYTES];
 extern uint8_t  vdu_index;
 extern uint24_t vdu_required_length;
 

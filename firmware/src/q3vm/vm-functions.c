@@ -26,3 +26,4 @@ void vm_call_2(const uint24_t pc, uint24_t arg, uint24_t arg2) {
 }
 
 void vm_vdu_colour(void) { vm_call_void(Q3VM_FN_VDU_COLOUR); }
+void vm_vdu_gcol(void) { vm_call_void(Q3VM_FN_VDU_GCOL); }

@@ -681,14 +681,6 @@ clean:
             $(RM) "$(WORKDIR)\vdu_10.lst"
 	@if exist "$(WORKDIR)\vdu_10.src"  \
             $(RM) "$(WORKDIR)\vdu_10.src"
-	@if exist "$(WORKDIR)\vdu_18.obj"  \
-            $(RM) "$(WORKDIR)\vdu_18.obj"
-	@if exist "$(WORKDIR)\vdu_18.lis"  \
-            $(RM) "$(WORKDIR)\vdu_18.lis"
-	@if exist "$(WORKDIR)\vdu_18.lst"  \
-            $(RM) "$(WORKDIR)\vdu_18.lst"
-	@if exist "$(WORKDIR)\vdu_18.src"  \
-            $(RM) "$(WORKDIR)\vdu_18.src"
 	@if exist "$(WORKDIR)\vdu_22.obj"  \
             $(RM) "$(WORKDIR)\vdu_22.obj"
 	@if exist "$(WORKDIR)\vdu_22.lis"  \
@@ -929,7 +921,6 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vdu_10.obj  \
-            $(WORKDIR_ESCSPACE)\vdu_18.obj  \
             $(WORKDIR_ESCSPACE)\vdu_22.obj  \
             $(WORKDIR_ESCSPACE)\vdu_25.obj  \
             $(WORKDIR_ESCSPACE)\vdu_init.obj  \
@@ -1774,11 +1765,6 @@ $(WORKDIR_ESCSPACE)\vdu_10.obj :  \
             Z:\ez80-for-rc\firmware\src\includes\v99x8.h  \
             Z:\ez80-for-rc\firmware\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_10.c"
-
-$(WORKDIR_ESCSPACE)\vdu_18.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_18.c  \
-            Z:\ez80-for-rc\firmware\src\rst-10-drivers\crt\vdu.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_18.c"
 
 $(WORKDIR_ESCSPACE)\vdu_22.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_22.c  \

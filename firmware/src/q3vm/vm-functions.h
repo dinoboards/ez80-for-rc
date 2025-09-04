@@ -38,5 +38,6 @@ extern void vm_call_2(const uint24_t pc, uint24_t arg, uint24_t arg2);
   { vm_call_2(Q3VM_FN_VDP_SET_REMAP, back, fore); }
 
 extern void vm_vdu_colour(void);
+extern void vm_vdu_gcol(void);
 
 #endif

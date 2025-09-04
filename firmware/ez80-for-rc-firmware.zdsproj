@@ -88,7 +88,6 @@
 <file filter-key="">src\rst-10-drivers\crt\vdp\vdp_get_screen_width.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_10.c</file>
-<file filter-key="">src\rst-10-drivers\crt\vdu\vdu_18.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_22.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_25.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu_init.c</file>
