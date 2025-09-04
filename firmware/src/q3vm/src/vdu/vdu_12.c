@@ -17,6 +17,6 @@ void vdu_cls(void) {
   vdp_cmd_wait_completion();
   vdp_cmd_logical_move_vdp_to_vram(sm.tviewport.left, sm.tviewport.top, width, height, sm.current_tbg_colour, 0, 0);
 
-  sm.current_tpos.x = sm.tviewport.left;
-  sm.current_tpos.y = sm.tviewport.top;
+  current_tpos.x = sm.tviewport.left;
+  current_tpos.y = sm.tviewport.top;
 }

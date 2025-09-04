@@ -29,7 +29,7 @@ void vdu_set_default_palette_4();
 void vdu_set_default_palette_16();
 
 #define vdu_cr()                                                                                                                   \
-  { sm.current_tpos.x = sm.tviewport.left; }
+  { current_tpos.x = sm.tviewport.left; }
 
 extern void init_font_patterns(void);
 void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);

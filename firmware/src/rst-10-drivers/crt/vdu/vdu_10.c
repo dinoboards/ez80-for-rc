@@ -4,8 +4,8 @@
 
 void vdu_lf(void) {
 
-  if (sm.current_tpos.y < sm.tviewport.bottom) {
-    sm.current_tpos.y += 8;
+  if (current_tpos.y < sm.tviewport.bottom) {
+    current_tpos.y += 8;
   } else {
 
     uint24_t left   = sm.tviewport.left;
