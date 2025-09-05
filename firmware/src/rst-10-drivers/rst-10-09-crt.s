@@ -7,6 +7,7 @@
 
 	SECTION CODE
 
+	XREF	_vm_vdp_init
 
 	.assume adl=1
 ;
@@ -27,11 +28,18 @@ _crt_dispatch:
 	OR	A					; TEST SUB FUNCTION CODE
 	JR	Z, crt_vdu				; B = 0, OUTPUT TO VDU STREAM
 	DEC	A
-	JR	Z, crt_ansi				; B = 1, OUTPUT TO ANSI STREAM
+	JR	Z, crt_ansi				; *B = 1, OUTPUT TO ANSI STREAM
 	DEC	A
-	JR	Z, crt_key_event			; B = 2, returns next qued keyboard event payload (aka usb_kyb_event)
+	JR	Z, crt_key_event			; *B = 2, returns next qued keyboard event payload (aka usb_kyb_event or uart in)
 	DEC	A
-	JR	Z, crt_vdp_fn				; B = 3, INVOKE SPECIFIC vdp_... library functions, fn id in C, values on stack.  must not be invoked with rst.l
+	JR	Z, crt_vdp_fn				; *B = 3, INVOKE SPECIFIC vdp_... library functions, fn id in C, values on stack.  must not be invoked with rst.l
+
+; *Not currently implemented - under consideration only for implementation
+
+	; 255 V99X8/Super PROBE
+	LD	A, B
+	CP	255
+	JR	Z, crt_v99x8_probe
 
 	LD	A, 1					; UNKNOWN SUB FUnCTION
 	OR	A
@@ -66,4 +74,8 @@ crt_vdu:
 crt_ansi:
 crt_key_event:
 crt_vdp_fn:
+	RET.L
+
+crt_v99x8_probe:
+	CALL	_vm_vdp_init
 	RET.L

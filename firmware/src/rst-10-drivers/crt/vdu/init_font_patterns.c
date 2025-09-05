@@ -1,4 +1,5 @@
-#include ".. /../../q3vm/vm-functions.h"
+#include "../../../q3vm/bytecode.h"
+#include "../../../q3vm/vm-functions.h"
 #include "../vdu.h"
 #include <v99x8-super.h>
 

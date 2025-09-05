@@ -63,6 +63,13 @@ longspike:
 _spike:
 
 	LD	A, 9
+	LD	B, 255
+	RST.L	%10
+	; A contains CHIP TYPE
+	NOP
+	NOP
+
+	LD	A, 9
 	LD	B, 0
 	LD	C, 22	; mode
 	RST.L	%10

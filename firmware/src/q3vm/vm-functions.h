@@ -6,15 +6,15 @@
 
 extern vm_t vm;
 
-extern void vm_call_void(const uint24_t pc);
+extern uint24_t vm_call_void(const uint24_t pc);
 // extern void vm_call_1(const uint24_t pc, uint24_t arg);
 // extern void vm_call_2(const uint24_t pc, uint24_t arg, uint24_t arg2);
 
 #define vm_vdu_cls()                                                                                                               \
   { vm_call_void(Q3VM_FN_VDU_CLS); }
 
-#define vm_vdp_set_super_graphic_1()                                                                                                               \
-{ vm_call_void(Q3VM_FN_VDP_SET_SUPER_GRAPHIC_1); }
+#define vm_vdp_set_super_graphic_1()                                                                                               \
+  { vm_call_void(Q3VM_FN_VDP_SET_SUPER_GRAPHIC_1); }
 
 extern void vm_vdu_colour(void);
 extern void vm_vdu_gcol(void);

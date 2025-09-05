@@ -96,7 +96,7 @@ extern uint8_t registers_mirror[REGISTER_COUNT]; /* private */
  * @note does not enable any specific graphics mode
  * @note should be called before any vdp operations
  */
-extern uint8_t vdp_init(void);
+extern uint24_t vdp_init(void);
 
 extern void set_base_registers(void); /* private */
 

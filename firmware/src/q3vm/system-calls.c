@@ -1,10 +1,10 @@
+#include "../rst-10-drivers/crt/vdu.h"
 #include "host/target-support.h"
 #include "host/vm.h"
 #include "includes/host-functions.h"
 #include "src/system-calls-ids.h"
 #include "vm_bytecode.h"
 #include <v99x8.h>
-#include "../rst-10-drivers/crt/vdu.h"
 
 void print_string(const char *str);
 int  putchar(int ch);
@@ -66,6 +66,10 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
 
   case SC_CONVERT_Y: {
     return convert_y(VMA_UINT24(3));
+  }
+
+  case SC_VDP_GET_STATUS: {
+    return vdp_get_status(VMA_UINT24(3));
   }
 
   default:

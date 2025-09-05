@@ -8,5 +8,6 @@
 #define SC_VDP_CMD_LOGICAL_MOVE_VDP_TO_VRAM -5
 #define SC_CONVERT_X                        -6
 #define SC_CONVERT_Y                        -7
+#define SC_VDP_GET_STATUS                   -8
 
 #endif

@@ -274,14 +274,13 @@ usb_kyb_status:
 ;
 ; Outputs
 ;   A -> Status
-;   H -> Keycode
+;   L -> ASCII
 ;
 ; Read the next key data from the keyboard. If a buffer is used, return the next key code in the buffer.
 ; If no key data is available, this function will wait indefinitely for a key press. The Status (A) is a
 ; standard usb_error_t result code.
 ;
-; The ascii Keycode (H) is generally returned as appropriate ASCII values, if possible. Special keys, like
-; function keys and arrows, are returned as reserved codes.
+; The character (L) is generally returned as appropriate ASCII values, if possible.
 ;
 ; marshalls to uint16_t usb_kyb_read()
 usb_kyb_read:

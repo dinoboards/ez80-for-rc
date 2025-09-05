@@ -50,7 +50,7 @@
 <file filter-key="">src\rst-10-drivers\rst-10-06-usb-functions.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-07-emulator-function.s</file>
 <file filter-key="">src\rst-10-drivers\rst-10-08-crt-adl.s</file>
-<file filter-key="">src\rst-10-drivers\rst-10-08-crt.s</file>
+<file filter-key="">src\rst-10-drivers\rst-10-09-crt.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
 <file filter-key="">src\rst-18-function.s</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\scsi_driver.c</file>
@@ -86,6 +86,7 @@
 <file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_draw_line.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdp\vdp_get_screen_height.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdp\vdp_get_screen_width.c</file>
+<file filter-key="">src\rst-10-drivers\crt\v99x8\vdp_get_status.asm</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_10.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_25.c</file>
@@ -526,13 +527,32 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="PC" />
-<watch-element expression="_vm" />
-<watch-element expression="*PC" />
+<watch-element expression="pc" />
 </watch-elements>
 
 <!-- breakpoint information -->
 <breakpoints>
+<breakpoint temporary="false" enabled="true" >
+<line-number>11</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\q3vm\vm-functions.c</pathname>
+<address>25685</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>35</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\q3vm\vm-functions.c</pathname>
+<address>25811</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
+<breakpoint temporary="false" enabled="true" >
+<line-number>6</line-number>
+<pathname>Z:\ez80-for-rc\firmware\src\rst-10-drivers\crt\vdu\init_font_patterns.c</pathname>
+<address>10072</address>
+<command></command>
+<preserve-type>0</preserve-type>
+</breakpoint>
 </breakpoints>
 
 </project>

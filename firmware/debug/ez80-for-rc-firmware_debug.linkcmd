@@ -145,7 +145,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-06-usb-functions.obj", \
  ".\rst-10-07-emulator-function.obj", \
  ".\rst-10-08-crt-adl.obj", \
- ".\rst-10-08-crt.obj", \
+ ".\rst-10-09-crt.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-function.obj", \
  ".\scsi_driver.obj", \
@@ -181,6 +181,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_draw_line.obj", \
  ".\vdp_get_screen_height.obj", \
  ".\vdp_get_screen_width.obj", \
+ ".\vdp_get_status.obj", \
  ".\vdu.obj", \
  ".\vdu_10.obj", \
  ".\vdu_25.obj", \

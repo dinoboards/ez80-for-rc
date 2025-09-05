@@ -421,12 +421,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-10-08-crt-adl.lis"
 	@if exist "$(WORKDIR)\rst-10-08-crt-adl.lst"  \
             $(RM) "$(WORKDIR)\rst-10-08-crt-adl.lst"
-	@if exist "$(WORKDIR)\rst-10-08-crt.obj"  \
-            $(RM) "$(WORKDIR)\rst-10-08-crt.obj"
-	@if exist "$(WORKDIR)\rst-10-08-crt.lis"  \
-            $(RM) "$(WORKDIR)\rst-10-08-crt.lis"
-	@if exist "$(WORKDIR)\rst-10-08-crt.lst"  \
-            $(RM) "$(WORKDIR)\rst-10-08-crt.lst"
+	@if exist "$(WORKDIR)\rst-10-09-crt.obj"  \
+            $(RM) "$(WORKDIR)\rst-10-09-crt.obj"
+	@if exist "$(WORKDIR)\rst-10-09-crt.lis"  \
+            $(RM) "$(WORKDIR)\rst-10-09-crt.lis"
+	@if exist "$(WORKDIR)\rst-10-09-crt.lst"  \
+            $(RM) "$(WORKDIR)\rst-10-09-crt.lst"
 	@if exist "$(WORKDIR)\rst-10-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-10-functions.obj"
 	@if exist "$(WORKDIR)\rst-10-functions.lis"  \
@@ -665,6 +665,12 @@ clean:
             $(RM) "$(WORKDIR)\vdp_get_screen_width.lst"
 	@if exist "$(WORKDIR)\vdp_get_screen_width.src"  \
             $(RM) "$(WORKDIR)\vdp_get_screen_width.src"
+	@if exist "$(WORKDIR)\vdp_get_status.obj"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.obj"
+	@if exist "$(WORKDIR)\vdp_get_status.lis"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.lis"
+	@if exist "$(WORKDIR)\vdp_get_status.lst"  \
+            $(RM) "$(WORKDIR)\vdp_get_status.lst"
 	@if exist "$(WORKDIR)\vdu.obj"  \
             $(RM) "$(WORKDIR)\vdu.obj"
 	@if exist "$(WORKDIR)\vdu.lis"  \
@@ -867,7 +873,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-06-usb-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-07-emulator-function.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-08-crt-adl.obj  \
-            $(WORKDIR_ESCSPACE)\rst-10-08-crt.obj  \
+            $(WORKDIR_ESCSPACE)\rst-10-09-crt.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
@@ -903,6 +909,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\vdp_draw_line.obj  \
             $(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj  \
             $(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj  \
+            $(WORKDIR_ESCSPACE)\vdp_get_status.obj  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vdu_10.obj  \
             $(WORKDIR_ESCSPACE)\vdu_25.obj  \
@@ -1196,6 +1203,7 @@ $(WORKDIR_ESCSPACE)\init-f92.obj :  \
 
 $(WORKDIR_ESCSPACE)\init_font_patterns.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\init_font_patterns.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -1207,12 +1215,17 @@ $(WORKDIR_ESCSPACE)\init_font_patterns.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
             $(INCLUDE_ESCSPACE)\zilog\uart.h  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vm-shared-mem.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\bytecode.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
+            $(PRJDIR_ESCSPACE)\src\q3vm\vm-functions.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\init_font_patterns.c"
 
@@ -1435,13 +1448,13 @@ $(WORKDIR_ESCSPACE)\rst-10-08-crt-adl.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-08-crt-adl.s"
 
-$(WORKDIR_ESCSPACE)\rst-10-08-crt.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-08-crt.s  \
+$(WORKDIR_ESCSPACE)\rst-10-09-crt.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\rst-10-09-crt.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
             $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
-	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-08-crt.s"
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\rst-10-09-crt.s"
 
 $(WORKDIR_ESCSPACE)\rst-10-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-functions.s  \
@@ -1847,6 +1860,12 @@ $(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vm-shared-mem.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_get_screen_width.c"
+
+$(WORKDIR_ESCSPACE)\vdp_get_status.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\vdp_get_status.asm  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\v99x8\common.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_get_status.asm"
 
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
