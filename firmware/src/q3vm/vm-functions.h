@@ -16,6 +16,8 @@ extern uint24_t vm_call_void(const uint24_t pc);
 #define vm_vdp_set_super_graphic_1()                                                                                               \
   { vm_call_void(Q3VM_FN_VDP_SET_SUPER_GRAPHIC_1); }
 
+  #define vm_vdu_bs() { vm_call_void(Q3VM_FN_VDU_BS); }
+
 extern void vm_vdu_colour(void);
 extern void vm_vdu_gcol(void);
 extern void vm_vdu_mode(void);

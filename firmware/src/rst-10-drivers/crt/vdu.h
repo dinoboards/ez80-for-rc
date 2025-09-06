@@ -69,4 +69,11 @@ extern void vdu_not_implemented(void);
 void vdu_cursor_disable();
 void vdu_cursor_enable();
 
+#define vdu_bs() { \
+  if (current_tpos.x > tviewport.left) \
+    current_tpos.x-=8; \
+}
+
+#define vdu_cr() { current_tpos.x = tviewport.left; }
+
 #endif

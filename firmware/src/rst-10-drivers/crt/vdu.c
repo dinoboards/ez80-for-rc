@@ -28,6 +28,11 @@ void vdu(uint8_t ch) {
   }
 
   switch (ch) {
+  case 8: {
+    vdu_bs();
+    goto done;
+  }
+
   case '\n': {
     vdu_lf();
     goto done;
