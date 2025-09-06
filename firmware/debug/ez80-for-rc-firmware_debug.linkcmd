@@ -184,7 +184,9 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_get_status.obj", \
  ".\vdu.obj", \
  ".\vdu_10.obj", \
+ ".\vdu_13.obj", \
  ".\vdu_25.obj", \
+ ".\vdu_cursor.obj", \
  ".\vdu_init.obj", \
  ".\vdu_not_implemented.obj", \
  ".\vectors16.obj", \

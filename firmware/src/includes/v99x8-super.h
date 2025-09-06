@@ -59,7 +59,8 @@
 
  */
 
-#define CMD_LOGIC_REMAP 0x05 /* DC = (SC == 0 ?) REMAP_BACK_COLOUR : REMAP_FORE_COLOUR */
+#define CMD_LOGIC_REMAP     0x05 /* DC = (SC == 0 ?) REMAP_BACK_COLOUR : REMAP_FORE_COLOUR */
+#define CMD_LOGIC_REMAP_XOR 0x06 /* DC = (SC == 0 ?) REMAP_BACK_COLOUR : REMAP_FORE_COLOUR */
 
 #ifdef __ZDS__
 /**

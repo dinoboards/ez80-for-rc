@@ -11,6 +11,7 @@ extern line_t  line_new(const point_t x, const point_t y);
 
 extern void vdu_bs(void);
 extern void vdu_lf(void);
+extern void vdu_cr(void);
 extern void vdu_cls(void);
 extern void vdu_clg(void);
 extern void vdu_colour(void);
@@ -28,9 +29,6 @@ void vdu_set_default_palette_2();
 void vdu_set_default_palette_4();
 void vdu_set_default_palette_16();
 
-#define vdu_cr()                                                                                                                   \
-  { current_tpos.x = tviewport.left; }
-
 extern void init_font_patterns(void);
 void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);
 
@@ -40,6 +38,12 @@ extern point_t convert_point(const point_t p);
 
 // vdu variables
 
+typedef struct cursor_state_s {
+  uint8_t enabled : 1;
+  uint8_t toggle : 1;
+  uint8_t hide : 1; /* disable while moving x,y */
+} cursor_state_t;
+
 extern point_t origin;
 
 extern point_t        current_gpos;
@@ -47,6 +51,7 @@ extern point_t        previous_gpos;
 extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8
 extern uint8_t        font_patterns[256 * 8];
 extern text_colours_t font_color[256];
+extern cursor_state_t cursor_state;
 
 extern uint8_t  vdu_index;
 extern uint24_t vdu_required_length;
@@ -60,5 +65,8 @@ extern void vdu_not_implemented(void);
 
 #define VRAM_SIZE         0x100000
 #define FONT_8X8_STORED_Y (VRAM_SIZE - (8 * 256))
+
+void vdu_cursor_disable();
+void vdu_cursor_enable();
 
 #endif

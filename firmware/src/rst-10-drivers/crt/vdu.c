@@ -5,6 +5,10 @@
 void graphic_print_char(uint24_t ch);
 
 void vdu(uint8_t ch) {
+  uint8_t cursor_enabled = cursor_state.enabled;
+  if (cursor_enabled)
+    vdu_cursor_disable();
+
   if (vdu_required_length) {
     data[vdu_index++] = ch;
     if (vdu_index == vdu_required_length) {
@@ -15,52 +19,56 @@ void vdu(uint8_t ch) {
 
       fn();
     }
-    return;
+    goto done;
   }
 
   if (ch >= ' ') {
     graphic_print_char(ch);
-    return;
+    goto done;
   }
 
   switch (ch) {
   case '\n': {
     vdu_lf();
-    return;
+    goto done;
   }
 
   case 12: {
     vm_vdu_cls();
-    return;
+    goto done;
   }
 
   case '\r': {
     vdu_cr();
-    return;
+    goto done;
   }
 
   case 17: {
     current_fn          = vm_vdu_colour;
     vdu_required_length = 1;
-    return;
+    goto done;
   }
 
   case 18: {
     current_fn          = vm_vdu_gcol;
     vdu_required_length = 2;
-    return;
+    goto done;
   }
 
   case 22: {
     current_fn          = vm_vdu_mode;
     vdu_required_length = 1;
-    return;
+    goto done;
   }
 
   case 25: {
     current_fn          = vdu_plot;
     vdu_required_length = 5;
-    return;
+    goto done;
   }
   }
+
+done:
+  if (cursor_enabled)
+    vdu_cursor_enable();
 }

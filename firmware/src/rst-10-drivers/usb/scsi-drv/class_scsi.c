@@ -7,9 +7,6 @@ const scsi_command_block_wrapper_t scsi_command_block_wrapper = {{0x55, 0x53, 0x
 
 uint16_t next_tag = 0;
 
-extern uint24_t di_and_save();
-extern void     restore_ei(uint24_t s);
-
 usb_error_t do_scsi_cmd(device_config_storage_t *const      dev,
                         scsi_command_block_wrapper_t *const cbw,
                         void *const                         send_receive_buffer,

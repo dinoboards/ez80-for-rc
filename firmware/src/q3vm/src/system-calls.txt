@@ -6,3 +6,4 @@ vdp_cmd_logical_move_vdp_to_vram
 convert_x
 convert_y
 vdp_get_status
+vdu_cursor_enable

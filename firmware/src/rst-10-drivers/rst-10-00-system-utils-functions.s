@@ -37,6 +37,7 @@
 	XREF	_led_flashing_state
 	XREF	_led_flash_delay_count
 	XREF	_led_flash_delay_period
+	XREF	_vdu_toggle_cursor
 
 ; interrupt to control flash rate of on board led
 _system_led_timer_isr:
@@ -68,6 +69,13 @@ _system_led_timer_isr:
 	AND	%FE
 	OR	B
 	OUT0	(PC_DR), A
+
+	push	ix
+	push	iy
+	call	_vdu_toggle_cursor
+	pop	iy
+	pop	ix
+
 	pop	bc
 
 led_continue:

@@ -164,4 +164,5 @@ void vdu_mode(void) {
   gsviewport.bottom = convert_y(gviewport.bottom);
 
   vdu_cls();
+  vdu_cursor_enable();
 }

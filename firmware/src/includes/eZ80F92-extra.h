@@ -46,4 +46,19 @@
 #define FLASH_KEY_UNLOCK_1 0xB6
 #define FLASH_KEY_UNLOCK_2 0x49
 
+#define di_and_save()                                                                                                              \
+  {                                                                                                                                \
+    asm("LD    a, i");                                                                                                             \
+    asm("PUSH  af");                                                                                                               \
+    asm("DI");                                                                                                                     \
+  }
+
+#define restore_ei()                                                                                                               \
+  {                                                                                                                                \
+    asm("POP   hl");                                                                                                               \
+    asm("BIT   #2, l");                                                                                                            \
+    asm("JR    Z, $F");                                                                                                            \
+    asm("EI");                                                                                                                     \
+    asm("$$:");                                                                                                                    \
+  }
 #endif

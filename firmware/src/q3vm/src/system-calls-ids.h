@@ -9,5 +9,6 @@
 #define SC_CONVERT_X                        -6
 #define SC_CONVERT_Y                        -7
 #define SC_VDP_GET_STATUS                   -8
+#define SC_vdu_cursor_enable                -9
 
 #endif

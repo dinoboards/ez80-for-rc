@@ -687,6 +687,14 @@ clean:
             $(RM) "$(WORKDIR)\vdu_10.lst"
 	@if exist "$(WORKDIR)\vdu_10.src"  \
             $(RM) "$(WORKDIR)\vdu_10.src"
+	@if exist "$(WORKDIR)\vdu_13.obj"  \
+            $(RM) "$(WORKDIR)\vdu_13.obj"
+	@if exist "$(WORKDIR)\vdu_13.lis"  \
+            $(RM) "$(WORKDIR)\vdu_13.lis"
+	@if exist "$(WORKDIR)\vdu_13.lst"  \
+            $(RM) "$(WORKDIR)\vdu_13.lst"
+	@if exist "$(WORKDIR)\vdu_13.src"  \
+            $(RM) "$(WORKDIR)\vdu_13.src"
 	@if exist "$(WORKDIR)\vdu_25.obj"  \
             $(RM) "$(WORKDIR)\vdu_25.obj"
 	@if exist "$(WORKDIR)\vdu_25.lis"  \
@@ -695,6 +703,14 @@ clean:
             $(RM) "$(WORKDIR)\vdu_25.lst"
 	@if exist "$(WORKDIR)\vdu_25.src"  \
             $(RM) "$(WORKDIR)\vdu_25.src"
+	@if exist "$(WORKDIR)\vdu_cursor.obj"  \
+            $(RM) "$(WORKDIR)\vdu_cursor.obj"
+	@if exist "$(WORKDIR)\vdu_cursor.lis"  \
+            $(RM) "$(WORKDIR)\vdu_cursor.lis"
+	@if exist "$(WORKDIR)\vdu_cursor.lst"  \
+            $(RM) "$(WORKDIR)\vdu_cursor.lst"
+	@if exist "$(WORKDIR)\vdu_cursor.src"  \
+            $(RM) "$(WORKDIR)\vdu_cursor.src"
 	@if exist "$(WORKDIR)\vdu_init.obj"  \
             $(RM) "$(WORKDIR)\vdu_init.obj"
 	@if exist "$(WORKDIR)\vdu_init.lis"  \
@@ -912,7 +928,9 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\vdp_get_status.obj  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vdu_10.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_13.obj  \
             $(WORKDIR_ESCSPACE)\vdu_25.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_cursor.obj  \
             $(WORKDIR_ESCSPACE)\vdu_init.obj  \
             $(WORKDIR_ESCSPACE)\vdu_not_implemented.obj  \
             $(WORKDIR_ESCSPACE)\vectors16.obj  \
@@ -1901,6 +1919,10 @@ $(WORKDIR_ESCSPACE)\vdu_10.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_10.c"
 
+$(WORKDIR_ESCSPACE)\vdu_13.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_13.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_13.c"
+
 $(WORKDIR_ESCSPACE)\vdu_25.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_25.c  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
@@ -1921,6 +1943,10 @@ $(WORKDIR_ESCSPACE)\vdu_25.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_25.c"
+
+$(WORKDIR_ESCSPACE)\vdu_cursor.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_cursor.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_cursor.c"
 
 $(WORKDIR_ESCSPACE)\vdu_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c  \

@@ -3,18 +3,17 @@
 #include <v99x8.h>
 
 void vdu_lf(void) {
-
   if (current_tpos.y < tviewport.bottom) {
     current_tpos.y += 8;
+
   } else {
+    const uint24_t left   = tviewport.left;
+    const uint24_t top    = tviewport.top;
+    const uint24_t right  = tviewport.right;
+    const uint24_t bottom = tviewport.bottom;
 
-    uint24_t left   = tviewport.left;
-    uint24_t top    = tviewport.top;
-    uint24_t right  = tviewport.right;
-    uint24_t bottom = tviewport.bottom;
-
-    uint24_t width  = right - left + 8;
-    uint24_t height = bottom - top;
+    const uint24_t width  = right - left + 8;
+    const uint24_t height = bottom - top;
 
     // TODO: ONLY SCROLL IF TEXT CURSOR IS ACTIVE
 
