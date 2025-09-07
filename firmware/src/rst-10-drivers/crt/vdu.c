@@ -65,6 +65,12 @@ void vdu(uint8_t ch) {
     goto done;
   }
 
+  case 19: {
+    current_fn          = vm_vdu_colour_define;
+    vdu_required_length = 5;
+    goto done;
+  }
+
   case 22: {
     current_fn          = vm_vdu_mode;
     vdu_required_length = 1;

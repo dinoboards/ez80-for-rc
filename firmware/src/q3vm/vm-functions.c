@@ -31,5 +31,6 @@ uint24_t vm_call_void(const uint24_t pc) {
 void vm_vdu_colour(void) { vm_call_void(Q3VM_FN_VDU_COLOUR); }
 void vm_vdu_gcol(void) { vm_call_void(Q3VM_FN_VDU_GCOL); }
 void vm_vdu_mode(void) { vm_call_void(Q3VM_FN_VDU_MODE); }
+void vm_vdu_colour_define(void) { vm_call_void(Q3VM_FN_VDU_COLOUR_DEFINE); }
 
 uint8_t vm_vdp_init(void) { return vm_call_void(Q3VM_FN_VDP_INIT); }

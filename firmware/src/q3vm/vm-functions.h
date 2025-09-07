@@ -25,5 +25,6 @@ extern uint24_t vm_call_void(const uint24_t pc);
 extern void vm_vdu_colour(void);
 extern void vm_vdu_gcol(void);
 extern void vm_vdu_mode(void);
+extern void vm_vdu_colour_define(void);
 
 #endif

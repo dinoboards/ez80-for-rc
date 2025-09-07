@@ -35,9 +35,9 @@ typedef uint32_t screen_addr_t;
  *
  */
 typedef struct {
-  uint8_t red;
-  uint8_t green;
-  uint8_t blue;
+  const uint8_t red;
+  const uint8_t green;
+  const uint8_t blue;
 } RGB;
 
 #ifdef __ZDS__
