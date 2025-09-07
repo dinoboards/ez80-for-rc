@@ -46,7 +46,6 @@ typedef struct cursor_state_s {
 
 extern point_t origin;
 
-extern point_t        current_gpos;
 extern point_t        previous_gpos;
 extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8
 extern uint8_t        font_patterns[256 * 8];
@@ -69,11 +68,13 @@ extern void vdu_not_implemented(void);
 void vdu_cursor_disable();
 void vdu_cursor_enable();
 
-#define vdu_bs() { \
-  if (current_tpos.x > tviewport.left) \
-    current_tpos.x-=8; \
-}
+#define vdu_bs()                                                                                                                   \
+  {                                                                                                                                \
+    if (current_tpos.x > tviewport.left)                                                                                           \
+      current_tpos.x -= 8;                                                                                                         \
+  }
 
-#define vdu_cr() { current_tpos.x = tviewport.left; }
+#define vdu_cr()                                                                                                                   \
+  { current_tpos.x = tviewport.left; }
 
 #endif

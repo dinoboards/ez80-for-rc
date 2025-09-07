@@ -9,6 +9,7 @@ typedef uint8_t data_t[MAX_VDP_BYTES];
 
 #define current_display_mode     (*((uint8_t *)&sm._current_display_mode))
 #define current_gfg_colour       (*((uint8_t *)&sm._current_gfg_colour))
+#define current_gpos             (*((point_t *)&sm._current_gpos))
 #define current_mode_colour_mask (*((uint8_t *)&sm._current_mode_colour_mask))
 #define current_operation_mode   (*((uint8_t *)&sm._current_operation_mode))
 #define current_tbg_colour       (*((uint8_t *)&sm._current_tbg_colour))
@@ -23,6 +24,7 @@ typedef uint8_t data_t[MAX_VDP_BYTES];
 
 typedef struct shared_mem_s {
   data_t       _data;
+  point_t      _current_gpos;
   rectangle_t  _gsviewport;
   rectangle_t  _gviewport;
   tpoint_t     _current_tpos;
