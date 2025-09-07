@@ -77,6 +77,12 @@ void vdu(uint8_t ch) {
     goto done;
   }
 
+  case 24: {
+    current_fn          = vm_vdu_set_gviewport;
+    vdu_required_length = 8;
+    goto done;
+  }
+
   case 25: {
     current_fn          = vdu_plot;
     vdu_required_length = 5;

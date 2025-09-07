@@ -26,5 +26,6 @@ extern void vm_vdu_colour(void);
 extern void vm_vdu_gcol(void);
 extern void vm_vdu_mode(void);
 extern void vm_vdu_colour_define(void);
+extern void vm_vdu_set_gviewport(void);
 
 #endif

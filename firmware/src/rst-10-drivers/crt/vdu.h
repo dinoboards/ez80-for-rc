@@ -57,9 +57,6 @@ extern uint24_t vdu_required_length;
 
 extern mos_vdu_handler current_fn;
 
-#define scale_width  ((int24_t)1280)
-#define scale_height ((int24_t)1024)
-
 extern void vdu_not_implemented(void);
 
 #define VRAM_SIZE         0x100000

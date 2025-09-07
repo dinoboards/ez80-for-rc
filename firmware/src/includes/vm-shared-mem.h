@@ -44,4 +44,7 @@ typedef struct shared_mem_s {
 
 extern shared_mem_t sm;
 
+#define scale_width  ((int24_t)1280)
+#define scale_height ((int24_t)1024)
+
 #endif
