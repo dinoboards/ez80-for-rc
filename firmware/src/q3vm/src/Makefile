@@ -14,7 +14,7 @@ VM_C_SOURCE := $(wildcard ../host/*)
 VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
 INCLUDE_PATH := ../../../../../../../../../../../../..$(shell realpath ../includes/)
-HOST_INCLUDE_PATH := ../../../../../../../../../../../home/dean/dinoboards/ez80-for-rc/firmware/src/includes/
+HOST_INCLUDE_PATH := ../../../../../../../../../../../$(shell realpath ../../../src/includes/)
 
 all: ../vm_bytecode.c
 	@echo > /dev/null
