@@ -1,9 +1,9 @@
 memcpy
 memset
-print_string
-vdp_cmd_wait_completion
-vdp_cmd_logical_move_vdp_to_vram
 convert_x
 convert_y
+vdp_cmd_logical_move_vdp_to_vram
+vdp_cmd_wait_completion
 vdp_get_status
 vdu_cursor_enable
+print_string

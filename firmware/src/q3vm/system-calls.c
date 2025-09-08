@@ -73,7 +73,7 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return vdp_get_status(VMA_UINT24(3));
   }
 
-  case SC_vdu_cursor_enable: {
+  case SC_VDU_CURSOR_ENABLE: {
     vdu_cursor_enable();
     return 0;
   }

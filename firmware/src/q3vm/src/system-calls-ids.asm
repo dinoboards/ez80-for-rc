@@ -2,11 +2,11 @@ code
 
 equ	memcpy                                 -1
 equ	memset                                 -2
-equ	print_string                           -3
-equ	vdp_cmd_wait_completion                -4
+equ	convert_x                              -3
+equ	convert_y                              -4
 equ	vdp_cmd_logical_move_vdp_to_vram       -5
-equ	convert_x                              -6
-equ	convert_y                              -7
-equ	vdp_get_status                         -8
-equ	vdu_cursor_enable                      -9
+equ	vdp_cmd_wait_completion                -6
+equ	vdp_get_status                         -7
+equ	vdu_cursor_enable                      -8
+equ	print_string                           -9
 
