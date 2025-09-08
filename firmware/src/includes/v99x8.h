@@ -17,8 +17,8 @@
 #include <stdint.h>
 #include <vm-shared-mem.h>
 
-#define PAL  1
-#define NTSC 2
+#define PAL  50
+#define NTSC 60
 
 #if defined(_EZ80_CLANG) || defined(__ZDS__) || defined(Q3_VM)
 typedef uint24_t screen_size_t;
