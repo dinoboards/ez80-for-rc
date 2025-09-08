@@ -32,10 +32,6 @@ void vdu_set_default_palette_16();
 extern void init_font_patterns(void);
 void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);
 
-extern int24_t convert_x(int24_t logical_x);
-extern int24_t convert_y(int24_t logical_y);
-extern point_t convert_point(const point_t p);
-
 // vdu variables
 
 typedef struct cursor_state_s {
@@ -44,7 +40,7 @@ typedef struct cursor_state_s {
   uint8_t hide : 1; /* disable while moving x,y */
 } cursor_state_t;
 
-extern point_t origin;
+// extern point_t origin;
 
 extern point_t        previous_gpos;
 extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8

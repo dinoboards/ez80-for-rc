@@ -4,7 +4,7 @@
 // VDU 28 defines a text viewport. The parameters specify the boundary of the
 // viewport; the left-most column, the bottom row, the right-most column and the top
 // row respectively.
-void vdu_set_tviewport() {
+void vdu_set_tviewport(void) {
   tviewport.left   = (uint24_t)data[0] * 8;
   tviewport.bottom = (uint24_t)data[1] * 8;
   tviewport.right  = (uint24_t)data[2] * 8;

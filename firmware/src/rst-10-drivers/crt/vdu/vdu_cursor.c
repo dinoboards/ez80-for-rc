@@ -7,7 +7,7 @@
 
 screen_addr_t cursor_pattern_addr = FONT_8X8_STORED_Y - (8);
 
-void vdu_cursor_disable() {
+void vdu_cursor_disable(void) {
   di_and_save();
   cursor_state.enabled = 0;
 
@@ -19,7 +19,7 @@ void vdu_cursor_disable() {
   restore_ei();
 }
 
-void vdu_cursor_enable() {
+void vdu_cursor_enable(void) {
   di_and_save();
   cursor_state.enabled = 1;
 
@@ -34,7 +34,7 @@ void vdu_cursor_enable() {
 
 // NOTE: this function called via timer interrupts handler
 
-void vdu_toggle_cursor() {
+void vdu_toggle_cursor(void) {
   if (!cursor_state.enabled)
     return;
 

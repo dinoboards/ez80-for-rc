@@ -24,7 +24,7 @@ all: ../vm_bytecode.c
 	@echo "Compiled $<"
 
 bytecode.qvm: $(VDU_ASM_FILES)
-	@$(Q3ASM) -v -l -m -o "bytecode"  $(VDU_ASM_FILES) system-calls-ids.asm host-data.asm
+	@$(Q3ASM) -l -m -o "bytecode"  $(VDU_ASM_FILES) system-calls-ids.asm host-data.asm
 	mv bytecode.h ../bytecode.h
 	clang-format -i  ../bytecode.h
 	@echo "Assembled vdu/bytecode.qvm"

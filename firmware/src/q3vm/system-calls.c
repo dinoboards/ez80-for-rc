@@ -5,6 +5,7 @@
 #include "src/system-calls-ids.h"
 #include "vm_bytecode.h"
 #include <v99x8.h>
+#include <vdu-functions.h>
 
 void print_string(const char *str);
 int  putchar(int ch);

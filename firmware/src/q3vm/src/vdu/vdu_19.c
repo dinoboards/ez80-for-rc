@@ -8,7 +8,7 @@ extern const RGB default_16_colour_palette[16];
 
 // VDU 19,l,p,r,g,b
 // VDU 19 is used to define the physical colours associated with the logical colour l.
-// If p <= 15 & p >= 0, r, g and b are ignored, and one of the standard colour settings is
+// If p <= 15, r, g and b are ignored, and one of the standard colour settings is
 // used. This is equivalent to COLOUR l,p.
 // If p = 16, the palette is set up to contain the levels of red, green and blue dictated
 // by r, g and b. This is equivalent to COLOUR l,r,g,b.
@@ -22,7 +22,7 @@ void vdu_colour_define(void) {
   const uint24_t l = data[0];
   const uint24_t p = data[1];
 
-  if (p <= 15 && p >= 0) {
+  if (p <= 15) {
     const RGB physical_colour = default_16_colour_palette[p];
 
     vdp_reg_write(16, l & 15);

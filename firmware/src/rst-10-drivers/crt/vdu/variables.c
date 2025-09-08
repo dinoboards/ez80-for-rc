@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-point_t origin = {0, 0};
+// point_t origin = {0, 0};
 
 point_t        previous_gpos       = {0, 0};
 uint8_t        vdu_index           = 0;

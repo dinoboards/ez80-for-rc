@@ -1,4 +1,6 @@
 #include <string.h>
+#include <v99x8.h>
+#include <vdu-functions.h>
 #include <vm-shared-mem.h>
 
 #include <stdio.h>

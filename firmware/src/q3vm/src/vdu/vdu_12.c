@@ -1,4 +1,5 @@
 #include <v99x8.h>
+#include <vdu-functions.h>
 #include <vdu-types.h>
 #include <vm-shared-mem.h>
 

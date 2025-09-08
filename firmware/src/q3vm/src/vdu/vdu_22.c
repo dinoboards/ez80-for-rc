@@ -1,4 +1,5 @@
 #include <v99x8-super.h>
+#include <vdu-functions.h>
 #include <vm-shared-mem.h>
 
 // VDU: 22 (1 byte)

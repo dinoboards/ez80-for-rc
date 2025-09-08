@@ -29,5 +29,6 @@ extern void vm_vdu_colour_define(void);
 extern void vm_vdu_set_gviewport(void);
 extern void vm_vdu_multi_purpose(void);
 extern void vm_vdu_set_tviewport(void);
+extern void VM_vdu_set_origin(void);
 
 #endif

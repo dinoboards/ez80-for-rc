@@ -1,3 +1,4 @@
+#include <vdu-functions.h>
 #include <vm-shared-mem.h>
 
 /*VDU 24,x1;y1;x2;y2
