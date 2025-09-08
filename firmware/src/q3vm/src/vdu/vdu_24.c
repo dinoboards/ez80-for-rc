@@ -6,10 +6,10 @@ VDU 24 defines a graphics viewport. The four parameters define the left, bottom,
 right and top boundaries respectively, relative to the current graphics origin.
 */
 void vdu_set_gviewport(void) {
-  gviewport.left = *((uint16_t*)&data[0]);
-  gviewport.bottom = *((uint16_t*)&data[2]);
-  gviewport.right = *((uint16_t*)&data[4]);
-  gviewport.top = *((uint16_t*)&data[6]);
+  gviewport.left   = *((uint16_t *)&data[0]);
+  gviewport.bottom = *((uint16_t *)&data[2]);
+  gviewport.right  = *((uint16_t *)&data[4]);
+  gviewport.top    = *((uint16_t *)&data[6]);
 
   if (gviewport.left > scale_width - 1)
     gviewport.left = scale_width - 1;

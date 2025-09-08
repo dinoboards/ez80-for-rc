@@ -59,9 +59,6 @@ extern mos_vdu_handler current_fn;
 
 extern void vdu_not_implemented(void);
 
-#define VRAM_SIZE         0x100000
-#define FONT_8X8_STORED_Y (VRAM_SIZE - (8 * 256))
-
 void vdu_cursor_disable();
 void vdu_cursor_enable();
 

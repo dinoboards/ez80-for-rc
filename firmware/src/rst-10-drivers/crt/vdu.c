@@ -77,6 +77,12 @@ void vdu(uint8_t ch) {
     goto done;
   }
 
+  case 23: { // multi purpose
+    current_fn          = vm_vdu_multi_purpose;
+    vdu_required_length = 9;
+    goto done;
+  }
+
   case 24: {
     current_fn          = vm_vdu_set_gviewport;
     vdu_required_length = 8;

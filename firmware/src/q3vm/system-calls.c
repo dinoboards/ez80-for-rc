@@ -24,9 +24,6 @@ void Com_Error(vmErrorCode_t level) {
 }
 #endif
 
-#define VRAM_SIZE         0x100000
-#define FONT_8X8_STORED_Y (VRAM_SIZE - (8 * 256))
-
 uint32_t systemCalls(vm_t *vm, uint8_t *args) {
   const int id = -1 - args[0];
 
@@ -78,7 +75,14 @@ uint32_t systemCalls(vm_t *vm, uint8_t *args) {
     return 0;
   }
 
+  case SC_VDP_CPU_TO_VRAM: {
+    vdp_cpu_to_vram(VMA_PTR(3, vm), VMA_UINT24(6), VMA_UINT24(9));
+    return 0;
+  }
+
   default:
+    print_string("Unknown System Call\r\n");
+    // TODO: implement a VM halt/break/error
     return 0;
   }
 }
