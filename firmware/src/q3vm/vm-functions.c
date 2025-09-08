@@ -34,5 +34,6 @@ void vm_vdu_mode(void) { vm_call_void(Q3VM_FN_VDU_MODE); }
 void vm_vdu_colour_define(void) { vm_call_void(Q3VM_FN_VDU_COLOUR_DEFINE); }
 void vm_vdu_set_gviewport(void) { vm_call_void(Q3VM_FN_VDU_SET_GVIEWPORT); }
 void vm_vdu_multi_purpose(void) { vm_call_void(Q3VM_FN_VDU_MULTI_PURPOSE); }
+void vm_vdu_set_tviewport(void) { vm_call_void(Q3VM_FN_VDU_SET_TVIEWPORT); }
 
 uint8_t vm_vdp_init(void) { return vm_call_void(Q3VM_FN_VDP_INIT); }

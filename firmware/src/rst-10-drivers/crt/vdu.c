@@ -94,6 +94,12 @@ void vdu(uint8_t ch) {
     vdu_required_length = 5;
     goto done;
   }
+
+  case 28: {
+    current_fn          = vm_vdu_set_tviewport;
+    vdu_required_length = 4;
+    goto done;
+  }
   }
 
 done:

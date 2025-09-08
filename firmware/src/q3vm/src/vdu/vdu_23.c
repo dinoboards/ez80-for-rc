@@ -10,9 +10,7 @@ parameters n1 to n8 corresponds to a row in the eight-by-eight grid of the
 character
 */
 
-static void vdu_redefine_font(void) {
-  vdp_cpu_to_vram(&data[1], FONT_8X8_STORED_Y + data[0] * 8, 8);
-}
+static void vdu_redefine_font(void) { vdp_cpu_to_vram(&data[1], FONT_8X8_STORED_Y + data[0] * 8, 8); }
 
 /*
 VDU 23,0,n,m|
