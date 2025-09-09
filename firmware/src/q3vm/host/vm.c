@@ -142,24 +142,6 @@
 /** Max. size of BSS section */
 #define VM_MAX_BSS_LENGTH 10485760
 
-/** The 64K segment that data/bss starts at */
-#define VM_VADDR_DATA_START 0x800000
-#define VM_VADDR_DATA_SEG   ((uint8_t)(VM_VADDR_DATA_START >> 16))
-
-/** the 64K segment that lit starts at */
-#define VM_VADDR_LIT_START 0x000000
-
-/** the 64K segment that stack is mapped to */
-#define VM_VADDR_STACK_START 0xFE0000
-#define VM_VADDR_STACK_SEG   ((uint8_t)(VM_VADDR_STACK_START >> 16))
-
-/** the 64K segment that i/o mapping starts at */
-#define VM_VADDR_IO_START 0xFF0000
-#define VM_VADDR_IO_SEG   ((uint8_t)(VM_VADDR_IO_START >> 16))
-
-#define VM_VADDR_MEMAP_START 0xFD0000
-#define VM_VADDR_MEMAP_SEG   ((uint8_t)(VM_VADDR_MEMAP_START >> 16))
-
 /******************************************************************************
  * TYPEDEFS
  ******************************************************************************/
@@ -1347,84 +1329,95 @@ static ustdint_t VM_CallInterpreted(const vm_t _vm, ustdint_t pc, int24_t *args,
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC1: {
+    case OP_CONSTP3_FD: {
+      push_1_uint24(UINT24(R2.uint16 + 0xFD0000));
+      PC += INT16_INCREMENT;
+      DISPATCH();
+    }
+
+    case OP_CONSTP3_NULL: {
+      push_1_uint24(UINT24(0));
+      DISPATCH();
+    }
+
+    case OP_CONSTP3_FFFFFF: {
       push_1_int24(INT24(-1));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC2: {
+    case OP_CONSTP3_FFFFFE: {
       push_1_int24(INT24(-2));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC3: {
+    case OP_CONSTP3_FFFFFD: {
       push_1_int24(INT24(-3));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC4: {
+    case OP_CONSTP3_FFFFFC: {
       push_1_int24(INT24(-4));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC5: {
+    case OP_CONSTP3_FFFFFB: {
       push_1_int24(INT24(-5));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC6: {
+    case OP_CONSTP3_FFFFFA: {
       push_1_int24(INT24(-6));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC7: {
+    case OP_CONSTP3_FFFFF9: {
       push_1_int24(INT24(-7));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC8: {
+    case OP_CONSTP3_FFFFF8: {
       push_1_int24(INT24(-8));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC9: {
+    case OP_CONSTP3_FFFFF7: {
       push_1_int24(INT24(-9));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC10: {
+    case OP_CONSTP3_FFFFF6: {
       push_1_int24(INT24(-10));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC11: {
+    case OP_CONSTP3_FFFFF5: {
       push_1_int24(INT24(-11));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC12: {
+    case OP_CONSTP3_FFFFF4: {
       push_1_int24(INT24(-12));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC13: {
+    case OP_CONSTP3_FFFFF3: {
       push_1_int24(INT24(-13));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC14: {
+    case OP_CONSTP3_FFFFF2: {
       push_1_int24(INT24(-14));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SC15: {
+    case OP_CONSTP3_FFFFF1: {
       push_1_int24(INT24(-15));
       DISPATCH();
     }
 
-    case OP_CONSTP3_SCn: {
+    case OP_CONSTP3_FFFFnn: {
       log3_2(FMT_INT8 " POP uint8\n", R2.uint8 & 0xFF);
-      push_1_int24(INT24(0 - R2.uint8));
+      push_1_int24(INT24(0xFFFF00 + R2.uint8));
       PC += INT8_INCREMENT;
       DISPATCH();
     }

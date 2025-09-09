@@ -20,7 +20,7 @@ typedef uint8_t data_t[MAX_VDP_BYTES];
 #define gviewport                (*((trectangle_t *)&sm._gviewport))
 #define last_text_column         (*((uint24_t *)&sm._last_text_column))
 #define last_text_row            (*((uint24_t *)&sm._last_text_row))
-#define origin                   (*((tpoint_t *)&sm._origin))
+#define origin                   (*((point_t *)&sm._origin))
 #define tviewport                (*((trectangle_t *)&sm._tviewport))
 
 typedef struct shared_mem_s {

@@ -14,11 +14,14 @@ uint8_t ram[2048];
 
 uint8_t stack[2048];
 
+uint8_t shared[1024];
+
 int main(/*const int argc, const char *argv[]*/) {
 
   for (int i = 0; i < Q3VM_VERIFICATION_SIZE; i++) {
 
-    if (VM_Create(&vm, q3vm_verification[i].image, q3vm_verification[i].size, ram, sizeof(ram), NULL, 0, systemCalls, NULL) != 0) {
+    if (VM_Create(&vm, q3vm_verification[i].image, q3vm_verification[i].size, ram, sizeof(ram), shared, sizeof(shared), systemCalls,
+                  NULL) != 0) {
       printf("VM %s Create failed\n", q3vm_verification[i].name);
       return -1;
     }

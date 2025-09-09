@@ -42,6 +42,24 @@
 /** Max. number of bytes in .qvm */
 #define VM_MAX_IMAGE_SIZE 0x400000
 
+/** The 64K segment that data/bss starts at */
+#define VM_VADDR_DATA_START 0x800000
+#define VM_VADDR_DATA_SEG   ((uint8_t)(VM_VADDR_DATA_START >> 16))
+
+/** the 64K segment that lit starts at */
+#define VM_VADDR_LIT_START 0x000000
+
+/** the 64K segment that stack is mapped to */
+#define VM_VADDR_STACK_START 0xFE0000
+#define VM_VADDR_STACK_SEG   ((uint8_t)(VM_VADDR_STACK_START >> 16))
+
+/** the 64K segment that i/o mapping starts at */
+#define VM_VADDR_IO_START 0xFF0000
+#define VM_VADDR_IO_SEG   ((uint8_t)(VM_VADDR_IO_START >> 16))
+
+#define VM_VADDR_MEMAP_START 0xFD0000
+#define VM_VADDR_MEMAP_SEG   ((uint8_t)(VM_VADDR_MEMAP_START >> 16))
+
 /**< Maximum length of a pathname, 64 to be Q3 compatible */
 #define VM_MAX_QPATH 64
 

@@ -1,7 +1,7 @@
 #include "../vdu.h"
 #include <stdint.h>
 #include <v99x8.h>
-#include <vdu-point-conversion.h>
+#include <vdu-functions.h>
 
 extern bool line_clip(line_t *l);
 extern void fill_triangle(const point_t *vt1, const point_t *vt2, const point_t *vt3);
@@ -44,10 +44,12 @@ modes:
 
 void vdu_plot(void) {
 
+  // TODO: may be compatbibility issue - move should apply origin/conversion at time execuytion, not at time of rendering
+
   switch (data[0]) { // mode
   case 4: {          // MOVE
-    previous_gpos = current_gpos;
-    current_gpos  = *((point_t *)&data[1]);
+    previous_gpos                = current_gpos;
+    (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
     return;
   }
 
@@ -56,7 +58,8 @@ void vdu_plot(void) {
 
     (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
 
-    {
+    { // Conversion is probably wrong - as cliped area is in physical co-ord
+      // yet we supply logical x,y - conversion is done after cliping
       line_t  l          = line_new(previous_gpos, current_gpos);
       uint8_t intersects = line_clip(&l);
 
