@@ -48,28 +48,30 @@ void vdu_plot(void) {
 
   switch (data[0]) { // mode
   case 4: {          // MOVE
-    previous_gpos                = current_gpos;
-    (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
+    previous_gpos  = current_gpos;
+    current_gpos.x = *((int16_t *)&data[1]) + origin.x;
+    current_gpos.y = *((int16_t *)&data[3]) + origin.y;
     return;
   }
 
   case 5: {
     previous_gpos = current_gpos;
 
-    (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
+    current_gpos.x = *((int16_t *)&data[1]) + origin.x;
+    current_gpos.y = *((int16_t *)&data[3]) + origin.y;
 
-    { // Conversion is probably wrong - as cliped area is in physical co-ord
-      // yet we supply logical x,y - conversion is done after cliping
-      line_t  l          = line_new(previous_gpos, current_gpos);
-      uint8_t intersects = line_clip(&l);
+    {
+      line_t   l          = line_new(previous_gpos, current_gpos);
+      uint24_t intersects = line_clip(&l);
 
-      uint24_t x  = convert_x(l.a.x);
-      uint24_t y  = convert_y(l.a.y);
-      uint24_t x2 = convert_x(l.b.x);
-      uint24_t y2 = convert_y(l.b.y);
+      if (intersects) {
+        uint24_t x  = convert_x(l.a.x);
+        uint24_t y  = convert_y(l.a.y);
+        uint24_t x2 = convert_x(l.b.x);
+        uint24_t y2 = convert_y(l.b.y);
 
-      if (intersects)
         vdp_draw_line(x, y, x2, y2, current_gfg_colour, current_operation_mode);
+      }
       return;
     }
   }
@@ -78,7 +80,8 @@ void vdu_plot(void) {
     previous_gpos = current_gpos;
 
     {
-      (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
+      current_gpos.x = *((int16_t *)&data[1]) + origin.x;
+      current_gpos.y = *((int16_t *)&data[3]) + origin.y;
 
       vdp_cmd_wait_completion();
       vdp_cmd_pset(convert_x(current_gpos.x), convert_y(current_gpos.y), current_gfg_colour, current_operation_mode);
@@ -91,7 +94,8 @@ void vdu_plot(void) {
     const point_t p2 = convert_point(current_gpos);
     previous_gpos    = current_gpos;
 
-    (*(uint32_t *)&current_gpos) = *((uint32_t *)&data[1]);
+    current_gpos.x = *((int16_t *)&data[1]) + origin.x;
+    current_gpos.y = *((int16_t *)&data[3]) + origin.y;
 
     {
       const point_t p3 = convert_point(current_gpos);

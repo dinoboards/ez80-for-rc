@@ -159,10 +159,12 @@ void vdu_mode(void) {
 
   vdp_set_remap(current_tbg_colour, current_tfg_colour); /* TODO: move this to where we set text colours */
 
-  gsviewport.left   = convert_x(gviewport.left);
-  gsviewport.top    = convert_y(gviewport.top);
-  gsviewport.right  = convert_x(gviewport.right);
-  gsviewport.bottom = convert_y(gviewport.bottom);
+  origin.x         = 0;
+  origin.y         = 0;
+  gviewport.left   = 0;
+  gviewport.top    = 0;
+  gviewport.right  = 1280;
+  gviewport.bottom = 1024;
 
   vdu_cls();
   vdu_cursor_enable();

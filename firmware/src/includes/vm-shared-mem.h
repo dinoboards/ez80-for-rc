@@ -16,8 +16,7 @@ typedef uint8_t data_t[MAX_VDP_BYTES];
 #define current_tfg_colour       (*((uint8_t *)&sm._current_tfg_colour))
 #define current_tpos             (*((tpoint_t *)&sm._current_tpos))
 #define data                     (*((data_t *)&sm._data))
-#define gsviewport               (*((trectangle_t *)&sm._gsviewport))
-#define gviewport                (*((trectangle_t *)&sm._gviewport))
+#define gviewport                (*((rectangle_t *)&sm._gviewport))
 #define last_text_column         (*((uint24_t *)&sm._last_text_column))
 #define last_text_row            (*((uint24_t *)&sm._last_text_row))
 #define origin                   (*((point_t *)&sm._origin))
@@ -27,7 +26,6 @@ typedef struct shared_mem_s {
   data_t       _data;
   point_t      _current_gpos;
   point_t      _origin;
-  rectangle_t  _gsviewport;
   rectangle_t  _gviewport;
   tpoint_t     _current_tpos;
   trectangle_t _tviewport;

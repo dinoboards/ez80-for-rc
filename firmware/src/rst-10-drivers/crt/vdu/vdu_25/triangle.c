@@ -12,31 +12,31 @@ static int8_t signum(const int a) {
 }
 
 static void draw_clipped_line(uint24_t x1, uint24_t y1, uint24_t x2) {
-  if (y1 > gsviewport.bottom)
+  if (y1 > gviewport.bottom)
     return;
 
-  if (y1 < gsviewport.top)
+  if (y1 < gviewport.top)
     return;
 
-  if (x1 < gsviewport.left) {
-    if (x2 < gsviewport.left)
+  if (x1 < gviewport.left) {
+    if (x2 < gviewport.left)
       return;
 
-    x1 = gsviewport.left;
+    x1 = gviewport.left;
   }
 
-  if (x1 > gsviewport.right) {
-    if (x2 > gsviewport.right)
+  if (x1 > gviewport.right) {
+    if (x2 > gviewport.right)
       return;
 
-    x1 = gsviewport.right;
+    x1 = gviewport.right;
   }
 
-  if (x2 < gsviewport.left)
-    x2 = gsviewport.left;
+  if (x2 < gviewport.left)
+    x2 = gviewport.left;
 
-  if (x2 > gsviewport.right)
-    x2 = gsviewport.right;
+  if (x2 > gviewport.right)
+    x2 = gviewport.right;
 
   vdp_draw_line(x1, y1, x2, y1, current_gfg_colour, current_operation_mode);
 }

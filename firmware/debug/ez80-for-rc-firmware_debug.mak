@@ -1523,6 +1523,7 @@ $(WORKDIR_ESCSPACE)\system-calls.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
@@ -1926,6 +1927,7 @@ $(WORKDIR_ESCSPACE)\vdu_25.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
@@ -1944,6 +1946,7 @@ $(WORKDIR_ESCSPACE)\vdu_cursor.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
             $(INCLUDE_ESCSPACE)\zilog\uart.h  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
