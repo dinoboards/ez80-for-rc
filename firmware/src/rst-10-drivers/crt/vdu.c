@@ -108,8 +108,14 @@ void vdu(uint8_t ch) {
   }
 
   case 29: {
-    current_fn          = VM_vdu_set_origin;
+    current_fn          = vm_vdu_set_origin;
     vdu_required_length = 4;
+    goto done;
+  }
+
+  case 31: {
+    current_fn          = vdu_tab;
+    vdu_required_length = 2;
     goto done;
   }
   }

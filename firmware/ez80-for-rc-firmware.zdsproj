@@ -109,6 +109,7 @@
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
+<file filter-key="">src\rst-10-drivers\crt\vdu\vdu_31.c</file>
 </files>
 
 <!-- configuration information -->

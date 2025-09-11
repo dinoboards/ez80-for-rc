@@ -827,6 +827,14 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
+	@if exist "$(WORKDIR)\vdu_31.obj"  \
+            $(RM) "$(WORKDIR)\vdu_31.obj"
+	@if exist "$(WORKDIR)\vdu_31.lis"  \
+            $(RM) "$(WORKDIR)\vdu_31.lis"
+	@if exist "$(WORKDIR)\vdu_31.lst"  \
+            $(RM) "$(WORKDIR)\vdu_31.lst"
+	@if exist "$(WORKDIR)\vdu_31.src"  \
+            $(RM) "$(WORKDIR)\vdu_31.src"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -939,7 +947,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_31.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -2123,4 +2132,8 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
+
+$(WORKDIR_ESCSPACE)\vdu_31.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_31.c
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_31.c"
 
