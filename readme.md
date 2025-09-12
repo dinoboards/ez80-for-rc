@@ -38,7 +38,7 @@ See [RomWBW](https://github.com/wwarthen/RomWBW)
 
 ## Yellow MSX
 
-With the latest firmware (date 2026-06-20 or after), the eZ80 can operate as a CPU for the Yellow MSX series.  It achieves this by executing all Z80 code through an interpreter, aka the Z80 emulator.
+With the latest firmware (date 2025-06-20 or after), the eZ80 can operate as a CPU for the Yellow MSX series.  It achieves this by executing all Z80 code through an interpreter, aka the Z80 emulator.
 
 In this emulation mode, it achieves a performance similar to a standard Z80 at around 3.5MHz.  Since its not able to achieve cycle-accurate execution of Z80 code, some instructions will be slower and while others will be faster.  For example the repeating instructions (eg: LDIR, OTIR) will operate significantly faster - whereas most instructions will incur some overhead due to the interpreter.
 
