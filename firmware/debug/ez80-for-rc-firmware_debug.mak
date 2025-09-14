@@ -2134,6 +2134,8 @@ $(WORKDIR_ESCSPACE)\zexall.obj :  \
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
 
 $(WORKDIR_ESCSPACE)\vdu_31.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_31.c
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_31.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_31.c"
 

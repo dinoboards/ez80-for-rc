@@ -132,14 +132,14 @@
 <tool name="Compiler">
 <options>
 <option name="padbranch" type="string" change-action="compile">Off</option>
-<option name="define" type="string" change-action="compile">NDEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE</option>
+<option name="define" type="string" change-action="compile">NDEBUG,_EZ80F92,_EZ80ACCLAIM!,RC2014_FIRMWARE,__ZDS__</option>
 <option name="genprintf" type="boolean" change-action="compile">true</option>
 <option name="keepasm" type="boolean" change-action="none">false</option>
 <option name="keeplst" type="boolean" change-action="none">false</option>
 <option name="list" type="boolean" change-action="none">false</option>
 <option name="listinc" type="boolean" change-action="none">false</option>
 <option name="modsect" type="boolean" change-action="compile">false</option>
-<option name="optspeed" type="boolean" change-action="compile">false</option>
+<option name="optspeed" type="boolean" change-action="compile">true</option>
 <option name="promote" type="boolean" change-action="compile">true</option>
 <option name="reduceopt" type="boolean" change-action="compile">false</option>
 <option name="stdinc" type="string" change-action="compile">src\includes</option>
@@ -206,8 +206,8 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0=700)
-LOCATE DATA at (BASE OF BSS - $0200)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
+LOCATE DATA at (BASE OF BSS - $00F6)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -228,7 +228,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="warnisfatal" type="boolean" change-action="none">false</option>
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
-<option name="fplib" type="string" change-action="build">None</option>
+<option name="fplib" type="string" change-action="build">Real</option>
 <option name="useadddirectives" type="boolean" change-action="build">true</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
@@ -343,8 +343,8 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0D00)
-LOCATE DATA at (BASE OF BSS - $0200)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
+LOCATE DATA at (BASE OF BSS - $00F6)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
@@ -480,8 +480,8 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0D00)
-LOCATE DATA at (BASE OF BSS - $0200)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
+LOCATE DATA at (BASE OF BSS - $00F6)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0680
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>

@@ -9,7 +9,7 @@ LCC := lcc
 Q3ASM := q3asm
 
 INCLUDES :=  $(wildcard ../includes/*.h) $(wildcard ./*.h) $(wildcard ./vdu/*.h) $(wildcard ./vdp/*.h) ../../includes/vm-shared-mem.h $(wildcard ../../includes/vdu*.h)
-VDU_C_SOURCE := $(filter-out ./dispatch.c,$(wildcard ./*.c) $(wildcard ./vdu/*.c) $(wildcard ./vdp/*.c)) $(wildcard ./stdlib/*.c)
+VDU_C_SOURCE := $(filter-out ./dispatch.c,$(wildcard ./*.c) $(wildcard ./vdu/*.c) $(wildcard ./vdp/*.c)) #$(wildcard ./stdlib/*.c)
 VM_C_SOURCE := $(wildcard ../host/*)
 VDU_ASM_FILES := $(VDU_C_SOURCE:.c=.vmasm)
 
