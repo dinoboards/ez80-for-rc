@@ -2,6 +2,11 @@
 
 extern void uart_out(char ch);
 
+int putchar(int ch) {
+  uart_out(ch);
+  return 0;
+}
+
 void print_string(const char *str) {
   char ch;
   while (ch = *str++) {

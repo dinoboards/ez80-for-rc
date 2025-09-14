@@ -6,8 +6,9 @@
 
 /* compiler options */
 /* -define:NDEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
-/* -define:RC2014_FIRMWARE -genprintf -NOkeepasm -NOkeeplst -NOlist */
-/* -NOlistinc -NOmodsect -optsize -promote -NOreduceopt */
+/* -define:RC2014_FIRMWARE -define:__ZDS__ -genprintf -NOkeepasm */
+/* -NOkeeplst -NOlist -NOlistinc -NOmodsect -optspeed -promote */
+/* -NOreduceopt */
 /* -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -NOdebug */
 /* -cpu:eZ80F92 */
@@ -91,9 +92,9 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0110)
-LOCATE DATA at (BASE OF BSS - $00D9)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $057E
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
+LOCATE DATA at (BASE OF BSS - $00F6)
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
 
@@ -118,16 +119,22 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\enumerate_hub.obj", \
  ".\enumerate_storage.obj", \
  ".\gpio-b4-isr-marshaller.obj", \
+ ".\graphic_print_char.obj", \
  ".\i2c-calculate.obj", \
  ".\init-clocks.obj", \
  ".\init-f92.obj", \
+ ".\init_font_patterns.obj", \
  ".\internal-hiram.obj", \
  ".\kyb_driver.obj", \
  ".\kyb_driver_event.obj", \
  ".\kyb_driver_eventasm.obj", \
  ".\kyb_driverasm.obj", \
+ ".\line_clip.obj", \
+ ".\line_new.obj", \
+ ".\logic_to_physical_coords.obj", \
  ".\main.obj", \
  ".\mse_driver.obj", \
+ ".\point_new.obj", \
  ".\protocol.obj", \
  ".\rom-flashing-calculator.obj", \
  ".\rst-08-io.obj", \
@@ -138,12 +145,17 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-04-i2c-functions.obj", \
  ".\rst-10-06-usb-functions.obj", \
  ".\rst-10-07-emulator-function.obj", \
+ ".\rst-10-08-crt-adl.obj", \
+ ".\rst-10-09-crt.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-function.obj", \
  ".\scsi_driver.obj", \
+ ".\sysfont.obj", \
+ ".\system-calls.obj", \
  ".\system-vars.obj", \
  ".\test.obj", \
  ".\transfers.obj", \
+ ".\triangle.obj", \
  ".\uart-calculate.obj", \
  ".\uart-rx-buffer-add-to.obj", \
  ".\uart-rx-buffer-empty.obj", \
@@ -157,7 +169,31 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb-tick-sr.obj", \
  ".\usb_cbi.obj", \
  ".\usb_state.obj", \
+ ".\v99x8.obj", \
+ ".\variables.obj", \
+ ".\vdp_cmd_line.obj", \
+ ".\vdp_cmd_logical_move_vdp_to_vram.obj", \
+ ".\vdp_cmd_move_linear_to_xy.obj", \
+ ".\vdp_cmd_move_vram_to_vram.obj", \
+ ".\vdp_cmd_pset.obj", \
+ ".\vdp_cmd_vdp_to_vram.obj", \
+ ".\vdp_cmd_wait_completion.obj", \
+ ".\vdp_cpu_to_vram.obj", \
+ ".\vdp_draw_line.obj", \
+ ".\vdp_get_screen_height.obj", \
+ ".\vdp_get_screen_width.obj", \
+ ".\vdp_get_status.obj", \
+ ".\vdu.obj", \
+ ".\vdu_10.obj", \
+ ".\vdu_25.obj", \
+ ".\vdu_cursor.obj", \
+ ".\vdu_init.obj", \
+ ".\vdu_not_implemented.obj", \
  ".\vectors16.obj", \
+ ".\vm-functions.obj", \
+ ".\vm-init.obj", \
+ ".\vm.obj", \
+ ".\vm_bytecode.obj", \
  ".\work-area.obj", \
  ".\z80-emulator-critical.obj", \
  ".\z80-emulator-ix.obj", \
@@ -169,9 +205,12 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
+ ".\vdu_31.obj", \
  "C:\ZDS\lib\std\chelp.lib", \
  "C:\ZDS\lib\std\crt.lib", \
  "C:\ZDS\lib\std\crtS.lib", \
  "C:\ZDS\lib\std\nokernel.lib", \
+ "C:\ZDS\lib\std\fplib.lib", \
+ "C:\ZDS\lib\std\fplibS.lib", \
  "C:\ZDS\lib\zilog\zsldevinitdummy.obj"
 

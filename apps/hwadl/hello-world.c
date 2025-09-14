@@ -21,6 +21,8 @@ extern uint8_t length_of_on_chip[];
 int foo __bss_on_chip;
 int bar __data_on_chip = 42;
 
+extern uint8_t end_of_bss[];
+
 void __func_on_chip spike() { printf("Executing in fast on-chip ram! Bar=%d\r\n", bar); }
 
 int main(const int argc, const char *argv[]) {
@@ -31,6 +33,7 @@ int main(const int argc, const char *argv[]) {
 
   printf("extended_memory_start: %p\r\n", get_memory_start());
   printf("extended_memory_end: %p\r\n", get_memory_end());
+  printf("end_of_bss: %p\r\n", end_of_bss);
 
   printf("Foo stored at %p\r\n", &foo);
   printf("bar stored at %p\r\n", &bar);

@@ -6,7 +6,9 @@
 	XREF	_uart_dispatch
 	XREF	_i2c_dispatch
 	XREF	_usb_dispatch
-	xref	_emulator_invoke
+	XREF	_emulator_invoke
+	XREF	_crt_dispatch_adl
+	XREF	_crt_dispatch
 
 	SECTION INTERNAL_RAM_ROM
 
@@ -42,6 +44,10 @@ _rst_10_functions:
 	JR	Z, _usb_dispatch			; A = 6, USB_xxx functions
 	DEC	A
 	JR	Z, _emulator_invoke			; A = 7, emulator invoke function
+	DEC	A
+	JR	Z, _crt_dispatch_adl			; A = 8, CRT_ functions (ADL mode only version)
+	DEC	A
+	JR	Z, _crt_dispatch			; A = 9, CRT_ functions (Mixed mode version)
 
 _spi_dispatch:
 _reserved_dispatch:

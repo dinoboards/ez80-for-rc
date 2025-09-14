@@ -61,6 +61,114 @@ longspike:
 	ret.l		; this should return to the emulator
 
 _spike:
+
+	LD	A, 9
+	LD	B, 255
+	RST.L	%10
+	; A contains CHIP TYPE
+	NOP
+	NOP
+
+	LD	A, 9
+	LD	B, 0
+	LD	C, 22	; mode
+	RST.L	%10
+	LD	C, 0 ; BBC Mode 0
+	RST.L	%10
+
+	LD	C, 65
+	RST.L	%10
+
+	LD	C, 1
+	RST.L	%10
+
+	LD	C, 66
+	RST.L	%10
+
+	LD	C, 67
+	RST.L	%10
+
+	LD	C,18 ; gcol
+	RST.L	%10
+	LD	C, 0
+	RST.L	%10
+	LD	C, 1
+	RST.L	%10
+
+
+	LD	C, 25	; plot
+	RST.L	%10
+	LD	C, 4	; move line
+	RST.L	%10
+
+	LD	C, 0	; x low
+	RST.L	%10
+	LD	C, 0	; x high
+	RST.L	%10
+	LD	C, 0	; y low
+	RST.L	%10
+	LD	C, 0	; y high
+	RST.L	%10
+
+
+	LD	C, 25	; plot
+	RST.L	%10
+	LD	C, 5	; draw line
+	RST.L	%10
+
+	LD	C, 255	; x low
+	RST.L	%10
+	LD	C, 4	; x high
+	RST.L	%10
+	LD	C, 255	; y low
+	RST.L	%10
+	LD	C, 3	; y high
+	RST.L	%10
+
+
+	LD	C, 25	; plot
+	RST.L	%10
+	LD	C, 85	; triangle
+	RST.L	%10
+
+	LD	C, %FF	; xlow
+	RST.L	%10
+	LD	C, 4	;x high
+	RST.L	%10
+
+	LD	C, 0	; y load
+	RST.L	%10
+	LD	C, 0	; y high
+	RST.L	%10
+
+	exx
+	ld	b, 0
+
+loopl:
+	exx
+	; LD	C,13
+	; RST.L	%10
+	; LD	C,10
+	; RST.L	%10
+	LD	C,'X'
+	RST.L	%10
+	LD	C,'X'
+	RST.L	%10
+	LD	C,'X'
+	RST.L	%10
+	LD	C,'X'
+	RST.L	%10
+
+	exx
+	djnz	loopl
+
+	nop
+	nop
+
+
+
+	ret
+
 	di
 
 	; write spike code here to be run in ADL mode on  on-chip rom

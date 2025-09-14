@@ -1,0 +1,126 @@
+#include "vdu.h"
+#include "../../q3vm/vm-functions.h"
+#include "stddef.h"
+
+extern void graphic_print_char(uint24_t ch);
+extern void uart_out(char ch);
+
+void vdu(uint8_t ch) {
+  uint8_t cursor_enabled = cursor_state.enabled;
+  if (cursor_enabled)
+    vdu_cursor_disable();
+
+  if (vdu_required_length) {
+    data[vdu_index++] = ch;
+    if (vdu_index == vdu_required_length) {
+      mos_vdu_handler fn  = current_fn;
+      current_fn          = NULL;
+      vdu_index           = 0;
+      vdu_required_length = 0;
+
+      fn();
+    }
+    goto done;
+  }
+
+  if (ch >= ' ') {
+    graphic_print_char(ch);
+    uart_out(ch);
+    goto done;
+  }
+
+  switch (ch) {
+  case 8: {
+    vdu_bs();
+    uart_out(ch);
+    goto done;
+  }
+
+  case '\n': {
+    vdu_lf();
+    uart_out(ch);
+    goto done;
+  }
+
+  case 12: {
+    vm_vdu_cls();
+    uart_out(ch);
+    goto done;
+  }
+
+  case '\r': {
+    vdu_cr();
+    uart_out(ch);
+    goto done;
+  }
+
+  case 16: {
+    vm_vdu_clg();
+    goto done;
+  }
+
+  case 17: {
+    current_fn          = vm_vdu_colour;
+    vdu_required_length = 1;
+    goto done;
+  }
+
+  case 18: {
+    current_fn          = vm_vdu_gcol;
+    vdu_required_length = 2;
+    goto done;
+  }
+
+  case 19: {
+    current_fn          = vm_vdu_colour_define;
+    vdu_required_length = 5;
+    goto done;
+  }
+
+  case 22: {
+    current_fn          = vm_vdu_mode;
+    vdu_required_length = 1;
+    goto done;
+  }
+
+  case 23: { // multi purpose
+    current_fn          = vm_vdu_multi_purpose;
+    vdu_required_length = 9;
+    goto done;
+  }
+
+  case 24: {
+    current_fn          = vm_vdu_set_gviewport;
+    vdu_required_length = 8;
+    goto done;
+  }
+
+  case 25: {
+    current_fn          = vdu_plot;
+    vdu_required_length = 5;
+    goto done;
+  }
+
+  case 28: {
+    current_fn          = vm_vdu_set_tviewport;
+    vdu_required_length = 4;
+    goto done;
+  }
+
+  case 29: {
+    current_fn          = vm_vdu_set_origin;
+    vdu_required_length = 4;
+    goto done;
+  }
+
+  case 31: {
+    current_fn          = vdu_tab;
+    vdu_required_length = 2;
+    goto done;
+  }
+  }
+
+done:
+  if (cursor_enabled)
+    vdu_cursor_enable();
+}

@@ -10,4 +10,6 @@ typedef unsigned int   uint24_t;
 typedef long           int32_t;
 typedef unsigned long  uint32_t;
 
+typedef int24_t intptr_t;
+
 #endif // _STDINT_H_

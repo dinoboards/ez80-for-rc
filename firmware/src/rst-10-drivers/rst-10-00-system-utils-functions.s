@@ -37,6 +37,7 @@
 	XREF	_led_flashing_state
 	XREF	_led_flash_delay_count
 	XREF	_led_flash_delay_period
+	XREF	_vdu_toggle_cursor
 
 ; interrupt to control flash rate of on board led
 _system_led_timer_isr:
@@ -68,6 +69,13 @@ _system_led_timer_isr:
 	AND	%FE
 	OR	B
 	OUT0	(PC_DR), A
+
+	push	ix
+	push	iy
+	call	_vdu_toggle_cursor
+	pop	iy
+	pop	ix
+
 	pop	bc
 
 led_continue:
@@ -107,10 +115,6 @@ _system_utils_dispatch:
 	JR	Z, not_supported			; B = 6, DEPRECATED
 	DEC	A
 	JR	Z, ez80_debug				; B = 7, SYSUTL_DEBUG
-
-	; temp new version of bus timing config functions
-	; will be swapped to indexes above, once full HBIOS conversion is completed
-
 	DEC	A					; B = 8, SYSUTL_MEMTM_SET (CS3)
 	JR	Z, ez80_mem_bus_timing_set
 	DEC	A					; B = 9, SYSUTL_IOTM_SET
@@ -133,9 +137,14 @@ _system_utils_dispatch:
 	JR	Z, ez80_mem0_bus_timing_freq_set	; B = 17, SYSUTL_MEMTMFQ_SET (CS0)
 	DEC	A
 	JR	Z, ez80_mem1_bus_timing_freq_set	; B = 18, SYSUTL_MEMTMFQ_SET (CS1)
-
 	DEC	A
-	jr	z, ez80_emulation_state_get		; B = 19, SYSUTL_EMULSTAT_GET
+	JR	Z, ez80_emulation_state_get		; B = 19, SYSUTL_EMULSTAT_GET
+	DEC	A
+	JR	Z, q3vm_create				; B = 20, SYSUTL_Q3VM_CREATE
+	DEC	A
+	JR	Z, q3vm_call				; B = 20, SYSUTL_Q3VM_CALL
+	DEC	A
+	JR	Z, q3vm_set_stack			; B = 21, SYSUTL_Q3VM_SET_STACK
 
 not_supported:
 	LD	A, %FF					; UNKNOWN FUNCTION
@@ -664,9 +673,59 @@ ez80_mem1_bus_timing_freq_set:
 ; Output
 ;  A = 01 -> Native Environment
 ;  A = 02 -> Emulated Environment
-
+;
 ez80_emulation_state_get:
 	; the emulator will intercept this request
 	; as such, a hard coded value works
 	ld	a, 1
 	ret.l
+
+
+
+;
+; Function B = 20 SYSUTL_Q3VM_CREATE
+; Initialise a new VM instance
+;
+; Must only be called from ADL mode using RST %10 (no .L suffix)
+;
+; Invokes C function:
+;
+; bool VM_Create(vm_t                *vm,
+;               const uint8_t *const bytecode,
+;               const vm_size_t      length,
+;               uint8_t *const       dataSegment,
+;               const vm_size_t      dataSegmentLength,
+;               uint32_t (*systemCalls)(vm_t *, uint8_t *));
+;
+; Input:
+;
+; Output
+;  A = -1 if error
+;  A =  0 if success
+;
+	XREF	_VM_Create
+q3vm_create:
+	JP	_VM_Create
+
+;
+; Function B = 21 SYSUTL_Q3VM_CALL1
+; Initialise a new VM instance
+;
+; Must only be called from ADL mode using RST %10 (no .L suffix)
+;
+; Invokes C function:
+;
+; uint32_t VM_Call(vm_t *vm, uint24_t command, ...);
+;
+; Input:
+;
+; Output
+;  ?? 32 bit result
+;
+	XREF	_VM_Call
+q3vm_call:
+	JP	_VM_Call
+
+	XREF	_VM_SetStackStore
+q3vm_set_stack:
+	JP	_VM_SetStackStore
