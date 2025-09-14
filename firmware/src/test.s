@@ -22,7 +22,7 @@
 ;  test int during emulator_invoke execution ./
 
 
-if 1
+if 0
         INCLUDE "startup\ez80F92.inc"
 
 	SECTION CODE

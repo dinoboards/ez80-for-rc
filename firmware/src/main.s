@@ -42,8 +42,8 @@ ENDIF
 	XREF	_vdu_init
 	CALL	_vdu_init
 
-	xref	_spike
-	call	_spike
+	; xref	_spike
+	; call	_spike
 	jp	z80_invoke
 
 	global	remove_usb_tick_hook
