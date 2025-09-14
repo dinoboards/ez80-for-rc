@@ -8,6 +8,7 @@
 	SECTION CODE
 
 	XREF	_vm_vdp_init
+	XREF	_vdu_init
 
 	.assume adl=1
 ;
@@ -35,6 +36,7 @@ _crt_dispatch:
 	JR	Z, crt_vdp_fn				; *B = 3, INVOKE SPECIFIC vdp_... library functions, fn id in C, values on stack.  must not be invoked with rst.l
 
 ; *Not currently implemented - under consideration only for implementation
+
 
 	; 255 V99X8/Super PROBE
 	LD	A, B
@@ -78,4 +80,8 @@ crt_vdp_fn:
 
 crt_v99x8_probe:
 	CALL	_vm_vdp_init
+	PUSH	AF
+	CP	4
+	CALL	Z, _vdu_init
+	POP	AF
 	RET.L

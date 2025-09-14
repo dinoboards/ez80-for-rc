@@ -38,10 +38,6 @@ IFDEF	ZEXALL
 ENDIF
 	di
 
-
-	XREF	_vdu_init
-	CALL	_vdu_init
-
 	; xref	_spike
 	; call	_spike
 	jp	z80_invoke

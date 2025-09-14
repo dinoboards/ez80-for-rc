@@ -8,6 +8,7 @@
 	SECTION CODE
 
 	XREF	_vm_vdp_init
+	XREF	_vdu_init
 
 	.assume adl=1
 ;
@@ -38,7 +39,7 @@ _crt_dispatch_adl:
 
 	LD	A, B
 	CP	255
-	JR	Z, _vm_vdp_init
+	JR	Z, crt_adl_v99x8_probe
 
 	LD	A, 1					; UNKNOWN SUB FUnCTION
 	OR	A
@@ -76,3 +77,9 @@ crt_adl_vdp_fn:
 	RET
 
 crt_adl_v99x8_probe:
+	CALL	_vm_vdp_init
+	PUSH	AF
+	CP	4
+	CALL	Z, _vdu_init
+	POP	AF
+	RET
