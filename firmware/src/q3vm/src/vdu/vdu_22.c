@@ -162,9 +162,9 @@ void vdu_mode(void) {
   origin.x         = 0;
   origin.y         = 0;
   gviewport.left   = 0;
-  gviewport.top    = 0;
+  gviewport.bottom = 0;
   gviewport.right  = 1280;
-  gviewport.bottom = 1024;
+  gviewport.top    = 1024;
 
   vdu_cls();
   vdu_cursor_enable();
