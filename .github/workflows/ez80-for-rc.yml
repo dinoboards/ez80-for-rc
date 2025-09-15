@@ -151,6 +151,13 @@ jobs:
         with:
           submodules: true
 
+      - name: Checkout BBC BASIC repo
+        uses: actions/checkout@v4
+        with:
+          repository: dinoboards/eZ80-for-rc-basic
+          ref: main/ez80-adl
+          path: apps/eZ80-for-rc-basic/
+
       - name: Apply REVISION_VERSION
         run: |
           VERSION_FILE="./firmware/src/version.inc"
@@ -172,6 +179,13 @@ jobs:
         run: |
           source /home/runner/.ez80-clang
           make
+
+      - name: Build BBCeZ80.EXE
+        working-directory: apps/eZ80-for-rc-basic/ez80
+        run: |
+          source /home/runner/.ez80-clang
+          make
+          cp ./bin/BBCeZ80.EXE ../../bin/
 
       - name: Archive apps
         uses: actions/upload-artifact@v4
