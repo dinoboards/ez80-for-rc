@@ -40,7 +40,12 @@ ENDIF
 
 	;xref	_spike
 	;call	_spike
+
 	jp	z80_invoke
+
+	; ld	a, Z80_ADDR_MBASE
+	; ld	MB, a
+	; jp.sis	0
 
 	global	remove_usb_tick_hook
 	; remove the usb key/mouse inter handler hook
