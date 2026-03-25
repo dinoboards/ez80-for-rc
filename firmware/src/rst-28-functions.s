@@ -2,7 +2,6 @@
 
 	include "config.inc"
 	include "rst-28-constants.inc"
-
 	include "rst-28-vars.inc"
 
 	SECTION CODE
@@ -10,8 +9,9 @@
 	XREF	firmware_rst_28_hook
 	XREF	get_hbios_cio_driver
 	XREF	get_hbios_dio_driver
+	XREF	hbios_vars
 
-	.assume adl=1
+	.ASSUME ADL=1
 
 ; B = function index
 	PUBLIC	_rst_28_functions
@@ -25,6 +25,12 @@ _rst_28_functions:
 	JR	Z, cioist				; B = 2, CIOIST
 
 	LD	A, B
+	CP	BF_CIOQUERY
+	JR	Z, cioquery
+	CP	BF_CIODEVICE
+	JR	Z, ciodevice
+
+
 	CP	BF_DIOSEEK
 	JR	Z, dioseek
 	CP	BF_DIOREAD
@@ -40,6 +46,8 @@ _rst_28_functions:
 
 	CP	BF_SYSALLOC
 	JR	Z, sysalloc
+	CP	BF_SYSGET
+	JR	Z, sysget
 
 rst_28_unknown:
 	LD	A, %FF					; UNKNOWN FUNCTION
@@ -110,6 +118,70 @@ cioist:
 	LD	IY, (IY+CIO_FUNCS)
 	LD	IY, (IY+CIO_IST)
 	JP	(IY)
+
+; ### Function 0x05 -- Character I/O Query (CIOQUERY)
+;
+; | **Entry Parameters**                   | **Returned Values**                    |
+; |----------------------------------------|----------------------------------------|
+; | B: 0x05                                | A: Status                              |
+; | C: Character Unit                      | DE: Line Characteristics               |
+; |                                        | HL: 24 bit Baud Rate                   |
+;
+; Returns the current Line Characteristics (DE) of the specified Character
+; Unit (C). The definition of the line characteristics value is described
+; below. The returned status (A) is a standard HBIOS result code.
+;
+; | **Bits** | **Line Characteristic**                                         |
+; |---------:|------------------------------------------------------------|
+; | 23-14    | Reserved (set to 0)                                        |
+; | 13       | RTS                                                        |
+; | 12-8     | Reserved (set to 0)                                        |
+; | 7        | DTR                                                        |
+; | 6        | XON/XOFF Flow Control                                      |
+; | 5        | 1 = Stick Parity(Mark/Space), 0 = Normal Parity (odd/even) |
+; | 4        | 1 = Even/Space, 0 = Odd/Mark                               |
+; | 3        | Parity Enable (set for true)                               |
+; | 2        | Stop Bits (set for true)                                   |
+; | 1-0      | Data Bits (5-8 encoded as 0-3)                             |
+;
+cioquery:
+	CALL	get_hbios_cio_driver
+	RET.L	NZ
+	LD	IY, (IY+CIO_FUNCS)
+	LD	IY, (IY+CIO_QUERY)
+	JP	(IY)
+
+
+; ### Function 0x06 -- Character I/O Device (CIODEVICE)
+;
+; | **Entry Parameters**                   | **Returned Values**                    |
+; |----------------------------------------|----------------------------------------|
+; | B: 0x06                                | A: Status                              |
+; | C: Character Unit                      | C: Device Attributes                   |
+; |                                        | D: Device Type                         |
+; |                                        | E: Device Number                       |
+;
+; Returns device information for the specified Character Unit (C).  The
+; status (A) is a standard HBIOS result code.
+;
+; The two high bits of Device Attribute (C) are: 00 = RS/232, 01 = Terminal,
+; 10 = Parallel.  The remaining bits should be ignored and are used
+; internally.
+;
+; Device Type (D) indicates the specific hardware driver that handles the
+; specified Character Unit.  Values are listed at the start of this
+; section. Device Number (E) indicates the physical device number assigned
+; per driver.  For example, a Device Type of 0x50 with a Device Number
+; of 2 refers to the third port being handled by the SIO driver.
+;
+ciodevice:
+	CALL	get_hbios_cio_driver
+	RET.L	NZ
+	LD	IY, (IY+CIO_FUNCS)
+	LD	IY, (IY+CIO_DEVICE)
+	JP	(IY)
+
+
 
 ; ### Function 0x12 -- Disk Seek (DIOSEEK)
 ;
@@ -363,3 +435,60 @@ sysalloc:
 sysalloc_ok
 	XOR	A
 	RET.L
+
+
+; ### Function 0xF8 -- System Get (SYSGET)
+;
+; | **Entry Parameters**                   | **Returned Values**                    |
+; |----------------------------------------|----------------------------------------|
+; | B: 0xF8                                | A: Status                              |
+; | C: Subfunction                         |                                        |
+;
+; This function will report various system information based on the
+; sub-function value. The following lists the subfunctions available along
+; with the registers/information utilized.  The Status (A) is a standard
+; HBIOS result code.
+;
+sysget:
+	LD	A, C
+	CP	BF_SYSGET_CIOCNT
+	JR	Z, sysget_ciocnt
+	CP	BF_SYSGET_DIOCNT
+	JR	Z, sysget_diocnt
+
+	LD	A, ERR_NOUNIT
+	OR	A
+	RET.L
+
+; #### SYSGET Subfunction 0x00 -- Get Character Device Unit Count (CIOCNT)
+;
+; | **Entry Parameters**                   | **Returned Values**                    |
+; |----------------------------------------|----------------------------------------|
+; | B: 0xF8                                | A: Status                              |
+; | C: 0x00                                | E: Count                               |
+;
+; Return the Count (E) of character device units.  The Status (A) is a
+; standard HBIOS result code.
+;
+sysget_ciocnt:
+	LD	IY, (hbios_vars)
+	LD	E, (IY+HB_CIOCNT)
+	XOR	A
+	RET.L
+
+; #### SYSGET Subfunction 0x10 -- Get Disk Device Unit Count (DIOCNT)
+;
+; | **Entry Parameters**                   | **Returned Values**                    |
+; |----------------------------------------|----------------------------------------|
+; | B: 0xF8                                | A: Status                              |
+; | C: 0x10                                | E: Count                               |
+;
+; Return the Count (E) of disk device units.  The Status (A) is a
+; standard HBIOS result code.
+;
+sysget_diocnt:
+	LD	IY, (hbios_vars)
+	LD	E, (IY+HB_DIOCNT)
+	XOR	A
+	RET.L
+

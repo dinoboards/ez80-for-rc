@@ -218,7 +218,7 @@ uart_config_assign_line:
 ;
 ; Function B = 05 -- GET UART Device Configure (UART_QUERY)
 ;   Output:
-;     HL{23:0} = New desired baud rate
+;     HL{23:0} = baud rate
 ;     E = H{23:16}
 ;     D{0:1} = Parity    (00 -> NONE, 01 -> NONE, 10 -> ODD, 11 -> EVEN)
 ;     D{2}   = Stop Bits (0 -> 1, 1 -> 2)
@@ -226,7 +226,7 @@ uart_config_assign_line:
 ;     D{5:5} = Hardware Flow Control CTS (0 -> OFF, 1 -> ON)
 ;     A = Status
 ;
-; Retreive the UART device's current configuration.  The returned Status (A) is a standard HBIOS result code.
+; Retrieve the UART device's current configuration.  The returned Status (A) is a standard HBIOS result code.
 ;
 uart_query:
 	LD	HL, (_baud_rate)

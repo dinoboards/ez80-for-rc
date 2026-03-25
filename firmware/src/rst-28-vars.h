@@ -8,6 +8,30 @@
 #define ERR_NOUNIT -4 /* INVALID UNIT NUMBER*/
 
 // ;
+// CHAR DEVICE IDS;
+// ;
+#define CIODEV_UART     0x00
+#define CIODEV_ASCI     0x01
+#define CIODEV_TERM     0x02
+#define CIODEV_PRPCON   0x03
+#define CIODEV_PPPCON   0x04
+#define CIODEV_SIO      0x05
+#define CIODEV_ACIA     0x06
+#define CIODEV_PIO      0x07
+#define CIODEV_UF       0x08
+#define CIODEV_DUART    0x09
+#define CIODEV_Z2U      0x0A
+#define CIODEV_LPT      0x0B
+#define CIODEV_ESPCON   0x0C
+#define CIODEV_ESPSER   0x0D
+#define CIODEV_SCON     0x0E
+#define CIODEV_SSER     0x0F
+#define CIODEV_EZ80UART 0x10
+#define CIODEV_DLPSER   0x11
+#define CIODEV_TSER     0x12
+#define CIODEV_SCC      0x13
+
+// ;
 // ; MEDIA ID VALUES
 // ;
 #define MID_NONE  0
@@ -119,8 +143,9 @@ typedef struct {
 #define MAX_HBIOS_CIO_INSTANCES 2
 
 typedef struct hbios_vars_s {
-  uint8_t *himem; /* pointer to start of allocated linear RAM */
-
+  uint8_t     *himem; /* pointer to start of allocated linear RAM */
+  uint8_t      cio_count;
+  uint8_t      dio_count;
   dio_driver_t dio_drivers[MAX_HBIOS_DIO_INSTANCES];
   cio_driver_t cio_drivers[MAX_HBIOS_CIO_INSTANCES];
 
@@ -141,5 +166,12 @@ uint24_t diocapacity_get_sectors(const uint8_t disk_unit);
 uint8_t  diodevice_getattributes(uint8_t);
 uint8_t  diodevice_getdriver(uint8_t);
 uint8_t  diodevice_getnumber(uint8_t);
+uint8_t  sysget_ciocount();
+uint8_t  sysget_diocount();
+uint8_t  ciodevice_getattributes(uint8_t);
+uint8_t  ciodevice_getdriver(uint8_t);
+uint8_t  ciodevice_getnumber(uint8_t);
+uint24_t cioquery_get_baud_rate(uint8_t);
+uint8_t  cioquery_get_line_control(uint8_t);
 
 #endif

@@ -4,6 +4,7 @@
 #include "../rst-10-drivers/usb/ufi-drv/class_ufi.h"
 #include "../rst-28-vars.h"
 #include "rst-28-c-helpers.h"
+#include "rst-28-disk-inspection.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -91,47 +92,8 @@ static void ch376_usb_init() {
   }
 }
 
-static void convert_and_print_disk_size(uint32_t number_of_sectors) {
-  if (number_of_sectors == 1474560 / 512) {
-    print_string("1.44MB");
-    return;
-  }
-
-  {
-    const char *suffix = "KB";
-
-    if (number_of_sectors <= 2880) {
-      print_uint16(number_of_sectors / 2);
-      print_string(suffix);
-      return;
-    }
-
-    number_of_sectors /= 256;
-    suffix = "MB";
-
-    if (number_of_sectors >= 8192) {
-      number_of_sectors /= 1024;
-      suffix = "GB";
-    }
-
-    {
-      const uint16_t a = (uint16_t)(number_of_sectors / 8);
-      const uint16_t b = (uint16_t)(number_of_sectors % 8 * 100) / 8;
-
-      print_uint16(a);
-
-      if (b != 0) {
-        print_string(".");
-        print_uint16(b);
-      }
-      print_string(suffix);
-    }
-  }
-}
-
 uint8_t hbios_mount_ram_disk(uint8_t next_unit);
 uint8_t hbios_mount_usb_scsi_storage_devices(uint8_t next_unit);
-void    report_hbios_drivers();
 
 void hbios_dio_init() {
   uint8_t next_unit = 0;
@@ -141,7 +103,7 @@ void hbios_dio_init() {
   next_unit = hbios_mount_ram_disk(next_unit);
   next_unit = hbios_mount_usb_scsi_storage_devices(next_unit);
 
-  report_hbios_drivers();
+  hbios_vars->dio_count = next_unit;
 }
 
 static void right_trim(char *buffer) {
@@ -237,9 +199,13 @@ uint8_t hbios_mount_usb_scsi_storage_devices(uint8_t next_unit) {
       convert_and_print_disk_size(number_of_sectors);
       print_string("\r\n");
 
-      hbios_vars->dio_drivers[next_unit].funcs                    = &dio_usb_scsi_fns;
-      hbios_vars->dio_drivers[next_unit].state.scsi.usb_dev_index = dev_index;
-      hbios_vars->dio_drivers[next_unit].instance                 = instance++;
+      {
+        dio_driver_t *const d = &hbios_vars->dio_drivers[next_unit];
+
+        d->funcs                    = &dio_usb_scsi_fns;
+        d->state.scsi.usb_dev_index = dev_index;
+        d->instance                 = instance++;
+      }
 
       next_unit++;
       if (next_unit >= MAX_HBIOS_DIO_INSTANCES)
@@ -272,41 +238,19 @@ uint8_t hbios_mount_ram_disk(uint8_t next_unit) {
   ram_disk_store = sys_alloc(512 * 1024, 64 * 1024);
   memset(ram_disk_store, 0xE5, 512 * 1024);
 
-  // use SYS_ALLOC to allocate 512K of RAM
+  {
+    dio_driver_t *const d = &hbios_vars->dio_drivers[next_unit];
 
-  hbios_vars->dio_drivers[next_unit].state.ram.store          = ram_disk_store;
-  hbios_vars->dio_drivers[next_unit].state.ram.current_sector = 0;
+    d->state.ram.store          = ram_disk_store;
+    d->state.ram.current_sector = 0;
 
-  // TODO set all ram disk bytes to E5
-  // Can we see if existing data there - from reboot?
+    // TODO set all ram disk bytes to E5
+    // Can we see if existing data there - from reboot?
 
-  hbios_vars->dio_drivers[next_unit].funcs    = &dio_ram_disk_fns;
-  hbios_vars->dio_drivers[next_unit].instance = 1;
+    d->funcs    = &dio_ram_disk_fns;
+    d->instance = 1;
 
-  print_string(" RAM Disk: 512K\r\n");
-
-  return next_unit + 1;
-}
-
-// TODO: move to a generic hbios driver reporter
-void report_hbios_drivers() {
-  uint8_t hbios_unit;
-  char    buffer[32];
-
-  print_string("\r\n"
-               "Unit        Device      Type              Capacity/Mode\r\n"
-               "----------  ----------  ----------------  --------------------\r\n");
-
-  for (hbios_unit = 0; hbios_unit <= MAX_HBIOS_DIO_INSTANCES; hbios_unit++) {
-    if (diodevice_getstatus(hbios_unit))
-      break;
-
-    sprintf(buffer, "%s%d", diodevice_getdriver_name(hbios_unit), diodevice_getnumber(hbios_unit));
-
-    printf("Disk %-7d%-12s%-18s", hbios_unit, buffer, diodevice_getattributes_name(hbios_unit));
-
-    convert_and_print_disk_size(diocapacity_get_sectors(hbios_unit));
-
-    print_string("\r\n");
+    printf(" RAM Disk: 512K @ 0x%06X\r\n", ram_disk_store);
   }
+  return next_unit + 1;
 }

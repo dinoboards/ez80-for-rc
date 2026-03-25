@@ -79,11 +79,13 @@
 <file filter-key="">src\rst-28-hbios\rst-28-c-marshallers.s</file>
 <file filter-key="">src\rst-28-hbios\rst-28-cio-init.c</file>
 <file filter-key="">src\rst-28-hbios\rst-28-cio-uart0.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-disk-inspection.c</file>
 <file filter-key="">src\rst-28-functions.s</file>
 <file filter-key="">src\rst-28-hbios\rst-28-get-cio-driver.s</file>
 <file filter-key="">src\rst-28-hbios\rst-28-get-dio-driver.s</file>
 <file filter-key="">src\rst-28-hbios\rst-28-mount.c</file>
 <file filter-key="">src\rst-28-hbios\rst-28-ram-disk.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-report-drivers.c</file>
 <file filter-key="">src\rst-28-hbios\rst-28-sys-alloc.c</file>
 <file filter-key="">src\rst-28-hbios\rst-28-usb-scsi-c.c</file>
 <file filter-key="">src\rst-28-hbios\rst-28-usb-scsi.s</file>

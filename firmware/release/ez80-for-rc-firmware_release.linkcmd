@@ -175,11 +175,13 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-28-c-marshallers.obj", \
  ".\rst-28-cio-init.obj", \
  ".\rst-28-cio-uart0.obj", \
+ ".\rst-28-disk-inspection.obj", \
  ".\rst-28-functions.obj", \
  ".\rst-28-get-cio-driver.obj", \
  ".\rst-28-get-dio-driver.obj", \
  ".\rst-28-mount.obj", \
  ".\rst-28-ram-disk.obj", \
+ ".\rst-28-report-drivers.obj", \
  ".\rst-28-sys-alloc.obj", \
  ".\rst-28-usb-scsi-c.obj", \
  ".\rst-28-usb-scsi.obj", \

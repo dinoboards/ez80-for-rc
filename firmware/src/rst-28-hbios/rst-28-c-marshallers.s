@@ -2,9 +2,76 @@
 	include "..\rst-28-constants.inc"
 
 	section	CODE
-	.assume	adl=1
+	.ASSUME	ADL=1
 
-	xref	firmware_rst_28_hook
+	XREF	firmware_rst_28_hook
+
+	PUBLIC	_ciodevice_getdriver
+; uint8_t ciodevice_getdevice(uint8_t);
+_ciodevice_getdriver
+	PUSH	IX					; save IX in case BF_CIODEVICE modifies it
+	LD	IX, 0
+	ADD	IX, SP
+	LD	C, (IX+6)				; hbios disk_unit
+	LD	B, BF_CIODEVICE
+	CALL.IL	firmware_rst_28_hook
+	LD	A, D
+	POP	IX
+	RET						; return status in A
+
+	PUBLIC	_ciodevice_getnumber
+; uint8_t ciodevice_getnumber(uint8_t);
+_ciodevice_getnumber
+	PUSH	IX					; save IX in case CF_DIODEVICE modifies it
+	LD	IX, 0
+	ADD	IX, SP
+	LD	C, (IX+6)				; hbios disk_unit
+	LD	B, BF_CIODEVICE
+	CALL.IL	firmware_rst_28_hook
+	LD	A, E
+	POP	IX
+	RET						; return status in A
+
+	PUBLIC	_cioquery_get_baud_rate
+; uint24_t cioquery_get_baud_rate(uint8_t);
+_cioquery_get_baud_rate:
+	PUSH	IX					; save IX in case BF_CIOQUERY modifies it
+	LD	IX, 0
+	ADD	IX, SP
+	LD	C, (IX+6)				; hbios disk_unit
+	LD	B, BF_CIOQUERY
+	CALL.IL	firmware_rst_28_hook
+	POP	IX
+	RET						; return status in A
+
+	PUBLIC	_cioquery_get_line_control
+; uint8_t _cioquery_get_line_control(uint8_t);
+_cioquery_get_line_control:
+	PUSH	IX					; save IX in case BF_CIOQUERY modifies it
+	LD	IX, 0
+	ADD	IX, SP
+	LD	C, (IX+6)				; hbios disk_unit
+	LD	B, BF_CIOQUERY
+	CALL.IL	firmware_rst_28_hook
+	LD	A, E
+	POP	IX
+	RET						; return status in A
+
+
+	PUBLIC	_ciodevice_getattributes
+; uint8_t ciodevice_getattributes(uint8_t);
+_ciodevice_getattributes
+	PUSH	IX					; save IX in case BF_CIODEVICE modifies it
+	LD	IX, 0
+	ADD	IX, SP
+	LD	C, (IX+6)				; hbios disk_unit
+	LD	B, BF_CIODEVICE
+	CALL.IL	firmware_rst_28_hook
+	LD	A, C
+	POP	IX
+	RET						; return status in A
+
+
 
 	PUBLIC	_diodevice_getstatus
 ; uint8_t diodevice_getstatus(uint8_t);
@@ -142,4 +209,20 @@ _diocapacity_get_sectors
 	LD	B, BF_DIOCAP
 	CALL.IL	firmware_rst_28_hook
 	POP	IX
+	RET
+
+	PUBLIC	_sysget_ciocount
+; uint8_t sysget_ciocount();
+_sysget_ciocount:
+	LD	BC, +(BF_SYSGET << 8)+BF_SYSGET_CIOCNT
+	CALL.IL	firmware_rst_28_hook
+	LD	A, E
+	RET
+
+	PUBLIC	_sysget_diocount
+; uint8_t sysget_diocount();
+_sysget_diocount:
+	LD	BC, +(BF_SYSGET << 8)+BF_SYSGET_DIOCNT
+	CALL.IL	firmware_rst_28_hook
+	LD	A, E
 	RET

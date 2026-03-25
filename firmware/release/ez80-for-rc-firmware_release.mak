@@ -618,6 +618,14 @@ clean:
             $(RM) "$(WORKDIR)\rst-28-cio-uart0.lis"
 	@if exist "$(WORKDIR)\rst-28-cio-uart0.lst"  \
             $(RM) "$(WORKDIR)\rst-28-cio-uart0.lst"
+	@if exist "$(WORKDIR)\rst-28-disk-inspection.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-disk-inspection.obj"
+	@if exist "$(WORKDIR)\rst-28-disk-inspection.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-disk-inspection.lis"
+	@if exist "$(WORKDIR)\rst-28-disk-inspection.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-disk-inspection.lst"
+	@if exist "$(WORKDIR)\rst-28-disk-inspection.src"  \
+            $(RM) "$(WORKDIR)\rst-28-disk-inspection.src"
 	@if exist "$(WORKDIR)\rst-28-functions.obj"  \
             $(RM) "$(WORKDIR)\rst-28-functions.obj"
 	@if exist "$(WORKDIR)\rst-28-functions.lis"  \
@@ -650,6 +658,14 @@ clean:
             $(RM) "$(WORKDIR)\rst-28-ram-disk.lis"
 	@if exist "$(WORKDIR)\rst-28-ram-disk.lst"  \
             $(RM) "$(WORKDIR)\rst-28-ram-disk.lst"
+	@if exist "$(WORKDIR)\rst-28-report-drivers.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-report-drivers.obj"
+	@if exist "$(WORKDIR)\rst-28-report-drivers.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-report-drivers.lis"
+	@if exist "$(WORKDIR)\rst-28-report-drivers.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-report-drivers.lst"
+	@if exist "$(WORKDIR)\rst-28-report-drivers.src"  \
+            $(RM) "$(WORKDIR)\rst-28-report-drivers.src"
 	@if exist "$(WORKDIR)\rst-28-sys-alloc.obj"  \
             $(RM) "$(WORKDIR)\rst-28-sys-alloc.obj"
 	@if exist "$(WORKDIR)\rst-28-sys-alloc.lis"  \
@@ -1151,11 +1167,13 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-28-c-marshallers.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-cio-init.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-cio-uart0.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-disk-inspection.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-get-cio-driver.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-get-dio-driver.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-mount.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-ram-disk.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-report-drivers.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-sys-alloc.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-usb-scsi-c.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-usb-scsi.obj  \
@@ -1974,6 +1992,9 @@ $(WORKDIR_ESCSPACE)\rst-28-c-marshallers.obj :  \
 
 $(WORKDIR_ESCSPACE)\rst-28-cio-init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-cio-init.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
@@ -1986,6 +2007,13 @@ $(WORKDIR_ESCSPACE)\rst-28-cio-uart0.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-cio-uart0.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-disk-inspection.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-disk-inspection.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-disk-inspection.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-disk-inspection.c"
 
 $(WORKDIR_ESCSPACE)\rst-28-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-functions.s  \
@@ -2042,6 +2070,7 @@ $(WORKDIR_ESCSPACE)\rst-28-mount.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-disk-inspection.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-mount.c"
 
@@ -2054,6 +2083,18 @@ $(WORKDIR_ESCSPACE)\rst-28-ram-disk.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.inc  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-ram-disk.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-report-drivers.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-report-drivers.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-disk-inspection.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-report-drivers.c"
 
 $(WORKDIR_ESCSPACE)\rst-28-sys-alloc.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-sys-alloc.c  \

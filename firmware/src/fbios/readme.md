@@ -47,16 +47,18 @@ It exposes a set of jump points at address $000180 (see fbios-jmp-table-adl.s)
 12. ~~ensure boot detect internal/external mode correctly~~
 13. ~~update/correct firmware boot reporting~~
 14. print_string/printf assumes UART0 output - will not be correct when CRT is enabled
-15. implement CRT output using V9958/HDMI
-16. implement USB Keyboard to pair with CRT
-17. Implement matrix keyboard
-18. Implement Compact Flash storage
-19. refactor locations of function to correct namespace/scope (fbios-get-lsb.c and others)
-20. refactor c code to optimise code size
-21. add eZ80.COM to disk image
-22. add an xmodem util
-23. add WDATE.COM - with appropriate local HBIOS support
-24. add TIMER.COM - with appropriate local HBIOS support
+15. implement hbios cio directly - bypass rst-10 jumps
+16. update hbios device reporting to a central reporting pattern
+17. implement CRT output using V9958/HDMI
+18. implement USB Keyboard to pair with CRT
+19. Implement matrix keyboard
+20. Implement Compact Flash storage
+21. refactor locations of function to correct namespace/scope (fbios-get-lsb.c and others)
+22. refactor c code to optimise code size
+23. ~~add eZ80.COM to disk image~~
+24. ~~add an xmodem util~~
+25. add WDATE.COM - with appropriate local HBIOS support
+26. add TIMER.COM - with appropriate local HBIOS support
 
 
 

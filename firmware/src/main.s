@@ -5,32 +5,33 @@
 	.assume	adl=1
 
 	public	_main
-	xref	_uart0_init
-	xref	_rx_buffer_init
-	xref	_init_clocks
-	xref	__c_startup
+	XREF	_uart0_init
+	XREF	_rx_buffer_init
+	XREF	_init_clocks
+	XREF	__c_startup
 	XREF	_vm_init
 
-	xref	_io_bus_mode_and_timing
-	xref	_mem_bus_mode_and_timing
-	xref	_mem0_bus_mode_and_timing
-	xref	_mem1_bus_mode_and_timing
+	XREF	_io_bus_mode_and_timing
+	XREF	_mem_bus_mode_and_timing
+	XREF	_mem0_bus_mode_and_timing
+	XREF	_mem1_bus_mode_and_timing
 
-	xref	_boot_prompt1
-	xref	_boot_prompt2
-	xref	_probe_installed_linear_ram
-	xref	_report_installed_linear_ram
-	xref	_probe_extrom
-	xref	_report_extrom
+	XREF	_boot_prompt1
+	XREF	_boot_prompt2
+	XREF	_probe_installed_linear_ram
+	XREF	_report_installed_linear_ram
+	XREF	_probe_extrom
+	XREF	_report_extrom
 
-	xref	_allocate_ram_for_hbios_and_fbios
-	xref	_report_seg_for_cpm
+	XREF	_allocate_ram_for_hbios_and_fbios
+	XREF	_report_seg_for_cpm
 
-	xref	_hbios_dio_init
-	xref	_hbios_cio_init
-	xref	_os_boot
+	XREF	_hbios_cio_init
+	XREF	_hbios_dio_init
+	XREF	_report_hbios_drivers
+	XREF	_os_boot
 
-	xref	z80_invoke
+	XREF	z80_invoke
 
 _main:
 	call	remove_usb_tick_hook
@@ -52,7 +53,7 @@ _main:
 
 	POP	DE
 
-	; xref	_spike
+	; XREF	_spike
 	; call	_spike
 
 	LD	A, L
@@ -73,10 +74,11 @@ boot_storage:
 	CALL	_allocate_ram_for_hbios_and_fbios
 	CALL	_hbios_cio_init
 	CALL	_hbios_dio_init
+  	CALL	_report_hbios_drivers
 	CALL	_os_boot
 
 IFDEF	ZEXALL
-	xref	Z80test
+	XREF	Z80test
 	call	Z80test
 ENDIF
 
