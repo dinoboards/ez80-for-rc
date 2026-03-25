@@ -5,7 +5,10 @@
 
 uint8_t hbios_cio_install_uart0(uint8_t next_unit);
 
-extern void    *uart0_cio;
+extern void    *uart0_cioin;
+extern void    *uart0_cioout;
+extern void    *uart0_cioist;
+extern void    *uart0_cioost;
 extern void    *uart0_ciodevice;
 extern void    *uart0_cioquery;
 extern uint24_t baud_rate;
@@ -20,8 +23,8 @@ void hbios_cio_init() {
   hbios_vars->cio_count = next_unit;
 }
 
-static const cio_fns_t cio_uart0_fns = {&uart0_cio, &uart0_cio,      &uart0_cio,      &uart0_cio,
-                                        &uart0_cio, &uart0_cioquery, &uart0_ciodevice};
+static const cio_fns_t cio_uart0_fns = {&uart0_cioin, &uart0_cioout,   &uart0_cioist,   &uart0_cioost,
+                                        NULL,         &uart0_cioquery, &uart0_ciodevice};
 
 uint8_t hbios_cio_install_uart0(uint8_t next_unit) {
   if (next_unit >= MAX_HBIOS_CIO_INSTANCES)

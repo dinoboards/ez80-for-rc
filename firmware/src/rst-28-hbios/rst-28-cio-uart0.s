@@ -11,11 +11,22 @@
 
 DISP_UART	EQU	3
 
-	PUBLIC	_uart0_cio
-_uart0_cio:
-	; passthrough to firmware uart handler
-	LD	A, DISP_UART
-	JP	firmware_rst_10_hook
+	PUBLIC	_uart0_cioin
+	XREF	uart_in
+_uart0_cioin:	EQU	uart_in
+
+
+	PUBLIC	_uart0_cioout
+	XREF	uart_out
+_uart0_cioout:	EQU	uart_out
+
+	PUBLIC	_uart0_cioist
+	XREF	uart_ist
+_uart0_cioist:	EQU	uart_ist
+
+	PUBLIC	_uart0_cioost
+	XREF	uart_ost
+_uart0_cioost:	EQU	uart_ost
 
 	PUBLIC	_uart0_ciodevice
 _uart0_ciodevice:

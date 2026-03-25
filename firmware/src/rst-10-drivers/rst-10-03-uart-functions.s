@@ -136,6 +136,7 @@ uart_ist_postive:
 ;
 ; TODO: if CTS flow control enabled, return 0 if CTS is high.
 ;
+	PUBLIC	uart_ost
 uart_ost:
 	IN0	A, (UART0_LSR)
 	AND	LSR_THRE
