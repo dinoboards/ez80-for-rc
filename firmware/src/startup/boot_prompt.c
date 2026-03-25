@@ -27,8 +27,11 @@ void boot_prompt1() {
 
   printf(", 20%02d-%02d-%02d\r\n\r\n", util_get_year(), util_get_month(), util_get_day_of_month());
 
-  printf("Frequency: %.3fMHz\r\n", ((float)cpu_freq_calculated) / 1000000);
-
+  {
+    uint24_t a = cpu_freq_calculated / 1000000L;
+    uint24_t b = (uint24_t)(cpu_freq_calculated / 1000L) % 1000;
+    printf("Frequency: %d.%03dMHz\r\n", a, b);
+  }
   print_string("   Memory: 128KB ROM, ");
   switch (probe_installed_linear_ram()) {
   case 0:
