@@ -6,7 +6,7 @@
 ;  1. diaable interrupts
 ;  2. clear mixed memory mode (MADL) flag
 ;  3. jump to initialization procedure with jp.lil to set ADL
-	DEFINE	.RESET, SPACE = ROM
+	DEFINE	.RESET, SPACE = ROM, ORG=%000000
 	SEGMENT	.RESET
 
 	XREF	__init
@@ -15,47 +15,63 @@
 	XREF	firmware_rst_08_hook
 	XREF	firmware_rst_10_hook
 	XREF	firmware_rst_18_hook
+	XREF	firmware_rst_28_hook
 	XREF	_default_mi_handler_hook
 	XREF	_marshall_isr_hook
 
-
+RSTALGN:	MACRO	x, y
+	IF x != y
+	.COMMENT "ALIGNMENT ERROR"
+	FAIL ALIGNEMENT ERROR
+	ENDIF
+	ENDMAC	RSTALGN
 _reset:
 _rst0:
 	di
 	stmix
 	jp.lil	__init
 
-	ORG	ROM_BASE+%08
 _rst8:
+	RSTALGN	_rst8, 8
 	jp.lil	firmware_rst_08_hook	; io prefix helper
+	DS	8-5
 
-	org	ROM_BASE+%10
 _rst10:
+	RSTALGN	_rst10, %10
 	jp.lil	firmware_rst_10_hook	; general firmware functions
+	DS	8-5
 
-	org	ROM_BASE+%18
 _rst18:
+	RSTALGN	_rst18, %18
 	jp.lil	firmware_rst_18_hook	; fast sleep helper
+	DS	8-5
 
-	org	ROM_BASE+%20
 _rst20:
+	RSTALGN	_rst20, %20
 	di
 	stmix
 	jp.lil	__init			; change to vdu/ansi stream
+
 _rst28:
-	di
-	stmix
-	jp.lil	__init
+	RSTALGN	_rst28, %28
+	jp.lil	firmware_rst_28_hook	; HBIOS Compatible
+	DS	8-5
+
 _rst30:
+	RSTALGN	_rst30, %30
 	di
 	stmix
 	jp.lil	__init
+
 _rst38:
+	RSTALGN	_rst38, %38
 	di
 	stmix
 	jp.lil	__init
 	ds %26
+
 _nmi:
+	RSTALGN	_nmi, %66
 	jp.lil	__default_nmi_handler
 
 
@@ -140,7 +156,7 @@ _marshall_isr_rom_hook:
 ;  - this segment must be aligned on a 256 byte boundary anywhere below
 ;    the 64K byte boundry
 ;  - each 2-byte entry is a 2-byte vector address
-	DEFINE .IVECTS, SPACE = ROM, ALIGN = 100h
+	DEFINE .IVECTS, SPACE = ROM, ALIGN = 100h, ORG = 100h
 	SEGMENT .IVECTS
 
 	PUBLIC	__vector_table

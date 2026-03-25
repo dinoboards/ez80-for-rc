@@ -21,6 +21,28 @@
 ;  test int during adl execution    ./
 ;  test int during emulator_invoke execution ./
 
+if 0
+        INCLUDE "startup\ez80F92.inc"
+
+	SECTION CODE
+
+	.assume adl=1
+
+	public	_spike
+
+_spike:
+	ld	b, 1
+	ld	c, 080h
+	ld	e, 'A'
+	RST.L	028h
+
+wait:
+	nop
+	nop
+	jr wait
+
+
+endif
 
 if 0
         INCLUDE "startup\ez80F92.inc"
@@ -243,7 +265,7 @@ step1:
 	ld	e, 65		; print A
 	rst.l	%10
 
-	call.lil longspike	; bad but should be made to work
+	call.il longspike	; bad but should be made to work
 
 	ld	a, 3
 	ld	b, 1

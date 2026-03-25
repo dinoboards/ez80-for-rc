@@ -181,6 +181,6 @@ usb_error_t ufi_send_diagnostics(device_config_t *const storage_device);
 
 uint32_t convert_from_msb_first(const uint8_t *const buffer);
 
-extern usb_error_t ufi_seek(const uint16_t dev_index, const uint32_t lba);
+extern usb_error_t ufi_seek(const uint8_t dev_index, const uint32_t lba);
 
 #endif

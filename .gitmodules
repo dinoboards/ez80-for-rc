@@ -1,0 +1,3 @@
+[submodule "apps/xmodem80"]
+	path = apps/xmodem80
+	url = https://github.com/dinoboards/xmodem80.git

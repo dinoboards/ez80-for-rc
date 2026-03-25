@@ -6,6 +6,7 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv.s</file>
 <file filter-key="">src\startup\boot_prompt.c</file>
 <file filter-key="">src\rst-10-drivers\build-date.c</file>
+<file filter-key="">src\fbios\cbios.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\ch376asm.s</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\class_hid.c</file>
@@ -22,6 +23,24 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_hub.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\enumerate_storage.c</file>
+<file filter-key="">src\extend_mbase.s</file>
+<file filter-key="">src\fbios\fbios-boot.s</file>
+<file filter-key="">src\fbios\fbios-const.s</file>
+<file filter-key="">src\fbios\fbios-find-boot-disk.c</file>
+<file filter-key="">src\fbios\fbios-get-lsb.c</file>
+<file filter-key="">src\fbios\fbios-jmp-table-adl.s</file>
+<file filter-key="">src\fbios\fbios-mount-disks.c</file>
+<file filter-key="">src\fbios\fbios-mount-report.c</file>
+<file filter-key="">src\fbios\fbios-mount.s</file>
+<file filter-key="">src\fbios\fbios-read-c.c</file>
+<file filter-key="">src\fbios\fbios-read.s</file>
+<file filter-key="">src\fbios\fbios-seldsk.s</file>
+<file filter-key="">src\fbios\fbios-setdma.s</file>
+<file filter-key="">src\fbios\fbios-setsec.s</file>
+<file filter-key="">src\fbios\fbios-settrk.s</file>
+<file filter-key="">src\fbios\fbios-write-c.c</file>
+<file filter-key="">src\fbios\fbios-write.s</file>
+<file filter-key="">src\fbios\fbios.s</file>
 <file filter-key="">src\gpio-b4-isr-marshaller.s</file>
 <file filter-key="">src\rst-10-drivers\crt\graphic_print_char.c</file>
 <file filter-key="">src\rst-10-drivers\i2c\i2c-calculate.c</file>
@@ -35,10 +54,13 @@
 <file filter-key="">src\rst-10-drivers\usb\kyb-drv\kyb_driverasm.s</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_25\line_clip.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\line_new.c</file>
+<file filter-key="">src\startup\linear-mem-test-at.s</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\logic_to_physical_coords.c</file>
 <file filter-key="">src\main.s</file>
 <file filter-key="">src\rst-10-drivers\usb\mse-drv\mse_driver.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\point_new.c</file>
+<file filter-key="">src\print-string.c</file>
+<file filter-key="">src\startup\probe-mem.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\protocol.c</file>
 <file filter-key="">src\rst-10-drivers\rom-flashing\rom-flashing-calculator.c</file>
 <file filter-key="">src\rst-08-io.s</file>
@@ -53,6 +75,18 @@
 <file filter-key="">src\rst-10-drivers\rst-10-09-crt.s</file>
 <file filter-key="">src\rst-10-functions.s</file>
 <file filter-key="">src\rst-18-function.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-c-helpers.c</file>
+<file filter-key="">src\rst-28-hbios\rst-28-c-marshallers.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-cio-init.c</file>
+<file filter-key="">src\rst-28-hbios\rst-28-cio-uart0.s</file>
+<file filter-key="">src\rst-28-functions.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-get-cio-driver.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-get-dio-driver.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-mount.c</file>
+<file filter-key="">src\rst-28-hbios\rst-28-ram-disk.s</file>
+<file filter-key="">src\rst-28-hbios\rst-28-sys-alloc.c</file>
+<file filter-key="">src\rst-28-hbios\rst-28-usb-scsi-c.c</file>
+<file filter-key="">src\rst-28-hbios\rst-28-usb-scsi.s</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\scsi_driver.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\sysfont.asm</file>
 <file filter-key="">src\q3vm\system-calls.c</file>
@@ -90,6 +124,7 @@
 <file filter-key="">src\rst-10-drivers\crt\vdu.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_10.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_25.c</file>
+<file filter-key="">src\rst-10-drivers\crt\vdu\vdu_31.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_cursor.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu_init.c</file>
 <file filter-key="">src\rst-10-drivers\crt\vdu\vdu_not_implemented.c</file>
@@ -109,7 +144,6 @@
 <file filter-key="">src\z80-emulator\z80-emulator.s</file>
 <file filter-key="">src\z80-emulator\z80-test.s</file>
 <file filter-key="">src\z80-emulator\zexall.s</file>
-<file filter-key="">src\rst-10-drivers\crt\vdu\vdu_31.c</file>
 </files>
 
 <!-- configuration information -->
@@ -206,9 +240,9 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
-LOCATE DATA at (BASE OF BSS - $00F6)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0200)
+LOCATE DATA at (BASE OF BSS - $0120)
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0600
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
@@ -343,10 +377,11 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
-LOCATE DATA at (BASE OF BSS - $00F6)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
-DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0200)
+LOCATE DATA at (BASE OF BSS - $0120)
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0600
+DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
+</option>
 <option name="createnew" type="boolean" change-action="build">true</option>
 <option name="exeform" type="string" change-action="build">OMF695,INTEL32</option>
 <option name="linkctlfile" type="string" change-action="build"></option>
@@ -480,8 +515,8 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
-LOCATE DATA at (BASE OF BSS - $00F6)
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0200)
+LOCATE DATA at (BASE OF BSS - $0120)
 LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0680
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 <option name="createnew" type="boolean" change-action="build">true</option>

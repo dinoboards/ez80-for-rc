@@ -51,6 +51,7 @@ A benchmarking tool using the whetstone measurement process.  See its [readme](.
 * Docker
 * ez80-clang
 * gnu make (`apt-get install build-essential`)
+* ez80asm
 
 #### Installing `ez80-clang`
 
@@ -59,13 +60,24 @@ eZ80-clang is a port of clang to target and build for the eZ80 CPU.  More detail
 To install:
 
 ```
-wget https://github.com/dinoboards/ez80-clang/releases/download/v0.0.16/ez80-clang-v0.0.16.tar.gz
-tar -xzvf ez80-clang-v0.0.16.tar.gz
-cd ez80-clang-v0.0.16
+wget https://github.com/dinoboards/ez80-clang/releases/download/v0.0.17/ez80-clang-v0.0.17.tar.gz
+tar -xzvf ez80-clang-v0.0.17.tar.gz
+cd ez80-clang-v0.0.17
 sudo ./install.sh
 ```
 
 > Change version as per latest/required release
+
+
+#### Installing ez80asm
+
+The xmodem application XR and XS are assembled using the linux assembler ez80asm.
+
+For On debian/ubuntu distros:
+
+```
+sudo apt install z80asm
+```
 
 ### Building
 

@@ -586,6 +586,12 @@ ez80_flash_ws_set:
 ;   L 	= wait state
 ;   A 	= 0 -> SUCCESS
 ;
+	PUBLIC	_ez80_flash_ws_get
+_ez80_flash_ws_get
+	CALL.IL ez80_flash_ws_get
+	LD	A, L
+	RET
+
 ez80_flash_ws_get:
 	IN0	L, (FLASH_CTRL)
 	LD	A, L
@@ -729,3 +735,17 @@ q3vm_call:
 	XREF	_VM_SetStackStore
 q3vm_set_stack:
 	JP	_VM_SetStackStore
+
+	PUBLIC	_firmware_version_major
+	PUBLIC	_firmware_version_minor
+	PUBLIC	_firmware_version_patch
+	PUBLIC	_firmware_version_revision
+_firmware_version:
+_firmware_version_major:
+	DB	MAJOR_VERSION
+_firmware_version_minor:
+	DB	MINOR_VERSION
+_firmware_version_patch:
+	DB	PATCH_VERSION
+_firmware_version_revision:
+	DB	REVISION_VERSION

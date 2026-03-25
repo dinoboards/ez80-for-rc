@@ -18,7 +18,7 @@
 z80_ldee:
 .if	EN_EZ80_INSTR
 	ld.s	a, (iy)
-	cp	%CD		; call.lil
+	cp	%CD		; call.il
 	jr	z, z80_callilmmn
 	jp	not_implemented
 .else

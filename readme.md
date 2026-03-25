@@ -26,6 +26,7 @@ This repository includes:
 * [programmer](./programmer/readme.md): Code and instructions for using a Raspberry Pi Pico module to flash the firmware (an alternative to the Zilog eZ80 Acclaim USB Smart Cable)
 * [hardware](./hardware/readme.md): PLD/JED code for the ATF16V8 PLD required for the eZ80 RCBus Interface Module
 * [apps](./apps/readme.md): A collection of CP/M applications to support and explore the eZ80
+* [operating-systems](./operating-systems/readme.md): A Work in progress to boot off external storage into operating systems such as CP/M.
 
 
 ## RomWBW
@@ -82,3 +83,27 @@ Refer to the following images for the correct installation orientation.
 
 More details of building, flashing and updating the firmware with Zilog's tool set can be found here [./firmware/readme.md](./firmware/readme.md)
 
+## Cloning the repo
+
+This repository contains submodules, so please use the following git command to clone and update your local image:
+
+```
+git clone --recurse-submodules https://github.com/dinoboards/ez80-for-rc.git
+```
+or via ssh
+```
+git clone --recurse-submodules git@github.com:dinoboards/ez80-for-rc.git
+```
+
+or clone then update submodules
+
+```
+git clone https://github.com/dinoboards/ez80-for-rc.git
+cd ez80-for-rc
+git submodule update --init --recursive
+```
+
+To update all submodules in an existing clone:
+```
+git submodule update --recursive --remote
+```

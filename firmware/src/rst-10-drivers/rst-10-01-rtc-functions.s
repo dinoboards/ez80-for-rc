@@ -99,6 +99,44 @@ rtc_alarm_set:
 ; Outputs:
 ;  A	 = 0 -> Success, otherwise errored
 ;
+	PUBLIC	_rtc_time_get
+_rtc_time_get:
+	PUSH	IX
+	LD	IX, 0
+	ADD	IX, SP
+	LD	HL, (IX+6)				; address of struct
+
+	IN0	A, (RTC_CEN)
+	LD	(HL), A
+	INC	HL
+
+	IN0	A, (RTC_YR)
+	LD	(HL), A
+	INC	HL
+
+	IN0	A, (RTC_MON)
+	LD	(HL), A
+	INC	HL
+
+	IN0	A, (RTC_DOM)
+	LD	(HL), A
+	INC	HL
+
+	IN0	A, (RTC_HRS)
+	LD	(HL), A
+	INC	HL
+
+	IN0	A, (RTC_MIN)
+	LD	(HL), A
+	INC	HL
+
+	IN0	A, (RTC_SEC)
+	LD	(HL), A
+
+	XOR	A					; SUCCESS
+	POP	IX
+	RET
+
 rtc_time_get:
 	IN0	A, (RTC_CEN)
 	LD.S	(HL), A

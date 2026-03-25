@@ -51,6 +51,10 @@ _default_mi_handler_hook:
 _system_led_timer_hook:
 	JP	_system_led_timer_isr
 
+	XREF	_rst_28_functions
+	PUBLIC	firmware_rst_28_hook
+firmware_rst_28_hook:
+	JP	_rst_28_functions
 	.assume	adl=1
 
 ; ez80's alt version of BC, DE, HL contain the emulated z80's main registers
@@ -106,3 +110,13 @@ z80_flags	equ	21		; true if maskable ints enabled
 
 	global	z80_ei_enabled
 z80_ei_enabled:	db	1		; tmp store when copying register state
+
+
+	global	_hbios_vars
+	global	hbios_vars
+	global	_fbios_vars
+	global	fbios_vars
+_hbios_vars:
+hbios_vars:	ds	3		; pointer within sys_seg for storage of hbios variables/buffers
+_fbios_vars:
+fbios_vars:	ds	3		; pointer within sys_seg for storage of cbios variables/buffers

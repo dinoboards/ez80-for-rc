@@ -52,7 +52,7 @@ _system_timer_isr:
 	NOP						; The NOPs are replaced
 	NOP						; CALL	_usb_tick_sr
 	NOP						; when keyboard driver is initalised/installed
-	NOP
+	NOP						; see usb_mse_init
 
 	PUSH	AF
 	PUSH	HL

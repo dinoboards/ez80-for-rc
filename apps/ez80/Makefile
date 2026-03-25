@@ -8,7 +8,7 @@ all: EZ80.COM
 .PHONY: EZ80.COM
 EZ80.COM:
 	@mkdir -p ../bin
-	@ez80-cc --optimise size --output-dir ../bin --iquote ../common EZ80.COM \
+	@ez80-cc --optimise size --output-dir ../bin EZ80.COM \
 	support_emulation.asm \
 	config-io.c \
 	config-mem.c \

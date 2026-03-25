@@ -110,6 +110,12 @@ clean:
             $(RM) "$(WORKDIR)\build-date.lst"
 	@if exist "$(WORKDIR)\build-date.src"  \
             $(RM) "$(WORKDIR)\build-date.src"
+	@if exist "$(WORKDIR)\cbios.obj"  \
+            $(RM) "$(WORKDIR)\cbios.obj"
+	@if exist "$(WORKDIR)\cbios.lis"  \
+            $(RM) "$(WORKDIR)\cbios.lis"
+	@if exist "$(WORKDIR)\cbios.lst"  \
+            $(RM) "$(WORKDIR)\cbios.lst"
 	@if exist "$(WORKDIR)\ch376.obj"  \
             $(RM) "$(WORKDIR)\ch376.obj"
 	@if exist "$(WORKDIR)\ch376.lis"  \
@@ -232,6 +238,126 @@ clean:
             $(RM) "$(WORKDIR)\enumerate_storage.lst"
 	@if exist "$(WORKDIR)\enumerate_storage.src"  \
             $(RM) "$(WORKDIR)\enumerate_storage.src"
+	@if exist "$(WORKDIR)\extend_mbase.obj"  \
+            $(RM) "$(WORKDIR)\extend_mbase.obj"
+	@if exist "$(WORKDIR)\extend_mbase.lis"  \
+            $(RM) "$(WORKDIR)\extend_mbase.lis"
+	@if exist "$(WORKDIR)\extend_mbase.lst"  \
+            $(RM) "$(WORKDIR)\extend_mbase.lst"
+	@if exist "$(WORKDIR)\fbios-boot.obj"  \
+            $(RM) "$(WORKDIR)\fbios-boot.obj"
+	@if exist "$(WORKDIR)\fbios-boot.lis"  \
+            $(RM) "$(WORKDIR)\fbios-boot.lis"
+	@if exist "$(WORKDIR)\fbios-boot.lst"  \
+            $(RM) "$(WORKDIR)\fbios-boot.lst"
+	@if exist "$(WORKDIR)\fbios-const.obj"  \
+            $(RM) "$(WORKDIR)\fbios-const.obj"
+	@if exist "$(WORKDIR)\fbios-const.lis"  \
+            $(RM) "$(WORKDIR)\fbios-const.lis"
+	@if exist "$(WORKDIR)\fbios-const.lst"  \
+            $(RM) "$(WORKDIR)\fbios-const.lst"
+	@if exist "$(WORKDIR)\fbios-find-boot-disk.obj"  \
+            $(RM) "$(WORKDIR)\fbios-find-boot-disk.obj"
+	@if exist "$(WORKDIR)\fbios-find-boot-disk.lis"  \
+            $(RM) "$(WORKDIR)\fbios-find-boot-disk.lis"
+	@if exist "$(WORKDIR)\fbios-find-boot-disk.lst"  \
+            $(RM) "$(WORKDIR)\fbios-find-boot-disk.lst"
+	@if exist "$(WORKDIR)\fbios-find-boot-disk.src"  \
+            $(RM) "$(WORKDIR)\fbios-find-boot-disk.src"
+	@if exist "$(WORKDIR)\fbios-get-lsb.obj"  \
+            $(RM) "$(WORKDIR)\fbios-get-lsb.obj"
+	@if exist "$(WORKDIR)\fbios-get-lsb.lis"  \
+            $(RM) "$(WORKDIR)\fbios-get-lsb.lis"
+	@if exist "$(WORKDIR)\fbios-get-lsb.lst"  \
+            $(RM) "$(WORKDIR)\fbios-get-lsb.lst"
+	@if exist "$(WORKDIR)\fbios-get-lsb.src"  \
+            $(RM) "$(WORKDIR)\fbios-get-lsb.src"
+	@if exist "$(WORKDIR)\fbios-jmp-table-adl.obj"  \
+            $(RM) "$(WORKDIR)\fbios-jmp-table-adl.obj"
+	@if exist "$(WORKDIR)\fbios-jmp-table-adl.lis"  \
+            $(RM) "$(WORKDIR)\fbios-jmp-table-adl.lis"
+	@if exist "$(WORKDIR)\fbios-jmp-table-adl.lst"  \
+            $(RM) "$(WORKDIR)\fbios-jmp-table-adl.lst"
+	@if exist "$(WORKDIR)\fbios-mount-disks.obj"  \
+            $(RM) "$(WORKDIR)\fbios-mount-disks.obj"
+	@if exist "$(WORKDIR)\fbios-mount-disks.lis"  \
+            $(RM) "$(WORKDIR)\fbios-mount-disks.lis"
+	@if exist "$(WORKDIR)\fbios-mount-disks.lst"  \
+            $(RM) "$(WORKDIR)\fbios-mount-disks.lst"
+	@if exist "$(WORKDIR)\fbios-mount-disks.src"  \
+            $(RM) "$(WORKDIR)\fbios-mount-disks.src"
+	@if exist "$(WORKDIR)\fbios-mount-report.obj"  \
+            $(RM) "$(WORKDIR)\fbios-mount-report.obj"
+	@if exist "$(WORKDIR)\fbios-mount-report.lis"  \
+            $(RM) "$(WORKDIR)\fbios-mount-report.lis"
+	@if exist "$(WORKDIR)\fbios-mount-report.lst"  \
+            $(RM) "$(WORKDIR)\fbios-mount-report.lst"
+	@if exist "$(WORKDIR)\fbios-mount-report.src"  \
+            $(RM) "$(WORKDIR)\fbios-mount-report.src"
+	@if exist "$(WORKDIR)\fbios-mount.obj"  \
+            $(RM) "$(WORKDIR)\fbios-mount.obj"
+	@if exist "$(WORKDIR)\fbios-mount.lis"  \
+            $(RM) "$(WORKDIR)\fbios-mount.lis"
+	@if exist "$(WORKDIR)\fbios-mount.lst"  \
+            $(RM) "$(WORKDIR)\fbios-mount.lst"
+	@if exist "$(WORKDIR)\fbios-read-c.obj"  \
+            $(RM) "$(WORKDIR)\fbios-read-c.obj"
+	@if exist "$(WORKDIR)\fbios-read-c.lis"  \
+            $(RM) "$(WORKDIR)\fbios-read-c.lis"
+	@if exist "$(WORKDIR)\fbios-read-c.lst"  \
+            $(RM) "$(WORKDIR)\fbios-read-c.lst"
+	@if exist "$(WORKDIR)\fbios-read-c.src"  \
+            $(RM) "$(WORKDIR)\fbios-read-c.src"
+	@if exist "$(WORKDIR)\fbios-read.obj"  \
+            $(RM) "$(WORKDIR)\fbios-read.obj"
+	@if exist "$(WORKDIR)\fbios-read.lis"  \
+            $(RM) "$(WORKDIR)\fbios-read.lis"
+	@if exist "$(WORKDIR)\fbios-read.lst"  \
+            $(RM) "$(WORKDIR)\fbios-read.lst"
+	@if exist "$(WORKDIR)\fbios-seldsk.obj"  \
+            $(RM) "$(WORKDIR)\fbios-seldsk.obj"
+	@if exist "$(WORKDIR)\fbios-seldsk.lis"  \
+            $(RM) "$(WORKDIR)\fbios-seldsk.lis"
+	@if exist "$(WORKDIR)\fbios-seldsk.lst"  \
+            $(RM) "$(WORKDIR)\fbios-seldsk.lst"
+	@if exist "$(WORKDIR)\fbios-setdma.obj"  \
+            $(RM) "$(WORKDIR)\fbios-setdma.obj"
+	@if exist "$(WORKDIR)\fbios-setdma.lis"  \
+            $(RM) "$(WORKDIR)\fbios-setdma.lis"
+	@if exist "$(WORKDIR)\fbios-setdma.lst"  \
+            $(RM) "$(WORKDIR)\fbios-setdma.lst"
+	@if exist "$(WORKDIR)\fbios-setsec.obj"  \
+            $(RM) "$(WORKDIR)\fbios-setsec.obj"
+	@if exist "$(WORKDIR)\fbios-setsec.lis"  \
+            $(RM) "$(WORKDIR)\fbios-setsec.lis"
+	@if exist "$(WORKDIR)\fbios-setsec.lst"  \
+            $(RM) "$(WORKDIR)\fbios-setsec.lst"
+	@if exist "$(WORKDIR)\fbios-settrk.obj"  \
+            $(RM) "$(WORKDIR)\fbios-settrk.obj"
+	@if exist "$(WORKDIR)\fbios-settrk.lis"  \
+            $(RM) "$(WORKDIR)\fbios-settrk.lis"
+	@if exist "$(WORKDIR)\fbios-settrk.lst"  \
+            $(RM) "$(WORKDIR)\fbios-settrk.lst"
+	@if exist "$(WORKDIR)\fbios-write-c.obj"  \
+            $(RM) "$(WORKDIR)\fbios-write-c.obj"
+	@if exist "$(WORKDIR)\fbios-write-c.lis"  \
+            $(RM) "$(WORKDIR)\fbios-write-c.lis"
+	@if exist "$(WORKDIR)\fbios-write-c.lst"  \
+            $(RM) "$(WORKDIR)\fbios-write-c.lst"
+	@if exist "$(WORKDIR)\fbios-write-c.src"  \
+            $(RM) "$(WORKDIR)\fbios-write-c.src"
+	@if exist "$(WORKDIR)\fbios-write.obj"  \
+            $(RM) "$(WORKDIR)\fbios-write.obj"
+	@if exist "$(WORKDIR)\fbios-write.lis"  \
+            $(RM) "$(WORKDIR)\fbios-write.lis"
+	@if exist "$(WORKDIR)\fbios-write.lst"  \
+            $(RM) "$(WORKDIR)\fbios-write.lst"
+	@if exist "$(WORKDIR)\fbios.obj"  \
+            $(RM) "$(WORKDIR)\fbios.obj"
+	@if exist "$(WORKDIR)\fbios.lis"  \
+            $(RM) "$(WORKDIR)\fbios.lis"
+	@if exist "$(WORKDIR)\fbios.lst"  \
+            $(RM) "$(WORKDIR)\fbios.lst"
 	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.obj"  \
             $(RM) "$(WORKDIR)\gpio-b4-isr-marshaller.obj"
 	@if exist "$(WORKDIR)\gpio-b4-isr-marshaller.lis"  \
@@ -324,6 +450,12 @@ clean:
             $(RM) "$(WORKDIR)\line_new.lst"
 	@if exist "$(WORKDIR)\line_new.src"  \
             $(RM) "$(WORKDIR)\line_new.src"
+	@if exist "$(WORKDIR)\linear-mem-test-at.obj"  \
+            $(RM) "$(WORKDIR)\linear-mem-test-at.obj"
+	@if exist "$(WORKDIR)\linear-mem-test-at.lis"  \
+            $(RM) "$(WORKDIR)\linear-mem-test-at.lis"
+	@if exist "$(WORKDIR)\linear-mem-test-at.lst"  \
+            $(RM) "$(WORKDIR)\linear-mem-test-at.lst"
 	@if exist "$(WORKDIR)\logic_to_physical_coords.obj"  \
             $(RM) "$(WORKDIR)\logic_to_physical_coords.obj"
 	@if exist "$(WORKDIR)\logic_to_physical_coords.lis"  \
@@ -354,6 +486,22 @@ clean:
             $(RM) "$(WORKDIR)\point_new.lst"
 	@if exist "$(WORKDIR)\point_new.src"  \
             $(RM) "$(WORKDIR)\point_new.src"
+	@if exist "$(WORKDIR)\print-string.obj"  \
+            $(RM) "$(WORKDIR)\print-string.obj"
+	@if exist "$(WORKDIR)\print-string.lis"  \
+            $(RM) "$(WORKDIR)\print-string.lis"
+	@if exist "$(WORKDIR)\print-string.lst"  \
+            $(RM) "$(WORKDIR)\print-string.lst"
+	@if exist "$(WORKDIR)\print-string.src"  \
+            $(RM) "$(WORKDIR)\print-string.src"
+	@if exist "$(WORKDIR)\probe-mem.obj"  \
+            $(RM) "$(WORKDIR)\probe-mem.obj"
+	@if exist "$(WORKDIR)\probe-mem.lis"  \
+            $(RM) "$(WORKDIR)\probe-mem.lis"
+	@if exist "$(WORKDIR)\probe-mem.lst"  \
+            $(RM) "$(WORKDIR)\probe-mem.lst"
+	@if exist "$(WORKDIR)\probe-mem.src"  \
+            $(RM) "$(WORKDIR)\probe-mem.src"
 	@if exist "$(WORKDIR)\protocol.obj"  \
             $(RM) "$(WORKDIR)\protocol.obj"
 	@if exist "$(WORKDIR)\protocol.lis"  \
@@ -442,6 +590,88 @@ clean:
             $(RM) "$(WORKDIR)\rst-18-function.lis"
 	@if exist "$(WORKDIR)\rst-18-function.lst"  \
             $(RM) "$(WORKDIR)\rst-18-function.lst"
+	@if exist "$(WORKDIR)\rst-28-c-helpers.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-c-helpers.obj"
+	@if exist "$(WORKDIR)\rst-28-c-helpers.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-c-helpers.lis"
+	@if exist "$(WORKDIR)\rst-28-c-helpers.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-c-helpers.lst"
+	@if exist "$(WORKDIR)\rst-28-c-helpers.src"  \
+            $(RM) "$(WORKDIR)\rst-28-c-helpers.src"
+	@if exist "$(WORKDIR)\rst-28-c-marshallers.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-c-marshallers.obj"
+	@if exist "$(WORKDIR)\rst-28-c-marshallers.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-c-marshallers.lis"
+	@if exist "$(WORKDIR)\rst-28-c-marshallers.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-c-marshallers.lst"
+	@if exist "$(WORKDIR)\rst-28-cio-init.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-init.obj"
+	@if exist "$(WORKDIR)\rst-28-cio-init.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-init.lis"
+	@if exist "$(WORKDIR)\rst-28-cio-init.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-init.lst"
+	@if exist "$(WORKDIR)\rst-28-cio-init.src"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-init.src"
+	@if exist "$(WORKDIR)\rst-28-cio-uart0.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-uart0.obj"
+	@if exist "$(WORKDIR)\rst-28-cio-uart0.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-uart0.lis"
+	@if exist "$(WORKDIR)\rst-28-cio-uart0.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-uart0.lst"
+	@if exist "$(WORKDIR)\rst-28-functions.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-functions.obj"
+	@if exist "$(WORKDIR)\rst-28-functions.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-functions.lis"
+	@if exist "$(WORKDIR)\rst-28-functions.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-functions.lst"
+	@if exist "$(WORKDIR)\rst-28-get-cio-driver.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-get-cio-driver.obj"
+	@if exist "$(WORKDIR)\rst-28-get-cio-driver.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-get-cio-driver.lis"
+	@if exist "$(WORKDIR)\rst-28-get-cio-driver.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-get-cio-driver.lst"
+	@if exist "$(WORKDIR)\rst-28-get-dio-driver.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-get-dio-driver.obj"
+	@if exist "$(WORKDIR)\rst-28-get-dio-driver.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-get-dio-driver.lis"
+	@if exist "$(WORKDIR)\rst-28-get-dio-driver.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-get-dio-driver.lst"
+	@if exist "$(WORKDIR)\rst-28-mount.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-mount.obj"
+	@if exist "$(WORKDIR)\rst-28-mount.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-mount.lis"
+	@if exist "$(WORKDIR)\rst-28-mount.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-mount.lst"
+	@if exist "$(WORKDIR)\rst-28-mount.src"  \
+            $(RM) "$(WORKDIR)\rst-28-mount.src"
+	@if exist "$(WORKDIR)\rst-28-ram-disk.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-ram-disk.obj"
+	@if exist "$(WORKDIR)\rst-28-ram-disk.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-ram-disk.lis"
+	@if exist "$(WORKDIR)\rst-28-ram-disk.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-ram-disk.lst"
+	@if exist "$(WORKDIR)\rst-28-sys-alloc.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-sys-alloc.obj"
+	@if exist "$(WORKDIR)\rst-28-sys-alloc.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-sys-alloc.lis"
+	@if exist "$(WORKDIR)\rst-28-sys-alloc.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-sys-alloc.lst"
+	@if exist "$(WORKDIR)\rst-28-sys-alloc.src"  \
+            $(RM) "$(WORKDIR)\rst-28-sys-alloc.src"
+	@if exist "$(WORKDIR)\rst-28-usb-scsi-c.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-usb-scsi-c.obj"
+	@if exist "$(WORKDIR)\rst-28-usb-scsi-c.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-usb-scsi-c.lis"
+	@if exist "$(WORKDIR)\rst-28-usb-scsi-c.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-usb-scsi-c.lst"
+	@if exist "$(WORKDIR)\rst-28-usb-scsi-c.src"  \
+            $(RM) "$(WORKDIR)\rst-28-usb-scsi-c.src"
+	@if exist "$(WORKDIR)\rst-28-usb-scsi.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-usb-scsi.obj"
+	@if exist "$(WORKDIR)\rst-28-usb-scsi.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-usb-scsi.lis"
+	@if exist "$(WORKDIR)\rst-28-usb-scsi.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-usb-scsi.lst"
 	@if exist "$(WORKDIR)\scsi_driver.obj"  \
             $(RM) "$(WORKDIR)\scsi_driver.obj"
 	@if exist "$(WORKDIR)\scsi_driver.lis"  \
@@ -698,6 +928,14 @@ clean:
             $(RM) "$(WORKDIR)\vdu_25.lst"
 	@if exist "$(WORKDIR)\vdu_25.src"  \
             $(RM) "$(WORKDIR)\vdu_25.src"
+	@if exist "$(WORKDIR)\vdu_31.obj"  \
+            $(RM) "$(WORKDIR)\vdu_31.obj"
+	@if exist "$(WORKDIR)\vdu_31.lis"  \
+            $(RM) "$(WORKDIR)\vdu_31.lis"
+	@if exist "$(WORKDIR)\vdu_31.lst"  \
+            $(RM) "$(WORKDIR)\vdu_31.lst"
+	@if exist "$(WORKDIR)\vdu_31.src"  \
+            $(RM) "$(WORKDIR)\vdu_31.src"
 	@if exist "$(WORKDIR)\vdu_cursor.obj"  \
             $(RM) "$(WORKDIR)\vdu_cursor.obj"
 	@if exist "$(WORKDIR)\vdu_cursor.lis"  \
@@ -830,14 +1068,6 @@ clean:
             $(RM) "$(WORKDIR)\zexall.lis"
 	@if exist "$(WORKDIR)\zexall.lst"  \
             $(RM) "$(WORKDIR)\zexall.lst"
-	@if exist "$(WORKDIR)\vdu_31.obj"  \
-            $(RM) "$(WORKDIR)\vdu_31.obj"
-	@if exist "$(WORKDIR)\vdu_31.lis"  \
-            $(RM) "$(WORKDIR)\vdu_31.lis"
-	@if exist "$(WORKDIR)\vdu_31.lst"  \
-            $(RM) "$(WORKDIR)\vdu_31.lst"
-	@if exist "$(WORKDIR)\vdu_31.src"  \
-            $(RM) "$(WORKDIR)\vdu_31.src"
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -848,6 +1078,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\base-drv.obj  \
             $(WORKDIR_ESCSPACE)\boot_prompt.obj  \
             $(WORKDIR_ESCSPACE)\build-date.obj  \
+            $(WORKDIR_ESCSPACE)\cbios.obj  \
             $(WORKDIR_ESCSPACE)\ch376.obj  \
             $(WORKDIR_ESCSPACE)\ch376asm.obj  \
             $(WORKDIR_ESCSPACE)\class_hid.obj  \
@@ -864,6 +1095,24 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\enumerate.obj  \
             $(WORKDIR_ESCSPACE)\enumerate_hub.obj  \
             $(WORKDIR_ESCSPACE)\enumerate_storage.obj  \
+            $(WORKDIR_ESCSPACE)\extend_mbase.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-boot.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-const.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-find-boot-disk.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-get-lsb.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-jmp-table-adl.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-mount-disks.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-mount-report.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-mount.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-read-c.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-read.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-seldsk.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-setdma.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-setsec.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-settrk.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-write-c.obj  \
+            $(WORKDIR_ESCSPACE)\fbios-write.obj  \
+            $(WORKDIR_ESCSPACE)\fbios.obj  \
             $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj  \
             $(WORKDIR_ESCSPACE)\graphic_print_char.obj  \
             $(WORKDIR_ESCSPACE)\i2c-calculate.obj  \
@@ -877,10 +1126,13 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\kyb_driverasm.obj  \
             $(WORKDIR_ESCSPACE)\line_clip.obj  \
             $(WORKDIR_ESCSPACE)\line_new.obj  \
+            $(WORKDIR_ESCSPACE)\linear-mem-test-at.obj  \
             $(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj  \
             $(WORKDIR_ESCSPACE)\main.obj  \
             $(WORKDIR_ESCSPACE)\mse_driver.obj  \
             $(WORKDIR_ESCSPACE)\point_new.obj  \
+            $(WORKDIR_ESCSPACE)\print-string.obj  \
+            $(WORKDIR_ESCSPACE)\probe-mem.obj  \
             $(WORKDIR_ESCSPACE)\protocol.obj  \
             $(WORKDIR_ESCSPACE)\rom-flashing-calculator.obj  \
             $(WORKDIR_ESCSPACE)\rst-08-io.obj  \
@@ -895,6 +1147,18 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-10-09-crt.obj  \
             $(WORKDIR_ESCSPACE)\rst-10-functions.obj  \
             $(WORKDIR_ESCSPACE)\rst-18-function.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-c-helpers.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-c-marshallers.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-cio-init.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-cio-uart0.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-functions.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-get-cio-driver.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-get-dio-driver.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-mount.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-ram-disk.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-sys-alloc.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-usb-scsi-c.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-usb-scsi.obj  \
             $(WORKDIR_ESCSPACE)\scsi_driver.obj  \
             $(WORKDIR_ESCSPACE)\sysfont.obj  \
             $(WORKDIR_ESCSPACE)\system-calls.obj  \
@@ -932,6 +1196,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\vdu.obj  \
             $(WORKDIR_ESCSPACE)\vdu_10.obj  \
             $(WORKDIR_ESCSPACE)\vdu_25.obj  \
+            $(WORKDIR_ESCSPACE)\vdu_31.obj  \
             $(WORKDIR_ESCSPACE)\vdu_cursor.obj  \
             $(WORKDIR_ESCSPACE)\vdu_init.obj  \
             $(WORKDIR_ESCSPACE)\vdu_not_implemented.obj  \
@@ -950,8 +1215,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\z80-emulator-sil.obj  \
             $(WORKDIR_ESCSPACE)\z80-emulator.obj  \
             $(WORKDIR_ESCSPACE)\z80-test.obj  \
-            $(WORKDIR_ESCSPACE)\zexall.obj  \
-            $(WORKDIR_ESCSPACE)\vdu_31.obj
+            $(WORKDIR_ESCSPACE)\zexall.obj
 
 ez80-for-rc-firmware: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -968,7 +1232,11 @@ $(WORKDIR_ESCSPACE)\base-drv.obj :  \
 
 $(WORKDIR_ESCSPACE)\boot_prompt.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\boot_prompt.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\boot_prompt.c"
 
 $(WORKDIR_ESCSPACE)\build-date.obj :  \
@@ -976,6 +1244,10 @@ $(WORKDIR_ESCSPACE)\build-date.obj :  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\build-date.c"
+
+$(WORKDIR_ESCSPACE)\cbios.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\cbios.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\cbios.s"
 
 $(WORKDIR_ESCSPACE)\ch376.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.c  \
@@ -1182,6 +1454,170 @@ $(WORKDIR_ESCSPACE)\enumerate_storage.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\usb\base-drv\enumerate_storage.c"
 
+$(WORKDIR_ESCSPACE)\extend_mbase.obj :  \
+            $(PRJDIR_ESCSPACE)\src\extend_mbase.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\extend_mbase.s"
+
+$(WORKDIR_ESCSPACE)\fbios-boot.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-boot.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-boot.s"
+
+$(WORKDIR_ESCSPACE)\fbios-const.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-const.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-const.s"
+
+$(WORKDIR_ESCSPACE)\fbios-find-boot-disk.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-find-boot-disk.c  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\ez80-support.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-find-boot-disk.c"
+
+$(WORKDIR_ESCSPACE)\fbios-get-lsb.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-get-lsb.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-get-lsb.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-get-lsb.c"
+
+$(WORKDIR_ESCSPACE)\fbios-jmp-table-adl.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-jmp-table-adl.s
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-jmp-table-adl.s"
+
+$(WORKDIR_ESCSPACE)\fbios-mount-disks.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-mount-disks.c  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-mount-disks.c"
+
+$(WORKDIR_ESCSPACE)\fbios-mount-report.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-mount-report.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-mount-report.c"
+
+$(WORKDIR_ESCSPACE)\fbios-mount.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-mount.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-mount.s"
+
+$(WORKDIR_ESCSPACE)\fbios-read-c.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-read-c.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-get-lsb.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-read-c.c"
+
+$(WORKDIR_ESCSPACE)\fbios-read.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-read.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-read.s"
+
+$(WORKDIR_ESCSPACE)\fbios-seldsk.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-seldsk.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-seldsk.s"
+
+$(WORKDIR_ESCSPACE)\fbios-setdma.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-setdma.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-setdma.s"
+
+$(WORKDIR_ESCSPACE)\fbios-setsec.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-setsec.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-setsec.s"
+
+$(WORKDIR_ESCSPACE)\fbios-settrk.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-settrk.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-settrk.s"
+
+$(WORKDIR_ESCSPACE)\fbios-write-c.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-write-c.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-get-lsb.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-write-c.c"
+
+$(WORKDIR_ESCSPACE)\fbios-write.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-write.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios-write.s"
+
+$(WORKDIR_ESCSPACE)\fbios.obj :  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\fbios\fbios.s"
+
 $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
             $(PRJDIR_ESCSPACE)\src\gpio-b4-isr-marshaller.s  \
             $(PRJDIR_ESCSPACE)\src\config.inc  \
@@ -1224,6 +1660,9 @@ $(WORKDIR_ESCSPACE)\init-f92.obj :  \
 
 $(WORKDIR_ESCSPACE)\init_font_patterns.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\init_font_patterns.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
@@ -1319,6 +1758,14 @@ $(WORKDIR_ESCSPACE)\line_new.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\line_new.c"
 
+$(WORKDIR_ESCSPACE)\linear-mem-test-at.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\linear-mem-test-at.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\startup\linear-mem-test-at.s"
+
 $(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\logic_to_physical_coords.c  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
@@ -1372,6 +1819,22 @@ $(WORKDIR_ESCSPACE)\point_new.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\point_new.c"
+
+$(WORKDIR_ESCSPACE)\print-string.obj :  \
+            $(PRJDIR_ESCSPACE)\src\print-string.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\print-string.c"
+
+$(WORKDIR_ESCSPACE)\probe-mem.obj :  \
+            $(PRJDIR_ESCSPACE)\src\startup\probe-mem.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\probe-mem.c"
 
 $(WORKDIR_ESCSPACE)\protocol.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.c  \
@@ -1493,6 +1956,143 @@ $(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
             $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-18-function.s"
 
+$(WORKDIR_ESCSPACE)\rst-28-c-helpers.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-c-helpers.c"
+
+$(WORKDIR_ESCSPACE)\rst-28-c-marshallers.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-marshallers.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-c-marshallers.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-cio-init.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-cio-init.c  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-cio-init.c"
+
+$(WORKDIR_ESCSPACE)\rst-28-cio-uart0.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-cio-uart0.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-cio-uart0.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-functions.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-functions.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-functions.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-get-cio-driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-get-cio-driver.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-get-cio-driver.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-get-dio-driver.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-get-dio-driver.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-get-dio-driver.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-mount.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-mount.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-base-drv.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-mount.c"
+
+$(WORKDIR_ESCSPACE)\rst-28-ram-disk.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-ram-disk.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-ram-disk.s"
+
+$(WORKDIR_ESCSPACE)\rst-28-sys-alloc.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-sys-alloc.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-sys-alloc.c"
+
+$(WORKDIR_ESCSPACE)\rst-28-usb-scsi-c.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-usb-scsi-c.c  \
+            $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\dev_transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\class_scsi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-usb-scsi-c.c"
+
+$(WORKDIR_ESCSPACE)\rst-28-usb-scsi.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-usb-scsi.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-vars.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-usb-scsi.s"
+
 $(WORKDIR_ESCSPACE)\scsi_driver.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.c  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
@@ -1519,6 +2119,9 @@ $(WORKDIR_ESCSPACE)\sysfont.obj :  \
 
 $(WORKDIR_ESCSPACE)\system-calls.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\system-calls.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
@@ -1691,7 +2294,6 @@ $(WORKDIR_ESCSPACE)\usb-base-drv.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\enumerate.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\protocol.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\transfers.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb-base-drv.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\usb_state.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\work-area.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\kyb-drv\class_hid_keyboard.h  \
@@ -1891,10 +2493,14 @@ $(WORKDIR_ESCSPACE)\vdp_get_status.obj :  \
 
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
@@ -1945,6 +2551,12 @@ $(WORKDIR_ESCSPACE)\vdu_25.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_25.c"
 
+$(WORKDIR_ESCSPACE)\vdu_31.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_31.c  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
+	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_31.c"
+
 $(WORKDIR_ESCSPACE)\vdu_cursor.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_cursor.c  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
@@ -1971,6 +2583,7 @@ $(WORKDIR_ESCSPACE)\vdu_cursor.obj :  \
 $(WORKDIR_ESCSPACE)\vdu_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu_init.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
@@ -1990,10 +2603,15 @@ $(WORKDIR_ESCSPACE)\vectors16.obj :  \
 
 $(WORKDIR_ESCSPACE)\vm-functions.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-functions.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\bytecode.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\vm.h  \
@@ -2002,10 +2620,14 @@ $(WORKDIR_ESCSPACE)\vm-functions.obj :  \
 
 $(WORKDIR_ESCSPACE)\vm-init.obj :  \
             $(PRJDIR_ESCSPACE)\src\q3vm\vm-init.c  \
+            $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\bytecode.h  \
             $(PRJDIR_ESCSPACE)\src\q3vm\host\target-support.h  \
@@ -2102,6 +2724,7 @@ $(WORKDIR_ESCSPACE)\z80-emulator-lis.obj :  \
 $(WORKDIR_ESCSPACE)\z80-emulator-logging.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\z80-emulator-logging.c  \
             $(INCLUDE_ESCSPACE)\std\Format.h  \
+            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\z80-emulator\z80-emulator-logging.c"
@@ -2135,10 +2758,4 @@ $(WORKDIR_ESCSPACE)\z80-test.obj :  \
 $(WORKDIR_ESCSPACE)\zexall.obj :  \
             $(PRJDIR_ESCSPACE)\src\z80-emulator\zexall.s
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\z80-emulator\zexall.s"
-
-$(WORKDIR_ESCSPACE)\vdu_31.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\vdu_31.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_31.c"
 

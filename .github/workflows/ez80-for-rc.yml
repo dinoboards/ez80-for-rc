@@ -51,7 +51,8 @@ jobs:
       - name: Apply REVISION_VERSION
         run: |
           VERSION_FILE="./firmware/src/version.inc"
-          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${GITHUB_RUN_NUMBER}/" $VERSION_FILE
+          CALCULATED_RUN_NUMBER=$((${GITHUB_RUN_NUMBER} - 288))
+          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${CALCULATED_RUN_NUMBER}/" $VERSION_FILE
 
       - name: Read version numbers
         id: read_version
@@ -161,7 +162,8 @@ jobs:
       - name: Apply REVISION_VERSION
         run: |
           VERSION_FILE="./firmware/src/version.inc"
-          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${GITHUB_RUN_NUMBER}/" $VERSION_FILE
+          CALCULATED_RUN_NUMBER=$((${GITHUB_RUN_NUMBER} - 288))
+          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${CALCULATED_RUN_NUMBER}/" $VERSION_FILE
 
       - name: pull docker tool chain
         run: |
@@ -169,10 +171,17 @@ jobs:
 
       - name: install ez80-clang
         run: |
-          wget --progress=dot:giga https://github.com/dinoboards/ez80-clang/releases/download/v0.0.16/ez80-clang-v0.0.16.tar.gz
-          tar -xzvf ez80-clang-v0.0.16.tar.gz
-          cd ez80-clang-v0.0.16
+          wget --progress=dot:giga https://github.com/dinoboards/ez80-clang/releases/download/v0.0.17/ez80-clang-v0.0.17.tar.gz
+          tar -xzvf ez80-clang-v0.0.17.tar.gz
+          cd ez80-clang-v0.0.17
           sudo ./install.sh
+
+      - name: install z80asm
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt update -y
+          sudo apt install -y z80asm
 
       - name: build apps
         working-directory: apps
@@ -214,7 +223,8 @@ jobs:
       - name: Apply REVISION_VERSION
         run: |
           VERSION_FILE="./firmware/src/version.inc"
-          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${GITHUB_RUN_NUMBER}/" $VERSION_FILE
+          CALCULATED_RUN_NUMBER=$((${GITHUB_RUN_NUMBER} - 288))
+          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${CALCULATED_RUN_NUMBER}/" $VERSION_FILE
 
       - name: create release notes
         run: ./release-notes.sh
@@ -261,7 +271,8 @@ jobs:
       - name: Apply REVISION_VERSION
         run: |
           VERSION_FILE="./firmware/src/version.inc"
-          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${GITHUB_RUN_NUMBER}/" $VERSION_FILE
+          CALCULATED_RUN_NUMBER=$((${GITHUB_RUN_NUMBER} - 288))
+          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${CALCULATED_RUN_NUMBER}/" $VERSION_FILE
 
       - name: Read version numbers
         id: read_version

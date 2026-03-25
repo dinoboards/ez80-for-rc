@@ -1,4 +1,3 @@
-#include "usb-base-drv.h"
 #include "../kyb-drv/kyb_driver.h"
 #include "../mse-drv/mse_driver.h"
 #include "ch376.h"
@@ -73,7 +72,7 @@ uint16_t usb_init(uint8_t state) {
   return (uint16_t)count_of_devices() << 8 | 4;
 }
 
-usb_error_t usb_scsi_seek(const uint16_t dev_index, const uint32_t lba) {
+usb_error_t usb_scsi_seek(const uint8_t dev_index, const uint32_t lba) {
   device_config_storage_t *const dev = (device_config_storage_t *)get_usb_device_config(dev_index);
 
   if (dev == NULL)

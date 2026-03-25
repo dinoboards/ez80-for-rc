@@ -92,9 +92,9 @@ DEFINE __INTERNAL_HIRAM_RAM = BASE OF INTERNAL_HIRAM_RAM
 DEFINE __INTERNAL_HIRAM_LEN = LENGTH OF INTERNAL_HIRAM_RAM
 DEFINE __LENGTH_OF_DATA = LENGTH OF DATA
 SEQUENCE INTERNAL_RAM_ROM, DATA, BSS, INTERNAL_HIRAM_RAM
-LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0156)
-LOCATE DATA at (BASE OF BSS - $00F6)
-LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0588
+LOCATE BSS at (BASE OF INTERNAL_HIRAM_RAM - $0200)
+LOCATE DATA at (BASE OF BSS - $0120)
+LOCATE INTERNAL_RAM_RAM at (BASE OF DATA) - $0600
 DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 /* end additional user-defined directives */
 
@@ -102,6 +102,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\base-drv.obj", \
  ".\boot_prompt.obj", \
  ".\build-date.obj", \
+ ".\cbios.obj", \
  ".\ch376.obj", \
  ".\ch376asm.obj", \
  ".\class_hid.obj", \
@@ -118,6 +119,24 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\enumerate.obj", \
  ".\enumerate_hub.obj", \
  ".\enumerate_storage.obj", \
+ ".\extend_mbase.obj", \
+ ".\fbios-boot.obj", \
+ ".\fbios-const.obj", \
+ ".\fbios-find-boot-disk.obj", \
+ ".\fbios-get-lsb.obj", \
+ ".\fbios-jmp-table-adl.obj", \
+ ".\fbios-mount-disks.obj", \
+ ".\fbios-mount-report.obj", \
+ ".\fbios-mount.obj", \
+ ".\fbios-read-c.obj", \
+ ".\fbios-read.obj", \
+ ".\fbios-seldsk.obj", \
+ ".\fbios-setdma.obj", \
+ ".\fbios-setsec.obj", \
+ ".\fbios-settrk.obj", \
+ ".\fbios-write-c.obj", \
+ ".\fbios-write.obj", \
+ ".\fbios.obj", \
  ".\gpio-b4-isr-marshaller.obj", \
  ".\graphic_print_char.obj", \
  ".\i2c-calculate.obj", \
@@ -131,10 +150,13 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\kyb_driverasm.obj", \
  ".\line_clip.obj", \
  ".\line_new.obj", \
+ ".\linear-mem-test-at.obj", \
  ".\logic_to_physical_coords.obj", \
  ".\main.obj", \
  ".\mse_driver.obj", \
  ".\point_new.obj", \
+ ".\print-string.obj", \
+ ".\probe-mem.obj", \
  ".\protocol.obj", \
  ".\rom-flashing-calculator.obj", \
  ".\rst-08-io.obj", \
@@ -149,6 +171,18 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-10-09-crt.obj", \
  ".\rst-10-functions.obj", \
  ".\rst-18-function.obj", \
+ ".\rst-28-c-helpers.obj", \
+ ".\rst-28-c-marshallers.obj", \
+ ".\rst-28-cio-init.obj", \
+ ".\rst-28-cio-uart0.obj", \
+ ".\rst-28-functions.obj", \
+ ".\rst-28-get-cio-driver.obj", \
+ ".\rst-28-get-dio-driver.obj", \
+ ".\rst-28-mount.obj", \
+ ".\rst-28-ram-disk.obj", \
+ ".\rst-28-sys-alloc.obj", \
+ ".\rst-28-usb-scsi-c.obj", \
+ ".\rst-28-usb-scsi.obj", \
  ".\scsi_driver.obj", \
  ".\sysfont.obj", \
  ".\system-calls.obj", \
@@ -186,6 +220,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdu.obj", \
  ".\vdu_10.obj", \
  ".\vdu_25.obj", \
+ ".\vdu_31.obj", \
  ".\vdu_cursor.obj", \
  ".\vdu_init.obj", \
  ".\vdu_not_implemented.obj", \
@@ -205,7 +240,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\z80-emulator.obj", \
  ".\z80-test.obj", \
  ".\zexall.obj", \
- ".\vdu_31.obj", \
  "C:\ZDS\lib\std\chelp.lib", \
  "C:\ZDS\lib\std\crt.lib", \
  "C:\ZDS\lib\std\crtS.lib", \

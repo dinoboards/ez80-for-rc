@@ -10,12 +10,25 @@
 	xref	_init_clocks
 	xref	__c_startup
 	XREF	_vm_init
-	xref	_boot_prompt
 
 	xref	_io_bus_mode_and_timing
 	xref	_mem_bus_mode_and_timing
 	xref	_mem0_bus_mode_and_timing
 	xref	_mem1_bus_mode_and_timing
+
+	xref	_boot_prompt1
+	xref	_boot_prompt2
+	xref	_probe_installed_linear_ram
+	xref	_report_installed_linear_ram
+	xref	_probe_extrom
+	xref	_report_extrom
+
+	xref	_allocate_ram_for_hbios_and_fbios
+	xref	_report_seg_for_cpm
+
+	xref	_hbios_dio_init
+	xref	_hbios_cio_init
+	xref	_os_boot
 
 	xref	z80_invoke
 
@@ -28,40 +41,71 @@ _main:
 	call	_init_memory_timings
 	CALL	_vm_init
 
-ifdef _DEBUG
-	call	_boot_prompt
-endif
+	call	_boot_prompt1
+
+	CALL	_probe_installed_linear_ram
+	LD	L, A
+	PUSH	HL
+
+	CALL	_probe_extrom
+	LD	L, A
+
+	POP	DE
+
+	; xref	_spike
+	; call	_spike
+
+	LD	A, L
+
+	CP	1
+	JR	Z, boot_romwbw_rom
+	CP	2
+	JR	Z, boot_msx_rom
+
+	LD	A, E
+	OR	A
+	JR	Z, boot_external_rom
+
+
+boot_storage:
+	CALL	_boot_prompt2
+
+	CALL	_allocate_ram_for_hbios_and_fbios
+	CALL	_hbios_cio_init
+	CALL	_hbios_dio_init
+	CALL	_os_boot
 
 IFDEF	ZEXALL
 	xref	Z80test
 	call	Z80test
 ENDIF
-	di
 
-	;xref	_spike
-	;call	_spike
+boot_external_rom:
+boot_msx_rom:
+	DI
+	JP	z80_invoke
 
-	jp	z80_invoke
+boot_romwbw_rom:
+	LD	A, Z80_ADDR_MBASE
+	LD	MB, A
+	JP.SIS	0
 
-	; ld	a, Z80_ADDR_MBASE
-	; ld	MB, a
-	; jp.sis	0
 
-	global	remove_usb_tick_hook
+	GLOBAL	remove_usb_tick_hook
 	; remove the usb key/mouse inter handler hook
 remove_usb_tick_hook:
-	xref	_system_timer_isr
-	ld	hl, _system_timer_isr
-	xor	a
-	ld	(HL), a
-	inc	hl
-	ld	(HL), a
-	inc	hl
-	ld	(HL), a
-	inc	hl
-	ld	(HL), a
-	inc	hl
-	ret
+	XREF	_system_timer_isr
+	LD	HL, _system_timer_isr
+	XOR	A
+	LD	(HL), A
+	INC	HL
+	LD	(HL), A
+	INC	HL
+	LD	(HL), A
+	INC	HL
+	LD	(HL), A
+	INC	HL
+	RET
 
 _init_memory_timings:
 	; Auto configure CS0's timing

@@ -133,7 +133,7 @@ usb_scsi_init:
 ; Outputs
 ;  A -> usb_error_t
 ;
-;marshalls to usb_error_t usb_scsi_read_capacity(const uint16_t dev_index, scsi_read_capacity_result_t *result);
+;marshalls to usb_error_t usb_scsi_read_capacity(const uint8_t dev_index, scsi_read_capacity_result_t *result);
 usb_scsi_read_capacity:
 	PUSH	DE
 	PUSH	BC

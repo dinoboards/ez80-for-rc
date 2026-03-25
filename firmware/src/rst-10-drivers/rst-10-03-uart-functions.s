@@ -47,6 +47,7 @@ _uart_dispatch:
 ; Read and return a Character (E).  If no character(s) are available in the unit's input buffer, this function will
 ; wait indefinitely.  The returned Status (A) is a standard  HBIOS result code.
 ;
+	public	uart_in
 uart_in:
 	CALL	_rx_buffer_empty
 	OR	A
@@ -76,6 +77,7 @@ uart_in_end:
 ; indefinitely.  The returned Status (A) is a standard HBIOS result code.
 ; Will block if CTS flow control enabled, and receiver does not assert (low) our CTS input.
 ;
+	PUBLIC	uart_out
 uart_out:
 	IN0	A, (UART0_LSR)				; WAIT FOR TX READY
 	AND	LSR_THRE
@@ -102,7 +104,7 @@ _uart_out:
 	ld	ix, 0
 	add	ix, sp
 	ld	e, (ix+6)
-	call.lil	uart_out
+	call.il	uart_out
 	pop	ix
 	ret
 ;
@@ -113,6 +115,7 @@ _uart_out:
 ; (bit 7 set) indicate a standard HBIOS result (error) code.  Otherwise, the return value represents the number
 ; of characters in the input buffer.
 ;
+	PUBLIC	uart_ist
 uart_ist:
 	CALL	_rx_buffer_get_length			; RETURN THE NUMBER OF CHARS IN THE RX BUFFER IN A
 
