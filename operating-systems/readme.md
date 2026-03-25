@@ -6,3 +6,13 @@ This avoids the need boot RomWBW images from the typical 512K ROM/RAM RC2014 mod
 
 More details to be noted here in due course.
 
+### Prerequisites
+
+* cpmtools
+
+#### Installing cpmtools
+
+```
+sudo apt-get update
+sudo apt-get install cpmtools
+```

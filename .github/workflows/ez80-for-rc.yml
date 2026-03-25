@@ -205,6 +205,52 @@ jobs:
             apps/bin/*.COM
             apps/bin/*.EXE
 
+  disk-images:
+    runs-on: ubuntu-latest
+    needs:
+      - apps
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Apply REVISION_VERSION
+        run: |
+          VERSION_FILE="./firmware/src/version.inc"
+          CALCULATED_RUN_NUMBER=$((${GITHUB_RUN_NUMBER} - 288))
+          sed -i "s/REVISION_VERSION\s*.EQU\s*[0-9]*/REVISION_VERSION .EQU ${CALCULATED_RUN_NUMBER}/" $VERSION_FILE
+
+      - name: install ez80-clang
+        run: |
+          wget --progress=dot:giga https://github.com/dinoboards/ez80-clang/releases/download/v0.0.17/ez80-clang-v0.0.17.tar.gz
+          tar -xzvf ez80-clang-v0.0.17.tar.gz
+          cd ez80-clang-v0.0.17
+          sudo ./install.sh
+
+      - name: install z80asm
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt update -y
+          sudo apt install -y z80asm cpmtools
+
+      - name: build disk images
+        working-directory: operating-systems/disk-images
+        run: |
+          source /home/runner/.ez80-clang
+          make
+
+      - name: Archive disk images
+        uses: actions/upload-artifact@v4
+        with:
+          compression-level: 0
+          name: disk-images
+          path: |
+            operating-systems/disk-images/hd1k_cpm22.img
+
   release-notes:
     runs-on: ubuntu-latest
     needs:
@@ -212,6 +258,7 @@ jobs:
       - firmware
       - programmer
       - apps
+      - disk-images
 
     steps:
       - name: Checkout repository
@@ -310,6 +357,12 @@ jobs:
           name: apps
           path: apps/bin/release
 
+      - name: Download disk-images artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: disk-images
+          path: disk-images
+
       - name: Download release notes
         uses: actions/download-artifact@v4
         with:
@@ -322,10 +375,12 @@ jobs:
           mkdir -p releases/hardware
           mkdir -p releases/programmer
           mkdir -p releases/apps
+          mkdir -p releases/disk-images
           cp firmware/bin/* releases/firmware/
           cp hardware/bin/* releases/hardware/
           cp programmer/build/programmer.uf2 releases/programmer/
           cp apps/bin/release/* releases/apps/
+          cp disk-images/* releases/disk-images/
 
       - name: Zip all artifacts
         run: |

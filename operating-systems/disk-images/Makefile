@@ -25,6 +25,7 @@ cpm22/u0/XR.COM:
 	@if [[ -e ../../apps/bin/XS.COM ]]; then cp ../../apps/bin/XR.COM ./cpm22/u0/XR.COM; fi
 
 debug/hd1k_prefix.dat: hd1k_prefix.dat.xz
+	@mkdir -p debug
 	@xz -dc hd1k_prefix.dat.xz > debug/hd1k_prefix.dat
 
 .PHONY: debug/cpm22.img
