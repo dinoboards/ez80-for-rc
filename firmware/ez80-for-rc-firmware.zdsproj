@@ -78,6 +78,7 @@
 <file filter-key="">src\rst-28-hbios\rst-28-c-helpers.c</file>
 <file filter-key="">src\rst-28-hbios\rst-28-c-marshallers.s</file>
 <file filter-key="">src\rst-28-hbios\rst-28-cio-init.c</file>
+<file filter-key="">src\rst-28-hbios\rst-28-cio-super-hdmi.s</file>
 <file filter-key="">src\rst-28-hbios\rst-28-cio-uart0.s</file>
 <file filter-key="">src\rst-28-hbios\rst-28-disk-inspection.c</file>
 <file filter-key="">src\rst-28-functions.s</file>
@@ -586,6 +587,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
+<watch-element expression="i" />
 </watch-elements>
 
 <!-- breakpoint information -->

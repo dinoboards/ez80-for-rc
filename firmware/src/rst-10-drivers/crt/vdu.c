@@ -3,7 +3,6 @@
 #include "vdu/variables.h"
 
 extern void graphic_print_char(uint24_t ch);
-extern void uart_out(char ch);
 
 void vdu(uint8_t ch) {
   uint8_t cursor_enabled = cursor_state.enabled;
@@ -25,32 +24,27 @@ void vdu(uint8_t ch) {
 
   if (ch >= ' ') {
     graphic_print_char(ch);
-    uart_out(ch);
     goto done;
   }
 
   switch (ch) {
   case 8: {
     vdu_bs();
-    uart_out(ch);
     goto done;
   }
 
   case '\n': {
     vdu_lf();
-    uart_out(ch);
     goto done;
   }
 
   case 12: {
     vdu_cls();
-    uart_out(ch);
     goto done;
   }
 
   case '\r': {
     vdu_cr();
-    uart_out(ch);
     goto done;
   }
 

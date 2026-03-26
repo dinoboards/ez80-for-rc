@@ -1,6 +1,5 @@
 #include "variables.h"
 #include <v99x8-super.h>
-#include <vm-shared-mem.h>
 
 /*
 VDU 17,n

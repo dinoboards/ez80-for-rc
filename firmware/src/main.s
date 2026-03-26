@@ -53,8 +53,8 @@ _main:
 
 	POP	DE
 
-	XREF	_spike
-	call	_spike
+	; XREF	_spike
+	; call	_spike
 
 	LD	A, L
 

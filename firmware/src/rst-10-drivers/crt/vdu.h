@@ -4,7 +4,6 @@
 #include "v99x8.h"
 #include <stdint.h>
 #include <vdu-types.h>
-#include <vm-shared-mem.h>
 
 extern point_t point_new(const int16_t x, const int16_t y);
 extern line_t  line_new(const point_t x, const point_t y);
@@ -58,6 +57,8 @@ extern void vdu_not_implemented(void);
 
 void vdu_cursor_disable();
 void vdu_cursor_enable();
+void vdu_init(void);
+void vdu(uint8_t c);
 
 #define vdu_bs()                                                                                                                   \
   {                                                                                                                                \

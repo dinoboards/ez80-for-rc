@@ -15,7 +15,6 @@
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <vm-shared-mem.h>
 
 #define PAL  50
 #define NTSC 60

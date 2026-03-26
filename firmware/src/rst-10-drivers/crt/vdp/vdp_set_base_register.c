@@ -5,19 +5,20 @@
 #include <v99x8.h>
 
 void set_base_registers(void) {
-#pragma asm DI
+  asm("DI");
 
-  uint8_t *pReg = registers_mirror;
-  uint8_t  i;
+  {
+    uint8_t *pReg = registers_mirror;
+    uint8_t  i;
 
-  for (i = 0; i < REGISTER_COUNT; i++) {
-    vdp_reg_write(i, *pReg);
+    for (i = 0; i < REGISTER_COUNT; i++) {
+      vdp_reg_write(i, *pReg);
 
-    VDP_ADDR = *pReg;
-    VDP_ADDR = i | 0x80;
+      VDP_ADDR = *pReg;
+      VDP_ADDR = i | 0x80;
 
-    pReg++;
+      pReg++;
+    }
   }
-
-#pragma asm EI
+  asm("EI");
 }

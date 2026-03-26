@@ -1,5 +1,4 @@
 #include "variables.h"
-#include <vm-shared-mem.h>
 
 // VDU: 18 (2 bytes)
 void vdu_gcol(void) {

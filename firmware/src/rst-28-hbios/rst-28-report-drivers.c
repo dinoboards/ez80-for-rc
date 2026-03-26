@@ -19,16 +19,28 @@ void report_hbios_drivers() {
                "----------  ----------  ----------------  --------------------\r\n");
 
   for (hbios_unit = 0; hbios_unit < ciocnt; hbios_unit++) {
+    const char *attr_name = ciodevice_getattributes_name(hbios_unit);
     sprintf(buffer, "%s%d", ciodevice_getdriver_name(hbios_unit), ciodevice_getnumber(hbios_unit));
-
     {
-      const uint8_t line_control = cioquery_get_line_control(hbios_unit);
-      const uint8_t data_bits    = (line_control & 3) + 5;
-      const char    parity       = stparmap[(line_control >> 3) & 6];
-      const uint8_t stop_bits    = ((line_control >> 2) & 1) + 1;
+      const uint8_t ciotype = ciodevice_getattributes(hbios_unit) & 0xC0;
 
-      printf("Char %-7d%-12s%-18s%d,%d,%c,%d\r\n", hbios_unit, buffer, ciodevice_getattributes_name(hbios_unit),
-             cioquery_get_baud_rate(hbios_unit), data_bits, parity, stop_bits);
+      if (ciotype == 0x00) { // RS-232 serial
+        const uint8_t line_control = cioquery_get_line_control(hbios_unit);
+        const uint8_t data_bits    = (line_control & 3) + 5;
+        const char    parity       = stparmap[(line_control >> 3) & 6];
+        const uint8_t stop_bits    = ((line_control >> 2) & 1) + 1;
+
+        printf("Char %-7d%-12s%-18s%d,%d,%c,%d\r\n", hbios_unit, buffer, attr_name, cioquery_get_baud_rate(hbios_unit), data_bits,
+               parity, stop_bits);
+
+        continue;
+      }
+
+      if (ciotype == 0x40) { // terminal
+        printf("Char %-7d%-12s%-18s????\r\n", hbios_unit, buffer, attr_name);
+        continue;
+      }
+      printf("Char %-7d%-12s%-18s\r\n", hbios_unit, buffer, attr_name);
     }
   }
 

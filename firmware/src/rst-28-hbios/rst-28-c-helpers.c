@@ -6,6 +6,9 @@ const char *ciodevice_getdriver_name(const uint8_t hbios_unit) {
   case CIODEV_EZ80UART:
     return "UART";
 
+  case CIODEV_SUPHDMI:
+    return "HDMI";
+
   default:
     return "UNK";
   }
@@ -18,10 +21,10 @@ const char *ciodevice_getattributes_name(const uint8_t hbios_unit) {
   case 0:
     return "RS-232";
 
-  case 1:
+  case 0x40:
     return "Terminal";
 
-  case 2:
+  case 0x80:
     return "Parallel";
 
   default:

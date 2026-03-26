@@ -612,6 +612,12 @@ clean:
             $(RM) "$(WORKDIR)\rst-28-cio-init.lst"
 	@if exist "$(WORKDIR)\rst-28-cio-init.src"  \
             $(RM) "$(WORKDIR)\rst-28-cio-init.src"
+	@if exist "$(WORKDIR)\rst-28-cio-super-hdmi.obj"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-super-hdmi.obj"
+	@if exist "$(WORKDIR)\rst-28-cio-super-hdmi.lis"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-super-hdmi.lis"
+	@if exist "$(WORKDIR)\rst-28-cio-super-hdmi.lst"  \
+            $(RM) "$(WORKDIR)\rst-28-cio-super-hdmi.lst"
 	@if exist "$(WORKDIR)\rst-28-cio-uart0.obj"  \
             $(RM) "$(WORKDIR)\rst-28-cio-uart0.obj"
 	@if exist "$(WORKDIR)\rst-28-cio-uart0.lis"  \
@@ -1326,6 +1332,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\rst-28-c-helpers.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-c-marshallers.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-cio-init.obj  \
+            $(WORKDIR_ESCSPACE)\rst-28-cio-super-hdmi.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-cio-uart0.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-disk-inspection.obj  \
             $(WORKDIR_ESCSPACE)\rst-28-functions.obj  \
@@ -1829,7 +1836,6 @@ $(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\graphic_print_char.c"
@@ -1875,7 +1881,6 @@ $(WORKDIR_ESCSPACE)\init_font_patterns.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\init_font_patterns.c"
@@ -1978,7 +1983,6 @@ $(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\logic_to_physical_coords.c"
@@ -2174,9 +2178,33 @@ $(WORKDIR_ESCSPACE)\rst-28-cio-init.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
+            $(INCLUDE_ESCSPACE)\zilog\cio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\defines.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F91.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80F93.h  \
+            $(INCLUDE_ESCSPACE)\zilog\eZ80L92.h  \
+            $(INCLUDE_ESCSPACE)\zilog\ez80.h  \
+            $(INCLUDE_ESCSPACE)\zilog\gpio.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uart.h  \
+            $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-cio-init.c"
+
+$(WORKDIR_ESCSPACE)\rst-28-cio-super-hdmi.obj :  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-cio-super-hdmi.s  \
+            $(PRJDIR_ESCSPACE)\src\config.inc  \
+            $(PRJDIR_ESCSPACE)\src\romwbw.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-10-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-constants.inc  \
+            $(PRJDIR_ESCSPACE)\src\startup\ez80F92.inc
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-cio-super-hdmi.s"
 
 $(WORKDIR_ESCSPACE)\rst-28-cio-uart0.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-cio-uart0.s  \
@@ -2361,8 +2389,7 @@ $(WORKDIR_ESCSPACE)\system_colours_palettes.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-standards-colors.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-standards-colors.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\system_colours_palettes.c"
 
 $(WORKDIR_ESCSPACE)\test.obj :  \
@@ -2402,7 +2429,6 @@ $(WORKDIR_ESCSPACE)\triangle.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_25\triangle.c"
@@ -2571,8 +2597,7 @@ $(WORKDIR_ESCSPACE)\v99x8.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\v99x8.c"
 
 $(WORKDIR_ESCSPACE)\variables.obj :  \
@@ -2648,8 +2673,7 @@ $(WORKDIR_ESCSPACE)\vdp_draw_line.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\v99x8\vdp_draw_line.c"
 
 $(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj :  \
@@ -2671,7 +2695,6 @@ $(WORKDIR_ESCSPACE)\vdp_get_screen_height.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_get_screen_height.c"
@@ -2695,7 +2718,6 @@ $(WORKDIR_ESCSPACE)\vdp_get_screen_width.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_get_screen_width.c"
@@ -2726,8 +2748,7 @@ $(WORKDIR_ESCSPACE)\vdp_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_init.c"
 
 $(WORKDIR_ESCSPACE)\vdp_set_base_register.obj :  \
@@ -2746,8 +2767,7 @@ $(WORKDIR_ESCSPACE)\vdp_set_base_register.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_base_register.c"
 
 $(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj :  \
@@ -2770,7 +2790,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_graphic_4.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_graphic_4.c"
@@ -2795,7 +2814,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_graphic_7.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_graphic_7.c"
@@ -2816,8 +2834,7 @@ $(WORKDIR_ESCSPACE)\vdp_set_lines.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_lines.c"
 
 $(WORKDIR_ESCSPACE)\vdp_set_refresh.obj :  \
@@ -2836,8 +2853,7 @@ $(WORKDIR_ESCSPACE)\vdp_set_refresh.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_refresh.c"
 
 $(WORKDIR_ESCSPACE)\vdp_set_remap.obj :  \
@@ -2856,8 +2872,7 @@ $(WORKDIR_ESCSPACE)\vdp_set_remap.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_remap.c"
 
 $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj :  \
@@ -2880,7 +2895,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_1.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_1.c"
@@ -2905,7 +2919,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_10.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_10.c"
@@ -2930,7 +2943,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_2.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_2.c"
@@ -2955,7 +2967,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_21.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_21.c"
@@ -2980,7 +2991,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_26.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_26.c"
@@ -3005,7 +3015,6 @@ $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdp\vdp_set_super_graphic_5.c"
@@ -3037,7 +3046,6 @@ $(WORKDIR_ESCSPACE)\vdu_10.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_10.c"
@@ -3061,7 +3069,6 @@ $(WORKDIR_ESCSPACE)\vdu_12.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_12.c"
@@ -3085,7 +3092,6 @@ $(WORKDIR_ESCSPACE)\vdu_16.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_16.c"
@@ -3109,7 +3115,6 @@ $(WORKDIR_ESCSPACE)\vdu_17.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_17.c"
@@ -3119,7 +3124,6 @@ $(WORKDIR_ESCSPACE)\vdu_18.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_18.c"
@@ -3143,7 +3147,6 @@ $(WORKDIR_ESCSPACE)\vdu_19.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-standards-colors.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_19.c"
@@ -3168,7 +3171,6 @@ $(WORKDIR_ESCSPACE)\vdu_22.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_22.c"
@@ -3196,7 +3198,6 @@ $(WORKDIR_ESCSPACE)\vdu_23.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_23.c"
@@ -3230,7 +3231,6 @@ $(WORKDIR_ESCSPACE)\vdu_25.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_25.c"
@@ -3282,7 +3282,6 @@ $(WORKDIR_ESCSPACE)\vdu_cursor.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\crt\vdu\variables.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_cursor.c"
@@ -3320,8 +3319,7 @@ $(WORKDIR_ESCSPACE)\vdu_set_palette.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-standards-colors.h  \
-            Z:\ez80-for-rc\firmware\src\includes\vm-shared-mem.h
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-standards-colors.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-10-drivers\crt\vdu\vdu_set_palette.c"
 
 $(WORKDIR_ESCSPACE)\vectors16.obj :  \

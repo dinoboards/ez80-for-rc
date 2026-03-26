@@ -30,6 +30,7 @@
 #define CIODEV_DLPSER   0x11
 #define CIODEV_TSER     0x12
 #define CIODEV_SCC      0x13
+#define CIODEV_SUPHDMI  0x70
 
 // ;
 // ; MEDIA ID VALUES
