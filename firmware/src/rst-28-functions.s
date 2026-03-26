@@ -87,6 +87,7 @@ cioin:
 ; Send a Character (E) via the specified Character Unit (C).  If
 ; there is no space available in the unit's output buffer, the function
 ; will wait indefinitely.  The returned Status (A) is a standard HBIOS result code.
+	PUBLIC	cioout
 cioout:
 	CALL	get_hbios_cio_driver
 	RET.L	NZ

@@ -117,6 +117,6 @@ z80_ei_enabled:	db	1		; tmp store when copying register state
 	global	_fbios_vars
 	global	fbios_vars
 _hbios_vars:
-hbios_vars:	ds	3		; pointer within sys_seg for storage of hbios variables/buffers
+hbios_vars:	db	0, 0, 0		; pointer within sys_seg for storage of hbios variables/buffers
 _fbios_vars:
-fbios_vars:	ds	3		; pointer within sys_seg for storage of cbios variables/buffers
+fbios_vars:	db	0,0,0		; pointer within sys_seg for storage of cbios variables/buffers

@@ -266,7 +266,5 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  "C:\ZDS\lib\std\crtD.lib", \
  "C:\ZDS\lib\std\crtSD.lib", \
  "C:\ZDS\lib\std\nokernelD.lib", \
- "C:\ZDS\lib\std\fplibD.lib", \
- "C:\ZDS\lib\std\fplibSD.lib", \
  "C:\ZDS\lib\zilog\zsldevinitdummy.obj"
 

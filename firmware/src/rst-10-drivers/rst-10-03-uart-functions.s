@@ -97,16 +97,6 @@ uart_out_char:
 	XOR	A
 	RET.L
 
-	PUBLIC _uart_out
-; void uart_out(uint8_t ch)
-_uart_out:
-	push	ix
-	ld	ix, 0
-	add	ix, sp
-	ld	e, (ix+6)
-	call.il	uart_out
-	pop	ix
-	ret
 ;
 ; Return the count of Characters Pending (A) in the input buffer.
 ;  Output A = Status/Characters Pending

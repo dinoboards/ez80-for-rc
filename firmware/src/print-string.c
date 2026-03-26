@@ -1,17 +1,11 @@
 #include "print-string.h"
+#include "rst-28-vars.h"
 #include <stdint.h>
-
-extern void uart_out(char ch);
-
-int putchar(int ch) {
-  uart_out(ch);
-  return 0;
-}
 
 void print_string(const char *str) {
   char ch;
   while (ch = *str++) {
-    uart_out(ch);
+    putchar(ch);
   }
 }
 

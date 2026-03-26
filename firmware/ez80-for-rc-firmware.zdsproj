@@ -14,7 +14,7 @@
 <file filter-key="">src\rst-10-drivers\usb\base-drv\class_hub.c</file>
 <file filter-key="">src\rst-10-drivers\usb\scsi-drv\class_scsi.c</file>
 <file filter-key="">src\rst-10-drivers\usb\ufi-drv\class_ufi.c</file>
-<file filter-key="">src\clib.c</file>
+<file filter-key="">src\clib.s</file>
 <file filter-key="">src\startup\cpu-freq-calculator.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\critical-section.c</file>
 <file filter-key="">src\startup\cstartup.asm</file>
@@ -422,7 +422,7 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
 <option name="warnisfatal" type="boolean" change-action="none">true</option>
 <option name="sort" type="string" change-action="none">NAME</option>
 <option name="padhex" type="boolean" change-action="build">false</option>
-<option name="fplib" type="string" change-action="build">Real</option>
+<option name="fplib" type="string" change-action="build">None</option>
 <option name="useadddirectives" type="boolean" change-action="build">true</option>
 <option name="linkconfig" type="string" change-action="build">Standard</option>
 <option name="flashinfo" type="string" change-action="build">000000-0000FF</option>
@@ -586,7 +586,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM</option>
 
 <!-- watch information -->
 <watch-elements>
-<watch-element expression="i" />
 </watch-elements>
 
 <!-- breakpoint information -->

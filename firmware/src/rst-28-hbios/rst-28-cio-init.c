@@ -58,14 +58,15 @@ uint8_t hbios_cio_install_super_hdmi(uint8_t next_unit) {
     if (probe != VDP_SUPER)
       return next_unit;
 
-    printf("SuperHDMI: IO=0x%02X..0x%02X 80x32\r\n", VDP_IO_DATA & 0xFF, VDP_IO_REGS & 0xFF);
-
-    hbios_vars->cio_drivers[next_unit].funcs    = &cio_super_hdmi_fns;
-    hbios_vars->cio_drivers[next_unit].instance = 1;
-
     vdu_init();
     vdu(22); // mode
     vdu(0);  // BBC Mode 0
+
+    hbios_vars->cio_drivers[next_unit].funcs    = &cio_super_hdmi_fns;
+    hbios_vars->cio_drivers[next_unit].instance = 1;
+    hbios_vars->cio_count                       = next_unit;
+
+    printf("SuperHDMI: IO=0x%02X..0x%02X 80x32\r\n", VDP_IO_DATA & 0xFF, VDP_IO_REGS & 0xFF);
   }
 
   return next_unit + 1;
