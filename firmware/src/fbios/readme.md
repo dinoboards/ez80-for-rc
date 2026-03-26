@@ -46,10 +46,10 @@ It exposes a set of jump points at address $000180 (see fbios-jmp-table-adl.s)
 11. update hbios/fbios drive mapping - add as many slices as possible - eg: dont limit to 4 is only one disk partition is found
 12. ~~ensure boot detect internal/external mode correctly~~
 13. ~~update/correct firmware boot reporting~~
-14. print_string/printf assumes UART0 output - will not be correct when CRT is enabled
+14. ~~print_string/printf assumes UART0 output - will not be correct when CRT is enabled~~
 15. ~~implement hbios cio directly - bypass rst-10 jumps~~
 16. ~~update hbios device reporting to a central reporting pattern~~
-17. implement CRT output using V9958/HDMI
+17. ~~implement CRT output using V9958/HDMI~~
 18. implement USB Keyboard to pair with CRT
 19. Implement matrix keyboard
 20. Implement Compact Flash storage
@@ -59,6 +59,9 @@ It exposes a set of jump points at address $000180 (see fbios-jmp-table-adl.s)
 24. ~~add an xmodem util~~
 25. add WDATE.COM - with appropriate local HBIOS support
 26. add TIMER.COM - with appropriate local HBIOS support
+27. update cbios to read and redirect as per IOBYTE
+28. cbios needs to identify the default TTY (RS-232) and CRT(Terminal) devices and then the other devices (LIST)
+29.
 
 
 

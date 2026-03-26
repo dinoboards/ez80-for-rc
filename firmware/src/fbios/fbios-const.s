@@ -5,7 +5,6 @@
 	.ASSUME ADL=1
 
 	XREF	firmware_rst_28_hook
-	XREF	_fbios_hook
 
 ;---------------------------------------------------------
 ; Implement CBIOS CONST BIOS Function (function 2)
@@ -18,8 +17,6 @@
 
 	PUBLIC	FB_CONST
 FB_CONST:
-	CALL	_fbios_hook
-
 	LD	B, BF_CIOIST
 	LD	C, CIO_CONSOLE
 	CALL.IL firmware_rst_28_hook
