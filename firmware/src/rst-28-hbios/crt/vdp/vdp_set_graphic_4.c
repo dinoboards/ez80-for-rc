@@ -1,4 +1,4 @@
-#include "../vdu/variables.h"
+#include "../rst-28-vars.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <v99x8.h>
@@ -23,7 +23,7 @@ void vdp_set_graphic_4(void) {
   *r++ = 0x00; // R11 - SPRITE ATTRIBUTE TABLE -> 7800
 
   set_base_registers();
-  vdp_current_mode = 4;
+  hbios_vars->vdp.current_mode = 4;
 
 #ifdef VDP_SUPER_HDMI
   register_31_mirror = 0;

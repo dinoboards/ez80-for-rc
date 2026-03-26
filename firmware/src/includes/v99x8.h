@@ -64,8 +64,6 @@ typedef struct {
 
 #endif
 
-// #define vdp_current_mode (sm._vdp_current_mode)
-
 #define REGISTER_COUNT 12
 extern uint8_t registers_mirror[REGISTER_COUNT]; /* private */
 
@@ -152,7 +150,7 @@ extern void vdp_set_extended_palette_entry(uint8_t index, RGB palette_entry);
 
 extern void vdp_set_mode(const uint8_t mode, const uint8_t lines, const uint8_t refresh_rate);
 
-#define vdp_get_mode() (vdp_current_mode)
+#define vdp_get_mode() (hbios_vars->vdp.current_mode)
 
 /**
  * @brief Switches between VRAM pages in supported graphics modes
@@ -665,7 +663,7 @@ extern void vdp_set_graphic_4(void);
  *
  * @return uint8_t the current graphics mode
  */
-#define vdp_get_graphic_mode() (vdp_current_mode)
+#define vdp_get_graphic_mode() (hbios_vars->vdp.current_mode)
 
 /**
  * @brief Set the graphics or super graphics mode

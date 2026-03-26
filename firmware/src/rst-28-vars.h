@@ -143,8 +143,13 @@ typedef struct {
 #define MAX_HBIOS_DIO_INSTANCES 32
 #define MAX_HBIOS_CIO_INSTANCES 2
 
+typedef struct vdp_vars_s {
+  uint8_t current_mode;
+} vdp_vars_t;
+
 typedef struct hbios_vars_s {
   uint8_t     *himem; /* pointer to start of allocated linear RAM */
+  vdp_vars_t   vdp;
   uint8_t      cio_count;
   uint8_t      dio_count;
   dio_driver_t dio_drivers[MAX_HBIOS_DIO_INSTANCES];

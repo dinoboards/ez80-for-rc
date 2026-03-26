@@ -1,11 +1,10 @@
-// #include <ez80.h>
-#include "../vdu/variables.h"
+#include "../rst-28-vars.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <v99x8.h>
 
 screen_size_t vdp_get_screen_height(void) {
-  switch (vdp_current_mode) {
+  switch (hbios_vars->vdp.current_mode) {
   case 0x80 | 0x01:
     return 200;
 

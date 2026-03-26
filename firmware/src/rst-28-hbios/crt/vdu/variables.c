@@ -28,5 +28,3 @@ uint8_t      current_mode_colour_mask;
 uint8_t      current_operation_mode;
 uint8_t      current_tbg_colour;
 uint8_t      current_tfg_colour;
-
-uint8_t vdp_current_mode;

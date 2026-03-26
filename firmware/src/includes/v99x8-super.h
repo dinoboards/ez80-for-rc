@@ -570,7 +570,7 @@ extern void vdp_set_super_graphic_28(void);
  *
  * @return uint8_t the current super graphics mode (1 based)
  */
-#define vdp_get_super_graphic_mode() (vdp_current_mode >= 0x80 ? vdp_current_mode & 0x7F : 0)
+#define vdp_get_super_graphic_mode() (hbios_vars->vdp.current_mode >= 0x80 ? hbios_vars->vdp.current_mode & 0x7F : 0)
 
 /**
  * @brief Set the super graphics mode

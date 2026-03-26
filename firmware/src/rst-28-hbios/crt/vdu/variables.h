@@ -35,6 +35,5 @@ extern uint8_t         current_mode_colour_mask;
 extern uint8_t         current_operation_mode;
 extern uint8_t         current_tbg_colour;
 extern uint8_t         current_tfg_colour;
-extern uint8_t         vdp_current_mode;
 
 #endif

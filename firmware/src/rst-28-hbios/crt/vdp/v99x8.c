@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <v99x8.h>
 
-// uint8_t vdp_current_mode = 255;
-
 uint8_t registers_mirror[REGISTER_COUNT] = {
     0x0E, // R0 - M5 = 1, M4 = 1, M3 = 1
     0x40, // R1 - ENABLE SCREEN, DISABLE INTERRUPTS, M1 = 0, M2 = 0

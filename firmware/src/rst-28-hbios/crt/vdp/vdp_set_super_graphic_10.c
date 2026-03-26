@@ -1,4 +1,4 @@
-#include "../vdu/variables.h"
+#include "../rst-28-vars.h"
 #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -7,7 +7,7 @@
 void vdp_set_super_graphic_10(void) {
   vdp_set_refresh(50);
   vdp_set_graphic_7();
-  vdp_current_mode = 138; // 128 + 10
+  hbios_vars->vdp.current_mode = 138; // 128 + 10
   vdp_reg_write(29, 255);
   vdp_reg_write(30, 255); // reset VIEW PORT and BASE ADDR and PALETTE_DEPTH
   register_31_mirror = 6; // super half
