@@ -44,7 +44,7 @@ wait:
 
 endif
 
-if 0
+if 1
         INCLUDE "startup\ez80F92.inc"
 
 	SECTION CODE
@@ -174,11 +174,11 @@ loopl:
 	; RST.L	%10
 	LD	C,'X'
 	RST.L	%10
-	LD	C,'X'
+	LD	C,'Y'
 	RST.L	%10
-	LD	C,'X'
+	LD	C,'Z'
 	RST.L	%10
-	LD	C,'X'
+	LD	C,' '
 	RST.L	%10
 
 	exx

@@ -1,4 +1,5 @@
 #include "vdu.h"
+#include "vdu/variables.h"
 #include <stdint.h>
 
 #include <stdio.h>

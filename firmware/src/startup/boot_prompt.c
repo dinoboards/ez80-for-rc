@@ -101,6 +101,10 @@ typedef struct rtc_time_s {
 extern uint8_t rtc_time_get(rtc_time_t *t);
 
 void boot_prompt2() {
+  // spike init vdu
+  // load fonts
+  // display something
+
   print_string("   Timing: ");
   print_timing(mem_bus_timings);
   print_string(" EXTERNAL RAM, ");

@@ -1,4 +1,5 @@
 #include "../../vdu.h"
+#include "../variables.h"
 #include <stdint.h>
 
 static uint8_t bit_code(point_t p) {

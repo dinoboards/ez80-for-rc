@@ -1,6 +1,6 @@
 #include "vdu.h"
-#include "../../q3vm/vm-functions.h"
 #include "stddef.h"
+#include "vdu/variables.h"
 
 extern void graphic_print_char(uint24_t ch);
 extern void uart_out(char ch);
@@ -43,7 +43,7 @@ void vdu(uint8_t ch) {
   }
 
   case 12: {
-    vm_vdu_cls();
+    vdu_cls();
     uart_out(ch);
     goto done;
   }
@@ -55,42 +55,42 @@ void vdu(uint8_t ch) {
   }
 
   case 16: {
-    vm_vdu_clg();
+    vdu_clg();
     goto done;
   }
 
   case 17: {
-    current_fn          = vm_vdu_colour;
+    current_fn          = vdu_colour;
     vdu_required_length = 1;
     goto done;
   }
 
   case 18: {
-    current_fn          = vm_vdu_gcol;
+    current_fn          = vdu_gcol;
     vdu_required_length = 2;
     goto done;
   }
 
   case 19: {
-    current_fn          = vm_vdu_colour_define;
+    current_fn          = vdu_colour_define;
     vdu_required_length = 5;
     goto done;
   }
 
   case 22: {
-    current_fn          = vm_vdu_mode;
+    current_fn          = vdu_mode;
     vdu_required_length = 1;
     goto done;
   }
 
   case 23: { // multi purpose
-    current_fn          = vm_vdu_multi_purpose;
+    current_fn          = vdu_multi_purpose;
     vdu_required_length = 9;
     goto done;
   }
 
   case 24: {
-    current_fn          = vm_vdu_set_gviewport;
+    current_fn          = vdu_set_gviewport;
     vdu_required_length = 8;
     goto done;
   }
@@ -102,13 +102,13 @@ void vdu(uint8_t ch) {
   }
 
   case 28: {
-    current_fn          = vm_vdu_set_tviewport;
+    current_fn          = vdu_set_tviewport;
     vdu_required_length = 4;
     goto done;
   }
 
   case 29: {
-    current_fn          = vm_vdu_set_origin;
+    current_fn          = vdu_set_origin;
     vdu_required_length = 4;
     goto done;
   }

@@ -9,7 +9,7 @@
 	XREF	_rx_buffer_init
 	XREF	_init_clocks
 	XREF	__c_startup
-	XREF	_vm_init
+	; XREF	_vm_init
 
 	XREF	_io_bus_mode_and_timing
 	XREF	_mem_bus_mode_and_timing
@@ -40,7 +40,7 @@ _main:
 	call	_rx_buffer_init
 	call	_uart0_init
 	call	_init_memory_timings
-	CALL	_vm_init
+	; CALL	_vm_init
 
 	call	_boot_prompt1
 
@@ -53,8 +53,8 @@ _main:
 
 	POP	DE
 
-	; XREF	_spike
-	; call	_spike
+	XREF	_spike
+	call	_spike
 
 	LD	A, L
 

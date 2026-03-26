@@ -24,6 +24,7 @@ extern void vdu_plot(void);
 extern void vdu_set_tviewport(void);
 extern void vdu_set_origin(void);
 extern void vdu_tab(void);
+extern void vdu_cls(void);
 
 void vdu_set_default_palette_2();
 void vdu_set_default_palette_4();

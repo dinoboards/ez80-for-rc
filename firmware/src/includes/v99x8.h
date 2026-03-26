@@ -65,7 +65,7 @@ typedef struct {
 
 #endif
 
-#define vdp_current_mode (sm._vdp_current_mode)
+// #define vdp_current_mode (sm._vdp_current_mode)
 
 #define REGISTER_COUNT 12
 extern uint8_t registers_mirror[REGISTER_COUNT]; /* private */

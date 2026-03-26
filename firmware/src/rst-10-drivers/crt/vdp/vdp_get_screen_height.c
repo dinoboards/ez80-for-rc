@@ -1,4 +1,5 @@
 // #include <ez80.h>
+#include "../vdu/variables.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <v99x8.h>

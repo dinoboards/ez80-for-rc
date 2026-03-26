@@ -1,9 +1,9 @@
 #include "../vdu.h"
+#include "variables.h"
 #include <eZ80F92-extra.h>
 #include <stdint.h>
 #include <v99x8-super.h>
 #include <v99x8.h>
-#include <vm-shared-mem.h>
 
 screen_addr_t cursor_pattern_addr = FONT_8X8_STORED_Y - (8);
 

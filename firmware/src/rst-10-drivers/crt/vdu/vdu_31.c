@@ -1,4 +1,5 @@
 #include "../vdu.h"
+#include "variables.h"
 
 void vdu_tab(void) {
   current_tpos.x = (int24_t)data[0] * 8;

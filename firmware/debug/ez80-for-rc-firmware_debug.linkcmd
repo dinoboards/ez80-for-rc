@@ -6,9 +6,9 @@
 
 /* compiler options */
 /* -define:_DEBUG -define:_EZ80F92 -define:_EZ80ACCLAIM! */
-/* -define:RC2014_FIRMWARE -define:__ZDS__ -genprintf -keepasm */
-/* -keeplst -list -listinc -NOmodsect -optspeed -promote */
-/* -NOreduceopt */
+/* -define:RC2014_FIRMWARE -define:__ZDS__ -define:VDP_SUPER_HDMI */
+/* -genprintf -keepasm -keeplst -list -listinc -NOmodsect -optspeed */
+/* -promote -NOreduceopt */
 /* -stdinc:"\"..;..\src\includes;C:\ZDS\include\std;C:\ZDS\include\zilog\"" */
 /* -usrinc:"\"..;\"" -NOmultithread -NOpadbranch -debug -cpu:eZ80F92 */
 /*-asmsw:"  */
@@ -187,8 +187,8 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\rst-28-usb-scsi.obj", \
  ".\scsi_driver.obj", \
  ".\sysfont.obj", \
- ".\system-calls.obj", \
  ".\system-vars.obj", \
+ ".\system_colours_palettes.obj", \
  ".\test.obj", \
  ".\transfers.obj", \
  ".\triangle.obj", \
@@ -219,18 +219,38 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\vdp_get_screen_height.obj", \
  ".\vdp_get_screen_width.obj", \
  ".\vdp_get_status.obj", \
+ ".\vdp_init.obj", \
+ ".\vdp_set_base_register.obj", \
+ ".\vdp_set_graphic_4.obj", \
+ ".\vdp_set_graphic_7.obj", \
+ ".\vdp_set_lines.obj", \
+ ".\vdp_set_refresh.obj", \
+ ".\vdp_set_remap.obj", \
+ ".\vdp_set_super_graphic_1.obj", \
+ ".\vdp_set_super_graphic_10.obj", \
+ ".\vdp_set_super_graphic_2.obj", \
+ ".\vdp_set_super_graphic_21.obj", \
+ ".\vdp_set_super_graphic_26.obj", \
+ ".\vdp_set_super_graphic_5.obj", \
  ".\vdu.obj", \
  ".\vdu_10.obj", \
+ ".\vdu_12.obj", \
+ ".\vdu_16.obj", \
+ ".\vdu_17.obj", \
+ ".\vdu_18.obj", \
+ ".\vdu_19.obj", \
+ ".\vdu_22.obj", \
+ ".\vdu_23.obj", \
+ ".\vdu_24.obj", \
  ".\vdu_25.obj", \
+ ".\vdu_28.obj", \
+ ".\vdu_29.obj", \
  ".\vdu_31.obj", \
  ".\vdu_cursor.obj", \
  ".\vdu_init.obj", \
  ".\vdu_not_implemented.obj", \
+ ".\vdu_set_palette.obj", \
  ".\vectors16.obj", \
- ".\vm-functions.obj", \
- ".\vm-init.obj", \
- ".\vm.obj", \
- ".\vm_bytecode.obj", \
  ".\work-area.obj", \
  ".\z80-emulator-critical.obj", \
  ".\z80-emulator-ix.obj", \

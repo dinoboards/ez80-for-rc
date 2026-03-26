@@ -7,7 +7,7 @@
 
 	SECTION CODE
 
-	XREF	_vm_vdp_init
+	; XREF	_vm_vdp_init
 	XREF	_vdu_init
 
 	.assume adl=1
@@ -77,7 +77,7 @@ crt_adl_vdp_fn:
 	RET
 
 crt_adl_v99x8_probe:
-	CALL	_vm_vdp_init
+	; CALL	_vm_vdp_init
 	PUSH	AF
 	CP	4
 	CALL	Z, _vdu_init

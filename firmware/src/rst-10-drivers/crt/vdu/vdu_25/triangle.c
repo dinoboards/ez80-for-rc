@@ -1,4 +1,5 @@
 #include "../../vdu.h"
+#include "../variables.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <v99x8.h>

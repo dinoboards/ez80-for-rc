@@ -139,12 +139,6 @@ _system_utils_dispatch:
 	JR	Z, ez80_mem1_bus_timing_freq_set	; B = 18, SYSUTL_MEMTMFQ_SET (CS1)
 	DEC	A
 	JR	Z, ez80_emulation_state_get		; B = 19, SYSUTL_EMULSTAT_GET
-	DEC	A
-	JR	Z, q3vm_create				; B = 20, SYSUTL_Q3VM_CREATE
-	DEC	A
-	JR	Z, q3vm_call				; B = 20, SYSUTL_Q3VM_CALL
-	DEC	A
-	JR	Z, q3vm_set_stack			; B = 21, SYSUTL_Q3VM_SET_STACK
 
 not_supported:
 	LD	A, %FF					; UNKNOWN FUNCTION
@@ -688,53 +682,6 @@ ez80_emulation_state_get:
 
 
 
-;
-; Function B = 20 SYSUTL_Q3VM_CREATE
-; Initialise a new VM instance
-;
-; Must only be called from ADL mode using RST %10 (no .L suffix)
-;
-; Invokes C function:
-;
-; bool VM_Create(vm_t                *vm,
-;               const uint8_t *const bytecode,
-;               const vm_size_t      length,
-;               uint8_t *const       dataSegment,
-;               const vm_size_t      dataSegmentLength,
-;               uint32_t (*systemCalls)(vm_t *, uint8_t *));
-;
-; Input:
-;
-; Output
-;  A = -1 if error
-;  A =  0 if success
-;
-	XREF	_VM_Create
-q3vm_create:
-	JP	_VM_Create
-
-;
-; Function B = 21 SYSUTL_Q3VM_CALL1
-; Initialise a new VM instance
-;
-; Must only be called from ADL mode using RST %10 (no .L suffix)
-;
-; Invokes C function:
-;
-; uint32_t VM_Call(vm_t *vm, uint24_t command, ...);
-;
-; Input:
-;
-; Output
-;  ?? 32 bit result
-;
-	XREF	_VM_Call
-q3vm_call:
-	JP	_VM_Call
-
-	XREF	_VM_SetStackStore
-q3vm_set_stack:
-	JP	_VM_SetStackStore
 
 	PUBLIC	_firmware_version_major
 	PUBLIC	_firmware_version_minor
