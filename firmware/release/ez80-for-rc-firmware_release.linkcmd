@@ -207,7 +207,6 @@ DEFINE SPL_BASE = BASE  OF INTERNAL_RAM_RAM
  ".\usb_cbi.obj", \
  ".\usb_state.obj", \
  ".\v99x8.obj", \
- ".\variables.obj", \
  ".\vdp_cmd_line.obj", \
  ".\vdp_cmd_logical_move_vdp_to_vram.obj", \
  ".\vdp_cmd_move_linear_to_xy.obj", \

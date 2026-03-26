@@ -126,8 +126,6 @@
     WS2812_LEDVAL = rgb.blue;                                                                                                      \
   }
 
-extern uint8_t register_31_mirror;
-
 /**
  * @brief Sets the base VRAM page for VDP command operations
  *

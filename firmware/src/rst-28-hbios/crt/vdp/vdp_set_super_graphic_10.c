@@ -9,9 +9,9 @@ void vdp_set_super_graphic_10(void) {
   vdp_set_graphic_7();
   hbios_vars->vdp.current_mode = 138; // 128 + 10
   vdp_reg_write(29, 255);
-  vdp_reg_write(30, 255); // reset VIEW PORT and BASE ADDR and PALETTE_DEPTH
-  register_31_mirror = 6; // super half
-  vdp_reg_write(31, register_31_mirror);
+  vdp_reg_write(30, 255);                 // reset VIEW PORT and BASE ADDR and PALETTE_DEPTH
+  hbios_vars->vdp.register_31_mirror = 6; // super half
+  vdp_reg_write(31, hbios_vars->vdp.register_31_mirror);
 
   vdp_reg_write(29, 0);
   vdp_reg_write(30, 0x28); // 0:VIEW_PORT_START_X  Low  byte 40 (0x28)

@@ -1,27 +1,29 @@
-#include "variables.h"
+#include "../rst-28-vars.h"
 
 // VDU 28,lx,by,rx,ty
 // VDU 28 defines a text viewport. The parameters specify the boundary of the
 // viewport; the left-most column, the bottom row, the right-most column and the top
 // row respectively.
 void vdu_set_tviewport(void) {
-  tviewport.left   = (uint24_t)data[0] * 8;
-  tviewport.bottom = (uint24_t)data[1] * 8;
-  tviewport.right  = (uint24_t)data[2] * 8;
-  tviewport.top    = (uint24_t)data[3] * 8;
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
 
-  if (tviewport.left > last_text_column)
-    tviewport.left = last_text_column;
+  vdu->tviewport.left   = (uint24_t)vdu->data[0] * 8;
+  vdu->tviewport.bottom = (uint24_t)vdu->data[1] * 8;
+  vdu->tviewport.right  = (uint24_t)vdu->data[2] * 8;
+  vdu->tviewport.top    = (uint24_t)vdu->data[3] * 8;
 
-  if (tviewport.right > last_text_column)
-    tviewport.right = last_text_column;
+  if (vdu->tviewport.left > vdu->last_text_column)
+    vdu->tviewport.left = vdu->last_text_column;
 
-  if (tviewport.top > last_text_row)
-    tviewport.top = last_text_row;
+  if (vdu->tviewport.right > vdu->last_text_column)
+    vdu->tviewport.right = vdu->last_text_column;
 
-  if (tviewport.bottom > last_text_row)
-    tviewport.bottom = last_text_row;
+  if (vdu->tviewport.top > vdu->last_text_row)
+    vdu->tviewport.top = vdu->last_text_row;
 
-  current_tpos.x = tviewport.left;
-  current_tpos.y = tviewport.top;
+  if (vdu->tviewport.bottom > vdu->last_text_row)
+    vdu->tviewport.bottom = vdu->last_text_row;
+
+  vdu->current_tpos.x = vdu->tviewport.left;
+  vdu->current_tpos.y = vdu->tviewport.top;
 }

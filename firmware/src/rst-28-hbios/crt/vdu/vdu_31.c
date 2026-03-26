@@ -1,7 +1,9 @@
+#include "../rst-28-vars.h"
 #include "../vdu.h"
-#include "variables.h"
 
 void vdu_tab(void) {
-  current_tpos.x = (int24_t)data[0] * 8;
-  current_tpos.y = (int24_t)data[1] * 8;
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
+
+  vdu->current_tpos.x = (int24_t)vdu->data[0] * 8;
+  vdu->current_tpos.y = (int24_t)vdu->data[1] * 8;
 }

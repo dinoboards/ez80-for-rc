@@ -1,4 +1,3 @@
-// #include <ez80.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <v99x8.h>
@@ -18,5 +17,3 @@ uint8_t registers_mirror[REGISTER_COUNT] = {
     0x00, // R10 - color table - n/a
     0x01  // R11 - SPRITE ATTRIBUTE TABLE -> FA00
 };
-
-uint8_t register_31_mirror = 0;

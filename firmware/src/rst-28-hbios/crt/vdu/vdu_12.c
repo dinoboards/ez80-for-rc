@@ -1,4 +1,4 @@
-#include "variables.h"
+#include "../rst-28-vars.h"
 #include <v99x8.h>
 #include <vdu-functions.h>
 #include <vdu-types.h>
@@ -12,9 +12,11 @@ graphics cursor is moved to its home position (see VDU 3)
 */
 
 void vdu_cls(void) {
-  vdp_cmd_logical_move_vdp_to_vram(tviewport.left, tviewport.top, tviewport.right - tviewport.left + 8,
-                                   tviewport.bottom - tviewport.top + 8, current_tbg_colour, 0, 0);
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
 
-  current_tpos.x = tviewport.left;
-  current_tpos.y = tviewport.top;
+  vdp_cmd_logical_move_vdp_to_vram(vdu->tviewport.left, vdu->tviewport.top, vdu->tviewport.right - vdu->tviewport.left + 8,
+                                   vdu->tviewport.bottom - vdu->tviewport.top + 8, vdu->current_tbg_colour, 0, 0);
+
+  vdu->current_tpos.x = vdu->tviewport.left;
+  vdu->current_tpos.y = vdu->tviewport.top;
 }

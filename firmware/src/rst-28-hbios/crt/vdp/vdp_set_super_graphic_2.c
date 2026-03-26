@@ -7,11 +7,11 @@
 void vdp_set_super_graphic_2(void) {
   vdp_set_refresh(50);
   vdp_set_graphic_7();
-  hbios_vars->vdp.current_mode = 130; // 128 + 2
-  register_31_mirror           = 2;
+  hbios_vars->vdp.current_mode       = 130; // 128 + 2
+  hbios_vars->vdp.register_31_mirror = 2;
   vdp_reg_write(29, 255);
-  vdp_reg_write(30, 255);                // reset VIEW PORT and BASE ADDR and PALETTE_DEPTH
-  vdp_reg_write(31, register_31_mirror); // set SUPER_MID mode
+  vdp_reg_write(30, 255);                                // reset VIEW PORT and BASE ADDR and PALETTE_DEPTH
+  vdp_reg_write(31, hbios_vars->vdp.register_31_mirror); // set SUPER_MID mode
 
   vdp_reg_write(29, 0);
   vdp_reg_write(30, 0x28); // 0:VIEW_PORT_START_X  Low  byte 40 (0x28)

@@ -1,5 +1,5 @@
+#include "../rst-28-vars.h"
 #include "../vdu.h"
-#include "variables.h"
 #include <stdint.h>
 #include <v99x8.h>
 #include <vdu-functions.h>
@@ -44,25 +44,26 @@ modes:
 */
 
 void vdu_plot(void) {
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
 
   // TODO: may be compatbibility issue - move should apply origin/conversion at time execuytion, not at time of rendering
 
-  switch (data[0]) { // mode
-  case 4: {          // MOVE
-    previous_gpos  = current_gpos;
-    current_gpos.x = *((int16_t *)&data[1]) + origin.x;
-    current_gpos.y = *((int16_t *)&data[3]) + origin.y;
+  switch (vdu->data[0]) { // mode
+  case 4: {               // MOVE
+    vdu->previous_gpos  = vdu->current_gpos;
+    vdu->current_gpos.x = *((int16_t *)&vdu->data[1]) + vdu->origin.x;
+    vdu->current_gpos.y = *((int16_t *)&vdu->data[3]) + vdu->origin.y;
     return;
   }
 
   case 5: {
-    previous_gpos = current_gpos;
+    vdu->previous_gpos = vdu->current_gpos;
 
-    current_gpos.x = *((int16_t *)&data[1]) + origin.x;
-    current_gpos.y = *((int16_t *)&data[3]) + origin.y;
+    vdu->current_gpos.x = *((int16_t *)&vdu->data[1]) + vdu->origin.x;
+    vdu->current_gpos.y = *((int16_t *)&vdu->data[3]) + vdu->origin.y;
 
     {
-      line_t   l          = line_new(previous_gpos, current_gpos);
+      line_t   l          = line_new(vdu->previous_gpos, vdu->current_gpos);
       uint24_t intersects = line_clip(&l);
 
       if (intersects) {
@@ -71,35 +72,36 @@ void vdu_plot(void) {
         uint24_t x2 = convert_x(l.b.x);
         uint24_t y2 = convert_y(l.b.y);
 
-        vdp_draw_line(x, y, x2, y2, current_gfg_colour, current_operation_mode);
+        vdp_draw_line(x, y, x2, y2, vdu->current_gfg_colour, vdu->current_operation_mode);
       }
       return;
     }
   }
 
   case 69: {
-    previous_gpos = current_gpos;
+    vdu->previous_gpos = vdu->current_gpos;
 
     {
-      current_gpos.x = *((int16_t *)&data[1]) + origin.x;
-      current_gpos.y = *((int16_t *)&data[3]) + origin.y;
+      vdu->current_gpos.x = *((int16_t *)&vdu->data[1]) + vdu->origin.x;
+      vdu->current_gpos.y = *((int16_t *)&vdu->data[3]) + vdu->origin.y;
 
       vdp_cmd_wait_completion();
-      vdp_cmd_pset(convert_x(current_gpos.x), convert_y(current_gpos.y), current_gfg_colour, current_operation_mode);
+      vdp_cmd_pset(convert_x(vdu->current_gpos.x), convert_y(vdu->current_gpos.y), vdu->current_gfg_colour,
+                   vdu->current_operation_mode);
       return;
     }
   }
 
   case 85: { // triangle
-    const point_t p1 = convert_point(previous_gpos);
-    const point_t p2 = convert_point(current_gpos);
-    previous_gpos    = current_gpos;
+    const point_t p1   = convert_point(vdu->previous_gpos);
+    const point_t p2   = convert_point(vdu->current_gpos);
+    vdu->previous_gpos = vdu->current_gpos;
 
-    current_gpos.x = *((int16_t *)&data[1]) + origin.x;
-    current_gpos.y = *((int16_t *)&data[3]) + origin.y;
+    vdu->current_gpos.x = *((int16_t *)&vdu->data[1]) + vdu->origin.x;
+    vdu->current_gpos.y = *((int16_t *)&vdu->data[3]) + vdu->origin.y;
 
     {
-      const point_t p3 = convert_point(current_gpos);
+      const point_t p3 = convert_point(vdu->current_gpos);
 
       fill_triangle(&p1, &p2, &p3);
       return;

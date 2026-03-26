@@ -1,8 +1,9 @@
+#include "../rst-28-vars.h"
 #include "../vdu.h"
-#include "variables.h"
+#include "vdu_consts.h"
 #include <v99x8-super.h>
 
-uint8_t cursor_pattern[8] = {255, 255, 255, 255, 255, 255, 255, 255};
+static const uint8_t cursor_pattern[8] = {255, 255, 255, 255, 255, 255, 255, 255};
 
 void init_font_patterns(void) {
   uint24_t i;

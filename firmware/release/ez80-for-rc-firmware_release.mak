@@ -840,14 +840,6 @@ clean:
             $(RM) "$(WORKDIR)\v99x8.lst"
 	@if exist "$(WORKDIR)\v99x8.src"  \
             $(RM) "$(WORKDIR)\v99x8.src"
-	@if exist "$(WORKDIR)\variables.obj"  \
-            $(RM) "$(WORKDIR)\variables.obj"
-	@if exist "$(WORKDIR)\variables.lis"  \
-            $(RM) "$(WORKDIR)\variables.lis"
-	@if exist "$(WORKDIR)\variables.lst"  \
-            $(RM) "$(WORKDIR)\variables.lst"
-	@if exist "$(WORKDIR)\variables.src"  \
-            $(RM) "$(WORKDIR)\variables.src"
 	@if exist "$(WORKDIR)\vdp_cmd_line.obj"  \
             $(RM) "$(WORKDIR)\vdp_cmd_line.obj"
 	@if exist "$(WORKDIR)\vdp_cmd_line.lis"  \
@@ -1365,7 +1357,6 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\usb_cbi.obj  \
             $(WORKDIR_ESCSPACE)\usb_state.obj  \
             $(WORKDIR_ESCSPACE)\v99x8.obj  \
-            $(WORKDIR_ESCSPACE)\variables.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_logical_move_vdp_to_vram.obj  \
             $(WORKDIR_ESCSPACE)\vdp_cmd_move_linear_to_xy.obj  \
@@ -1691,7 +1682,9 @@ $(WORKDIR_ESCSPACE)\fbios-find-boot-disk.obj :  \
             $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
             $(PRJDIR_ESCSPACE)\src\includes\ez80-support.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-find-boot-disk.c"
 
@@ -1713,6 +1706,8 @@ $(WORKDIR_ESCSPACE)\fbios-mount-disks.obj :  \
             $(PRJDIR_ESCSPACE)\src\fbios\fbios-mount-disks.c  \
             $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-mount-disks.c"
 
@@ -1723,7 +1718,9 @@ $(WORKDIR_ESCSPACE)\fbios-mount-report.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-mount-report.c"
@@ -1745,6 +1742,8 @@ $(WORKDIR_ESCSPACE)\fbios-read-c.obj :  \
             $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-read-c.c"
 
@@ -1802,6 +1801,8 @@ $(WORKDIR_ESCSPACE)\fbios-write-c.obj :  \
             $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\fbios\fbios-write-c.c"
 
@@ -1833,9 +1834,8 @@ $(WORKDIR_ESCSPACE)\gpio-b4-isr-marshaller.obj :  \
 
 $(WORKDIR_ESCSPACE)\graphic_print_char.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\graphic_print_char.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_consts.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\graphic_print_char.c"
 
 $(WORKDIR_ESCSPACE)\i2c-calculate.obj :  \
@@ -1862,7 +1862,6 @@ $(WORKDIR_ESCSPACE)\init-f92.obj :  \
 
 $(WORKDIR_ESCSPACE)\init_font_patterns.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\init_font_patterns.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -1878,9 +1877,8 @@ $(WORKDIR_ESCSPACE)\init_font_patterns.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_consts.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\init_font_patterns.c"
 
 $(WORKDIR_ESCSPACE)\internal-hiram.obj :  \
@@ -1942,17 +1940,12 @@ $(WORKDIR_ESCSPACE)\kyb_driverasm.obj :  \
 
 $(WORKDIR_ESCSPACE)\line_clip.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_25\line_clip.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_25\line_clip.c"
 
 $(WORKDIR_ESCSPACE)\line_new.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\line_new.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\line_new.c"
 
@@ -1966,7 +1959,6 @@ $(WORKDIR_ESCSPACE)\linear-mem-test-at.obj :  \
 
 $(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\logic_to_physical_coords.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -1981,9 +1973,8 @@ $(WORKDIR_ESCSPACE)\logic_to_physical_coords.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_consts.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\logic_to_physical_coords.c"
 
 $(WORKDIR_ESCSPACE)\main.obj :  \
@@ -2015,8 +2006,6 @@ $(WORKDIR_ESCSPACE)\mse_driver.obj :  \
 
 $(WORKDIR_ESCSPACE)\point_new.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\point_new.c  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\point_new.c"
 
@@ -2032,7 +2021,9 @@ $(WORKDIR_ESCSPACE)\probe-mem.obj :  \
             $(PRJDIR_ESCSPACE)\src\fbios\fbios-vars.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\startup\probe-mem.c"
 
@@ -2159,6 +2150,8 @@ $(WORKDIR_ESCSPACE)\rst-18-function.obj :  \
 $(WORKDIR_ESCSPACE)\rst-28-c-helpers.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.c  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-c-helpers.c"
@@ -2264,6 +2257,7 @@ $(WORKDIR_ESCSPACE)\rst-28-mount.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\print-string.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
@@ -2277,6 +2271,7 @@ $(WORKDIR_ESCSPACE)\rst-28-mount.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-disk-inspection.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
@@ -2298,7 +2293,9 @@ $(WORKDIR_ESCSPACE)\rst-28-report-drivers.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\print-string.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-c-helpers.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-disk-inspection.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
@@ -2307,6 +2304,8 @@ $(WORKDIR_ESCSPACE)\rst-28-report-drivers.obj :  \
 $(WORKDIR_ESCSPACE)\rst-28-sys-alloc.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\rst-28-sys-alloc.c  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-sys-alloc.c"
 
@@ -2318,6 +2317,7 @@ $(WORKDIR_ESCSPACE)\rst-28-usb-scsi-c.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\eZ80F92-extra.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\ch376inc.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\base-drv\delay.h  \
@@ -2329,6 +2329,7 @@ $(WORKDIR_ESCSPACE)\rst-28-usb-scsi-c.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\scsi-drv\scsi_driver.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\class_ufi.h  \
             $(PRJDIR_ESCSPACE)\src\rst-10-drivers\usb\ufi-drv\usb_cbi.h  \
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-vars.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\rst-28-usb-scsi-c.c"
 
@@ -2413,7 +2414,6 @@ $(WORKDIR_ESCSPACE)\transfers.obj :  \
 
 $(WORKDIR_ESCSPACE)\triangle.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_25\triangle.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
@@ -2429,9 +2429,7 @@ $(WORKDIR_ESCSPACE)\triangle.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_25\triangle.c"
 
 $(WORKDIR_ESCSPACE)\uart-calculate.obj :  \
@@ -2600,15 +2598,6 @@ $(WORKDIR_ESCSPACE)\v99x8.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdp\v99x8.c"
-
-$(WORKDIR_ESCSPACE)\variables.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\variables.c"
 
 $(WORKDIR_ESCSPACE)\vdp_cmd_line.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\v99x8\vdp_cmd_line.asm  \
@@ -2982,16 +2971,11 @@ $(WORKDIR_ESCSPACE)\vdp_set_super_graphic_5.obj :  \
 
 $(WORKDIR_ESCSPACE)\vdu.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu.c"
 
 $(WORKDIR_ESCSPACE)\vdu_10.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_10.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3006,14 +2990,11 @@ $(WORKDIR_ESCSPACE)\vdu_10.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_10.c"
 
 $(WORKDIR_ESCSPACE)\vdu_12.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_12.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3029,13 +3010,11 @@ $(WORKDIR_ESCSPACE)\vdu_12.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_12.c"
 
 $(WORKDIR_ESCSPACE)\vdu_16.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_16.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3051,13 +3030,11 @@ $(WORKDIR_ESCSPACE)\vdu_16.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_16.c"
 
 $(WORKDIR_ESCSPACE)\vdu_17.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_17.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3072,20 +3049,15 @@ $(WORKDIR_ESCSPACE)\vdu_17.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\includes\v99x8.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_17.c"
 
 $(WORKDIR_ESCSPACE)\vdu_18.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_18.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_18.c
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_18.c"
 
 $(WORKDIR_ESCSPACE)\vdu_19.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_19.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3100,13 +3072,11 @@ $(WORKDIR_ESCSPACE)\vdu_19.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdbool.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-standards-colors.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-standards-colors.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_19.c"
 
 $(WORKDIR_ESCSPACE)\vdu_22.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_22.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3123,16 +3093,11 @@ $(WORKDIR_ESCSPACE)\vdu_22.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_22.c"
 
 $(WORKDIR_ESCSPACE)\vdu_23.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_23.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
@@ -3150,21 +3115,19 @@ $(WORKDIR_ESCSPACE)\vdu_23.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_consts.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_23.c"
 
 $(WORKDIR_ESCSPACE)\vdu_24.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_24.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_consts.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_24.c"
 
 $(WORKDIR_ESCSPACE)\vdu_25.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_25.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3181,36 +3144,25 @@ $(WORKDIR_ESCSPACE)\vdu_25.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-functions.h  \
             $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_25.c"
 
 $(WORKDIR_ESCSPACE)\vdu_28.obj :  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_28.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_28.c
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_28.c"
 
 $(WORKDIR_ESCSPACE)\vdu_29.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_29.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\includes\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_29.c"
 
 $(WORKDIR_ESCSPACE)\vdu_31.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_31.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_31.c"
 
 $(WORKDIR_ESCSPACE)\vdu_cursor.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_cursor.c  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -3227,21 +3179,15 @@ $(WORKDIR_ESCSPACE)\vdu_cursor.obj :  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8-super.h  \
             $(PRJDIR_ESCSPACE)\src\includes\v99x8.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_consts.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu\vdu_cursor.c"
 
 $(WORKDIR_ESCSPACE)\vdu_init.obj :  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu_init.c  \
-            $(INCLUDE_ESCSPACE)\std\Format.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
-            $(INCLUDE_ESCSPACE)\std\Stddef.h  \
-            $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(PRJDIR_ESCSPACE)\src\includes\stdint.h  \
-            $(PRJDIR_ESCSPACE)\src\includes\vdu-types.h  \
             $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu.h  \
-            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\variables.h
+            $(PRJDIR_ESCSPACE)\src\rst-28-hbios\crt\vdu\vdu_consts.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\src\rst-28-hbios\crt\vdu_init.c"
 
 $(WORKDIR_ESCSPACE)\vdu_not_implemented.obj :  \

@@ -1,7 +1,9 @@
 #ifndef __HBIOS_VARS
 #define __HBIOS_VARS
 
+#include "rst-28-hbios/crt/vdu.h"
 #include <stdint.h>
+#include <vdu-types.h>
 
 /* HBIOS STATUS CODES */
 #define ERR_OK     0  /* INVALID UNIT NUMBER*/
@@ -145,14 +147,48 @@ typedef struct {
 
 typedef struct vdp_vars_s {
   uint8_t current_mode;
+  uint8_t register_31_mirror;
+  uint8_t reserved[8];
 } vdp_vars_t;
 
+#define MAX_VDP_BYTES 16
+typedef uint8_t data_t[MAX_VDP_BYTES];
+
+typedef struct vdu_vars_s {
+  point_t         previous_gpos;            /* 4 BYTES */
+  uint8_t         vdu_index;                /* 1 BYTES */
+  uint24_t        vdu_required_length;      /* 3 BYTES */
+  cursor_state_t  cursor_state;             /* 3 BYTE */
+  mos_vdu_handler current_fn;               /* 3 BYTES */
+  uint8_t         counter;                  /* 1 BYTE */
+  data_t          data;                     /* 16 BYTES */
+  point_t         current_gpos;             /* 4 BYTES */
+  point_t         origin;                   /* 4 BYTES */
+  rectangle_t     gviewport;                /* 12 BYTES */
+  tpoint_t        current_tpos;             /* 6 BYTES */
+  trectangle_t    tviewport;                /* 12 BYTES */
+  uint24_t        last_text_column;         /* 3 BYTES */
+  uint24_t        last_text_row;            /* 3 BYTES */
+  uint8_t         current_display_mode;     /* 1 BYTE */
+  uint8_t         current_gfg_colour;       /* 1 BYTE */
+  uint8_t         current_mode_colour_mask; /* 1 BYTE */
+  uint8_t         current_operation_mode;   /* 1 BYTE */
+  uint8_t         current_tbg_colour;       /* 1 BYTE */
+  uint8_t         current_tfg_colour;       /* 1 BYTE */
+  uint8_t         reserved[9];              /* 9 BYTES*/
+} vdu_vars_t;                               /* 90 BYTES */
+
 typedef struct hbios_vars_s {
-  uint8_t     *himem; /* pointer to start of allocated linear RAM */
-  vdp_vars_t   vdp;
-  uint8_t      cio_count;
-  uint8_t      dio_count;
-  dio_driver_t dio_drivers[MAX_HBIOS_DIO_INSTANCES];
+  uint8_t     *himem;                                /* pointer to start of allocated linear RAM */
+  vdp_vars_t   vdp;                                  /* 10 BYTE @ 3*/
+  vdu_vars_t   vdu;                                  /* 90 BYTE @ 13*/
+  uint8_t      cio_count;                            /* 1 BYTE @ 103*/
+  uint8_t      dio_count;                            /* 1 BYTE @ 104 */
+  uint8_t      rtc_count;                            /* 1 BYTE @ 105 */
+  uint8_t      dsk_count;                            /* 1 BYTE @ 106 */
+  uint8_t      vda_count;                            /* 1 BYTE @ 107 */
+  uint8_t      snd_count;                            /* 1 BYTE @ 108 */
+  dio_driver_t dio_drivers[MAX_HBIOS_DIO_INSTANCES]; /* @ 109 */
   cio_driver_t cio_drivers[MAX_HBIOS_CIO_INSTANCES];
 
 } hbios_vars_t;

@@ -1,9 +1,8 @@
-#include "variables.h"
+#include "../rst-28-vars.h"
+#include "vdu_consts.h"
 #include <string.h>
 #include <v99x8.h>
 #include <vdu-functions.h>
-
-#include <stdio.h>
 
 /*
 VDU 23,32 to 255,n1,n2,n3,n4,n5,n6,n7,n8
@@ -12,7 +11,11 @@ parameters n1 to n8 corresponds to a row in the eight-by-eight grid of the
 character
 */
 
-static void vdu_redefine_font(void) { vdp_cpu_to_vram(&data[1], FONT_8X8_STORED_Y + data[0] * 8, 8); }
+static void vdu_redefine_font(void) {
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
+
+  vdp_cpu_to_vram(&vdu->data[1], FONT_8X8_STORED_Y + vdu->data[0] * 8, 8);
+}
 
 /*
 VDU 23,0,n,m|
@@ -36,8 +39,10 @@ If n = 11, then m defines the end line for the cursor
 */
 
 static void vdu_cursor_or_interlace(void) {
-  uint8_t n = data[1];
-  uint8_t m = data[2];
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
+
+  uint8_t n = vdu->data[1];
+  uint8_t m = vdu->data[2];
 
   if (n == 8) { // set interlace
     // N/A
@@ -76,13 +81,14 @@ identifies a particular function. Each of the available functions is described b
 Eight additional parameters are required in each case
 */
 void vdu_multi_purpose(void) {
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
 
-  if (data[0] == 0) {
+  if (vdu->data[0] == 0) {
     vdu_cursor_or_interlace();
     return;
   }
 
-  if (data[0] >= 32) {
+  if (vdu->data[0] >= 32) {
     vdu_redefine_font();
     return;
   }

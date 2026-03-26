@@ -111,7 +111,6 @@
 <file filter-key="">src\rst-10-drivers\usb\ufi-drv\usb_cbi.c</file>
 <file filter-key="">src\rst-10-drivers\usb\base-drv\usb_state.c</file>
 <file filter-key="">src\rst-28-hbios\crt\vdp\v99x8.c</file>
-<file filter-key="">src\rst-28-hbios\crt\vdu\variables.c</file>
 <file filter-key="">src\rst-28-hbios\crt\v99x8\vdp_cmd_line.asm</file>
 <file filter-key="">src\rst-28-hbios\crt\v99x8\vdp_cmd_logical_move_vdp_to_vram.asm</file>
 <file filter-key="">src\rst-28-hbios\crt\v99x8\vdp_cmd_move_linear_to_xy.asm</file>

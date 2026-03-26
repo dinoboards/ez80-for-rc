@@ -1,5 +1,5 @@
 #include "../../vdu.h"
-#include "../variables.h"
+#include "../rst-28-vars.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <v99x8.h>
@@ -13,33 +13,35 @@ static int8_t signum(const int a) {
 }
 
 static void draw_clipped_line(uint24_t x1, uint24_t y1, uint24_t x2) {
-  if (y1 > gviewport.bottom)
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
+
+  if (y1 > vdu->gviewport.bottom)
     return;
 
-  if (y1 < gviewport.top)
+  if (y1 < vdu->gviewport.top)
     return;
 
-  if (x1 < gviewport.left) {
-    if (x2 < gviewport.left)
+  if (x1 < vdu->gviewport.left) {
+    if (x2 < vdu->gviewport.left)
       return;
 
-    x1 = gviewport.left;
+    x1 = vdu->gviewport.left;
   }
 
-  if (x1 > gviewport.right) {
-    if (x2 > gviewport.right)
+  if (x1 > vdu->gviewport.right) {
+    if (x2 > vdu->gviewport.right)
       return;
 
-    x1 = gviewport.right;
+    x1 = vdu->gviewport.right;
   }
 
-  if (x2 < gviewport.left)
-    x2 = gviewport.left;
+  if (x2 < vdu->gviewport.left)
+    x2 = vdu->gviewport.left;
 
-  if (x2 > gviewport.right)
-    x2 = gviewport.right;
+  if (x2 > vdu->gviewport.right)
+    x2 = vdu->gviewport.right;
 
-  vdp_draw_line(x1, y1, x2, y1, current_gfg_colour, current_operation_mode);
+  vdp_draw_line(x1, y1, x2, y1, vdu->current_gfg_colour, vdu->current_operation_mode);
 }
 
 // Triangle fill code derived from:

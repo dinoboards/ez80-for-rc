@@ -35,23 +35,23 @@ void        prepare_font_pattern(uint8_t ch, uint16_t x, uint16_t y);
 // vdu variables
 
 typedef struct cursor_state_s {
-  uint8_t enabled : 1;
-  uint8_t toggle : 1;
-  uint8_t hide : 1; /* disable while moving x,y */
-} cursor_state_t;
+  uint8_t enabled;
+  uint8_t toggle;
+  uint8_t hide;   /* disable while moving x,y */
+} cursor_state_t; /* 3 BYTE */
 
 // extern point_t origin;
 
-extern point_t        previous_gpos;
-extern uint8_t        sysfont[(128 - ' ') * 8]; // 96*8
-extern uint8_t        font_patterns[256 * 8];
-extern text_colours_t font_color[256];
-extern cursor_state_t cursor_state;
+// extern point_t        previous_gpos;
+extern uint8_t sysfont[(128 - ' ') * 8]; // 96*8
+// extern uint8_t        font_patterns[256 * 8];
+// extern text_colours_t font_color[256];
+// extern cursor_state_t cursor_state;
 
-extern uint8_t  vdu_index;
-extern uint24_t vdu_required_length;
+// extern uint8_t  vdu_index;
+// extern uint24_t vdu_required_length;
 
-extern mos_vdu_handler current_fn;
+// extern mos_vdu_handler current_fn;
 
 extern void vdu_not_implemented(void);
 
@@ -62,11 +62,11 @@ void vdu(uint8_t c);
 
 #define vdu_bs()                                                                                                                   \
   {                                                                                                                                \
-    if (current_tpos.x > tviewport.left)                                                                                           \
-      current_tpos.x -= 8;                                                                                                         \
+    if (vdu->current_tpos.x > vdu->tviewport.left)                                                                                 \
+      vdu->current_tpos.x -= 8;                                                                                                    \
   }
 
 #define vdu_cr()                                                                                                                   \
-  { current_tpos.x = tviewport.left; }
+  { vdu->current_tpos.x = vdu->tviewport.left; }
 
 #endif

@@ -26,7 +26,7 @@ void vdp_set_graphic_4(void) {
   hbios_vars->vdp.current_mode = 4;
 
 #ifdef VDP_SUPER_HDMI
-  register_31_mirror = 0;
+  hbios_vars->vdp.register_31_mirror = 0;
   vdp_reg_write(31, 0);
 #endif
 }

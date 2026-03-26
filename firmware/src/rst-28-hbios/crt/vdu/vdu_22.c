@@ -1,4 +1,4 @@
-#include "variables.h"
+#include "../rst-28-vars.h"
 #include <v99x8-super.h>
 #include <vdu-functions.h>
 
@@ -56,115 +56,117 @@
 // which is the new mode. Thus VDU 22,7 is exactly equivalent to MODE 7.
 
 void vdu_mode(void) {
-  current_display_mode = data[0];
-  tviewport.left       = 0;
-  last_text_row        = 31 * 8;
-  tviewport.bottom     = 31 * 8;
-  tviewport.top        = 0;
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
 
-  switch (data[0]) {
+  vdu->current_display_mode = vdu->data[0];
+  vdu->tviewport.left       = 0;
+  vdu->last_text_row        = 31 * 8;
+  vdu->tviewport.bottom     = 31 * 8;
+  vdu->tviewport.top        = 0;
+
+  switch (vdu->data[0]) {
   case 0:
     vdu_set_default_palette_2();
-    current_tfg_colour       = 1;
-    current_gfg_colour       = 1;
-    current_tbg_colour       = 0;
-    current_mode_colour_mask = 1;
-    last_text_column         = 79 * 8;
-    tviewport.right          = 79 * 8;
-    last_text_row            = 31 * 8;
-    tviewport.bottom         = 31 * 8;
+    vdu->current_tfg_colour       = 1;
+    vdu->current_gfg_colour       = 1;
+    vdu->current_tbg_colour       = 0;
+    vdu->current_mode_colour_mask = 1;
+    vdu->last_text_column         = 79 * 8;
+    vdu->tviewport.right          = 79 * 8;
+    vdu->last_text_row            = 31 * 8;
+    vdu->tviewport.bottom         = 31 * 8;
     vdp_set_super_graphic_26();
     break;
 
   case 1:
     vdu_set_default_palette_4();
-    current_tfg_colour       = 3;
-    current_gfg_colour       = 3;
-    current_tbg_colour       = 0;
-    current_mode_colour_mask = 3;
-    last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
-    last_text_row            = 31 * 8;
-    tviewport.bottom         = 31 * 8;
+    vdu->current_tfg_colour       = 3;
+    vdu->current_gfg_colour       = 3;
+    vdu->current_tbg_colour       = 0;
+    vdu->current_mode_colour_mask = 3;
+    vdu->last_text_column         = 39 * 8;
+    vdu->tviewport.right          = 39 * 8;
+    vdu->last_text_row            = 31 * 8;
+    vdu->tviewport.bottom         = 31 * 8;
     vdp_set_super_graphic_2();
     break;
 
   case 2:
     vdu_set_default_palette_16();
-    current_tfg_colour       = 7;
-    current_gfg_colour       = 7;
-    current_tbg_colour       = 0;
-    current_mode_colour_mask = 15;
-    last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
-    last_text_row            = 29 * 8;
-    tviewport.bottom         = 29 * 8;
+    vdu->current_tfg_colour       = 7;
+    vdu->current_gfg_colour       = 7;
+    vdu->current_tbg_colour       = 0;
+    vdu->current_mode_colour_mask = 15;
+    vdu->last_text_column         = 39 * 8;
+    vdu->tviewport.right          = 39 * 8;
+    vdu->last_text_row            = 29 * 8;
+    vdu->tviewport.bottom         = 29 * 8;
     vdp_set_super_graphic_2();
     break;
 
   case 3:
     vdu_set_default_palette_2();
-    current_tfg_colour       = 1;
-    current_gfg_colour       = 1;
-    current_tbg_colour       = 0;
-    current_mode_colour_mask = 1;
-    last_text_column         = 79 * 8;
-    tviewport.right          = 79 * 8;
-    last_text_row            = 49 * 8;
-    tviewport.bottom         = 49 * 8;
+    vdu->current_tfg_colour       = 1;
+    vdu->current_gfg_colour       = 1;
+    vdu->current_tbg_colour       = 0;
+    vdu->current_mode_colour_mask = 1;
+    vdu->last_text_column         = 79 * 8;
+    vdu->tviewport.right          = 79 * 8;
+    vdu->last_text_row            = 49 * 8;
+    vdu->tviewport.bottom         = 49 * 8;
     vdp_set_super_graphic_21();
     break;
 
   case 4:
     vdu_set_default_palette_2();
-    current_tfg_colour       = 1;
-    current_gfg_colour       = 1;
-    current_tbg_colour       = 0;
-    current_mode_colour_mask = 1;
-    last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
-    last_text_row            = 29 * 8;
-    tviewport.bottom         = 29 * 8;
+    vdu->current_tfg_colour       = 1;
+    vdu->current_gfg_colour       = 1;
+    vdu->current_tbg_colour       = 0;
+    vdu->current_mode_colour_mask = 1;
+    vdu->last_text_column         = 39 * 8;
+    vdu->tviewport.right          = 39 * 8;
+    vdu->last_text_row            = 29 * 8;
+    vdu->tviewport.bottom         = 29 * 8;
     vdp_set_super_graphic_2();
     break;
 
   case 5:
     vdu_set_default_palette_4();
-    current_tfg_colour       = 3;
-    current_gfg_colour       = 3;
-    current_tbg_colour       = 0;
-    current_mode_colour_mask = 3;
-    last_text_column         = 39 * 8;
-    tviewport.right          = 39 * 8;
-    last_text_row            = 29 * 8;
-    tviewport.bottom         = 29 * 8;
+    vdu->current_tfg_colour       = 3;
+    vdu->current_gfg_colour       = 3;
+    vdu->current_tbg_colour       = 0;
+    vdu->current_mode_colour_mask = 3;
+    vdu->last_text_column         = 39 * 8;
+    vdu->tviewport.right          = 39 * 8;
+    vdu->last_text_row            = 29 * 8;
+    vdu->tviewport.bottom         = 29 * 8;
     vdp_set_super_graphic_2();
     break;
 
   case 16:
     vdu_set_default_palette_16();
-    current_tfg_colour       = 3;
-    current_gfg_colour       = 3;
-    current_tbg_colour       = 0;
-    current_mode_colour_mask = 3;
-    last_text_column         = 31 * 8;
-    tviewport.right          = 31 * 8;
-    last_text_row            = 23 * 8;
-    tviewport.bottom         = 23 * 8;
+    vdu->current_tfg_colour       = 3;
+    vdu->current_gfg_colour       = 3;
+    vdu->current_tbg_colour       = 0;
+    vdu->current_mode_colour_mask = 3;
+    vdu->last_text_column         = 31 * 8;
+    vdu->tviewport.right          = 31 * 8;
+    vdu->last_text_row            = 23 * 8;
+    vdu->tviewport.bottom         = 23 * 8;
     vdp_set_lines(192);
     vdp_set_refresh(50);
     vdp_set_graphic_4();
     break;
   }
 
-  vdp_set_remap(current_tbg_colour, current_tfg_colour); /* TODO: move this to where we set text colours */
+  vdp_set_remap(vdu->current_tbg_colour, vdu->current_tfg_colour); /* TODO: move this to where we set text colours */
 
-  origin.x         = 0;
-  origin.y         = 0;
-  gviewport.left   = 0;
-  gviewport.bottom = 0;
-  gviewport.right  = 1280;
-  gviewport.top    = 1024;
+  vdu->origin.x         = 0;
+  vdu->origin.y         = 0;
+  vdu->gviewport.left   = 0;
+  vdu->gviewport.bottom = 0;
+  vdu->gviewport.right  = 1280;
+  vdu->gviewport.top    = 1024;
 
   vdu_cls();
   vdu_cursor_enable();

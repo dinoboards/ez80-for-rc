@@ -1,17 +1,19 @@
+#include "../rst-28-vars.h"
 #include "../vdu.h"
-#include "variables.h"
 #include <stdint.h>
 #include <v99x8.h>
 
 void vdu_lf(void) {
-  if (current_tpos.y < tviewport.bottom) {
-    current_tpos.y += 8;
+  vdu_vars_t *const vdu = &hbios_vars->vdu;
+
+  if (vdu->current_tpos.y < vdu->tviewport.bottom) {
+    vdu->current_tpos.y += 8;
 
   } else {
-    const uint24_t left   = tviewport.left;
-    const uint24_t top    = tviewport.top;
-    const uint24_t right  = tviewport.right;
-    const uint24_t bottom = tviewport.bottom;
+    const uint24_t left   = vdu->tviewport.left;
+    const uint24_t top    = vdu->tviewport.top;
+    const uint24_t right  = vdu->tviewport.right;
+    const uint24_t bottom = vdu->tviewport.bottom;
 
     const uint24_t width  = right - left + 8;
     const uint24_t height = bottom - top;
@@ -21,6 +23,6 @@ void vdu_lf(void) {
     vdp_cmd_wait_completion();
     vdp_cmd_move_vram_to_vram(left, top + 8, left, top, width, height, 0);
     vdp_cmd_wait_completion();
-    vdp_cmd_vdp_to_vram(left, bottom, width, 8, current_tbg_colour, 0);
+    vdp_cmd_vdp_to_vram(left, bottom, width, 8, vdu->current_tbg_colour, 0);
   }
 }

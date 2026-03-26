@@ -1,5 +1,5 @@
 #include "../vdu.h"
-#include "variables.h"
+#include "vdu_consts.h"
 #include <v99x8.h>
 
 int24_t convert_x(int24_t logical_x) { return vdp_get_screen_width() * (logical_x) / scale_width; }
